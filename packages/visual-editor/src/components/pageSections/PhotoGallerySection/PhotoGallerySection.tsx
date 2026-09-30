@@ -20,6 +20,7 @@ import {
 } from "../entityFieldSectionUtils.ts";
 import { getPhotoGalleryImageData } from "./photoGalleryUtils.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
+import { useMappedEntitySectionEmptyState } from "../useMappedEntitySectionEmptyState.ts";
 
 export interface PhotoGalleryStyles {
   /**
@@ -113,11 +114,28 @@ const photoGallerySectionFields: YextFields<PhotoGallerySectionProps> = {
 const PhotoGallerySectionComponent: PuckComponent<PhotoGallerySectionProps> = ({
   styles,
   slots,
+  conditionalRender,
+  puck,
 }) => {
   const { t } = useTranslation();
+  const { setWrapperRef, isMappedContentEmpty } =
+    useMappedEntitySectionEmptyState({
+      enabled: true,
+      initialIsMappedContentEmpty: conditionalRender?.isMappedContentEmpty,
+    });
+
+  // Keep the gallery mounted so field changes can update the section's visibility.
+  if (isMappedContentEmpty && !puck.isEditing) {
+    return (
+      <div ref={setWrapperRef} className="hidden" aria-hidden="true">
+        <slots.PhotoGalleryWrapper style={{ height: "auto" }} allow={[]} />
+      </div>
+    );
+  }
 
   return (
     <PageSection
+      ref={setWrapperRef}
       aria-label={t("photoGallerySection", "Photo Gallery Section")}
       background={styles.backgroundColor}
       className="flex flex-col gap-8"
@@ -236,12 +254,7 @@ export const PhotoGallerySection: YextComponentConfig<PhotoGallerySectionProps> 
           liveVisibility={props.liveVisibility}
           isEditing={props.puck.isEditing}
         >
-          {props.conditionalRender?.isMappedContentEmpty &&
-          !props.puck.isEditing ? (
-            <></>
-          ) : (
-            <PhotoGallerySectionComponent {...props} />
-          )}
+          <PhotoGallerySectionComponent {...props} />
         </VisibilityWrapper>
       </ComponentErrorBoundary>
     ),

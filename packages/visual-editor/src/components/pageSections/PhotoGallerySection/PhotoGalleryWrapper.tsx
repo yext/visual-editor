@@ -30,7 +30,10 @@ import { ImagePlus } from "lucide-react";
 import { Button } from "../../../internal/puck/ui/button.tsx";
 import { updateFields } from "../HeroSection.tsx";
 import { isMappedEntityFieldSelected } from "../entityFieldSectionUtils.ts";
-import { renderMappedEntityFieldEmptyState } from "../EntityFieldSectionEmptyState.tsx";
+import {
+  EntityFieldSectionEmptyStateBox,
+  renderMappedEntityFieldEmptyState,
+} from "../EntityFieldSectionEmptyState.tsx";
 import {
   getPhotoGalleryImageData,
   ResolvedGalleryImage,
@@ -551,7 +554,8 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     hasExplicitLinkMapping: !!data.images.mappings?.link?.field,
   });
 
-  const hasAnyImages = isMappedEntityFieldSelected(data.images)
+  const isMapped = isMappedEntityFieldSelected(data.images);
+  const hasAnyImages = isMapped
     ? hasRenderableImages
     : galleryImages.length > 0;
   const imageWidth = styles.image?.width || 1000;
@@ -615,10 +619,10 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
           </CarouselProvider>
         )
       ) : puck?.isEditing ? (
-        renderMappedEntityFieldEmptyState(true)
-      ) : (
+        <EntityFieldSectionEmptyStateBox showEmptyStateMarker={isMapped} />
+      ) : isMapped ? (
         renderMappedEntityFieldEmptyState(false)
-      )}
+      ) : null}
     </div>
   );
 };

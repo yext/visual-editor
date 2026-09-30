@@ -173,7 +173,11 @@ const directSectionCases: DirectSectionCase[] = [
           HeadingSlot: createSectionHeadingSlot(),
           PhotoGalleryWrapper: createCardsSlot(
             isMappedContentEmpty ? (
-              <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
+              isEditing ? (
+                <EntityFieldSectionEmptyStateBox showEmptyStateMarker />
+              ) : (
+                <EmptyStateMarker />
+              )
             ) : (
               "Gallery Images"
             )
@@ -257,7 +261,9 @@ describe.each(directSectionCases)(
       });
 
       await waitFor(() => {
-        expect(result.container.childElementCount).toBe(0);
+        expect(result.queryByText("Section Heading")).toBeNull();
+        expect(result.queryByText(visibleContentText)).toBeNull();
+        expect(result.queryByText(/Section hidden for this/i)).toBeNull();
       });
     });
 
