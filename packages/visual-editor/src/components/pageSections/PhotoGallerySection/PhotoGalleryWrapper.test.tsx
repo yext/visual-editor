@@ -303,6 +303,12 @@ describe("PhotoGalleryWrapper", () => {
         );
 
         await waitFor(() => {
+          if (parentData.variant === "carousel") {
+            // Wait for ResizeObserver to set the slide count before measuring.
+            expect(
+              within(container).getAllByRole("option", { selected: true })
+            ).toHaveLength(viewport < 750 ? 1 : 3);
+          }
           const sizes = within(container)
             .getAllByAltText("Brand")
             .map((image) => image.getBoundingClientRect())
