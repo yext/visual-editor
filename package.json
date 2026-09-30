@@ -2,7 +2,7 @@
   "name": "visual-editor",
   "version": "0.0.1",
   "description": "A monorepo containing all packages used by Yext Visual Editor",
-  "author": "sumo@yext.com",
+  "author": "sprumo@yext.com",
   "license": "BSD-3-Clause",
   "private": true,
   "type": "module",
@@ -56,17 +56,5 @@
     "typescript": "^5.3.3",
     "yaml": "^2.3.4"
   },
-  "packageManager": "pnpm@10.33.0",
-  "pnpm": {
-    "overrides": {
-      "happy-dom": "20.8.8",
-      "esbuild": "0.28.1",
-      "js-yaml": "4.3.1"
-    },
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "vite": "^5.3.5"
-      }
-    }
-  }
+  "packageManager": "pnpm@10.33.0"
 }

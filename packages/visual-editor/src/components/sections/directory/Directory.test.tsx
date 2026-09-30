@@ -1,0 +1,872 @@
+import * as React from "react";
+import { describe, it, expect } from "vitest";
+import {
+  axe,
+  ComponentTest,
+  testHours,
+  transformTests,
+} from "../../testing/componentTests.setup.ts";
+import { render as reactRender } from "@testing-library/react";
+import { Directory } from "./Directory.tsx";
+import { migrate } from "../../../utils/migrate.ts";
+import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { SlotsCategoryComponents } from "../../testing/SlotComponents.tsx";
+import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
+import { Render, Config, resolveAllData } from "@puckeditor/core";
+import { page } from "@vitest/browser/context";
+import { MainContent } from "../../helpers/MainContent.tsx";
+
+const rootDocument = {
+  locale: "en",
+  _site: {
+    name: "Example Business",
+  },
+  __: {
+    isPrimaryLocale: true,
+  },
+  _pageset: JSON.stringify({
+    config: {
+      urlTemplate: {
+        primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+      },
+    },
+  }),
+  name: "Location Directory",
+  meta: { entityType: { id: "dm_root", uid: 123 }, locale: "en" },
+  dm_childEntityIds: ["998877"],
+  dm_directoryChildren: [
+    {
+      name: "United States",
+      slug: "us",
+      dm_addressCountryDisplayName: "United States",
+    },
+    {
+      name: "Mexico",
+      slug: "mx",
+      dm_addressCountryDisplayName: "Mexico",
+    },
+    {
+      name: "Canada",
+      slug: "ca",
+      dm_addressCountryDisplayName: "Canada",
+    },
+    {
+      name: "France",
+      slug: "fr",
+      dm_addressCountryDisplayName: "France",
+    },
+  ],
+  dm_directoryManagerId: "63590-locations",
+  slug: "en/index.html",
+};
+
+const countryDocument = {
+  locale: "en",
+  _site: {
+    name: "Example Business",
+  },
+  __: {
+    isPrimaryLocale: true,
+  },
+  _pageset: JSON.stringify({
+    config: {
+      urlTemplate: {
+        primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+      },
+    },
+  }),
+  name: "US",
+  meta: { entityType: { id: "dm_country", uid: 123 }, locale: "en" },
+  dm_addressCountryDisplayName: "United States",
+  dm_childEntityIds: ["123456"],
+  dm_directoryChildren: [
+    {
+      name: "Virginia",
+      slug: "us/va",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+    },
+    {
+      name: "Washington DC",
+      slug: "us/dc",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Washington DC",
+    },
+    {
+      name: "New York",
+      slug: "us/ny",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "New York",
+    },
+    {
+      name: "California",
+      slug: "us/ca",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "California",
+    },
+  ],
+  dm_directoryManagerId: "63590-locations",
+  dm_directoryParents_63590_locations: [
+    {
+      name: "Locations Directory",
+      slug: "en/index.html",
+      dm_addressCountryDisplayName: "United States",
+    },
+  ],
+  slug: "us",
+};
+
+const regionDocument = {
+  locale: "en",
+  _site: {
+    name: "Example Business",
+  },
+  __: {
+    isPrimaryLocale: true,
+  },
+  _pageset: JSON.stringify({
+    config: {
+      urlTemplate: {
+        primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+      },
+    },
+  }),
+  name: "VA",
+  meta: { entityType: { id: "dm_region", uid: 123 }, locale: "en" },
+  dm_addressCountryDisplayName: "United States",
+  dm_addressRegionDisplayName: "Virginia",
+  dm_childEntityIds: ["8932945"],
+  dm_directoryChildren: [
+    {
+      name: "Arlington",
+      slug: "us/va/arlington",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+    },
+    {
+      name: "Fairfax",
+      slug: "us/va/fairfax",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+    },
+    {
+      name: "Alexandria",
+      slug: "us/va/alexandria",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+    },
+    {
+      name: "Falls Church",
+      slug: "us/va/fallschurch",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+    },
+  ],
+  dm_directoryManagerId: "63590-locations",
+  dm_directoryParents_63590_locations: [
+    {
+      name: "Locations Directory",
+      slug: "en/index.html",
+    },
+    {
+      name: "US",
+      slug: "en/us",
+      dm_addressCountryDisplayName: "United States",
+    },
+  ],
+  slug: "us/va",
+};
+
+const cityDocument = {
+  locale: "en",
+  _site: {
+    name: "Example Business",
+  },
+  __: {
+    isPrimaryLocale: true,
+  },
+  _pageset: JSON.stringify({
+    config: {
+      urlTemplate: {
+        primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+      },
+    },
+  }),
+  dm_childEntityIds: ["8725530"],
+  dm_directoryChildren: [
+    {
+      address: {
+        city: "Arlington",
+        countryCode: "US",
+        line1: "1101 Wilson Blvd",
+        postalCode: "22209",
+        region: "VA",
+      },
+      mainPhone: "+12025551010",
+      hours: testHours,
+      name: "Galaxy Grill Rosslyn",
+      timezone: "America/New_York",
+      slug: "arlington",
+      geomodifier: "2nd Floor",
+    },
+    {
+      address: {
+        city: "Arlington",
+        countryCode: "US",
+        line1: "4320 Fairfax Dr",
+        postalCode: "22201",
+        region: "VA",
+      },
+      mainPhone: "+12025551011",
+      hours: testHours,
+      name: "Galaxy Grill Ballston",
+      timezone: "America/New_York",
+    },
+    {
+      address: {
+        city: "Arlington",
+        countryCode: "US",
+        line1: "3100 Wilson Blvd",
+        postalCode: "22201",
+        region: "VA",
+      },
+      mainPhone: "+12025551012",
+      name: "Galaxy Grill Clarendon",
+      timezone: "America/New_York",
+      geomodifier: "Rooftop",
+    },
+    {
+      address: {
+        city: "Arlington",
+        countryCode: "US",
+        line1: "1250 S Hays St",
+        postalCode: "22202",
+        region: "VA",
+      },
+      hours: testHours,
+      name: "Galaxy Grill Pentagon City",
+      timezone: "America/New_York",
+    },
+  ],
+  name: "Arlington",
+  meta: { entityType: { id: "dm_city", uid: 456 }, locale: "en" },
+  dm_addressCountryDisplayName: "United States",
+  dm_addressRegionDisplayName: "Virginia",
+  dm_directoryManagerId: "63590-locations",
+  dm_directoryParents_63590_locations: [
+    { name: "Locations Directory", slug: "en/index.html" },
+    {
+      name: "US",
+      slug: "en/us",
+      dm_addressCountryDisplayName: "United States",
+    },
+    {
+      name: "VA",
+      slug: "us/va",
+      dm_addressCountryDisplayName: "United States",
+      dm_addressRegionDisplayName: "Virginia",
+    },
+  ],
+  slug: "us/va/arlington",
+};
+
+const version40Props = {
+  styles: {
+    backgroundColor: {
+      bgColor: "bg-palette-primary-dark",
+      textColor: "text-white",
+    },
+  },
+  slots: {
+    TitleSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          data: {
+            text: {
+              constantValue: {
+                en: "[[name]]",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+              field: "",
+            },
+          },
+          styles: { level: 2, align: "center" },
+        },
+      },
+    ],
+    SiteNameSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          data: {
+            text: {
+              constantValue: {
+                en: "",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+              field: "name",
+            },
+          },
+          styles: { level: 4, align: "center" },
+        },
+      },
+    ],
+    BreadcrumbsSlot: [
+      {
+        type: "BreadcrumbsSlot",
+        props: {
+          data: {
+            directoryRoot: {
+              en: "Directory Root",
+              hasLocalizedValue: "true",
+            },
+          },
+          styles: {
+            backgroundColor: {
+              bgColor: "bg-palette-secondary-dark",
+              textColor: "text-white",
+            },
+          },
+          analytics: {
+            scope: "directory",
+          },
+          liveVisibility: true,
+        },
+      },
+    ],
+    DirectoryGrid: [
+      {
+        type: "DirectoryGrid",
+        props: {
+          slots: {
+            CardSlot: [],
+          },
+        },
+      },
+    ],
+  },
+};
+
+const tests: ComponentTest[] = [
+  {
+    name: "default props - no document",
+    document: {},
+    props: { ...Directory.defaultProps },
+    version: migrationRegistry.length,
+  },
+  {
+    name: "default props - root - document data",
+    document: rootDocument,
+    props: { ...Directory.defaultProps },
+    version: migrationRegistry.length,
+  },
+  {
+    name: "default props - country - document data",
+    document: countryDocument,
+    props: { ...Directory.defaultProps },
+    version: migrationRegistry.length,
+  },
+  {
+    name: "default props - region - document data",
+    document: regionDocument,
+    props: { ...Directory.defaultProps },
+    version: migrationRegistry.length,
+  },
+  {
+    name: "default props - city list - document data",
+    document: cityDocument,
+    props: { ...Directory.defaultProps },
+    version: migrationRegistry.length,
+  },
+  {
+    name: "version 8 - directory list - non-default props",
+    document: regionDocument,
+    props: {
+      data: {
+        directoryRoot: "Not Default Root",
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 8,
+  },
+  {
+    name: "version 8 - directory card - non-default props",
+    document: cityDocument,
+    props: {
+      data: {
+        directoryRoot: "Not Default Root",
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 8,
+  },
+  {
+    name: "version 8 - root - default props",
+    document: rootDocument,
+    props: {
+      data: {
+        directoryRoot: "Directory Root",
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 8,
+  },
+  {
+    name: "version 8 - country - default props",
+    document: countryDocument,
+    props: {
+      data: {
+        directoryRoot: "Directory Root",
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 8,
+  },
+  {
+    name: "version 8 - region - default props",
+    document: regionDocument,
+    props: {
+      data: {
+        directoryRoot: "Directory Root",
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 8,
+  },
+  {
+    name: "version 8 - city - default props",
+    document: cityDocument,
+    props: {
+      data: {
+        directoryRoot: "Directory Root",
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+      },
+      liveVisibility: true,
+    },
+    version: 8,
+  },
+  {
+    name: "version 18 with cityDocument and siteName field",
+    document: cityDocument,
+    props: {
+      data: {
+        title: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "[[name]]",
+            hasLocalizedValue: "true",
+          },
+        },
+        directoryRoot: "Directory Root",
+        siteName: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: {
+            en: "Example Business",
+            hasLocalizedValue: "true",
+          },
+        },
+      },
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        breadcrumbsBackgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        cards: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          headingLevel: 3,
+        },
+        hours: {
+          showCurrentStatus: true,
+          timeFormat: "12h",
+          showDayNames: false,
+          dayOfWeekFormat: "short",
+        },
+        phoneNumberFormat: "international",
+        phoneNumberLink: true,
+      },
+      liveVisibility: true,
+    },
+    version: 18,
+  },
+  {
+    name: "version 40 with cityDocument and non-default props",
+    document: cityDocument,
+    props: version40Props,
+    version: 40,
+  },
+  {
+    name: "version 40 with countryDocument and non-default props",
+    document: countryDocument,
+    props: version40Props,
+    version: 40,
+  },
+  {
+    name: "version 58 - Slotified Address with showGetDirectionsLink",
+    document: cityDocument,
+    props: {
+      ...version40Props,
+      slots: {
+        ...version40Props.slots,
+        DirectoryGrid: [
+          {
+            type: "DirectoryGrid",
+            props: {
+              slots: {
+                CardSlot: [
+                  {
+                    type: "DirectoryCard",
+                    props: {
+                      slots: {
+                        AddressSlot: [
+                          {
+                            type: "AddressSlot",
+                            props: {
+                              styles: {
+                                showGetDirectionsLink: true,
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    },
+    version: 58,
+  },
+  {
+    name: "version 77 - City with custom card titles",
+    document: cityDocument,
+    props: {
+      ...version40Props,
+      slots: {
+        ...version40Props.slots,
+        DirectoryGrid: [
+          {
+            type: "DirectoryGrid",
+            props: {
+              data: {
+                field: "dm_directoryChildren",
+                constantValueEnabled: false,
+                constantValue: [],
+                mappings: {
+                  cardTitle: {
+                    field: "",
+                    constantValueEnabled: true,
+                    constantValue: {
+                      defaultValue: "[[name]] [[geomodifier]]",
+                    },
+                  },
+                },
+              },
+              styles: {
+                backgroundColor: {
+                  selectedColor: "white",
+                  contrastingColor: "black",
+                },
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "DirectoryCard",
+                    props: {
+                      data: {
+                        cardTitle: {
+                          defaultValue: "[[name]]",
+                        },
+                      },
+                      styles: {
+                        backgroundColor: {
+                          selectedColor: "white",
+                          contrastingColor: "black",
+                        },
+                      },
+                      slots: {
+                        HeadingSlot: [
+                          {
+                            type: "HeadingTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValueEnabled: true,
+                                  constantValue: {
+                                    defaultValue: "[[name]]",
+                                  },
+                                },
+                              },
+                              styles: {
+                                level: 3,
+                                align: "left",
+                              },
+                            },
+                          },
+                        ],
+                        AddressSlot: [
+                          {
+                            type: "AddressSlot",
+                            props: {
+                              data: {
+                                address: {
+                                  field: "address",
+                                  constantValue: {
+                                    line1: "",
+                                    city: "",
+                                    postalCode: "",
+                                    countryCode: "",
+                                  },
+                                },
+                              },
+                              styles: {
+                                showGetDirectionsLink: true,
+                                showRegion: true,
+                                showCountry: true,
+                                ctaVariant: "link",
+                              },
+                            },
+                          },
+                        ],
+                        PhoneSlot: [
+                          {
+                            type: "PhoneSlot",
+                            props: {
+                              data: {
+                                number: {
+                                  constantValue: "",
+                                  field: "mainPhone",
+                                },
+                                label: {
+                                  constantValue: "",
+                                  hasLocalizedValue: "true",
+                                  field: "",
+                                },
+                              },
+                              styles: {
+                                phoneFormat: "domestic",
+                                includePhoneHyperlink: true,
+                                includeIcon: false,
+                              },
+                            },
+                          },
+                        ],
+                        HoursSlot: [
+                          {
+                            type: "HoursStatusSlot",
+                            props: {
+                              data: {
+                                hours: {
+                                  constantValue: {},
+                                  field: "hours",
+                                },
+                              },
+                              styles: {
+                                dayOfWeekFormat: "long",
+                                showDayNames: true,
+                                showCurrentStatus: true,
+                                className:
+                                  "mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    },
+    version: 77,
+  },
+];
+
+describe("Directory", async () => {
+  const puckConfig: Config = {
+    components: { Directory, MainContent, ...SlotsCategoryComponents },
+    root: {
+      render: ({ children }: { children: React.ReactNode }) => {
+        return <>{children}</>;
+      },
+    },
+  };
+  it.each(transformTests(tests))(
+    "$viewport.name $name",
+    async ({
+      document,
+      name,
+      props,
+      interactions,
+      version,
+      viewport: { width, height, name: viewportName },
+    }) => {
+      let data = migrate(
+        puckConfig,
+        {
+          root: {
+            props: {
+              version,
+            },
+          },
+          content: [
+            {
+              type: "Directory",
+              props: props,
+            },
+          ],
+        },
+        document,
+        migrationRegistry
+      );
+
+      const updatedData = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
+
+      const { container } = reactRender(
+        <VisualEditorProvider templateProps={{ document }}>
+          <Render
+            config={puckConfig}
+            data={updatedData}
+            metadata={{ streamDocument: document }}
+          />
+        </VisualEditorProvider>
+      );
+
+      await page.viewport(width, height);
+
+      await expect(`Directory/[${viewportName}] ${name}`).toMatchScreenshot();
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+
+      if (interactions) {
+        await interactions(page);
+        await expect(
+          `Directory/[${viewportName}] ${name} (after interactions)`
+        ).toMatchScreenshot();
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      }
+    }
+  );
+});

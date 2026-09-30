@@ -47,8 +47,7 @@ const setChildSlotIds = (
   cardId: string
 ): ComponentData<Record<string, unknown>> => {
   const slots = card.props.slots as
-    | Record<string, Array<{ props?: Record<string, unknown> }>>
-    | undefined;
+    Record<string, Array<{ props?: Record<string, unknown> }>> | undefined;
 
   if (!slots) {
     return card;

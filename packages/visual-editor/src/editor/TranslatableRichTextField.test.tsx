@@ -32,10 +32,6 @@ vi.mock("../internal/hooks/useMessage.ts", () => ({
   }),
 }));
 
-vi.mock("../utils/isFakeStarterLocalDev.ts", () => ({
-  isFakeStarterLocalDev: () => false,
-}));
-
 const RichTextFieldRenderer = ({
   value,
 }: {

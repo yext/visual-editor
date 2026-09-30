@@ -20,7 +20,7 @@ import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
-import { migrate } from "../../utils/migrate.ts";
+import { migrate, type MigrationRegistry } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { Metadata } from "../../editor/Editor.tsx";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
@@ -40,6 +40,7 @@ type LayoutEditorProps = {
   localDev: boolean;
   metadata?: Metadata;
   streamDocument: StreamDocument;
+  sectionLibraryMigrationRegistry?: MigrationRegistry;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {
@@ -52,6 +53,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     localDev,
     metadata,
     streamDocument,
+    sectionLibraryMigrationRegistry,
   } = props;
 
   const { errorCount, errorSources, errorDetails } = useErrorContext();
@@ -67,7 +69,12 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     useCommonMessageSenders();
 
   const { layoutSaveState, layoutSaveStateFetched, setLayoutSaveState } =
-    useLayoutMessageReceivers(localDev, puckConfig, streamDocument);
+    useLayoutMessageReceivers(
+      localDev,
+      puckConfig,
+      streamDocument,
+      sectionLibraryMigrationRegistry
+    );
 
   const { buildVisualConfigLocalStorageKey, clearVisualConfigLocalStorage } =
     useLayoutLocalStorage(templateMetadata);
@@ -78,6 +85,18 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   >();
   const [puckInitialHistoryFetched, setPuckInitialHistoryFetched] =
     useState<boolean>(false);
+
+  const migrateLayoutData = useCallback(
+    (data: Data): Data =>
+      migrate(
+        puckConfig,
+        data,
+        streamDocument,
+        migrationRegistry,
+        sectionLibraryMigrationRegistry
+      ),
+    [puckConfig, sectionLibraryMigrationRegistry, streamDocument]
+  );
 
   /**
    * Clears localStorage and resets the save data in the DB
@@ -180,12 +199,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
               !!history?.state?.data
           )
           .map((history) => {
-            const migratedData = migrate(
-              history.state.data,
-              migrationRegistry,
-              puckConfig,
-              streamDocument
-            );
+            const migratedData = migrateLayoutData(history.state.data);
 
             return {
               id: history.id,
@@ -245,13 +259,13 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
             { id: "root", state: { data: layoutData } },
             {
               id: layoutSaveState.hash,
-              state: { data: layoutSaveState.history.data },
+              state: { data: migrateLayoutData(layoutSaveState.history.data) },
             },
           ]
         : [
             {
               id: layoutSaveState.hash,
-              state: { data: layoutSaveState.history.data },
+              state: { data: migrateLayoutData(layoutSaveState.history.data) },
             },
           ],
       index: layoutData ? 1 : 0,
@@ -264,6 +278,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     setPuckInitialHistoryFetched,
     clearVisualConfigLocalStorage,
     buildVisualConfigLocalStorageKey,
+    migrateLayoutData,
   ]);
 
   useEffect(() => {
@@ -319,6 +334,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
       localDev={localDev}
       metadata={metadata}
+      sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
     />
   ) : (
     <LoadingScreen

@@ -20,7 +20,7 @@ import {
  */
 const ROOT = path.resolve(process.cwd(), "locales");
 const NAMESPACE = "visual-editor.json";
-const INSTANCES = ["platform", "components"] as const;
+const INSTANCES = ["platform", "page"] as const;
 const PRIMARY_LOCALE = "en";
 const CHECK_ONLY = process.argv.includes("--check-only");
 const INTERPOLATION_REGEX = /\{\{\s*([^{}]+?)\s*\}\}/g;
@@ -329,7 +329,7 @@ const run = async (): Promise<void> => {
 
   if (allIssues.length === 0) {
     console.log(
-      "Interpolation placeholder check passed for platform/components locale files."
+      "Interpolation placeholder check passed for platform/page locale files."
     );
     return;
   }

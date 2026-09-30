@@ -1,6 +1,19 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { locatorConfig } from "../../components/configs/locatorConfig.tsx";
 import { getLocalDevLayoutData } from "./useMessageReceivers.ts";
+import { Config } from "@puckeditor/core";
+import React from "react";
+
+const testConfig: Config<{
+  Locator: {
+    mapStyle: string;
+  };
+}> = {
+  components: {
+    Locator: {
+      render: () => React.createElement("div"),
+    },
+  },
+};
 
 const localDevLocatorLayout = JSON.stringify({
   root: {
@@ -41,7 +54,7 @@ afterEach(() => {
 
 describe("getLocalDevLayoutData", () => {
   it("bootstraps local dev from document.__.layout when present", () => {
-    const data = getLocalDevLayoutData(locatorConfig, {
+    const data = getLocalDevLayoutData(testConfig, {
       meta: {
         entityType: {
           id: "locator",
@@ -67,7 +80,7 @@ describe("getLocalDevLayoutData", () => {
   it("falls back to an empty layout when local dev layout JSON is invalid", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-    const data = getLocalDevLayoutData(locatorConfig, {
+    const data = getLocalDevLayoutData(testConfig, {
       __: {
         layout: "{not-valid-json}",
       },
@@ -80,5 +93,32 @@ describe("getLocalDevLayoutData", () => {
       },
     });
     expect(warnSpy).toHaveBeenCalledOnce();
+  });
+
+  it("applies section-library migrations to initial local editor data", () => {
+    const data = getLocalDevLayoutData(
+      testConfig,
+      {},
+      {
+        root: { props: { version: 82 } },
+        content: [],
+        zones: {},
+      },
+      [
+        {
+          root: {
+            propTransformation: (props: Record<string, any>) => ({
+              ...props,
+              migrated: true,
+            }),
+          },
+        },
+      ]
+    );
+
+    expect(data.root.props).toMatchObject({
+      migrated: true,
+      sectionLibraryMigrationVersion: 1,
+    });
   });
 });

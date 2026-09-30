@@ -7,15 +7,12 @@ import {
   walkTree,
 } from "@puckeditor/core";
 import { migrationRegistry as commonMigrationRegistry } from "../components/migrations/migrationRegistry.ts";
+import { clonePuckResolveData } from "../internal/utils/clonePuckResolveData.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
 
 export type MigrationAction =
   | {
       action: "removed";
-    }
-  | {
-      action: "renamed";
-      newName: string;
     }
   | {
       action: "updated";
@@ -44,6 +41,7 @@ export type Migration =
   | {
       root: RootMigrationAction;
     };
+
 export type MigrationRegistry = Migration[];
 
 const isContentMigration = (
@@ -69,26 +67,112 @@ const isRootMigration = (
 interface RootProps extends DefaultRootProps {
   props?: {
     version?: number;
+    sectionLibraryMigrationVersion?: number;
   };
 }
 
+type PuckData = Data<DefaultComponentProps, RootProps>;
+
 export const migrate = (
-  data: Data<DefaultComponentProps, RootProps>,
+  config: Config,
+  data: PuckData,
+  streamDocument: StreamDocument,
   migrationRegistry: MigrationRegistry = commonMigrationRegistry,
+  sectionLibraryMigrationRegistry: MigrationRegistry = []
+): Data => {
+  // Work on a clone so a thrown migration cannot partially mutate persisted
+  // layout data owned by the caller.
+  data = migratePuck(clonePuckResolveData(data)) as PuckData;
+  if (!data.root.props) {
+    data.root.props = {};
+  }
+
+  const migrationConfig = withRemovedComponentConfigs(config, [
+    migrationRegistry,
+    sectionLibraryMigrationRegistry,
+  ]);
+
+  data = applyRegistry(
+    data,
+    migrationRegistry,
+    "version",
+    migrationConfig,
+    streamDocument
+  );
+
+  data = applyRegistry(
+    data,
+    sectionLibraryMigrationRegistry,
+    "sectionLibraryMigrationVersion",
+    migrationConfig,
+    streamDocument
+  );
+
+  return data;
+};
+
+/** Create an empty component config for any removed components so the config can pass validation in `walkTree`. */
+const withRemovedComponentConfigs = (
+  config: Config,
+  registries: MigrationRegistry[]
+): Config => {
+  const removedComponentNames = new Set<string>();
+  registries.forEach((registry) => {
+    registry.forEach((migration) => {
+      Object.entries(migration).forEach(([componentName, migrationAction]) => {
+        if (
+          componentName !== "*" &&
+          "action" in migrationAction &&
+          migrationAction.action === "removed"
+        ) {
+          removedComponentNames.add(componentName);
+        }
+      });
+    });
+  });
+
+  const missingComponentNames = [...removedComponentNames].filter(
+    (componentName) => !config.components[componentName]
+  );
+  if (missingComponentNames.length === 0) {
+    return config;
+  }
+
+  const components = { ...config.components };
+  missingComponentNames.forEach((componentName) => {
+    // walkTree requires every slot child to have a config before its callback
+    // can remove the child. This placeholder is used only during migration.
+    components[componentName] = {} as Config["components"][string];
+  });
+  return { ...config, components };
+};
+
+const applyRegistry = (
+  data: PuckData,
+  registry: MigrationRegistry,
+  versionKey: "version" | "sectionLibraryMigrationVersion",
   config: Config,
   streamDocument: StreamDocument
-): Data => {
-  const version = data.root?.props?.version ?? 0;
-
-  // Apply puck migrations
-  data = migratePuck(data);
-
-  const migrationsToApply = migrationRegistry.slice(version);
-  if (migrationsToApply.length === 0) {
+): PuckData => {
+  if (registry.length === 0) {
     return data;
   }
 
-  migrationsToApply.forEach((migration) => {
+  const version = data.root.props?.[versionKey] ?? 0;
+  if (!Number.isSafeInteger(version) || version < 0) {
+    console.warn(
+      `Invalid ${versionKey} value ${JSON.stringify(version)}; skipping migrations.`
+    );
+    return data;
+  }
+  if (version > registry.length) {
+    console.warn(
+      `${versionKey} value ${version} is newer than the current migration registry; skipping migrations.`
+    );
+    return data;
+  }
+
+  registry.slice(version).forEach((migration) => {
     Object.entries(migration).forEach(([componentName, migrationAction]) => {
       if (componentName === "content" && isContentMigration(migrationAction)) {
         data.content = migrationAction.transformation(data.content);
@@ -99,10 +183,23 @@ export const migrate = (
         if (!data.root.props) {
           data.root.props = {};
         }
-        data.root.props = migrationAction.propTransformation(
-          data.root.props,
+        const previousRootProps = data.root.props;
+        const transformedRootProps = migrationAction.propTransformation(
+          previousRootProps,
           streamDocument
         );
+        data.root.props = {
+          ...transformedRootProps,
+          ...(previousRootProps.version === undefined
+            ? {}
+            : { version: previousRootProps.version }),
+          ...(previousRootProps.sectionLibraryMigrationVersion === undefined
+            ? {}
+            : {
+                sectionLibraryMigrationVersion:
+                  previousRootProps.sectionLibraryMigrationVersion,
+              }),
+        };
         return;
       }
 
@@ -116,19 +213,6 @@ export const migrate = (
               );
             }
             return content.filter((c) => c.type !== componentName);
-          case "renamed":
-            if (appliesToAllComponents) {
-              throw new Error(
-                "Cannot apply rename migration to all components."
-              );
-            }
-            return content.map((c) => {
-              return {
-                ...c,
-                type:
-                  c.type === componentName ? migrationAction.newName : c.type,
-              };
-            });
           case "updated":
             return content.map((c) => {
               if (!appliesToAllComponents && c.type !== componentName) {
@@ -147,9 +231,6 @@ export const migrate = (
     });
   });
 
-  if (!data.root.props) {
-    data.root.props = {};
-  }
-  data.root.props.version = migrationRegistry.length;
+  data.root.props![versionKey] = registry.length;
   return data;
 };

@@ -1,8 +1,8 @@
 {
   "name": "@yext/visual-editor",
   "description": "Component library for Yext Pages Visual Editor",
-  "version": "1.4.8",
-  "author": "sumo@yext.com",
+  "version": "2.0.0-beta.1",
+  "author": "sprumo@yext.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/yext/visual-editor.git"
@@ -14,6 +14,9 @@
   "files": [
     "dist"
   ],
+  "bin": {
+    "yextve": "dist/cli/yextve.js"
+  },
   "module": "dist/visual-editor.js",
   "exports": {
     ".": {
@@ -22,20 +25,34 @@
       "default": "./dist/visual-editor.js"
     },
     "./plugin": {
+      "types": "./dist/plugin/vite-plugin/index.d.ts",
       "import": "./dist/plugin/plugin.js",
       "default": "./dist/plugin/plugin.js"
     },
     "./style.css": "./dist/style.css",
-    "./editor.css": "./dist/editor.css"
+    "./editor.css": "./dist/visual-editor.css",
+    "./section-library-support": {
+      "types": "./dist/sectionLibrarySupport.d.ts",
+      "import": "./dist/section-library-support.js",
+      "default": "./dist/section-library-support.js"
+    }
   },
   "types": "dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "section-library-support": [
+        "dist/sectionLibrarySupport.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "build:components": "tsc && vite build",
-    "build:plugin": "vite build --config vite.config.plugin.ts",
-    "build": "pnpm run build:components && pnpm run build:plugin",
+    "build:plugin": "rm -rf dist/plugin && tsc -p tsconfig.plugin.json --emitDeclarationOnly && vite build --config vite.config.plugin.ts",
+    "build:cli": "tsup --config tsup.config.ts",
+    "build": "pnpm run build:components && pnpm run build:plugin && pnpm run build:cli",
     "test": "pnpm run test:editor && pnpm run test:components",
     "test:editor": "vitest run --exclude './src/components/**/*.test.tsx' --browser.enabled false",
-    "test:components": "vitest run ./src/components/**",
+    "test:components": "vitest run --dir ./src/components",
     "test:components:local": "./scripts/localScreenshots.sh",
     "prettier": "prettier --write --cache .",
     "lint": "oxlint --fix --ignore-pattern 'src/vite-plugin/templates/*'",
@@ -47,13 +64,13 @@
     "docs:build": "vitepress build .",
     "docs:preview": "vitepress preview .",
     "i18n:extract:platform": "i18next-cli extract --config i18next-cli.platform.config.ts --quiet",
-    "i18n:extract:components": "i18next-cli extract --config i18next-cli.components.config.ts --quiet",
+    "i18n:extract:page": "i18next-cli extract --config i18next-cli.page.config.ts --quiet",
     "i18n:translate:platform": "pnpm exec tsx scripts/generateTranslations.ts --type platform",
     "i18n:translate:platform:dry": "pnpm exec tsx scripts/generateTranslations.ts --type platform --dry-run",
-    "i18n:propagate:components": "pnpm exec tsx scripts/propagatePlatformToComponents.ts",
+    "i18n:propagate:page": "pnpm exec tsx scripts/propagatePlatformToPage.ts",
     "i18n:check:interpolation": "pnpm exec tsx scripts/checkInterpolationVariables.ts",
-    "i18n:lint": "i18next-cli lint --config i18next-cli.platform.config.ts --quiet && i18next-cli lint --config i18next-cli.components.config.ts --quiet && pnpm run i18n:check:interpolation",
-    "i18n:update": "pnpm run i18n:extract:platform && pnpm run i18n:extract:components && pnpm run i18n:translate:platform && pnpm run i18n:propagate:components && pnpm run i18n:lint"
+    "i18n:lint": "i18next-cli lint --config i18next-cli.platform.config.ts --quiet && i18next-cli lint --config i18next-cli.page.config.ts --quiet && pnpm run i18n:check:interpolation",
+    "i18n:update": "pnpm run i18n:extract:platform && pnpm run i18n:extract:page && pnpm run i18n:translate:platform && pnpm run i18n:propagate:page && pnpm run i18n:lint"
   },
   "dependencies": {
     "@mapbox/maki": "^8.2.0",
@@ -69,27 +86,31 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.0",
-    "@radix-ui/react-toggle": "^1.1.9",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@tanstack/react-query": "^5.71.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "dompurify": "^3.2.3",
-    "handlebars": "^4.7.9",
+    "fs-extra": "^11.2.0",
     "geolib": "^3.3.4",
-    "i18next": "^25.8.4",
+    "handlebars": "^4.7.9",
+    "i18next-cli": "^1.73.2",
     "lucide-react": "^0.414.0",
     "lz-string": "1.5.0",
     "next-themes": "^0.3.0",
-    "pure-react-carousel": "^1.32.0",
+    "ora": "^8.2.0",
+    "picocolors": "^1.1.1",
     "react-collapsed": "^4.1.2",
     "react-color": "^2.19.3",
     "react-error-boundary": "^5.0.0",
-    "react-i18next": "^15.5.2",
     "react-international-phone": "^4.6.0",
     "sonner": "^1.5.0",
-    "tailwind-merge": "^2.4.0"
+    "tailwind-merge": "^2.4.0",
+    "ts-morph": "22.0.0",
+    "tsx": "^4.22.4",
+    "typescript": "^5.5.4",
+    "uuid": "11.0.3"
   },
   "engines": {
     "node": "^20.6.0 || ^22 || ^24"
@@ -123,10 +144,9 @@
     "autoprefixer": "^10.4.2",
     "awesome-phonenumber": "^7.5.0",
     "axe-core": "^4.10.3",
-    "fs-extra": "^11.2.0",
     "generate-license-file": "^3.5.0",
+    "gray-matter": "^4.0.3",
     "husky": "^9.1.4",
-    "i18next-cli": "^1.42.0",
     "jest-axe": "^10.0.0",
     "jsdom": "^24.1.1",
     "lint-staged": "^15.2.7",
@@ -134,22 +154,23 @@
     "playwright": "1.55.1",
     "pngjs": "^7.0.0",
     "prettier": "^3.3.3",
+    "prompts": "^2.4.2",
     "react-icons": "^5.2.1",
     "tailwindcss": "^3.4.6",
-    "tsup": "8.3.5",
-    "tsx": "^4.22.4",
-    "typescript": "^5.5.4",
-    "uuid": "11.0.3",
+    "tsup": "^8.5.1",
     "vite": "^5.4.21",
     "vitepress": "^1.6.3",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.7",
+    "yaml": "^2.8.2"
   },
   "peerDependencies": {
     "@yext/pages-components": "^2.2.0",
     "@yext/search-headless-react": "^2.7.1",
     "@yext/search-ui-react": "^3.0.1",
+    "i18next": "^26.4.2",
     "mapbox-gl": "^3.20.0",
     "react": "^17.0.2 || ^18.2.0",
-    "react-dom": "^17.0.2 || ^18.2.0"
+    "react-dom": "^17.0.2 || ^18.2.0",
+    "react-i18next": "^17.0.13"
   }
 }

@@ -10,12 +10,7 @@ export type StyledPageSectionValue = {
 };
 
 type ContentWidthValue =
-  | "default"
-  | "768px"
-  | "960px"
-  | "1024px"
-  | "1280px"
-  | "1440px";
+  "default" | "768px" | "960px" | "1024px" | "1280px" | "1440px";
 
 type VerticalPaddingValue =
   | "default"

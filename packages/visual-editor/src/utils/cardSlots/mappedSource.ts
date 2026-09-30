@@ -42,4 +42,6 @@ export type MappedSourceFieldFilter<T extends Record<string, any>> =
   RenderEntityFieldFilter<T> & {
     /** Higher-priority repeated-source constraints used by itemSource pickers. */
     itemSourceTypes?: EntityFieldTypes[][];
+    /** Used only when itemSourceTypes is not provided. */
+    mappedSourceTypes?: EntityFieldTypes[][];
   };

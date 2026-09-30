@@ -9,11 +9,17 @@ import { DevLogger } from "../../utils/devLogger.ts";
 import { Config, Data } from "@puckeditor/core";
 import { useCommonMessageSenders } from "./useMessageSenders.ts";
 import { ThemeData } from "../types/themeData.ts";
-import { migrate } from "../../utils/migrate.ts";
+import { migrate, type MigrationRegistry } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
+import type { LocalDevOptions } from "../../editor/types.ts";
 
 const devLogger = new DevLogger();
+
+export type ComponentRegistry = Record<
+  string,
+  Config<any> | (() => Promise<Config<any>>)
+>;
 
 const createEmptyLocalDevLayout: Data = {
   root: {},
@@ -23,39 +29,60 @@ const createEmptyLocalDevLayout: Data = {
 
 export const getLocalDevLayoutData = (
   puckConfig: Config,
-  streamDocument: StreamDocument
+  streamDocument: StreamDocument,
+  initialLayoutData?: Record<string, unknown>,
+  sectionLibraryMigrationRegistry?: MigrationRegistry
 ) => {
+  if (initialLayoutData) {
+    return migrate(
+      puckConfig,
+      initialLayoutData as Data,
+      streamDocument,
+      migrationRegistry,
+      sectionLibraryMigrationRegistry
+    );
+  }
   const layout = streamDocument.__?.layout;
   if (!layout) {
     return migrate(
-      createEmptyLocalDevLayout,
-      migrationRegistry,
       puckConfig,
-      streamDocument
+      createEmptyLocalDevLayout,
+      streamDocument,
+      migrationRegistry,
+      sectionLibraryMigrationRegistry
     );
   }
 
   try {
     const parsedLayout = JSON.parse(layout) as Data;
-    return migrate(parsedLayout, migrationRegistry, puckConfig, streamDocument);
+    return migrate(
+      puckConfig,
+      parsedLayout,
+      streamDocument,
+      migrationRegistry,
+      sectionLibraryMigrationRegistry
+    );
   } catch (error) {
     console.warn(
       "Failed to parse local dev layout JSON. Falling back to empty layout.",
       error
     );
     return migrate(
-      createEmptyLocalDevLayout,
-      migrationRegistry,
       puckConfig,
-      streamDocument
+      createEmptyLocalDevLayout,
+      streamDocument,
+      migrationRegistry,
+      sectionLibraryMigrationRegistry
     );
   }
 };
 
 export const useCommonMessageReceivers = (
-  componentRegistry: Record<string, Config<any>>,
+  componentRegistry: ComponentRegistry,
   localDev: boolean,
-  streamDocument: StreamDocument
+  streamDocument: StreamDocument,
+  localDevOptions?: LocalDevOptions,
+  sectionLibraryMigrationRegistry?: MigrationRegistry
 ) => {
   const { iFrameLoaded } = useCommonMessageSenders();
 
@@ -79,30 +106,49 @@ export const useCommonMessageReceivers = (
   // in localDev mode, return default data and mark all data as fetched
   useEffect(() => {
     if (localDev) {
-      const devMetadata = generateTemplateMetadata(streamDocument);
+      const devMetadata = generateTemplateMetadata(
+        streamDocument,
+        localDevOptions
+      );
       setTemplateMetadata(devMetadata);
 
-      const puckConfig = componentRegistry[devMetadata.templateId];
-      if (!puckConfig) {
+      const registeredConfig = componentRegistry[devMetadata.templateId];
+      if (!registeredConfig) {
         throw new Error(
           `Could not find config for template: templateId=${devMetadata.templateId}`
         );
       }
+      if (typeof registeredConfig === "function") {
+        throw new Error(
+          `Cannot load config asynchronously in local development: templateId=${devMetadata.templateId}`
+        );
+      }
+      const puckConfig = registeredConfig;
       setPuckConfig(puckConfig);
 
-      setLayoutData(getLocalDevLayoutData(puckConfig, streamDocument));
+      setLayoutData(
+        getLocalDevLayoutData(
+          puckConfig,
+          streamDocument,
+          localDevOptions?.initialLayoutData,
+          sectionLibraryMigrationRegistry
+        )
+      );
       setLayoutDataFetched(true);
       setThemeData({});
       setThemeDataFetched(true);
     }
   }, [
+    componentRegistry,
     localDev,
+    localDevOptions,
     setTemplateMetadata,
     setPuckConfig,
     setLayoutData,
     setLayoutDataFetched,
     setThemeData,
     setThemeDataFetched,
+    sectionLibraryMigrationRegistry,
     streamDocument,
   ]);
 
@@ -118,21 +164,29 @@ export const useCommonMessageReceivers = (
     };
   }
 
-  useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
-    const puckConfig = componentRegistry[payload.templateId];
-    if (!puckConfig) {
-      throw new Error(
-        `Could not find config for template: templateId=${payload.templateId}`
-      );
+  useReceiveMessage(
+    "getTemplateMetadata",
+    TARGET_ORIGINS,
+    async (send, payload) => {
+      const registeredConfig = componentRegistry[payload.templateId];
+      if (!registeredConfig) {
+        throw new Error(
+          `Could not find config for template: templateId=${payload.templateId}`
+        );
+      }
+      const puckConfig =
+        typeof registeredConfig === "function"
+          ? await registeredConfig()
+          : registeredConfig;
+      setPuckConfig(puckConfig);
+      const templateMetadata = payload as TemplateMetadata;
+      setTemplateMetadata(payload as TemplateMetadata);
+      devLogger.enable(templateMetadata.isxYextDebug);
+      devLogger.logData("TEMPLATE_METADATA", templateMetadata);
+      devLogger.logData("PUCK_CONFIG", puckConfig);
+      send({ status: "success", payload: { message: "payload received" } });
     }
-    setPuckConfig(puckConfig);
-    const templateMetadata = payload as TemplateMetadata;
-    setTemplateMetadata(payload as TemplateMetadata);
-    devLogger.enable(templateMetadata.isxYextDebug);
-    devLogger.logData("TEMPLATE_METADATA", templateMetadata);
-    devLogger.logData("PUCK_CONFIG", puckConfig);
-    send({ status: "success", payload: { message: "payload received" } });
-  });
+  );
 
   useReceiveMessage("getLayoutData", TARGET_ORIGINS, (send, payload) => {
     const data = JSON.parse(payload.layoutData) as Data;

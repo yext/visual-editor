@@ -47,6 +47,7 @@ Meant to be used in conjunction with the [VisualEditorProvider](../utils/README.
 import {
   Editor,
   usePlatformBridgeDocument,
+  usePlatformBridgeEntityFields,
   VisualEditorProvider,
 } from "@yext/visual-editor";
 

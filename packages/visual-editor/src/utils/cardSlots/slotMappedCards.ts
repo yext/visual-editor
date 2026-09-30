@@ -82,8 +82,7 @@ export const syncManualSlotMappedCards = <TCard extends CardWithId>({
     if (card) {
       card = syncChildSlotIds ? syncChildSlotIds(card, nextId) : card;
       const slots = card.props.slots as
-        | Record<string, Array<{ props?: Record<string, unknown> }>>
-        | undefined;
+        Record<string, Array<{ props?: Record<string, unknown> }>> | undefined;
 
       Object.values(slots ?? {}).forEach((slotArray) => {
         slotArray.forEach((slotChild) => {

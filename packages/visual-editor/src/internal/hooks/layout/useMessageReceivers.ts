@@ -9,7 +9,7 @@ import {
 } from "../useMessage.ts";
 import { useCommonMessageSenders } from "../useMessageSenders.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
-import { migrate } from "../../../utils/migrate.ts";
+import { migrate, type MigrationRegistry } from "../../../utils/migrate.ts";
 import { resolveSchemaJson } from "../../../utils/schema/resolveSchema.ts";
 import { type StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import {
@@ -22,7 +22,8 @@ const devLogger = new DevLogger();
 export const useLayoutMessageReceivers = (
   localDev: boolean,
   puckConfig: Config,
-  streamDocument: StreamDocument
+  streamDocument: StreamDocument,
+  sectionLibraryMigrationRegistry?: MigrationRegistry
 ) => {
   const { iFrameLoaded } = useCommonMessageSenders();
 
@@ -43,10 +44,11 @@ export const useLayoutMessageReceivers = (
       const migratedHistory = {
         ...history,
         data: migrate(
-          history.data,
-          migrationRegistry,
           puckConfig,
-          streamDocument
+          history.data,
+          streamDocument,
+          migrationRegistry,
+          sectionLibraryMigrationRegistry
         ),
       };
 

@@ -1,0 +1,1189 @@
+import fs from "node:fs";
+import path from "node:path";
+import process from "node:process";
+import ts from "typescript";
+import {
+  purposes,
+  verticals,
+  type EntityLayoutMetadata,
+  type LibraryMetadata,
+  type PageSetType,
+} from "../../../types/sectionLibrary.ts";
+import { exportDirectoryLocatorSectionLibrary } from "./exportDirectoryLocatorSectionLibrary.ts";
+
+const SAFE_ID = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
+const VERTICALS = new Set(verticals);
+const PURPOSES = new Set(purposes);
+const REQUIRED_BASE_SECTIONS = new Set(["Directory", "Locator"]);
+const RESERVED_COMPONENT_IDS = new Set([
+  ...REQUIRED_BASE_SECTIONS,
+  "MainContent",
+]);
+const RESERVED_LAYOUT_IDS = new Set(["main", "directory", "locator", "edit"]);
+
+type JsonRecord = Record<string, any>;
+
+type LegacyComponent = {
+  displayName: string;
+  id: string;
+  content: string;
+};
+
+type LegacyTemplate = {
+  templateId: string;
+  directory: string;
+  metadata: JsonRecord;
+  defaultLayout: JsonRecord;
+  components: LegacyComponent[];
+};
+
+type BaseLayout = {
+  directory: string;
+  metadata: { id: string; pageSetType: PageSetType; [key: string]: any };
+};
+
+type BaseLibrary = {
+  directory: BaseLayout;
+  locator: BaseLayout;
+  layouts: BaseLayout[];
+};
+
+type PreparedBaseLibrary = {
+  directory: string;
+  temporaryDirectory?: string;
+};
+
+type CopiedComponent = LegacyComponent & { templateId: string };
+
+type TemplateHeaderFooterSelection = {
+  kind: "header" | "footer";
+  matches: string[];
+  component?: JsonRecord & { type: string };
+};
+
+type TemplateHeaderFooter = {
+  header: TemplateHeaderFooterSelection;
+  footer: TemplateHeaderFooterSelection;
+};
+
+type Conversion = {
+  baseLibrary: BaseLibrary;
+  templateHeaderFooter: TemplateHeaderFooter;
+  components: Map<string, CopiedComponent>;
+  directoryLayoutId: string;
+  duplicates: {
+    componentId: string;
+    keptTemplateId: string;
+    ignoredTemplateId: string;
+    differs: boolean;
+  }[];
+  libraryMetadata: LibraryMetadata;
+  locatorLayoutId: string;
+  templates: LegacyTemplate[];
+};
+
+type ConvertOptions = {
+  apply: boolean;
+  deleteSource: boolean;
+  targetDirectory: string;
+  write?: (message: string) => void;
+};
+
+/**
+ * Converts all legacy registry templates into one Section Library.
+ *
+ * 1. Export missing Directory and Locator source, then validate the base
+ *    library and every legacy template.
+ * 2. Build one Entity layout per template and one section per component ID.
+ * 3. Replace the library only after the staged copy is complete.
+ */
+export const convertTemplatesToSectionLibrary = ({
+  apply,
+  deleteSource,
+  targetDirectory,
+  write = console.log,
+}: ConvertOptions): void => {
+  if (deleteSource && !apply) {
+    throw new Error("--delete-source requires --apply");
+  }
+
+  const rootDirectory = path.resolve(targetDirectory);
+  const libraryDirectory = path.join(rootDirectory, "src", "library");
+  const templates = readLegacyTemplates(rootDirectory);
+  const preparedBaseLibrary = prepareBaseLibrary(rootDirectory);
+  try {
+    const baseLibrary = readBaseLibrary(preparedBaseLibrary.directory);
+    const conversion = buildConversion(templates, baseLibrary);
+
+    if (preparedBaseLibrary.temporaryDirectory) {
+      write(
+        "Directory and Locator source will be added to the converted library."
+      );
+    }
+    writeReport({ apply, conversion, deleteSource, write });
+    if (!apply) {
+      return;
+    }
+
+    replaceLibrary(libraryDirectory, preparedBaseLibrary.directory, conversion);
+    if (deleteSource) {
+      deleteLegacyTemplates(templates, write);
+    }
+  } finally {
+    if (preparedBaseLibrary.temporaryDirectory) {
+      fs.rmSync(preparedBaseLibrary.temporaryDirectory, {
+        recursive: true,
+        force: true,
+      });
+    }
+  }
+};
+
+/**
+ * Returns the existing base library, or creates a temporary Directory and
+ * Locator base that the conversion can validate and apply atomically.
+ */
+const prepareBaseLibrary = (rootDirectory: string): PreparedBaseLibrary => {
+  const libraryDirectory = path.join(rootDirectory, "src", "library");
+  if (hasDirectoryLocatorBase(libraryDirectory)) {
+    return { directory: libraryDirectory };
+  }
+
+  const temporaryDirectory = fs.mkdtempSync(
+    path.join(rootDirectory, "src", ".section-library-base-")
+  );
+  const temporaryLibraryDirectory = path.join(
+    temporaryDirectory,
+    "src",
+    "library"
+  );
+  if (fs.existsSync(libraryDirectory)) {
+    fs.cpSync(libraryDirectory, temporaryLibraryDirectory, {
+      recursive: true,
+    });
+  }
+  exportDirectoryLocatorSectionLibrary({
+    targetDirectory: temporaryDirectory,
+    overwrite: fs.existsSync(path.join(temporaryLibraryDirectory, "shared")),
+  });
+  return {
+    directory: temporaryLibraryDirectory,
+    temporaryDirectory,
+  };
+};
+
+const hasDirectoryLocatorBase = (libraryDirectory: string): boolean => {
+  const sectionsDirectory = path.join(libraryDirectory, "sections");
+  if (
+    !fs.existsSync(
+      path.join(libraryDirectory, "shared", "componentRegistry.ts")
+    ) ||
+    !fs.existsSync(path.join(sectionsDirectory, "Directory.tsx")) ||
+    !fs.existsSync(path.join(sectionsDirectory, "Locator.tsx"))
+  ) {
+    return false;
+  }
+  const layoutsDirectory = path.join(libraryDirectory, "layouts");
+  if (!fs.existsSync(layoutsDirectory)) {
+    return false;
+  }
+  const pageSetTypes = fs
+    .readdirSync(layoutsDirectory, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .flatMap((entry) => {
+      try {
+        const metadata = readJson(
+          path.join(layoutsDirectory, entry.name, "metadata.json"),
+          `layout metadata for ${entry.name}`
+        );
+        return isRecord(metadata) &&
+          (metadata.pageSetType === "DIRECTORY" ||
+            metadata.pageSetType === "LOCATOR")
+          ? [metadata.pageSetType]
+          : [];
+      } catch {
+        return [];
+      }
+    });
+  return (
+    pageSetTypes.filter((pageSetType) => pageSetType === "DIRECTORY").length ===
+      1 &&
+    pageSetTypes.filter((pageSetType) => pageSetType === "LOCATOR").length === 1
+  );
+};
+
+const readLegacyTemplates = (rootDirectory: string): LegacyTemplate[] => {
+  const registryDirectory = path.join(rootDirectory, "src", "registry");
+  if (!fs.existsSync(registryDirectory)) {
+    throw new Error(`Missing legacy template registry at ${registryDirectory}`);
+  }
+  const templateDirectories = fs
+    .readdirSync(registryDirectory, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort((left, right) => left.localeCompare(right));
+  if (templateDirectories.length === 0) {
+    throw new Error(`No legacy templates found in ${registryDirectory}`);
+  }
+  const normalizedTemplateIds = new Set<string>();
+  return templateDirectories.map((templateDirectory) => {
+    if (!SAFE_ID.test(templateDirectory)) {
+      throw new Error(`Template ID is not valid: ${templateDirectory}`);
+    }
+    const templateId = removeYextPrefix(templateDirectory);
+    if (!SAFE_ID.test(templateId)) {
+      throw new Error(`Template ID is not valid: ${templateDirectory}`);
+    }
+    if (normalizedTemplateIds.has(templateId)) {
+      throw new Error(
+        `Template IDs collide after removing the yext- prefix: ${templateId}`
+      );
+    }
+    normalizedTemplateIds.add(templateId);
+    if (RESERVED_LAYOUT_IDS.has(templateId)) {
+      throw new Error(
+        `Template ID is reserved for a generated template alias: ${templateId}`
+      );
+    }
+    return readLegacyTemplate(
+      path.join(registryDirectory, templateDirectory),
+      templateId
+    );
+  });
+};
+
+const readLegacyTemplate = (
+  directory: string,
+  templateId: string
+): LegacyTemplate => {
+  const metadataPath = path.join(directory, "template.json");
+  const defaultLayoutPath = path.join(directory, "defaultLayout.json");
+  const componentsDirectory = path.join(directory, "components");
+  for (const requiredPath of [
+    metadataPath,
+    defaultLayoutPath,
+    componentsDirectory,
+  ]) {
+    if (!fs.existsSync(requiredPath)) {
+      throw new Error(`Legacy template is missing ${requiredPath}`);
+    }
+  }
+  if (!fs.statSync(componentsDirectory).isDirectory()) {
+    throw new Error(
+      `Legacy components path is not a directory: ${componentsDirectory}`
+    );
+  }
+
+  const entries = fs.readdirSync(componentsDirectory, { withFileTypes: true });
+  const nestedDirectory = entries.find((entry) => entry.isDirectory());
+  if (nestedDirectory) {
+    throw new Error(
+      `Nested component directories are not supported: ${path.join(componentsDirectory, nestedDirectory.name)}`
+    );
+  }
+  const unsupportedFile = entries.find(
+    (entry) => entry.isFile() && path.extname(entry.name) !== ".tsx"
+  );
+  if (unsupportedFile) {
+    throw new Error(
+      `Legacy component file must use the .tsx extension: ${path.join(componentsDirectory, unsupportedFile.name)}`
+    );
+  }
+  const components = entries
+    .filter((entry) => entry.isFile() && path.extname(entry.name) === ".tsx")
+    .flatMap((entry) => {
+      const sourcePath = path.join(componentsDirectory, entry.name);
+      const componentName = path.basename(entry.name, ".tsx");
+      const id = removeYextPrefix(componentName);
+      if (!SAFE_ID.test(id)) {
+        throw new Error(`Component ID is not valid: ${componentName}`);
+      }
+      const content = fs.readFileSync(sourcePath, "utf8");
+      if (
+        id === "CustomCodeSection" &&
+        content.trim() ===
+          'export { CustomCodeSection } from "@yext/visual-editor";'
+      ) {
+        return [];
+      }
+      validateComponentSource(
+        content,
+        sourcePath,
+        [id, componentName],
+        componentsDirectory
+      );
+      return [
+        {
+          id,
+          content: renameComponentIdentifiers(content),
+          displayName: readComponentLabel(content, sourcePath),
+        },
+      ];
+    })
+    .sort((left, right) => left.id.localeCompare(right.id));
+  if (components.length === 0) {
+    throw new Error(
+      `Legacy template has no .tsx components: ${componentsDirectory}`
+    );
+  }
+
+  const metadata = readJson(metadataPath, "legacy template metadata");
+  const defaultLayout = normalizeLayoutComponentIds(
+    readJson(defaultLayoutPath, "legacy default layout")
+  );
+  if (!isRecord(metadata)) {
+    throw new Error(
+      `Legacy template metadata must be an object: ${metadataPath}`
+    );
+  }
+  validateDefaultLayout(defaultLayout, defaultLayoutPath, "Legacy");
+  return { templateId, directory, metadata, defaultLayout, components };
+};
+
+const removeYextPrefix = (id: string): string => id.replace(/^yext-?/i, "");
+
+const normalizeLayoutComponentIds = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value.map(normalizeLayoutComponentIds);
+  }
+  if (!isRecord(value)) {
+    return value;
+  }
+  const isComponent = typeof value.type === "string" && isRecord(value.props);
+  return Object.fromEntries(
+    Object.entries(value).map(([key, child]) => [
+      key,
+      key === "type" && isComponent && typeof child === "string"
+        ? removeYextPrefix(child)
+        : key === "props" && isComponent && isRecord(child)
+          ? Object.fromEntries(
+              Object.entries(child).map(([propKey, propValue]) => [
+                propKey,
+                propKey === "id" && typeof propValue === "string"
+                  ? removeYextPrefix(propValue)
+                  : normalizeLayoutComponentIds(propValue),
+              ])
+            )
+          : normalizeLayoutComponentIds(child),
+    ])
+  );
+};
+
+/**
+ * Removes Yext prefixes from local identifiers in component source code.
+ *
+ * The converter renames declarations and references for local variables,
+ * functions, types, and components. It also removes the prefix from a
+ * hardcoded `AnalyticsScopeProvider` `name` value. Other strings, comments,
+ * and names imported from external packages remain unchanged.
+ *
+ * @param content The legacy component source.
+ * @returns The source with local Yext-prefixed identifiers normalized.
+ */
+const renameComponentIdentifiers = (content: string): string => {
+  const sourceFile = ts.createSourceFile(
+    "component.tsx",
+    content,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX
+  );
+  const externalImportNames = new Set<string>();
+  for (const statement of sourceFile.statements) {
+    if (
+      !ts.isImportDeclaration(statement) ||
+      !ts.isStringLiteral(statement.moduleSpecifier) ||
+      statement.moduleSpecifier.text.startsWith(".")
+    ) {
+      continue;
+    }
+    if (statement.importClause?.name) {
+      externalImportNames.add(statement.importClause.name.text);
+    }
+    const namedBindings = statement.importClause?.namedBindings;
+    if (namedBindings && ts.isNamespaceImport(namedBindings)) {
+      externalImportNames.add(namedBindings.name.text);
+    } else if (namedBindings && ts.isNamedImports(namedBindings)) {
+      for (const element of namedBindings.elements) {
+        externalImportNames.add(element.name.text);
+        if (element.propertyName) {
+          externalImportNames.add(element.propertyName.text);
+        }
+      }
+    }
+  }
+  const identifierRanges: {
+    start: number;
+    end: number;
+    nextName: string;
+  }[] = [];
+  const visit = (node: ts.Node): void => {
+    if (ts.isJsxAttribute(node) && node.name.getText(sourceFile) === "name") {
+      const openingElement = node.parent.parent;
+      if (
+        (ts.isJsxOpeningElement(openingElement) ||
+          ts.isJsxSelfClosingElement(openingElement)) &&
+        openingElement.tagName.getText(sourceFile) === "AnalyticsScopeProvider"
+      ) {
+        const initializer = node.initializer;
+        const expression =
+          initializer && ts.isJsxExpression(initializer)
+            ? initializer.expression
+            : initializer;
+        if (
+          expression &&
+          (ts.isStringLiteral(expression) ||
+            ts.isNoSubstitutionTemplateLiteral(expression))
+        ) {
+          const nextName = removeYextPrefix(expression.text);
+          if (nextName !== expression.text) {
+            identifierRanges.push({
+              start: expression.getStart(sourceFile) + 1,
+              end: expression.end - 1,
+              nextName,
+            });
+          }
+        } else if (expression && ts.isTemplateExpression(expression)) {
+          const nextName = removeYextPrefix(expression.head.text);
+          if (nextName !== expression.head.text) {
+            const start = expression.head.getStart(sourceFile) + 1;
+            identifierRanges.push({
+              start,
+              end: start + expression.head.text.length,
+              nextName,
+            });
+          }
+        }
+      }
+    }
+    if (ts.isIdentifier(node) && !externalImportNames.has(node.text)) {
+      const parent = node.parent;
+      const isPropertyName =
+        (ts.isPropertyAccessExpression(parent) && parent.name === node) ||
+        (ts.isQualifiedName(parent) && parent.right === node) ||
+        (ts.isPropertyAssignment(parent) && parent.name === node) ||
+        (ts.isMethodDeclaration(parent) && parent.name === node) ||
+        (ts.isMethodSignature(parent) && parent.name === node) ||
+        (ts.isPropertyDeclaration(parent) && parent.name === node) ||
+        (ts.isPropertySignature(parent) && parent.name === node);
+      if (!isPropertyName) {
+        const nextName = removeYextPrefix(node.text);
+        if (nextName !== node.text) {
+          identifierRanges.push({
+            start: node.getStart(sourceFile),
+            end: node.end,
+            nextName,
+          });
+        }
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sourceFile);
+  return identifierRanges
+    .sort((left, right) => right.start - left.start)
+    .reduce(
+      (renamedContent, range) =>
+        `${renamedContent.slice(0, range.start)}${range.nextName}${renamedContent.slice(range.end)}`,
+      content
+    );
+};
+
+/** Reads the static label from a legacy component configuration. */
+const readComponentLabel = (content: string, sourcePath: string): string => {
+  const sourceFile = ts.createSourceFile(
+    sourcePath,
+    content,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX
+  );
+  const declarations = sourceFile.statements.flatMap((statement) =>
+    ts.isVariableStatement(statement) &&
+    (statement.declarationList.flags & ts.NodeFlags.Const) !== 0
+      ? statement.declarationList.declarations.filter(
+          (declaration) =>
+            declaration.type &&
+            ts.isTypeReferenceNode(declaration.type) &&
+            declaration.type.typeName.getText(sourceFile) ===
+              "YextComponentConfig"
+        )
+      : []
+  );
+  if (declarations.length !== 1) {
+    throw new Error(
+      `Component must define one const with type YextComponentConfig: ${sourcePath}`
+    );
+  }
+  const initializer = declarations[0].initializer;
+  if (!initializer || !ts.isObjectLiteralExpression(initializer)) {
+    throw new Error(
+      `YextComponentConfig must use an object literal initializer: ${sourcePath}`
+    );
+  }
+  const label = initializer.properties.find(
+    (property): property is ts.PropertyAssignment =>
+      ts.isPropertyAssignment(property) &&
+      property.name.getText(sourceFile) === "label"
+  );
+  if (
+    !label ||
+    !ts.isStringLiteral(label.initializer) ||
+    !label.initializer.text.trim()
+  ) {
+    throw new Error(
+      `YextComponentConfig label must be a non-empty string: ${sourcePath}`
+    );
+  }
+  return label.initializer.text;
+};
+
+/**
+ * Validates a legacy component source file.
+ *
+ * The source must export one of the provided names, must not define its own
+ * SectionConfig, and must keep relative imports inside the components directory.
+ * The converter provides both the normalized name and the legacy name because
+ * either name can be present in the source export.
+ *
+ * @param content The legacy component source.
+ * @param sourcePath The source path used in validation errors.
+ * @param componentNames The normalized and legacy names accepted for the export.
+ * @param componentsDirectory The directory that relative imports must not leave.
+ * @throws If the source does not meet the legacy component requirements.
+ */
+const validateComponentSource = (
+  content: string,
+  sourcePath: string,
+  componentNames: string[],
+  componentsDirectory: string
+): void => {
+  const hasNamedExport = componentNames.some((componentName) => {
+    const directNamedExport = new RegExp(
+      `export\\s+(?:async\\s+)?(?:const|function|class)\\s+${componentName}\\b`
+    );
+    return (
+      directNamedExport.test(content) ||
+      Array.from(content.matchAll(/export\s*\{([^}]*)\}/g)).some((match) =>
+        match[1].split(",").some((entry) => {
+          const exportName = entry
+            .trim()
+            .replace(/^type\s+/, "")
+            .split(/\s+as\s+/)
+            .at(-1)
+            ?.trim();
+          return exportName === componentName;
+        })
+      )
+    );
+  });
+  if (!hasNamedExport) {
+    throw new Error(
+      `Component ${componentNames.at(-1)} must have a named export in ${sourcePath}`
+    );
+  }
+  const exportsConfig =
+    /export\s+(?:const|let|var|function|class)\s+config\b/.test(content) ||
+    Array.from(content.matchAll(/export\s*\{([^}]*)\}/g)).some((match) =>
+      match[1].split(",").some((entry) => {
+        const exportName = entry
+          .trim()
+          .split(/\s+as\s+/)
+          .at(-1)
+          ?.trim();
+        return exportName === "config";
+      })
+    );
+  if (
+    /\b(?:const|let|var|function|class)\s+config\b/.test(content) ||
+    exportsConfig
+  ) {
+    throw new Error(
+      `Component ${componentNames.at(-1)} already defines config: ${sourcePath}`
+    );
+  }
+  for (const match of content.matchAll(
+    /(?:import|export)\s+(?:type\s+)?(?:[^"']+?\s+from\s+)?["']([^"']+)["']/g
+  )) {
+    const specifier = match[1];
+    if (!specifier.startsWith(".")) {
+      continue;
+    }
+    const resolvedPath = path.resolve(path.dirname(sourcePath), specifier);
+    if (
+      resolvedPath !== componentsDirectory &&
+      !resolvedPath.startsWith(`${componentsDirectory}${path.sep}`)
+    ) {
+      throw new Error(
+        `Relative import leaves the legacy components directory: ${sourcePath} imports ${specifier}`
+      );
+    }
+    if (!fs.existsSync(`${resolvedPath}.tsx`) && !fs.existsSync(resolvedPath)) {
+      throw new Error(
+        `Relative import cannot be copied from the legacy components directory: ${sourcePath} imports ${specifier}`
+      );
+    }
+  }
+};
+
+const readBaseLibrary = (libraryDirectory: string): BaseLibrary => {
+  const layoutsDirectory = path.join(libraryDirectory, "layouts");
+  const sectionsDirectory = path.join(libraryDirectory, "sections");
+  const sharedRegistryPath = path.join(
+    libraryDirectory,
+    "shared",
+    "componentRegistry.ts"
+  );
+  for (const requiredPath of [
+    layoutsDirectory,
+    sectionsDirectory,
+    sharedRegistryPath,
+  ]) {
+    if (!fs.existsSync(requiredPath)) {
+      throw new Error(`Base Section Library is missing ${requiredPath}`);
+    }
+  }
+  const layouts = fs
+    .readdirSync(layoutsDirectory, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => {
+      const directory = path.join(layoutsDirectory, entry.name);
+      const metadataPath = path.join(directory, "metadata.json");
+      const metadata = readJson(
+        metadataPath,
+        `layout metadata for ${entry.name}`
+      );
+      if (
+        !isRecord(metadata) ||
+        !["ENTITY", "DIRECTORY", "LOCATOR"].includes(metadata.pageSetType) ||
+        typeof metadata.id !== "string" ||
+        metadata.id !== entry.name ||
+        !SAFE_ID.test(metadata.id)
+      ) {
+        throw new Error(`Base layout metadata is not valid: ${metadataPath}`);
+      }
+      const defaultLayoutPath = path.join(directory, "defaultLayout.json");
+      const defaultLayout = readJson(
+        defaultLayoutPath,
+        `base default layout for ${entry.name}`
+      );
+      validateDefaultLayout(defaultLayout, defaultLayoutPath, "Base");
+      return { directory, metadata } as BaseLayout;
+    });
+  const directoryLayouts = layouts.filter(
+    (layout) => layout.metadata.pageSetType === "DIRECTORY"
+  );
+  const locatorLayouts = layouts.filter(
+    (layout) => layout.metadata.pageSetType === "LOCATOR"
+  );
+  if (directoryLayouts.length !== 1 || locatorLayouts.length !== 1) {
+    throw new Error(
+      "Base Section Library must contain one Directory layout and one Locator layout"
+    );
+  }
+
+  const sectionIds = fs
+    .readdirSync(sectionsDirectory, { withFileTypes: true })
+    .filter(
+      (entry) =>
+        entry.isFile() && [".tsx", ".jsx"].includes(path.extname(entry.name))
+    )
+    .map((entry) => path.basename(entry.name, path.extname(entry.name)));
+  for (const requiredSection of REQUIRED_BASE_SECTIONS) {
+    if (!sectionIds.includes(requiredSection)) {
+      throw new Error(`Base Section Library is missing ${requiredSection}.tsx`);
+    }
+  }
+  return {
+    directory: directoryLayouts[0],
+    locator: locatorLayouts[0],
+    layouts,
+  };
+};
+
+const buildConversion = (
+  templates: LegacyTemplate[],
+  baseLibrary: BaseLibrary
+): Conversion => {
+  const firstTemplate = templates[0];
+  const templateHeaderFooter: TemplateHeaderFooter = {
+    header: selectTemplateHeaderFooter(firstTemplate, "header"),
+    footer: selectTemplateHeaderFooter(firstTemplate, "footer"),
+  };
+  const components = new Map<string, CopiedComponent>();
+  const duplicates: Conversion["duplicates"] = [];
+  for (const template of templates) {
+    for (const component of template.components) {
+      const existing = components.get(component.id);
+      if (existing) {
+        duplicates.push({
+          componentId: component.id,
+          keptTemplateId: existing.templateId,
+          ignoredTemplateId: template.templateId,
+          differs: existing.content !== component.content,
+        });
+        continue;
+      }
+      if (RESERVED_COMPONENT_IDS.has(component.id)) {
+        throw new Error(
+          `Legacy component ID is reserved by the base library: ${component.id}`
+        );
+      }
+      components.set(component.id, {
+        ...component,
+        templateId: template.templateId,
+      });
+    }
+  }
+  const componentIds = new Set(components.keys());
+  const directoryLayoutId = `${firstTemplate.templateId}-directory`;
+  const locatorLayoutId = `${firstTemplate.templateId}-locator`;
+  if (
+    templates.some(
+      (template) =>
+        template.templateId === directoryLayoutId ||
+        template.templateId === locatorLayoutId
+    )
+  ) {
+    throw new Error(
+      "A legacy template ID conflicts with the generated Directory or Locator layout ID"
+    );
+  }
+  for (const template of templates) {
+    validateLayoutReferences(
+      template.defaultLayout.content,
+      componentIds,
+      path.join(template.directory, "defaultLayout.json")
+    );
+    validateLayoutReferences(
+      template.defaultLayout.zones,
+      componentIds,
+      path.join(template.directory, "defaultLayout.json")
+    );
+  }
+  return {
+    baseLibrary,
+    templateHeaderFooter,
+    components,
+    directoryLayoutId,
+    duplicates,
+    libraryMetadata: buildLibraryMetadata(firstTemplate),
+    locatorLayoutId,
+    templates,
+  };
+};
+
+// Finds the existing header or footer by looking at the default layout
+// and finding a "type" that includes "header" or "footer"
+const selectTemplateHeaderFooter = (
+  template: LegacyTemplate,
+  kind: "header" | "footer"
+): TemplateHeaderFooterSelection => {
+  const matches = template.defaultLayout.content.filter(
+    (component: unknown): component is JsonRecord & { type: string } =>
+      isRecord(component) &&
+      typeof component.type === "string" &&
+      component.type.toLowerCase().includes(kind)
+  );
+  return {
+    kind,
+    matches: matches.map((component: any) => component.type),
+    ...(matches.length === 1 ? { component: matches[0] } : {}),
+  };
+};
+
+const buildLibraryMetadata = (template: LegacyTemplate): LibraryMetadata => {
+  const displayName = requireString(
+    template.metadata.displayName,
+    path.join(template.directory, "template.json"),
+    "displayName"
+  );
+  return {
+    schemaVersion: 1,
+    id: template.templateId,
+    displayName,
+    description:
+      typeof template.metadata.description === "string" &&
+      template.metadata.description.trim()
+        ? template.metadata.description
+        : "",
+  };
+};
+
+const buildEntityLayoutMetadata = (
+  template: LegacyTemplate
+): EntityLayoutMetadata => {
+  const metadataPath = path.join(template.directory, "template.json");
+  const vertical = readMetadataList(
+    template.metadata.verticals,
+    VERTICALS,
+    metadataPath,
+    "verticals"
+  );
+  const purpose = readMetadataList(
+    template.metadata.purposes,
+    PURPOSES,
+    metadataPath,
+    "purposes"
+  );
+  return {
+    id: template.templateId,
+    displayName: requireString(
+      template.metadata.displayName,
+      metadataPath,
+      "displayName"
+    ),
+    ...(vertical.length > 0 ? { vertical } : {}),
+    ...(purpose.length > 0 ? { purpose } : {}),
+    pageSetType: "ENTITY",
+  };
+};
+
+const readMetadataList = <T extends string>(
+  value: unknown,
+  allowedValues: Set<T>,
+  sourcePath: string,
+  property: string
+): T[] => {
+  if (value === undefined) {
+    return [];
+  }
+  if (
+    !Array.isArray(value) ||
+    value.some(
+      (item) => typeof item !== "string" || !allowedValues.has(item as T)
+    )
+  ) {
+    throw new Error(
+      `${sourcePath} ${property} must contain supported string values`
+    );
+  }
+  return value as T[];
+};
+
+function validateDefaultLayout(
+  defaultLayout: unknown,
+  sourcePath: string,
+  description: string
+): asserts defaultLayout is JsonRecord {
+  if (
+    !isRecord(defaultLayout) ||
+    !isRecord(defaultLayout.root) ||
+    !isRecord(defaultLayout.zones) ||
+    !Array.isArray(defaultLayout.content)
+  ) {
+    throw new Error(
+      `${description} default layout is not valid: ${sourcePath}`
+    );
+  }
+}
+
+const validateLayoutReferences = (
+  value: unknown,
+  componentIds: Set<string>,
+  sourcePath: string
+): void => {
+  if (Array.isArray(value)) {
+    value.forEach((item) =>
+      validateLayoutReferences(item, componentIds, sourcePath)
+    );
+    return;
+  }
+  if (!isRecord(value)) {
+    return;
+  }
+  if (
+    typeof value.type === "string" &&
+    isRecord(value.props) &&
+    value.type !== "MainContent" &&
+    !componentIds.has(value.type)
+  ) {
+    throw new Error(
+      `Default layout references missing section ${value.type}: ${sourcePath}`
+    );
+  }
+  Object.values(value).forEach((child) =>
+    validateLayoutReferences(child, componentIds, sourcePath)
+  );
+};
+
+const replaceLibrary = (
+  libraryDirectory: string,
+  baseLibraryDirectory: string,
+  conversion: Conversion
+): void => {
+  const parentDirectory = path.dirname(libraryDirectory);
+  const stagedDirectory = fs.mkdtempSync(
+    path.join(parentDirectory, ".section-library-conversion-")
+  );
+  const backupDirectory = path.join(
+    parentDirectory,
+    `.section-library-backup-${process.pid}-${Date.now()}`
+  );
+  const hasExistingLibrary = fs.existsSync(libraryDirectory);
+  try {
+    fs.cpSync(baseLibraryDirectory, stagedDirectory, { recursive: true });
+    writeConvertedLibrary(stagedDirectory, conversion);
+    if (hasExistingLibrary) {
+      fs.renameSync(libraryDirectory, backupDirectory);
+    }
+    try {
+      fs.renameSync(stagedDirectory, libraryDirectory);
+    } catch (error) {
+      if (hasExistingLibrary) {
+        fs.renameSync(backupDirectory, libraryDirectory);
+      }
+      throw error;
+    }
+    if (hasExistingLibrary) {
+      fs.rmSync(backupDirectory, { recursive: true, force: true });
+    }
+  } catch (error) {
+    fs.rmSync(stagedDirectory, { recursive: true, force: true });
+    if (fs.existsSync(backupDirectory) && !fs.existsSync(libraryDirectory)) {
+      fs.renameSync(backupDirectory, libraryDirectory);
+    }
+    throw error;
+  }
+};
+
+const writeConvertedLibrary = (
+  libraryDirectory: string,
+  conversion: Conversion
+): void => {
+  fs.rmSync(path.join(libraryDirectory, ".generated"), {
+    recursive: true,
+    force: true,
+  });
+  fs.writeFileSync(
+    path.join(libraryDirectory, "library.json"),
+    formatJson(conversion.libraryMetadata)
+  );
+  const layoutsDirectory = path.join(libraryDirectory, "layouts");
+  for (const layout of conversion.baseLibrary.layouts) {
+    if (layout.metadata.pageSetType === "ENTITY") {
+      fs.rmSync(path.join(layoutsDirectory, path.basename(layout.directory)), {
+        recursive: true,
+        force: true,
+      });
+    }
+  }
+  renameBaseLayout(
+    libraryDirectory,
+    conversion.baseLibrary.directory,
+    conversion.directoryLayoutId,
+    conversion.templateHeaderFooter
+  );
+  renameBaseLayout(
+    libraryDirectory,
+    conversion.baseLibrary.locator,
+    conversion.locatorLayoutId,
+    conversion.templateHeaderFooter
+  );
+  for (const template of conversion.templates) {
+    const layoutDirectory = path.join(layoutsDirectory, template.templateId);
+    fs.mkdirSync(layoutDirectory, { recursive: true });
+    fs.writeFileSync(
+      path.join(layoutDirectory, "metadata.json"),
+      formatJson(buildEntityLayoutMetadata(template))
+    );
+    fs.writeFileSync(
+      path.join(layoutDirectory, "defaultLayout.json"),
+      formatJson(template.defaultLayout)
+    );
+  }
+  const sectionsDirectory = path.join(libraryDirectory, "sections");
+  for (const entry of fs.readdirSync(sectionsDirectory, {
+    withFileTypes: true,
+  })) {
+    if (
+      entry.isFile() &&
+      [".tsx", ".jsx"].includes(path.extname(entry.name)) &&
+      !REQUIRED_BASE_SECTIONS.has(
+        path.basename(entry.name, path.extname(entry.name))
+      )
+    ) {
+      fs.rmSync(path.join(sectionsDirectory, entry.name));
+    }
+  }
+  for (const component of conversion.components.values()) {
+    fs.writeFileSync(
+      path.join(sectionsDirectory, `${component.id}.tsx`),
+      buildSectionSource(component, conversion.templateHeaderFooter)
+    );
+  }
+};
+
+const renameBaseLayout = (
+  libraryDirectory: string,
+  layout: BaseLayout,
+  layoutId: string,
+  templateHeaderFooter: TemplateHeaderFooter
+): void => {
+  const layoutsDirectory = path.join(libraryDirectory, "layouts");
+  const currentDirectory = path.join(
+    layoutsDirectory,
+    path.basename(layout.directory)
+  );
+  const nextDirectory = path.join(layoutsDirectory, layoutId);
+  if (currentDirectory !== nextDirectory) {
+    fs.rmSync(nextDirectory, { recursive: true, force: true });
+    fs.renameSync(currentDirectory, nextDirectory);
+  }
+  const metadata = readJson(
+    path.join(nextDirectory, "metadata.json"),
+    `layout metadata for ${layoutId}`
+  );
+  if (!isRecord(metadata)) {
+    throw new Error(`Layout metadata is not valid: ${layoutId}`);
+  }
+  fs.writeFileSync(
+    path.join(nextDirectory, "metadata.json"),
+    formatJson({ ...metadata, id: layoutId })
+  );
+  const defaultLayoutPath = path.join(nextDirectory, "defaultLayout.json");
+  const defaultLayout = readJson(
+    defaultLayoutPath,
+    `default layout for ${layoutId}`
+  );
+  validateDefaultLayout(defaultLayout, defaultLayoutPath, "Base");
+  fs.writeFileSync(
+    defaultLayoutPath,
+    formatJson({
+      ...defaultLayout,
+      content: [
+        ...(templateHeaderFooter.header.component
+          ? [templateHeaderFooter.header.component]
+          : []),
+        ...defaultLayout.content,
+        ...(templateHeaderFooter.footer.component
+          ? [templateHeaderFooter.footer.component]
+          : []),
+      ],
+    })
+  );
+};
+
+const buildSectionSource = (
+  component: CopiedComponent,
+  templateHeaderFooter: TemplateHeaderFooter
+): string => {
+  const supportsAllPageSetTypes = Object.values(templateHeaderFooter).some(
+    (selection) => selection.component?.type === component.id
+  );
+
+  return [
+    'import type { SectionConfig } from "@yext/visual-editor";',
+    "",
+    component.content.trimEnd(),
+    "",
+    "export const config: SectionConfig = {",
+    `  id: ${JSON.stringify(component.id)},`,
+    `  displayName: ${JSON.stringify(component.displayName)},`,
+    // The description should default to the display name until a human updates it manually.
+    `  description: ${JSON.stringify(component.displayName)},`,
+    `  pageSetTypes: ${supportsAllPageSetTypes ? '["ENTITY", "DIRECTORY", "LOCATOR"]' : '["ENTITY"]'},`,
+    "};",
+    "",
+  ].join("\n");
+};
+
+const deleteLegacyTemplates = (
+  templates: LegacyTemplate[],
+  write: (message: string) => void
+): void => {
+  for (const template of templates) {
+    fs.rmSync(template.directory, { recursive: true });
+    write(`Removed ${template.directory}`);
+  }
+};
+
+const writeReport = ({
+  apply,
+  conversion,
+  deleteSource,
+  write,
+}: {
+  apply: boolean;
+  conversion: Conversion;
+  deleteSource: boolean;
+  write: (message: string) => void;
+}): void => {
+  write(
+    apply
+      ? "Applying Section Library conversion:"
+      : "Dry run: no files changed."
+  );
+  write(
+    `  library: ${conversion.libraryMetadata.id} from ${conversion.templates[0].templateId}`
+  );
+  write(
+    `  Entity layouts: ${conversion.templates.map((template) => template.templateId).join(", ")}`
+  );
+  write(
+    `  shared sections: ${Array.from(conversion.components.keys()).join(", ")}`
+  );
+  for (const duplicate of conversion.duplicates) {
+    write(
+      `  duplicate section ${duplicate.componentId}: kept ${duplicate.keptTemplateId}, ignored ${duplicate.ignoredTemplateId}${duplicate.differs ? " (source differs)" : ""}`
+    );
+  }
+  const headerFooterUsage = Object.values(conversion.templateHeaderFooter)
+    .map((selection) => selection.component?.type ?? `no ${selection.kind}`)
+    .join(" and ");
+  write(
+    `  Directory layout: ${conversion.directoryLayoutId} (using ${headerFooterUsage})`
+  );
+  write(
+    `  Locator layout: ${conversion.locatorLayoutId} (using ${headerFooterUsage})`
+  );
+  write(
+    deleteSource
+      ? "  legacy source: remove after conversion"
+      : "  legacy source: keep"
+  );
+  for (const selection of Object.values(conversion.templateHeaderFooter)) {
+    if (selection.component) {
+      continue;
+    }
+    if (selection.matches.length === 0) {
+      write(
+        `  Warning: ${selection.kind} will not be copied because ${conversion.templates[0].templateId} has no top-level type containing ${selection.kind}`
+      );
+    } else {
+      write(
+        `  Warning: ${selection.kind} will not be copied because ${conversion.templates[0].templateId} has multiple top-level matches: ${selection.matches.join(", ")}`
+      );
+    }
+  }
+};
+
+const requireString = (
+  value: unknown,
+  sourcePath: string,
+  property: string
+): string => {
+  if (typeof value !== "string") {
+    throw new Error(`${sourcePath} must define a string ${property}`);
+  }
+  return value;
+};
+
+const readJson = (filePath: string, description: string): unknown => {
+  try {
+    return JSON.parse(fs.readFileSync(filePath, "utf8"));
+  } catch (error) {
+    throw new Error(
+      `Could not read ${description} at ${filePath}: ${getErrorMessage(error)}`
+    );
+  }
+};
+
+const formatJson = (value: unknown): string =>
+  `${JSON.stringify(value, null, 2)}\n`;
+
+const isRecord = (value: unknown): value is JsonRecord =>
+  Boolean(value) && typeof value === "object" && !Array.isArray(value);
+
+const getErrorMessage = (error: unknown): string =>
+  error instanceof Error ? error.message : String(error);

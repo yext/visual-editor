@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { YextAutoField } from "./YextAutoField.tsx";
@@ -54,10 +54,6 @@ vi.mock("./TranslatableStringField.tsx", async (importOriginal) => {
   };
 });
 
-vi.mock("../utils/isFakeStarterLocalDev.ts", () => ({
-  isFakeStarterLocalDev: () => true,
-}));
-
 const renderImageField = (
   field: ImageField = {
     type: "image",
@@ -91,28 +87,6 @@ describe("ImageField", () => {
     vi.restoreAllMocks();
     translatableStringFieldMock.mockReset();
     sendToParentMock.mockReset();
-  });
-
-  it("renders through YextAutoField as a registered field type", () => {
-    const promptSpy = vi
-      .spyOn(window, "prompt")
-      .mockReturnValue("https://example.com/image.jpg");
-    const { onChange } = renderImageField();
-
-    expect(screen.getByText("Image")).toBeDefined();
-
-    fireEvent.click(screen.getByRole("button", { name: "Choose Image" }));
-
-    expect(promptSpy).toHaveBeenCalledWith("Enter Image URL:");
-    expect(onChange).toHaveBeenCalledWith({
-      en: {
-        alternateText: "",
-        url: "https://example.com/image.jpg",
-        height: 1,
-        width: 1,
-      },
-      hasLocalizedValue: "true",
-    });
   });
 
   it("passes locator alt text options into the alt text field", () => {

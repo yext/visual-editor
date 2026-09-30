@@ -18,29 +18,32 @@ import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 export type MapboxStaticProps = {
   coordinate: YextEntityField<Coordinate>;
   mapStyle: string;
+  height?: string;
   zoom?: number;
 };
+
+export const mapboxStaticMapStyleOptions = [
+  { value: "streets-v12", label: msg("fields.options.default", "Default") },
+  {
+    value: "satellite-streets-v12",
+    label: msg("fields.options.satellite", "Satellite"),
+  },
+  { value: "light-v11", label: msg("fields.options.light", "Light") },
+  { value: "dark-v11", label: msg("fields.options.dark", "Dark") },
+  {
+    value: "navigation-day-v1",
+    label: msg("fields.options.navigationDay", "Navigation (Day)"),
+  },
+  {
+    value: "navigation-night-v1",
+    label: msg("fields.options.navigationNight", "Navigation (Night)"),
+  },
+];
 
 export const mapStyleField: BasicSelectorField = {
   label: msg("fields.mapStyle", "Map Style"),
   type: "basicSelector",
-  options: [
-    { value: "streets-v12", label: msg("fields.options.default", "Default") },
-    {
-      value: "satellite-streets-v12",
-      label: msg("fields.options.satellite", "Satellite"),
-    },
-    { value: "light-v11", label: msg("fields.options.light", "Light") },
-    { value: "dark-v11", label: msg("fields.options.dark", "Dark") },
-    {
-      value: "navigation-day-v1",
-      label: msg("fields.options.navigationDay", "Navigation (Day)"),
-    },
-    {
-      value: "navigation-night-v1",
-      label: msg("fields.options.navigationNight", "Navigation (Night)"),
-    },
-  ],
+  options: mapboxStaticMapStyleOptions,
 };
 
 const mapboxFields: YextFields<MapboxStaticProps> = {
@@ -62,6 +65,7 @@ const getPrimaryColor = (streamDocument: StreamDocument) => {
 
 export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   coordinate: coordinateField,
+  height = "300px",
   zoom = 14,
   mapStyle = "light-v11",
   puck,
@@ -145,7 +149,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
       constantValueEnabled={coordinateField.constantValueEnabled}
       className="w-full"
     >
-      <div className="relative h-[300px] w-full overflow-hidden">
+      <div className="relative w-full overflow-hidden" style={{ height }}>
         <picture>
           <source
             media="(max-width: 412px)"

@@ -3,23 +3,20 @@ import React, { ErrorInfo, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
-import { type Config } from "@puckeditor/core";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
 import { useQuickFindShortcut } from "../internal/hooks/useQuickFindShortcut.ts";
 import {
   useCommonMessageReceivers,
+  type ComponentRegistry,
   TemplateMetadataContext,
 } from "../internal/hooks/useMessageReceivers.ts";
 import { LayoutEditor } from "../internal/components/LayoutEditor.tsx";
 import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
 import { useProgress } from "../internal/hooks/useProgress.ts";
-import {
-  i18nPlatformInstance,
-  loadPlatformTranslations,
-} from "../utils/i18n/platform.ts";
+import { i18nPlatformInstance } from "../utils/i18n/i18nInstances.ts";
 import { StreamDocument } from "../utils/types/StreamDocument.ts";
 import {
   createDefaultThemeConfig,
@@ -29,9 +26,11 @@ import {
   defaultFonts,
   loadFontsIntoDOM,
 } from "../utils/fonts/visualEditorFonts.ts";
-import { migrate } from "../utils/migrate.ts";
+import { migrate, type MigrationRegistry } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
+import type { LocalDevOptions } from "./types.ts";
+import { useTranslationRuntime } from "../utils/i18n/TranslationRuntimeContext.tsx";
 
 const devLogger = new DevLogger();
 
@@ -60,13 +59,15 @@ declare module "@puckeditor/core" {
 
 export type EditorProps = {
   document: any;
-  componentRegistry: Record<string, Config<any>>;
+  componentRegistry: ComponentRegistry;
   themeConfig?: ThemeConfig;
   // localDev is used for running VE outside of the platform
   localDev?: boolean;
+  localDevOptions?: LocalDevOptions;
   // forceThemeMode is used with localDev to load the theme editor
   forceThemeMode?: boolean;
   metadata?: Metadata; // passed into puck's global metadata
+  sectionLibraryMigrationRegistry?: MigrationRegistry;
 };
 
 export const Editor = ({
@@ -74,9 +75,12 @@ export const Editor = ({
   componentRegistry,
   themeConfig,
   localDev,
+  localDevOptions,
   forceThemeMode,
   metadata,
+  sectionLibraryMigrationRegistry,
 }: EditorProps) => {
+  const { loadPlatformTranslations } = useTranslationRuntime();
   if (document) {
     devLogger.logData("DOCUMENT", document);
   }
@@ -93,7 +97,13 @@ export const Editor = ({
     layoutDataFetched,
     themeData,
     themeDataFetched,
-  } = useCommonMessageReceivers(componentRegistry, !!localDev, document);
+  } = useCommonMessageReceivers(
+    componentRegistry,
+    !!localDev,
+    document,
+    localDevOptions,
+    sectionLibraryMigrationRegistry
+  );
 
   const { pushPageSets, sendError } = useCommonMessageSenders();
 
@@ -181,7 +191,7 @@ export const Editor = ({
     return () => {
       isCurrent = false;
     };
-  }, [templateMetadata?.platformLocale]);
+  }, [loadPlatformTranslations, templateMetadata?.platformLocale]);
 
   const { isLoading, progress } = useProgress({
     maxProgress: 60,
@@ -203,7 +213,13 @@ export const Editor = ({
     finalThemeConfig = createDefaultThemeConfig(templateMetadata?.customFonts);
   }
   const migratedData = !isLoading
-    ? migrate(layoutData!, migrationRegistry, puckConfig, document)
+    ? migrate(
+        puckConfig,
+        layoutData!,
+        document,
+        migrationRegistry,
+        sectionLibraryMigrationRegistry
+      )
     : undefined;
 
   return (
@@ -231,6 +247,9 @@ export const Editor = ({
                 localDev={!!localDev}
                 metadata={{ ...metadata, streamDocument: document }}
                 streamDocument={document}
+                sectionLibraryMigrationRegistry={
+                  sectionLibraryMigrationRegistry
+                }
               />
             )
           ) : (

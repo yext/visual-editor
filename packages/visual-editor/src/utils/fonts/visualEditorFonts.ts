@@ -8,8 +8,7 @@ import { fontStyleOptions } from "../themeConfigOptions.ts";
 const variableFontRegex = /var\((--[^)]+)\)/;
 
 export type FontWeightSupport =
-  | { weights: number[] }
-  | { minWeight: number; maxWeight: number };
+  { weights: number[] } | { minWeight: number; maxWeight: number };
 
 export type FontVariant = {
   style: "normal" | "italic";
@@ -471,7 +470,8 @@ const getFontNameFromStyleElement = (
   }
 
   const styleContent = styleElement.textContent || styleElement.innerHTML;
-  const regex = new RegExp( // matches Arial in "'Arial', sans-serif"
+  const regex = new RegExp(
+    // matches Arial in "'Arial', sans-serif"
     `${fontCssVariable}:\\s*(['"]?([^',\\s]+(?:\\s+[^',\\s]+)*)['"]?)(?:,|\\s|;|$)`,
     "i"
   );
