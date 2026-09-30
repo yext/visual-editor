@@ -30,6 +30,7 @@ import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.t
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type StreamFields } from "../types/entityFields.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
+import { photoGallerySource } from "../components/pageSections/PhotoGallerySection/photoGallerySource.ts";
 import {
   getConstantConfigFromType,
   returnConstantFieldConfig,
@@ -1116,5 +1117,169 @@ describe("EntityFieldSelectorField", () => {
         },
       },
     });
+  });
+
+  it.each([
+    {
+      previousField: "c_brands",
+      nextField: "photoGallery",
+      label: "Photos",
+      expectedImageField: "$item",
+    },
+    {
+      previousField: "photoGallery",
+      nextField: "c_brands",
+      label: "Brands",
+      expectedImageField: "",
+    },
+  ])(
+    "when the gallery source changes to $nextField then its mappings update",
+    ({ previousField, nextField, label, expectedImageField }) => {
+      const { onChange } = renderRepeatedEntityField({
+        field: photoGallerySource.field as EntityFieldSelectorField,
+        value: {
+          field: previousField,
+          constantValueEnabled: false,
+          constantValue: [],
+          mappings: {
+            image: {
+              field: previousField === "photoGallery" ? "$item" : "logo",
+              constantValueEnabled: false,
+            },
+            link: { field: "cta", constantValueEnabled: false },
+          },
+        },
+        entityFields: {
+          fields: [
+            {
+              name: "photoGallery",
+              displayName: "Photos",
+              definition: {
+                name: "photoGallery",
+                typeName: "type.image",
+                isList: true,
+                type: {},
+              },
+            },
+            {
+              name: "c_brands",
+              displayName: "Brands",
+              definition: { name: "c_brands", isList: true, type: {} },
+              children: {
+                fields: [
+                  {
+                    name: "logo",
+                    definition: {
+                      name: "logo",
+                      typeName: "type.image",
+                      type: {},
+                    },
+                  },
+                  {
+                    name: "cta",
+                    definition: { name: "cta", typeName: "type.cta", type: {} },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      fireEvent.click(screen.getAllByRole("combobox")[0]);
+      fireEvent.click(within(screen.getByRole("listbox")).getByText(label));
+
+      expect(onChange).toHaveBeenCalledWith({
+        field: nextField,
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          image: { field: expectedImageField, constantValueEnabled: false },
+          link: { field: "", constantValueEnabled: false },
+        },
+      });
+    }
+  );
+
+  it("when a brand has a CTA then the gallery link selector offers it", () => {
+    renderRepeatedEntityField({
+      field: photoGallerySource.field as EntityFieldSelectorField,
+      value: {
+        ...photoGallerySource.defaultValue,
+        field: "c_brands",
+        constantValueEnabled: false,
+      },
+      entityFields: {
+        fields: [
+          {
+            name: "c_brands",
+            definition: { name: "c_brands", isList: true, type: {} },
+            children: {
+              fields: [
+                {
+                  name: "logo",
+                  displayName: "Brand Image",
+                  definition: {
+                    name: "logo",
+                    typeName: "type.image",
+                    type: {},
+                  },
+                },
+                {
+                  name: "cta",
+                  displayName: "Brand CTA",
+                  definition: { name: "cta", typeName: "type.cta", type: {} },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[2]);
+
+    expect(
+      within(screen.getByRole("listbox")).getByText("Brand CTA")
+    ).toBeDefined();
+  });
+
+  it("when a manual gallery image uses an entity field then single images are available", () => {
+    renderEntityField({
+      field: (photoGallerySource.field as EntityFieldSelectorField).repeated!
+        .manualItemFields.image as EntityFieldSelectorField,
+      value: {
+        field: "",
+        constantValueEnabled: false,
+        constantValue: undefined,
+      },
+      entityFields: {
+        fields: [
+          {
+            name: "logo",
+            displayName: "Logo",
+            definition: { name: "logo", typeName: "type.image", type: {} },
+          },
+        ],
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(within(screen.getByRole("listbox")).getByText("Logo")).toBeDefined();
+  });
+
+  it("when a manual gallery link uses text then the link input is available", () => {
+    renderEntityField({
+      field: (photoGallerySource.field as EntityFieldSelectorField).repeated!
+        .manualItemFields.link as EntityFieldSelectorField,
+      value: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: { defaultValue: "/brand" },
+      },
+    });
+
+    expect(screen.getByDisplayValue("/brand")).toBeDefined();
   });
 });

@@ -535,10 +535,10 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     styles.carouselImageCount
   );
 
-  const resolvedItems = photoGallerySource.resolveItems(
-    data.images,
-    streamDocument
-  );
+  const resolvedItems = photoGallerySource.resolveItems(data.images, {
+    ...streamDocument,
+    locale,
+  });
   const { galleryImages, hasRenderableImages } = getPhotoGalleryImageData({
     resolvedItems,
     locale,

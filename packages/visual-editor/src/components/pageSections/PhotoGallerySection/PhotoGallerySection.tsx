@@ -204,13 +204,12 @@ export const PhotoGallerySection: YextComponentConfig<PhotoGallerySectionProps> 
         | undefined;
       const streamDocument = params.metadata.streamDocument;
       const locale = streamDocument?.locale ?? "en";
-      const resolvedItems =
-        photoGalleryWrapperProps?.data?.images && streamDocument
-          ? photoGallerySource.resolveItems(
-              photoGalleryWrapperProps.data.images,
-              streamDocument
-            )
-          : [];
+      const resolvedItems = photoGalleryWrapperProps?.data?.images
+        ? photoGallerySource.resolveItems(
+            photoGalleryWrapperProps.data.images,
+            { ...streamDocument, locale }
+          )
+        : [];
       const { hasRenderableImages } = getPhotoGalleryImageData({
         resolvedItems,
         locale,

@@ -107,12 +107,13 @@ const getItemSourceTooltipRequirements = (
   );
 };
 
+/** Clears mapped fields, including saved values with no constantValue property. */
 const clearEntityFieldBindings = (value: unknown): unknown => {
   if (
     value &&
     typeof value === "object" &&
     "field" in value &&
-    "constantValue" in value
+    ("constantValue" in value || "constantValueEnabled" in value)
   ) {
     return {
       ...value,
@@ -136,12 +137,13 @@ const clearEntityFieldBindings = (value: unknown): unknown => {
   return value;
 };
 
+/** Checks nested values for a selected entity field. */
 const hasEntityFieldBindings = (value: unknown): boolean => {
   if (
     value &&
     typeof value === "object" &&
     "field" in value &&
-    "constantValue" in value
+    ("constantValue" in value || "constantValueEnabled" in value)
   ) {
     return !!(value as { field?: string }).field;
   }

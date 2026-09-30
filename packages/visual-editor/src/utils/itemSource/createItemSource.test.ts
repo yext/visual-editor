@@ -516,4 +516,54 @@ describe("createItemSource", () => {
       { image: { url: "https://example.com/product.jpg" }, link: "/product" },
     ]);
   });
+
+  it.each([
+    {
+      constantValueEnabled: false,
+      expected: { url: "https://example.com/source.jpg" },
+    },
+    {
+      constantValueEnabled: true,
+      expected: { url: "https://example.com/manual.jpg" },
+    },
+  ])(
+    "when a direct mapping has constant mode $constantValueEnabled then it uses the selected value",
+    ({ constantValueEnabled, expected }) => {
+      const source = createItemSource<{
+        image: {
+          field: string;
+          constantValueEnabled: boolean;
+          constantValue: { url: string };
+        };
+      }>({
+        label: "Images",
+        mappingFields: {
+          image: {
+            type: "entityField",
+            filter: { types: ["type.image"] },
+            disableConstantValueToggle: false,
+          },
+        },
+        directItem: { types: ["type.image"], mappingKey: "image" },
+      });
+
+      expect(
+        source.resolveItems(
+          {
+            field: "images",
+            constantValueEnabled: false,
+            constantValue: [],
+            mappings: {
+              image: {
+                field: "$item",
+                constantValueEnabled,
+                constantValue: { url: "https://example.com/manual.jpg" },
+              },
+            },
+          },
+          { locale: "en", images: [{ url: "https://example.com/source.jpg" }] }
+        )
+      ).toEqual([{ image: expected }]);
+    }
+  );
 });

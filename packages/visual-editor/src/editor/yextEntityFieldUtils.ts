@@ -304,7 +304,7 @@ const getScopedFieldsForSelector = (
           ? [
               {
                 name: ITEM_SOURCE_SELF_FIELD,
-                displayName: "This Item",
+                displayName: rootDisplayName ?? sourceField,
                 definition: sourceSchemaField!.definition,
               },
             ]

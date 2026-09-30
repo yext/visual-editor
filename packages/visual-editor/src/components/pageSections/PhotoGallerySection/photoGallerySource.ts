@@ -1,10 +1,9 @@
 import { type AssetImageType } from "../../../types/images.ts";
-import { type TranslatableString } from "../../../types/types.ts";
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { createItemSource } from "../../../utils/itemSource/index.ts";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
-import { type PhotoGalleryImageValue } from "./photoGalleryUtils.ts";
+import { type PhotoGalleryItem } from "./photoGalleryUtils.ts";
 
 const PLACEHOLDER: AssetImageType = {
   ...getRandomPlaceholderImageObject({ width: 1000, height: 570 }),
@@ -13,12 +12,10 @@ const PLACEHOLDER: AssetImageType = {
   assetImage: { name: "Placeholder" },
 };
 
-type PhotoGalleryItemFields = {
-  image: YextEntityField<PhotoGalleryImageValue>;
-  link: YextEntityField<TranslatableString>;
-};
-
-export const photoGallerySource = createItemSource<PhotoGalleryItemFields>({
+export const photoGallerySource = createItemSource<{
+  image: YextEntityField<PhotoGalleryItem["image"]>;
+  link: YextEntityField<PhotoGalleryItem["link"]>;
+}>({
   label: msg("fields.images", "Images"),
   mappingFields: {
     image: {
@@ -29,7 +26,8 @@ export const photoGallerySource = createItemSource<PhotoGalleryItemFields>({
     link: {
       type: "entityField",
       label: msg("fields.link", "Link"),
-      filter: { types: ["type.string"] },
+      filter: { types: ["type.string", "type.cta"] },
+      constantValueFilter: { types: ["type.string"] },
       disableConstantValueToggle: true,
     },
   },
