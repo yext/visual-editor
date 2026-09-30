@@ -1,4 +1,8 @@
-import { ComplexImageType, ImageType } from "@yext/pages-components";
+import {
+  ComplexImageType,
+  ImageType,
+  type LinkType,
+} from "@yext/pages-components";
 import {
   AssetImageType,
   resolveLocalizedAssetImage,
@@ -10,6 +14,7 @@ import {
   type TranslatableString,
 } from "../../../types/types.ts";
 import { type StreamDocument } from "../../../utils/types/StreamDocument.ts";
+import { isNonNormalizableLinkType } from "../../../utils/normalizeLink.ts";
 
 type PhotoGalleryImageValue =
   | ImageType
@@ -30,9 +35,12 @@ export type ResolvedGalleryImage = {
   width?: number;
   originalImage?: PhotoGalleryImageValue;
   href?: string;
+  linkType?: LinkType;
+  ariaLabel?: string;
 };
 
-const LINK_REGEX_VALIDATION = /^(https?:\/\/[^\s]+|\/[^\s]*|#[^\s]*)$/;
+const LINK_REGEX_VALIDATION =
+  /^(https?:\/\/[^\s]+|mailto:[^\s]+|tel:[^\s]+|\/[^\s]*|#[^\s]*)$/i;
 
 /**
  * 1. Gets each image and its alternative text for the selected language.
@@ -100,18 +108,23 @@ export const getPhotoGalleryImageData = ({
       typeof rawImage.clickthroughUrl === "string"
         ? rawImage.clickthroughUrl
         : undefined);
+    const cta =
+      inputLink && typeof inputLink === "object" && "link" in inputLink
+        ? (inputLink as TranslatableCTA)
+        : undefined;
+    const linkType = cta?.linkType ?? "URL";
     const resolvedLink = inputLink
       ? resolveComponentData(
-          typeof inputLink === "object" && "link" in inputLink
-            ? (inputLink.link ?? "")
-            : inputLink,
+          cta ? (cta.link ?? "") : inputLink,
           locale,
           streamDocument
         )
       : undefined;
     const href =
       typeof resolvedLink === "string" &&
-      LINK_REGEX_VALIDATION.test(resolvedLink.trim())
+      resolvedLink.trim() &&
+      (isNonNormalizableLinkType(linkType) ||
+        LINK_REGEX_VALIDATION.test(resolvedLink.trim()))
         ? resolvedLink.trim()
         : undefined;
 
@@ -135,6 +148,11 @@ export const getPhotoGalleryImageData = ({
       width: width || 1000,
       originalImage: rawImage,
       href,
+      linkType,
+      ariaLabel:
+        !altText && cta?.label
+          ? resolveComponentData(cta.label, locale, streamDocument)
+          : undefined,
     };
   });
 

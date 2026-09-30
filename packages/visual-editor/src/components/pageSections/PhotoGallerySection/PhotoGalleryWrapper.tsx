@@ -4,7 +4,7 @@ import {
 } from "../../contentBlocks/image/styling.ts";
 import { EntityField } from "../../../editor/EntityField.tsx";
 import { Image } from "../../atoms/image.tsx";
-import { MaybeLink } from "../../atoms/maybeLink.tsx";
+import { CTA } from "../../atoms/cta.tsx";
 import { themeManagerCn } from "../../../utils/cn.ts";
 import { useBackground } from "../../../hooks/useBackground.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
@@ -241,14 +241,17 @@ const DesktopImageItem = ({
 
   const linkedImage =
     imageData.href && !isEditing ? (
-      <MaybeLink
-        href={imageData.href}
+      <CTA
+        link={imageData.href}
+        linkType={imageData.linkType}
+        ariaLabel={imageData.ariaLabel}
+        normalizeLink={false}
+        variant="link"
+        label={imageElement}
         className="block max-w-full"
         alwaysHideCaret
         eventName="photoGalleryImage"
-      >
-        {imageElement}
-      </MaybeLink>
+      />
     ) : (
       imageElement
     );
@@ -299,14 +302,17 @@ const MobileImageItem = ({
       }}
     >
       {imageData.href && !isEditing ? (
-        <MaybeLink
-          href={imageData.href}
+        <CTA
+          link={imageData.href}
+          linkType={imageData.linkType}
+          ariaLabel={imageData.ariaLabel}
+          normalizeLink={false}
+          variant="link"
+          label={imageElement}
           className="block w-full"
           alwaysHideCaret
           eventName="photoGalleryImage"
-        >
-          {imageElement}
-        </MaybeLink>
+        />
       ) : (
         imageElement
       )}

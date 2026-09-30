@@ -1312,4 +1312,65 @@ describe("EntityFieldSelectorField", () => {
 
     expect(screen.getByDisplayValue("/brand")).toBeDefined();
   });
+  it.each([
+    { previousField: "photoGallery", nextField: "", label: "Select a Field" },
+    { previousField: "", nextField: "c_brands", label: "Brands" },
+  ])(
+    "when the source changes from '$previousField' to '$nextField' then old mappings are cleared",
+    ({ previousField, nextField, label }): void => {
+      const { onChange } = renderRepeatedEntityField({
+        field: photoGallerySource.field as EntityFieldSelectorField,
+        value: {
+          field: previousField,
+          constantValueEnabled: false,
+          constantValue: [],
+          mappings: {
+            image: { field: "$item", constantValueEnabled: false },
+            link: { field: "cta", constantValueEnabled: false },
+          },
+        },
+        entityFields: {
+          fields: [
+            {
+              name: "photoGallery",
+              definition: {
+                name: "photoGallery",
+                isList: true,
+                typeName: "type.image",
+                type: {},
+              },
+            },
+            {
+              name: "c_brands",
+              displayName: "Brands",
+              definition: { name: "c_brands", isList: true, type: {} },
+              children: {
+                fields: [
+                  {
+                    name: "logo",
+                    definition: {
+                      name: "logo",
+                      typeName: "type.image",
+                      type: {},
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+      fireEvent.click(screen.getAllByRole("combobox")[0]);
+      fireEvent.click(within(screen.getByRole("listbox")).getByText(label));
+      expect(onChange).toHaveBeenCalledWith({
+        field: nextField,
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          image: { field: "", constantValueEnabled: false },
+          link: { field: "", constantValueEnabled: false },
+        },
+      });
+    }
+  );
 });

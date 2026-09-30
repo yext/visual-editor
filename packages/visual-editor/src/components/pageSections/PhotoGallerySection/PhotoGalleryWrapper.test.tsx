@@ -323,4 +323,240 @@ describe("PhotoGalleryWrapper", () => {
       }
     }
   );
+  it.each([
+    {
+      parentData: { variant: "gallery" as const },
+      isEditing: false,
+      copies: 1,
+    },
+    {
+      parentData: { variant: "carousel" as const },
+      isEditing: false,
+      copies: 2,
+    },
+    { parentData: { variant: "gallery" as const }, isEditing: true, copies: 1 },
+    {
+      parentData: { variant: "carousel" as const },
+      isEditing: true,
+      copies: 2,
+    },
+  ])(
+    "when team CTAs use different link types and edit mode is $isEditing then $parentData keeps the images and link actions",
+    ({ parentData, isEditing, copies }): void => {
+      const { container } = render(
+        <VisualEditorProvider
+          templateProps={{
+            document: {
+              locale: "en",
+              c_team: {
+                people: [
+                  {
+                    headshot: {
+                      url: "https://example.com/jane.jpg",
+                      width: 100,
+                      height: 100,
+                      alternateText: "Jane",
+                    },
+                    cta: { link: "jane@example.com", linkType: "EMAIL" },
+                  },
+                  {
+                    headshot: {
+                      url: "https://example.com/john.jpg",
+                      width: 100,
+                      height: 100,
+                    },
+                    cta: {
+                      link: "+12125550100",
+                      linkType: "PHONE",
+                      label: "Call John",
+                    },
+                  },
+                  {
+                    headshot: {
+                      url: "https://example.com/jill.jpg",
+                      width: 100,
+                      height: 100,
+                      alternateText: "Jill",
+                    },
+                    cta: { link: "/Team/Jill", linkType: "URL" },
+                  },
+                  {
+                    headshot: {
+                      url: "https://example.com/jack.jpg",
+                      width: 100,
+                      height: 100,
+                      alternateText: "Jack",
+                    },
+                    cta: { link: " ", linkType: "URL" },
+                  },
+                ],
+              },
+            },
+          }}
+        >
+          <PhotoGalleryWrapper.render
+            id="team-links"
+            data={{
+              images: {
+                ...photoGallerySource.defaultValue,
+                field: "c_team.people",
+                constantValueEnabled: false,
+                mappings: {
+                  image: {
+                    field: "headshot",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                  link: {
+                    field: "cta",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                },
+              },
+            }}
+            styles={{
+              image: { width: 100, aspectRatio: 1 },
+              carouselImageCount: 1,
+            }}
+            parentData={parentData}
+            puck={{
+              isEditing,
+              dragRef: null,
+              metadata: {},
+              renderDropZone: () => <div />,
+            }}
+          />
+        </VisualEditorProvider>
+      );
+      expect(container.querySelectorAll("img")).toHaveLength(4 * copies);
+      expect(container.querySelectorAll("a")).toHaveLength(
+        isEditing ? 0 : 3 * copies
+      );
+      if (!isEditing) {
+        for (const image of within(container).getAllByAltText("Jane")) {
+          // The shared CTA masks email addresses in the HTML link.
+          expect(atob(image.closest("a")!.getAttribute("href")!)).toBe(
+            "mailto:jane@example.com"
+          );
+        }
+        for (const link of container.querySelectorAll(
+          'a[aria-label="Call John"]'
+        )) {
+          expect(link.getAttribute("href")).toBe("tel:+12125550100");
+        }
+        expect(
+          container.querySelectorAll('a[aria-label="Call John"]')
+        ).toHaveLength(copies);
+        for (const image of within(container).getAllByAltText("Jill")) {
+          expect(image.closest("a")!.getAttribute("href")).toBe("/Team/Jill");
+        }
+      }
+      for (const image of within(container).getAllByAltText("Jack")) {
+        expect(image.closest("a")).toBeNull();
+      }
+    }
+  );
+
+  it("when a carousel source changes from three images to one then the last image stays visible", async (): Promise<void> => {
+    await page.viewport(1440, 900);
+    const props = {
+      id: "changing-gallery",
+      data: {
+        images: {
+          ...photoGallerySource.defaultValue,
+          field: "photoGallery",
+          constantValueEnabled: false,
+          mappings: {
+            link: {
+              field: "",
+              constantValueEnabled: false,
+              constantValue: undefined,
+            },
+            image: {
+              field: "$item",
+              constantValueEnabled: false,
+              constantValue: undefined,
+            },
+          },
+        },
+      },
+      styles: { image: { width: 100, aspectRatio: 1 }, carouselImageCount: 3 },
+      parentData: { variant: "carousel" as const },
+      puck: {
+        isEditing: false,
+        dragRef: null,
+        metadata: {},
+        renderDropZone: (): React.ReactElement => <div />,
+      },
+    };
+    const { container, rerender } = render(
+      <VisualEditorProvider
+        templateProps={{
+          document: {
+            photoGallery: [
+              {
+                url: "https://example.com/one.jpg",
+                width: 100,
+                height: 100,
+                alternateText: "One",
+              },
+              {
+                url: "https://example.com/two.jpg",
+                width: 100,
+                height: 100,
+                alternateText: "Two",
+              },
+              {
+                url: "https://example.com/three.jpg",
+                width: 100,
+                height: 100,
+                alternateText: "Three",
+              },
+            ],
+          },
+        }}
+      >
+        <PhotoGalleryWrapper.render {...props} />
+      </VisualEditorProvider>
+    );
+    await waitFor(() =>
+      expect(
+        container.querySelectorAll(".carousel__slide--visible")
+      ).toHaveLength(6)
+    );
+    rerender(
+      <VisualEditorProvider
+        templateProps={{
+          document: {
+            photoGallery: [
+              {
+                url: "https://example.com/one.jpg",
+                width: 100,
+                height: 100,
+                alternateText: "One",
+              },
+            ],
+          },
+        }}
+      >
+        <PhotoGalleryWrapper.render {...props} />
+      </VisualEditorProvider>
+    );
+    await waitFor(() => {
+      expect(
+        container.querySelectorAll(".carousel__slide--visible")
+      ).toHaveLength(2);
+      const image = within(container).getAllByAltText("One")[0];
+      expect(image.getBoundingClientRect().width).toBeGreaterThan(0);
+      expect(
+        image.closest(".carousel__slide")!.getAttribute("aria-selected")
+      ).toBe("true");
+      expect(
+        container.querySelectorAll(
+          ".carousel__back-button:enabled, .carousel__next-button:enabled"
+        )
+      ).toHaveLength(0);
+    });
+  });
 });

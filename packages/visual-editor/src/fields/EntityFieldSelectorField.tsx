@@ -224,12 +224,7 @@ const RepeatedEntityFieldSelector = ({
 
       const changedSource = previousField !== nextField;
       let mappings = nextValue.mappings;
-      if (
-        changedSource &&
-        previousField &&
-        nextField &&
-        hasEntityFieldBindings(baseValue.mappings)
-      ) {
+      if (changedSource && hasEntityFieldBindings(baseValue.mappings)) {
         mappings = clearEntityFieldBindings(
           baseValue.mappings
         ) as typeof mappings;

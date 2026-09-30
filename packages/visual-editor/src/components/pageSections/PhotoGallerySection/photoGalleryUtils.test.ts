@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { getPhotoGalleryImageData } from "./photoGalleryUtils.ts";
+import {
+  getPhotoGalleryImageData,
+  type PhotoGalleryItem,
+} from "./photoGalleryUtils.ts";
 
 describe("getPhotoGalleryImageData", () => {
   it("returns no renderable images for an empty list", () => {
@@ -194,4 +197,119 @@ describe("getPhotoGalleryImageData", () => {
       "https://example.com/page",
     ]);
   });
+
+  it.each<{
+    link: PhotoGalleryItem["link"];
+    expectedHref: string | undefined;
+    expectedType: string;
+  }>([
+    {
+      link: { label: "", link: "team@example.com", linkType: "EMAIL" },
+      expectedHref: "team@example.com",
+      expectedType: "EMAIL",
+    },
+    {
+      link: { label: "", link: "+1 (212) 555-0100", linkType: "PHONE" },
+      expectedHref: "+1 (212) 555-0100",
+      expectedType: "PHONE",
+    },
+    {
+      link: { label: "", link: "mailto:team@example.com", linkType: "Email" },
+      expectedHref: "mailto:team@example.com",
+      expectedType: "Email",
+    },
+    {
+      link: { label: "", link: "tel:+12125550100", linkType: "Phone" },
+      expectedHref: "tel:+12125550100",
+      expectedType: "Phone",
+    },
+    {
+      link: {
+        label: "",
+        link: {
+          defaultValue: "/English",
+          fr: "/Francais",
+          hasLocalizedValue: "true",
+        },
+        linkType: "URL",
+      },
+      expectedHref: "/Francais",
+      expectedType: "URL",
+    },
+    {
+      link: "mailto:team@example.com",
+      expectedHref: "mailto:team@example.com",
+      expectedType: "URL",
+    },
+    {
+      link: "tel:+12125550100",
+      expectedHref: "tel:+12125550100",
+      expectedType: "URL",
+    },
+    {
+      link: { label: "", link: "  ", linkType: "EMAIL" },
+      expectedHref: undefined,
+      expectedType: "EMAIL",
+    },
+    {
+      link: { label: "", link: "javascript:alert(1)", linkType: "URL" },
+      expectedHref: undefined,
+      expectedType: "URL",
+    },
+  ])(
+    "when the link is $link then it keeps its value and type",
+    ({ link, expectedHref, expectedType }): void => {
+      const result = getPhotoGalleryImageData({
+        resolvedItems: [
+          {
+            image: {
+              url: "https://example.com/team.jpg",
+              width: 100,
+              height: 100,
+            },
+            link,
+          },
+        ],
+        locale: "fr",
+        isEditing: false,
+      });
+      expect(result.galleryImages).toHaveLength(1);
+      expect(result.galleryImages[0]).toMatchObject({
+        href: expectedHref,
+        linkType: expectedType,
+      });
+    }
+  );
+
+  it.each(["", "Headshot"])(
+    "when image alternative text is '%s' then the CTA label supplies a missing link name",
+    (alternateText): void => {
+      const result = getPhotoGalleryImageData({
+        resolvedItems: [
+          {
+            image: {
+              url: "https://example.com/team.jpg",
+              width: 100,
+              height: 100,
+              alternateText,
+            },
+            link: {
+              link: "/team",
+              label: {
+                defaultValue: "Team",
+                fr: "Equipe [[name]]",
+                hasLocalizedValue: "true",
+              },
+            },
+          },
+        ],
+        locale: "fr",
+        streamDocument: { name: "Paris" },
+        isEditing: false,
+      });
+      expect(result.galleryImages[0]?.ariaLabel).toBe(
+        alternateText ? undefined : "Equipe Paris"
+      );
+    }
+  );
 });

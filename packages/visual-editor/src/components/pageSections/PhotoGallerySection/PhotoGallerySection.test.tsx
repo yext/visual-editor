@@ -1212,4 +1212,114 @@ describe("PhotoGallerySection", async () => {
       });
     }
   );
+  it.each([
+    { version: 37, constantValueEnabled: true },
+    { version: 37, constantValueEnabled: false },
+    { version: 82, constantValueEnabled: true },
+    { version: 82, constantValueEnabled: false },
+  ])(
+    "when a version $version gallery has manual mode $constantValueEnabled then migration and reload keep its image and link",
+    async ({ version, constantValueEnabled }): Promise<void> => {
+      const streamDocument: StreamDocument = {
+        locale: "en",
+        photoGallery: [
+          {
+            image: {
+              url: "https://example.com/mapped.jpg",
+              width: 200,
+              height: 100,
+              alternateText: "Mapped image",
+            },
+            clickthroughUrl: "/mapped",
+          },
+        ],
+      };
+      const images = {
+        field: "photoGallery",
+        constantValueEnabled,
+        constantValue: [
+          {
+            assetImage: {
+              url: "https://example.com/manual.jpg",
+              width: 200,
+              height: 100,
+              alternateText: "Manual image",
+            },
+            clickthroughUrl: "/manual",
+          },
+        ],
+      };
+      const migratedData = migrate(
+        {
+          root: { props: { version } },
+          content: [
+            {
+              type: "PhotoGallerySection",
+              props:
+                version === 37
+                  ? {
+                      id: "old-gallery",
+                      data: { images },
+                      styles: {
+                        variant: "gallery",
+                        image: { width: 200, aspectRatio: 2 },
+                      },
+                      liveVisibility: true,
+                    }
+                  : {
+                      ...PhotoGallerySection.defaultProps,
+                      id: "old-gallery",
+                      styles: { variant: "gallery", showSectionHeading: false },
+                      slots: {
+                        HeadingSlot: [],
+                        PhotoGalleryWrapper: [
+                          {
+                            type: "PhotoGalleryWrapper",
+                            props: {
+                              ...PhotoGalleryWrapper.defaultProps,
+                              id: "old-images",
+                              data: { images },
+                            },
+                          },
+                        ],
+                      },
+                    },
+            },
+          ],
+        },
+        migrationRegistry,
+        puckConfig,
+        streamDocument
+      );
+      const savedData = JSON.parse(JSON.stringify(migratedData));
+      const reloadedData = migrate(
+        savedData,
+        migrationRegistry,
+        puckConfig,
+        streamDocument
+      );
+      expect(reloadedData).toEqual(savedData);
+      expect(reloadedData.root.props).toMatchObject({
+        version: migrationRegistry.length,
+      });
+      const resolvedData = await resolveAllData(reloadedData, puckConfig, {
+        streamDocument,
+      });
+      const { container } = reactRender(
+        <VisualEditorProvider templateProps={{ document: streamDocument }}>
+          <Render config={puckConfig} data={resolvedData} />
+        </VisualEditorProvider>
+      );
+      const link = await within(container).findByRole("link", {
+        name: constantValueEnabled ? "Manual image" : "Mapped image",
+      });
+      expect(link.getAttribute("href")).toBe(
+        constantValueEnabled ? "/manual" : "/mapped"
+      );
+      expect(container.querySelectorAll("img")).toHaveLength(1);
+      expect(link.querySelector("img")?.getAttribute("src")).toContain(
+        constantValueEnabled ? "manual.jpg" : "mapped.jpg"
+      );
+    }
+  );
 });
