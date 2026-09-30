@@ -1545,7 +1545,9 @@ describe("Locator", async () => {
           String(input).includes("/search/filtersearch")
         )
       ).toBe(false);
-      expect(screen.getByText(/Custom Search Area/)).toBeInTheDocument();
+      expect(
+        screen.getByRole("combobox", { name: "Find a Location" })
+      ).toHaveValue("Custom Search Area");
     } finally {
       window.history.replaceState(window.history.state, "", originalUrl);
     }
