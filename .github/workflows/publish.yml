@@ -23,10 +23,10 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
 
-      - name: Set node version to 20.x
+      - name: Set node version to 24.x
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: 24.x
           registry-url: https://registry.npmjs.org/
           cache: "pnpm"
 
@@ -34,8 +34,8 @@ jobs:
         run: pnpm install --ignore-scripts --frozen-lockfile
 
       - name: Update npm
-        # npm 11.5.1 or later is required for Trusted Publishing.
-        run: npm install -g npm@11
+        # npm 12.2.0 supports npm dist-tag with Trusted Publishing.
+        run: npm install -g npm@12.2.0
 
       - name: Verify package version and get npm tag
         id: get_npm_tag
@@ -48,16 +48,6 @@ jobs:
         env:
           NPM_TAG: ${{ steps.get_npm_tag.outputs.npm_tag }}
         run: cd packages/visual-editor && pnpm publish --access public --tag "$NPM_TAG" --no-git-checks
-
-      - name: Set node version for major-version tags
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24.x
-          registry-url: https://registry.npmjs.org/
-
-      - name: Set npm version for major-version tags
-        # npm 12.2.0 supports npm dist-tag with Trusted Publishing.
-        run: npm install -g npm@12.2.0
 
       - name: Update major-version tags
         id: update_release_tags
