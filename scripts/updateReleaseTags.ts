@@ -1,15 +1,14 @@
 import {
   args,
-  getLegacyNpmTag,
-  getNpmTag,
   getPackageInfo,
+  getVersionedNpmTag,
   run,
 } from "./releaseUtils.js";
 
 /**
- * 1. Read the primary tag for releases with a major-version tag.
- * 2. Use the original rules to select the existing tag.
- * 3. Copy the current primary tag to the alias, including after rollback.
+ * 1. Select the major-version tag for the published release.
+ * 2. Read fresh registry tags and preserve the current tag during recovery.
+ * 3. Update only the major-version tag. Keep all existing tags unchanged.
  */
 const version = args._[0];
 if (!version) {
@@ -17,10 +16,10 @@ if (!version) {
   process.exit(1);
 }
 
-const releaseTag = getNpmTag(version);
-if (releaseTag === getLegacyNpmTag(version)) {
+const releaseTag = getVersionedNpmTag(version);
+if (!releaseTag) {
   console.log(
-    `${releaseTag} uses the existing rules. No major-version tag is added.`,
+    "This release uses the existing rules. No major-version tag is added.",
   );
   process.exit(0);
 }
@@ -38,16 +37,13 @@ const tags: Record<string, string> = JSON.parse(
   ).stdout,
 );
 
-const primaryVersion = tags[releaseTag];
-if (!primaryVersion || getNpmTag(primaryVersion) !== releaseTag) {
-  throw new Error(`Missing or invalid npm tag: ${releaseTag}`);
-}
-
-// Keep the tag selection used before major-version tags were added.
-const alias = getLegacyNpmTag(primaryVersion);
-
-if (tags[alias] === primaryVersion) {
-  console.log(`${alias} already points to ${primaryVersion}.`);
+if (args.recover && tags[releaseTag]) {
+  if (getVersionedNpmTag(tags[releaseTag]) !== releaseTag) {
+    throw new Error(`Invalid npm tag: ${releaseTag}`);
+  }
+  console.log(`Keeping ${releaseTag} at ${tags[releaseTag]} during recovery.`);
+} else if (tags[releaseTag] === version) {
+  console.log(`${releaseTag} already points to ${version}.`);
 } else {
-  await run("npm", ["dist-tag", "add", `${pkg.name}@${primaryVersion}`, alias]);
+  await run("npm", ["dist-tag", "add", `${pkg.name}@${version}`, releaseTag]);
 }

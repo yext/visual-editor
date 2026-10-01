@@ -6,8 +6,8 @@ This library provides components necessary to set up a Section Library Pages rep
 
 ## Package release tags
 
-Run `pnpm run release` from this repository. The version sets the npm tag shown
-in the confirmation prompt. CI publishes the package and updates its alias.
+Run `pnpm run release` from this repository. The confirmation prompt shows the
+npm tags. CI publishes with the existing tag, then adds the major-version tag.
 
 | Release type      | New npm tag       |
 | ----------------- | ----------------- |

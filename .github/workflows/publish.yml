@@ -9,11 +9,6 @@ on:
 permissions:
   id-token: write # Required for OIDC
 
-concurrency:
-  group: visual-editor-npm-publish
-  queue: max
-  cancel-in-progress: false
-
 jobs:
   publish:
     if: github.repository == 'yext/visual-editor'
@@ -28,10 +23,10 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
 
-      - name: Set node version to 24.x
+      - name: Set node version to 20.x
         uses: actions/setup-node@v4
         with:
-          node-version: 24.x
+          node-version: 20.x
           registry-url: https://registry.npmjs.org/
           cache: "pnpm"
 
@@ -39,8 +34,8 @@ jobs:
         run: pnpm install --ignore-scripts --frozen-lockfile
 
       - name: Update npm
-        # npm 12.2.0 supports npm dist-tag with Trusted Publishing.
-        run: npm install -g npm@12.2.0
+        # npm 11.5.1 or later is required for Trusted Publishing.
+        run: npm install -g npm@11
 
       - name: Verify package version and get npm tag
         id: get_npm_tag
@@ -54,15 +49,28 @@ jobs:
           NPM_TAG: ${{ steps.get_npm_tag.outputs.npm_tag }}
         run: cd packages/visual-editor && pnpm publish --access public --tag "$NPM_TAG" --no-git-checks
 
-      - name: Update release alias
+      - name: Set node version for major-version tags
+        if: steps.get_npm_tag.outputs.versioned_npm_tag != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          registry-url: https://registry.npmjs.org/
+
+      - name: Set npm version for major-version tags
+        if: steps.get_npm_tag.outputs.versioned_npm_tag != ''
+        # npm 12.2.0 supports npm dist-tag with Trusted Publishing.
+        run: npm install -g npm@12.2.0
+
+      - name: Update major-version tag
+        if: steps.get_npm_tag.outputs.versioned_npm_tag != ''
         id: update_release_tags
         env:
           PACKAGE_VERSION: ${{ steps.get_npm_tag.outputs.package_version }}
         run: pnpm run ci-update-release-tags "$PACKAGE_VERSION"
 
-      - name: Report alias update failure
-        if: failure() && steps.publish.outcome == 'success' && steps.update_release_tags.outcome == 'failure'
+      - name: Report major-version tag update failure
+        if: failure() && steps.publish.outcome == 'success'
         env:
           PACKAGE_VERSION: ${{ steps.get_npm_tag.outputs.package_version }}
         run: |
-          echo "::error::Package $PACKAGE_VERSION is published, but its alias update failed. Run pnpm run ci-update-release-tags $PACKAGE_VERSION with npm tag-write access. Do not publish the package again."
+          echo "::error::Package $PACKAGE_VERSION is published, but its major-version tag update failed. Run pnpm run ci-update-release-tags $PACKAGE_VERSION --recover with npm tag-write access. Do not publish the package again."

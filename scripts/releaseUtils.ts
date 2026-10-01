@@ -23,8 +23,8 @@ if (isDryRun) {
 
 export const versionIncrements: ReleaseType[] = ["patch", "minor", "major"];
 
-/** Returns a major-version tag for supported releases, or the original npm tag. */
-export function getNpmTag(version: string): string {
+/** Returns a major-version tag for stable, alpha, beta, and rc releases. */
+export function getVersionedNpmTag(version: string): string | undefined {
   const parsedVersion = semver.parse(version);
   if (
     !parsedVersion ||
@@ -40,14 +40,14 @@ export function getNpmTag(version: string): string {
     identifier !== undefined &&
     !["alpha", "beta", "rc"].includes(String(identifier))
   ) {
-    return getLegacyNpmTag(version);
+    return undefined;
   }
 
   return `${identifier ?? "stable"}-v${parsedVersion.major}`;
 }
 
 /** Returns the npm tag selected by the original release rules. */
-export function getLegacyNpmTag(version: string): string {
+export function getNpmTag(version: string): string {
   return version.includes("rc")
     ? "rc"
     : version.includes("beta")
@@ -120,12 +120,14 @@ interface VersionChoice {
   value: string;
 }
 export function getVersionChoices(currentVersion: string): VersionChoice[] {
-  const prereleaseIdentifier = semver.prerelease(currentVersion)?.[0];
-  const isStable = prereleaseIdentifier === undefined;
+  const currentRc = currentVersion.includes("rc");
+  const currentBeta = currentVersion.includes("beta");
+  const currentAlpha = currentVersion.includes("alpha");
+  const isStable = !currentRc && !currentBeta && !currentAlpha;
 
   function inc(
     i: ReleaseType,
-    tag = String(prereleaseIdentifier ?? "rc"),
+    tag = currentAlpha ? "alpha" : currentBeta ? "beta" : "rc",
   ): string {
     const incVersion = semver.inc(currentVersion, i, tag, "1");
     if (incVersion) {
@@ -177,10 +179,25 @@ export function getVersionChoices(currentVersion: string): VersionChoice[] {
         value: inc("major"),
       },
     );
+  } else if (currentAlpha) {
+    versionChoices.push({
+      title: "alpha",
+      value: inc("patch") + "-alpha.1",
+    });
+  } else if (currentBeta) {
+    versionChoices.push({
+      title: "beta",
+      value: inc("patch") + "-beta.1",
+    });
+  } else if (currentRc) {
+    versionChoices.push({
+      title: "rc",
+      value: inc("patch") + "-rc.1",
+    });
   } else {
     versionChoices.push({
-      title: String(prereleaseIdentifier),
-      value: `${inc("patch")}-${prereleaseIdentifier}.1`,
+      title: "stable",
+      value: inc("patch"),
     });
   }
   versionChoices.push({ value: "custom", title: "custom" });
