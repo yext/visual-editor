@@ -23,7 +23,7 @@ if (isDryRun) {
 
 export const versionIncrements: ReleaseType[] = ["patch", "minor", "major"];
 
-/** Returns the npm tag from the major version and first prerelease identifier. */
+/** Returns a major-version tag for supported releases, or the original npm tag. */
 export function getNpmTag(version: string): string {
   const parsedVersion = semver.parse(version);
   if (
@@ -35,13 +35,26 @@ export function getNpmTag(version: string): string {
     throw new Error(`Invalid release version: ${version}`);
   }
 
-  if (parsedVersion.prerelease[0] === "stable") {
-    throw new Error(
-      `The prerelease identifier "${parsedVersion.prerelease[0]}" is reserved for stable releases.`,
-    );
+  const identifier = parsedVersion.prerelease[0];
+  if (
+    identifier !== undefined &&
+    !["alpha", "beta", "rc"].includes(String(identifier))
+  ) {
+    return getLegacyNpmTag(version);
   }
 
-  return `${parsedVersion.prerelease[0] ?? "stable"}-v${parsedVersion.major}`;
+  return `${identifier ?? "stable"}-v${parsedVersion.major}`;
+}
+
+/** Returns the npm tag selected by the original release rules. */
+export function getLegacyNpmTag(version: string): string {
+  return version.includes("rc")
+    ? "rc"
+    : version.includes("beta")
+      ? "beta"
+      : version.includes("alpha")
+        ? "alpha"
+        : "latest";
 }
 
 interface Pkg {

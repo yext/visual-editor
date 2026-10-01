@@ -1,7 +1,13 @@
-import { args, getNpmTag, getPackageInfo, run } from "./releaseUtils.js";
+import {
+  args,
+  getLegacyNpmTag,
+  getNpmTag,
+  getPackageInfo,
+  run,
+} from "./releaseUtils.js";
 
 /**
- * 1. Read the current npm tags for this release type.
+ * 1. Read the primary tag for releases with a major-version tag.
  * 2. Use the original rules to select the existing tag.
  * 3. Copy the current primary tag to the alias, including after rollback.
  */
@@ -12,6 +18,13 @@ if (!version) {
 }
 
 const releaseTag = getNpmTag(version);
+if (releaseTag === getLegacyNpmTag(version)) {
+  console.log(
+    `${releaseTag} uses the existing rules. No major-version tag is added.`,
+  );
+  process.exit(0);
+}
+
 const { pkg } = await getPackageInfo();
 const tags: Record<string, string> = JSON.parse(
   (
@@ -31,13 +44,7 @@ if (!primaryVersion || getNpmTag(primaryVersion) !== releaseTag) {
 }
 
 // Keep the tag selection used before major-version tags were added.
-const alias = primaryVersion.includes("rc")
-  ? "rc"
-  : primaryVersion.includes("beta")
-    ? "beta"
-    : primaryVersion.includes("alpha")
-      ? "alpha"
-      : "latest";
+const alias = getLegacyNpmTag(primaryVersion);
 
 if (tags[alias] === primaryVersion) {
   console.log(`${alias} already points to ${primaryVersion}.`);

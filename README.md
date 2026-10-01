@@ -9,19 +9,21 @@ This library provides components necessary to set up a Section Library Pages rep
 Run `pnpm run release` from this repository. The version sets the npm tag shown
 in the confirmation prompt. CI publishes the package and updates its alias.
 
-| Release type | New npm tag             |
-| ------------ | ----------------------- |
-| Stable       | `stable-v<major>`       |
-| Prerelease   | `<identifier>-v<major>` |
+| Release type      | New npm tag       |
+| ----------------- | ----------------- |
+| Stable            | `stable-v<major>` |
+| Alpha             | `alpha-v<major>`  |
+| Beta              | `beta-v<major>`   |
+| Release candidate | `rc-v<major>`     |
 
-Prereleases use the first prerelease identifier. For example, `2.0.1-test.1`
-uses `test-v2`. Stable `2.0.0` uses `stable-v2`.
-The identifier `stable` is reserved for stable releases.
+For example, `2.0.0-beta.1` uses `beta-v2`. Stable `2.0.0` uses `stable-v2`.
+Other prerelease identifiers keep the existing rules and do not get a new tag.
 
 Existing tags keep their previous rules. Versions that contain `rc`, `beta`,
 or `alpha` use that tag, in that order. All other versions use `latest`.
-For example, `2.0.1-test.1` also updates `latest`. These tags can move between
-major versions. Use `stable-v2` to select stable 2.x releases.
+For example, `2.0.1-test.1` updates `latest` without adding `test-v2`.
+These tags can move between major versions. Use `stable-v2` to select stable
+2.x releases.
 
 ## CLI
 
