@@ -344,7 +344,7 @@
   "inheritedDataMsg": "Os dados são herdados da seção pai.",
   "insight": "Entendimento",
   "item": "Item",
-  "itemSourceParentFieldTooltip": "Os elementos da lista devem ser capazes de satisfazer os requisitos de mapeamento:",
+  "itemSourceParentFieldTooltip": "Os elementos da lista deveriam ser capazes de satisfazer os requisitos de mapeamento:",
   "kilometer_zero": "quilômetro",
   "kilometer_one": "quilômetro",
   "kilometer_many": "quilômetros",

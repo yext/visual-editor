@@ -344,7 +344,7 @@
   "inheritedDataMsg": "Podaci se nasljeđuju iz nadređenog odjeljka.",
   "insight": "Uvid",
   "item": "Artikal",
-  "itemSourceParentFieldTooltip": "Elementi popisa moraju moći zadovoljiti zahtjeve mapiranja:",
+  "itemSourceParentFieldTooltip": "Elementi popisa trebali bi moći zadovoljiti zahtjeve mapiranja:",
   "kilometer_zero": "kilometar",
   "kilometer_one": "kilometar",
   "kilometer_few": "kilometra",
