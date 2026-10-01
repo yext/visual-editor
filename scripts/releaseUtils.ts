@@ -35,10 +35,7 @@ export function getNpmTag(version: string): string {
     throw new Error(`Invalid release version: ${version}`);
   }
 
-  if (
-    parsedVersion.prerelease[0] === "stable" ||
-    parsedVersion.prerelease[0] === "latest"
-  ) {
+  if (parsedVersion.prerelease[0] === "stable") {
     throw new Error(
       `The prerelease identifier "${parsedVersion.prerelease[0]}" is reserved for stable releases.`,
     );

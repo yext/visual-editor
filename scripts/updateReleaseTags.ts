@@ -1,9 +1,8 @@
-import semver from "semver";
 import { args, getNpmTag, getPackageInfo, run } from "./releaseUtils.js";
 
 /**
  * 1. Read the current npm tags for this release type.
- * 2. Keep the alias on the highest released major version.
+ * 2. Use the original rules to select the existing tag.
  * 3. Copy the current primary tag to the alias, including after rollback.
  */
 const version = args._[0];
@@ -13,8 +12,6 @@ if (!version) {
 }
 
 const releaseTag = getNpmTag(version);
-const channel = releaseTag.slice(0, releaseTag.lastIndexOf("-v"));
-const alias = channel === "stable" ? "latest" : channel;
 const { pkg } = await getPackageInfo();
 const tags: Record<string, string> = JSON.parse(
   (
@@ -33,23 +30,14 @@ if (!primaryVersion || getNpmTag(primaryVersion) !== releaseTag) {
   throw new Error(`Missing or invalid npm tag: ${releaseTag}`);
 }
 
-for (const [tag, taggedVersion] of Object.entries(tags)) {
-  if (tag !== alias && !new RegExp(`^${channel}-v[0-9]+$`).test(tag)) continue;
-
-  const primaryTag = getNpmTag(taggedVersion);
-  if (
-    (tag === alias &&
-      primaryTag !== `${channel}-v${semver.major(taggedVersion)}`) ||
-    (tag !== alias && primaryTag !== tag)
-  ) {
-    throw new Error(`Invalid npm tag ${tag}: ${taggedVersion}`);
-  }
-
-  if (semver.major(taggedVersion) > semver.major(primaryVersion)) {
-    console.log(`Keeping ${alias}. A higher major version is available.`);
-    process.exit(0);
-  }
-}
+// Keep the tag selection used before major-version tags were added.
+const alias = primaryVersion.includes("rc")
+  ? "rc"
+  : primaryVersion.includes("beta")
+    ? "beta"
+    : primaryVersion.includes("alpha")
+      ? "alpha"
+      : "latest";
 
 if (tags[alias] === primaryVersion) {
   console.log(`${alias} already points to ${primaryVersion}.`);
