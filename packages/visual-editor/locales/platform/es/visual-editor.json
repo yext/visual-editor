@@ -614,7 +614,7 @@
   "inheritedDataMsg": "Los datos se heredan de la sección principal.",
   "insight": "Conocimiento",
   "item": "Artículo",
-  "itemSourceParentFieldTooltip": "Los elementos de la lista deben poder satisfacer los requisitos de mapeo:",
+  "itemSourceParentFieldTooltip": "Los elementos de la lista deberían poder satisfacer los requisitos de mapeo:",
   "kilometer_zero": "kilómetro",
   "kilometer_one": "kilómetro",
   "kilometer_many": "kilómetros",

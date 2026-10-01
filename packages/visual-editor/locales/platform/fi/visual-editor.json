@@ -614,7 +614,7 @@
   "inheritedDataMsg": "Tiedot peritään yläosasta.",
   "insight": "Oivallus",
   "item": "Tuote",
-  "itemSourceParentFieldTooltip": "Luettelon elementtien on täytettävä kartoitusvaatimukset:",
+  "itemSourceParentFieldTooltip": "Luettelon elementtien pitäisi pystyä täyttämään kartoitusvaatimukset:",
   "kilometer_zero": "kilometri",
   "kilometer_one": "kilometri",
   "kilometer_other": "kilometriä",

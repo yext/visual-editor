@@ -614,7 +614,7 @@
   "inheritedDataMsg": "Les données sont héritées de la section parent.",
   "insight": "Aperçu",
   "item": "Article",
-  "itemSourceParentFieldTooltip": "Les éléments de liste doivent être capables de satisfaire aux exigences de mappage :",
+  "itemSourceParentFieldTooltip": "Les éléments de liste devraient pouvoir satisfaire aux exigences de mappage :",
   "kilometer_zero": "kilomètre",
   "kilometer_one": "kilomètre",
   "kilometer_many": "kilomètres",
