@@ -1,3 +1,18 @@
+#### 1.4.11 (2026-09-29)
+
+##### Chores
+
+- upgrade search-ui-react to 3.4.1 ([#1333](https://github.com/yext/visual-editor/pull/1333)) ([f3988e4c](https://github.com/yext/visual-editor/commit/f3988e4cb0b811588e830771cedd5403dc1200c7))
+
+##### New Features
+
+- add location param to locator url ([#1335](https://github.com/yext/visual-editor/pull/1335)) ([963f071b](https://github.com/yext/visual-editor/commit/963f071bd4e6198fc1f8e20f7f9afcdd75e5e9fa))
+- form section ([#1330](https://github.com/yext/visual-editor/pull/1330)) ([f8f24663](https://github.com/yext/visual-editor/commit/f8f246632cfb166e044d706f3c4bbb4a35ea656c))
+
+##### Bug Fixes
+
+- image alignment in one column grid ([#1336](https://github.com/yext/visual-editor/pull/1336)) ([4fbbeed6](https://github.com/yext/visual-editor/commit/4fbbeed6e502a54239eb80ef21f5dcc773a52f40))
+
 #### 1.4.10 (2026-09-24)
 
 ##### Chores

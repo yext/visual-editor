@@ -142,6 +142,7 @@
     "presetImage": "预设图像",
     "textAndLink": "文字和链接"
   },
+  "currentLocation": "当前位置",
   "customSearchArea": "自定义搜索区域",
   "dataAttribute": "属性",
   "date": "日期",
@@ -613,7 +614,7 @@
   "inheritedDataMsg": "数据是从父节继承的。",
   "insight": "洞察力",
   "item": "物品",
-  "itemSourceParentFieldTooltip": "列表元素必须能够满足映射要求：",
+  "itemSourceParentFieldTooltip": "列表元素应能满足映射要求：",
   "kilometer_zero": "公里",
   "kilometer_one": "公里",
   "kilometer_other": "公里",

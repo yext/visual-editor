@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Core Info -sectie",
+  "currentLocation": "Huidige locatie",
   "customSearchArea": "Aangepast zoekgebied",
   "distance": "Afstand",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> uit zoekopdracht",

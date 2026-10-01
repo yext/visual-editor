@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Odjeljak jezgrenih informacija",
+  "currentLocation": "Trenutna lokacija",
   "customSearchArea": "Područje prilagođenog pretraživanja",
   "distance": "Udaljenost",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> iz pretraživanja",

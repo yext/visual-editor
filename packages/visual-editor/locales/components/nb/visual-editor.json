@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Kjerneinfo -seksjon",
+  "currentLocation": "Nåværende plassering",
   "customSearchArea": "Tilpasset søkeområde",
   "distance": "Avstand",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> fra søk",

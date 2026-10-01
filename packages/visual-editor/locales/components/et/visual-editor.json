@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Põhiteabe jaotis",
+  "currentLocation": "Praegune asukoht",
   "customSearchArea": "Kohandatud otsinguala",
   "distance": "Kaugus",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> otsingust",

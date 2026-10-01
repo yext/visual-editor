@@ -142,6 +142,7 @@
     "presetImage": "Iš anksto nustatytas vaizdas",
     "textAndLink": "Tekstas ir nuoroda"
   },
+  "currentLocation": "Dabartinė vieta",
   "customSearchArea": "Pasirinktinė paieškos sritis",
   "dataAttribute": "Atributas",
   "date": "Data",
@@ -613,7 +614,7 @@
   "inheritedDataMsg": "Duomenys paveldimi iš pirminės sekcijos.",
   "insight": "Įžvalga",
   "item": "Prekė",
-  "itemSourceParentFieldTooltip": "Sąrašo elementai turi atitikti atvaizdavimo reikalavimus:",
+  "itemSourceParentFieldTooltip": "Sąrašo elementai turėtų gebėti atitikti atvaizdavimo reikalavimus:",
   "kilometer_zero": "kilometrų",
   "kilometer_one": "kilometras",
   "kilometer_few": "kilometrų",

@@ -142,6 +142,7 @@
     "presetImage": "Forhåndsinnstilt bilde",
     "textAndLink": "Tekst og lenke"
   },
+  "currentLocation": "Nåværende plassering",
   "customSearchArea": "Tilpasset søkeområde",
   "dataAttribute": "Dataattributt",
   "date": "Dato",
@@ -613,7 +614,7 @@
   "inheritedDataMsg": "Data arves fra den overordnede delen.",
   "insight": "Innsikt",
   "item": "Punkt",
-  "itemSourceParentFieldTooltip": "Listeelementer må kunne tilfredsstille kartleggingskravene:",
+  "itemSourceParentFieldTooltip": "Listeelementer bør kunne tilfredsstille kartleggingskravene:",
   "kilometer_zero": "kilometer",
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometer",

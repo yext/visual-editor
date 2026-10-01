@@ -10,6 +10,8 @@ type Coordinate = {
 };
 
 export type NearbyLocationDoc = {
+  /** Content Endpoint records may include additional fields for card titles. */
+  [field: string]: unknown;
   /** The entity id of the location */
   id?: string;
   /** The name of the location */

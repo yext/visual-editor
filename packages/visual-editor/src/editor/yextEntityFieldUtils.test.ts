@@ -313,3 +313,89 @@ describe("getEntityFieldDisplayName", () => {
     ).toBe("c_linkedEntity");
   });
 });
+
+describe("item-source parent selection", () => {
+  it("allows item sources when any descendant type matches", () => {
+    const fields = getFieldsForSelector(
+      {
+        fields: [
+          {
+            name: "c_articles",
+            definition: {
+              name: "c_articles",
+              typeName: "c_articles",
+              isList: true,
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "title",
+                  definition: {
+                    name: "title",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: {
+          c_articles: "Articles",
+          "c_articles.title": "Articles > Title",
+        },
+      },
+      {
+        itemSourceTypes: [["type.image"], ["type.rich_text_v2"]],
+      }
+    );
+
+    expect(fields).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: "c_articles",
+        }),
+      ])
+    );
+  });
+
+  it("hides item sources when no descendant types match", () => {
+    const fields = getFieldsForSelector(
+      {
+        fields: [
+          {
+            name: "c_articles",
+            definition: {
+              name: "c_articles",
+              typeName: "c_articles",
+              isList: true,
+              type: {},
+            },
+            children: {
+              fields: [
+                {
+                  name: "title",
+                  definition: {
+                    name: "title",
+                    typeName: "type.string",
+                    type: {},
+                  },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: {
+          c_articles: "Articles",
+          "c_articles.title": "Articles > Title",
+        },
+      },
+      {
+        itemSourceTypes: [["type.image"], ["type.cta"]],
+      }
+    );
+
+    expect(fields).toEqual([]);
+  });
+});

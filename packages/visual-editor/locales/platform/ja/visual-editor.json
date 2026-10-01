@@ -142,6 +142,7 @@
     "presetImage": "プリセット画像",
     "textAndLink": "テキストとリンク"
   },
+  "currentLocation": "現在地",
   "customSearchArea": "カスタム検索領域",
   "dataAttribute": "属性",
   "date": "日付",
@@ -613,7 +614,7 @@
   "inheritedDataMsg": "データは親セクションから継承されます。",
   "insight": "洞察力",
   "item": "アイテム",
-  "itemSourceParentFieldTooltip": "リスト要素は、次のマッピング要件を満たすことができる必要があります。",
+  "itemSourceParentFieldTooltip": "リスト要素は、次のマッピング要件を満たせることが望まれます。",
   "kilometer_zero": "キロメートル",
   "kilometer_one": "キロメートル",
   "kilometer_other": "キロメートル",
