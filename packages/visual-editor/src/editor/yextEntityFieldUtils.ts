@@ -1,8 +1,8 @@
 import {
+  type EntityFieldTypes,
   getFilteredEntityFields,
   getCompatibleEntityFieldTypes,
   RenderEntityFieldFilter,
-  type EntityFieldTypes,
 } from "../internal/utils/getFilteredEntityFields.ts";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import { resolveField } from "../utils/resolveYextEntityField.ts";
