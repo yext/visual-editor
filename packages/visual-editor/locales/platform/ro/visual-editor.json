@@ -79,6 +79,7 @@
     "textAndLink": "Text și link"
   },
   "currentLocation": "Locația curentă",
+  "custom": "Personalizat",
   "customSearchArea": "Zona de căutare personalizată",
   "dataAttribute": "Atribut de date",
   "date": "Data",
@@ -409,6 +410,7 @@
     "metaTitle": "completați Meta Title pentru toate localitățile navigând la setările componentei Pagina de nivel superior",
     "metaTitleWithLocales": "completați Meta Title pentru următoarele localități navigând la setările componentei Pagina de nivel superior: {{locales}}"
   },
+  "recommended": "Recomandat",
   "recommendedColor": "Culoare recomandată",
   "recommendedColors": "Culorile recomandate",
   "redo": "Redo.",
@@ -418,6 +420,7 @@
   "restaurants": "Restaurante",
   "saturday": "sâmbătă",
   "schemaMarkup": "Schema Markup",
+  "schemaMode": "Mod schemă",
   "search": "Căutare",
   "searchHere": "Căutați aici ...",
   "searchThisArea": "Căutați în această zonă",

@@ -79,6 +79,7 @@
     "textAndLink": "Text & Link"
   },
   "currentLocation": "Aktueller Standort",
+  "custom": "Benutzerdefiniert",
   "customSearchArea": "Benutzerdefinierter Suchbereich",
   "dataAttribute": "Attribut",
   "date": "Datum",
@@ -404,6 +405,7 @@
     "metaTitle": "Geben Sie den Metatitel für alle Gebietsschemas ein, indem Sie zu den Einstellungen der Seitenkomponente der obersten Ebene navigieren",
     "metaTitleWithLocales": "Geben Sie den Metatitel für die folgenden Gebietsschemata ein, indem Sie zu den Einstellungen der Seitenkomponente der obersten Ebene navigieren: {{locales}}"
   },
+  "recommended": "Empfohlen",
   "recommendedColor": "Empfohlene Farbe",
   "recommendedColors": "Empfohlene Farben",
   "redo": "Wiederholen",
@@ -413,6 +415,7 @@
   "restaurants": "Restaurants",
   "saturday": "Samstag",
   "schemaMarkup": "Schema Markup",
+  "schemaMode": "Schema-Modus",
   "search": "Suchen",
   "searchHere": "Hier suchen...",
   "searchThisArea": "In diesem Bereich suchen",

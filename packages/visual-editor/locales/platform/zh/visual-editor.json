@@ -79,6 +79,7 @@
     "textAndLink": "文字和链接"
   },
   "currentLocation": "当前位置",
+  "custom": "自定义",
   "customSearchArea": "自定义搜索区域",
   "dataAttribute": "属性",
   "date": "日期",
@@ -404,6 +405,7 @@
     "metaTitle": "通过导航到顶级页面组件的设置来填写所有区域设置的元标题",
     "metaTitleWithLocales": "通过导航到顶级页面组件的设置来填写以下区域设置的元标题：{{locales}}"
   },
+  "recommended": "推荐",
   "recommendedColor": "推荐颜色",
   "recommendedColors": "推荐的颜色",
   "redo": "重做",
@@ -413,6 +415,7 @@
   "restaurants": "餐厅",
   "saturday": "周六",
   "schemaMarkup": "模式标记",
+  "schemaMode": "架构模式",
   "search": "搜索",
   "searchHere": "在这里搜索...",
   "searchThisArea": "搜索此区域",

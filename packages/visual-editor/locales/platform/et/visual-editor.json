@@ -79,6 +79,7 @@
     "textAndLink": "Tekst ja link"
   },
   "currentLocation": "Praegune asukoht",
+  "custom": "Kohandatud",
   "customSearchArea": "Kohandatud otsinguala",
   "dataAttribute": "Atribuut",
   "date": "Kuupäev",
@@ -404,6 +405,7 @@
     "metaTitle": "täitke metapealkiri kõigi lokaatide jaoks, navigeerides lehe ülataseme komponendi seadetesse",
     "metaTitleWithLocales": "täitke metapealkiri järgmiste lokaatide jaoks, navigeerides lehe ülataseme komponendi seadetesse: {{locales}}"
   },
+  "recommended": "Soovitatav",
   "recommendedColor": "Soovitatav värv",
   "recommendedColors": "Soovitatavad värvid",
   "redo": "Uuesti tegema",
@@ -413,6 +415,7 @@
   "restaurants": "Restoranid",
   "saturday": "Laupäev",
   "schemaMarkup": "Skeemi märgistus",
+  "schemaMode": "Skeemi režiim",
   "search": "Otsima",
   "searchHere": "Otsige siit ...",
   "searchThisArea": "Otsige sellest piirkonnast",

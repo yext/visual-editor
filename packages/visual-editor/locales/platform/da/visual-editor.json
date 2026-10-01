@@ -79,6 +79,7 @@
     "textAndLink": "Tekst og link"
   },
   "currentLocation": "Nuværende placering",
+  "custom": "Brugerdefineret",
   "customSearchArea": "Brugerdefineret søgeområde",
   "dataAttribute": "Attribut",
   "date": "Dato",
@@ -404,6 +405,7 @@
     "metaTitle": "udfyld Meta Title for alle lokaliteter ved at navigere til sidekomponentens indstillinger på øverste niveau",
     "metaTitleWithLocales": "udfyld Meta Title for følgende lokaliteter ved at navigere til sidekomponentens indstillinger på øverste niveau: {{locales}}"
   },
+  "recommended": "Anbefalet",
   "recommendedColor": "Anbefalet farve",
   "recommendedColors": "Anbefalede farver",
   "redo": "Genindstille",
@@ -413,6 +415,7 @@
   "restaurants": "Restauranter",
   "saturday": "lørdag",
   "schemaMarkup": "Skema markering",
+  "schemaMode": "Skematilstand",
   "search": "Søge",
   "searchHere": "Søg her ...",
   "searchThisArea": "Søg i dette område",

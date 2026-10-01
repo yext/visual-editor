@@ -79,6 +79,7 @@
     "textAndLink": "文字和鏈接"
   },
   "currentLocation": "目前位置",
+  "custom": "自訂",
   "customSearchArea": "自定義搜索區域",
   "dataAttribute": "數據屬性",
   "date": "日期",
@@ -404,6 +405,7 @@
     "metaTitle": "通過導航到頂級頁面組件的設置來填寫所有區域設置的元標題",
     "metaTitleWithLocales": "通過導航到頂級頁面組件的設置來填寫以下區域設置的元標題：{{locales}}"
   },
+  "recommended": "建議",
   "recommendedColor": "推薦顏色",
   "recommendedColors": "推薦的顏色",
   "redo": "重做",
@@ -413,6 +415,7 @@
   "restaurants": "餐廳",
   "saturday": "週六",
   "schemaMarkup": "模式標記",
+  "schemaMode": "結構描述模式",
   "search": "搜尋",
   "searchHere": "在這裡搜索...",
   "searchThisArea": "搜索此區域",

@@ -79,6 +79,7 @@
     "textAndLink": "Tekstas ir nuoroda"
   },
   "currentLocation": "Dabartinė vieta",
+  "custom": "Pasirinktinis",
   "customSearchArea": "Pasirinktinė paieškos sritis",
   "dataAttribute": "Atributas",
   "date": "Data",
@@ -414,6 +415,7 @@
     "metaTitle": "užpildykite metapavadinimą visoms vietoms naršydami į aukščiausio lygio puslapio komponento nustatymus",
     "metaTitleWithLocales": "užpildykite metapavadinimą šioms vietoms, eidami į aukščiausio lygio puslapio komponento nustatymus: {{locales}}"
   },
+  "recommended": "Rekomenduojamas",
   "recommendedColor": "Rekomenduojama spalva",
   "recommendedColors": "Rekomenduojamos spalvos",
   "redo": "Perdaryti",
@@ -423,6 +425,7 @@
   "restaurants": "Restoranai",
   "saturday": "Šeštadienis",
   "schemaMarkup": "Schemos žymėjimas",
+  "schemaMode": "Schemos režimas",
   "search": "Ieškoti",
   "searchHere": "Ieškokite čia ...",
   "searchThisArea": "Ieškokite šioje srityje",

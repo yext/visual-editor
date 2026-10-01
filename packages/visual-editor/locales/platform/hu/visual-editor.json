@@ -79,6 +79,7 @@
     "textAndLink": "Szöveg és link"
   },
   "currentLocation": "Jelenlegi hely",
+  "custom": "Egyéni",
   "customSearchArea": "Egyedi keresési terület",
   "dataAttribute": "Adatattribútum",
   "date": "Dátum",
@@ -404,6 +405,7 @@
     "metaTitle": "töltse ki a metacímet az összes területhez a legfelső szintű oldal összetevő beállításaihoz navigálva",
     "metaTitleWithLocales": "töltse ki a metacímet a következő nyelvekhez a legfelső szintű oldal összetevő beállításaihoz navigálva: {{locales}}"
   },
+  "recommended": "Ajánlott",
   "recommendedColor": "Ajánlott szín",
   "recommendedColors": "Ajánlott színek",
   "redo": "Újra felújít",
@@ -413,6 +415,7 @@
   "restaurants": "Éttermek",
   "saturday": "szombat",
   "schemaMarkup": "Séma jelölés",
+  "schemaMode": "Sémamód",
   "search": "Keresés",
   "searchHere": "Keressen itt ...",
   "searchThisArea": "Keresse meg ezt a területet",

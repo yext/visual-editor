@@ -79,6 +79,7 @@
     "textAndLink": "Texto y enlace"
   },
   "currentLocation": "Ubicación actual",
+  "custom": "Personalizado",
   "customSearchArea": "Área de búsqueda personalizada",
   "dataAttribute": "Atributo",
   "date": "Fecha",
@@ -409,6 +410,7 @@
     "metaTitle": "complete el metatítulo para todas las configuraciones regionales navegando a la configuración del componente de página de nivel superior",
     "metaTitleWithLocales": "complete el metatítulo para las siguientes configuraciones regionales navegando a la configuración del componente de página de nivel superior: {{locales}}"
   },
+  "recommended": "Recomendado",
   "recommendedColor": "Color recomendado",
   "recommendedColors": "Colores recomendados",
   "redo": "Rehacer",
@@ -418,6 +420,7 @@
   "restaurants": "Restaurantes",
   "saturday": "Sábado",
   "schemaMarkup": "Marcado de esquema",
+  "schemaMode": "Modo de esquema",
   "search": "Buscar",
   "searchHere": "Buscar aquí ...",
   "searchThisArea": "Busca esta área",

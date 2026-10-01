@@ -79,6 +79,7 @@
     "textAndLink": "Text a odkaz"
   },
   "currentLocation": "Aktuální poloha",
+  "custom": "Vlastní",
   "customSearchArea": "Vlastní vyhledávací oblast",
   "dataAttribute": "Atribut",
   "date": "Datum",
@@ -414,6 +415,7 @@
     "metaTitle": "vyplňte název metadat pro všechna národní prostředí tak, že přejdete do nastavení komponenty stránky nejvyšší úrovně",
     "metaTitleWithLocales": "vyplňte metanázev pro následující národní prostředí tak, že přejdete do nastavení komponenty stránky nejvyšší úrovně: {{locales}}"
   },
+  "recommended": "Doporučené",
   "recommendedColor": "Doporučená barva",
   "recommendedColors": "Doporučené barvy",
   "redo": "Předělat",
@@ -423,6 +425,7 @@
   "restaurants": "Restaurace",
   "saturday": "sobota",
   "schemaMarkup": "Označení schématu",
+  "schemaMode": "Režim schématu",
   "search": "Vyhledávání",
   "searchHere": "Hledejte zde ...",
   "searchThisArea": "Prohledejte tuto oblast",

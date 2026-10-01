@@ -79,6 +79,7 @@
     "textAndLink": "テキストとリンク"
   },
   "currentLocation": "現在地",
+  "custom": "カスタム",
   "customSearchArea": "カスタム検索領域",
   "dataAttribute": "属性",
   "date": "日付",
@@ -404,6 +405,7 @@
     "metaTitle": "最上位のページコンポーネントの設定に移動して、すべてのロケールのメタタイトルを入力します。",
     "metaTitleWithLocales": "最上位のページ コンポーネントの設定に移動して、次のロケールのメタ タイトルを入力します: {{locales}}"
   },
+  "recommended": "推奨",
   "recommendedColor": "おすすめカラー",
   "recommendedColors": "推奨される色",
   "redo": "やり直します",
@@ -413,6 +415,7 @@
   "restaurants": "レストラン",
   "saturday": "土曜日",
   "schemaMarkup": "スキーママークアップ",
+  "schemaMode": "スキーマモード",
   "search": "検索",
   "searchHere": "ここで検索してください...",
   "searchThisArea": "このエリアを検索します",

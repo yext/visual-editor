@@ -79,6 +79,7 @@
     "textAndLink": "Teksti ja linkki"
   },
   "currentLocation": "Nykyinen sijainti",
+  "custom": "Mukautettu",
   "customSearchArea": "Mukautettu hakualue",
   "dataAttribute": "Attribuutti",
   "date": "Päivämäärä",
@@ -404,6 +405,7 @@
     "metaTitle": "täytä Meta Title kaikille alueille siirtymällä sivukomponentin ylätason asetuksiin",
     "metaTitleWithLocales": "täytä Meta Title seuraaville alueille siirtymällä sivukomponentin ylätason asetuksiin: {{locales}}"
   },
+  "recommended": "Suositeltu",
   "recommendedColor": "Suositeltu väri",
   "recommendedColors": "Suositellut värit",
   "redo": "Tehdä uudelleen",
@@ -413,6 +415,7 @@
   "restaurants": "Ravintolat",
   "saturday": "lauantai",
   "schemaMarkup": "Kaavio",
+  "schemaMode": "Skeeman tila",
   "search": "Haku",
   "searchHere": "Etsi täältä ...",
   "searchThisArea": "Etsi tätä aluetta",
