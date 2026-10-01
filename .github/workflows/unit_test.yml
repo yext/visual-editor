@@ -70,6 +70,12 @@ jobs:
         run: pnpm i --frozen-lockfile --ignore-scripts
         working-directory: ./packages/${{ inputs.package }}
 
+      - name: Check release scripts
+        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true'
+        run: |
+          pnpm run typecheck:release
+          pnpm run test:release
+
       - name: Download build artifact
         if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true'
         uses: actions/download-artifact@v4.1.7

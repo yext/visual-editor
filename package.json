@@ -11,12 +11,15 @@
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
     "release": "tsx scripts/release.ts",
+    "test:release": "node --import tsx --test scripts/*.test.ts",
+    "typecheck:release": "tsc --noEmit --target ES2022 --module NodeNext --esModuleInterop --strict --skipLibCheck scripts/*.ts",
     "fmt": "prettier --write --cache .",
     "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
     "prettier": "pnpm -r run prettier",
     "lint": "pnpm -r run lint",
     "docs": "pnpm -r run api-extractor && pnpm -r run generate-docs && pnpm run fmt",
     "ci-verify-publish": "tsx scripts/verifyPublish.ts",
+    "ci-update-release-tags": "tsx scripts/updateReleaseTags.ts",
     "prepare": "husky install"
   },
   "lint-staged": {

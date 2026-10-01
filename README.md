@@ -4,6 +4,103 @@
 
 This library provides components necessary to set up a Section Library Pages repository that can interact with Visual Editor in the Yext platform.
 
+## Package releases
+
+Run `pnpm run release` from this repository. Select a version and check the npm
+tag in the confirmation prompt. The command pushes a Git release tag. CI then
+publishes the package with its primary npm tag and updates the release alias.
+
+| Release type      | Primary npm tag   | Release alias |
+| ----------------- | ----------------- | ------------- |
+| Stable            | `latest-v<major>` | `latest`      |
+| Alpha             | `alpha-v<major>`  | `alpha`       |
+| Beta              | `beta-v<major>`   | `beta`        |
+| Release candidate | `rc-v<major>`     | `rc`          |
+
+For example, `2.0.0-beta.1` uses `beta-v2`. Stable `2.0.0` uses `latest-v2`.
+Only `alpha`, `beta`, and `rc` prerelease labels are supported. A stable tag must
+always point to a stable release.
+
+Each alias follows the highest released major version for its release type.
+`latest` follows stable 1.x until the first stable 2.x release. After that, a
+1.x release updates `latest-v1` and keeps `latest` on 2.x. Prerelease tags have
+the same rule, separately for each release type.
+
+Tags select the approved release. They can point to an earlier version after
+rollback. A consumer that requires stable 2.x must use `latest-v2`. It can use
+`rc-v2`, `beta-v2`, or `alpha-v2` before that stable tag exists.
+
+### Release setup
+
+Apply the release scripts and workflows to both the main branch and
+`release/1.x` before creating new release tags. CI reads the workflow from the
+release commit. Release jobs use one shared queue so their tag updates run
+one at a time.
+
+Publishing CI uses Node 24.x and npm 12.2.0. In the npm package settings,
+configure the Trusted Publisher to allow both `npm publish` and `npm dist-tag`.
+Keep the repository, `publish.yml` workflow filename, and `Release` environment. Older Trusted Publisher connections may permit publication only.
+
+Before the first release with these rules, read the existing tags:
+
+```sh
+npm dist-tag ls @yext/visual-editor
+```
+
+Add the corresponding primary tag for each existing release alias. Confirm
+the version numbers against the registry before running these initial setup
+commands. The versions below were the current alias values on 2026-10-01.
+
+```sh
+npm dist-tag add @yext/visual-editor@1.4.11 latest-v1
+npm dist-tag add @yext/visual-editor@2.0.0-beta.1 beta-v2
+npm dist-tag add @yext/visual-editor@1.3.0-alpha.2 alpha-v1
+```
+
+Keep the existing aliases. Create `latest-v2` with the first stable 2.x release.
+These commands require npm tag-write access.
+
+### Recover an alias update
+
+If publication succeeds but the alias update fails, CI fails and reports the
+published version. Correct the npm access or registry error. From this
+repository, run the alias update with that published version:
+
+```sh
+pnpm run ci-update-release-tags 2.0.0
+```
+
+Do not publish the package again. The recovery command reads the current
+primary tag. If that tag was rolled back, the command uses the approved
+rollback version. Repeated execution is safe.
+
+### Roll back a release
+
+Complete any active release job before changing tags. Set the primary tag to
+the approved published version. For example, to roll back stable 2.x:
+
+```sh
+npm dist-tag add @yext/visual-editor@2.0.3 latest-v2
+pnpm run ci-update-release-tags 2.0.3
+```
+
+The second command also changes `latest` if it follows 2.x. It keeps `latest`
+on a higher stable major version if one exists. Use the same steps with the
+appropriate primary tag for a prerelease rollback.
+
+Consumers must resolve the tag again to get the rollback version. A later
+release updates its primary tag and can update its alias again.
+
+### Check release scripts
+
+```sh
+pnpm run typecheck:release
+pnpm run test:release
+```
+
+The release tests use a local npm mock. They do not publish packages or change
+registry tags.
+
 ## CLI
 
 `@yext/visual-editor` includes the `yextve` CLI for creating a Section Library revision from the current Git commit. In a repository that uses Visual Editor, install the package and run its local CLI:

@@ -9,6 +9,11 @@ on:
 permissions:
   id-token: write # Required for OIDC
 
+concurrency:
+  group: visual-editor-npm-publish
+  queue: max
+  cancel-in-progress: false
+
 jobs:
   publish:
     if: github.repository == 'yext/visual-editor'
@@ -23,10 +28,10 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
 
-      - name: Set node version to 20.x
+      - name: Set node version to 24.x
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: 24.x
           registry-url: https://registry.npmjs.org/
           cache: "pnpm"
 
@@ -34,18 +39,30 @@ jobs:
         run: pnpm install --ignore-scripts --frozen-lockfile
 
       - name: Update npm
-        # npm version npm 11.5.1 or later needed for Trusted Publishing
-        run: npm install -g npm@11
+        # npm 12.2.0 supports npm dist-tag with Trusted Publishing.
+        run: npm install -g npm@12.2.0
 
       - name: Verify package version and get npm tag
         id: get_npm_tag
         env:
           REF_NAME: ${{ github.ref_name }}
-        run: |
-          TAG=$(pnpm run ci-verify-publish "$REF_NAME" | tail -n 1)
-          echo "npm_tag=$TAG" >> "$GITHUB_OUTPUT"
+        run: pnpm run ci-verify-publish "$REF_NAME"
 
       - name: Publish
+        id: publish
         env:
           NPM_TAG: ${{ steps.get_npm_tag.outputs.npm_tag }}
         run: cd packages/visual-editor && pnpm publish --access public --tag "$NPM_TAG" --no-git-checks
+
+      - name: Update release alias
+        id: update_release_tags
+        env:
+          PACKAGE_VERSION: ${{ steps.get_npm_tag.outputs.package_version }}
+        run: pnpm run ci-update-release-tags "$PACKAGE_VERSION"
+
+      - name: Report alias update failure
+        if: failure() && steps.publish.outcome == 'success' && steps.update_release_tags.outcome == 'failure'
+        env:
+          PACKAGE_VERSION: ${{ steps.get_npm_tag.outputs.package_version }}
+        run: |
+          echo "::error::Package $PACKAGE_VERSION is published, but its alias update failed. Run pnpm run ci-update-release-tags $PACKAGE_VERSION with npm tag-write access. Do not publish the package again."

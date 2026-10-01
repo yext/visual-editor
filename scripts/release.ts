@@ -5,8 +5,8 @@ import prompts from "prompts";
 import semver from "semver";
 import colors from "picocolors";
 import {
-  args,
   getLatestTag,
+  getNpmTag,
   getPackageInfo,
   getVersionChoices,
   isDryRun,
@@ -50,21 +50,12 @@ if (!semver.valid(targetVersion)) {
 }
 
 const tag = `v${targetVersion}`;
-
-if (targetVersion.includes("rc") && !args.tag) {
-  args.tag = "rc";
-}
-if (targetVersion.includes("beta") && !args.tag) {
-  args.tag = "beta";
-}
-if (targetVersion.includes("alpha") && !args.tag) {
-  args.tag = "alpha";
-}
+const npmTag = getNpmTag(targetVersion);
 
 const { yes }: { yes: boolean } = await prompts({
   type: "confirm",
   name: "yes",
-  message: `Releasing ${colors.yellow(tag)}. Confirm?`,
+  message: `Releasing ${colors.yellow(tag)} with npm tag ${colors.yellow(npmTag)}. Confirm?`,
 });
 
 if (!yes) {

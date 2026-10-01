@@ -1,4 +1,5 @@
-import { args, getPackageInfo } from "./releaseUtils.js";
+import { appendFileSync } from "node:fs";
+import { args, getNpmTag, getPackageInfo } from "./releaseUtils.js";
 
 const tag = args._[0];
 
@@ -7,7 +8,13 @@ if (!tag) {
   process.exit(1);
 }
 
-const [, version] = tag.split("v");
+if (typeof tag !== "string" || !tag.startsWith("v")) {
+  console.error(`Invalid Git release tag: ${tag}`);
+  process.exit(1);
+}
+
+const version = tag.slice(1);
+const releaseTag = getNpmTag(version);
 
 const { currentVersion } = await getPackageInfo();
 if (currentVersion !== version) {
@@ -17,13 +24,12 @@ if (currentVersion !== version) {
   process.exit(1);
 }
 
-const releaseTag = version.includes("rc")
-  ? "rc"
-  : version.includes("beta")
-    ? "beta"
-    : version.includes("alpha")
-      ? "alpha"
-      : "latest";
+if (process.env.GITHUB_OUTPUT) {
+  appendFileSync(
+    process.env.GITHUB_OUTPUT,
+    `npm_tag=${releaseTag}\npackage_version=${version}\n`,
+  );
+}
 
-// Log the release tag to be picked up by the next GitHub Actions step
+// Keep the npm tag output for local use.
 console.log(releaseTag);

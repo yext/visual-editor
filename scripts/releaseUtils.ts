@@ -23,6 +23,29 @@ if (isDryRun) {
 
 export const versionIncrements: ReleaseType[] = ["patch", "minor", "major"];
 
+/** Returns the npm tag for a stable, alpha, beta, or rc release. */
+export function getNpmTag(version: string): string {
+  const parsedVersion = semver.parse(version);
+  if (
+    !parsedVersion ||
+    version !==
+      parsedVersion.version +
+        (parsedVersion.build.length ? `+${parsedVersion.build.join(".")}` : "")
+  ) {
+    throw new Error(`Invalid release version: ${version}`);
+  }
+
+  const channel = parsedVersion.prerelease[0] ?? "latest";
+  if (
+    parsedVersion.prerelease.length &&
+    !["alpha", "beta", "rc"].includes(String(channel))
+  ) {
+    throw new Error(`Unsupported prerelease label: ${channel}`);
+  }
+
+  return `${channel}-v${parsedVersion.major}`;
+}
+
 interface Pkg {
   name: string;
   version: string;
