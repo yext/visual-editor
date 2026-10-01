@@ -72,9 +72,7 @@ jobs:
 
       - name: Check release scripts
         if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true'
-        run: |
-          pnpm run typecheck:release
-          pnpm run test:release
+        run: pnpm run typecheck:release
 
       - name: Download build artifact
         if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true'

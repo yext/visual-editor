@@ -23,7 +23,7 @@ if (isDryRun) {
 
 export const versionIncrements: ReleaseType[] = ["patch", "minor", "major"];
 
-/** Returns the npm tag for a stable, alpha, beta, or rc release. */
+/** Returns the npm tag from the major version and first prerelease identifier. */
 export function getNpmTag(version: string): string {
   const parsedVersion = semver.parse(version);
   if (
@@ -35,15 +35,16 @@ export function getNpmTag(version: string): string {
     throw new Error(`Invalid release version: ${version}`);
   }
 
-  const channel = parsedVersion.prerelease[0] ?? "latest";
   if (
-    parsedVersion.prerelease.length &&
-    !["alpha", "beta", "rc"].includes(String(channel))
+    parsedVersion.prerelease[0] === "stable" ||
+    parsedVersion.prerelease[0] === "latest"
   ) {
-    throw new Error(`Unsupported prerelease label: ${channel}`);
+    throw new Error(
+      `The prerelease identifier "${parsedVersion.prerelease[0]}" is reserved for stable releases.`,
+    );
   }
 
-  return `${channel}-v${parsedVersion.major}`;
+  return `${parsedVersion.prerelease[0] ?? "stable"}-v${parsedVersion.major}`;
 }
 
 interface Pkg {
@@ -109,15 +110,13 @@ interface VersionChoice {
   value: string;
 }
 export function getVersionChoices(currentVersion: string): VersionChoice[] {
-  const currentRc = currentVersion.includes("rc");
-  const currentBeta = currentVersion.includes("beta");
-  const currentAlpha = currentVersion.includes("alpha");
-  const isStable = !currentRc && !currentBeta && !currentAlpha;
+  const prereleaseIdentifier = semver.prerelease(currentVersion)?.[0];
+  const isStable = prereleaseIdentifier === undefined;
 
   function inc(
     i: ReleaseType,
-    tag = currentAlpha ? "alpha" : currentBeta ? "beta" : "rc",
-  ) {
+    tag = String(prereleaseIdentifier ?? "rc"),
+  ): string {
     const incVersion = semver.inc(currentVersion, i, tag, "1");
     if (incVersion) {
       return incVersion;
@@ -168,25 +167,10 @@ export function getVersionChoices(currentVersion: string): VersionChoice[] {
         value: inc("major"),
       },
     );
-  } else if (currentAlpha) {
-    versionChoices.push({
-      title: "alpha",
-      value: inc("patch") + "-alpha.1",
-    });
-  } else if (currentBeta) {
-    versionChoices.push({
-      title: "beta",
-      value: inc("patch") + "-beta.1",
-    });
-  } else if (currentRc) {
-    versionChoices.push({
-      title: "rc",
-      value: inc("patch") + "-rc.1",
-    });
   } else {
     versionChoices.push({
-      title: "stable",
-      value: inc("patch"),
+      title: String(prereleaseIdentifier),
+      value: `${inc("patch")}-${prereleaseIdentifier}.1`,
     });
   }
   versionChoices.push({ value: "custom", title: "custom" });
