@@ -12,12 +12,18 @@ const REVISION_POLLING_TEXT = "Waiting for Section Library Revision build...";
 export async function pollRevision(
   config: DeployConfig,
   revisionName: string,
-  verbose: boolean
+  verbose: boolean,
+  isInteractive: boolean
 ): Promise<void> {
+  const pollingIntervalMs = isInteractive ? 10_000 : 30_000;
   let lastStatus = BUILD_PROCESSING_STATUS;
   let revision: SectionLibraryRevision | undefined;
   const startedAt = Date.now();
   const spinner = ora(REVISION_POLLING_TEXT).start();
+  const spinnerTimer = setInterval(() => {
+    const elapsedSeconds = Math.floor((Date.now() - startedAt) / 1000);
+    spinner.text = `${REVISION_POLLING_TEXT} ${formatElapsed(elapsedSeconds)} elapsed (expected build time: 5-10 minutes)`;
+  }, 1000);
   try {
     while (lastStatus === BUILD_PROCESSING_STATUS) {
       revision = await getSectionLibraryRevision(
@@ -28,14 +34,15 @@ export async function pollRevision(
       );
       lastStatus = revision.status;
 
-      const elapsedSeconds = Math.floor((Date.now() - startedAt) / 1000);
-      spinner.text = `${REVISION_POLLING_TEXT} ${formatElapsed(elapsedSeconds)} elapsed (expected build time: 5-10 minutes)`;
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (lastStatus === BUILD_PROCESSING_STATUS) {
+        await new Promise((resolve) => setTimeout(resolve, pollingIntervalMs));
+      }
     }
   } catch (error) {
     spinner.fail("Section Library Revision build failed.");
     throw error;
+  } finally {
+    clearInterval(spinnerTimer);
   }
 
   if (revision?.status === BUILD_SUCCESS_STATUS) {

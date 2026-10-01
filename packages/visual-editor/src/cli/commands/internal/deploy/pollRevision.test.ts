@@ -10,6 +10,7 @@ vi.mock("./sectionLibraryApi.ts", () => ({
 
 vi.mock("ora", () => {
   const spinner = {
+    text: "",
     start: vi.fn(),
     succeed: vi.fn(),
     fail: vi.fn(),
@@ -35,28 +36,59 @@ afterEach(() => {
 });
 
 describe("pollRevision", () => {
-  it("polls every second until the build succeeds", async () => {
+  it.each([
+    { isInteractive: true, intervalMs: 10_000 },
+    { isInteractive: false, intervalMs: 30_000 },
+  ])(
+    "polls every $intervalMs ms with isInteractive=$isInteractive",
+    async ({ isInteractive, intervalMs }) => {
+      vi.useFakeTimers();
+      vi.mocked(getSectionLibraryRevision)
+        .mockResolvedValueOnce({
+          name: revisionName,
+          status: "STATUS_BUILD_PROCESSING",
+        })
+        .mockResolvedValueOnce({
+          name: revisionName,
+          status: "STATUS_BUILD_SUCCEEDED",
+        });
+
+      const polling = pollRevision(config, revisionName, false, isInteractive);
+      const spinner = vi.mocked(ora).mock.results[0].value;
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(spinner.text).toContain("1s elapsed");
+      expect(getSectionLibraryRevision).toHaveBeenCalledTimes(1);
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(spinner.text).toContain("2s elapsed");
+      await vi.advanceTimersByTimeAsync(intervalMs - 2001);
+      expect(getSectionLibraryRevision).toHaveBeenCalledTimes(1);
+      await vi.advanceTimersByTimeAsync(1);
+      await polling;
+
+      expect(getSectionLibraryRevision).toHaveBeenCalledTimes(2);
+      expect(vi.getTimerCount()).toBe(0);
+      expect(ora).toHaveBeenCalledWith(
+        "Waiting for Section Library Revision build..."
+      );
+      expect(vi.mocked(ora).mock.results[0].value.succeed).toHaveBeenCalledWith(
+        `Section Library Revision ${revisionId} build succeeded after ${intervalMs / 1000}s.`
+      );
+    }
+  );
+
+  it("stops refreshing the spinner when a status request fails", async () => {
     vi.useFakeTimers();
-    vi.mocked(getSectionLibraryRevision)
-      .mockResolvedValueOnce({
-        name: revisionName,
-        status: "STATUS_BUILD_PROCESSING",
-      })
-      .mockResolvedValueOnce({
-        name: revisionName,
-        status: "STATUS_BUILD_SUCCEEDED",
-      });
-
-    const polling = pollRevision(config, revisionName, false);
-    await vi.advanceTimersByTimeAsync(2000);
-    await polling;
-
-    expect(getSectionLibraryRevision).toHaveBeenCalledTimes(2);
-    expect(ora).toHaveBeenCalledWith(
-      "Waiting for Section Library Revision build..."
+    vi.mocked(getSectionLibraryRevision).mockRejectedValueOnce(
+      new Error("Request failed")
     );
-    expect(vi.mocked(ora).mock.results[0].value.succeed).toHaveBeenCalledWith(
-      `Section Library Revision ${revisionId} build succeeded after 2s.`
+
+    await expect(
+      pollRevision(config, revisionName, false, false)
+    ).rejects.toThrow("Request failed");
+
+    expect(vi.getTimerCount()).toBe(0);
+    expect(vi.mocked(ora).mock.results[0].value.fail).toHaveBeenCalledWith(
+      "Section Library Revision build failed."
     );
   });
 
@@ -67,12 +99,12 @@ describe("pollRevision", () => {
       status: "STATUS_BUILD_FAILURE",
     });
 
-    const polling = pollRevision(config, revisionName, false);
+    const polling = pollRevision(config, revisionName, false, true);
     const rejection = expect(polling).rejects.toThrow(
       "Section Library Revision failed with status STATUS_BUILD_FAILURE."
     );
-    await vi.advanceTimersByTimeAsync(1000);
     await rejection;
+    expect(vi.getTimerCount()).toBe(0);
 
     const spinner = vi.mocked(ora).mock.results[0]?.value;
     expect(spinner.fail).toHaveBeenCalledWith(

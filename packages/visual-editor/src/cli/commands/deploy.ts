@@ -57,7 +57,7 @@ export const deployCmd = defineYextVECommand({
         throw new Error("No Section Library revision was created.");
       }
       if (revision) {
-        await pollRevision(config, revision.name, verbose);
+        await pollRevision(config, revision.name, verbose, isInteractive);
       }
       return 0;
     } catch (error) {

@@ -132,9 +132,9 @@ describe("yextve", () => {
       true,
     ]);
     expect(pollRevision.mock.calls).toEqual([
-      [config, "revision/1", false],
-      [config, "revision/1", true],
-      [config, "revision/1", true],
+      [config, "revision/1", false, false],
+      [config, "revision/1", true, false],
+      [config, "revision/1", true, false],
     ]);
   });
 
@@ -177,7 +177,7 @@ describe("yextve", () => {
       allowDuplicate: true,
       isInteractive: false,
     });
-    expect(pollRevision).toHaveBeenCalledWith({}, "revision/1", false);
+    expect(pollRevision).toHaveBeenCalledWith({}, "revision/1", false, false);
   });
 
   it("preserves interactive command behavior with terminal input", async () => {
@@ -196,6 +196,10 @@ describe("yextve", () => {
         isInteractive: true,
       });
       expect(pollRevision).not.toHaveBeenCalled();
+
+      deploy.mockResolvedValueOnce({ name: "revision/1" });
+      expect((await invoke(["deploy"], rootDir)).exitCode).toBe(0);
+      expect(pollRevision).toHaveBeenCalledWith({}, "revision/1", false, true);
     } finally {
       if (originalDescriptor) {
         Object.defineProperty(stdin, "isTTY", originalDescriptor);
