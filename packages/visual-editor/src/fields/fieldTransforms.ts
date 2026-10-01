@@ -16,35 +16,46 @@ import { i18nPageInstance } from "../utils/i18n/i18nInstances.ts";
 import { getCTAType } from "../internal/utils/ctaFieldUtils.ts";
 
 /**
- * Build render-time transforms for explicitly enabled Yext content fields.
+ * Build render-time transforms for Yext content fields automatically by field type.
  *
  * 1. Keep authored editor values and unrelated fields unchanged.
- * 2. Resolve content and repeated mappings using the active page document.
+ * 2. Supply resolved content fields and plain item values to component renderers.
+ *    Resolve content and repeated mappings using the active page document.
  * 3. Return plain values without changing Puck's saved data or slot lifecycle.
  */
 export const createPuckFieldTransforms = (
   locale: string,
-  streamDocument: StreamDocument
+  streamDocument: StreamDocument,
+  fieldSources = new Map<string, unknown>()
 ): FieldTransforms => {
   const transform = (
     {
       value,
       field,
       componentId,
+      propPath,
     }: {
       value: any;
       field: {
         type: string;
         yextFieldType?: string;
-        resolve?: boolean;
         repeated?: RepeatedEntityFieldMetadata<Record<string, unknown>>;
       };
       componentId?: string;
+      propPath?: string;
     },
     sourceDocument: StreamDocument = streamDocument
   ): any => {
-    if (!field.resolve || componentId === "root") {
+    if (componentId === "root") {
       return value;
+    }
+    // Preserve binding metadata for source-dependent UI without wrapping resolved values.
+    if (
+      componentId &&
+      propPath &&
+      (field.yextFieldType ?? field.type) === "entityField"
+    ) {
+      fieldSources.set(`${componentId}:${propPath}`, value);
     }
     if (value == null) {
       return field.repeated ? [] : value;
@@ -88,7 +99,7 @@ export const createPuckFieldTransforms = (
                     transform(
                       {
                         value: childValue,
-                        field: { ...childField, resolve: true },
+                        field: childField,
                       },
                       itemDocument
                     )
@@ -140,7 +151,7 @@ export const createPuckFieldTransforms = (
             cta: transform(
               {
                 value: value.data?.cta,
-                field: { type: "ctaSelector", resolve: true },
+                field: { type: "ctaSelector" },
               },
               sourceDocument
             ),

@@ -49,19 +49,19 @@ describe("VisualEditorRender field transforms", () => {
             caption: { defaultValue: "Default [[name]]" },
           },
           fields: toPuckFields({
-            caption: { type: "translatableString", resolve: true },
+            caption: { type: "translatableString" },
             content: {
               type: "object",
               objectFields: {
                 title: {
                   type: "entityField",
-                  resolve: true,
+
                   filter: { types: ["type.string"] },
                 },
                 links: {
                   type: "array",
                   arrayFields: {
-                    label: { type: "translatableString", resolve: true },
+                    label: { type: "translatableString" },
                   },
                 },
               },
@@ -229,7 +229,7 @@ describe("VisualEditorRender field transforms", () => {
             fields: toPuckFields({
               heading: { type: "object", objectFields: heading.fields! },
               body: { type: "object", objectFields: body.fields! },
-              cta: { type: "comprehensiveCTA", resolve: true },
+              cta: { type: "comprehensiveCTA" },
             }),
             render: ({ heading, body, cta }): React.ReactElement => (
               <>

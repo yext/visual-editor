@@ -17,11 +17,11 @@ import { type MultiSelectorOption } from "../../../fields/MultiSelectorField.tsx
 import { useCollapse } from "react-collapsed";
 import { useTranslation } from "react-i18next";
 import { FaChevronUp, FaDotCircle, FaRegCircle, FaTimes } from "react-icons/fa";
-import { type TranslatableString } from "../../../types/types.ts";
+
 import { getPreferredDistanceUnit } from "../../../utils/i18n/distance.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { LocatorEntityType } from "../../../utils/locatorEntityTypes.ts";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+
 import { Body } from "../../atoms/body.tsx";
 import { translateDistanceUnit } from "./Results.tsx";
 
@@ -45,7 +45,7 @@ interface FilterModalProps {
   handleClearFiltersClick: () => void;
   accentColorCssValue: string;
   closeButtonRef: React.Ref<HTMLButtonElement>;
-  keywordsDisplayName?: TranslatableString;
+  keywordsDisplayName?: string;
 }
 
 export const FilterModal = ({
@@ -62,7 +62,7 @@ export const FilterModal = ({
   closeButtonRef,
   keywordsDisplayName,
 }: FilterModalProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const popupRef = React.useRef<HTMLDivElement>(null);
   const facets = useSearchState((state) => state.filters.facets);
   const facetOverrides = facets?.map((facet) => {
@@ -76,7 +76,7 @@ export const FilterModal = ({
     const FacetOverride = isNumericalFacet ? NumericalFacet : StandardFacet;
     const displayName =
       facet.fieldId === KEYWORDS_FIELD && keywordsDisplayName
-        ? resolveComponentData(keywordsDisplayName, i18n.language) || undefined
+        ? keywordsDisplayName || undefined
         : undefined;
 
     return (

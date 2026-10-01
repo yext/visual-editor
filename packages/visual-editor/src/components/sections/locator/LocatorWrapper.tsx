@@ -1,4 +1,3 @@
-import { WithPuckProps } from "@puckeditor/core";
 import {
   FilterSearchResponse,
   Matcher,
@@ -39,7 +38,7 @@ import {
   toMeters,
   toMiles,
 } from "../../../utils/i18n/distance.ts";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+
 import {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
@@ -59,7 +58,7 @@ import {
   Location,
   LocatorResultCard,
 } from "./LocatorResultCard.tsx";
-import type { LocatorProps } from "./Locator.tsx";
+import type { LocatorComponent } from "./Locator.tsx";
 import {
   COUNTRY_CODE_FIELD,
   FilterModal,
@@ -120,7 +119,9 @@ const updateLocationQuery = (location: string) => {
   }
 };
 
-export const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
+export const LocatorWrapper = (
+  props: Parameters<typeof LocatorComponent.render>[0]
+) => {
   const streamDocument = useDocument();
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
     const searchHeadlessConfig = createSearchHeadlessConfig(
@@ -171,7 +172,7 @@ const LocatorInternal = ({
   resultCard: resultCardConfigs,
   distanceDisplay,
   pageHeading,
-}: LocatorProps) => {
+}: Parameters<typeof LocatorComponent.render>[0]) => {
   // Adds unified [enable|disable]YextAnalytics to the window for both Pages and Search
   // analytics. Typically used during consent banner implementation.
   const searchAnalytics = useSearchAnalytics();
@@ -944,9 +945,7 @@ const LocatorInternal = ({
   const filterModalCloseButtonRef = React.useRef<HTMLButtonElement>(null);
   const hasOpenedFilterModalRef = React.useRef(false);
   const resolvedHeading =
-    (pageHeading?.title &&
-      resolveComponentData(pageHeading.title, i18n.language, streamDocument)) ||
-    t("findALocation", "Find a Location");
+    pageHeading?.title || t("findALocation", "Find a Location");
 
   const requireMapOptIn: boolean = streamDocument.__?.visualEditorConfig
     ? JSON.parse(streamDocument.__?.visualEditorConfig)?.requireMapOptIn

@@ -7,37 +7,37 @@ describe("Yext content transforms", () => {
   it.each([
     {
       name: "mapped text",
-      field: { type: "entityField", resolve: true },
+      field: { type: "entityField" },
       value: { field: "name", constantValue: "", constantValueEnabled: false },
       expected: "Restaurant",
     },
     {
       name: "localized embedded text",
-      field: { type: "translatableString", resolve: true },
+      field: { type: "translatableString" },
       value: { fr: "Bonjour [[name]]", defaultValue: "Hello" },
       expected: "Bonjour Restaurant",
     },
     {
       name: "empty localized text",
-      field: { type: "translatableString", resolve: true },
+      field: { type: "translatableString" },
       value: { fr: "", defaultValue: "Hello" },
       expected: "",
     },
     {
       name: "false",
-      field: { type: "entityField", resolve: true },
+      field: { type: "entityField" },
       value: { field: "", constantValue: false, constantValueEnabled: true },
       expected: false,
     },
     {
       name: "zero",
-      field: { type: "entityField", resolve: true },
+      field: { type: "entityField" },
       value: { field: "", constantValue: 0, constantValueEnabled: true },
       expected: 0,
     },
     {
       name: "rich text data",
-      field: { type: "entityField", resolve: true },
+      field: { type: "entityField" },
       value: {
         field: "",
         constantValue: { defaultValue: { html: "<p>[[name]]</p>", json: "" } },
@@ -47,7 +47,7 @@ describe("Yext content transforms", () => {
     },
     {
       name: "localized image",
-      field: { type: "image", resolve: true },
+      field: { type: "image" },
       value: {
         defaultValue: { url: "/default.jpg" },
         fr: { url: "/fr.jpg", alternateText: { defaultValue: "[[name]]" } },
@@ -56,7 +56,7 @@ describe("Yext content transforms", () => {
     },
     {
       name: "CTA",
-      field: { type: "ctaSelector", resolve: true },
+      field: { type: "ctaSelector" },
       value: {
         field: "",
         constantValueEnabled: true,
@@ -70,25 +70,25 @@ describe("Yext content transforms", () => {
     },
     {
       name: "code",
-      field: { type: "code", resolve: true },
+      field: { type: "code" },
       value: "console.log('[[name]]')",
       expected: "console.log('Restaurant')",
     },
     {
-      name: "unconfigured field",
+      name: "field without resolution options",
       field: { type: "entityField" },
       value: { field: "name", constantValue: "" },
-      expected: { field: "name", constantValue: "" },
+      expected: "Restaurant",
     },
     {
       name: "style control",
-      field: { type: "fontSizeSelector", resolve: true },
+      field: { type: "fontSizeSelector" },
       value: "heading",
       expected: "heading",
     },
     {
       name: "root",
-      field: { type: "entityField", resolve: true },
+      field: { type: "entityField" },
       value: { field: "name", constantValue: "" },
       componentId: "root",
       expected: { field: "name", constantValue: "" },
@@ -124,7 +124,7 @@ describe("Yext content transforms", () => {
       };
     }>({
       label: "Cards",
-      resolve: true,
+
       mappingFields: {
         title: { type: "entityField", filter: { types: ["type.string"] } },
       },
@@ -204,7 +204,6 @@ describe("Yext content transforms", () => {
         field: {
           type: "custom",
           yextFieldType: "comprehensiveCTA",
-          resolve: true,
         } as any,
         componentId: "Hero",
         propName: "cta",
@@ -229,4 +228,30 @@ describe("Yext content transforms", () => {
     });
     expect(value).toEqual(before);
   });
+});
+
+it("when an entity field renders then source-dependent UI can read its binding separately", () => {
+  const fieldSources = new Map<string, unknown>();
+  const value = {
+    field: "address",
+    constantValue: {},
+    constantValueEnabled: false,
+  };
+  const transform = createPuckFieldTransforms(
+    "en",
+    {
+      address: { line1: "123 Main Street" },
+    },
+    fieldSources
+  ).custom!;
+  const result = transform({
+    value,
+    field: { type: "custom", yextFieldType: "entityField" } as any,
+    componentId: "Address-1",
+    propName: "address",
+    propPath: "data.address",
+    isReadOnly: true,
+  });
+  expect(result).toEqual({ line1: "123 Main Street" });
+  expect(fieldSources.get("Address-1:data.address")).toBe(value);
 });

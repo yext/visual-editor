@@ -1,3 +1,7 @@
+import {
+  toPuckFields,
+  type YextComponentConfig,
+} from "../../../fields/fields.ts";
 import * as React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
@@ -1320,7 +1324,15 @@ const screenshotThreshold = 30;
 
 describe("Locator", async () => {
   const puckConfig: Config = {
-    components: { Locator: LocatorComponent, MainContent },
+    components: Object.fromEntries(
+      Object.entries<YextComponentConfig<any>>({
+        Locator: LocatorComponent,
+        MainContent,
+      }).map(([name, component]) => [
+        name,
+        { ...component, fields: toPuckFields<any>(component.fields ?? {}) },
+      ])
+    ),
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

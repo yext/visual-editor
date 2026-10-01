@@ -1,4 +1,3 @@
-import { PuckComponent } from "@puckeditor/core";
 import { HoursType } from "@yext/pages-components";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
@@ -38,14 +37,14 @@ export interface HoursStatusProps {
   };
 }
 
-export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
+export const hoursStatusWrapperFields = {
   data: {
     type: "object",
     label: msg("fields.data", "Data"),
     objectFields: {
       hours: {
         type: "entityField",
-        resolve: true,
+
         label: msg("fields.hours", "Hours"),
         filter: {
           types: ["type.hours"],
@@ -91,11 +90,14 @@ export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
       },
     },
   },
-};
+} satisfies YextFields<HoursStatusProps>;
 
-const HoursStatusWrapper: PuckComponent<
-  Omit<HoursStatusProps, "data"> & { data: { hours?: HoursType } }
-> = ({ data, styles, puck, parentData }) => {
+const HoursStatusWrapper: typeof HoursStatus.render = ({
+  data,
+  styles,
+  puck,
+  parentData,
+}) => {
   const streamDocument = useDocument();
   const comingSoon = parentData?.comingSoon ?? !!streamDocument.comingSoon;
   const hours = parentData?.hours ?? data.hours;
@@ -126,7 +128,7 @@ const HoursStatusWrapper: PuckComponent<
 
 export const HoursStatus: YextComponentConfig<
   HoursStatusProps,
-  Parameters<typeof HoursStatusWrapper>[0]
+  typeof hoursStatusWrapperFields
 > = {
   label: msg("components.hoursStatus", "Hours Status"),
   fields: hoursStatusWrapperFields,
@@ -147,5 +149,5 @@ export const HoursStatus: YextComponentConfig<
   },
   resolveFields: (data) =>
     resolveDataFromParent(hoursStatusWrapperFields, data),
-  render: (props) => <HoursStatusWrapper {...props} />,
+  render: HoursStatusWrapper,
 };

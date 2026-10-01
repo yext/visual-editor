@@ -39,8 +39,6 @@ let pendingImageSession:
 
 export type ImageField = BaseField & {
   type: "image";
-  /** Resolve this content field before passing it to the component renderer. */
-  resolve?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   hideAltTextField?: boolean;

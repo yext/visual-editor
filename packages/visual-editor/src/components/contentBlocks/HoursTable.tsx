@@ -1,4 +1,3 @@
-import { PuckComponent } from "@puckeditor/core";
 import { DayOfWeekNames, HoursType } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import { EntityField } from "../../editor/EntityField.tsx";
@@ -7,7 +6,11 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Body } from "../atoms/body.tsx";
-import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
+import {
+  YextComponentConfig,
+  YextFields,
+  YextFieldDefinition,
+} from "../../fields/fields.ts";
 
 /** Props for the HoursTable component. */
 export interface HoursTableProps {
@@ -31,20 +34,19 @@ export interface HoursTableProps {
 }
 
 // HoursTable data field used in HoursTable and CoreInfoSection
-export const HoursTableDataField: YextFields<HoursTableProps["data"]>["hours"] =
-  {
-    type: "entityField",
-    resolve: true,
-    label: msg("fields.hours", "Hours"),
-    filter: {
-      types: ["type.hours"],
-    },
-  };
+export const HoursTableDataField = {
+  type: "entityField",
+
+  label: msg("fields.hours", "Hours"),
+  filter: {
+    types: ["type.hours"],
+  },
+} satisfies YextFieldDefinition<HoursTableProps["data"]["hours"]>;
 
 type HoursTableStyleFieldProps = Omit<HoursTableProps["styles"], "alignment">;
 
 // HoursTable style fields used in HoursTable and CoreInfoSection
-export const HoursTableStyleFields: YextFields<HoursTableStyleFieldProps> = {
+export const HoursTableStyleFields = {
   startOfWeek: {
     type: "basicSelector",
     label: msg("fields.startOfTheWeek", "Start of the Week"),
@@ -69,9 +71,9 @@ export const HoursTableStyleFields: YextFields<HoursTableStyleFieldProps> = {
       { label: msg("fields.options.no", "No"), value: false },
     ],
   },
-};
+} satisfies YextFields<HoursTableStyleFieldProps>;
 
-export const hoursTableFields: YextFields<HoursTableProps> = {
+export const hoursTableFields = {
   data: {
     type: "object",
     label: msg("fields.data", "Data"),
@@ -97,11 +99,9 @@ export const hoursTableFields: YextFields<HoursTableProps> = {
       },
     },
   },
-};
+} satisfies YextFields<HoursTableProps>;
 
-const VisualEditorHoursTable: PuckComponent<
-  Omit<HoursTableProps, "data"> & { data: { hours?: HoursType } }
-> = (props) => {
+const VisualEditorHoursTable: typeof HoursTable.render = (props) => {
   const { data, styles, puck } = props;
   const streamDocument = useDocument();
   const comingSoon = !!streamDocument.comingSoon;
@@ -141,7 +141,7 @@ const VisualEditorHoursTable: PuckComponent<
 
 export const HoursTable: YextComponentConfig<
   HoursTableProps,
-  Parameters<typeof VisualEditorHoursTable>[0]
+  typeof hoursTableFields
 > = {
   fields: hoursTableFields,
   defaultProps: {
@@ -159,5 +159,5 @@ export const HoursTable: YextComponentConfig<
     },
   },
   label: msg("components.hoursTable", "Hours Table"),
-  render: (props) => <VisualEditorHoursTable {...props} />,
+  render: VisualEditorHoursTable,
 };

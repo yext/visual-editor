@@ -60,8 +60,6 @@ export type ComprehensiveCTAValue = {
 
 export type ComprehensiveCTAField = BaseField & {
   type: "comprehensiveCTA";
-  /** Resolve this content field before passing it to the component renderer. */
-  resolve?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   disableConstantValueToggle?: boolean;

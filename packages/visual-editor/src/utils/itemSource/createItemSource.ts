@@ -27,7 +27,6 @@ import { resolveItemValue } from "./itemSourceResolution.ts";
  */
 export function createItemSource<TItemProps extends Record<string, unknown>>({
   label,
-  resolve,
   mappingFields,
   defaultValues,
 }: CreateItemSourceOptions<TItemProps>): ItemSourceInstance<TItemProps> {
@@ -59,7 +58,6 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
   const defaultMappings = generatedDefaultMappings;
   const field = {
     type: "entityField",
-    resolve,
     label,
     filter: {
       itemSourceTypes: getItemSourceTypes(scopedMappingFields),

@@ -76,17 +76,15 @@ const buildFields = <TText,>({
   colorLabelOverride,
   alignmentLabelOverride,
   tagLabelOverride,
-}: CreateStyledTextConfigOptions): YextFields<
-  StyledTextConfigProps<YextEntityField<TText>>
-> => {
-  const fields: YextFields<StyledTextConfigProps<YextEntityField<TText>>> = {
+}: CreateStyledTextConfigOptions) => {
+  const fields = {
     data: {
       label: textLabelOverride ?? msg("fields.text", "Text"),
       type: "object",
       objectFields: {
         text: {
           type: "entityField",
-          resolve: true,
+
           label: msg("fields.text", "Text"),
           filter: {
             types:
@@ -104,28 +102,32 @@ const buildFields = <TText,>({
       includeColor,
       colorLabel: colorLabelOverride ?? msg("fields.fontColor", "Font Color"),
     },
+  } satisfies YextFields<StyledTextConfigProps<YextEntityField<TText>>>;
+
+  return {
+    ...fields,
+    ...(includeAlignment
+      ? {
+          alignment: {
+            label: alignmentLabelOverride ?? msg("fields.align", "Alignment"),
+            type: "radio" as const,
+            options: ThemeOptions.ALIGNMENT,
+          },
+        }
+      : {}),
+    ...(kind === "plain" && tagOptions?.length
+      ? {
+          tag: {
+            label: tagLabelOverride ?? msg("fields.tag", "Tag"),
+            type: "select" as const,
+            options: tagOptions.map((tag) => ({
+              label: tag.toUpperCase(),
+              value: tag,
+            })),
+          },
+        }
+      : {}),
   };
-
-  if (includeAlignment) {
-    fields.alignment = {
-      label: alignmentLabelOverride ?? msg("fields.align", "Alignment"),
-      type: "radio",
-      options: ThemeOptions.ALIGNMENT,
-    };
-  }
-
-  if (kind === "plain" && tagOptions?.length) {
-    fields.tag = {
-      label: tagLabelOverride ?? msg("fields.tag", "Tag"),
-      type: "select",
-      options: tagOptions.map((tag) => ({
-        label: tag.toUpperCase(),
-        value: tag,
-      })),
-    };
-  }
-
-  return fields;
 };
 
 const getDefaultTag = (
@@ -176,13 +178,13 @@ export function createStyledTextConfig(
   options: CreateStyledTextConfigOptions & { kind: "plain" }
 ): YextComponentConfig<
   StyledPlainTextProps,
-  StyledPlainTextProps<string | undefined>
+  ReturnType<typeof buildFields<TranslatableString>>
 >;
 export function createStyledTextConfig(
   options: CreateStyledTextConfigOptions & { kind: "richText" }
 ): YextComponentConfig<
   StyledRichTextProps,
-  StyledRichTextProps<string | RichText | undefined>
+  ReturnType<typeof buildFields<TranslatableRichText>>
 >;
 /**
  * Creates a styled text component config for plain or rich text content.
@@ -198,11 +200,11 @@ export function createStyledTextConfig(
 ):
   | YextComponentConfig<
       StyledPlainTextProps,
-      StyledPlainTextProps<string | undefined>
+      ReturnType<typeof buildFields<TranslatableString>>
     >
   | YextComponentConfig<
       StyledRichTextProps,
-      StyledRichTextProps<string | RichText | undefined>
+      ReturnType<typeof buildFields<TranslatableRichText>>
     > {
   const defaultProps: Pick<
     StyledPlainTextProps,

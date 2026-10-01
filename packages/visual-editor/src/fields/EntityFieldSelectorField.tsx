@@ -69,8 +69,6 @@ export type EntityFieldSelectorField<
   T extends Record<string, any> = Record<string, any>,
 > = BaseField & {
   type: "entityField";
-  /** Resolve this content field before passing it to the component renderer. */
-  resolve?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   filter: MappedSourceFieldFilter<T>;

@@ -114,10 +114,18 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
+  const renderMetadata = React.useMemo(
+    () => ({ ...metadata, fieldSources: new Map<string, unknown>() }),
+    [metadata, streamDocument]
+  );
   const fieldTransforms = React.useMemo(
     () =>
-      createPuckFieldTransforms(streamDocument.locale ?? "en", streamDocument),
-    [streamDocument]
+      createPuckFieldTransforms(
+        streamDocument.locale ?? "en",
+        streamDocument,
+        renderMetadata.fieldSources
+      ),
+    [streamDocument, renderMetadata]
   );
   const { errorCount, errorSources, errorDetails } = useErrorContext();
 
@@ -610,7 +618,7 @@ export const InternalLayoutEditor = ({
           ),
           puck: puckOverride,
         }}
-        metadata={metadata}
+        metadata={renderMetadata}
       />
     </EntityTooltipsProvider>
   );

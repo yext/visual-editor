@@ -17,8 +17,6 @@ export type CreateItemSourceOptions<
   TItemProps extends Record<string, unknown>,
 > = {
   label: string;
-  /** Supply plain item values to the renderer through field transforms. */
-  resolve?: boolean;
   mappingFields: YextFieldMap<TItemProps>;
   defaultValues?: TItemProps[];
 };
@@ -60,7 +58,7 @@ export type ResolvedItemField<TValue> =
  * Public contract returned by `createItemSource(...)`.
  */
 export type ItemSourceInstance<TItemProps extends Record<string, unknown>> = {
-  field: YextFieldDefinition<RepeatedEntityFieldValue<TItemProps>>;
+  field: RepeatedEntityFieldDefinition<TItemProps>;
   defaultValue: RepeatedEntityFieldValue<TItemProps>;
   value: RepeatedEntityFieldValue<TItemProps>;
   resolveItems: (

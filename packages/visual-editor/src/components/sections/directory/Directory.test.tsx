@@ -1,3 +1,7 @@
+import {
+  toPuckFields,
+  type YextComponentConfig,
+} from "../../../fields/fields.ts";
 import * as React from "react";
 import { describe, it, expect } from "vitest";
 import {
@@ -803,7 +807,16 @@ const tests: ComponentTest[] = [
 
 describe("Directory", async () => {
   const puckConfig: Config = {
-    components: { Directory, MainContent, ...SlotsCategoryComponents },
+    components: Object.fromEntries(
+      Object.entries<YextComponentConfig<any>>({
+        Directory,
+        MainContent,
+        ...SlotsCategoryComponents,
+      }).map(([name, component]) => [
+        name,
+        { ...component, fields: toPuckFields<any>(component.fields ?? {}) },
+      ])
+    ),
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

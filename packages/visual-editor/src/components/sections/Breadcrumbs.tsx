@@ -10,7 +10,7 @@ import {
   backgroundColors,
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+
 import { setDeep } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
@@ -85,7 +85,7 @@ export interface BreadcrumbsSectionProps {
   liveVisibility: boolean;
 }
 
-const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
+const breadcrumbsSectionFields = {
   data: {
     type: "object",
     label: msg("fields.data", "Data"),
@@ -148,7 +148,7 @@ const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
       { label: msg("fields.options.hide", "Hide"), value: false },
     ],
   },
-};
+} satisfies YextFields<BreadcrumbsSectionProps>;
 
 // BreadcrumbsComponent renders breadcrumbs for DM related pages.
 // If there are no dm_directoryParents nor dm_directoryChildren,
@@ -158,21 +158,12 @@ const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
 export const BreadcrumbsComponent = ({
   data,
   styles,
-}: BreadcrumbsSectionProps) => {
-  const { t, i18n } = useTranslation();
+}: Parameters<typeof BreadcrumbsSection.render>[0]) => {
+  const { t } = useTranslation();
   const separator = "/";
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const breadcrumbs = resolveBreadcrumbs(streamDocument);
-  const directoryRoot = resolveComponentData(
-    data.directoryRoot,
-    i18n.language,
-    streamDocument
-  );
-  const currentPage = resolveComponentData(
-    data.currentPage,
-    i18n.language,
-    streamDocument
-  );
+  const { directoryRoot, currentPage } = data;
   const breadcrumbsToRender = breadcrumbs
     .map((breadcrumb, index) => ({ ...breadcrumb, index }))
     .filter(
@@ -239,60 +230,60 @@ export const BreadcrumbsComponent = ({
  * The Breadcrumbs component automatically generates and displays a navigational hierarchy based on a page's position within a Yext directory structure. It renders a list of links showing the path from the main directory root to the current page, helping users understand their location on the site.
  * Available on Location templates.
  */
-export const BreadcrumbsSection: YextComponentConfig<BreadcrumbsSectionProps> =
-  {
-    label: msg("components.breadcrumbs", "Breadcrumbs"),
-    fields: breadcrumbsSectionFields,
-    resolveFields: (_data, params) => {
-      const streamDocument = params.metadata?.streamDocument;
-      if (!streamDocument) {
-        return toPuckFields<BreadcrumbsSectionProps>(breadcrumbsSectionFields);
-      }
+export const BreadcrumbsSection: YextComponentConfig<
+  BreadcrumbsSectionProps,
+  typeof breadcrumbsSectionFields
+> = {
+  label: msg("components.breadcrumbs", "Breadcrumbs"),
+  fields: breadcrumbsSectionFields,
+  resolveFields: (_data, params) => {
+    const streamDocument = params.metadata?.streamDocument;
+    if (!streamDocument) {
+      return toPuckFields<BreadcrumbsSectionProps>(breadcrumbsSectionFields);
+    }
 
-      // On root pages there is only one breadcrumb, so "currentPage" duplicates "directoryRoot".
-      const breadcrumbCount = resolveBreadcrumbs(streamDocument).length;
-      return setDeep(
-        toPuckFields<BreadcrumbsSectionProps>(breadcrumbsSectionFields),
-        "data.objectFields.currentPage.visible",
-        breadcrumbCount !== 1
-      );
+    // On root pages there is only one breadcrumb, so "currentPage" duplicates "directoryRoot".
+    const breadcrumbCount = resolveBreadcrumbs(streamDocument).length;
+    return setDeep(
+      toPuckFields<BreadcrumbsSectionProps>(breadcrumbsSectionFields),
+      "data.objectFields.currentPage.visible",
+      breadcrumbCount !== 1
+    );
+  },
+  defaultProps: {
+    data: {
+      directoryRoot: { defaultValue: "Directory Root" },
+      currentPage: {
+        constantValue: { defaultValue: "[[name]]" },
+        field: "name",
+        constantValueEnabled: false,
+      },
     },
-    defaultProps: {
-      data: {
-        directoryRoot: { defaultValue: "Directory Root" },
-        currentPage: {
-          constantValue: { defaultValue: "[[name]]" },
-          field: "name",
-          constantValueEnabled: false,
-        },
-      },
-      styles: {
-        backgroundColor: backgroundColors.background1.value,
-        showCurrentPage: true,
-      },
-      analytics: {
-        scope: "breadcrumbs",
-      },
-      liveVisibility: true,
+    styles: {
+      backgroundColor: backgroundColors.background1.value,
+      showCurrentPage: true,
     },
-    render: (props) => {
-      return (
-        <ComponentErrorBoundary
-          isEditing={props.puck.isEditing}
-          resetKeys={[props]}
-        >
-          <AnalyticsScopeProvider
-            name={props?.analytics?.scope ?? "breadcrumbs"}
+    analytics: {
+      scope: "breadcrumbs",
+    },
+    liveVisibility: true,
+  },
+  render: (props) => {
+    return (
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
+      >
+        <AnalyticsScopeProvider name={props?.analytics?.scope ?? "breadcrumbs"}>
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+            iconSize="md"
           >
-            <VisibilityWrapper
-              liveVisibility={props.liveVisibility}
-              isEditing={props.puck.isEditing}
-              iconSize="md"
-            >
-              <BreadcrumbsComponent {...props} />
-            </VisibilityWrapper>
-          </AnalyticsScopeProvider>
-        </ComponentErrorBoundary>
-      );
-    },
-  };
+            <BreadcrumbsComponent {...props} />
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
+    );
+  },
+};

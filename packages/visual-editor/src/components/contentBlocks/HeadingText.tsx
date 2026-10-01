@@ -1,5 +1,4 @@
 import * as React from "react";
-import { PuckComponent } from "@puckeditor/core";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { Heading, HeadingProps } from "../atoms/heading.tsx";
@@ -37,9 +36,7 @@ export type HeadingTextProps = {
   };
 };
 
-const HeadingTextWrapper: PuckComponent<
-  Omit<HeadingTextProps, "data"> & { data: { text?: string } }
-> = (props) => {
+const HeadingTextWrapper: typeof HeadingText.render = (props) => {
   const { data, styles, puck, parentData } = props;
 
   const justifyClass = styles?.align
@@ -80,14 +77,14 @@ const HeadingTextWrapper: PuckComponent<
   );
 };
 
-const headingTextFields: YextFields<HeadingTextProps> = {
+const headingTextFields = {
   data: {
     label: msg("fields.data", "Data"),
     type: "object",
     objectFields: {
       text: {
         type: "entityField",
-        resolve: true,
+
         label: msg("fields.text", "Text"),
         filter: {
           types: ["type.string"],
@@ -116,11 +113,11 @@ const headingTextFields: YextFields<HeadingTextProps> = {
       },
     },
   },
-};
+} satisfies YextFields<HeadingTextProps>;
 
 export const HeadingText: YextComponentConfig<
   HeadingTextProps,
-  Parameters<typeof HeadingTextWrapper>[0]
+  typeof headingTextFields
 > = {
   label: msg("components.headingText", "Heading Text"),
   fields: headingTextFields,
@@ -138,5 +135,5 @@ export const HeadingText: YextComponentConfig<
       align: "left",
     },
   },
-  render: (props) => <HeadingTextWrapper {...props} />,
+  render: HeadingTextWrapper,
 };
