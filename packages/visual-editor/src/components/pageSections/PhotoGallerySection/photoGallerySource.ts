@@ -32,7 +32,7 @@ export const photoGallerySource = createItemSource<{
     },
   },
   optionalMappingKeys: ["link"],
-  directItem: { types: ["type.image"], mappingKey: "image" },
+  directItem: { mappingKey: "image" },
   defaultValues: Array.from({ length: 3 }, () => ({
     image: {
       field: "",

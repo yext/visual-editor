@@ -566,4 +566,49 @@ describe("createItemSource", () => {
       ).toEqual([{ image: expected }]);
     }
   );
+  it.each([
+    { types: undefined, expectedTypes: ["type.image"] },
+    { types: ["type.string"] as const, expectedTypes: ["type.string"] },
+  ])(
+    "when direct item types are $types then the source uses $expectedTypes",
+    ({ types, expectedTypes }): void => {
+      const source = createItemSource({
+        label: "Images",
+        mappingFields: {
+          image: {
+            type: "entityField",
+            filter: { types: ["type.image"] },
+          },
+        },
+        directItem: {
+          mappingKey: "image",
+          types: types ? [...types] : undefined,
+        },
+      });
+
+      expect(source.field).toMatchObject({
+        filter: { directItemTypes: expectedTypes },
+        repeated: {
+          directItemMappingKey: "image",
+          mappingFields: {
+            image: { filter: { directItemTypes: expectedTypes } },
+          },
+          manualItemFields: { image: { filter: { types: ["type.image"] } } },
+        },
+      });
+      expect(
+        source.resolveItems(
+          {
+            field: "images",
+            constantValueEnabled: false,
+            constantValue: [],
+            mappings: {
+              image: { field: "$item", constantValueEnabled: false },
+            },
+          },
+          { images: [{ url: "https://example.com/image.jpg" }] }
+        )
+      ).toEqual([{ image: { url: "https://example.com/image.jpg" } }]);
+    }
+  );
 });

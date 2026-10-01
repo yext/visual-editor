@@ -1,9 +1,19 @@
 import React from "react";
-import { render, waitFor, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import {
+  act,
+  fireEvent,
+  render,
+  waitFor,
+  within,
+} from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { useGetPuck, type Config } from "@puckeditor/core";
+import { InternalLayoutEditor } from "../../../internal/components/InternalLayoutEditor.tsx";
+import { generateTemplateMetadata } from "../../../internal/types/templateMetadata.ts";
+import { type LayoutSaveState } from "../../../internal/types/saveState.ts";
+import { toPuckFields } from "../../../fields/fields.ts";
 import { page } from "@vitest/browser/context";
-import "../../testing/componentTests.css";
-import "../../../../dist/style.css";
+import { axe, viewports } from "../../testing/componentTests.setup.ts";
 import { PhotoGalleryWrapper } from "./PhotoGalleryWrapper.tsx";
 import { photoGallerySource } from "./photoGallerySource.ts";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
@@ -565,4 +575,243 @@ describe("PhotoGalleryWrapper", () => {
       ).toHaveLength(0);
     });
   });
+
+  it.each([viewports.desktop, viewports.tablet, viewports.mobile])(
+    "$name item source with optional image links",
+    async ({ name, width, height }): Promise<void> => {
+      await page.viewport(width, height);
+      const { container } = render(
+        <VisualEditorProvider
+          templateProps={{
+            document: {
+              locale: "en",
+              c_brands: [
+                {
+                  logo: {
+                    url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+                    width: 2048,
+                    height: 2048,
+                    alternateText: "Varilux",
+                  },
+                  cta: {
+                    label: "View Varilux",
+                    link: "/varilux",
+                    linkType: "URL",
+                  },
+                },
+                {
+                  logo: {
+                    url: "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/2048x2048.jpg",
+                    width: 2048,
+                    height: 2048,
+                    alternateText: "Crizal",
+                  },
+                  cta: {
+                    label: "View Crizal",
+                    link: "/crizal",
+                    linkType: "URL",
+                  },
+                },
+                {
+                  logo: {
+                    url: "https://a.mktgcdn.com/p-dev/KuK2XRaNDf-LF97Jt_ZMASRdUxtPiJP2MCwU6Ccmh9Q/2048x2048.jpg",
+                    width: 2048,
+                    height: 2048,
+                    alternateText: "Essilor",
+                  },
+                },
+              ],
+            },
+          }}
+        >
+          <PhotoGalleryWrapper.render
+            id="mapped-gallery-screenshot"
+            data={{
+              images: {
+                ...photoGallerySource.defaultValue,
+                field: "c_brands",
+                constantValueEnabled: false,
+                mappings: {
+                  image: {
+                    field: "logo",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                  link: {
+                    field: "cta",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                },
+              },
+            }}
+            styles={{
+              image: { width: 200, aspectRatio: 1 },
+              carouselImageCount: 3,
+            }}
+            parentData={{ variant: "gallery" }}
+            puck={{
+              isEditing: false,
+              dragRef: null,
+              metadata: {},
+              renderDropZone: (): React.ReactElement => <div />,
+            }}
+          />
+        </VisualEditorProvider>
+      );
+
+      await waitFor(
+        () => {
+          const images = Array.from(container.querySelectorAll("img"));
+          expect(images).toHaveLength(3);
+          for (const image of images) {
+            expect(image.complete).toBe(true);
+            expect(image.naturalWidth).toBeGreaterThan(0);
+          }
+        },
+        { timeout: 5000 }
+      );
+      expect(
+        within(container)
+          .getByRole("link", { name: "Varilux" })
+          .getAttribute("href")
+      ).toBe("/varilux");
+      expect(
+        within(container)
+          .getByRole("link", { name: "Crizal" })
+          .getAttribute("href")
+      ).toBe("/crizal");
+      expect(within(container).getByAltText("Essilor").closest("a")).toBeNull();
+      await expect(
+        `PhotoGalleryWrapper/[${name}] item source with optional image links`
+      ).toMatchScreenshot();
+      expect(await axe(container)).toHaveNoViolations();
+    }
+  );
+  it.each([0, 1])(
+    "when a gallery constant value is saved in sidebar %i then the open array item keeps focus",
+    async (sidebarIndex: number): Promise<void> => {
+      const onChange = vi.fn();
+      const SelectGallery = (): React.JSX.Element => {
+        const getPuck = useGetPuck();
+        return (
+          <button
+            onClick={() =>
+              getPuck().dispatch({
+                type: "setUi",
+                ui: { itemSelector: getPuck().getSelectorForId("gallery") },
+              })
+            }
+          >
+            Select gallery
+          </button>
+        );
+      };
+      const puckConfig: Config = {
+        components: {
+          PhotoGalleryWrapper: {
+            ...PhotoGalleryWrapper,
+            fields: toPuckFields(PhotoGalleryWrapper.fields!),
+            render: (props) => (
+              <>
+                <SelectGallery />
+                {PhotoGalleryWrapper.render(
+                  props as Parameters<typeof PhotoGalleryWrapper.render>[0]
+                )}
+              </>
+            ),
+          },
+        },
+      };
+      const Editor = (): React.JSX.Element => {
+        const [layoutSaveState, setLayoutSaveState] =
+          React.useState<LayoutSaveState>();
+        return (
+          <InternalLayoutEditor
+            puckConfig={puckConfig}
+            puckInitialHistory={{
+              appendData: false,
+              histories: [
+                {
+                  state: {
+                    data: {
+                      root: {},
+                      content: [
+                        {
+                          type: "PhotoGalleryWrapper",
+                          props: {
+                            ...PhotoGalleryWrapper.defaultProps,
+                            id: "gallery",
+                            parentData: { variant: "gallery" },
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            }}
+            clearHistory={vi.fn()}
+            templateMetadata={{
+              ...generateTemplateMetadata(),
+              isDevMode: false,
+            }}
+            layoutSaveState={layoutSaveState}
+            saveLayoutSaveState={({ payload }) => {
+              const history = JSON.parse(payload.history);
+              onChange(history.data);
+              setLayoutSaveState({ history, hash: payload.hash });
+            }}
+            publishLayout={vi.fn()}
+            sendLayoutForApproval={vi.fn()}
+            sendDevSaveStateData={vi.fn()}
+            buildVisualConfigLocalStorageKey={() => "gallery-focus-test"}
+            localDev={false}
+          />
+        );
+      };
+      const { container } = render(
+        <VisualEditorProvider
+          templateProps={{ document: { locale: "en" } }}
+          entityFields={null}
+          tailwindConfig={{}}
+        >
+          <Editor />
+        </VisualEditorProvider>
+      );
+      await waitFor(
+        () => {
+          const body = container.querySelector("iframe")?.contentDocument?.body;
+          expect(body).toBeDefined();
+          fireEvent.click(within(body!).getByText("Select gallery"));
+        },
+        { timeout: 5000 }
+      );
+      fireEvent.click(
+        (await within(container).findAllByText("Item 1"))[sidebarIndex]
+      );
+      const input = within(container).getByRole("textbox", {
+        name: "",
+        hidden: true,
+      });
+      input.focus();
+      fireEvent.change(input, { target: { value: "/brand" } });
+      fireEvent.blur(input);
+      await waitFor(() => {
+        expect(
+          onChange.mock.lastCall?.[0].content[0].props.data.images
+            .constantValue[0].link.constantValue.en
+        ).toBe("/brand");
+      });
+      await act(async (): Promise<void> => {
+        await new Promise<void>((resolve) => setTimeout(resolve, 0));
+      });
+      await waitFor(() => {
+        expect(
+          within(container).getByRole("textbox", { name: "", hidden: true })
+        ).toBe(input);
+        expect(within(container).getByDisplayValue("/brand")).toBe(input);
+      });
+    }
+  );
 });

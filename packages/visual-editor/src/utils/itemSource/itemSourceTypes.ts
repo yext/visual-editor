@@ -19,12 +19,30 @@ export const ITEM_SOURCE_SELF_FIELD = "$item";
 export type CreateItemSourceOptions<
   TItemProps extends Record<string, unknown>,
 > = {
+  /** Label shown above the item source controls. */
   label: string;
+  /**
+   * Fields for each item. These define both the manual item inputs and the
+   * mappings to fields within each object in a selected entity list.
+   * Required entity-field types also determine which lists can be selected.
+   */
   mappingFields: YextFieldMap<TItemProps>;
+  /** Initial manual items. The first item is also the template for new items. */
   defaultValues?: TItemProps[];
+  /**
+   * Mappings that do not require a matching field in the selected list.
+   * For example, an optional link lets lists with only images remain available.
+   * These mappings still appear in the editor and are resolved when set.
+   */
   optionalMappingKeys?: (keyof TItemProps)[];
+  /**
+   * Allows lists whose items are values, such as images, instead of objects
+   * with matching child fields. Maps the whole item to the specified key.
+   */
   directItem?: {
-    types: EntityFieldTypes[];
+    /** Overrides the accepted item types. Defaults to the mapped field's filter types. */
+    types?: EntityFieldTypes[];
+    /** Key in mappingFields that receives the whole item through the $item mapping. */
     mappingKey: Extract<keyof TItemProps, string>;
   };
 };
