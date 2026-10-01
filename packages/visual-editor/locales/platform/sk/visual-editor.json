@@ -344,7 +344,7 @@
   "inheritedDataMsg": "Údaje sa dedia z nadradenej sekcie.",
   "insight": "Nahliadnutie",
   "item": "Položka",
-  "itemSourceParentFieldTooltip": "Prvky zoznamu musia spĺňať požiadavky na mapovanie:",
+  "itemSourceParentFieldTooltip": "Prvky zoznamu by mali byť schopné splniť požiadavky na mapovanie:",
   "kilometer_zero": "kilometer",
   "kilometer_one": "kilometer",
   "kilometer_few": "kilometre",

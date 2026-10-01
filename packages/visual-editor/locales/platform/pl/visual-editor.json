@@ -344,7 +344,7 @@
   "inheritedDataMsg": "Dane są dziedziczone z sekcji nadrzędnej.",
   "insight": "Wgląd",
   "item": "Przedmiot",
-  "itemSourceParentFieldTooltip": "Elementy listy muszą spełniać wymagania mapowania:",
+  "itemSourceParentFieldTooltip": "Elementy listy powinny być w stanie spełnić wymagania mapowania:",
   "kilometer_zero": "kilometr",
   "kilometer_one": "kilometr",
   "kilometer_few": "kilometry",

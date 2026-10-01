@@ -344,7 +344,7 @@
   "inheritedDataMsg": "Dati tiek mantoti no vecāku sadaļas.",
   "insight": "Ieskats",
   "item": "Vienums",
-  "itemSourceParentFieldTooltip": "Saraksta elementiem jāatbilst kartēšanas prasībām:",
+  "itemSourceParentFieldTooltip": "Saraksta elementiem vajadzētu spēt izpildīt kartēšanas prasības:",
   "kilometer_zero": "kilometri",
   "kilometer_one": "kilometrs",
   "kilometer_other": "kilometri",
