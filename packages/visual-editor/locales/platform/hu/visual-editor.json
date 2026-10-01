@@ -614,7 +614,7 @@
   "inheritedDataMsg": "Az adatok a szülő szakaszból származnak.",
   "insight": "Betekintés",
   "item": "Tétel",
-  "itemSourceParentFieldTooltip": "A listaelemeknek meg kell felelniük a leképezési követelményeknek:",
+  "itemSourceParentFieldTooltip": "A listaelemeknek képesnek kellene lenniük megfelelni a leképezési követelményeknek:",
   "kilometer_zero": "kilométer",
   "kilometer_one": "kilométer",
   "kilometer_other": "kilométer",

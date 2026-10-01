@@ -614,7 +614,7 @@
   "inheritedDataMsg": "データは親セクションから継承されます。",
   "insight": "洞察力",
   "item": "アイテム",
-  "itemSourceParentFieldTooltip": "リスト要素は、次のマッピング要件を満たすことができる必要があります。",
+  "itemSourceParentFieldTooltip": "リスト要素は、次のマッピング要件を満たせることが望まれます。",
   "kilometer_zero": "キロメートル",
   "kilometer_one": "キロメートル",
   "kilometer_other": "キロメートル",

@@ -614,7 +614,7 @@
   "inheritedDataMsg": "數據是從父節繼承的。",
   "insight": "洞察力",
   "item": "物品",
-  "itemSourceParentFieldTooltip": "列表元素必須能夠滿足映射要求：",
+  "itemSourceParentFieldTooltip": "列表元素應能滿足映射要求：",
   "kilometer_zero": "公里",
   "kilometer_one": "公里",
   "kilometer_other": "公里",
