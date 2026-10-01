@@ -7,7 +7,7 @@ This library provides components necessary to set up a Section Library Pages rep
 ## Package release tags
 
 Run `pnpm run release` from this repository. The confirmation prompt shows the
-npm tags. CI publishes with the existing tag, then adds the major-version tag.
+npm tags. CI publishes with the existing tag, then adds the major-version tags.
 
 | Release type      | New npm tag       |
 | ----------------- | ----------------- |
@@ -15,15 +15,16 @@ npm tags. CI publishes with the existing tag, then adds the major-version tag.
 | Alpha             | `alpha-v<major>`  |
 | Beta              | `beta-v<major>`   |
 | Release candidate | `rc-v<major>`     |
+| Any release type  | `latest-v<major>` |
 
-For example, `2.0.0-beta.1` uses `beta-v2`. Stable `2.0.0` uses `stable-v2`.
-Other prerelease identifiers keep the existing rules and do not get a new tag.
+For example, `2.0.0-beta.1` uses `beta-v2` and `latest-v2`. Stable `2.0.0` uses
+`stable-v2` and `latest-v2`. Other prerelease identifiers only get `latest-v<major>`.
 
 Existing tags keep their previous rules. Versions that contain `rc`, `beta`,
 or `alpha` use that tag, in that order. All other versions use `latest`.
-For example, `2.0.1-test.1` updates `latest` without adding `test-v2`.
-These tags can move between major versions. Use `stable-v2` to select stable
-2.x releases.
+For example, `2.0.1-test.1` updates `latest` and `latest-v2` without adding
+`test-v2`. Existing tags can move between major versions. Use `stable-v2` for
+stable 2.x releases. Use `latest-v2` for the latest 2.x release of any type.
 
 ## CLI
 

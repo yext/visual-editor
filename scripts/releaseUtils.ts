@@ -23,8 +23,8 @@ if (isDryRun) {
 
 export const versionIncrements: ReleaseType[] = ["patch", "minor", "major"];
 
-/** Returns a major-version tag for stable, alpha, beta, and rc releases. */
-export function getVersionedNpmTag(version: string): string | undefined {
+/** Returns the release-type tag, when supported, and the tag for any release type. */
+export function getVersionedNpmTags(version: string): string[] {
   const parsedVersion = semver.parse(version);
   if (
     !parsedVersion ||
@@ -36,14 +36,16 @@ export function getVersionedNpmTag(version: string): string | undefined {
   }
 
   const identifier = parsedVersion.prerelease[0];
+  const tags = [];
   if (
-    identifier !== undefined &&
-    !["alpha", "beta", "rc"].includes(String(identifier))
+    identifier === undefined ||
+    ["alpha", "beta", "rc"].includes(String(identifier))
   ) {
-    return undefined;
+    tags.push(`${identifier ?? "stable"}-v${parsedVersion.major}`);
   }
 
-  return `${identifier ?? "stable"}-v${parsedVersion.major}`;
+  tags.push(`latest-v${parsedVersion.major}`);
+  return tags;
 }
 
 /** Returns the npm tag selected by the original release rules. */

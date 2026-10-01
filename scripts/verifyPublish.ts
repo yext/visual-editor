@@ -3,7 +3,7 @@ import {
   args,
   getNpmTag,
   getPackageInfo,
-  getVersionedNpmTag,
+  getVersionedNpmTags,
 } from "./releaseUtils.js";
 
 const tag = args._[0];
@@ -20,7 +20,7 @@ if (typeof tag !== "string" || !tag.startsWith("v")) {
 
 const version = tag.slice(1);
 const releaseTag = getNpmTag(version);
-const versionedTag = getVersionedNpmTag(version);
+const versionedTags = getVersionedNpmTags(version);
 
 const { currentVersion } = await getPackageInfo();
 if (currentVersion !== version) {
@@ -33,7 +33,7 @@ if (currentVersion !== version) {
 if (process.env.GITHUB_OUTPUT) {
   appendFileSync(
     process.env.GITHUB_OUTPUT,
-    `npm_tag=${releaseTag}\nversioned_npm_tag=${versionedTag ?? ""}\npackage_version=${version}\n`,
+    `npm_tag=${releaseTag}\nversioned_npm_tags=${versionedTags.join(" ")}\npackage_version=${version}\n`,
   );
 }
 

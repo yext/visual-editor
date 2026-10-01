@@ -50,19 +50,16 @@ jobs:
         run: cd packages/visual-editor && pnpm publish --access public --tag "$NPM_TAG" --no-git-checks
 
       - name: Set node version for major-version tags
-        if: steps.get_npm_tag.outputs.versioned_npm_tag != ''
         uses: actions/setup-node@v4
         with:
           node-version: 24.x
           registry-url: https://registry.npmjs.org/
 
       - name: Set npm version for major-version tags
-        if: steps.get_npm_tag.outputs.versioned_npm_tag != ''
         # npm 12.2.0 supports npm dist-tag with Trusted Publishing.
         run: npm install -g npm@12.2.0
 
-      - name: Update major-version tag
-        if: steps.get_npm_tag.outputs.versioned_npm_tag != ''
+      - name: Update major-version tags
         id: update_release_tags
         env:
           PACKAGE_VERSION: ${{ steps.get_npm_tag.outputs.package_version }}
@@ -73,4 +70,4 @@ jobs:
         env:
           PACKAGE_VERSION: ${{ steps.get_npm_tag.outputs.package_version }}
         run: |
-          echo "::error::Package $PACKAGE_VERSION is published, but its major-version tag update failed. Run pnpm run ci-update-release-tags $PACKAGE_VERSION --recover with npm tag-write access. Do not publish the package again."
+          echo "::error::Package $PACKAGE_VERSION is published, but its major-version tag updates failed. Run pnpm run ci-update-release-tags $PACKAGE_VERSION --recover with npm tag-write access. Do not publish the package again."

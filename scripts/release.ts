@@ -9,7 +9,7 @@ import {
   getNpmTag,
   getPackageInfo,
   getVersionChoices,
-  getVersionedNpmTag,
+  getVersionedNpmTags,
   isDryRun,
   logRecentCommits,
   run,
@@ -51,9 +51,10 @@ if (!semver.valid(targetVersion)) {
 }
 
 const tag = `v${targetVersion}`;
-const npmTags = [getNpmTag(targetVersion), getVersionedNpmTag(targetVersion)]
-  .filter(Boolean)
-  .join(", ");
+const npmTags = [
+  getNpmTag(targetVersion),
+  ...getVersionedNpmTags(targetVersion),
+].join(", ");
 
 const { yes }: { yes: boolean } = await prompts({
   type: "confirm",
