@@ -72,8 +72,10 @@ ${pageHeader("Thing", "thing")}${description}
 </script>`;
 
 /** Complete editable markup, selected using the same entity types as Recommended. */
-export const getCustomSchemaTemplate = (document: StreamDocument): string => {
-  const entityTypeId = document.meta?.entityType?.id;
+export const getCustomSchemaTemplate = (
+  streamDocument: StreamDocument
+): string => {
+  const entityTypeId = streamDocument.meta?.entityType?.id;
   if (entityTypeId && LOCAL_BUSINESS_ENTITY_TYPES.includes(entityTypeId)) {
     return localBusiness;
   }
