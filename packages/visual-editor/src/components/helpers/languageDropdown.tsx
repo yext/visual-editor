@@ -105,7 +105,23 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
       return;
     }
     setSelected(locale);
-    window.location.href = `/${path}`;
+    let destination = `/${path}`;
+    const isLocatorDocument =
+      streamDocument?.meta?.entityType?.id === "locator" ||
+      streamDocument?.__?.codeTemplate === "locator";
+
+    if (isLocatorDocument) {
+      const queryParams = new URLSearchParams(window.location.search);
+      const query = queryParams.get("q");
+      if (query !== null) {
+        const destinationUrl = new URL(destination, window.location.origin);
+        destinationUrl.searchParams.set("q", query);
+        destination =
+          destinationUrl.pathname + destinationUrl.search + destinationUrl.hash;
+      }
+    }
+
+    window.location.href = destination;
   };
 
   return (
