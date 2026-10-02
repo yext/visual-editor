@@ -125,6 +125,11 @@
 }
 
 /* Set the body variants */
+.rtf-body-xs p,
+.rtf-body-xs li {
+  font-size: calc(var(--fontSize-body-fontSize) - 4px) !important;
+}
+
 .rtf-body-sm p,
 .rtf-body-sm li {
   font-size: calc(var(--fontSize-body-fontSize) - 2px) !important;
