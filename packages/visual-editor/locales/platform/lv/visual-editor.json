@@ -79,6 +79,7 @@
     "textAndLink": "Teksts un saite"
   },
   "currentLocation": "Pašreizējā atrašanās vieta",
+  "custom": "Pielāgots",
   "customSearchArea": "Pielāgota meklēšanas zona",
   "dataAttribute": "Atribūts",
   "date": "Datums",
@@ -407,6 +408,7 @@
     "metaTitle": "aizpildiet Meta Title visām lokalizācijām, pārejot uz augšējā līmeņa lapas komponenta iestatījumiem",
     "metaTitleWithLocales": "aizpildiet meta virsrakstu šādām lokalizācijām, pārejot uz augšējā līmeņa lapas komponenta iestatījumiem: {{locales}}"
   },
+  "recommended": "Ieteicamais",
   "recommendedColor": "Ieteicamā krāsa",
   "recommendedColors": "Ieteicamās krāsas",
   "redo": "Pārtaisīt",
@@ -416,6 +418,7 @@
   "restaurants": "Restorāni",
   "saturday": "Sestdiena",
   "schemaMarkup": "Shēmas uzcenojums",
+  "schemaMode": "Shēmas režīms",
   "search": "Meklēšana",
   "searchHere": "Meklēt šeit ...",
   "searchThisArea": "Meklējiet šo apgabalu",

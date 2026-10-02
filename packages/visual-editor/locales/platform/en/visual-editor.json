@@ -79,6 +79,7 @@
     "textAndLink": "Text & Link"
   },
   "currentLocation": "Current Location",
+  "custom": "Custom",
   "customSearchArea": "Custom Search Area",
   "dataAttribute": "Attribute",
   "date": "Date",
@@ -404,6 +405,7 @@
     "metaTitle": "fill in Meta Title for all locales by navigating to the top-level Page component's settings",
     "metaTitleWithLocales": "fill in Meta Title for the following locales by navigating to the top-level Page component's settings: {{locales}}"
   },
+  "recommended": "Recommended",
   "recommendedColor": "Recommended Color",
   "recommendedColors": "Recommended Colors",
   "redo": "Redo",
@@ -413,6 +415,7 @@
   "restaurants": "Restaurants",
   "saturday": "Saturday",
   "schemaMarkup": "Schema Markup",
+  "schemaMode": "Schema Mode",
   "search": "Search",
   "searchHere": "Search here...",
   "searchThisArea": "Search This Area",
