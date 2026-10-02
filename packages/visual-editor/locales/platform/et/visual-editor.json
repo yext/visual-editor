@@ -142,6 +142,7 @@
     "presetImage": "Eelseade",
     "textAndLink": "Tekst ja link"
   },
+  "currentLocation": "Praegune asukoht",
   "customSearchArea": "Kohandatud otsinguala",
   "dataAttribute": "Atribuut",
   "date": "Kuupäev",
@@ -613,7 +614,7 @@
   "inheritedDataMsg": "Andmed päritakse emasektsioonist.",
   "insight": "Ülevaade",
   "item": "Üksus",
-  "itemSourceParentFieldTooltip": "Loendi elemendid peavad vastama kaardistamise nõuetele:",
+  "itemSourceParentFieldTooltip": "Loendi elemendid peaksid suutma täita kaardistamise nõudeid:",
   "kilometer_zero": "kilomeetrit",
   "kilometer_one": "kilomeeter",
   "kilometer_other": "kilomeetrit",

@@ -342,7 +342,8 @@ const getScopedFieldsForSelector = (
  * 1. Scope to a selected source item when `sourceField` is provided.
  * 2. For item-source and mapped-source pickers, restrict roots to fields that
  *    can satisfy the required descendant type sets. `itemSourceTypes` takes
- *    precedence over `mappedSourceTypes` when both are present.
+ *    precedence over `mappedSourceTypes` when both are present and requires only
+ *    one matching group; mapped-source pickers require every group.
  * 3. Filter incompatible resolved values out when a stream document is
  *    available.
  * 4. Fall back to normal entity-field filtering for standard field selectors.
@@ -372,7 +373,7 @@ export const getFieldsForSelector = (
       }
     );
 
-    return requiredDescendantTypes.every((requiredTypes) =>
+    const matchesRequiredTypes = (requiredTypes: EntityFieldTypes[]): boolean =>
       availableFields.some(
         (availableField) =>
           getFilteredEntityFields(
@@ -382,8 +383,12 @@ export const getFieldsForSelector = (
               types: requiredTypes.flatMap(getCompatibleEntityFieldTypes),
             }
           ).length > 0
-      )
-    );
+      );
+
+    // One descendant match is enough for item-source selection.
+    return filter.itemSourceTypes?.length
+      ? requiredDescendantTypes.some(matchesRequiredTypes)
+      : requiredDescendantTypes.every(matchesRequiredTypes);
   };
 
   if (filter.itemSourceTypes?.length || filter.directItemTypes?.length) {

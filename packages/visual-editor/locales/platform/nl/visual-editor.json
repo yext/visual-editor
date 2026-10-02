@@ -142,6 +142,7 @@
     "presetImage": "Vooraf ingestelde afbeelding",
     "textAndLink": "Tekst en link"
   },
+  "currentLocation": "Huidige locatie",
   "customSearchArea": "Aangepast zoekgebied",
   "dataAttribute": "Attribuut",
   "date": "Datum",
@@ -613,7 +614,7 @@
   "inheritedDataMsg": "Gegevens worden overgenomen van de bovenliggende sectie.",
   "insight": "Inzicht",
   "item": "Item",
-  "itemSourceParentFieldTooltip": "Lijstelementen moeten aan de mappingvereisten kunnen voldoen:",
+  "itemSourceParentFieldTooltip": "Lijstelementen zouden aan de mappingvereisten moeten kunnen voldoen:",
   "kilometer_zero": "kilometer",
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometers",

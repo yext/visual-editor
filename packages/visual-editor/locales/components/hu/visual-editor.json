@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Alapvető információ szakasz",
+  "currentLocation": "Jelenlegi hely",
   "customSearchArea": "Egyedi keresési terület",
   "distance": "Távolság",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> a keresésből",

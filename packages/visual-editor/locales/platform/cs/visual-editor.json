@@ -142,6 +142,7 @@
     "presetImage": "Přednastavený obrázek",
     "textAndLink": "Text a odkaz"
   },
+  "currentLocation": "Aktuální poloha",
   "customSearchArea": "Vlastní vyhledávací oblast",
   "dataAttribute": "Atribut",
   "date": "Datum",
@@ -613,7 +614,7 @@
   "inheritedDataMsg": "Data jsou zděděna z nadřazené části.",
   "insight": "Vhled",
   "item": "Položka",
-  "itemSourceParentFieldTooltip": "Prvky seznamu musí být schopny splnit požadavky na mapování:",
+  "itemSourceParentFieldTooltip": "Prvky seznamu by měly být schopny splnit požadavky na mapování:",
   "kilometer_zero": "kilometr",
   "kilometer_one": "kilometr",
   "kilometer_few": "kilometry",

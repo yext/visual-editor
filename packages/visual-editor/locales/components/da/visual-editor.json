@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Kerneinfo -sektion",
+  "currentLocation": "Nuværende placering",
   "customSearchArea": "Brugerdefineret søgeområde",
   "distance": "Afstand",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> fra søgning",

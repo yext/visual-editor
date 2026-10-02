@@ -142,6 +142,7 @@
     "presetImage": "Förinställning",
     "textAndLink": "Text & länk"
   },
+  "currentLocation": "Nuvarande plats",
   "customSearchArea": "Anpassad sökområde",
   "dataAttribute": "Attribut",
   "date": "Datum",
@@ -613,7 +614,7 @@
   "inheritedDataMsg": "Data ärvs från den överordnade sektionen.",
   "insight": "Insikt",
   "item": "Punkt",
-  "itemSourceParentFieldTooltip": "Listelement måste kunna uppfylla mappningskraven:",
+  "itemSourceParentFieldTooltip": "Listelement bör kunna uppfylla mappningskraven:",
   "kilometer_zero": "kilometer",
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometer",

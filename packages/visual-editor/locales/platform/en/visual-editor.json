@@ -142,6 +142,7 @@
     "presetImage": "Preset Image",
     "textAndLink": "Text & Link"
   },
+  "currentLocation": "Current Location",
   "customSearchArea": "Custom Search Area",
   "dataAttribute": "Attribute",
   "date": "Date",
@@ -613,7 +614,7 @@
   "inheritedDataMsg": "Data is inherited from the parent section.",
   "insight": "Insight",
   "item": "Item",
-  "itemSourceParentFieldTooltip": "List elements must be able to satisfy the mapping requirements:",
+  "itemSourceParentFieldTooltip": "List elements should be able to satisfy the mapping requirements:",
   "kilometer_zero": "kilometers",
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometers",

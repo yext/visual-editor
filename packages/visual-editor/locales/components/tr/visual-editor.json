@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Çekirdek Bilgi Bölümü",
+  "currentLocation": "Mevcut Konum",
   "customSearchArea": "Özel arama alanı",
   "distance": "Mesafe",
   "distanceLineFromSearch": "Aramadan <strong>{{distance}}</strong>",

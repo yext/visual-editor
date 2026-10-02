@@ -142,6 +142,7 @@
     "presetImage": "Vordefiniertes Bild",
     "textAndLink": "Text & Link"
   },
+  "currentLocation": "Aktueller Standort",
   "customSearchArea": "Benutzerdefinierter Suchbereich",
   "dataAttribute": "Attribut",
   "date": "Datum",
@@ -613,7 +614,7 @@
   "inheritedDataMsg": "Daten werden vom übergeordneten Modul übernommen.",
   "insight": "Insight",
   "item": "Artikel",
-  "itemSourceParentFieldTooltip": "Listenelemente müssen die Mapping-Anforderungen erfüllen können:",
+  "itemSourceParentFieldTooltip": "Listenelemente sollten die Mapping-Anforderungen erfüllen können:",
   "kilometer_zero": "Kilometer",
   "kilometer_one": "Kilometer",
   "kilometer_other": "Kilometer",

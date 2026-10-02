@@ -430,7 +430,7 @@ export const ConstantValueModeToggler = ({
   const locale = i18n.language;
   const itemSourceParentFieldTooltipTitle = pt(
     "itemSourceParentFieldTooltip",
-    "List elements must be able to satisfy the mapping requirements:"
+    "List elements should be able to satisfy the mapping requirements:"
   );
 
   return (

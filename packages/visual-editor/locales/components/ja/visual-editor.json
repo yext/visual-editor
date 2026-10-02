@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "コア情報セクション",
+  "currentLocation": "現在地",
   "customSearchArea": "カスタム検索領域",
   "distance": "距離",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> 検索から",

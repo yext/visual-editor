@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Pagrindinės informacijos skyrius",
+  "currentLocation": "Dabartinė vieta",
   "customSearchArea": "Pasirinktinė paieškos sritis",
   "distance": "Atstumas",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> iš paieškos",

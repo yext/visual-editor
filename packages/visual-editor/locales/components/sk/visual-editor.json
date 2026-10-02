@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Sekcia",
+  "currentLocation": "Aktuálna poloha",
   "customSearchArea": "Oblasť vyhľadávania",
   "distance": "Vzdialenosť",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> z vyhľadávania",

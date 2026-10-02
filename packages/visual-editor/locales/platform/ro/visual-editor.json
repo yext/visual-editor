@@ -142,6 +142,7 @@
     "presetImage": "Imagine prestabilită",
     "textAndLink": "Text și link"
   },
+  "currentLocation": "Locația curentă",
   "customSearchArea": "Zona de căutare personalizată",
   "dataAttribute": "Atribut de date",
   "date": "Data",
@@ -613,7 +614,7 @@
   "inheritedDataMsg": "Datele sunt moștenite din secțiunea părinte.",
   "insight": "Perspectivă",
   "item": "Articol",
-  "itemSourceParentFieldTooltip": "Elementele listei trebuie să fie capabile să satisfacă cerințele de mapare:",
+  "itemSourceParentFieldTooltip": "Elementele listei ar trebui să poată satisface cerințele de mapare:",
   "kilometer_zero": "kilometru",
   "kilometer_one": "kilometru",
   "kilometer_few": "kilometri",

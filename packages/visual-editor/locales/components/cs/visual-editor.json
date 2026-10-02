@@ -26,6 +26,7 @@
     }
   },
   "coreInfoSection": "Sekce hlavních informací",
+  "currentLocation": "Aktuální poloha",
   "customSearchArea": "Vlastní vyhledávací oblast",
   "distance": "Vzdálenost",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> z vyhledávání",
