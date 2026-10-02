@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 73,
+      version: 83,
       title: {
         field: "name",
         constantValue: "",
@@ -56,6 +56,7 @@ const mainDefaultLayout = {
                         styles: {
                           aspectRatio: 1,
                           width: 100,
+                          imageFillType: "fill",
                         },
                       },
                     },
@@ -401,6 +402,7 @@ const mainDefaultLayout = {
                 desktopContainerPosition: "left",
                 mobileContentAlignment: "left",
                 mobileImagePosition: "bottom",
+                showPhone: false,
               },
               slots: {
                 BusinessNameSlot: [
@@ -551,6 +553,31 @@ const mainDefaultLayout = {
                       },
                       eventName: "secondaryCta",
                       parentStyles: {},
+                    },
+                  },
+                ],
+                PhoneSlot: [
+                  {
+                    type: "PhoneNumbersSlot",
+                    props: {
+                      id: "HeroSection-6171b068-a44d-406e-9094-95f1ca7a53c5-PhoneSlot",
+                      data: {
+                        phoneNumbers: [
+                          {
+                            number: {
+                              field: "mainPhone",
+                              constantValue: "",
+                            },
+                            label: {
+                              defaultValue: "Phone",
+                            },
+                          },
+                        ],
+                      },
+                      styles: {
+                        phoneFormat: "domestic",
+                        includePhoneHyperlink: true,
+                      },
                     },
                   },
                 ],
@@ -850,6 +877,7 @@ const mainDefaultLayout = {
                       styles: {
                         aspectRatio: 1.78,
                         width: 640,
+                        imageFillType: "fill",
                       },
                       sizes: {
                         base: "calc(100vw - 32px)",
@@ -1025,6 +1053,7 @@ const mainDefaultLayout = {
                                         aspectRatio: 1.78,
                                         width: 640,
                                         imageConstrain: "fill",
+                                        imageFillType: "fill",
                                       },
                                       sizes: {
                                         base: "calc(100vw - 32px)",
@@ -1200,6 +1229,7 @@ const mainDefaultLayout = {
                                         aspectRatio: 1.78,
                                         width: 640,
                                         imageConstrain: "fill",
+                                        imageFillType: "fill",
                                       },
                                       sizes: {
                                         base: "calc(100vw - 32px)",
@@ -1375,6 +1405,7 @@ const mainDefaultLayout = {
                                         aspectRatio: 1.78,
                                         width: 640,
                                         imageConstrain: "fill",
+                                        imageFillType: "fill",
                                       },
                                       sizes: {
                                         base: "calc(100vw - 32px)",
@@ -2162,6 +2193,7 @@ const mainDefaultLayout = {
                                       styles: {
                                         aspectRatio: 1,
                                         width: 200,
+                                        imageFillType: "fill",
                                       },
                                       hideWidthProp: true,
                                       className:
@@ -2340,6 +2372,7 @@ const mainDefaultLayout = {
                                       styles: {
                                         aspectRatio: 1,
                                         width: 200,
+                                        imageFillType: "fill",
                                       },
                                       hideWidthProp: true,
                                       className:
@@ -2518,6 +2551,7 @@ const mainDefaultLayout = {
                                       styles: {
                                         aspectRatio: 1,
                                         width: 200,
+                                        imageFillType: "fill",
                                       },
                                       hideWidthProp: true,
                                       className:
@@ -2800,6 +2834,7 @@ const mainDefaultLayout = {
                                       styles: {
                                         aspectRatio: 1.78,
                                         width: 640,
+                                        imageFillType: "fill",
                                       },
                                       sizes: {
                                         base: "calc(100vw - 32px)",
@@ -2971,6 +3006,7 @@ const mainDefaultLayout = {
                                       styles: {
                                         aspectRatio: 1.78,
                                         width: 640,
+                                        imageFillType: "fill",
                                       },
                                       sizes: {
                                         base: "calc(100vw - 32px)",
@@ -3142,6 +3178,7 @@ const mainDefaultLayout = {
                                       styles: {
                                         aspectRatio: 1.78,
                                         width: 640,
+                                        imageFillType: "fill",
                                       },
                                       sizes: {
                                         base: "calc(100vw - 32px)",
@@ -3334,37 +3371,68 @@ const mainDefaultLayout = {
                           field: "",
                           constantValue: [
                             {
-                              assetImage: {
-                                url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
-                                width: 1000,
-                                height: 570,
-                                assetImage: {
-                                  name: "Placeholder",
+                              image: {
+                                field: "",
+                                constantValueEnabled: true,
+                                constantValue: {
+                                  url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                                  width: 1000,
+                                  height: 570,
+                                  assetImage: { name: "Placeholder" },
                                 },
+                              },
+                              link: {
+                                field: "",
+                                constantValueEnabled: true,
+                                constantValue: { defaultValue: "" },
                               },
                             },
                             {
-                              assetImage: {
-                                url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
-                                width: 1000,
-                                height: 570,
-                                assetImage: {
-                                  name: "Placeholder",
+                              image: {
+                                field: "",
+                                constantValueEnabled: true,
+                                constantValue: {
+                                  url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                                  width: 1000,
+                                  height: 570,
+                                  assetImage: { name: "Placeholder" },
                                 },
+                              },
+                              link: {
+                                field: "",
+                                constantValueEnabled: true,
+                                constantValue: { defaultValue: "" },
                               },
                             },
                             {
-                              assetImage: {
-                                url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
-                                width: 1000,
-                                height: 570,
-                                assetImage: {
-                                  name: "Placeholder",
+                              image: {
+                                field: "",
+                                constantValueEnabled: true,
+                                constantValue: {
+                                  url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                                  width: 1000,
+                                  height: 570,
+                                  assetImage: { name: "Placeholder" },
                                 },
+                              },
+                              link: {
+                                field: "",
+                                constantValueEnabled: true,
+                                constantValue: { defaultValue: "" },
                               },
                             },
                           ],
                           constantValueEnabled: true,
+                          mappings: {
+                            image: {
+                              field: "",
+                              constantValueEnabled: false,
+                            },
+                            link: {
+                              field: "",
+                              constantValueEnabled: false,
+                            },
+                          },
                         },
                       },
                       styles: {
@@ -3499,6 +3567,7 @@ const mainDefaultLayout = {
                                       styles: {
                                         aspectRatio: 1.78,
                                         width: 640,
+                                        imageFillType: "fill",
                                       },
                                       hideWidthProp: true,
                                       className:
@@ -3660,6 +3729,7 @@ const mainDefaultLayout = {
                                       styles: {
                                         aspectRatio: 1.78,
                                         width: 640,
+                                        imageFillType: "fill",
                                       },
                                       hideWidthProp: true,
                                       className:
@@ -3821,6 +3891,7 @@ const mainDefaultLayout = {
                                       styles: {
                                         aspectRatio: 1.78,
                                         width: 640,
+                                        imageFillType: "fill",
                                       },
                                       hideWidthProp: true,
                                       className:
@@ -4077,6 +4148,7 @@ const mainDefaultLayout = {
                 styles: {
                   width: 100,
                   aspectRatio: 1,
+                  imageFillType: "fill",
                 },
               },
             },
@@ -4109,6 +4181,7 @@ const mainDefaultLayout = {
                 styles: {
                   width: 0,
                   aspectRatio: 1,
+                  imageFillType: "fill",
                 },
               },
             },

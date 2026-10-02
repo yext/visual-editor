@@ -12,6 +12,7 @@ import {
   getListSourceRootFields,
   type MappedSourceFieldFilter,
 } from "../utils/cardSlots/mappedSource.ts";
+import { ITEM_SOURCE_SELF_FIELD } from "../utils/itemSource/itemSourceTypes.ts";
 
 const DISPLAY_NAME_SEPARATOR = " > ";
 
@@ -276,13 +277,20 @@ const getSubdocumentStreamFields = (
 const getScopedFieldsForSelector = (
   entityFields: StreamFields | null,
   sourceField: string,
-  filter: RenderEntityFieldFilter<any>
+  filter: MappedSourceFieldFilter<any>
 ): YextSchemaField[] => {
   const scopedStreamFields = getSubdocumentStreamFields(
     entityFields,
     sourceField
   );
-  if (!scopedStreamFields) {
+  const sourceSchemaField = getSchemaFieldAtPath(entityFields, sourceField);
+  const allowsDirectItem =
+    !!sourceSchemaField?.definition.isList &&
+    filter.directItemTypes?.includes(
+      (sourceSchemaField.definition.typeRegistryId ??
+        sourceSchemaField.definition.typeName) as EntityFieldTypes
+    );
+  if (!scopedStreamFields && !allowsDirectItem) {
     return [];
   }
 
@@ -291,7 +299,23 @@ const getScopedFieldsForSelector = (
 
   return sortFields(
     dedupeFieldsByName(
-      getFilteredEntityFields(scopedStreamFields, filter).map((field) => {
+      [
+        ...(allowsDirectItem
+          ? [
+              {
+                name: ITEM_SOURCE_SELF_FIELD,
+                displayName: rootDisplayName ?? sourceField,
+                definition: sourceSchemaField!.definition,
+              },
+            ]
+          : []),
+        ...(scopedStreamFields
+          ? getFilteredEntityFields(scopedStreamFields, filter)
+          : []),
+      ].map((field) => {
+        if (field.name === ITEM_SOURCE_SELF_FIELD) {
+          return field;
+        }
         const displayName =
           getEntityFieldDisplayName(
             `${sourceField}.${field.name}`,
@@ -367,10 +391,10 @@ export const getFieldsForSelector = (
       : requiredDescendantTypes.every(matchesRequiredTypes);
   };
 
-  if (filter.itemSourceTypes?.length) {
+  if (filter.itemSourceTypes?.length || filter.directItemTypes?.length) {
     return sortFields(
       dedupeFieldsByName(
-        getListSourceRootFields(entityFields)
+        getListSourceRootFields(entityFields, filter.directItemTypes)
           .map((field) => ({
             ...field,
             displayName:
@@ -378,7 +402,14 @@ export const getFieldsForSelector = (
               field.displayName ??
               field.name,
           }))
-          .filter(hasRequiredDescendants)
+          .filter(
+            (field) =>
+              filter.directItemTypes?.includes(
+                (field.definition.typeRegistryId ??
+                  field.definition
+                    .typeName) as (typeof filter.directItemTypes)[number]
+              ) || hasRequiredDescendants(field)
+          )
           .filter((field) =>
             !streamDocument
               ? true

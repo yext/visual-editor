@@ -3,8 +3,93 @@ import {
   getEntityFieldDisplayName,
   getFieldsForSelector,
 } from "./yextEntityFieldUtils.ts";
+import { ITEM_SOURCE_SELF_FIELD } from "../utils/itemSource/itemSourceTypes.ts";
 
 describe("getFieldsForSelector", () => {
+  it("offers image lists and image-bearing object lists for direct item sources", () => {
+    const entityFields = {
+      fields: [
+        {
+          name: "images",
+          definition: {
+            name: "images",
+            isList: true,
+            typeRegistryId: "type.image",
+            type: {},
+          },
+        },
+        {
+          name: "gallery",
+          definition: {
+            name: "gallery",
+            isList: true,
+            typeRegistryId: "type.image",
+            type: {},
+          },
+          children: {
+            fields: [
+              {
+                name: "image",
+                definition: {
+                  name: "image",
+                  typeRegistryId: "type.image",
+                  type: {},
+                },
+              },
+            ],
+          },
+        },
+        {
+          name: "products",
+          definition: { name: "products", isList: true, type: {} },
+          children: {
+            fields: [
+              {
+                name: "cover",
+                definition: {
+                  name: "cover",
+                  typeRegistryId: "type.image",
+                  type: {},
+                },
+              },
+            ],
+          },
+        },
+        {
+          name: "names",
+          definition: {
+            name: "names",
+            isList: true,
+            typeRegistryId: "type.string",
+            type: {},
+          },
+        },
+      ],
+    };
+
+    expect(
+      getFieldsForSelector(entityFields, {
+        itemSourceTypes: [["type.image"]],
+        directItemTypes: ["type.image"],
+      }).map((field) => field.name)
+    ).toEqual(["gallery", "images", "products"]);
+    expect(
+      getFieldsForSelector(
+        entityFields,
+        { types: ["type.image"], directItemTypes: ["type.image"] },
+        undefined,
+        "images"
+      ).map((field) => field.name)
+    ).toEqual([ITEM_SOURCE_SELF_FIELD]);
+    expect(
+      getFieldsForSelector(
+        entityFields,
+        { types: ["type.image"] },
+        undefined,
+        "images"
+      )
+    ).toEqual([]);
+  });
   it("allows one descendant to satisfy multiple compatible mapping requirements", () => {
     const fields = getFieldsForSelector(
       {

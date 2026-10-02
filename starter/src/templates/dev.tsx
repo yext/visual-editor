@@ -65,6 +65,7 @@ export const config = {
       "mainPhone",
       "emails",
       "services",
+      "photoGallery",
       "c_deliveryPromo",
       "ref_listings",
     ],

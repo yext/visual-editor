@@ -4,6 +4,7 @@ import {
   type TranslatableString,
 } from "../../types/types.ts";
 import { createItemSource } from "./index.ts";
+import { ITEM_SOURCE_SELF_FIELD } from "./itemSourceTypes.ts";
 
 type ArticleItemProps = {
   title: {
@@ -401,4 +402,213 @@ describe("createItemSource", () => {
       },
     ]);
   });
+
+  it("resolves direct image items and mapped object items with optional links", () => {
+    const gallerySource = createItemSource<{
+      image: {
+        field: string;
+        constantValueEnabled?: boolean;
+        constantValue: { url: string };
+      };
+      link: {
+        field: string;
+        constantValueEnabled?: boolean;
+        constantValue: string;
+      };
+    }>({
+      label: "Images",
+      mappingFields: {
+        image: {
+          type: "entityField",
+          filter: { types: ["type.image"] },
+        },
+        link: {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        },
+      },
+      optionalMappingKeys: ["link"],
+      directItem: { types: ["type.image"], mappingKey: "image" },
+    });
+
+    expect((gallerySource.field as any).filter).toEqual({
+      itemSourceTypes: [["type.image"]],
+      directItemTypes: ["type.image"],
+    });
+    expect(
+      (gallerySource.field as any).repeated.mappingFields.image.filter
+    ).toEqual({
+      types: ["type.image"],
+      directItemTypes: ["type.image"],
+    });
+
+    expect(
+      gallerySource.resolveItems(
+        {
+          field: "images",
+          constantValue: [],
+          constantValueEnabled: false,
+          mappings: {
+            image: {
+              field: ITEM_SOURCE_SELF_FIELD,
+              constantValue: { url: "" },
+              constantValueEnabled: false,
+            },
+            link: {
+              field: "clickthroughUrl",
+              constantValue: "",
+              constantValueEnabled: false,
+            },
+          },
+        },
+        {
+          locale: "en",
+          images: [
+            { url: "https://example.com/one.jpg" },
+            {
+              image: { url: "https://example.com/two.jpg" },
+              clickthroughUrl: "https://example.com/two",
+            },
+          ],
+        }
+      )
+    ).toEqual([
+      { image: { url: "https://example.com/one.jpg" }, link: undefined },
+      {
+        image: {
+          image: { url: "https://example.com/two.jpg" },
+          clickthroughUrl: "https://example.com/two",
+        },
+        link: "https://example.com/two",
+      },
+    ]);
+
+    expect(
+      gallerySource.resolveItems(
+        {
+          field: "products",
+          constantValue: [],
+          constantValueEnabled: false,
+          mappings: {
+            image: {
+              field: "cover",
+              constantValue: { url: "" },
+              constantValueEnabled: false,
+            },
+            link: {
+              field: "destination",
+              constantValue: "",
+              constantValueEnabled: false,
+            },
+          },
+        },
+        {
+          locale: "en",
+          products: [
+            {
+              cover: { url: "https://example.com/product.jpg" },
+              destination: "/product",
+            },
+          ],
+        }
+      )
+    ).toEqual([
+      { image: { url: "https://example.com/product.jpg" }, link: "/product" },
+    ]);
+  });
+
+  it.each([
+    {
+      constantValueEnabled: false,
+      expected: { url: "https://example.com/source.jpg" },
+    },
+    {
+      constantValueEnabled: true,
+      expected: { url: "https://example.com/manual.jpg" },
+    },
+  ])(
+    "when a direct mapping has constant mode $constantValueEnabled then it uses the selected value",
+    ({ constantValueEnabled, expected }) => {
+      const source = createItemSource<{
+        image: {
+          field: string;
+          constantValueEnabled: boolean;
+          constantValue: { url: string };
+        };
+      }>({
+        label: "Images",
+        mappingFields: {
+          image: {
+            type: "entityField",
+            filter: { types: ["type.image"] },
+            disableConstantValueToggle: false,
+          },
+        },
+        directItem: { types: ["type.image"], mappingKey: "image" },
+      });
+
+      expect(
+        source.resolveItems(
+          {
+            field: "images",
+            constantValueEnabled: false,
+            constantValue: [],
+            mappings: {
+              image: {
+                field: "$item",
+                constantValueEnabled,
+                constantValue: { url: "https://example.com/manual.jpg" },
+              },
+            },
+          },
+          { locale: "en", images: [{ url: "https://example.com/source.jpg" }] }
+        )
+      ).toEqual([{ image: expected }]);
+    }
+  );
+  it.each([
+    { types: undefined, expectedTypes: ["type.image"] },
+    { types: ["type.string"] as const, expectedTypes: ["type.string"] },
+  ])(
+    "when direct item types are $types then the source uses $expectedTypes",
+    ({ types, expectedTypes }): void => {
+      const source = createItemSource({
+        label: "Images",
+        mappingFields: {
+          image: {
+            type: "entityField",
+            filter: { types: ["type.image"] },
+          },
+        },
+        directItem: {
+          mappingKey: "image",
+          types: types ? [...types] : undefined,
+        },
+      });
+
+      expect(source.field).toMatchObject({
+        filter: { directItemTypes: expectedTypes },
+        repeated: {
+          directItemMappingKey: "image",
+          mappingFields: {
+            image: { filter: { directItemTypes: expectedTypes } },
+          },
+          manualItemFields: { image: { filter: { types: ["type.image"] } } },
+        },
+      });
+      expect(
+        source.resolveItems(
+          {
+            field: "images",
+            constantValueEnabled: false,
+            constantValue: [],
+            mappings: {
+              image: { field: "$item", constantValueEnabled: false },
+            },
+          },
+          { images: [{ url: "https://example.com/image.jpg" }] }
+        )
+      ).toEqual([{ image: { url: "https://example.com/image.jpg" } }]);
+    }
+  );
 });

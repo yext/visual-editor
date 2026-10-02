@@ -1,19 +1,35 @@
-import * as React from "react";
+import React from "react";
 import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
   transformTests,
 } from "../../testing/componentTests.setup.ts";
-import { render as reactRender, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render as reactRender,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { PhotoGallerySection } from "./PhotoGallerySection.tsx";
 import { migrate } from "../../../utils/migrate.ts";
 import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
-import { Render, Config } from "@puckeditor/core";
+import {
+  Render,
+  Config,
+  Puck,
+  resolveAllData,
+  useGetPuck,
+} from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { MainContent } from "../../structure/MainContent.tsx";
+import { PhotoGalleryWrapper } from "./PhotoGalleryWrapper.tsx";
+import { photoGallerySource } from "./photoGallerySource.ts";
+import { toPuckFields } from "../../../fields/fields.ts";
+import { type StreamDocument } from "../../../utils/types/StreamDocument.ts";
 
 const photoGalleryData = [
   {
@@ -943,6 +959,367 @@ describe("PhotoGallerySection", async () => {
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }
+    }
+  );
+
+  it("when a team headshot mapping changes then interactive mode uses the current images", async (): Promise<void> => {
+    const streamDocument: StreamDocument = {
+      locale: "en",
+      c_team: {
+        people: [
+          {
+            headshot: {
+              url: "https://example.com/jane.jpg",
+              width: 100,
+              height: 100,
+              alternateText: "Jane",
+            },
+            cta: { label: "View Jane", link: "/team/jane", linkType: "URL" },
+          },
+        ],
+      },
+    };
+    const config: Config = {
+      ...puckConfig,
+      components: {
+        ...puckConfig.components,
+        PhotoGalleryWrapper: {
+          ...PhotoGalleryWrapper,
+          fields: toPuckFields(PhotoGalleryWrapper.fields!),
+        },
+      },
+    };
+    const data = await resolveAllData(
+      {
+        root: {},
+        content: [
+          {
+            type: "PhotoGallerySection",
+            props: {
+              ...PhotoGallerySection.defaultProps,
+              id: "team-gallery",
+              styles: { variant: "gallery", showSectionHeading: true },
+              slots: {
+                ...PhotoGallerySection.defaultProps!.slots,
+                HeadingSlot: [
+                  {
+                    type: "HeadingTextSlot",
+                    props: {
+                      ...PhotoGallerySection.defaultProps!.slots!.HeadingSlot[0]
+                        .props,
+                      id: "team-gallery-heading",
+                    },
+                  },
+                ],
+                PhotoGalleryWrapper: [
+                  {
+                    type: "PhotoGalleryWrapper",
+                    props: {
+                      ...PhotoGalleryWrapper.defaultProps,
+                      id: "team-images",
+                      data: {
+                        images: {
+                          ...photoGallerySource.defaultValue,
+                          field: "c_team.people",
+                          constantValueEnabled: false,
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      config,
+      { streamDocument }
+    );
+
+    const Controls = (): React.ReactElement => {
+      const getPuck = useGetPuck();
+      return (
+        <>
+          <button
+            onClick={() => {
+              const { getItemById, getSelectorForId, dispatch } = getPuck();
+              const item = getItemById("team-images")!;
+              const selector = getSelectorForId("team-images")!;
+              dispatch({
+                type: "replace",
+                destinationIndex: selector.index,
+                destinationZone: selector.zone,
+                data: {
+                  ...item,
+                  props: {
+                    ...item.props,
+                    data: {
+                      images: {
+                        ...item.props.data.images,
+                        mappings: {
+                          image: {
+                            field: item.props.data.images.mappings.image.field
+                              ? ""
+                              : "headshot",
+                            constantValueEnabled: false,
+                          },
+                          link: { field: "cta", constantValueEnabled: false },
+                        },
+                      },
+                    },
+                  },
+                },
+              });
+            }}
+          >
+            Change headshot mapping
+          </button>
+          <button
+            onClick={() =>
+              getPuck().dispatch({
+                type: "setUi",
+                ui: { previewMode: "interactive" },
+              })
+            }
+          >
+            Interactive mode
+          </button>
+        </>
+      );
+    };
+
+    const { container } = reactRender(
+      <VisualEditorProvider templateProps={{ document: streamDocument }}>
+        <Puck
+          config={config}
+          data={data}
+          metadata={{ streamDocument }}
+          iframe={{ enabled: false }}
+        >
+          <Controls />
+          <Puck.Preview />
+        </Puck>
+      </VisualEditorProvider>
+    );
+
+    // Let Puck finish its initial data resolution before changing a child slot.
+    await act(async (): Promise<void> => {
+      await new Promise<void>((resolve) => setTimeout(resolve, 0));
+    });
+    fireEvent.click(
+      within(container).getByRole("button", { name: "Change headshot mapping" })
+    );
+    await waitFor(() => {
+      expect(within(container).getByAltText("Jane")).toBeDefined();
+    });
+    fireEvent.click(
+      within(container).getByRole("button", {
+        name: "Interactive mode",
+      })
+    );
+    await waitFor(() => {
+      expect(
+        within(container)
+          .getByRole("link", { name: "Jane" })
+          .getAttribute("href")
+      ).toBe("/team/jane");
+    });
+
+    fireEvent.click(
+      within(container).getByRole("button", { name: "Change headshot mapping" })
+    );
+    await waitFor(() => {
+      expect(
+        within(container).queryByRole("region", {
+          name: "Photo Gallery Section",
+        })
+      ).toBeNull();
+    });
+    fireEvent.click(
+      within(container).getByRole("button", { name: "Change headshot mapping" })
+    );
+    await waitFor(() => {
+      expect(
+        within(container).getByRole("link", { name: "Jane" })
+      ).toBeDefined();
+    });
+  });
+
+  it.each([
+    { constantValueEnabled: false, initialIsMappedContentEmpty: false },
+    { constantValueEnabled: false, initialIsMappedContentEmpty: true },
+    { constantValueEnabled: true, initialIsMappedContentEmpty: false },
+    { constantValueEnabled: true, initialIsMappedContentEmpty: true },
+  ])(
+    "when an empty gallery has manual mode $constantValueEnabled and saved empty state $initialIsMappedContentEmpty then visibility follows its current source",
+    async ({
+      constantValueEnabled,
+      initialIsMappedContentEmpty,
+    }): Promise<void> => {
+      const { container } = reactRender(
+        <VisualEditorProvider
+          templateProps={{ document: { locale: "en", c_team: { people: [] } } }}
+        >
+          <Render
+            config={puckConfig}
+            data={{
+              root: {},
+              content: [
+                {
+                  type: "PhotoGallerySection",
+                  props: {
+                    ...PhotoGallerySection.defaultProps,
+                    id: "empty-gallery",
+                    styles: { variant: "gallery", showSectionHeading: false },
+                    conditionalRender: {
+                      isMappedContentEmpty: initialIsMappedContentEmpty,
+                    },
+                    slots: {
+                      HeadingSlot: [],
+                      PhotoGalleryWrapper: [
+                        {
+                          type: "PhotoGalleryWrapper",
+                          props: {
+                            ...PhotoGalleryWrapper.defaultProps,
+                            id: "empty-images",
+                            parentData: { variant: "gallery" },
+                            data: {
+                              images: {
+                                ...photoGallerySource.defaultValue,
+                                field: "c_team.people",
+                                constantValueEnabled,
+                                constantValue: [],
+                              },
+                            },
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            }}
+          />
+        </VisualEditorProvider>
+      );
+
+      await waitFor(() => {
+        expect(
+          within(container).queryByRole("region", {
+            name: "Photo Gallery Section",
+          }) !== null
+        ).toBe(constantValueEnabled);
+      });
+    }
+  );
+  it.each([
+    { version: 37, constantValueEnabled: true },
+    { version: 37, constantValueEnabled: false },
+    { version: 82, constantValueEnabled: true },
+    { version: 82, constantValueEnabled: false },
+  ])(
+    "when a version $version gallery has manual mode $constantValueEnabled then migration and reload keep its image and link",
+    async ({ version, constantValueEnabled }): Promise<void> => {
+      const streamDocument: StreamDocument = {
+        locale: "en",
+        photoGallery: [
+          {
+            image: {
+              url: "https://example.com/mapped.jpg",
+              width: 200,
+              height: 100,
+              alternateText: "Mapped image",
+            },
+            clickthroughUrl: "/mapped",
+          },
+        ],
+      };
+      const images = {
+        field: "photoGallery",
+        constantValueEnabled,
+        constantValue: [
+          {
+            assetImage: {
+              url: "https://example.com/manual.jpg",
+              width: 200,
+              height: 100,
+              alternateText: "Manual image",
+            },
+            clickthroughUrl: "/manual",
+          },
+        ],
+      };
+      const migratedData = migrate(
+        {
+          root: { props: { version } },
+          content: [
+            {
+              type: "PhotoGallerySection",
+              props:
+                version === 37
+                  ? {
+                      id: "old-gallery",
+                      data: { images },
+                      styles: {
+                        variant: "gallery",
+                        image: { width: 200, aspectRatio: 2 },
+                      },
+                      liveVisibility: true,
+                    }
+                  : {
+                      ...PhotoGallerySection.defaultProps,
+                      id: "old-gallery",
+                      styles: { variant: "gallery", showSectionHeading: false },
+                      slots: {
+                        HeadingSlot: [],
+                        PhotoGalleryWrapper: [
+                          {
+                            type: "PhotoGalleryWrapper",
+                            props: {
+                              ...PhotoGalleryWrapper.defaultProps,
+                              id: "old-images",
+                              data: { images },
+                            },
+                          },
+                        ],
+                      },
+                    },
+            },
+          ],
+        },
+        migrationRegistry,
+        puckConfig,
+        streamDocument
+      );
+      const savedData = JSON.parse(JSON.stringify(migratedData));
+      const reloadedData = migrate(
+        savedData,
+        migrationRegistry,
+        puckConfig,
+        streamDocument
+      );
+      expect(reloadedData).toEqual(savedData);
+      expect(reloadedData.root.props).toMatchObject({
+        version: migrationRegistry.length,
+      });
+      const resolvedData = await resolveAllData(reloadedData, puckConfig, {
+        streamDocument,
+      });
+      const { container } = reactRender(
+        <VisualEditorProvider templateProps={{ document: streamDocument }}>
+          <Render config={puckConfig} data={resolvedData} />
+        </VisualEditorProvider>
+      );
+      const link = await within(container).findByRole("link", {
+        name: constantValueEnabled ? "Manual image" : "Mapped image",
+      });
+      expect(link.getAttribute("href")).toBe(
+        constantValueEnabled ? "/manual" : "/mapped"
+      );
+      expect(container.querySelectorAll("img")).toHaveLength(1);
+      expect(link.querySelector("img")?.getAttribute("src")).toContain(
+        constantValueEnabled ? "manual.jpg" : "mapped.jpg"
+      );
     }
   );
 });

@@ -22,7 +22,10 @@ type ConditionalRenderData = {
 };
 
 export const isMappedEntityFieldSelected = (
-  entityField?: YextEntityField<unknown>
+  entityField?: Pick<
+    YextEntityField<unknown, unknown>,
+    "field" | "constantValueEnabled"
+  >
 ): boolean => {
   return (
     Boolean(entityField?.field) && entityField?.constantValueEnabled === false

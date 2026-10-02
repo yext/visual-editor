@@ -24,7 +24,8 @@ const getListFields = (
  * list's item shape as a mapped source.
  */
 export const getListSourceRootFields = (
-  entityFields: StreamFields | YextSchemaField[] | null
+  entityFields: StreamFields | YextSchemaField[] | null,
+  directItemTypes: EntityFieldTypes[] = []
 ): YextSchemaField[] => {
   const fields = Array.isArray(entityFields)
     ? entityFields
@@ -33,8 +34,12 @@ export const getListSourceRootFields = (
   return getListFields(fields).filter(
     (field) =>
       !!field.definition?.isList &&
-      Array.isArray(field.children?.fields) &&
-      field.children.fields.length > 0
+      ((Array.isArray(field.children?.fields) &&
+        field.children.fields.length > 0) ||
+        directItemTypes.includes(
+          (field.definition.typeRegistryId ??
+            field.definition.typeName) as EntityFieldTypes
+        ))
   );
 };
 
@@ -42,6 +47,8 @@ export type MappedSourceFieldFilter<T extends Record<string, any>> =
   RenderEntityFieldFilter<T> & {
     /** Higher-priority repeated-source constraints used by itemSource pickers. */
     itemSourceTypes?: EntityFieldTypes[][];
+    /** List item types that can be mapped as the item itself. */
+    directItemTypes?: EntityFieldTypes[];
     /** Used only when itemSourceTypes is not provided. */
     mappedSourceTypes?: EntityFieldTypes[][];
   };
