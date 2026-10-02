@@ -1,3 +1,5 @@
+import type { TranslatableString } from "../../../types/types.ts";
+import { createPuckFieldTransforms } from "../../../fields/fieldTransforms.ts";
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
@@ -94,11 +96,7 @@ vi.mock("@yext/search-ui-react", async () => {
   };
 });
 
-const renderFilterModal = (
-  keywordsDisplayName?: React.ComponentProps<
-    typeof FilterModal
-  >["keywordsDisplayName"]
-) =>
+const renderFilterModal = (keywordsDisplayName?: TranslatableString) =>
   render(
     <FilterModal
       showFilterModal={true}
@@ -112,7 +110,14 @@ const renderFilterModal = (
       handleClearFiltersClick={vi.fn()}
       accentColorCssValue="#000"
       closeButtonRef={React.createRef<HTMLButtonElement>()}
-      keywordsDisplayName={keywordsDisplayName}
+      keywordsDisplayName={createPuckFieldTransforms("fr", {}).custom!({
+        value: keywordsDisplayName,
+        field: { type: "custom", yextFieldType: "translatableString" } as any,
+        componentId: "Locator",
+        propName: "keywordsDisplayName",
+        propPath: "filters.keywordsDisplayName",
+        isReadOnly: true,
+      })}
     />
   );
 

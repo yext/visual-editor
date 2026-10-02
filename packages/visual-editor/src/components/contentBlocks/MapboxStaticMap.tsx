@@ -1,14 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { Coordinate } from "@yext/pages-components";
 import { EntityField } from "../../editor/EntityField.tsx";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { type BasicSelectorField } from "../../fields/BasicSelectorField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { Body } from "../atoms/body.tsx";
-import { PuckComponent } from "@puckeditor/core";
+
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import mapboxLogo from "../assets/mapbox-logo-black.svg";
 import { Map } from "lucide-react";
@@ -46,14 +46,14 @@ export const mapStyleField: BasicSelectorField = {
   options: mapboxStaticMapStyleOptions,
 };
 
-const mapboxFields: YextFields<MapboxStaticProps> = {
+const mapboxFields = {
   coordinate: {
     type: "entityField",
     label: msg("fields.coordinates", "Coordinates"),
     filter: { types: ["type.coordinate"] },
   },
   mapStyle: mapStyleField,
-};
+} satisfies YextFields<MapboxStaticProps>;
 
 const getPrimaryColor = (streamDocument: StreamDocument) => {
   return (
@@ -63,21 +63,15 @@ const getPrimaryColor = (streamDocument: StreamDocument) => {
   );
 };
 
-export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
-  coordinate: coordinateField,
+export const MapboxStaticMapComponent: typeof MapboxStaticMap.render = ({
+  coordinate,
   height = "300px",
   zoom = 14,
   mapStyle = "light-v11",
   puck,
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const streamDocument = useDocument<any>();
-
-  const coordinate = resolveComponentData<Coordinate>(
-    coordinateField,
-    i18n.language,
-    streamDocument
-  );
 
   // If we are in the layout editor, use the non-URL-restricted Mapbox API key
   const iframe =
@@ -124,7 +118,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   }
 
   if (!coordinate) {
-    console.warn(`${coordinateField.field} is not present in the stream`);
+    console.warn("Map coordinates are not present in the stream");
     return <></>;
   }
 
@@ -145,8 +139,6 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   return (
     <EntityField
       displayName={pt("coordinate", "Coordinate")}
-      fieldId={coordinateField.field}
-      constantValueEnabled={coordinateField.constantValueEnabled}
       className="w-full"
     >
       <div className="relative w-full overflow-hidden" style={{ height }}>
@@ -188,7 +180,10 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   );
 };
 
-export const MapboxStaticMap: YextComponentConfig<MapboxStaticProps> = {
+export const MapboxStaticMap: YextComponentConfig<
+  MapboxStaticProps,
+  typeof mapboxFields
+> = {
   label: msg("components.mapboxStaticMap", "Mapbox Static Map"),
   fields: mapboxFields,
   defaultProps: {
@@ -201,5 +196,5 @@ export const MapboxStaticMap: YextComponentConfig<MapboxStaticProps> = {
     },
     mapStyle: "streets-v12",
   },
-  render: (props) => <MapboxStaticMapComponent {...props} />,
+  render: MapboxStaticMapComponent,
 };

@@ -1,6 +1,3 @@
-import { useTranslation } from "react-i18next";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { PhoneAtom } from "../atoms/phone.tsx";
@@ -42,7 +39,7 @@ export interface PhoneProps {
 }
 
 // Phone field definitions used in Phone and CoreInfoSection
-export const PhoneDataFields: YextFields<PhoneProps["data"]> = {
+export const PhoneDataFields = {
   number: {
     type: "entityField",
     label: msg("fields.phoneNumber", "Phone Number"),
@@ -55,10 +52,10 @@ export const PhoneDataFields: YextFields<PhoneProps["data"]> = {
     label: msg("fields.label", "Label"),
     filter: { types: ["type.string"] },
   },
-};
+} satisfies YextFields<PhoneProps["data"]>;
 
 // Phone style definitions used in Phone and CoreInfoSection
-export const PhoneStyleFields: YextFields<PhoneProps["styles"]> = {
+export const PhoneStyleFields = {
   phoneFormat: {
     label: msg("fields.phoneFormat", "Phone Format"),
     type: "radio",
@@ -83,7 +80,7 @@ export const PhoneStyleFields: YextFields<PhoneProps["styles"]> = {
     label: msg("fields.color", "Color"),
     options: "SITE_COLOR",
   },
-};
+} satisfies YextFields<PhoneProps["styles"]>;
 
 export const defaultPhoneDataProps: PhoneProps["data"] = {
   number: {
@@ -93,7 +90,7 @@ export const defaultPhoneDataProps: PhoneProps["data"] = {
   label: { defaultValue: "Phone" },
 };
 
-export const PhoneFields: YextFields<PhoneProps> = {
+export const PhoneFields = {
   data: {
     type: "object",
     label: msg("fields.data", "Data"),
@@ -104,17 +101,13 @@ export const PhoneFields: YextFields<PhoneProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: PhoneStyleFields,
   },
-};
+} satisfies YextFields<PhoneProps>;
 
-const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
-  const { i18n } = useTranslation();
-  const streamDocument = useDocument();
-  const resolvedPhone =
-    parentData?.phoneNumber ??
-    resolveComponentData(data.number, i18n.language, streamDocument);
+const PhoneComponent: typeof Phone.render = ({ data, styles, parentData }) => {
+  const resolvedPhone = parentData?.phoneNumber ?? data.number;
 
   if (!resolvedPhone) {
-    return;
+    return <></>;
   }
 
   return (
@@ -122,14 +115,12 @@ const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
       displayName={
         parentData ? parentData.field : pt("fields.phoneNumber", "Phone Number")
       }
-      fieldId={data.number.field}
-      constantValueEnabled={!parentData && data.number.constantValueEnabled}
     >
       <PhoneAtom
         backgroundColor={styles.color ?? backgroundColors.background2.value}
         eventName={`phone`}
         format={styles.phoneFormat}
-        label={resolveComponentData(data.label, i18n.language, streamDocument)}
+        label={data.label}
         phoneNumber={resolvedPhone}
         includeHyperlink={styles.includePhoneHyperlink}
         includeIcon={styles.includeIcon ?? true}
@@ -139,7 +130,7 @@ const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
   );
 };
 
-export const Phone: YextComponentConfig<PhoneProps> = {
+export const Phone: YextComponentConfig<PhoneProps, typeof PhoneFields> = {
   label: msg("components.phone", "Phone"),
   fields: PhoneFields,
   defaultProps: {
@@ -151,5 +142,5 @@ export const Phone: YextComponentConfig<PhoneProps> = {
     },
   },
   resolveFields: (data) => resolveDataFromParent(PhoneFields, data),
-  render: (props) => <PhoneComponent {...props} />,
+  render: PhoneComponent,
 };

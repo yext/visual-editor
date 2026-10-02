@@ -1,4 +1,4 @@
-import { PuckComponent, setDeep } from "@puckeditor/core";
+import { setDeep } from "@puckeditor/core";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import {
   AssetImageType,
@@ -16,9 +16,9 @@ import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { TranslatableString } from "../../../types/types.ts";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+
 import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
-import { useDocument } from "../../../hooks/useDocument.tsx";
+
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { EmptyImageState } from "./EmptyImageState.tsx";
@@ -58,7 +58,7 @@ export interface ImageWrapperProps {
   showImageConstrain?: boolean;
 }
 
-export const ImageWrapperFields: YextFields<ImageWrapperProps> = {
+export const ImageWrapperFields = {
   data: {
     type: "object",
     label: msg("fields.data", "Data"),
@@ -92,7 +92,7 @@ export const ImageWrapperFields: YextFields<ImageWrapperProps> = {
     ],
     visible: false,
   },
-};
+} satisfies YextFields<ImageWrapperProps>;
 
 export const getImageUrl = (
   image: ImageType | ComplexImageType | TranslatableAssetImage | undefined,
@@ -113,7 +113,7 @@ export const getImageUrl = (
   return image.url;
 };
 
-const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
+const ImageWrapperComponent: typeof ImageWrapper.render = (props) => {
   const {
     data,
     styles,
@@ -130,12 +130,9 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     showImageConstrain = false,
   } = props;
   const { i18n } = useTranslation();
-  const streamDocument = useDocument();
-  const resolvedImage = React.useMemo(() => {
-    return parentData
-      ? parentData?.image
-      : resolveComponentData(data.image, i18n.language, streamDocument);
-  }, [parentData, data.image, i18n.language, streamDocument]);
+  const resolvedImage = parentData ? parentData.image : data.image;
+  const source = puck.metadata.fieldSources?.get(`${props.id}:data.image`) as
+    ImageWrapperProps["data"]["image"] | undefined;
 
   const imageUrl = getImageUrl(resolvedImage, i18n.language);
   const isEmpty =
@@ -143,11 +140,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     !imageUrl ||
     (typeof imageUrl === "string" && imageUrl.trim() === "");
 
-  const inputLink = resolveComponentData(
-    data.link ?? { defaultValue: DEFAULT_LINK },
-    i18n.language,
-    streamDocument
-  );
+  const inputLink = data.link;
 
   const resolvedLink =
     typeof inputLink === "string" &&
@@ -161,9 +154,9 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
       <EmptyImageState
         isEmpty={isEmpty}
         isEditing={puck.isEditing ?? false}
-        constantValueEnabled={data.image.constantValueEnabled ?? false}
-        constantValue={data.image.constantValue as AssetImageType | undefined}
-        fieldId={parentData ? parentData.field : data.image.field}
+        constantValueEnabled={source?.constantValueEnabled ?? false}
+        constantValue={source?.constantValue as AssetImageType | undefined}
+        fieldId={parentData ? parentData.field : (source?.field ?? "")}
         containerStyle={{
           ...(hideWidthProp
             ? {}
@@ -187,8 +180,8 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
   return (
     <EntityField
       displayName={pt("fields.image", "Image")}
-      fieldId={parentData ? parentData.field : data.image.field}
-      constantValueEnabled={!parentData && data.image.constantValueEnabled}
+      fieldId={parentData ? parentData.field : (source?.field ?? "")}
+      constantValueEnabled={!parentData && source?.constantValueEnabled}
       fullHeight
       ref={puck.dragRef}
     >
@@ -241,7 +234,10 @@ export const imageDefaultProps = {
   allowWidthProp: true,
 };
 
-export const ImageWrapper: YextComponentConfig<ImageWrapperProps> = {
+export const ImageWrapper: YextComponentConfig<
+  ImageWrapperProps,
+  typeof ImageWrapperFields
+> = {
   label: msg("components.image", "Image"),
   inline: true,
   fields: ImageWrapperFields,
@@ -271,5 +267,5 @@ export const ImageWrapper: YextComponentConfig<ImageWrapperProps> = {
 
     return fields;
   },
-  render: (props) => <ImageWrapperComponent {...props} />,
+  render: ImageWrapperComponent,
 };

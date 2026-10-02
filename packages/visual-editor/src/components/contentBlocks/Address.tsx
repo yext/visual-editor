@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import {
   ComponentData,
   DefaultComponentProps,
-  PuckComponent,
   setDeep,
 } from "@puckeditor/core";
 import {
@@ -15,7 +14,7 @@ import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+
 import {
   ThemeColor,
   ThemeOptions,
@@ -61,16 +60,16 @@ export interface AddressProps {
 }
 
 // Address field definition used in Address and CoreInfoSection
-export const AddressDataField: YextFields<AddressProps["data"]> = {
+export const AddressDataField = {
   address: {
     type: "entityField",
     label: msg("fields.address", "Address"),
     filter: { types: ["type.address"] },
   },
-};
+} satisfies YextFields<AddressProps["data"]>;
 
 // Address style fields used in Address and CoreInfoSection
-export const AddressStyleFields: YextFields<AddressProps["styles"]> = {
+export const AddressStyleFields = {
   showRegion: {
     label: msg("fields.showRegion", "Show Region"),
     type: "radio",
@@ -105,9 +104,9 @@ export const AddressStyleFields: YextFields<AddressProps["styles"]> = {
     label: msg("fields.linkColor", "Link Color"),
     options: "SITE_COLOR",
   },
-};
+} satisfies YextFields<AddressProps["styles"]>;
 
-export const addressFields: YextFields<AddressProps> = {
+export const addressFields = {
   data: {
     type: "object",
     label: msg("fields.data", "Data"),
@@ -118,21 +117,17 @@ export const addressFields: YextFields<AddressProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: AddressStyleFields,
   },
-};
+} satisfies YextFields<AddressProps>;
 
-const AddressComponent: PuckComponent<AddressProps> = (props) => {
+const AddressComponent: typeof Address.render = (props) => {
   const { data, styles, puck, parentData } = props;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const streamDocument = useDocument();
 
   const resolvedColor = styles.color;
-  const address =
-    parentData?.address ??
-    (resolveComponentData(
-      data.address,
-      i18n.language,
-      streamDocument
-    ) as unknown as AddressType | undefined);
+  const address = parentData?.address ?? data.address;
+  const source = puck.metadata.fieldSources?.get(`${props.id}:data.address`) as
+    AddressProps["data"]["address"] | undefined;
 
   const listings = streamDocument.ref_listings ?? [];
   const listingsLink = getDirections(
@@ -151,7 +146,7 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
 
   // If ref_listings doesn't exist or the address field selected isn't just address, use the address link.
   const useAddressLink: boolean =
-    data.address.field !== "address" || !streamDocument.ref_listings?.length;
+    source?.field !== "address" || !streamDocument.ref_listings?.length;
 
   // Only show the address component if there's at least one line of the address
   const showAddress = !!(
@@ -166,8 +161,8 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
     <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
       <EntityField
         displayName={parentData ? parentData.field : pt("address", "Address")}
-        fieldId={data.address.field}
-        constantValueEnabled={!parentData && data.address.constantValueEnabled}
+        fieldId={source?.field}
+        constantValueEnabled={!parentData && source?.constantValueEnabled}
       >
         <RenderAddress
           address={address}
@@ -222,30 +217,31 @@ export const resolveAddressFields = (
   return updatedFields;
 };
 
-export const Address: YextComponentConfig<AddressProps> = {
-  label: msg("components.address", "Address"),
-  fields: addressFields,
-  defaultProps: {
-    data: {
-      address: {
-        field: "address",
-        constantValue: {
-          line1: "",
-          city: "",
-          region: "",
-          postalCode: "",
-          countryCode: "",
+export const Address: YextComponentConfig<AddressProps, typeof addressFields> =
+  {
+    label: msg("components.address", "Address"),
+    fields: addressFields,
+    defaultProps: {
+      data: {
+        address: {
+          field: "address",
+          constantValue: {
+            line1: "",
+            city: "",
+            region: "",
+            postalCode: "",
+            countryCode: "",
+          },
         },
       },
+      styles: {
+        showRegion: true,
+        showCountry: false,
+        showGetDirectionsLink: true,
+        ctaVariant: "link",
+        color: backgroundColors.color1.value,
+      },
     },
-    styles: {
-      showRegion: true,
-      showCountry: false,
-      showGetDirectionsLink: true,
-      ctaVariant: "link",
-      color: backgroundColors.color1.value,
-    },
-  },
-  resolveFields: resolveAddressFields,
-  render: (props) => <AddressComponent {...props} />,
-};
+    resolveFields: resolveAddressFields,
+    render: AddressComponent,
+  };

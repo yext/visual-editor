@@ -131,7 +131,7 @@ export interface LocatorProps {
   distanceDisplay?: DistanceDisplayOption;
 }
 
-const locatorFields: YextFields<LocatorProps> = {
+const locatorFields = {
   mapStyle: {
     type: "basicSelector",
     label: msg("fields.mapStyle", "Map Style"),
@@ -408,12 +408,15 @@ const locatorFields: YextFields<LocatorProps> = {
       },
     ],
   },
-};
+} satisfies YextFields<LocatorProps>;
 
 /**
  * Available on Locator templates.
  */
-export const LocatorComponent: YextComponentConfig<LocatorProps> = {
+export const LocatorComponent: YextComponentConfig<
+  LocatorProps,
+  typeof locatorFields
+> = {
   fields: locatorFields,
   /**
    * Locks array lengths for `locationStyles` and `resultCard` to the current
@@ -429,7 +432,7 @@ export const LocatorComponent: YextComponentConfig<LocatorProps> = {
     ) as (keyof typeof entityTypeSourceMap)[];
     const entityTypeCount = entityTypes.length;
 
-    let updatedFields: YextFields<LocatorProps> = { ...locatorFields };
+    let updatedFields = { ...locatorFields } satisfies YextFields<LocatorProps>;
     updatedFields = setDeep(
       updatedFields,
       "locationStyles.min",
@@ -537,5 +540,5 @@ export const LocatorComponent: YextComponentConfig<LocatorProps> = {
 
     return data;
   },
-  render: (props) => <LocatorWrapper {...props} />,
+  render: LocatorWrapper,
 };

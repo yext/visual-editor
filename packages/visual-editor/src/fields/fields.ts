@@ -1,3 +1,4 @@
+import type { YextEntityField } from "../editor/yextEntityFieldUtils.ts";
 import { createElement } from "react";
 import type {
   ArrayField,
@@ -77,16 +78,67 @@ export type YextFieldDefinition<ValueType = any> =
       ? YextObjectField<ValueType>
       : never);
 
+/** Localize content data without changing native values or creating React elements. */
+type ContentValue<Value> = 0 extends 1 & Value
+  ? Value
+  : Value extends YextEntityField<infer Constant, any>
+    ? ContentValue<Constant> | undefined
+    : Value extends readonly unknown[]
+      ? { [Key in keyof Value]: ContentValue<Value[Key]> }
+      : Value extends object
+        ? "defaultValue" extends keyof Value
+          ? ContentValue<Value["defaultValue"]>
+          : { [Key in keyof Value]: ContentValue<Value[Key]> }
+        : Value;
+
+/** Follow the field schema so custom controls, style objects, and slots stay intact. */
+type FieldValue<Value, Definition> = YextPuckField extends Definition
+  ? Value
+  : Definition extends { type: "entityField"; repeated: unknown }
+    ? Value extends YextEntityField<any, infer Mappings>
+      ? ContentValue<Mappings>[]
+      : never
+    : Definition extends {
+          type: "entityField" | "ctaSelector" | "image" | "translatableString";
+        }
+      ? ContentValue<Value>
+      : Definition extends { type: "comprehensiveCTA" }
+        ? {
+            [Key in keyof Value]: Key extends "data"
+              ? ContentValue<Value[Key]>
+              : Value[Key];
+          }
+        : Definition extends { type: "object"; objectFields: infer Children }
+          ? ComponentValues<Value, Children>
+          : Definition extends { type: "array"; arrayFields: infer Children }
+            ? Value extends readonly unknown[]
+              ? { [Key in keyof Value]: ComponentValues<Value[Key], Children> }
+              : Value
+            : Value;
+
+type ComponentValues<Props, Definitions> = 0 extends 1 & Props
+  ? Props
+  : {
+      [Key in keyof Props]: Key extends keyof Definitions
+        ? FieldValue<Props[Key], NonNullable<Definitions[Key]>>
+        : Props[Key];
+    };
+
+/** Keep defaults and editor callbacks authored; derive render values from the field schema. */
 export type YextComponentConfig<
   Props extends DefaultComponentProps = DefaultComponentProps,
+  Definitions extends YextFields<Props> = YextFields<Props>,
 > = Omit<
   ComponentConfig<{
     props: Props;
     fields: YextPuckFields;
   }>,
-  "fields" | "resolveFields"
+  "fields" | "resolveFields" | "render"
 > & {
-  fields?: YextFields<Props>;
+  render: ComponentConfig<{
+    props: ComponentValues<Props, Definitions>;
+  }>["render"];
+  fields?: Definitions;
   resolveFields?: ComponentConfig<{
     props: Props;
     fields: YextPuckFields;
@@ -129,6 +181,7 @@ export const toPuckFields = <
     (yextField) => ({
       ...yextField,
       type: "custom",
+      yextFieldType: yextField.type,
       render: ({ field: _, ...props }) =>
         createElement(YextAutoField, {
           ...(props as any),

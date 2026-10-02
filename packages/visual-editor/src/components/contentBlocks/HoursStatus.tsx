@@ -1,8 +1,5 @@
-import { useTranslation } from "react-i18next";
-import { PuckComponent } from "@puckeditor/core";
 import { HoursType } from "@yext/pages-components";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
@@ -40,13 +37,14 @@ export interface HoursStatusProps {
   };
 }
 
-export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
+export const hoursStatusWrapperFields = {
   data: {
     type: "object",
     label: msg("fields.data", "Data"),
     objectFields: {
       hours: {
         type: "entityField",
+
         label: msg("fields.hours", "Hours"),
         filter: {
           types: ["type.hours"],
@@ -92,27 +90,22 @@ export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
       },
     },
   },
-};
+} satisfies YextFields<HoursStatusProps>;
 
-const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
+const HoursStatusWrapper: typeof HoursStatus.render = ({
   data,
   styles,
   puck,
   parentData,
 }) => {
   const streamDocument = useDocument();
-  const { i18n } = useTranslation();
   const comingSoon = parentData?.comingSoon ?? !!streamDocument.comingSoon;
-  const hours =
-    parentData?.hours ??
-    resolveComponentData(data.hours, i18n.language, streamDocument);
+  const hours = parentData?.hours ?? data.hours;
   const timezone = parentData?.timezone ?? streamDocument.timezone;
 
   return hours || comingSoon ? (
     <EntityField
       displayName={parentData ? parentData.field : pt("hours", "Hours")}
-      fieldId={data.hours.field}
-      constantValueEnabled={!parentData && data.hours.constantValueEnabled}
     >
       <HoursStatusAtom
         hours={hours ?? {}}
@@ -133,7 +126,10 @@ const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
   );
 };
 
-export const HoursStatus: YextComponentConfig<HoursStatusProps> = {
+export const HoursStatus: YextComponentConfig<
+  HoursStatusProps,
+  typeof hoursStatusWrapperFields
+> = {
   label: msg("components.hoursStatus", "Hours Status"),
   fields: hoursStatusWrapperFields,
   defaultProps: {
@@ -153,5 +149,5 @@ export const HoursStatus: YextComponentConfig<HoursStatusProps> = {
   },
   resolveFields: (data) =>
     resolveDataFromParent(hoursStatusWrapperFields, data),
-  render: (props) => <HoursStatusWrapper {...props} />,
+  render: HoursStatusWrapper,
 };

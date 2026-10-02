@@ -20,7 +20,12 @@ export const resolveItemValue = <TValue>(
   field: YextFieldDefinition<TValue>,
   value: unknown,
   streamDocument: StreamDocument,
-  itemDocument?: StreamDocument
+  itemDocument?: StreamDocument,
+  transform?: (
+    field: YextFieldDefinition,
+    value: unknown,
+    streamDocument: StreamDocument
+  ) => unknown
 ): ResolvedItemField<TValue> => {
   if (isEntityFieldDefinition(field)) {
     const entityField = value as Partial<YextEntityField<unknown>> | undefined;
@@ -28,14 +33,24 @@ export const resolveItemValue = <TValue>(
       return undefined as ResolvedItemField<TValue>;
     }
 
-    return resolveYextEntityField(
-      itemDocument ?? streamDocument,
-      {
-        field: entityField?.field ?? "",
-        constantValue: entityField?.constantValue,
-        constantValueEnabled: entityField?.constantValueEnabled,
-      },
-      streamDocument.locale
+    if (!transform) {
+      return resolveYextEntityField(
+        itemDocument ?? streamDocument,
+        {
+          field: entityField?.field ?? "",
+          constantValue: entityField?.constantValue,
+          constantValueEnabled: entityField?.constantValueEnabled,
+        },
+        streamDocument.locale
+      ) as ResolvedItemField<TValue>;
+    }
+  }
+
+  if (transform && field.type !== "object" && field.type !== "array") {
+    return transform(
+      field,
+      value,
+      itemDocument ?? streamDocument
     ) as ResolvedItemField<TValue>;
   }
 
@@ -52,7 +67,8 @@ export const resolveItemValue = <TValue>(
           nestedField as YextFieldDefinition<any>,
           objectValue[key],
           streamDocument,
-          itemDocument
+          itemDocument,
+          transform
         ),
       ])
     ) as ResolvedItemField<TValue>;
@@ -71,7 +87,8 @@ export const resolveItemValue = <TValue>(
             nestedField as YextFieldDefinition<any>,
             item?.[key],
             streamDocument,
-            itemDocument
+            itemDocument,
+            transform
           ),
         ])
       )

@@ -1,8 +1,14 @@
+import type { YextEntityField } from "../editor/yextEntityFieldUtils.ts";
+import type { TranslatableString } from "../types/types.ts";
 import React from "react";
-import { describe, expect, it } from "vitest";
-import type { CustomField, Fields } from "@puckeditor/core";
+import { describe, expect, expectTypeOf, it } from "vitest";
+import type { CustomField, Fields, Slot } from "@puckeditor/core";
 import type { BasicSelectorField } from "./BasicSelectorField.tsx";
-import { toPuckFields } from "./fields.ts";
+import {
+  toPuckFields,
+  type YextComponentConfig,
+  type YextFields,
+} from "./fields.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
 
 type TestProps = {
@@ -114,4 +120,58 @@ describe("toPuckFields", () => {
       basicSelectorField
     );
   });
+});
+
+it("when a schema contains content and native fields then only content render types change", () => {
+  const fields = {
+    title: { type: "entityField", filter: { types: ["type.string"] } },
+    cards: {
+      type: "array",
+      arrayFields: {
+        label: { type: "translatableString" },
+        content: { type: "slot" },
+      },
+    },
+    control: { type: "custom", render: () => <></> },
+  } satisfies YextFields<{
+    title: YextEntityField<TranslatableString>;
+    cards: { label: TranslatableString; content: Slot }[];
+    control: YextEntityField<string>;
+  }>;
+  const component: YextComponentConfig<
+    {
+      title: YextEntityField<TranslatableString>;
+      cards: { label: TranslatableString; content: Slot }[];
+      control: YextEntityField<string>;
+    },
+    typeof fields
+  > = {
+    fields,
+    defaultProps: {
+      title: { field: "name", constantValue: { defaultValue: "Title" } },
+      cards: [{ label: { defaultValue: "Card" }, content: [] }],
+      control: { field: "name", constantValue: "" },
+    },
+    resolveData: (data) => {
+      expectTypeOf(data.props.title).toMatchTypeOf<{
+        field?: string;
+        constantValue?: TranslatableString;
+      }>();
+      return data;
+    },
+    render: ({ title, cards, control }) => {
+      expectTypeOf(title).toEqualTypeOf<string | undefined>();
+      expectTypeOf(cards[0].label).toEqualTypeOf<string | undefined>();
+      expectTypeOf(cards[0].content).toBeFunction();
+      expectTypeOf(control).toEqualTypeOf<YextEntityField<string>>();
+      return <>{title}</>;
+    },
+  };
+  expect(component.defaultProps?.title.constantValue).toEqual({
+    defaultValue: "Title",
+  });
+  // Authored defaults remain binding objects even though render props are plain strings.
+  expectTypeOf<
+    NonNullable<typeof component.defaultProps>["title"]
+  >().toEqualTypeOf<YextEntityField<TranslatableString>>();
 });

@@ -25,7 +25,7 @@ type ResolveComponentDataOptions = {
   isDarkBackground?: boolean;
   className?: string;
   color?: ThemeColor;
-  output?: "render" | "plainText";
+  output?: "render" | "plainText" | "data";
 };
 
 /**
@@ -79,6 +79,19 @@ export function resolveComponentData(
   streamDocument?: Record<string, any>
 ): TranslatableAssetImage | undefined;
 
+/** Resolve localized data without creating rich-text elements. */
+export function resolveComponentData<T>(
+  data:
+    | YextEntityField<T>
+    | TranslatableString
+    | TranslatableRichText
+    | TranslatableAssetImage
+    | undefined,
+  locale: string,
+  streamDocument: Record<string, any> | undefined,
+  options: { output: "data" }
+): T | undefined;
+
 // --- Implementation ---
 export function resolveComponentData<T>(
   data:
@@ -98,7 +111,11 @@ export function resolveComponentData<T>(
 
   // Fully resolve the resulting value, converting any translatable
   // objects into their final string or React element form.
-  const resolved = resolveTranslatableType(rawValue, locale);
+  const resolved = resolveTranslatableType(
+    rawValue,
+    locale,
+    options?.output === "data"
+  );
 
   // If the resolved value is a RTF react element, wrap it in a div with tailwind classes
   if (React.isValidElement(resolved)) {
@@ -130,7 +147,8 @@ export function resolveComponentData<T>(
  */
 const resolveTranslatableType = (
   value: any,
-  locale: string
+  locale: string,
+  dataOnly = false
 ): any | string | React.ReactElement => {
   // If the value is already a React element, return it immediately.
   if (React.isValidElement(value)) {
@@ -143,7 +161,7 @@ const resolveTranslatableType = (
 
   // Handle a direct RichText object that is not inside a Translatable object.
   if (isRichText(value)) {
-    return toStringOrElement(value);
+    return dataOnly ? value : toStringOrElement(value);
   }
 
   const localizedValue = value[locale] ?? value.defaultValue;
@@ -152,7 +170,7 @@ const resolveTranslatableType = (
 
   if (isTranslatableContainer) {
     if (isRichText(localizedValue)) {
-      return toStringOrElement(localizedValue);
+      return dataOnly ? localizedValue : toStringOrElement(localizedValue);
     }
 
     if (
@@ -163,17 +181,17 @@ const resolveTranslatableType = (
       return localizedValue ?? "";
     }
 
-    return resolveTranslatableType(localizedValue, locale);
+    return resolveTranslatableType(localizedValue, locale, dataOnly);
   }
 
   if (Array.isArray(value)) {
-    return value.map((item) => resolveTranslatableType(item, locale));
+    return value.map((item) => resolveTranslatableType(item, locale, dataOnly));
   }
 
   // If it's an object, recursively resolve each property.
   const newValue: { [key: string]: any } = {};
   for (const key in value) {
-    newValue[key] = resolveTranslatableType(value[key], locale);
+    newValue[key] = resolveTranslatableType(value[key], locale, dataOnly);
   }
   return newValue;
 };

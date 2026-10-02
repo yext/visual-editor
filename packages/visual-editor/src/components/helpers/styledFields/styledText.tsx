@@ -1,4 +1,5 @@
 import * as React from "react";
+import type { RichText } from "../../../types/types.ts";
 import { MaybeRTF } from "../maybeRTF.tsx";
 import { type StyledTextValue } from "../../../fields/styledFields/StyledTextField.tsx";
 import { getTextColorClass, getTextColorStyle } from "../../../utils/colors.ts";
@@ -93,7 +94,7 @@ export const renderStyledRichText = ({
   className,
   text,
 }: {
-  content: React.ReactNode;
+  content: string | RichText | undefined;
   align?: StyledTextAlignment;
   className?: string;
   text?: StyledTextValue;
@@ -138,61 +139,14 @@ export const renderStyledRichText = ({
     );
   }
 
-  if (!React.isValidElement(content)) {
-    return content;
-  }
-
-  if (content.type === MaybeRTF) {
-    return (
-      <MaybeRTF
-        {...content.props}
-        className={themeManagerCn(content.props.className, richTextClassName)}
-        richTextStyleOverrides={{
-          ...content.props.richTextStyleOverrides,
-          ...text,
-        }}
-        style={{
-          ...content.props.style,
-          ...richTextStyle,
-        }}
-      />
-    );
-  }
-
-  if (
-    React.isValidElement(content.props.children) &&
-    typeof content.props.children.props.className === "string" &&
-    content.props.children.props.className.includes("rtf-wrapper")
-  ) {
-    return React.cloneElement(content, {
-      children: React.cloneElement(content.props.children, {
-        className: themeManagerCn(
-          content.props.children.props.className,
-          richTextClassName
-        ),
-        style: {
-          ...content.props.children.props.style,
-          ...richTextStyle,
-        },
-      }),
-    });
-  }
-
-  const innerContent = React.isValidElement(content.props.children)
-    ? React.cloneElement(content.props.children, {
-        className: themeManagerCn(content.props.children.props.className),
-        style: content.props.children.props.style,
-      })
-    : content.props.children;
-
-  return React.cloneElement(content, {
-    className: themeManagerCn(content.props.className, richTextClassName),
-    style: {
-      ...content.props.style,
-      ...richTextStyle,
-    },
-    children: innerContent,
-  });
+  return content?.html?.trim() ? (
+    <MaybeRTF
+      data={content}
+      className={richTextClassName}
+      richTextStyleOverrides={text}
+      style={richTextStyle}
+    />
+  ) : null;
 };
 
 type StyledTextElementProps = {
