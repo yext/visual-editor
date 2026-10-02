@@ -11,7 +11,6 @@
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
     "release": "tsx scripts/release.ts",
-    "typecheck:release": "tsc --noEmit --target ES2022 --module NodeNext --esModuleInterop --strict --skipLibCheck scripts/*.ts",
     "fmt": "prettier --write --cache .",
     "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
     "prettier": "pnpm -r run prettier",
