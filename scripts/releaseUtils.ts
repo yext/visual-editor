@@ -23,6 +23,42 @@ if (isDryRun) {
 
 export const versionIncrements: ReleaseType[] = ["patch", "minor", "major"];
 
+/** Returns the release-type tag, when supported, and the tag for any release type. */
+export function getVersionedNpmTags(version: string): string[] {
+  const parsedVersion = semver.parse(version);
+  if (
+    !parsedVersion ||
+    version !==
+      parsedVersion.version +
+        (parsedVersion.build.length ? `+${parsedVersion.build.join(".")}` : "")
+  ) {
+    throw new Error(`Invalid release version: ${version}`);
+  }
+
+  const identifier = parsedVersion.prerelease[0];
+  const tags = [];
+  if (
+    identifier === undefined ||
+    ["alpha", "beta", "rc"].includes(String(identifier))
+  ) {
+    tags.push(`${identifier ?? "stable"}-v${parsedVersion.major}`);
+  }
+
+  tags.push(`latest-v${parsedVersion.major}`);
+  return tags;
+}
+
+/** Returns the npm tag selected by the original release rules. */
+export function getNpmTag(version: string): string {
+  return version.includes("rc")
+    ? "rc"
+    : version.includes("beta")
+      ? "beta"
+      : version.includes("alpha")
+        ? "alpha"
+        : "latest";
+}
+
 interface Pkg {
   name: string;
   version: string;
@@ -94,7 +130,7 @@ export function getVersionChoices(currentVersion: string): VersionChoice[] {
   function inc(
     i: ReleaseType,
     tag = currentAlpha ? "alpha" : currentBeta ? "beta" : "rc",
-  ) {
+  ): string {
     const incVersion = semver.inc(currentVersion, i, tag, "1");
     if (incVersion) {
       return incVersion;
@@ -148,17 +184,17 @@ export function getVersionChoices(currentVersion: string): VersionChoice[] {
   } else if (currentAlpha) {
     versionChoices.push({
       title: "alpha",
-      value: inc("patch") + "-alpha.1",
+      value: inc("prerelease", "alpha"),
     });
   } else if (currentBeta) {
     versionChoices.push({
       title: "beta",
-      value: inc("patch") + "-beta.1",
+      value: inc("prerelease", "beta"),
     });
   } else if (currentRc) {
     versionChoices.push({
       title: "rc",
-      value: inc("patch") + "-rc.1",
+      value: inc("prerelease", "rc"),
     });
   } else {
     versionChoices.push({

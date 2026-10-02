@@ -4,6 +4,22 @@
 
 This library provides components necessary to set up a Section Library Pages repository that can interact with Visual Editor in the Yext platform.
 
+## Package release tags
+
+Run `pnpm run release` from this repository. The confirmation prompt shows the
+npm tags. CI publishes with the existing tag, then adds the major-version tags.
+
+| Release type      | New npm tag       |
+| ----------------- | ----------------- |
+| Stable            | `stable-v<major>` |
+| Alpha             | `alpha-v<major>`  |
+| Beta              | `beta-v<major>`   |
+| Release candidate | `rc-v<major>`     |
+| Any release type  | `latest-v<major>` |
+
+For example, `2.0.0-beta.1` uses `beta-v2` and `latest-v2`. Stable `2.0.0` uses
+`stable-v2` and `latest-v2`. Other prerelease identifiers only get `latest-v<major>`.
+
 ## CLI
 
 `@yext/visual-editor` includes the `yextve` CLI for creating a Section Library revision from the current Git commit. In a repository that uses Visual Editor, install the package and run its local CLI:
