@@ -28,3 +28,5 @@ export {
   type BreadcrumbsSectionProps,
   BreadcrumbsSection,
 } from "./Breadcrumbs.tsx";
+export { TestHero } from "./TestHero.tsx";
+export { TestBanner } from "./TestBanner.tsx";

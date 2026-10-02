@@ -29,6 +29,31 @@
   }
 }
 
+.puck-header.layout-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 16px;
+
+  .header-left {
+    min-width: 0;
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .header-center {
+    display: none;
+  }
+
+  .dynamic-config-controls {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding-top: 12px;
+  }
+}
+
 .ve-loading-wrapper {
   width: 100vw;
   height: 100vh;
