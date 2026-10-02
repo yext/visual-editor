@@ -106,8 +106,13 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
     }
     setSelected(locale);
     let destination = `/${path}`;
-    const isLocatorDocument =
-      JSON.parse(streamDocument?._pageset || "{}").type === "LOCATOR";
+    let isLocatorDocument = false;
+    try {
+      isLocatorDocument =
+        JSON.parse(streamDocument?._pageset || "{}").type === "LOCATOR";
+    } catch {
+      // continue
+    }
 
     if (isLocatorDocument) {
       const queryParams = new URLSearchParams(window.location.search);
