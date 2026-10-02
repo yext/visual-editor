@@ -1,3 +1,14 @@
+#### 2.0.0-beta.2 (2026-10-02)
+
+##### New Features
+
+- add npm release tags by major version and identifier ([#1341](https://github.com/yext/visual-editor/pull/1341)) ([214b6c58](https://github.com/yext/visual-editor/commit/214b6c5847d66ca9e1ec38f563c6f3a5218fed0d))
+- loosen itemSource mapping requirements ([#1283](https://github.com/yext/visual-editor/pull/1283)) ([34edfb5f](https://github.com/yext/visual-editor/commit/34edfb5fbc3adeb93a1900653a11d88f30c96b6a))
+
+##### Bug Fixes
+
+- reduce request frequency in deploy script ([#1340](https://github.com/yext/visual-editor/pull/1340)) ([96594cf7](https://github.com/yext/visual-editor/commit/96594cf779682e53d2fc808d6502a507404c4d48))
+
 #### 2.0.0-beta.1 (2026-09-29)
 
 ##### Chores
