@@ -18,6 +18,20 @@ const MainContentComponent: PuckComponent<MainContentProps> = ({
     >
       <Content
         disallow={[
+          "Address",
+          "BodyText",
+          "CTAGroup",
+          "CTAWrapper",
+          "Emails",
+          "GetDirections",
+          "HeadingText",
+          "HoursTable",
+          "HoursStatus",
+          "ImageWrapper",
+          "MapboxStaticMap",
+          "Phone",
+          "TextList",
+          "Text",
           "ExpandedHeader",
           "ExpandedFooter",
           "Header",
