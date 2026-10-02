@@ -184,17 +184,17 @@ export function getVersionChoices(currentVersion: string): VersionChoice[] {
   } else if (currentAlpha) {
     versionChoices.push({
       title: "alpha",
-      value: inc("patch") + "-alpha.1",
+      value: inc("prerelease", "alpha"),
     });
   } else if (currentBeta) {
     versionChoices.push({
       title: "beta",
-      value: inc("patch") + "-beta.1",
+      value: inc("prerelease", "beta"),
     });
   } else if (currentRc) {
     versionChoices.push({
       title: "rc",
-      value: inc("patch") + "-rc.1",
+      value: inc("prerelease", "rc"),
     });
   } else {
     versionChoices.push({

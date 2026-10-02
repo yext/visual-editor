@@ -137,7 +137,7 @@ for (const { version, expectedChoices } of [
     version: "2.0.0-alpha.3",
     expectedChoices: [
       { title: "next (2.0.0-alpha.4)", value: "2.0.0-alpha.4" },
-      { title: "alpha (2.0.0-alpha.1)", value: "2.0.0-alpha.1" },
+      { title: "alpha (2.0.0-alpha.4)", value: "2.0.0-alpha.4" },
       { title: "custom (custom)", value: "custom" },
     ],
   },
@@ -145,7 +145,7 @@ for (const { version, expectedChoices } of [
     version: "2.0.0-beta.1",
     expectedChoices: [
       { title: "next (2.0.0-beta.2)", value: "2.0.0-beta.2" },
-      { title: "beta (2.0.0-beta.1)", value: "2.0.0-beta.1" },
+      { title: "beta (2.0.0-beta.2)", value: "2.0.0-beta.2" },
       { title: "custom (custom)", value: "custom" },
     ],
   },
@@ -153,7 +153,7 @@ for (const { version, expectedChoices } of [
     version: "2.0.0-rc.2",
     expectedChoices: [
       { title: "next (2.0.0-rc.3)", value: "2.0.0-rc.3" },
-      { title: "rc (2.0.0-rc.1)", value: "2.0.0-rc.1" },
+      { title: "rc (2.0.0-rc.3)", value: "2.0.0-rc.3" },
       { title: "custom (custom)", value: "custom" },
     ],
   },
@@ -173,7 +173,7 @@ for (const { version, expectedChoices } of [
     ],
   },
 ]) {
-  test(`when the version is ${version} then release choices keep the existing increments`, (): void => {
+  test(`when the version is ${version} then release choices select the next versions`, (): void => {
     assert.deepEqual(getVersionChoices(version), expectedChoices);
   });
 }
