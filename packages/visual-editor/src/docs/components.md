@@ -134,13 +134,13 @@ Props for the HoursTable component.
 
 Additional CSS classes to apply to the image.
 
-| Prop            | Type                                                                                                              | Description                                   | Default |
-| :-------------- | :---------------------------------------------------------------------------------------------------------------- | :-------------------------------------------- | :------ |
-| `className`     | `string`                                                                                                          | Additional CSS classes to apply to the image. |         |
-| `data`          | `{ image: YextEntityField<ImageType \| ComplexImageType \| TranslatableAssetImage>; link?: TranslatableString; }` |                                               |         |
-| `hideWidthProp` | `boolean`                                                                                                         |                                               |         |
-| `sizes`         | `ImgSizesByBreakpoint`                                                                                            |                                               |         |
-| `styles`        | `ImageStylingProps`                                                                                               | Size and aspect ratio of the image.           |         |
+| Prop            | Type                                                                             | Description                                   | Default |
+| :-------------- | :------------------------------------------------------------------------------- | :-------------------------------------------- | :------ |
+| `className`     | `string`                                                                         | Additional CSS classes to apply to the image. |         |
+| `data`          | `{ image: YextEntityField<TranslatableAssetImage>; link?: TranslatableString; }` |                                               |         |
+| `hideWidthProp` | `boolean`                                                                        |                                               |         |
+| `sizes`         | `ImgSizesByBreakpoint`                                                           |                                               |         |
+| `styles`        | `ImageStylingProps`                                                              | Size and aspect ratio of the image.           |         |
 
 ---
 
