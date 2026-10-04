@@ -7,6 +7,7 @@ import { CTASelectorFieldOverride } from "./CTASelectorField.tsx";
 import { MultiSelectorFieldOverride } from "./MultiSelectorField.tsx";
 import { OptionalNumberFieldOverride } from "./OptionalNumberField.tsx";
 import { ImageFieldOverride } from "./ImageField.tsx";
+import { PriceFieldOverride } from "./PriceField.tsx";
 import { StyledButtonFieldOverride } from "./styledFields/StyledButtonField.tsx";
 import { StyledImageFieldOverride } from "./styledFields/StyledImageField.tsx";
 import { StyledLinkFieldOverride } from "./styledFields/StyledLinkField.tsx";
@@ -26,6 +27,7 @@ export const YextPuckFieldOverrides = {
   multiSelector: MultiSelectorFieldOverride,
   fontSizeSelector: FontSizeSelectorFieldOverride,
   image: ImageFieldOverride,
+  price: PriceFieldOverride,
   optionalNumber: OptionalNumberFieldOverride,
   styledButton: StyledButtonFieldOverride,
   styledImage: StyledImageFieldOverride,

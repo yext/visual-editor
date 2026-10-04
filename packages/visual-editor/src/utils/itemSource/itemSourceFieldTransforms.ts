@@ -19,6 +19,9 @@ import { type EntityFieldTypes } from "../../internal/utils/getFilteredEntityFie
 export function getMappingItemField<TValue>(
   field: YextFieldDefinition<TValue>
 ): YextFieldDefinition<TValue> {
+  if (field.type === "price") {
+    return { ...field, disableConstantValueToggle: true };
+  }
   if (
     isEntityFieldDefinition(field) &&
     field.disableConstantValueToggle === undefined
@@ -164,6 +167,15 @@ export function getDefaultValueForField(
   field: YextFieldDefinition<any>,
   constantValueEnabled: boolean
 ): unknown {
+  if (field.type === "price") {
+    return {
+      field: "",
+      constantValueEnabled: field.disableConstantValueToggle
+        ? false
+        : constantValueEnabled,
+      constantValue: undefined,
+    };
+  }
   if (isEntityFieldDefinition(field)) {
     return {
       field: "",
@@ -196,6 +208,9 @@ export function getDefaultValueForField(
 function getNestedItemSourceTypes(
   field: YextFieldDefinition<any>
 ): EntityFieldTypes[][] {
+  if (field.type === "price") {
+    return [["type.price"]];
+  }
   if (isEntityFieldDefinition(field)) {
     return field.filter.types?.length ? [field.filter.types] : [];
   }

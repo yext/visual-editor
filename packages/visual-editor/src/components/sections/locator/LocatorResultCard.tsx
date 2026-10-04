@@ -1,3 +1,4 @@
+import type { ImageType } from "@yext/pages-components";
 import React from "react";
 import { Trans, useTranslation } from "react-i18next";
 import {
@@ -46,7 +47,6 @@ import {
   HoursTableProps,
   HoursTableStyleFields,
 } from "../../contentBlocks/HoursTable.tsx";
-import { getImageUrl } from "../../contentBlocks/image/Image.tsx";
 import {
   Accordion,
   AccordionContent,
@@ -1208,20 +1208,20 @@ const ImageSection = (props: {
   const { i18n } = useTranslation();
 
   if (image.constantValueEnabled) {
-    const resolvedImage = image.constantValue
-      ? resolveComponentData(image.constantValue, i18n.language, location)
-      : undefined;
-    const imageUrl = getImageUrl(resolvedImage, i18n.language);
-    const showImageSection =
-      !!imageUrl && image.liveVisibility && !!resolvedImage;
+    const imageData = resolveComponentData<ImageType>(
+      image.constantValue,
+      i18n.language,
+      location,
+      { output: "data" }
+    );
+    if (!imageData?.url || !image.liveVisibility) {
+      return null;
+    }
     return (
-      showImageSection && (
-        <Image
-          image={resolvedImage}
-          streamDocumentOverride={location}
-          className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-image-borderRadius min-w-fit"
-        />
-      )
+      <Image
+        image={imageData}
+        className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-image-borderRadius min-w-fit"
+      />
     );
   }
 
@@ -1239,7 +1239,6 @@ const ImageSection = (props: {
     showImageSection && (
       <Image
         image={imageData}
-        streamDocumentOverride={location}
         className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-image-borderRadius min-w-fit"
       />
     )

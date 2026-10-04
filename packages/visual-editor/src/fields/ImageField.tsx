@@ -27,6 +27,11 @@ import {
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { type EmbeddedStringOption } from "../editor/EmbeddedFieldStringInput.tsx";
+import {
+  EntityFieldSelectorFieldOverride,
+  type EntityFieldSelectorField,
+} from "./EntityFieldSelectorField.tsx";
+import { type RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 
 export type ImagePayload = {
   id: string;
@@ -43,6 +48,8 @@ export type ImageField = BaseField & {
   visible?: boolean;
   hideAltTextField?: boolean;
   maxFileSizeBytes?: number;
+  filter?: RenderEntityFieldFilter<Record<string, any>>;
+  constantValueEditor?: boolean;
   getAltTextOptions?: (
     templateMetadata: TemplateMetadata
   ) => EmbeddedStringOption[];
@@ -70,6 +77,22 @@ export const ImageFieldOverride = ({
   onChange,
   value,
 }: ImageFieldOverrideProps) => {
+  if (!field.constantValueEditor) {
+    return (
+      <EntityFieldSelectorFieldOverride
+        field={
+          {
+            ...field,
+            type: "entityField",
+            filter: field.filter ?? { types: ["type.image"] },
+          } as EntityFieldSelectorField
+        }
+        onChange={onChange}
+        value={value}
+      />
+    );
+  }
+
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const templateMetadata: TemplateMetadata = useTemplateMetadata();
@@ -137,6 +160,22 @@ export const ImageFieldOverride = ({
         } as TranslatableAssetImage);
       },
     };
+    if (window.location.hostname === "localhost") {
+      pendingImageSession = undefined;
+      const url = window.prompt("Enter Image URL:");
+      if (!url) {
+        return;
+      }
+      const image = { alternateText: "", url, height: 1, width: 1 };
+      onChange({
+        ...localizedContainer,
+        defaultValue: localizedContainer?.defaultValue ?? image,
+        [locale]: image,
+        hasLocalizedValue: "true",
+      } as TranslatableAssetImage);
+      return;
+    }
+
     openImageAssetSelector({
       payload: {
         type: "ImageAsset",

@@ -1,9 +1,7 @@
 import { setDeep } from "@puckeditor/core";
-import { ComplexImageType, ImageType } from "@yext/pages-components";
+import { ImageType } from "@yext/pages-components";
 import {
   AssetImageType,
-  isLocalizedAssetImage,
-  resolveLocalizedAssetImage,
   TranslatableAssetImage,
 } from "../../../types/images.ts";
 import { EntityField } from "../../../editor/EntityField.tsx";
@@ -20,7 +18,6 @@ import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
 
 import * as React from "react";
-import { useTranslation } from "react-i18next";
 import { EmptyImageState } from "./EmptyImageState.tsx";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
@@ -32,9 +29,7 @@ const LINK_REGEX_VALIDATION = /^(https?:\/\/[^\s]+|\/[^\s]*|#[^\s]*)$/;
 export interface ImageWrapperProps {
   data: {
     /** The image to display. */
-    image: YextEntityField<
-      ImageType | ComplexImageType | TranslatableAssetImage
-    >;
+    image: YextEntityField<TranslatableAssetImage>;
     link?: TranslatableString;
   };
 
@@ -44,7 +39,7 @@ export interface ImageWrapperProps {
   /** @internal Controlled data from the parent section. */
   parentData?: {
     field: string;
-    image: ImageType | ComplexImageType | TranslatableAssetImage | undefined;
+    image: ImageType | undefined;
   };
 
   /** Additional CSS classes to apply to the image. */
@@ -64,7 +59,7 @@ export const ImageWrapperFields = {
     label: msg("fields.data", "Data"),
     objectFields: {
       image: {
-        type: "entityField",
+        type: "image",
         label: msg("fields.options.image", "Image"),
         filter: {
           types: ["type.image"],
@@ -94,25 +89,6 @@ export const ImageWrapperFields = {
   },
 } satisfies YextFields<ImageWrapperProps>;
 
-export const getImageUrl = (
-  image: ImageType | ComplexImageType | TranslatableAssetImage | undefined,
-  locale: string
-): string | undefined => {
-  if (!image) {
-    return undefined;
-  }
-
-  if (isLocalizedAssetImage(image)) {
-    return resolveLocalizedAssetImage(image, locale)?.url;
-  }
-
-  if ("image" in image) {
-    return image.image?.url;
-  }
-
-  return image.url;
-};
-
 const ImageWrapperComponent: typeof ImageWrapper.render = (props) => {
   const {
     data,
@@ -129,12 +105,11 @@ const ImageWrapperComponent: typeof ImageWrapper.render = (props) => {
     hideWidthProp,
     showImageConstrain = false,
   } = props;
-  const { i18n } = useTranslation();
   const resolvedImage = parentData ? parentData.image : data.image;
   const source = puck.metadata.fieldSources?.get(`${props.id}:data.image`) as
     ImageWrapperProps["data"]["image"] | undefined;
 
-  const imageUrl = getImageUrl(resolvedImage, i18n.language);
+  const imageUrl = resolvedImage?.url;
   const isEmpty =
     !resolvedImage ||
     !imageUrl ||
@@ -218,9 +193,11 @@ export const imageDefaultProps = {
     image: {
       field: "",
       constantValue: {
-        url: PLACEHOLDER_IMAGE_URL,
-        height: 360,
-        width: 640,
+        defaultValue: {
+          url: PLACEHOLDER_IMAGE_URL,
+          height: 360,
+          width: 640,
+        },
       },
       constantValueEnabled: true,
     },

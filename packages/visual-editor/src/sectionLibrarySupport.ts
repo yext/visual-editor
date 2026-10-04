@@ -21,7 +21,6 @@ export {
   type HeadingProps,
 } from "./components/atoms/heading.tsx";
 export {
-  getImageAltText,
   Image,
   imgSizesHelper,
   type ImageProps,

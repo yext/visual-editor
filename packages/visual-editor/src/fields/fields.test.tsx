@@ -161,7 +161,7 @@ it("when a schema contains content and native fields then only content render ty
     },
     render: ({ title, cards, control }) => {
       expectTypeOf(title).toEqualTypeOf<string | undefined>();
-      expectTypeOf(cards[0].label).toEqualTypeOf<string | undefined>();
+      expectTypeOf(cards[0].label).toEqualTypeOf<string>();
       expectTypeOf(cards[0].content).toBeFunction();
       expectTypeOf(control).toEqualTypeOf<YextEntityField<string>>();
       return <>{title}</>;
@@ -174,4 +174,31 @@ it("when a schema contains content and native fields then only content render ty
   expectTypeOf<
     NonNullable<typeof component.defaultProps>["title"]
   >().toEqualTypeOf<YextEntityField<TranslatableString>>();
+});
+
+it("when a schema declares price then render props contain a display string and defaults remain structured", () => {
+  const fields = { price: { type: "price" } } satisfies YextFields<{
+    price: YextEntityField<{ value: number; currencyCode: string }>;
+  }>;
+  const component: YextComponentConfig<
+    { price: YextEntityField<{ value: number; currencyCode: string }> },
+    typeof fields
+  > = {
+    fields,
+    defaultProps: {
+      price: {
+        field: "",
+        constantValue: { value: 0, currencyCode: "USD" },
+        constantValueEnabled: true,
+      },
+    },
+    render: ({ price }) => {
+      expectTypeOf(price).toEqualTypeOf<string | undefined>();
+      return <>{price}</>;
+    },
+  };
+  expect(component.defaultProps?.price.constantValue).toEqual({
+    value: 0,
+    currencyCode: "USD",
+  });
 });

@@ -18,6 +18,8 @@ import type { CTASelectorField } from "./CTASelectorField.tsx";
 import type { MultiSelectorField } from "./MultiSelectorField.tsx";
 import type { OptionalNumberField } from "./OptionalNumberField.tsx";
 import type { ImageField } from "./ImageField.tsx";
+import type { PriceField } from "./PriceField.tsx";
+import type { ImageType } from "@yext/pages-components";
 import type { StyledButtonField } from "./styledFields/StyledButtonField.tsx";
 import type { StyledImageField } from "./styledFields/StyledImageField.tsx";
 import type { StyledLinkField } from "./styledFields/StyledLinkField.tsx";
@@ -39,6 +41,7 @@ export type YextPuckFields = {
   multiSelector: MultiSelectorField;
   fontSizeSelector: FontSizeSelectorField;
   image: ImageField;
+  price: PriceField;
   optionalNumber: OptionalNumberField;
   styledButton: StyledButtonField;
   styledImage: StyledImageField;
@@ -81,13 +84,13 @@ export type YextFieldDefinition<ValueType = any> =
 /** Localize content data without changing native values or creating React elements. */
 type ContentValue<Value> = 0 extends 1 & Value
   ? Value
-  : Value extends YextEntityField<infer Constant, any>
+  : Value extends { field: string; constantValue: infer Constant }
     ? ContentValue<Constant> | undefined
     : Value extends readonly unknown[]
       ? { [Key in keyof Value]: ContentValue<Value[Key]> }
       : Value extends object
         ? "defaultValue" extends keyof Value
-          ? ContentValue<Value["defaultValue"]>
+          ? ContentValue<NonNullable<Value["defaultValue"]>>
           : { [Key in keyof Value]: ContentValue<Value[Key]> }
         : Value;
 
@@ -98,23 +101,36 @@ type FieldValue<Value, Definition> = YextPuckField extends Definition
     ? Value extends YextEntityField<any, infer Mappings>
       ? ContentValue<Mappings>[]
       : never
-    : Definition extends {
-          type: "entityField" | "ctaSelector" | "image" | "translatableString";
-        }
-      ? ContentValue<Value>
-      : Definition extends { type: "comprehensiveCTA" }
-        ? {
-            [Key in keyof Value]: Key extends "data"
-              ? ContentValue<Value[Key]>
-              : Value[Key];
+    : Definition extends { type: "price" | "image" }
+      ? {
+          price: string | undefined;
+          image: ImageType | undefined;
+        }[Definition["type"]]
+      : Definition extends {
+            type: "entityField" | "ctaSelector" | "translatableString";
           }
-        : Definition extends { type: "object"; objectFields: infer Children }
-          ? ComponentValues<Value, Children>
-          : Definition extends { type: "array"; arrayFields: infer Children }
-            ? Value extends readonly unknown[]
-              ? { [Key in keyof Value]: ComponentValues<Value[Key], Children> }
-              : Value
-            : Value;
+        ? ContentValue<Value>
+        : Definition extends { type: "comprehensiveCTA" }
+          ? {
+              [Key in keyof Value]: Key extends "data"
+                ? ContentValue<Value[Key]>
+                : Value[Key];
+            }
+          : Definition extends {
+                type: "object";
+                objectFields: infer Children;
+              }
+            ? ComponentValues<Value, Children>
+            : Definition extends {
+                  type: "array";
+                  arrayFields: infer Children;
+                }
+              ? Value extends readonly unknown[]
+                ? {
+                    [Key in keyof Value]: ComponentValues<Value[Key], Children>;
+                  }
+                : Value
+              : Value;
 
 type ComponentValues<Props, Definitions> = 0 extends 1 & Props
   ? Props

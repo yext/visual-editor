@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { YextAutoField } from "./YextAutoField.tsx";
@@ -8,6 +8,19 @@ import { type ImageField } from "./ImageField.tsx";
 const { sendToParentMock, translatableStringFieldMock } = vi.hoisted(() => ({
   sendToParentMock: vi.fn(),
   translatableStringFieldMock: vi.fn(),
+}));
+
+vi.mock("../hooks/useEntityFields.tsx", () => ({
+  useEntityFields: () => ({ fields: [] }),
+}));
+
+vi.mock("@puckeditor/core", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@puckeditor/core")>()),
+  createUsePuck: () => (selector: (state: unknown) => unknown) =>
+    selector({
+      appState: { ui: { itemSelector: null } },
+      getItemBySelector: () => undefined,
+    }),
 }));
 
 vi.mock("react-i18next", async (importOriginal) => {
@@ -29,7 +42,10 @@ vi.mock("../internal/hooks/useMessage.ts", () => ({
   }),
 }));
 
-vi.mock("../internal/hooks/useMessageReceivers.ts", () => ({
+vi.mock("../internal/hooks/useMessageReceivers.ts", async (importOriginal) => ({
+  ...(await importOriginal<
+    typeof import("../internal/hooks/useMessageReceivers.ts")
+  >()),
   useTemplateMetadata: () => ({
     locatorDisplayFields: {
       c_title: {
@@ -84,6 +100,7 @@ const renderImageField = (
 
 describe("ImageField", () => {
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
     translatableStringFieldMock.mockReset();
     sendToParentMock.mockReset();
@@ -104,13 +121,17 @@ describe("ImageField", () => {
         getAltTextOptions,
       },
       {
-        en: {
-          alternateText: "",
-          url: "https://example.com/image.jpg",
-          height: 1,
-          width: 1,
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          en: {
+            alternateText: "",
+            url: "https://example.com/image.jpg",
+            height: 1,
+            width: 1,
+          },
+          hasLocalizedValue: "true",
         },
-        hasLocalizedValue: "true",
       }
     );
 
@@ -128,4 +149,40 @@ describe("ImageField", () => {
     });
     expect(screen.getByText("Alt Text (en)")).toBeDefined();
   });
+
+  it.each([
+    {
+      button: "Choose Image",
+      constantValue: { defaultValue: { url: "", height: 0, width: 0 } },
+    },
+    {
+      button: "Change",
+      constantValue: { defaultValue: { url: "/old.jpg", height: 1, width: 1 } },
+    },
+  ])(
+    "when localhost $button selects an image then the authored value updates without a parent message",
+    ({ button, constantValue }) => {
+      vi.spyOn(window, "prompt").mockReturnValue("/selected.jpg");
+      const { onChange } = renderImageField(
+        { type: "image" },
+        {
+          field: "",
+          constantValueEnabled: true,
+          constantValue,
+        }
+      );
+      fireEvent.click(screen.getByRole("button", { name: button }));
+      expect(window.prompt).toHaveBeenCalledOnce();
+      expect(onChange).toHaveBeenCalledWith(
+        expect.objectContaining({
+          field: "",
+          constantValueEnabled: true,
+          constantValue: expect.objectContaining({
+            en: expect.objectContaining({ url: "/selected.jpg" }),
+          }),
+        })
+      );
+      expect(sendToParentMock).not.toHaveBeenCalled();
+    }
+  );
 });

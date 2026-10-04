@@ -1,26 +1,12 @@
 import * as React from "react";
-import {
-  ComplexImageType,
-  Image as ImageComponent,
-  ImageType,
-} from "@yext/pages-components";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { Image as ImageComponent, ImageType } from "@yext/pages-components";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import {
-  AssetImageType,
-  isLocalizedAssetImage,
-  resolveLocalizedAssetImage,
-  TranslatableAssetImage,
-  ImageFillType,
-} from "../../types/images.ts";
-import { TranslatableString } from "../../types/types.ts";
-import { useTranslation } from "react-i18next";
-import { StreamDocument } from "../../utils/types/StreamDocument.ts";
+import { ImageFillType } from "../../types/images.ts";
 import { getThemeValue } from "../../utils/getThemeValue.ts";
 
 export interface ImageProps {
-  image: ImageType | ComplexImageType | TranslatableAssetImage;
+  image: ImageType;
   aspectRatio?: number;
   width?: number;
   imageFillType?: ImageFillType;
@@ -28,61 +14,19 @@ export interface ImageProps {
   /** sizes attribute of the underlying img tag */
   sizes?: string;
   loading?: "lazy" | "eager";
-  /**
-   * Entity data used to resolve embedded fields.
-   * Defaults to the stream document if not provided.
-   */
-  streamDocumentOverride?: Record<string, any>;
   style?: React.CSSProperties;
 }
 
-export const getImageAltText = (
-  image: ImageType | ComplexImageType | AssetImageType | undefined,
-  locale: string,
-  streamDocument: StreamDocument | Record<string, any>
-): string | undefined => {
-  if (!image) {
-    return undefined;
-  }
-
-  let altTextField: string | TranslatableString | undefined = undefined;
-  if (isComplexImageType(image)) {
-    altTextField = image.image.alternateText;
-  } else if (image?.alternateText) {
-    altTextField = image.alternateText;
-  }
-
-  return typeof altTextField === "object"
-    ? resolveComponentData(altTextField, locale, streamDocument)
-    : altTextField;
-};
-
 export const Image: React.FC<ImageProps> = ({
-  image: rawImage,
+  image,
   aspectRatio,
   width,
   imageFillType,
   className,
   sizes,
   loading = "lazy",
-  streamDocumentOverride,
   style,
 }) => {
-  const { i18n } = useTranslation();
-  const streamDocument: StreamDocument | Record<string, any> =
-    streamDocumentOverride ?? useDocument();
-
-  const image = React.useMemo(() => {
-    if (rawImage && isLocalizedAssetImage(rawImage)) {
-      return resolveLocalizedAssetImage(rawImage, i18n.language);
-    }
-    return rawImage as ImageType | ComplexImageType | AssetImageType;
-  }, [rawImage, i18n.language]);
-
-  if (!image) {
-    return null;
-  }
-
   // Calculate height based on width and aspect ratio if width is provided
   const calculatedHeight =
     width && aspectRatio ? width / aspectRatio : undefined;
@@ -92,7 +36,6 @@ export const Image: React.FC<ImageProps> = ({
     ? `overflow-hidden` // No w-full when width is specified
     : `overflow-hidden w-full`; // Use w-full when no width specified
 
-  const altText = getImageAltText(image, i18n.language, streamDocument);
   const imageStyle: React.CSSProperties = {
     objectFit: imageFillType === "fit" ? "contain" : "cover",
     ...style,
@@ -108,7 +51,7 @@ export const Image: React.FC<ImageProps> = ({
     >
       {aspectRatio ? (
         <ImageComponent
-          image={{ ...image, alternateText: altText }}
+          image={image}
           layout={"aspect"}
           aspectRatio={aspectRatio}
           className="object-cover w-full h-full"
@@ -119,7 +62,7 @@ export const Image: React.FC<ImageProps> = ({
         />
       ) : !!width && !!calculatedHeight ? (
         <ImageComponent
-          image={{ ...image, alternateText: altText }}
+          image={image}
           layout={"fixed"}
           width={width}
           height={calculatedHeight}
@@ -131,8 +74,8 @@ export const Image: React.FC<ImageProps> = ({
         />
       ) : (
         <img
-          src={isComplexImageType(image) ? image.image.url : image.url}
-          alt={altText}
+          src={image.url}
+          alt={image.alternateText}
           className="object-cover w-full h-full"
           loading={loading}
           style={imageStyle}
@@ -141,12 +84,6 @@ export const Image: React.FC<ImageProps> = ({
     </div>
   );
 };
-
-function isComplexImageType(
-  image: ImageType | ComplexImageType | AssetImageType
-): image is ComplexImageType {
-  return "image" in image;
-}
 
 export type ImgSizesByBreakpoint = {
   base: string;

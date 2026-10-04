@@ -14,6 +14,9 @@ import type { StreamDocument } from "../utils/types/StreamDocument.ts";
 import type { YextFieldDefinition } from "./fields.ts";
 import { i18nPageInstance } from "../utils/i18n/i18nInstances.ts";
 import { getCTAType } from "../internal/utils/ctaFieldUtils.ts";
+import type { ImageType } from "@yext/pages-components";
+import { formatCurrency } from "../utils/productPrice.ts";
+import type { ProductPrice } from "../types/types.ts";
 
 /**
  * Build render-time transforms for Yext content fields automatically by field type.
@@ -53,12 +56,18 @@ export const createPuckFieldTransforms = (
     if (
       componentId &&
       propPath &&
-      (field.yextFieldType ?? field.type) === "entityField"
+      ["entityField", "image", "price"].includes(
+        field.yextFieldType ?? field.type
+      )
     ) {
       fieldSources.set(`${componentId}:${propPath}`, value);
     }
     if (value == null) {
-      return field.repeated ? [] : value;
+      return field.repeated
+        ? []
+        : ["image", "price"].includes(field.yextFieldType ?? field.type)
+          ? undefined
+          : value;
     }
 
     switch (field.yextFieldType ?? field.type) {
@@ -116,10 +125,43 @@ export const createPuckFieldTransforms = (
         );
       }
       case "translatableString":
-      case "image":
         return resolveComponentData(value, locale, sourceDocument, {
           output: "data",
         });
+      case "price": {
+        const price = resolveComponentData<ProductPrice>(
+          value,
+          locale,
+          sourceDocument,
+          { output: "data" }
+        );
+        return formatCurrency(price?.value, price?.currencyCode, locale);
+      }
+      case "image": {
+        const resolved = resolveComponentData<ImageType | { image: ImageType }>(
+          value,
+          locale,
+          sourceDocument,
+          {
+            output: "data",
+          }
+        );
+        if (!resolved) {
+          return undefined;
+        }
+        const flattened = (
+          "image" in resolved ? resolved.image : resolved
+        ) as ImageType;
+        return {
+          ...flattened,
+          alternateText: resolveComponentData(
+            flattened.alternateText ?? "",
+            locale,
+            sourceDocument,
+            { output: "data" }
+          ),
+        } as ImageType;
+      }
       case "ctaSelector": {
         const cta = resolveComponentData<Record<string, unknown>>(
           value,
@@ -183,6 +225,7 @@ export const createPuckFieldTransforms = (
       "entityField",
       "translatableString",
       "image",
+      "price",
       "ctaSelector",
       "comprehensiveCTA",
       "code",

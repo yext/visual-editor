@@ -5,6 +5,7 @@ import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholder
 
 export const IMAGE_CONSTANT_CONFIG: ImageField = {
   type: "image",
+  constantValueEditor: true,
 };
 
 export const IMAGE_LIST_CONSTANT_CONFIG: YextFieldDefinition = {

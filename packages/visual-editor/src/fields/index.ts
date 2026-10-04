@@ -13,6 +13,7 @@ export {
 
 export { CodeFieldOverride, type CodeField } from "./CodeField.tsx";
 export { ImageFieldOverride, type ImageField } from "./ImageField.tsx";
+export { type PriceField } from "./PriceField.tsx";
 
 export {
   DateTimeSelectorFieldOverride,

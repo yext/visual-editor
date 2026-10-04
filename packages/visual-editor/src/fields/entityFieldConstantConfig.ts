@@ -36,6 +36,13 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, ConstantFieldConfig> = {
   "type.string": TRANSLATABLE_STRING_CONSTANT_CONFIG,
   "type.rich_text_v2": TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
+  "type.price": {
+    type: "object",
+    objectFields: {
+      value: { type: "number", label: "Amount" },
+      currencyCode: { type: "text", label: "Currency code" },
+    },
+  },
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.cta": ENHANCED_CTA_CONSTANT_CONFIG,
   "type.datetime": DATE_TIME_CONSTANT_CONFIG,

@@ -255,3 +255,252 @@ it("when an entity field renders then source-dependent UI can read its binding s
   expect(result).toEqual({ line1: "123 Main Street" });
   expect(fieldSources.get("Address-1:data.address")).toBe(value);
 });
+
+it.each([
+  {
+    name: "mapped flat image",
+    value: { field: "photo", constantValue: {}, constantValueEnabled: false },
+    expected: { url: "/photo.jpg", width: 2, height: 1, alternateText: "Page" },
+  },
+  {
+    name: "mapped complex image",
+    value: {
+      field: "complexPhoto",
+      constantValue: {},
+      constantValueEnabled: false,
+    },
+    expected: {
+      url: "/complex.jpg",
+      width: 2,
+      height: 1,
+      alternateText: "Page",
+    },
+  },
+  {
+    name: "localized static image",
+    value: {
+      field: "",
+      constantValueEnabled: true,
+      constantValue: {
+        defaultValue: { url: "/default.jpg" },
+        fr: { url: "/fr.jpg", alternateText: { defaultValue: "[[name]]" } },
+      },
+    },
+    expected: { url: "/fr.jpg", alternateText: "Page" },
+  },
+  {
+    name: "default static image",
+    value: {
+      field: "",
+      constantValueEnabled: true,
+      constantValue: { defaultValue: { url: "/default.jpg" } },
+    },
+    expected: { url: "/default.jpg", alternateText: "" },
+  },
+  {
+    name: "missing mapped image",
+    value: { field: "missing", constantValue: {}, constantValueEnabled: false },
+    expected: undefined,
+  },
+])(
+  "when resolving $name then the renderer receives a flat image",
+  ({ value, expected }) => {
+    const before = structuredClone(value);
+    expect(
+      createPuckFieldTransforms("fr", {
+        name: "Page",
+        photo: {
+          url: "/photo.jpg",
+          width: 2,
+          height: 1,
+          alternateText: "[[name]]",
+        },
+        complexPhoto: {
+          image: {
+            url: "/complex.jpg",
+            width: 2,
+            height: 1,
+            alternateText: { defaultValue: "[[name]]" },
+          },
+          description: "Unused",
+        },
+      }).custom!({
+        value,
+        field: { type: "custom", yextFieldType: "image" } as any,
+        componentId: "Image",
+        propName: "image",
+        propPath: "image",
+        isReadOnly: true,
+      })
+    ).toEqual(expected);
+    expect(value).toEqual(before);
+  }
+);
+
+it("when repeated images resolve then alternate text uses each item's document", () => {
+  const source = createItemSource({
+    label: "Cards",
+    mappingFields: { image: { type: "image" } },
+    defaultValues: [],
+  });
+  expect(
+    createPuckFieldTransforms("en", {
+      cards: [
+        {
+          name: "First",
+          photo: { image: { url: "/first.jpg", alternateText: "[[name]]" } },
+        },
+        {
+          name: "Second",
+          photo: { url: "/second.jpg", alternateText: "[[name]]" },
+        },
+      ],
+    }).custom!({
+      value: {
+        field: "cards",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          image: {
+            field: "photo",
+            constantValue: {},
+            constantValueEnabled: false,
+          },
+        },
+      },
+      field: toPuckFields({ cards: source.field }).cards as any,
+      componentId: "Cards",
+      propName: "cards",
+      propPath: "cards",
+      isReadOnly: true,
+    })
+  ).toEqual([
+    { image: { url: "/first.jpg", alternateText: "First" } },
+    { image: { url: "/second.jpg", alternateText: "Second" } },
+  ]);
+});
+
+it.each([
+  {
+    name: "mapped USD price",
+    locale: "en-US",
+    value: {
+      field: "price",
+      constantValue: undefined,
+      constantValueEnabled: false,
+    },
+    expected: "$12.50",
+  },
+  {
+    name: "static zero price",
+    locale: "en-US",
+    value: {
+      field: "",
+      constantValue: { value: 0, currencyCode: "USD" },
+      constantValueEnabled: true,
+    },
+    expected: "$0.00",
+  },
+  {
+    name: "localized euro price",
+    locale: "de-DE",
+    value: {
+      field: "",
+      constantValue: { value: "12.50", currencyCode: "EUR" },
+      constantValueEnabled: true,
+    },
+    expected: "12,50 €",
+  },
+  {
+    name: "missing currency",
+    locale: "en-US",
+    value: {
+      field: "",
+      constantValue: { value: 12.5 },
+      constantValueEnabled: true,
+    },
+    expected: undefined,
+  },
+  {
+    name: "invalid amount",
+    locale: "en-US",
+    value: {
+      field: "",
+      constantValue: { value: "abc", currencyCode: "USD" },
+      constantValueEnabled: true,
+    },
+    expected: undefined,
+  },
+  {
+    name: "missing mapping",
+    locale: "en-US",
+    value: {
+      field: "missing",
+      constantValue: undefined,
+      constantValueEnabled: false,
+    },
+    expected: undefined,
+  },
+  {
+    name: "missing value",
+    locale: "en-US",
+    value: undefined,
+    expected: undefined,
+  },
+])(
+  "when resolving $name then the renderer receives a display price",
+  ({ locale, value, expected }) => {
+    const before = structuredClone(value);
+    const fieldSources = new Map<string, unknown>();
+    expect(
+      createPuckFieldTransforms(
+        locale,
+        { price: { value: 12.5, currencyCode: "USD" } },
+        fieldSources
+      ).custom!({
+        value,
+        field: { type: "custom", yextFieldType: "price" } as any,
+        componentId: "Price-1",
+        propName: "price",
+        propPath: "data.price",
+        isReadOnly: true,
+      })
+    ).toEqual(expected);
+    expect(value).toEqual(before);
+    expect(fieldSources.get("Price-1:data.price")).toEqual(value);
+  }
+);
+
+it("when repeated prices resolve then each item's amount and currency are formatted", () => {
+  const source = createItemSource({
+    label: "Products",
+    mappingFields: { price: { type: "price" } },
+    defaultValues: [],
+  });
+  expect(
+    createPuckFieldTransforms("en-US", {
+      products: [
+        { price: { value: 12.5, currencyCode: "USD" } },
+        { price: { value: 0, currencyCode: "USD" } },
+      ],
+    }).custom!({
+      value: {
+        ...source.defaultValue,
+        field: "products",
+        constantValueEnabled: false,
+        mappings: {
+          price: {
+            field: "price",
+            constantValue: undefined,
+            constantValueEnabled: false,
+          },
+        },
+      },
+      field: toPuckFields({ products: source.field }).products as any,
+      componentId: "Products-1",
+      propName: "products",
+      propPath: "products",
+      isReadOnly: true,
+    })
+  ).toEqual([{ price: "$12.50" }, { price: "$0.00" }]);
+});

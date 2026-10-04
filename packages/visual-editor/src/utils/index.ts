@@ -27,6 +27,7 @@ export {
 } from "./migrate.ts";
 export { resolveComponentData } from "./resolveComponentData.tsx";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";
+export { migrateImageField } from "./migrateImageField.ts";
 export {
   createItemSource,
   createSlottedItemSource,
@@ -69,3 +70,5 @@ export {
   resolveBreadcrumbs,
   type BreadcrumbLink,
 } from "./urls/resolveBreadcrumbs.ts";
+
+export { richTextToPlainText } from "./plainText.ts";
