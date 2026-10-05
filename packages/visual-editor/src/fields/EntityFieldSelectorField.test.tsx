@@ -31,6 +31,7 @@ import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts"
 import { type StreamFields } from "../types/entityFields.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { photoGallerySource } from "../components/pageSections/PhotoGallerySection/photoGallerySource.ts";
+import { createItemSource } from "../utils/itemSource/createItemSource.ts";
 import {
   getConstantConfigFromType,
   returnConstantFieldConfig,
@@ -1373,4 +1374,124 @@ describe("EntityFieldSelectorField", () => {
       });
     }
   );
+
+  it.each([
+    { secondaryType: "type.string" as const, expectedPrimary: "$item" },
+    { secondaryType: "type.image" as const, expectedPrimary: "" },
+  ])(
+    "when the second mapping accepts $secondaryType then automatic mapping is '$expectedPrimary'",
+    ({ secondaryType, expectedPrimary }): void => {
+      const source = createItemSource({
+        label: "Items",
+        mappingFields: {
+          primary: {
+            type: "entityField",
+            label: "Primary",
+            filter: { types: ["type.image"] },
+          },
+          secondary: {
+            type: "entityField",
+            label: "Secondary",
+            filter: { types: [secondaryType] },
+          },
+        },
+      });
+      const { onChange } = renderRepeatedEntityField({
+        field: source.field as EntityFieldSelectorField,
+        value: {
+          field: "previous",
+          constantValueEnabled: false,
+          constantValue: [],
+          mappings: {
+            primary: { field: "cover", constantValueEnabled: false },
+            secondary: { field: "caption", constantValueEnabled: false },
+          },
+        },
+        entityFields: {
+          fields: [
+            {
+              name: "images",
+              displayName: "Images",
+              definition: {
+                name: "images",
+                typeRegistryId: "type.image",
+                isList: true,
+                type: {},
+              },
+            },
+          ],
+        },
+      });
+
+      fireEvent.click(screen.getAllByRole("combobox")[0]);
+      fireEvent.click(within(screen.getByRole("listbox")).getByText("Images"));
+
+      expect(onChange).toHaveBeenCalledWith({
+        field: "images",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          primary: { field: expectedPrimary, constantValueEnabled: false },
+          secondary: { field: "", constantValueEnabled: false },
+        },
+      });
+    }
+  );
+
+  it("when several mappings accept image items then the user can select a complete item", () => {
+    const source = createItemSource({
+      label: "Images",
+      mappingFields: {
+        primary: {
+          type: "entityField",
+          label: "Primary",
+          filter: { types: ["type.image"] },
+        },
+        secondary: {
+          type: "entityField",
+          label: "Secondary",
+          filter: { types: ["type.image"] },
+        },
+      },
+    });
+    const { onChange } = renderRepeatedEntityField({
+      field: source.field as EntityFieldSelectorField,
+      value: {
+        field: "images",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          primary: { field: "", constantValueEnabled: false },
+          secondary: { field: "", constantValueEnabled: false },
+        },
+      },
+      entityFields: {
+        fields: [
+          {
+            name: "images",
+            displayName: "Images",
+            definition: {
+              name: "images",
+              typeName: "type.image",
+              isList: true,
+              type: {},
+            },
+          },
+        ],
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[1]);
+    fireEvent.click(within(screen.getByRole("listbox")).getByText("Images"));
+
+    expect(onChange).toHaveBeenCalledWith({
+      field: "images",
+      constantValueEnabled: false,
+      constantValue: [],
+      mappings: {
+        primary: { field: "$item", constantValueEnabled: false },
+        secondary: { field: "", constantValueEnabled: false },
+      },
+    });
+  });
 });

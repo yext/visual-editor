@@ -230,18 +230,19 @@ const RepeatedEntityFieldSelector = ({
         ) as typeof mappings;
       }
 
-      if (changedSource && nextField && repeated.directItemMappingKey) {
-        const selectedSource = getFieldsForSelector(
-          entityFields,
-          field.filter
-        ).find((source) => source.name === nextField);
-        const sourceType =
-          selectedSource?.definition.typeRegistryId ??
-          selectedSource?.definition.typeName;
-        if (
-          field.filter.directItemTypes?.includes(sourceType as EntityFieldTypes)
-        ) {
-          const mappingKey = repeated.directItemMappingKey;
+      if (changedSource && nextField) {
+        const matchingMappings = Object.entries(repeated.mappingFields).filter(
+          ([, mappingField]) =>
+            mappingField.type === "entityField" &&
+            getFieldsForSelector(
+              entityFields,
+              mappingField.filter,
+              undefined,
+              nextField
+            ).some((option) => option.name === ITEM_SOURCE_SELF_FIELD)
+        );
+        if (matchingMappings.length === 1) {
+          const [mappingKey] = matchingMappings[0];
           mappings = {
             ...mappings,
             [mappingKey]: {
@@ -255,13 +256,7 @@ const RepeatedEntityFieldSelector = ({
 
       onChange({ ...nextValue, mappings });
     },
-    [
-      baseValue,
-      entityFields,
-      field.filter,
-      onChange,
-      repeated.directItemMappingKey,
-    ]
+    [baseValue, entityFields, onChange, repeated.mappingFields]
   );
 
   return (

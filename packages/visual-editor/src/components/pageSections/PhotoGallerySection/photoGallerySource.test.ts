@@ -191,4 +191,52 @@ describe("photoGallerySource", () => {
       });
     }
   );
+
+  it("when a Team list maps headshots and CTAs then each photo keeps its link", () => {
+    const streamDocument: StreamDocument = {
+      locale: "en",
+      c_team: {
+        people: [
+          {
+            headshot: { url: "https://example.com/alex.jpg" },
+            cta: { label: "Alex", link: "/alex", linkType: "URL" },
+          },
+          { headshot: { url: "https://example.com/sam.jpg" } },
+        ],
+      },
+    };
+    const resolvedItems = photoGallerySource.resolveItems(
+      {
+        field: "c_team.people",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          image: {
+            field: "headshot",
+            constantValueEnabled: false,
+            constantValue: undefined,
+          },
+          link: {
+            field: "cta",
+            constantValueEnabled: false,
+            constantValue: undefined,
+          },
+        },
+      },
+      streamDocument
+    );
+
+    expect(
+      getPhotoGalleryImageData({
+        resolvedItems,
+        locale: "en",
+        streamDocument,
+        isEditing: false,
+        hasExplicitLinkMapping: true,
+      }).galleryImages.map(({ image, href }) => ({ url: image.url, href }))
+    ).toEqual([
+      { url: "https://example.com/alex.jpg", href: "/alex" },
+      { url: "https://example.com/sam.jpg", href: undefined },
+    ]);
+  });
 });

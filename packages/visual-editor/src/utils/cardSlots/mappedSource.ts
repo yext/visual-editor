@@ -20,12 +20,12 @@ const getListFields = (
   });
 
 /**
- * Returns every list field with nested children so wrappers can treat that
- * list's item shape as a mapped source.
+ * Returns lists with child fields for mapped sources. Item sources can also
+ * include lists whose complete items can be mapped.
  */
 export const getListSourceRootFields = (
   entityFields: StreamFields | YextSchemaField[] | null,
-  directItemTypes: EntityFieldTypes[] = []
+  includeItems = false
 ): YextSchemaField[] => {
   const fields = Array.isArray(entityFields)
     ? entityFields
@@ -36,10 +36,7 @@ export const getListSourceRootFields = (
       !!field.definition?.isList &&
       ((Array.isArray(field.children?.fields) &&
         field.children.fields.length > 0) ||
-        directItemTypes.includes(
-          (field.definition.typeRegistryId ??
-            field.definition.typeName) as EntityFieldTypes
-        ))
+        includeItems)
   );
 };
 
@@ -47,8 +44,6 @@ export type MappedSourceFieldFilter<T extends Record<string, any>> =
   RenderEntityFieldFilter<T> & {
     /** Higher-priority repeated-source constraints used by itemSource pickers. */
     itemSourceTypes?: EntityFieldTypes[][];
-    /** List item types that can be mapped as the item itself. */
-    directItemTypes?: EntityFieldTypes[];
     /** Used only when itemSourceTypes is not provided. */
     mappedSourceTypes?: EntityFieldTypes[][];
   };

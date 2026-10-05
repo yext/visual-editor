@@ -5,7 +5,6 @@ import {
   type YextFieldMap,
 } from "../../fields/fields.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
-import { type EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields.ts";
 
 export const ITEM_SOURCE_SELF_FIELD = "$item";
 
@@ -24,27 +23,12 @@ export type CreateItemSourceOptions<
   /**
    * Fields for each item. These define both the manual item inputs and the
    * mappings to fields within each object in a selected entity list.
-   * Required entity-field types also determine which lists can be selected.
+   * A list can be selected when its item type or a child field matches any
+   * mapping field filter.
    */
   mappingFields: YextFieldMap<TItemProps>;
   /** Initial manual items. The first item is also the template for new items. */
   defaultValues?: TItemProps[];
-  /**
-   * Mappings that do not require a matching field in the selected list.
-   * For example, an optional link lets lists with only images remain available.
-   * These mappings still appear in the editor and are resolved when set.
-   */
-  optionalMappingKeys?: (keyof TItemProps)[];
-  /**
-   * Allows lists whose items are values, such as images, instead of objects
-   * with matching child fields. Maps the whole item to the specified key.
-   */
-  fullItemMapping?: {
-    /** Overrides the accepted item types. Defaults to the mapped field's filter types. */
-    types?: EntityFieldTypes[];
-    /** Key in mappingFields that receives the whole item through the $item mapping. */
-    mappingKey: Extract<keyof TItemProps, string>;
-  };
 };
 
 export type RepeatedEntityFieldValue<
@@ -58,7 +42,6 @@ export type RepeatedEntityFieldMetadata<
   manualItemFields: YextFieldMap<TItemProps>;
   defaultItemValue: TItemProps;
   defaultMappings: TItemProps;
-  directItemMappingKey?: Extract<keyof TItemProps, string>;
   manualItemSummary?: (item: unknown, index?: number) => string;
 };
 

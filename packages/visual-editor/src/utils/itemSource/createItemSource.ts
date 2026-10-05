@@ -20,9 +20,7 @@ import { resolveItemValue } from "./itemSourceResolution.ts";
 /**
  * Item-source assembly.
  *
- * 1. Uses mappingFields for manual inputs and linked item mappings. Excludes
- *    optionalMappingKeys from the types required in a selected object list.
- *    Uses fullItemMapping to also accept lists of values without child fields.
+ * 1. Uses mappingFields for manual inputs and linked item mappings.
  * 2. Generates the default repeated value for linked and manual modes.
  * 3. Resolves linked or manual items into render-ready values without writing
  *    derived data back onto component props.
@@ -31,41 +29,15 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
   label,
   mappingFields,
   defaultValues,
-  optionalMappingKeys = [],
-  fullItemMapping,
 }: CreateItemSourceOptions<TItemProps>): ItemSourceInstance<TItemProps> {
-  const fullItemMappingField = fullItemMapping
-    ? (mappingFields as Record<string, YextFieldDefinition<any>>)[
-        fullItemMapping.mappingKey
-      ]
-    : undefined;
-  const directItemTypes =
-    fullItemMapping?.types ??
-    (fullItemMappingField?.type === "entityField"
-      ? fullItemMappingField.filter.types
-      : undefined);
   const scopedMappingFields = Object.fromEntries(
-    Object.entries(mappingFields).map(([key, field]) => {
-      const mappingField = getMappingItemField(
-        field as YextFieldDefinition<any>
-      );
-      return [
-        key,
-        key === fullItemMapping?.mappingKey &&
-        mappingField.type === "entityField"
-          ? {
-              ...mappingField,
-              filter: {
-                ...mappingField.filter,
-                directItemTypes,
-              },
-            }
-          : mappingField,
-      ];
-    })
+    Object.entries(mappingFields).map(([key, field]) => [
+      key,
+      getMappingItemField(field as YextFieldDefinition<any>),
+    ])
   ) as YextFieldMap<TItemProps>;
   const manualItemFields = Object.fromEntries(
-    Object.entries(mappingFields).map(([key, field]) => [
+    Object.entries(scopedMappingFields).map(([key, field]) => [
       key,
       getManualItemField(field as YextFieldDefinition<any>),
     ])
@@ -88,21 +60,13 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
     type: "entityField",
     label,
     filter: {
-      itemSourceTypes: getItemSourceTypes(
-        Object.fromEntries(
-          Object.entries(scopedMappingFields).filter(
-            ([key]) => !optionalMappingKeys.includes(key as keyof TItemProps)
-          )
-        ) as YextFieldMap<TItemProps>
-      ),
-      directItemTypes,
+      itemSourceTypes: getItemSourceTypes(scopedMappingFields),
     },
     repeated: {
       mappingFields: scopedMappingFields,
       manualItemFields,
       defaultItemValue,
       defaultMappings,
-      directItemMappingKey: fullItemMapping?.mappingKey,
     },
   } satisfies RepeatedEntityFieldDefinition<TItemProps>;
   const defaultValue: RepeatedEntityFieldValue<TItemProps> = {

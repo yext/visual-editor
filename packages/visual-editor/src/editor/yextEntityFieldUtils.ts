@@ -284,13 +284,26 @@ const getScopedFieldsForSelector = (
     sourceField
   );
   const sourceSchemaField = getSchemaFieldAtPath(entityFields, sourceField);
-  const allowsDirectItem =
-    !!sourceSchemaField?.definition.isList &&
-    filter.directItemTypes?.includes(
-      (sourceSchemaField.definition.typeRegistryId ??
-        sourceSchemaField.definition.typeName) as EntityFieldTypes
-    );
-  if (!scopedStreamFields && !allowsDirectItem) {
+  const itemFields =
+    sourceSchemaField?.definition.isList && filter.types?.length
+      ? getFilteredEntityFields(
+          {
+            fields: [
+              {
+                ...sourceSchemaField,
+                name: ITEM_SOURCE_SELF_FIELD,
+                definition: {
+                  ...sourceSchemaField.definition,
+                  isList: false,
+                },
+                children: undefined,
+              },
+            ],
+          },
+          filter
+        )
+      : [];
+  if (!scopedStreamFields && !itemFields.length) {
     return [];
   }
 
@@ -300,15 +313,10 @@ const getScopedFieldsForSelector = (
   return sortFields(
     dedupeFieldsByName(
       [
-        ...(allowsDirectItem
-          ? [
-              {
-                name: ITEM_SOURCE_SELF_FIELD,
-                displayName: rootDisplayName ?? sourceField,
-                definition: sourceSchemaField!.definition,
-              },
-            ]
-          : []),
+        ...itemFields.map((field) => ({
+          ...field,
+          displayName: rootDisplayName ?? sourceField,
+        })),
         ...(scopedStreamFields
           ? getFilteredEntityFields(scopedStreamFields, filter)
           : []),
@@ -341,7 +349,8 @@ const getScopedFieldsForSelector = (
  *
  * 1. Scope to a selected source item when `sourceField` is provided.
  * 2. For item-source and mapped-source pickers, restrict roots to fields that
- *    can satisfy the required descendant type sets. `itemSourceTypes` takes
+ *    can satisfy the required type sets. Item sources also accept matching
+ *    complete list items. `itemSourceTypes` takes
  *    precedence over `mappedSourceTypes` when both are present and requires only
  *    one matching group; mapped-source pickers require every group.
  * 3. Filter incompatible resolved values out when a stream document is
@@ -391,10 +400,10 @@ export const getFieldsForSelector = (
       : requiredDescendantTypes.every(matchesRequiredTypes);
   };
 
-  if (filter.itemSourceTypes?.length || filter.directItemTypes?.length) {
+  if (filter.itemSourceTypes?.length) {
     return sortFields(
       dedupeFieldsByName(
-        getListSourceRootFields(entityFields, filter.directItemTypes)
+        getListSourceRootFields(entityFields, true)
           .map((field) => ({
             ...field,
             displayName:
@@ -404,11 +413,13 @@ export const getFieldsForSelector = (
           }))
           .filter(
             (field) =>
-              filter.directItemTypes?.includes(
-                (field.definition.typeRegistryId ??
-                  field.definition
-                    .typeName) as (typeof filter.directItemTypes)[number]
-              ) || hasRequiredDescendants(field)
+              getFilteredEntityFields(
+                { fields: [{ ...field, children: undefined }] },
+                {
+                  types: filter.itemSourceTypes!.flat(),
+                  includeListsOnly: true,
+                }
+              ).length > 0 || hasRequiredDescendants(field)
           )
           .filter((field) =>
             !streamDocument

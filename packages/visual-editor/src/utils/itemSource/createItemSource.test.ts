@@ -427,19 +427,15 @@ describe("createItemSource", () => {
           filter: { types: ["type.string"] },
         },
       },
-      optionalMappingKeys: ["link"],
-      fullItemMapping: { types: ["type.image"], mappingKey: "image" },
     });
 
     expect((gallerySource.field as any).filter).toEqual({
-      itemSourceTypes: [["type.image"]],
-      directItemTypes: ["type.image"],
+      itemSourceTypes: [["type.image"], ["type.string"]],
     });
     expect(
       (gallerySource.field as any).repeated.mappingFields.image.filter
     ).toEqual({
       types: ["type.image"],
-      directItemTypes: ["type.image"],
     });
 
     expect(
@@ -544,7 +540,6 @@ describe("createItemSource", () => {
             disableConstantValueToggle: false,
           },
         },
-        fullItemMapping: { types: ["type.image"], mappingKey: "image" },
       });
 
       expect(
@@ -567,48 +562,44 @@ describe("createItemSource", () => {
     }
   );
   it.each([
-    { types: undefined, expectedTypes: ["type.image"] },
-    { types: ["type.string"] as const, expectedTypes: ["type.string"] },
+    {
+      type: "type.image" as const,
+      item: { url: "https://example.com/image.jpg" },
+    },
+    { type: "type.string" as const, item: "Caption" },
   ])(
-    "when direct item types are $types then the source uses $expectedTypes",
-    ({ types, expectedTypes }): void => {
+    "when the mapping accepts $type then complete items resolve",
+    ({ type, item }): void => {
       const source = createItemSource({
-        label: "Images",
+        label: "Items",
         mappingFields: {
-          image: {
+          value: {
             type: "entityField",
-            filter: { types: ["type.image"] },
+            filter: { types: [type] },
           },
-        },
-        fullItemMapping: {
-          mappingKey: "image",
-          types: types ? [...types] : undefined,
         },
       });
 
       expect(source.field).toMatchObject({
-        filter: { directItemTypes: expectedTypes },
+        filter: { itemSourceTypes: [[type]] },
         repeated: {
-          directItemMappingKey: "image",
-          mappingFields: {
-            image: { filter: { directItemTypes: expectedTypes } },
-          },
-          manualItemFields: { image: { filter: { types: ["type.image"] } } },
+          mappingFields: { value: { filter: { types: [type] } } },
+          manualItemFields: { value: { filter: { types: [type] } } },
         },
       });
       expect(
         source.resolveItems(
           {
-            field: "images",
+            field: "items",
             constantValueEnabled: false,
             constantValue: [],
             mappings: {
-              image: { field: "$item", constantValueEnabled: false },
+              value: { field: "$item", constantValueEnabled: false },
             },
           },
-          { images: [{ url: "https://example.com/image.jpg" }] }
+          { items: [item] }
         )
-      ).toEqual([{ image: { url: "https://example.com/image.jpg" } }]);
+      ).toEqual([{ value: item }]);
     }
   );
 });
