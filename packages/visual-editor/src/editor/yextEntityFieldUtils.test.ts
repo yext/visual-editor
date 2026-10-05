@@ -3,8 +3,92 @@ import {
   getEntityFieldDisplayName,
   getFieldsForSelector,
 } from "./yextEntityFieldUtils.ts";
+import { ITEM_SOURCE_SELF_FIELD } from "../utils/itemSource/itemSourceTypes.ts";
 
 describe("getFieldsForSelector", () => {
+  it("offers image lists and image-bearing object lists for direct item sources", () => {
+    const entityFields = {
+      fields: [
+        {
+          name: "images",
+          definition: {
+            name: "images",
+            isList: true,
+            typeRegistryId: "type.image",
+            type: {},
+          },
+        },
+        {
+          name: "gallery",
+          definition: {
+            name: "gallery",
+            isList: true,
+            typeRegistryId: "type.image",
+            type: {},
+          },
+          children: {
+            fields: [
+              {
+                name: "image",
+                definition: {
+                  name: "image",
+                  typeRegistryId: "type.image",
+                  type: {},
+                },
+              },
+            ],
+          },
+        },
+        {
+          name: "products",
+          definition: { name: "products", isList: true, type: {} },
+          children: {
+            fields: [
+              {
+                name: "cover",
+                definition: {
+                  name: "cover",
+                  typeRegistryId: "type.image",
+                  type: {},
+                },
+              },
+            ],
+          },
+        },
+        {
+          name: "names",
+          definition: {
+            name: "names",
+            isList: true,
+            typeRegistryId: "type.string",
+            type: {},
+          },
+        },
+      ],
+    };
+
+    expect(
+      getFieldsForSelector(entityFields, {
+        itemSourceTypes: [["type.image"]],
+      }).map((field) => field.name)
+    ).toEqual(["gallery", "images", "products"]);
+    expect(
+      getFieldsForSelector(
+        entityFields,
+        { types: ["type.image"] },
+        undefined,
+        "images"
+      ).map((field) => field.name)
+    ).toEqual([ITEM_SOURCE_SELF_FIELD]);
+    expect(
+      getFieldsForSelector(
+        entityFields,
+        { types: ["type.cta"] },
+        undefined,
+        "images"
+      )
+    ).toEqual([]);
+  });
   it("allows one descendant to satisfy multiple compatible mapping requirements", () => {
     const fields = getFieldsForSelector(
       {
@@ -312,5 +396,106 @@ describe("item-source parent selection", () => {
     );
 
     expect(fields).toEqual([]);
+  });
+
+  it.each([
+    {
+      filter: {
+        itemSourceTypes: [["type.image" as const], ["type.cta" as const]],
+      },
+      expected: ["brands", "images", "links"],
+    },
+    {
+      filter: {
+        mappedSourceTypes: [["type.image" as const], ["type.cta" as const]],
+      },
+      expected: ["brands"],
+    },
+  ])(
+    "when the source filter is $filter then available lists are $expected",
+    ({ filter, expected }): void => {
+      expect(
+        getFieldsForSelector(
+          {
+            fields: [
+              {
+                name: "images",
+                definition: {
+                  name: "images",
+                  typeName: "type.image",
+                  isList: true,
+                  type: {},
+                },
+              },
+              {
+                name: "links",
+                definition: {
+                  name: "links",
+                  typeRegistryId: "type.cta",
+                  isList: true,
+                  type: {},
+                },
+              },
+              {
+                name: "singleImage",
+                definition: {
+                  name: "singleImage",
+                  typeName: "type.image",
+                  type: {},
+                },
+              },
+              {
+                name: "brands",
+                definition: { name: "brands", isList: true, type: {} },
+                children: {
+                  fields: [
+                    {
+                      name: "image",
+                      definition: {
+                        name: "image",
+                        typeName: "type.image",
+                        type: {},
+                      },
+                    },
+                    {
+                      name: "cta",
+                      definition: {
+                        name: "cta",
+                        typeName: "type.cta",
+                        type: {},
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+          filter
+        ).map((field) => field.name)
+      ).toEqual(expected);
+    }
+  );
+
+  it("when a rich text mapping uses a string list then complete items are available", () => {
+    expect(
+      getFieldsForSelector(
+        {
+          fields: [
+            {
+              name: "captions",
+              definition: {
+                name: "captions",
+                typeName: "type.string",
+                isList: true,
+                type: {},
+              },
+            },
+          ],
+        },
+        { types: ["type.rich_text_v2"] },
+        undefined,
+        "captions"
+      ).map((field) => field.name)
+    ).toEqual(["$item"]);
   });
 });

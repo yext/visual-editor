@@ -1,16 +1,31 @@
-import { ComplexImageType, ImageType } from "@yext/pages-components";
+import {
+  ComplexImageType,
+  ImageType,
+  type LinkType,
+} from "@yext/pages-components";
 import {
   AssetImageType,
-  isLocalizedAssetImage,
   resolveLocalizedAssetImage,
   TranslatableAssetImage,
 } from "../../../types/images.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import {
+  type TranslatableCTA,
+  type TranslatableString,
+} from "../../../types/types.ts";
+import { type StreamDocument } from "../../../utils/types/StreamDocument.ts";
+import { isNonNormalizableLinkType } from "../../../utils/normalizeLink.ts";
 
-export type PhotoGalleryImageValue =
+type PhotoGalleryImageValue =
   | ImageType
   | ComplexImageType
+  | TranslatableAssetImage
   | { assetImage: AssetImageType | TranslatableAssetImage };
+
+export type PhotoGalleryItem = {
+  image?: PhotoGalleryImageValue;
+  link?: TranslatableString | TranslatableCTA;
+};
 
 export type ResolvedGalleryImage = {
   isEmpty: boolean;
@@ -18,77 +33,101 @@ export type ResolvedGalleryImage = {
   image: ImageType | AssetImageType;
   aspectRatio?: number;
   width?: number;
-  originalImage: PhotoGalleryImageValue;
+  originalImage?: PhotoGalleryImageValue;
+  href?: string;
+  linkType?: LinkType;
+  ariaLabel?: string;
 };
 
+const LINK_REGEX_VALIDATION =
+  /^(https?:\/\/[^\s]+|mailto:[^\s]+|tel:[^\s]+|\/[^\s]*|#[^\s]*)$/i;
+
 /**
- * Normalizes the resolved photo gallery field value into the image shape used by
- * the gallery renderers and reports whether the mapped field produced any
- * renderable images.
- *
- * Empty images are retained only in editor mode so the wrapper can still render
- * its empty state; live rendering filters them out entirely.
+ * 1. Gets each image and its alternative text for the selected language.
+ * 2. Gets the optional link from text, a CTA, or the image clickthrough URL.
+ * 3. Removes empty images from the live page. Keeps them in the editor.
  */
 export const getPhotoGalleryImageData = ({
-  resolvedImages,
+  resolvedItems,
   locale,
   streamDocument,
   aspectRatio,
   width,
   isEditing,
+  hasExplicitLinkMapping = false,
 }: {
-  resolvedImages: PhotoGalleryImageValue[] | undefined;
+  resolvedItems: PhotoGalleryItem[] | undefined;
   locale: string;
-  streamDocument?: Record<string, any>;
+  streamDocument?: StreamDocument;
   aspectRatio?: number;
   width?: number;
   isEditing: boolean;
+  hasExplicitLinkMapping?: boolean;
 }): {
   galleryImages: ResolvedGalleryImage[];
   hasRenderableImages: boolean;
 } => {
   const allGalleryImages = (
-    Array.isArray(resolvedImages) ? resolvedImages : []
-  ).map((rawImage, originalIndex) => {
+    Array.isArray(resolvedItems) ? resolvedItems : []
+  ).map((item, originalIndex) => {
+    const rawImage = item.image;
     let image: ImageType | AssetImageType | undefined;
-    let altText = "";
 
     if (
       typeof rawImage === "object" &&
       rawImage !== null &&
-      "assetImage" in rawImage
+      "assetImage" in rawImage &&
+      !("url" in rawImage)
     ) {
-      if (isLocalizedAssetImage(rawImage.assetImage)) {
-        image = resolveLocalizedAssetImage(rawImage.assetImage, locale);
-        altText = resolveComponentData(
-          image?.alternateText ?? "",
-          locale,
-          streamDocument
-        );
-      } else {
-        image = rawImage.assetImage;
-        altText = resolveComponentData(
-          rawImage.assetImage?.alternateText ?? "",
-          locale,
-          streamDocument
-        );
-      }
+      image = resolveLocalizedAssetImage(rawImage.assetImage, locale);
     } else if (
       typeof rawImage === "object" &&
       rawImage !== null &&
       "image" in rawImage
     ) {
       image = rawImage.image;
-      altText = rawImage.image?.alternateText ?? "";
     } else {
-      image = rawImage;
-      altText = rawImage?.alternateText ?? "";
+      image = resolveLocalizedAssetImage(rawImage, locale);
     }
 
+    const altText = resolveComponentData(
+      image?.alternateText ?? "",
+      locale,
+      streamDocument
+    );
     const url = image?.url;
     const imageHeight = image?.height || 570;
     const imageWidth = image?.width || 1000;
     const isEmpty = !url || (typeof url === "string" && url.trim() === "");
+    const inputLink =
+      item.link ??
+      (!hasExplicitLinkMapping &&
+      rawImage &&
+      typeof rawImage === "object" &&
+      "clickthroughUrl" in rawImage &&
+      typeof rawImage.clickthroughUrl === "string"
+        ? rawImage.clickthroughUrl
+        : undefined);
+    const cta =
+      inputLink && typeof inputLink === "object" && "link" in inputLink
+        ? (inputLink as TranslatableCTA)
+        : undefined;
+    const linkType = cta?.linkType ?? "URL";
+    const resolvedLink = inputLink
+      ? resolveComponentData(
+          cta ? (cta.link ?? "") : inputLink,
+          locale,
+          streamDocument
+        )
+      : undefined;
+    const href =
+      typeof resolvedLink === "string" &&
+      resolvedLink.trim() &&
+      !/^javascript:/i.test(resolvedLink.trim()) &&
+      (isNonNormalizableLinkType(linkType) ||
+        LINK_REGEX_VALIDATION.test(resolvedLink.trim()))
+        ? resolvedLink.trim()
+        : undefined;
 
     return {
       isEmpty,
@@ -109,6 +148,12 @@ export const getPhotoGalleryImageData = ({
       aspectRatio,
       width: width || 1000,
       originalImage: rawImage,
+      href,
+      linkType,
+      ariaLabel:
+        !altText && cta?.label
+          ? resolveComponentData(cta.label, locale, streamDocument)
+          : undefined,
     };
   });
 

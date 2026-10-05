@@ -20,7 +20,7 @@ import { resolveItemValue } from "./itemSourceResolution.ts";
 /**
  * Item-source assembly.
  *
- * 1. Builds one repeated `entityField` config from the authored mapping props.
+ * 1. Uses mappingFields for manual inputs and linked item mappings.
  * 2. Generates the default repeated value for linked and manual modes.
  * 3. Resolves linked or manual items into render-ready values without writing
  *    derived data back onto component props.
