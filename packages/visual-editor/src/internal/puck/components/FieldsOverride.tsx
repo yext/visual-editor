@@ -1,7 +1,8 @@
 import React from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import { createUsePuck, useGetPuck } from "@puckeditor/core";
+import { createUsePuck, useGetPuck, type RadioField } from "@puckeditor/core";
 import { AdvancedSettings } from "../../../internal/components/AdvancedSettings.tsx";
+import { YextAutoField } from "../../../fields/YextAutoField.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 
 const usePuck = createUsePuck();
@@ -23,8 +24,25 @@ export const fieldsOverride = ({ children }: { children: React.ReactNode }) => {
       advancedSettingsField.type === "object" &&
       advancedSettingsField.objectFields?.schemaMarkup
     ) {
-      const schemaField = advancedSettingsField.objectFields
-        .schemaMarkup as any;
+      const schemaMode =
+        appState.data.root?.props?.schemaMode === "custom"
+          ? "custom"
+          : "recommended";
+      const fieldName =
+        schemaMode === "custom" ? "customSchemaMarkup" : "schemaMarkup";
+      const schemaField = advancedSettingsField.objectFields[fieldName] as any;
+      const modeField = advancedSettingsField.objectFields
+        .schemaMode as RadioField;
+      const updateRoot = (name: string, value: string) => {
+        const { dispatch, appState: currentState } = getPuck();
+        dispatch({
+          type: "replaceRoot",
+          root: {
+            ...currentState.data.root,
+            props: { ...currentState.data.root?.props, [name]: value },
+          },
+        });
+      };
 
       if (schemaField.type === "custom" && schemaField.render) {
         return (
@@ -36,22 +54,27 @@ export const fieldsOverride = ({ children }: { children: React.ReactNode }) => {
               </div>
             </div>
 
-            {/* Schema markup field */}
+            {modeField?.type === "radio" && (
+              <div className="ve-mb-4">
+                <YextAutoField
+                  id="schemaMode"
+                  field={{
+                    ...modeField,
+                    label: pt(modeField.label ?? ""),
+                    options: modeField.options.map((option) => ({
+                      ...option,
+                      label: pt(option.label),
+                    })),
+                  }}
+                  value={schemaMode}
+                  onChange={(value) => updateRoot("schemaMode", value)}
+                />
+              </div>
+            )}
             {React.createElement(schemaField.render, {
-              onChange: (newValue: string) => {
-                const { dispatch } = getPuck();
-                dispatch({
-                  type: "replaceRoot" as const,
-                  root: {
-                    ...appState.data.root,
-                    props: {
-                      ...appState.data.root?.props,
-                      schemaMarkup: newValue,
-                    } as any,
-                  },
-                });
-              },
-              value: appState.data.root?.props?.schemaMarkup || "",
+              key: fieldName,
+              onChange: (value: string) => updateRoot(fieldName, value),
+              value: appState.data.root?.props?.[fieldName],
               field: { label: msg("schemaMarkup", "Schema Markup") },
             })}
 

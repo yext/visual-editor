@@ -141,6 +141,7 @@
     "presetImage": "Iepriekš iestatīts attēls",
     "textAndLink": "Teksts un saite"
   },
+  "custom": "Pielāgots",
   "customSearchArea": "Pielāgota meklēšanas zona",
   "dataAttribute": "Atribūts",
   "date": "Datums",
@@ -646,6 +647,7 @@
   },
   "readLess": "Lasīt mazāk",
   "readMore": "Lasīt vairāk",
+  "recommended": "Ieteicamais",
   "recommendedColor": "Ieteicamā krāsa",
   "recommendedColors": "Ieteicamās krāsas",
   "redo": "Pārtaisīt",
@@ -658,6 +660,7 @@
   "reviewsEmptyStateSectionHidden": "Sadaļa paslēpta šim {{entityType}}",
   "saturday": "Sestdiena",
   "schemaMarkup": "Shēmas uzcenojums",
+  "schemaMode": "Shēmas režīms",
   "search": "Meklēšana",
   "searchHere": "Meklēt šeit ...",
   "searchThisArea": "Meklējiet šo apgabalu",

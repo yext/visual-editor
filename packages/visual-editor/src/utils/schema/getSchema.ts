@@ -1,3 +1,5 @@
+import { resolveCustomSchema } from "./resolveCustomSchema.ts";
+import { getCustomSchemaTemplate } from "./defaultCustomSchemas.ts";
 import { StreamDocument } from "../types/StreamDocument.ts";
 import { resolveSchemaJson, resolveSchemaString } from "./resolveSchema.ts";
 import { getDefaultSchema } from "./defaultSchemas.ts";
@@ -16,11 +18,10 @@ export interface TemplateRenderProps {
   document: StreamDocument;
 }
 
-export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
+export const getSchema = (
+  data: TemplateRenderProps
+): Record<string, any> | string => {
   const { document } = data;
-
-  // Move path to the document for schema resolution
-  document.path = data.path;
 
   const layoutString = document?.__?.layout;
   if (!layoutString) {
@@ -29,6 +30,20 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
 
   try {
     const layout = JSON.parse(layoutString);
+    if (layout?.root?.props?.schemaMode === "custom") {
+      const result = resolveCustomSchema(
+        layout.root.props.customSchemaMarkup ??
+          getCustomSchemaTemplate(document),
+        data
+      );
+      if (result.error) {
+        console.warn("Error resolving custom schema:", result.error);
+      }
+      return result.output;
+    }
+
+    // Move path to the document for Recommended schema resolution
+    document.path = data.path;
     const entityTypeId = document?.meta?.entityType?.id;
 
     // If the entity has categories, resolve the primaryCategory key

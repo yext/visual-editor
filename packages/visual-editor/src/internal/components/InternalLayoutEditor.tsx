@@ -268,6 +268,7 @@ export const InternalLayoutEditor = ({
             constantValue: "",
             constantValueEnabled: false,
           },
+          schemaMode: "recommended",
           schemaMarkup: "",
           ...puckConfig.root?.defaultProps,
           __advancedSettingsLink: null,

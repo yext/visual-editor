@@ -43,6 +43,157 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
 };
 ```
 
+## getSchema
+
+Generates page schema using the mode selected in Advanced Settings:
+
+- **Recommended** returns a JSON-LD object containing an `@graph` of schema blocks.
+- **Custom** returns the rendered markup from a Handlebars template.
+
+Recommended is the default mode. Each mode keeps its own editable content.
+
+### Usage
+
+Use the result in the page's `getHeadConfig`:
+
+```ts
+import { getSchema } from "@yext/visual-editor";
+import { SchemaWrapper } from "@yext/pages-components";
+
+const schema = getSchema(data);
+const other = typeof schema === "string" ? schema : SchemaWrapper(schema);
+```
+
+### Recommended schema
+
+Recommended uses a JSON configuration with entity placeholders such as
+`[[name]]`, `[[address.city]]`, and `[[path]]`. The editor starts with a default
+for the page's entity type, which you can customize in Advanced Settings.
+
+| Page entity                                          | Default schema type                                        |
+| ---------------------------------------------------- | ---------------------------------------------------------- |
+| Business entities, such as locations and restaurants | `LocalBusiness` or a subtype based on the primary category |
+| Directory entities (`dm_*`)                          | `CollectionPage`                                           |
+| Locator                                              | `WebPage`                                                  |
+| Other entities                                       | `Thing`                                                    |
+
+The business default uses `[[primaryCategory]]` for its schema type. It shares
+the category mapping used by the Custom `businessType` helper. Empty fields are
+omitted from Recommended output. Page URLs use `siteDomain` when available and
+relative URLs otherwise.
+
+Some schema properties format entity data automatically:
+
+| Property / placeholder                       | Output                                                                                          | Formatting helper                                                                 |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `openingHours` with `[[hours]]`              | Opening-hours strings                                                                           | `OpeningHoursSchema`                                                              |
+| `openingHoursSpecification` with `[[hours]]` | `OpeningHoursSpecification` objects                                                             | `OpeningHoursSpecificationSchema`                                                 |
+| `image` with `[[photoGallery]]`              | Image URLs                                                                                      | `PhotoGallerySchema`                                                              |
+| `hasOfferCatalog` with `[[services]]`        | An `OfferCatalog` containing `Offer` and `Service` entries                                      | Automatic service conversion                                                      |
+| `[[dm_directoryChildren]]`                   | Ordered `ListItem` entries with child names, resolved page URLs, and available location details | Automatic directory conversion; `OpeningHoursSpecificationSchema` for child hours |
+
+These conversions apply to the selected entity field; for example,
+`"openingHoursSpecification": "[[c_customHours]]"` uses the same hours helper.
+
+#### Breadcrumbs and ratings
+
+For pages with an entity type other than `locator`, Recommended also includes
+these blocks when the corresponding data is available:
+
+- **`BreadcrumbList`** lists directory parents in order, followed by the current
+  page. A directory root includes its own breadcrumb even without parents.
+  Parent URLs use the supplied `slug` with the site domain or `/` prefix,
+  without additional slug normalization. The current-page entry uses the
+  resolved page URL.
+- **`AggregateRating`** uses the average rating and review count from
+  `FIRSTPARTY` entries in `ref_reviewsAgg`. It requires an `@id` on the main
+  schema block and links to that block through its identifier.
+
+The generated block identifiers use the current page entity's `uid`:
+
+| Block            | `@id` with a site domain                          | `@id` without a site domain |
+| ---------------- | ------------------------------------------------- | --------------------------- |
+| Breadcrumbs      | `https://[[siteDomain]]/#[[uid]]-breadcrumbs`     | `#[[uid]]-breadcrumbs`      |
+| Aggregate rating | `https://[[siteDomain]]/#[[uid]]-aggregaterating` | `#[[uid]]-aggregaterating`  |
+
+### Custom schema
+
+Custom templates contain complete markup, including script tags. Entity fields
+are available at the template root, along with `path` and
+`relativePrefixToRoot`. The editor starts with a Handlebars default for the
+page's entity type. Saving empty content produces no Custom schema markup.
+
+Use `json` for values inside JSON-LD, since ordinary interpolation is unescaped.
+Use schema helpers to build objects and `SchemaWrapper` to produce a complete
+script tag:
+
+```handlebars
+{{SchemaWrapper (LocalBusiness this (businessType))}}
+```
+
+Or write your own schema markup:
+
+```handlebars
+<script type="application/ld+json">
+  { "@context": "https://schema.org", "@type":
+  {{json (businessType)}}, "name":
+  {{json name}}
+  }
+</script>
+```
+
+Custom renders the markup you author. Include any desired breadcrumb and rating
+blocks in the template.
+
+#### Handlebars helpers
+
+| Helper              | Behavior                                                                                                                      | Example                                                |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `if`                | Renders a block when a value is present or truthy                                                                             | `{{#if description}}...{{/if}}`                        |
+| `unless`            | Renders a block when a value is absent or falsy                                                                               | `{{#unless @last}},{{/unless}}`                        |
+| `each`              | Iterates an array or object                                                                                                   | `{{#each services}}{{json this}}{{/each}}`             |
+| `with`              | Sets the current context for a block                                                                                          | `{{#with address}}{{json city}}{{/with}}`              |
+| `lookup`            | Looks up a property or array element dynamically                                                                              | `{{lookup address "city"}}`                            |
+| `log`               | Logs values for debugging                                                                                                     | `{{log name}}`                                         |
+| `json`              | Serializes a value as JSON, including quotes around strings                                                                   | `{{json name}}`                                        |
+| `businessType`      | Returns the current document's primary-category business subtype, defaulting to `LocalBusiness`; accepts an explicit document | `{{businessType}}` or `{{businessType @root}}`         |
+| `directoryChildUrl` | Resolves a directory child's URL using the same page-set templates, locale handling, and site domain as Recommended           | `{{json (directoryChildUrl this @root)}}`              |
+| `slugify`           | Joins its arguments and normalizes the result as a slug                                                                       | `{{slugify address.city "/" name}}`                    |
+| `eq`                | Tests strict equality                                                                                                         | `{{#if (eq meta.entityType.id "location")}}...{{/if}}` |
+| `ne`                | Tests strict inequality                                                                                                       | `{{#if (ne status "CLOSED")}}...{{/if}}`               |
+| `gt`                | Tests greater than                                                                                                            | `{{#if (gt reviewCount 0)}}...{{/if}}`                 |
+| `gte`               | Tests greater than or equal to                                                                                                | `{{#if (gte rating 4)}}...{{/if}}`                     |
+| `lt`                | Tests less than                                                                                                               | `{{#if (lt rating 3)}}...{{/if}}`                      |
+| `lte`               | Tests less than or equal to                                                                                                   | `{{#if (lte reviewCount 10)}}...{{/if}}`               |
+| `and`               | Tests whether all arguments are truthy                                                                                        | `{{#if (and name address)}}...{{/if}}`                 |
+| `or`                | Tests whether any argument is truthy                                                                                          | `{{#if (or description mainPhone)}}...{{/if}}`         |
+| `not`               | Negates a value's truthiness                                                                                                  | `{{#if (not hidden)}}...{{/if}}`                       |
+
+#### Pages schema helpers
+
+These helpers use the schema builders from `@yext/pages-components`. Serialize
+object results with `json`, or wrap a complete schema with `SchemaWrapper`.
+
+| Helper                            | Schema output                                                 | Example                                                 |
+| --------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------- |
+| `SchemaWrapper`                   | Complete JSON-LD script tag                                   | `{{SchemaWrapper (LocalBusiness this (businessType))}}` |
+| `BaseSchema`                      | Context, type, and name for a document                        | `{{json (BaseSchema this "Thing")}}`                    |
+| `LocalBusiness`                   | Business schema; accepts an optional subtype                  | `{{json (LocalBusiness this (businessType))}}`          |
+| `Event`                           | Event schema; accepts an optional subtype                     | `{{json (Event this "MusicEvent")}}`                    |
+| `Product`                         | Product schema; accepts an optional subtype                   | `{{json (Product this)}}`                               |
+| `FAQPage`                         | Questions and answers from an FAQ array                       | `{{json (FAQPage faqs)}}`                               |
+| `AddressSchema`                   | An `address` property containing a `PostalAddress`            | `{{json (AddressSchema address)}}`                      |
+| `LocationSchema`                  | A `Place` with location details                               | `{{json (LocationSchema location)}}`                    |
+| `OpeningHoursSchema`              | An `openingHours` property containing hours strings           | `{{json (OpeningHoursSchema hours)}}`                   |
+| `OpeningHoursSpecificationSchema` | Opening-hours and special-hours specification properties      | `{{json (OpeningHoursSpecificationSchema hours)}}`      |
+| `OfferSchema`                     | An `offers` property containing an `Offer`                    | `{{json (OfferSchema offer)}}`                          |
+| `PerformerSchema`                 | A `performer` property built from performer names             | `{{json (PerformerSchema performers)}}`                 |
+| `OrganizationSchema`              | An `organizer` property containing an `Organization`          | `{{json (OrganizationSchema organization)}}`            |
+| `PhotoGallerySchema`              | An `image` property containing image URLs                     | `{{json (PhotoGallerySchema photoGallery)}}`            |
+| `PhotoSchema`                     | An `image` property containing one image URL                  | `{{json (PhotoSchema photo)}}`                          |
+| `ReviewSchema`                    | A `review` property containing a `Review`                     | `{{json (ReviewSchema review)}}`                        |
+| `AggregateRatingSchema`           | An `aggregateRating` property containing an `AggregateRating` | `{{json (AggregateRatingSchema rating)}}`               |
+
 ## resolveYextEntityField
 
 Used in a component's render function to pull in the selected entity field's value from the document or use the constant value.

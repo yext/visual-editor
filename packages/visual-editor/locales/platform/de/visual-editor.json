@@ -141,6 +141,7 @@
     "presetImage": "Vordefiniertes Bild",
     "textAndLink": "Text & Link"
   },
+  "custom": "Benutzerdefiniert",
   "customSearchArea": "Benutzerdefinierter Suchbereich",
   "dataAttribute": "Attribut",
   "date": "Datum",
@@ -643,6 +644,7 @@
   },
   "readLess": "Weniger lesen",
   "readMore": "Mehr lesen",
+  "recommended": "Empfohlen",
   "recommendedColor": "Empfohlene Farbe",
   "recommendedColors": "Empfohlene Farben",
   "redo": "Wiederholen",
@@ -655,6 +657,7 @@
   "reviewsEmptyStateSectionHidden": "Modul für diesen {{entityType}} ist ausgeblendet",
   "saturday": "Samstag",
   "schemaMarkup": "Schema Markup",
+  "schemaMode": "Schema-Modus",
   "search": "Suchen",
   "searchHere": "Hier suchen...",
   "searchThisArea": "In diesem Bereich suchen",

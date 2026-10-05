@@ -1,5 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { getSchema } from "./getSchema.ts";
+import { migrate } from "../migrate.ts";
+import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 
 describe("getSchema - entity pages", () => {
   it("returns resolved schema markup for a location and no directory/reviews", async () => {
@@ -1155,5 +1157,567 @@ describe("getSchema - locator pages", () => {
         },
       ],
     });
+  });
+});
+
+describe("getSchema - custom markup", () => {
+  afterEach(() => vi.restoreAllMocks());
+  const renderCustom = (template: string, document: Record<string, any> = {}) =>
+    getSchema({
+      path: "us/store",
+      relativePrefixToRoot: "../",
+      document: {
+        ...document,
+        __: {
+          ...document.__,
+          layout: JSON.stringify({
+            root: {
+              props: {
+                schemaMode: "custom",
+                schemaMarkup: '{"name":"Recommended"}',
+                customSchemaMarkup: template,
+              },
+            },
+          }),
+        },
+      },
+    });
+
+  it("renders the Custom default for a business with escaped fields and structured hours, photos, and services", () => {
+    const output = getSchema({
+      path: "us/store",
+      relativePrefixToRoot: "../",
+      document: {
+        meta: { entityType: { id: "location" } },
+        __: {
+          categoryRootAncestorId: 389,
+          layout: JSON.stringify({ root: { props: { schemaMode: "custom" } } }),
+        },
+        siteDomain: "example.com",
+        uid: 123,
+        name: 'Shop "One"',
+        address: { line1: "1 Main St", city: "NY", countryCode: "US" },
+        hours: {
+          monday: { openIntervals: [{ start: "09:00", end: "17:00" }] },
+        },
+        photoGallery: [{ image: { url: "https://example.com/photo" } }],
+        description: "A shop",
+        mainPhone: "+12025550123",
+        paymentOptions: ["Cash", "Visa"],
+        services: ["Repairs", 'Custom "work"'],
+      },
+    });
+    expect(typeof output).toBe("string");
+    expect(
+      JSON.parse(
+        (output as string)
+          .split('<script type="application/ld+json">')[1]
+          .split("</script>")[0]
+      )
+    ).toEqual({
+      "@context": "https://schema.org",
+      "@type": "Store",
+      "@id": "https://example.com/#123-Store",
+      url: "https://example.com/us/store",
+      name: 'Shop "One"',
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "1 Main St",
+        addressLocality: "NY",
+        addressCountry: "US",
+      },
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: "https://schema.org/Monday",
+          opens: "09:00",
+          closes: "17:00",
+        },
+      ],
+      image: ["https://example.com/photo"],
+      description: "A shop",
+      telephone: "+12025550123",
+      paymentAccepted: ["Cash", "Visa"],
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        itemListElement: [
+          {
+            "@type": "Offer",
+            itemOffered: { "@type": "Service", name: "Repairs" },
+          },
+          {
+            "@type": "Offer",
+            itemOffered: { "@type": "Service", name: 'Custom "work"' },
+          },
+        ],
+      },
+    });
+  });
+
+  it.each([
+    ["location", "LocalBusiness", "LocalBusiness"],
+    ["dm_root", "CollectionPage", "collectionpage"],
+    ["locator", "WebPage", "webpage"],
+    ["other", "Thing", "thing"],
+  ])(
+    "renders a sparse Custom default for %s with relative URLs",
+    (entityTypeId, type, anchor) => {
+      const output = getSchema({
+        path: "page",
+        relativePrefixToRoot: "../",
+        document: {
+          uid: 0,
+          meta: { entityType: { id: entityTypeId } },
+          __: {
+            layout: JSON.stringify({
+              root: { props: { schemaMode: "custom" } },
+            }),
+          },
+        },
+      }) as string;
+      expect(
+        JSON.parse(
+          output
+            .split('<script type="application/ld+json">')[1]
+            .split("</script>")[0]
+        )
+      ).toEqual({
+        "@context": "https://schema.org",
+        "@type": type,
+        "@id": `#0-${anchor}`,
+        url: "/page",
+      });
+    }
+  );
+
+  it("omits null optional fields in the Custom default", () => {
+    const output = getSchema({
+      path: "page",
+      relativePrefixToRoot: "",
+      document: {
+        meta: { entityType: { id: "location" } },
+        __: {
+          layout: JSON.stringify({ root: { props: { schemaMode: "custom" } } }),
+        },
+        address: null,
+        hours: null,
+        photoGallery: null,
+      },
+    }) as string;
+    expect(output).toContain('<script type="application/ld+json">');
+    expect(
+      JSON.parse(
+        output
+          .split('<script type="application/ld+json">')[1]
+          .split("</script>")[0]
+      )
+    ).toEqual({
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      url: "/page",
+    });
+  });
+
+  it("renders directory children in the Custom default without losing parent URL context", () => {
+    const output = getSchema({
+      path: "us",
+      relativePrefixToRoot: "../",
+      document: {
+        meta: { entityType: { id: "dm_country" } },
+        __: {
+          layout: JSON.stringify({ root: { props: { schemaMode: "custom" } } }),
+        },
+        uid: 12,
+        siteDomain: "example.com",
+        name: "US",
+        dm_directoryChildren: [
+          { name: 'Shop "One"', slug: "us/store", mainPhone: "+12025550123" },
+          { name: "Region", slug: "us/ny" },
+        ],
+      },
+    }) as string;
+    expect(
+      JSON.parse(
+        output
+          .split('<script type="application/ld+json">')[1]
+          .split("</script>")[0]
+      )
+    ).toEqual({
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": "https://example.com/#12-collectionpage",
+      url: "https://example.com/us",
+      name: "US",
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: [
+          {
+            "@type": "Thing",
+            name: 'Shop "One"',
+            url: "https://example.com/us/store",
+            phone: "+12025550123",
+          },
+          {
+            "@type": "Thing",
+            name: "Region",
+            url: "https://example.com/us/ny",
+          },
+        ],
+      },
+    });
+  });
+
+  it.each([
+    ["en", false, ""],
+    ["en", true, "en/"],
+    ["fr", false, "fr/"],
+    ["fr", true, "fr/"],
+  ] as const)(
+    "matches Recommended directory URLs for locale %s with primary prefix %s",
+    (locale, includeLocalePrefixForPrimaryLocale, prefix) => {
+      for (const siteDomain of [undefined, "example.com"]) {
+        const document = {
+          locale,
+          siteDomain,
+          name: "Directory",
+          meta: { entityType: { id: "dm_city" } },
+          __: {
+            pathInfo: {
+              template: "directory/ny",
+              sourceEntityPageSetTemplate: "stores/[[id]]",
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale,
+            },
+          },
+          dm_directoryChildren: [
+            {
+              name: "Shop",
+              id: "shop",
+              slug: "old-path",
+              address: { city: "NY" },
+            },
+            { name: "No slug", id: "no-slug", address: { city: "NY" } },
+            {
+              name: "Region",
+              id: "region",
+              slug: "old-region",
+              __: {
+                pathInfo: {
+                  template: "regions/[[id]]",
+                  primaryLocale: "en",
+                  includeLocalePrefixForPrimaryLocale,
+                },
+              },
+            },
+          ],
+        };
+        const renderMode = (schemaMode: string) =>
+          getSchema({
+            path: `${prefix}directory/ny`,
+            relativePrefixToRoot: "../",
+            document: {
+              ...document,
+              __: {
+                ...document.__,
+                layout: JSON.stringify({ root: { props: { schemaMode } } }),
+              },
+            },
+          });
+        const recommended = renderMode("recommended") as Record<string, any>;
+        const customMarkup = renderMode("custom") as string;
+        const container = globalThis.document.createElement("div");
+        container.innerHTML = customMarkup;
+        const custom = JSON.parse(
+          container.querySelector("script")!.textContent!
+        );
+        const baseUrl = siteDomain ? `https://${siteDomain}/` : "/";
+        const expectedUrls = [
+          "stores/shop",
+          "stores/no-slug",
+          "regions/region",
+        ].map((path) => `${baseUrl}${prefix}${path}`);
+
+        expect(custom.url).toBe(`${baseUrl}${prefix}directory/ny`);
+        expect(custom.url).toBe(recommended["@graph"][0].url);
+        expect(
+          custom.mainEntity.itemListElement.map((child: any) => child.url)
+        ).toEqual(expectedUrls);
+        expect(
+          recommended["@graph"][0].mainEntity.itemListElement.map(
+            (child: any) => child.item.url
+          )
+        ).toEqual(expectedUrls);
+      }
+    }
+  );
+
+  it("renders complete markup verbatim with nested loops, conditionals, and page context", () => {
+    expect(
+      renderCustom(
+        '  <script type="application/ld+json">\n{{#each groups}}{{#if enabled}}{{#each members}}{{name}};{{/each}}{{/if}}{{/each}}|{{path}}|{{relativePrefixToRoot}}\n</script>\n<script>invalid JSON & raw</script>  ',
+        {
+          path: "stale",
+          relativePrefixToRoot: "stale",
+          groups: [
+            { enabled: true, members: [{ name: "A & <B>" }, { name: "C" }] },
+            { enabled: false, members: [{ name: "Hidden" }] },
+          ],
+        }
+      )
+    ).toBe(
+      '  <script type="application/ld+json">\nA & <B>;C;|us/store|../\n</script>\n<script>invalid JSON & raw</script>  '
+    );
+  });
+  it("serializes nested JSON and missing values without HTML escaping", () => {
+    expect(
+      renderCustom("{{json name}}|{{json nested}}|{{json missing}}|{{json}}", {
+        name: 'A "quote" & <tag>\nnext',
+        nested: { values: [false, 0, null, ""] },
+      })
+    ).toBe(
+      String.raw`"A \"quote\" & \u003ctag>\nnext"|{"values":[false,0,null,""]}|null|null`
+    );
+  });
+
+  it("keeps serialized entity values inside multiple authored JSON-LD scripts", () => {
+    const name = '</script><script>alert("injected")</script><!--';
+    const nested = { values: [name, "<script>", "A & B"] };
+    const output = renderCustom(
+      '<script type="application/ld+json">\n{{json name}}\n</script>\n<script type="application/ld+json">\n{{json nested}}\n</script>',
+      { name, nested }
+    );
+    const container = document.createElement("div");
+    expect(typeof output).toBe("string");
+    container.innerHTML = output as string;
+    const scripts = container.querySelectorAll("script");
+
+    expect(scripts).toHaveLength(2);
+    expect(Array.from(scripts, (script) => script.type)).toEqual([
+      "application/ld+json",
+      "application/ld+json",
+    ]);
+    expect(
+      Array.from(scripts, (script) => JSON.parse(script.textContent!))
+    ).toEqual([name, nested]);
+    expect(output).toContain(String.raw`\u003c/script>`);
+  });
+
+  it.each([
+    '</script><script>alert("injected")</script>',
+    '</ScRiPt><script>alert("injected")</script>',
+    "<!--<script>script data",
+  ])("keeps SchemaWrapper data inside its script for %s", (name) => {
+    const output = renderCustom(
+      '{{SchemaWrapper (LocalBusiness this)}}\n<script type="application/ld+json">\n{{json nested}}\n</script>',
+      { name, nested: { names: [name] } }
+    );
+    const container = document.createElement("div");
+    expect(typeof output).toBe("string");
+    container.innerHTML = output as string;
+    const scripts = container.querySelectorAll("script");
+
+    expect(scripts).toHaveLength(2);
+    expect(Array.from(scripts, (script) => script.type)).toEqual([
+      "application/ld+json",
+      "application/ld+json",
+    ]);
+    expect(
+      Array.from(scripts, (script) => JSON.parse(script.textContent!))
+    ).toEqual([
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        name,
+      },
+      { names: [name] },
+    ]);
+  });
+
+  it("supports strict equality, JavaScript ordering and truthiness, and slug composition", () => {
+    expect(
+      renderCustom(
+        '{{eq 1 "1"}}|{{ne 1 "1"}}|{{gt 3 2}}|{{gte 2 2}}|{{lt "a" "b"}}|{{lte 2 2}}|{{and name 1}}|{{or 0 name}}|{{not 0}}|{{and empty name}}|{{#if (and (eq kind "Store") (not hidden))}}{{slugify name "-" city}}{{/if}}',
+        {
+          kind: "Store",
+          name: "A & B",
+          city: "New York",
+          hidden: false,
+          empty: [],
+        }
+      )
+    ).toBe("false|true|true|true|true|true|true|true|true|true|a-&-b-new-york");
+  });
+
+  it("resolves businessType from the current or an explicit document", () => {
+    expect(
+      renderCustom(
+        "{{businessType}}|{{json (businessType this)}}|{{#each children}}{{businessType}}/{{businessType @root}};{{/each}}|{{businessType missing}}",
+        {
+          __: { categoryRootAncestorId: 389 },
+          children: [
+            { __: { categoryRootAncestorId: 378 } },
+            { __: { categoryRootAncestorId: 999 } },
+          ],
+        }
+      )
+    ).toBe(
+      'Store|"Store"|FinancialService/Store;LocalBusiness/Store;|LocalBusiness'
+    );
+  });
+
+  it("composes Pages wrappers without forwarding Handlebars options or changing return values", () => {
+    expect(
+      renderCustom(
+        '{{json (BaseSchema this "Store")}}|{{json (LocalBusiness this)}}|{{json (AddressSchema address)}}|{{json (OpeningHoursSchema)}}|{{SchemaWrapper (BaseSchema this "Thing")}}',
+        {
+          name: "Shop",
+          address: { line1: "1 Main St", city: "NY", countryCode: "US" },
+        }
+      )
+    ).toBe(
+      '{"@context":"https://schema.org","@type":"Store","name":"Shop"}|{"@context":"https://schema.org","@type":"LocalBusiness","name":"Shop","address":{"@type":"PostalAddress","streetAddress":"1 Main St","addressLocality":"NY","addressCountry":"US"}}|{"address":{"@type":"PostalAddress","streetAddress":"1 Main St","addressLocality":"NY","addressCountry":"US"}}|{}|<script type="application/ld+json">\n  {"@context":"https://schema.org","@type":"Thing","name":"Shop"}\n  </script>'
+    );
+  });
+
+  it("does not modify entity fields or leak custom escaping into Custom Code", async () => {
+    const { processHandlebarsTemplate } = await import(
+      "../../components/customCode/customCodeHandlebars.ts"
+    );
+    const document = {
+      name: "<Shop>",
+      path: "original",
+      primaryCategory: "Original",
+    };
+    renderCustom("{{name}}", document);
+    expect({
+      document,
+      customCode: processHandlebarsTemplate("{{name}}", document),
+    }).toEqual({
+      document: {
+        name: "<Shop>",
+        path: "original",
+        primaryCategory: "Original",
+      },
+      customCode: "&lt;Shop&gt;",
+    });
+  });
+
+  it.each([
+    "",
+    "{{#if name}}",
+    "{{missingHelper name}}",
+    "{{json (AddressSchema invalid)}}",
+  ])("emits no markup for blank or failing Custom %s", (template) => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    expect(renderCustom(template, { name: "Shop", invalid: null })).toBe("");
+    if (template) {
+      expect(warn).toHaveBeenCalledWith(
+        "Error resolving custom schema:",
+        expect.any(String)
+      );
+    } else {
+      expect(warn).not.toHaveBeenCalled();
+    }
+  });
+
+  it("preserves whitespace around standalone Handlebars blocks", () => {
+    expect(
+      renderCustom(" \n{{#if name}}\n  <script>{{name}}</script>\n{{/if}}\n ", {
+        name: "Shop",
+      })
+    ).toBe(" \n\n  <script>Shop</script>\n\n ");
+  });
+
+  it.each([
+    [
+      'Event this "MusicEvent"',
+      '{"@context":"https://schema.org","@type":"MusicEvent","name":"Shop","performer":{"@type":"PerformingGroup","name":"A and B"}}',
+    ],
+    [
+      'Product this "IndividualProduct"',
+      '{"@context":"https://schema.org","@type":"IndividualProduct","name":"Shop"}',
+    ],
+    [
+      "FAQPage faqs",
+      '{"@context":"http://www.schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Open?","acceptedAnswer":{"@type":"Answer","text":"Yes"}}]}',
+    ],
+    ["LocationSchema place", '{"@type":"Place","name":"Venue"}'],
+    ["OpeningHoursSchema hours", '{"openingHours":["Mo 09:00-17:00"]}'],
+    [
+      "OpeningHoursSpecificationSchema hours",
+      '{"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":"https://schema.org/Monday","opens":"09:00","closes":"17:00"}]}',
+    ],
+    [
+      "OfferSchema offer",
+      '{"offers":{"@type":"Offer","priceCurrency":"USD","price":"10","availability":"InStock"}}',
+    ],
+    [
+      "PerformerSchema performers",
+      '{"performer":{"@type":"PerformingGroup","name":"A and B"}}',
+    ],
+    [
+      "OrganizationSchema organization",
+      '{"organizer":{"@type":"Organization","name":"Org","url":"https://example.test"}}',
+    ],
+    ["PhotoGallerySchema gallery", '{"image":["https://example.test/photo"]}'],
+    ["PhotoSchema photo", '{"image":"https://example.test/photo"}'],
+    [
+      "ReviewSchema review",
+      '{"review":{"@type":"Review","reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"author":{"@type":"Person","name":"Ada"}}}',
+    ],
+    [
+      "AggregateRatingSchema rating",
+      '{"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.5","reviewCount":"2"}}',
+    ],
+    ["AddressSchema missing", "false"],
+    ["AggregateRatingSchema missing", "null"],
+  ])("preserves the Pages wrapper result for %s", (expression, expected) => {
+    expect(
+      renderCustom(`{{json (${expression})}}`, {
+        name: "Shop",
+        faqs: [{ question: "Open?", answer: "Yes" }],
+        place: { name: "Venue" },
+        hours: {
+          monday: { openIntervals: [{ start: "09:00", end: "17:00" }] },
+        },
+        offer: { priceCurrency: "USD", price: "10", availability: "InStock" },
+        performers: ["A", "B"],
+        organization: { name: "Org", url: "https://example.test" },
+        gallery: [{ image: { url: "https://example.test/photo" } }],
+        photo: { image: { url: "https://example.test/photo" } },
+        review: { ratingValue: "5", bestRating: "5", author: "Ada" },
+        rating: { ratingValue: "4.5", reviewCount: "2" },
+      })
+    ).toBe(expected);
+  });
+
+  it("retains Custom markup through existing layout migrations", () => {
+    const template = "  <script>{{json name}}</script>\n";
+    const document = { name: "Shop", meta: { entityType: { id: "location" } } };
+    const layout = {
+      root: {
+        props: {
+          version: 0,
+          schemaMode: "custom",
+          customSchemaMarkup: template,
+          schemaMarkup: '{"name":"[[name]]"}',
+        },
+      },
+      content: [],
+    };
+    const migrated = migrate(
+      layout,
+      migrationRegistry,
+      { components: {} },
+      document
+    );
+
+    expect(
+      getSchema({
+        path: "store",
+        relativePrefixToRoot: "",
+        document: { ...document, __: { layout: JSON.stringify(migrated) } },
+      })
+    ).toBe('  <script>"Shop"</script>\n');
   });
 });

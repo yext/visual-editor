@@ -84,7 +84,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
       applyAnalytics(document),
       applyHeaderScript(document),
       applyTheme(document, relativePrefixToRoot, defaultThemeConfig),
-      SchemaWrapper(schema),
+      typeof schema === "string" ? schema : SchemaWrapper(schema),
     ].join("\n"),
   };
 };

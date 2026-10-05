@@ -141,6 +141,7 @@
     "presetImage": "Eelseade",
     "textAndLink": "Tekst ja link"
   },
+  "custom": "Kohandatud",
   "customSearchArea": "Kohandatud otsinguala",
   "dataAttribute": "Atribuut",
   "date": "Kuupäev",
@@ -643,6 +644,7 @@
   },
   "readLess": "Lugege vähem",
   "readMore": "Lugege rohkem",
+  "recommended": "Soovitatav",
   "recommendedColor": "Soovitatav värv",
   "recommendedColors": "Soovitatavad värvid",
   "redo": "Uuesti tegema",
@@ -655,6 +657,7 @@
   "reviewsEmptyStateSectionHidden": "Selle {{entityType}} jaoks peidetud jaotis",
   "saturday": "Laupäev",
   "schemaMarkup": "Skeemi märgistus",
+  "schemaMode": "Skeemi režiim",
   "search": "Otsima",
   "searchHere": "Otsige siit ...",
   "searchThisArea": "Otsige sellest piirkonnast",

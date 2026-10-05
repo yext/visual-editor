@@ -141,6 +141,7 @@
     "presetImage": "Imagem predefinida",
     "textAndLink": "Texto e link"
   },
+  "custom": "Personalizado",
   "customSearchArea": "Área de pesquisa personalizada",
   "dataAttribute": "Atributo",
   "date": "Data",
@@ -648,6 +649,7 @@
   },
   "readLess": "Leia menos",
   "readMore": "Leia mais",
+  "recommended": "Recomendado",
   "recommendedColor": "Cor recomendada",
   "recommendedColors": "Cores recomendadas",
   "redo": "Refazer",
@@ -660,6 +662,7 @@
   "reviewsEmptyStateSectionHidden": "Seção oculta para este {{entityType}}",
   "saturday": "Sábado",
   "schemaMarkup": "Marcação de esquema",
+  "schemaMode": "Modo de esquema",
   "search": "Procurar",
   "searchHere": "Pesquise aqui ...",
   "searchThisArea": "Pesquise nesta área",

@@ -141,6 +141,7 @@
     "presetImage": "Iš anksto nustatytas vaizdas",
     "textAndLink": "Tekstas ir nuoroda"
   },
+  "custom": "Pasirinktinis",
   "customSearchArea": "Pasirinktinė paieškos sritis",
   "dataAttribute": "Atributas",
   "date": "Data",
@@ -653,6 +654,7 @@
   },
   "readLess": "Skaitykite mažiau",
   "readMore": "Skaityti daugiau",
+  "recommended": "Rekomenduojamas",
   "recommendedColor": "Rekomenduojama spalva",
   "recommendedColors": "Rekomenduojamos spalvos",
   "redo": "Perdaryti",
@@ -665,6 +667,7 @@
   "reviewsEmptyStateSectionHidden": "Šio {{entityType}} skyrius paslėptas",
   "saturday": "Šeštadienis",
   "schemaMarkup": "Schemos žymėjimas",
+  "schemaMode": "Schemos režimas",
   "search": "Ieškoti",
   "searchHere": "Ieškokite čia ...",
   "searchThisArea": "Ieškokite šioje srityje",

@@ -1,7 +1,6 @@
-import { CustomField } from "@puckeditor/core";
-import { msg } from "../../utils/i18n/platform.ts";
+import { CustomField, FieldLabel } from "@puckeditor/core";
+import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { YextAutoField } from "../../fields/YextAutoField.tsx";
 import React from "react";
 import {
   useSendMessageToParent,
@@ -10,6 +9,7 @@ import {
 } from "../hooks/useMessage.ts";
 import { getSchemaTemplate } from "../../utils/schema/defaultSchemas.ts";
 import { isLocalDev } from "../../utils/isLocalDev.ts";
+import { getCustomSchemaTemplate } from "../../utils/schema/defaultCustomSchemas.ts";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 let pendingSchemaMarkupSession:
@@ -22,13 +22,16 @@ export interface AdvancedSettingsProps {
    */
   data: {
     /**
-     * @defaultValue ""
-     */
+     * Whether schemaMarkup (recommended) or customSchemaMarkup (custom) is being used.
+     * Absent on old layouts; defaults to Recommended.
+     **/
+    schemaMode?: "recommended" | "custom";
     schemaMarkup: string;
+    customSchemaMarkup?: string;
   };
 }
 
-const SCHEMA_MARKUP_FIELD: CustomField<string> = {
+const createSchemaMarkupField = (custom: boolean): CustomField<string> => ({
   type: "custom",
   render: ({ onChange, value }) => {
     const streamDocument = useDocument();
@@ -51,16 +54,14 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       }
     );
 
-    const defaultSchema = getSchemaTemplate(streamDocument);
+    const recommendedDefaultSchema = custom
+      ? ""
+      : getSchemaTemplate(streamDocument);
 
     // Use the schema value from root, or default schema if not set
-    const schema = value || defaultSchema;
-
-    const codeField = {
-      label: msg("schemaMarkup", "Schema Markup"),
-      type: "code" as const,
-      codeLanguage: "json" as const,
-    };
+    const schema = custom
+      ? (value ?? getCustomSchemaTemplate(streamDocument))
+      : value || recommendedDefaultSchema;
 
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -74,16 +75,18 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
         }
       } else {
         /** Instructs Storm to open the schema markup drawer */
-        const messageId = `SchemaMarkup-${Date.now()}`;
+        const messageId = `${custom ? "CustomSchemaMarkup" : "SchemaMarkup"}-${Date.now()}`;
         pendingSchemaMarkupSession = {
           messageId,
-          apply: (payload) => onChange(String(payload.value || "")),
+          apply: (payload) => {
+            if (typeof payload.value === "string") onChange(payload.value);
+          },
         };
 
         const payload = {
-          type: "SchemaMarkup",
+          type: custom ? "CustomSchemaMarkup" : "SchemaMarkup",
           value: schema,
-          defaultValue: defaultSchema,
+          ...(!custom && { defaultValue: recommendedDefaultSchema }),
           id: messageId,
         };
 
@@ -92,36 +95,34 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
     };
 
     return (
-      <div
-        onClick={handleClick}
-        onMouseDown={(e) => e.preventDefault()}
-        onMouseUp={(e) => e.preventDefault()}
-        className="ve-cursor-pointer"
-        style={{ pointerEvents: "auto" }}
-      >
-        <div
-          onClick={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
-          onMouseUp={(e) => e.stopPropagation()}
-          style={{ pointerEvents: "none" }}
+      <FieldLabel label={pt("schemaMarkup", "Schema Markup")}>
+        <button
+          type="button"
+          aria-label={pt("schemaMarkup", "Schema Markup")}
+          onClick={handleClick}
+          className="CodeField"
         >
-          <YextAutoField
-            field={codeField}
-            id="schemaMarkup"
-            onChange={onChange}
-            value={schema}
-          />
-        </div>
-      </div>
+          <div className="ve-line-clamp-3">{schema}</div>
+        </button>
+      </FieldLabel>
     );
   },
-};
+});
 
 const advancedSettingsFields: YextFields<AdvancedSettingsProps> = {
   data: {
     type: "object",
     objectFields: {
-      schemaMarkup: SCHEMA_MARKUP_FIELD,
+      schemaMode: {
+        type: "radio",
+        label: msg("schemaMode", "Schema Mode"),
+        options: [
+          { label: msg("recommended", "Recommended"), value: "recommended" },
+          { label: msg("custom", "Custom"), value: "custom" },
+        ],
+      },
+      schemaMarkup: createSchemaMarkupField(false),
+      customSchemaMarkup: createSchemaMarkupField(true),
     },
   },
 };
@@ -136,6 +137,7 @@ export const AdvancedSettings: YextComponentConfig<AdvancedSettingsProps> = {
   fields: advancedSettingsFields,
   defaultProps: {
     data: {
+      schemaMode: "recommended",
       schemaMarkup: "",
     },
   },

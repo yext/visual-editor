@@ -141,6 +141,7 @@
     "presetImage": "Előre beállított kép",
     "textAndLink": "Szöveg és link"
   },
+  "custom": "Egyéni",
   "customSearchArea": "Egyedi keresési terület",
   "dataAttribute": "Adatattribútum",
   "date": "Dátum",
@@ -643,6 +644,7 @@
   },
   "readLess": "Olvasson kevesebbet",
   "readMore": "Olvasson tovább",
+  "recommended": "Ajánlott",
   "recommendedColor": "Ajánlott szín",
   "recommendedColors": "Ajánlott színek",
   "redo": "Újra felújít",
@@ -655,6 +657,7 @@
   "reviewsEmptyStateSectionHidden": "A szakasz elrejtve ehhez a(z) {{entityType}}",
   "saturday": "szombat",
   "schemaMarkup": "Séma jelölés",
+  "schemaMode": "Sémamód",
   "search": "Keresés",
   "searchHere": "Keressen itt ...",
   "searchThisArea": "Keresse meg ezt a területet",

@@ -141,6 +141,7 @@
     "presetImage": "Predvolený obraz",
     "textAndLink": "Text a odkaz"
   },
+  "custom": "Vlastné",
   "customSearchArea": "Oblasť vyhľadávania",
   "dataAttribute": "Atribút",
   "date": "Dátum",
@@ -653,6 +654,7 @@
   },
   "readLess": "Čítajte menej",
   "readMore": "Čítajte viac",
+  "recommended": "Odporúčané",
   "recommendedColor": "Odporúčaná farba",
   "recommendedColors": "Odporúčané farby",
   "redo": "Opätovne prekážať",
@@ -665,6 +667,7 @@
   "reviewsEmptyStateSectionHidden": "Sekcia skrytá pre túto {{entityType}}",
   "saturday": "Sobota",
   "schemaMarkup": "Označenie schémy",
+  "schemaMode": "Režim schémy",
   "search": "Hľadať",
   "searchHere": "Vyhľadajte tu ...",
   "searchThisArea": "Hľadať túto oblasť",

@@ -141,6 +141,7 @@
     "presetImage": "Přednastavený obrázek",
     "textAndLink": "Text a odkaz"
   },
+  "custom": "Vlastní",
   "customSearchArea": "Vlastní vyhledávací oblast",
   "dataAttribute": "Atribut",
   "date": "Datum",
@@ -653,6 +654,7 @@
   },
   "readLess": "Číst méně",
   "readMore": "Číst více",
+  "recommended": "Doporučené",
   "recommendedColor": "Doporučená barva",
   "recommendedColors": "Doporučené barvy",
   "redo": "Předělat",
@@ -665,6 +667,7 @@
   "reviewsEmptyStateSectionHidden": "Sekce skrytá pro tuto {{entityType}}",
   "saturday": "sobota",
   "schemaMarkup": "Označení schématu",
+  "schemaMode": "Režim schématu",
   "search": "Vyhledávání",
   "searchHere": "Hledejte zde ...",
   "searchThisArea": "Prohledejte tuto oblast",

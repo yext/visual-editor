@@ -141,6 +141,7 @@
     "presetImage": "Unaprijed postavljena slika",
     "textAndLink": "Tekst i veza"
   },
+  "custom": "Prilagođeno",
   "customSearchArea": "Područje prilagođenog pretraživanja",
   "dataAttribute": "Atribut",
   "date": "Datum",
@@ -648,6 +649,7 @@
   },
   "readLess": "Čitaj manje",
   "readMore": "Pročitaj više",
+  "recommended": "Preporučeno",
   "recommendedColor": "Preporučena boja",
   "recommendedColors": "Preporučene boje",
   "redo": "Ponovno obnavljati",
@@ -660,6 +662,7 @@
   "reviewsEmptyStateSectionHidden": "Odjeljak skriven za ovaj {{entityType}}",
   "saturday": "subota",
   "schemaMarkup": "Oznaka sheme",
+  "schemaMode": "Način sheme",
   "search": "Pretraživanje",
   "searchHere": "Pretražite ovdje ...",
   "searchThisArea": "Pretražite ovo područje",

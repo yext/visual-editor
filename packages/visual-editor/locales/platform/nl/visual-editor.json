@@ -141,6 +141,7 @@
     "presetImage": "Vooraf ingestelde afbeelding",
     "textAndLink": "Tekst en link"
   },
+  "custom": "Aangepast",
   "customSearchArea": "Aangepast zoekgebied",
   "dataAttribute": "Attribuut",
   "date": "Datum",
@@ -643,6 +644,7 @@
   },
   "readLess": "Lees minder",
   "readMore": "Lees meer",
+  "recommended": "Aanbevolen",
   "recommendedColor": "Aanbevolen kleur",
   "recommendedColors": "Aanbevolen kleuren",
   "redo": "Opnieuw doen",
@@ -655,6 +657,7 @@
   "reviewsEmptyStateSectionHidden": "Sectie verborgen voor deze {{entityType}}",
   "saturday": "Zaterdag",
   "schemaMarkup": "Schema -aanmelding",
+  "schemaMode": "Schemamodus",
   "search": "Zoekopdracht",
   "searchHere": "Zoek hier ...",
   "searchThisArea": "Zoek dit gebied",

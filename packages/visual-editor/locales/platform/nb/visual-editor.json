@@ -141,6 +141,7 @@
     "presetImage": "Forhåndsinnstilt bilde",
     "textAndLink": "Tekst og lenke"
   },
+  "custom": "Egendefinert",
   "customSearchArea": "Tilpasset søkeområde",
   "dataAttribute": "Dataattributt",
   "date": "Dato",
@@ -643,6 +644,7 @@
   },
   "readLess": "Les mindre",
   "readMore": "Les mer",
+  "recommended": "Anbefalt",
   "recommendedColor": "Anbefalt farge",
   "recommendedColors": "Anbefalte farger",
   "redo": "Gjøre om",
@@ -655,6 +657,7 @@
   "reviewsEmptyStateSectionHidden": "Seksjon skjult for denne {{entityType}}",
   "saturday": "lørdag",
   "schemaMarkup": "Skjema markering",
+  "schemaMode": "Skjemamodus",
   "search": "Søk",
   "searchHere": "Søk her ...",
   "searchThisArea": "Søk i dette området",

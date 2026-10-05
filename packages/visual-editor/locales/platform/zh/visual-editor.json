@@ -141,6 +141,7 @@
     "presetImage": "预设图像",
     "textAndLink": "文字和链接"
   },
+  "custom": "自定义",
   "customSearchArea": "自定义搜索区域",
   "dataAttribute": "属性",
   "date": "日期",
@@ -643,6 +644,7 @@
   },
   "readLess": "阅读更少",
   "readMore": "阅读更多",
+  "recommended": "推荐",
   "recommendedColor": "推荐颜色",
   "recommendedColors": "推荐的颜色",
   "redo": "重做",
@@ -655,6 +657,7 @@
   "reviewsEmptyStateSectionHidden": "此 {{entityType}} 的部分已隐藏",
   "saturday": "周六",
   "schemaMarkup": "模式标记",
+  "schemaMode": "架构模式",
   "search": "搜索",
   "searchHere": "在这里搜索...",
   "searchThisArea": "搜索此区域",

@@ -141,6 +141,7 @@
     "presetImage": "プリセット画像",
     "textAndLink": "テキストとリンク"
   },
+  "custom": "カスタム",
   "customSearchArea": "カスタム検索領域",
   "dataAttribute": "属性",
   "date": "日付",
@@ -643,6 +644,7 @@
   },
   "readLess": "閉じる",
   "readMore": "続きを読む",
+  "recommended": "推奨",
   "recommendedColor": "おすすめカラー",
   "recommendedColors": "推奨される色",
   "redo": "やり直します",
@@ -655,6 +657,7 @@
   "reviewsEmptyStateSectionHidden": "この {{entityType}} に対して非表示のセクション",
   "saturday": "土曜日",
   "schemaMarkup": "スキーママークアップ",
+  "schemaMode": "スキーマモード",
   "search": "検索",
   "searchHere": "ここで検索してください...",
   "searchThisArea": "このエリアを検索します",

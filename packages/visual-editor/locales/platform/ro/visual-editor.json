@@ -141,6 +141,7 @@
     "presetImage": "Imagine prestabilită",
     "textAndLink": "Text și link"
   },
+  "custom": "Personalizat",
   "customSearchArea": "Zona de căutare personalizată",
   "dataAttribute": "Atribut de date",
   "date": "Data",
@@ -648,6 +649,7 @@
   },
   "readLess": "Citiți mai puțin",
   "readMore": "Citiți mai mult",
+  "recommended": "Recomandat",
   "recommendedColor": "Culoare recomandată",
   "recommendedColors": "Culorile recomandate",
   "redo": "Redo.",
@@ -660,6 +662,7 @@
   "reviewsEmptyStateSectionHidden": "Secțiune ascunsă pentru acest {{entityType}}",
   "saturday": "sâmbătă",
   "schemaMarkup": "Schema Markup",
+  "schemaMode": "Mod schemă",
   "search": "Căutare",
   "searchHere": "Căutați aici ...",
   "searchThisArea": "Căutați în această zonă",

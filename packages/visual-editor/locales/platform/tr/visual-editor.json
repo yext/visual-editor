@@ -141,6 +141,7 @@
     "presetImage": "Önceden ayarlanmış resim",
     "textAndLink": "Metin ve Bağlantı"
   },
+  "custom": "Özel",
   "customSearchArea": "Özel arama alanı",
   "dataAttribute": "Veri Niteliği",
   "date": "Tarih",
@@ -643,6 +644,7 @@
   },
   "readLess": "Daha az oku",
   "readMore": "Devamını oku",
+  "recommended": "Önerilen",
   "recommendedColor": "Önerilen Renk",
   "recommendedColors": "Önerilen renkler",
   "redo": "Yeniden yapmak",
@@ -655,6 +657,7 @@
   "reviewsEmptyStateSectionHidden": "Bu {{entityType}} için bölüm gizlendi",
   "saturday": "Cumartesi",
   "schemaMarkup": "Şema işaretlemesi",
+  "schemaMode": "Şema modu",
   "search": "Aramak",
   "searchHere": "Burada ara ...",
   "searchThisArea": "Bu alanı arayın",

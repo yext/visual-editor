@@ -141,6 +141,7 @@
     "presetImage": "Image prédéfinie",
     "textAndLink": "Texte et lien"
   },
+  "custom": "Personnalisé",
   "customSearchArea": "Zone de recherche personnalisée",
   "dataAttribute": "Attribut",
   "date": "Date",
@@ -648,6 +649,7 @@
   },
   "readLess": "Lire moins",
   "readMore": "En savoir plus",
+  "recommended": "Recommandé",
   "recommendedColor": "Couleur recommandée",
   "recommendedColors": "Couleurs recommandées",
   "redo": "Refaire",
@@ -660,6 +662,7 @@
   "reviewsEmptyStateSectionHidden": "Section masquée pour ce {{entityType}}",
   "saturday": "Samedi",
   "schemaMarkup": "Marquage du schéma",
+  "schemaMode": "Mode de schéma",
   "search": "Recherche",
   "searchHere": "Recherche ici ...",
   "searchThisArea": "Recherchez cette zone",

@@ -141,6 +141,7 @@
     "presetImage": "Preset Image",
     "textAndLink": "Text & Link"
   },
+  "custom": "Custom",
   "customSearchArea": "Custom Search Area",
   "dataAttribute": "Attribute",
   "date": "Date",
@@ -643,6 +644,7 @@
   },
   "readLess": "Read less",
   "readMore": "Read more",
+  "recommended": "Recommended",
   "recommendedColor": "Recommended Color",
   "recommendedColors": "Recommended Colors",
   "redo": "Redo",
@@ -655,6 +657,7 @@
   "reviewsEmptyStateSectionHidden": "Section hidden for this {{entityType}}",
   "saturday": "Saturday",
   "schemaMarkup": "Schema Markup",
+  "schemaMode": "Schema Mode",
   "search": "Search",
   "searchHere": "Search here...",
   "searchThisArea": "Search This Area",

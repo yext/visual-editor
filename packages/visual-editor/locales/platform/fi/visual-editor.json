@@ -141,6 +141,7 @@
     "presetImage": "Esiasetettu kuva",
     "textAndLink": "Teksti ja linkki"
   },
+  "custom": "Mukautettu",
   "customSearchArea": "Mukautettu hakualue",
   "dataAttribute": "Attribuutti",
   "date": "Päivämäärä",
@@ -643,6 +644,7 @@
   },
   "readLess": "Lue vähemmän",
   "readMore": "Lue lisää",
+  "recommended": "Suositeltu",
   "recommendedColor": "Suositeltu väri",
   "recommendedColors": "Suositellut värit",
   "redo": "Tehdä uudelleen",
@@ -655,6 +657,7 @@
   "reviewsEmptyStateSectionHidden": "Osio piilotettu tälle {{entityType}}",
   "saturday": "lauantai",
   "schemaMarkup": "Kaavio",
+  "schemaMode": "Skeeman tila",
   "search": "Haku",
   "searchHere": "Etsi täältä ...",
   "searchThisArea": "Etsi tätä aluetta",
