@@ -1,20 +1,21 @@
-import type { AnchorHTMLAttributes } from "react";
+import type { HTMLAttributes } from "react";
 import { cn } from "../../../utils/cn.ts";
 import { useTranslation } from "react-i18next";
 
 export const AppGalleryButton = ({
   size = "md",
   ...props
-}: AnchorHTMLAttributes<HTMLAnchorElement> & { size?: "md" | "lg" }) => {
+}: HTMLAttributes<HTMLSpanElement> & { size?: "md" | "lg" }) => {
   const { t } = useTranslation();
   return (
-    <a
+    <span
+      role="img"
       aria-label={t("ariaLabelAppGallery", "Explore it on {{serviceName}}", {
         serviceName: "AppGallery",
       })}
       {...props}
       className={cn(
-        "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",
+        "rounded-[7px] bg-black ring-1 ring-app-store-badge-border ring-inset",
         props.className
       )}
     >
@@ -123,6 +124,6 @@ export const AppGalleryButton = ({
           fill="white"
         />
       </svg>
-    </a>
+    </span>
   );
 };
