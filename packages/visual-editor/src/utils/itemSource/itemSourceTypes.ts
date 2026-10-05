@@ -39,7 +39,7 @@ export type CreateItemSourceOptions<
    * Allows lists whose items are values, such as images, instead of objects
    * with matching child fields. Maps the whole item to the specified key.
    */
-  directItem?: {
+  fullItemMapping?: {
     /** Overrides the accepted item types. Defaults to the mapped field's filter types. */
     types?: EntityFieldTypes[];
     /** Key in mappingFields that receives the whole item through the $item mapping. */

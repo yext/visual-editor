@@ -428,7 +428,7 @@ describe("createItemSource", () => {
         },
       },
       optionalMappingKeys: ["link"],
-      directItem: { types: ["type.image"], mappingKey: "image" },
+      fullItemMapping: { types: ["type.image"], mappingKey: "image" },
     });
 
     expect((gallerySource.field as any).filter).toEqual({
@@ -544,7 +544,7 @@ describe("createItemSource", () => {
             disableConstantValueToggle: false,
           },
         },
-        directItem: { types: ["type.image"], mappingKey: "image" },
+        fullItemMapping: { types: ["type.image"], mappingKey: "image" },
       });
 
       expect(
@@ -580,7 +580,7 @@ describe("createItemSource", () => {
             filter: { types: ["type.image"] },
           },
         },
-        directItem: {
+        fullItemMapping: {
           mappingKey: "image",
           types: types ? [...types] : undefined,
         },

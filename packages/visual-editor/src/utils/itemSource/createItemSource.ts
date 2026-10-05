@@ -22,7 +22,7 @@ import { resolveItemValue } from "./itemSourceResolution.ts";
  *
  * 1. Uses mappingFields for manual inputs and linked item mappings. Excludes
  *    optionalMappingKeys from the types required in a selected object list.
- *    Uses directItem to also accept lists of values without child fields.
+ *    Uses fullItemMapping to also accept lists of values without child fields.
  * 2. Generates the default repeated value for linked and manual modes.
  * 3. Resolves linked or manual items into render-ready values without writing
  *    derived data back onto component props.
@@ -32,17 +32,17 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
   mappingFields,
   defaultValues,
   optionalMappingKeys = [],
-  directItem,
+  fullItemMapping,
 }: CreateItemSourceOptions<TItemProps>): ItemSourceInstance<TItemProps> {
-  const directItemField = directItem
+  const fullItemMappingField = fullItemMapping
     ? (mappingFields as Record<string, YextFieldDefinition<any>>)[
-        directItem.mappingKey
+        fullItemMapping.mappingKey
       ]
     : undefined;
   const directItemTypes =
-    directItem?.types ??
-    (directItemField?.type === "entityField"
-      ? directItemField.filter.types
+    fullItemMapping?.types ??
+    (fullItemMappingField?.type === "entityField"
+      ? fullItemMappingField.filter.types
       : undefined);
   const scopedMappingFields = Object.fromEntries(
     Object.entries(mappingFields).map(([key, field]) => {
@@ -51,7 +51,8 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
       );
       return [
         key,
-        key === directItem?.mappingKey && mappingField.type === "entityField"
+        key === fullItemMapping?.mappingKey &&
+        mappingField.type === "entityField"
           ? {
               ...mappingField,
               filter: {
@@ -101,7 +102,7 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
       manualItemFields,
       defaultItemValue,
       defaultMappings,
-      directItemMappingKey: directItem?.mappingKey,
+      directItemMappingKey: fullItemMapping?.mappingKey,
     },
   } satisfies RepeatedEntityFieldDefinition<TItemProps>;
   const defaultValue: RepeatedEntityFieldValue<TItemProps> = {
