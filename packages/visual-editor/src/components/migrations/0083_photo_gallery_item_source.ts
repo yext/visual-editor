@@ -1,5 +1,4 @@
 import { type Migration } from "../../utils/migrate.ts";
-import { ITEM_SOURCE_SELF_FIELD } from "../../utils/itemSource/itemSourceTypes.ts";
 
 /**
  * Gallery item-source migration.
@@ -51,7 +50,7 @@ export const photoGalleryItemSource: Migration = {
               : [],
             mappings: {
               image: {
-                field: images.field ? ITEM_SOURCE_SELF_FIELD : "",
+                field: images.field ? "$item" : "",
                 constantValueEnabled: false,
                 constantValue: undefined,
               },
