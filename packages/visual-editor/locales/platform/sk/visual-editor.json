@@ -79,6 +79,7 @@
     "textAndLink": "Text a odkaz"
   },
   "currentLocation": "Aktuálna poloha",
+  "custom": "Vlastné",
   "customSearchArea": "Oblasť vyhľadávania",
   "dataAttribute": "Atribút",
   "date": "Dátum",
@@ -414,6 +415,7 @@
     "metaTitle": "vyplňte Meta Title pre všetky miestne nastavenia tak, že prejdete na nastavenia komponentu stránky najvyššej úrovne",
     "metaTitleWithLocales": "vyplňte Meta Title pre nasledujúce miestne nastavenia tak, že prejdete na nastavenia komponentu stránky najvyššej úrovne: {{locales}}"
   },
+  "recommended": "Odporúčané",
   "recommendedColor": "Odporúčaná farba",
   "recommendedColors": "Odporúčané farby",
   "redo": "Opätovne prekážať",
@@ -423,6 +425,7 @@
   "restaurants": "Reštaurácie",
   "saturday": "Sobota",
   "schemaMarkup": "Označenie schémy",
+  "schemaMode": "Režim schémy",
   "search": "Hľadať",
   "searchHere": "Vyhľadajte tu ...",
   "searchThisArea": "Hľadať túto oblasť",

@@ -79,6 +79,7 @@
     "textAndLink": "Tekst i link"
   },
   "currentLocation": "Aktualna lokalizacja",
+  "custom": "Niestandardowy",
   "customSearchArea": "Niestandardowy obszar wyszukiwania",
   "dataAttribute": "Atrybut",
   "date": "Data",
@@ -414,6 +415,7 @@
     "metaTitle": "wypełnij metatytuł dla wszystkich ustawień regionalnych, przechodząc do ustawień komponentu strony najwyższego poziomu",
     "metaTitleWithLocales": "wypełnij metatytuł dla następujących ustawień regionalnych, przechodząc do ustawień komponentu strony najwyższego poziomu: {{locales}}"
   },
+  "recommended": "Zalecany",
   "recommendedColor": "Zalecany kolor",
   "recommendedColors": "Zalecane kolory",
   "redo": "Przerobić",
@@ -423,6 +425,7 @@
   "restaurants": "Restauracje",
   "saturday": "Sobota",
   "schemaMarkup": "Znacznik schematu",
+  "schemaMode": "Tryb schematu",
   "search": "Szukaj",
   "searchHere": "Wyszukaj tutaj ...",
   "searchThisArea": "Przeszukaj ten obszar",

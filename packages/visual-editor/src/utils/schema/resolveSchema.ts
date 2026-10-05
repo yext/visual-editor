@@ -219,16 +219,7 @@ const resolveDirectoryChildren = (
   }
 
   return resolvedValue.map((child: any, index: number) => {
-    const baseUrl = streamDocument.siteDomain
-      ? `https://${streamDocument.siteDomain}/`
-      : "/";
-
-    // if the child has an address, we're at the city level
-    const childPath = child.address
-      ? resolveUrlTemplateOfChild(child, streamDocument, "")
-      : resolveUrlTemplate(mergeMeta(child, streamDocument), "");
-
-    const childUrl = `${baseUrl}${childPath}`;
+    const childUrl = getDirectoryChildUrl(child, streamDocument);
 
     return {
       "@type": "ListItem",
@@ -251,4 +242,18 @@ const resolveDirectoryChildren = (
       },
     };
   });
+};
+
+/** Resolve directory child URLs consistently for Recommended and Custom schema. */
+export const getDirectoryChildUrl = (
+  child: StreamDocument,
+  document: StreamDocument
+): string => {
+  const baseUrl = document.siteDomain ? `https://${document.siteDomain}/` : "/";
+  // Children with an address use the source entity page set's URL template.
+  const childPath = child.address
+    ? resolveUrlTemplateOfChild(child, document, "")
+    : resolveUrlTemplate(mergeMeta(child, document), "");
+
+  return `${baseUrl}${childPath}`;
 };

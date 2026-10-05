@@ -79,6 +79,7 @@
     "textAndLink": "Text & länk"
   },
   "currentLocation": "Nuvarande plats",
+  "custom": "Anpassat",
   "customSearchArea": "Anpassad sökområde",
   "dataAttribute": "Attribut",
   "date": "Datum",
@@ -404,6 +405,7 @@
     "metaTitle": "fyll i Meta Titel för alla språk genom att navigera till inställningarna för den översta sidans komponent",
     "metaTitleWithLocales": "fyll i Meta Titel för följande språk genom att navigera till inställningarna för sidkomponenten på översta nivån: {{locales}}"
   },
+  "recommended": "Rekommenderat",
   "recommendedColor": "Rekommenderad färg",
   "recommendedColors": "Rekommenderade färger",
   "redo": "Göra om",
@@ -413,6 +415,7 @@
   "restaurants": "Restauranger",
   "saturday": "Lördag",
   "schemaMarkup": "Schematmarkering",
+  "schemaMode": "Schemaläge",
   "search": "Söka",
   "searchHere": "Sök här ...",
   "searchThisArea": "Sök på detta område",

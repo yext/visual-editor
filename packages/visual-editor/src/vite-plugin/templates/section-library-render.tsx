@@ -43,6 +43,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   data
 ): HeadConfig => {
   const { title, description } = getPageMetadata(data.document);
+  const schema = getSchema(data);
   const faviconUrl =
     data.document?._favicon ?? data.document?._site?.favicon?.url;
   return {
@@ -86,7 +87,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
       applyAnalytics(data.document),
       applyHeaderScript(data.document),
       applyTheme(data.document, data.relativePrefixToRoot, defaultThemeConfig),
-      SchemaWrapper(getSchema(data)),
+      typeof schema === "string" ? schema : SchemaWrapper(schema),
       applyCertifiedFacts(data.document),
     ].join("\n"),
   };
