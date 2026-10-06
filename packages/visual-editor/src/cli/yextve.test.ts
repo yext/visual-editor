@@ -300,6 +300,27 @@ describe("yextve", () => {
     });
   });
 
+  it("rejects a library id containing an underscore during validation", async () => {
+    const rootDir = createTempRoot();
+    fs.outputJsonSync(path.join(rootDir, "src", "library", "library.json"), {
+      schemaVersion: 1,
+      id: "foo_test",
+      displayName: "Library",
+    });
+
+    const result = await invoke(
+      ["validate", "--skip-repo-structure-check", "--skip-code-check"],
+      rootDir
+    );
+
+    expect(result.exitCode).toBe(1);
+    expect(result.stdout).toContain("src/library/library.json");
+    expect(result.stdout).toContain(
+      "id must be 2–63 characters, contain only lowercase letters, numbers, and hyphens, start with a lowercase letter, and end with a letter or number."
+    );
+    expect(result.stdout).toContain("Validation failed. 1 error.");
+  });
+
   it("renders all skipped stages and succeeds", async () => {
     const result = await invoke([
       "validate",

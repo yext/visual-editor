@@ -3,7 +3,8 @@ import fs from "fs-extra";
 import type { LibraryMetadata } from "../../../../types/sectionLibrary.ts";
 import type { ValidationIssue } from "../../types.ts";
 
-const safeIdPattern = /^[A-Za-z0-9_-]{1,64}$/;
+// Require the actual end of input; JavaScript $ also matches before a trailing newline.
+const safeIdPattern = /^[a-z][a-z0-9-]{0,61}[a-z0-9](?![\s\S])/;
 const descriptionMaxLength = 1024;
 
 /** validateLibraryMetadata validates that the library.json has the required fields. */
@@ -82,7 +83,7 @@ export const validateLibraryMetadata = (
   if (id && !safeIdPattern.test(id)) {
     addIssue(
       "field/id/safe",
-      "id must be at most 64 characters and may contain only letters, numbers, underscores, and hyphens."
+      "id must be 2–63 characters, contain only lowercase letters, numbers, and hyphens, start with a lowercase letter, and end with a letter or number."
     );
   }
 

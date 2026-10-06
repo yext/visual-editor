@@ -5,14 +5,18 @@ export function logApiCall(
   text: string,
   method: string,
   url: URL,
-  verbose: boolean = false
+  verbose: boolean = false,
+  expectedStatusMessages: Partial<Record<number, string>> = {}
 ): (res?: YextApiResponse) => void {
   const spinner = text.length > 0 ? ora(text).start() : undefined;
   const finishVerboseLog = verbose ? verboseLogApiCall(method, url) : undefined;
 
   return (res?: YextApiResponse) => {
     if (spinner) {
-      if (res?.ok) {
+      const expectedMessage = res && expectedStatusMessages[res.status];
+      if (expectedMessage) {
+        spinner.info(expectedMessage);
+      } else if (res?.ok) {
         spinner.succeed(`${text} ${color("done", true)}`);
       } else {
         spinner.fail(`${text} ${color("error", false)}`);

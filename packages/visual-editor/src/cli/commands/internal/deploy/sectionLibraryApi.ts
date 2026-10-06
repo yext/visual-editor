@@ -93,6 +93,15 @@ export async function createSectionLibraryRevision(
   );
 
   if (!result.ok) {
+    if (
+      result.errors[0]?.message.includes(
+        "cannot create revision for built-in section library"
+      )
+    ) {
+      throw new Error(
+        'Cannot create a revision for a built-in section library. Check the "id" field in src/library/library.json. To deploy your own library, remove the reserved "yext_" prefix and retry.'
+      );
+    }
     throw sectionLibraryApiError(
       result.errors,
       "Failed to upload current commit as a Section Library Revision"
@@ -170,7 +179,9 @@ export async function getSectionLibrary(
     "GET",
     `accounts/me/sectionLibraries/${encodeURIComponent(libraryId)}`,
     config,
-    verbose
+    verbose,
+    undefined,
+    { 404: "Section library not found" }
   );
 
   if (!result.ok && result.status !== 404) {

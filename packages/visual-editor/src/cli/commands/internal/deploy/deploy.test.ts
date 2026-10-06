@@ -4,11 +4,25 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { execFileSync } from "node:child_process";
 import prompts from "prompts";
+import ora from "ora";
 import { deploy } from "./deploy.ts";
 import type { DeployConfig } from "./config.ts";
 import type { SectionLibraryRevision } from "./sectionLibraryApi.ts";
 
 vi.mock("prompts");
+vi.mock("ora", () => ({
+  default: vi.fn((options) => {
+    const spinner = {
+      text: typeof options === "string" ? options : options.text,
+      start: vi.fn(),
+      succeed: vi.fn(),
+      fail: vi.fn(),
+      info: vi.fn(),
+    };
+    spinner.start.mockReturnValue(spinner);
+    return spinner;
+  }),
+}));
 
 const config: DeployConfig = {
   accountId: "123",
@@ -38,6 +52,7 @@ let sourceCommitHash: string;
 
 beforeEach(() => {
   vi.mocked(prompts).mockReset();
+  vi.mocked(ora).mockClear();
   vi.spyOn(console, "log").mockImplementation(() => {});
   vi.spyOn(console, "warn").mockImplementation(() => {});
   rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "deploy-templates-test-"));
@@ -292,6 +307,68 @@ describe("deploy", () => {
     expect(error).not.toHaveBeenCalled();
   });
 
+  it.each([
+    {
+      name: "built-in library rejection",
+      message:
+        "Provided argument 'section_library_revision' is invalid: cannot create revision for built-in section library",
+      expectedMessage:
+        'Cannot create a revision for a built-in section library. Check the "id" field in src/library/library.json. To deploy your own library, remove the reserved "yext_" prefix and retry.',
+      verbose: false,
+    },
+    {
+      name: "built-in library rejection in verbose mode",
+      message:
+        "Provided argument 'section_library_revision' is invalid: cannot create revision for built-in section library",
+      expectedMessage:
+        'Cannot create a revision for a built-in section library. Check the "id" field in src/library/library.json. To deploy your own library, remove the reserved "yext_" prefix and retry.',
+      verbose: true,
+    },
+    {
+      name: "unrelated rejection with the same error code",
+      message: "The exact API error message.",
+      expectedMessage: "The exact API error message.",
+      verbose: false,
+    },
+  ])("handles $name during revision creation", async (testCase) => {
+    const errorLog = vi.spyOn(console, "error").mockImplementation(() => {});
+    const apiError = {
+      code: 104001,
+      type: "BAD_REQUEST",
+      message: testCase.message,
+      name: "invalidRequest",
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(successfulResponse(sectionLibrary), { status: 200 })
+        )
+        .mockResolvedValueOnce(
+          new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
+            status: 200,
+          })
+        )
+        .mockResolvedValueOnce(
+          new Response(JSON.stringify({ meta: { errors: [apiError] } }), {
+            status: 400,
+          })
+        )
+    );
+
+    await expect(deploy(config, testCase.verbose)).rejects.toThrow(
+      testCase.expectedMessage
+    );
+    if (testCase.verbose) {
+      expect(errorLog).toHaveBeenCalledWith(
+        `[debug] API Errors: ${JSON.stringify([apiError])}`
+      );
+    } else {
+      expect(errorLog).not.toHaveBeenCalled();
+    }
+  });
+
   it("explains how to resolve missing section library write permissions", async () => {
     vi.stubGlobal(
       "fetch",
@@ -354,6 +431,11 @@ describe("deploy", () => {
     await expect(deploy(config)).rejects.toThrow(
       /Yext API key does not have required permissions\./
     );
+    const spinner = vi.mocked(ora).mock.results[0].value;
+    expect(spinner.fail).toHaveBeenCalledWith(
+      "Fetching Section Library... error"
+    );
+    expect(spinner.info).not.toHaveBeenCalled();
   });
 
   it("uses the API message for error code 104001", async () => {
@@ -477,6 +559,9 @@ describe("deploy", () => {
 
     await deploy(config, false, { isInteractive: true });
 
+    const spinner = vi.mocked(ora).mock.results[0].value;
+    expect(spinner.info).toHaveBeenCalledWith("Section library not found");
+    expect(spinner.fail).not.toHaveBeenCalled();
     expect(fetchMock).toHaveBeenNthCalledWith(
       2,
       new URL(
@@ -507,6 +592,9 @@ describe("deploy", () => {
       deploy(config, false, { isInteractive: false })
     ).rejects.toThrow(/Section library "library\/123" does not exist/);
 
+    const spinner = vi.mocked(ora).mock.results[0].value;
+    expect(spinner.info).toHaveBeenCalledWith("Section library not found");
+    expect(spinner.fail).not.toHaveBeenCalled();
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(prompts).not.toHaveBeenCalled();
   });
