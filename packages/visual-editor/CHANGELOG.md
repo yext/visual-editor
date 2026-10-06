@@ -1,3 +1,17 @@
+#### 1.4.12 (2026-10-06)
+
+##### New Features
+
+- add item sources and per-image links to Photo Gallery ([#1339](https://github.com/yext/visual-editor/pull/1339)) ([bc02abdf](https://github.com/yext/visual-editor/commit/bc02abdf42f72ab4463d03664cdd6536d84ef66b))
+- preserve q param in language dropdown ([#1345](https://github.com/yext/visual-editor/pull/1345)) ([6315a838](https://github.com/yext/visual-editor/commit/6315a838c33206f117fa1f833523bc15857ac870))
+- loosen itemSource mapping requirements ([#1343](https://github.com/yext/visual-editor/pull/1343)) ([93270f92](https://github.com/yext/visual-editor/commit/93270f92e8775ffd7217bac7b3159d77aa5a115f))
+- allow Nearby Location Section customization ([#1337](https://github.com/yext/visual-editor/pull/1337)) ([4f20b8ac](https://github.com/yext/visual-editor/commit/4f20b8ac9d60c8540f555ee106b73c263d02ea1b))
+
+##### Bug Fixes
+
+- app icon dom nesting ([#1350](https://github.com/yext/visual-editor/pull/1350)) ([76d24a22](https://github.com/yext/visual-editor/commit/76d24a22ac3491998e70ac2952cd2984f6471395))
+- faq dom nesting ([#1348](https://github.com/yext/visual-editor/pull/1348)) ([2bd3dbf8](https://github.com/yext/visual-editor/commit/2bd3dbf8a5b08d9fbb966674e7ff2ed32b2db8b0))
+
 #### 1.4.11 (2026-09-29)
 
 ##### Chores
