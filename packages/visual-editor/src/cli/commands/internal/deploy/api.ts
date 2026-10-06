@@ -30,7 +30,8 @@ export async function yextApiRequest(
   path: string,
   config: DeployConfig,
   verbose: boolean = false,
-  data?: object
+  data?: object,
+  expectedStatusMessages: Partial<Record<number, string>> = {}
 ): Promise<YextApiResponse> {
   const url = new URL(`${API_PATH_PREFIX}${path}`, config.apiHost);
   url.searchParams.set("v", "20260819");
@@ -44,7 +45,13 @@ export async function yextApiRequest(
     requestInit.body = JSON.stringify(data);
   }
 
-  const finishLog = logApiCall(logAction, method, url, verbose);
+  const finishLog = logApiCall(
+    logAction,
+    method,
+    url,
+    verbose,
+    expectedStatusMessages
+  );
 
   try {
     const response = await fetch(url, new Request(url, requestInit));

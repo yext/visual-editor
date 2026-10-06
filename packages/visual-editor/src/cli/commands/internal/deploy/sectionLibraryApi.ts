@@ -170,7 +170,9 @@ export async function getSectionLibrary(
     "GET",
     `accounts/me/sectionLibraries/${encodeURIComponent(libraryId)}`,
     config,
-    verbose
+    verbose,
+    undefined,
+    { 404: "Section library not found" }
   );
 
   if (!result.ok && result.status !== 404) {

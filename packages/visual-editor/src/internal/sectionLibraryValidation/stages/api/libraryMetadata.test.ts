@@ -71,14 +71,42 @@ describe("validateLibraryMetadata", () => {
     );
   });
 
-  it("reports an unsafe id", () => {
+  it.each([
+    "unsafe id",
+    "foo_test",
+    "safe-id\n",
+    "Safe-id",
+    "safe-Id",
+    "1safe-id",
+    "-safe-id",
+    "safe-id-",
+    "a",
+    "a".repeat(64),
+  ])("reports an unsafe id %s", (id) => {
     const rootDir = createTempRoot();
-    writeLibraryJson(rootDir, validMetadata({ id: "unsafe id" }));
+    writeLibraryJson(rootDir, validMetadata({ id }));
 
     expect(validateLibraryMetadata(rootDir).issues).toContainEqual(
-      expect.objectContaining({ rule: "field/id/safe" })
+      expect.objectContaining({
+        rule: "field/id/safe",
+        message:
+          "id must be 2–63 characters, contain only lowercase letters, numbers, and hyphens, start with a lowercase letter, and end with a letter or number.",
+      })
     );
   });
+
+  it.each(["ab", "a0", "a-b", "a".repeat(63)])(
+    "accepts a valid id %s",
+    (id) => {
+      const rootDir = createTempRoot();
+      writeLibraryJson(rootDir, validMetadata({ id }));
+
+      expect(validateLibraryMetadata(rootDir)).toEqual({
+        issues: [],
+        metadata: validMetadata({ id }),
+      });
+    }
+  );
 
   it("aggregates independent field errors", () => {
     const rootDir = createTempRoot();
