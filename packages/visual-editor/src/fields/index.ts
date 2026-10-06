@@ -53,6 +53,7 @@ export { VideoFieldOverride, type VideoField } from "./VideoField.tsx";
 export {
   toPuckFields,
   type YextComponentConfig,
+  type YextTransformedProps,
   type YextArrayField,
   type YextFields,
   type YextFieldMap,
@@ -65,3 +66,4 @@ export {
 export { YextPuckFieldOverrides } from "./fieldOverrides.ts";
 
 export { YextAutoField } from "./YextAutoField.tsx";
+export { createYextFieldTransforms } from "./fieldTransforms.tsx";

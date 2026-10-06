@@ -125,6 +125,112 @@ const Example = ({ myField }: ExampleProps) => {
 };
 ```
 
+## Opt-in field transforms
+
+Add `transform: true` to an `entityField` or `translatableString` to resolve its
+value before component rendering. Omitted or false flags keep the authored value
+unchanged. Defaults, field editors, `resolveData`, and saved layouts continue to
+use authored props.
+
+| Field definition                             | Render value                                                                 |
+| -------------------------------------------- | ---------------------------------------------------------------------------- |
+| `translatableString`                         | Localized, interpolated string                                               |
+| Ordinary `entityField`                       | Resolved entity or constant value with nested localization and interpolation |
+| `entityField` including `type.rich_text_v2`  | Resolved rich-text object or plain string                                    |
+| Rich-text list with `includeListsOnly: true` | Array of resolved rich-text objects or strings                               |
+
+Images retain their simple or complex image shape, dimensions, and asset metadata;
+nested alt text becomes a string. Repeated item sources and CTA field types are
+outside this first pass.
+
+Both editor previews and `VisualEditorRender` pass transforms to Puck's official
+`fieldTransforms` API. This requires `@puckeditor/core@0.24.0-canary.c1ec9773`,
+which includes native support in both client and server `Render`. The generated
+section-library page template uses `VisualEditorRender` inside the existing
+provider. Existing libraries are not migrated automatically.
+
+For direct Puck usage, pass
+`fieldTransforms={createYextFieldTransforms(streamDocument, locale)}` to `Puck`
+or `Render`. Transform resolution belongs to rendering; do not store the
+returned values in layout data.
+
+### Hero without slots
+
+Keep the precise field definitions with `satisfies`, then pass `typeof fields` as
+the second type argument to `YextComponentConfig`. This derives clean render
+props while keeping authored defaults typed separately.
+
+```tsx
+import { type ComplexImageType } from "@yext/pages-components";
+import {
+  ComprehensiveCTA,
+  Image,
+  RichTextRenderer,
+  type ComprehensiveCTAValue,
+  type TranslatableAssetImage,
+  type TranslatableRichText,
+  type TranslatableString,
+  type YextComponentConfig,
+  type YextEntityField,
+  type YextFieldMap,
+} from "@yext/visual-editor";
+
+type HeroProps = {
+  title: YextEntityField<TranslatableString>;
+  description: YextEntityField<TranslatableRichText>;
+  image: YextEntityField<ComplexImageType | TranslatableAssetImage>;
+  primaryCta: ComprehensiveCTAValue;
+  secondaryCta: ComprehensiveCTAValue;
+};
+
+const fields = {
+  title: {
+    type: "entityField",
+    label: "Title",
+    transform: true,
+    filter: { types: ["type.string"] },
+  },
+  description: {
+    type: "entityField",
+    label: "Description",
+    transform: true,
+    filter: { types: ["type.rich_text_v2", "type.string"] },
+  },
+  image: {
+    type: "entityField",
+    label: "Image",
+    transform: true,
+    filter: { types: ["type.image"] },
+  },
+  primaryCta: { type: "comprehensiveCTA", label: "Primary CTA" },
+  secondaryCta: { type: "comprehensiveCTA", label: "Secondary CTA" },
+} satisfies YextFieldMap<HeroProps>;
+
+export const Hero: YextComponentConfig<HeroProps, typeof fields> = {
+  fields,
+  render: ({ title, description, image, primaryCta, secondaryCta }) => (
+    <section>
+      <h1>{title}</h1>
+      <RichTextRenderer data={description} bodyVariant="lg" />
+      {image && <Image image={image} loading="eager" />}
+      <ComprehensiveCTA value={primaryCta} />
+      <ComprehensiveCTA value={secondaryCta} />
+    </section>
+  ),
+};
+```
+
+Title, description, and image still allow entity bindings and constant values.
+The transform returns resolved data, including translated and interpolated rich-text
+HTML and JSON. `RichTextRenderer` accepts that data and uses the shared `MaybeRTF`
+rendering internally, with optional `className`, `style`, `bodyVariant`, and
+`richTextStyleOverrides`. CTAs keep their existing field and renderer API.
+
+Opted-in fields appear in the editor's component-level entity tooltip when
+entity tooltips are enabled. The tooltip reads authored bindings and does not
+add source metadata to rendered props or require `EntityField` wrappers. Fields
+without `transform: true` retain their existing tooltip behavior.
+
 ## Linked Entity Item Sources
 
 Use `createItemSource(...)` when a component needs to render repeated content

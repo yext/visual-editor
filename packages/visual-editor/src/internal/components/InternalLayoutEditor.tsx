@@ -39,6 +39,9 @@ import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
 import type { MigrationRegistry } from "../../utils/migrate.ts";
+import { useTranslation } from "react-i18next";
+import { createYextFieldTransforms } from "../../fields/fieldTransforms.tsx";
+import { TransformedFieldTooltip } from "../puck/components/TransformedFieldTooltip.tsx";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -113,6 +116,11 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
+  const { i18n: pageI18n } = useTranslation();
+  const fieldTransforms = React.useMemo(
+    () => createYextFieldTransforms(streamDocument, pageI18n.language),
+    [streamDocument, pageI18n.language]
+  );
   const { errorCount, errorSources, errorDetails } = useErrorContext();
 
   /**
@@ -397,10 +405,12 @@ export const InternalLayoutEditor = ({
     <EntityTooltipsProvider>
       <Puck
         config={translatedPuckConfigWithRootFields}
+        fieldTransforms={fieldTransforms}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
         plugins={[{ ...blocks, label: pt("sections", "Sections") }, outline]}
         overrides={{
+          componentOverlay: TransformedFieldTooltip,
           fields: fieldsOverride,
           header: () => (
             <LayoutHeader

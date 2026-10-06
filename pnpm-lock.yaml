@@ -89,8 +89,8 @@ importers:
         specifier: ^8.2.0
         version: 8.2.0
       "@puckeditor/core":
-        specifier: 0.22.2
-        version: 0.22.2(@floating-ui/dom@1.8.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.7.0(react@18.3.1))
+        specifier: 0.24.0-canary.c1ec9773
+        version: 0.24.0-canary.c1ec9773(@floating-ui/dom@1.8.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.7.0(react@18.3.1))
       "@radix-ui/react-accordion":
         specifier: ^1.2.3
         version: 1.2.20(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1741,10 +1741,10 @@ packages:
         integrity: sha512-HNB6HYeYKhQbJ1aKl+YRjrS4+QWHLKX6qKoUsfS/m0vqzsVaEBiZiaKbG/e+NKk2ch5ALQr/ihWaMHxiCuuWHA==,
       }
 
-  "@puckeditor/core@0.22.2":
+  "@puckeditor/core@0.24.0-canary.c1ec9773":
     resolution:
       {
-        integrity: sha512-pFflZGoCGkULZtXo2JGReGxizAmJnPnjm1sUE0yCNQUMBfzPId8Oj2mmy5Mthw4DPFCjjXLeWjEvfgnoYgnjqQ==,
+        integrity: sha512-OHeZTwpIpGqcktpRZWpJpRmmPTUZxc7L6Dslrdzmg6TuB6IseekkuAfl9OIr0Hwy56J64QDh489lDyEwEWvQ/A==,
       }
     engines: { node: ">=20.0.0" }
     peerDependencies:
@@ -9870,7 +9870,7 @@ snapshots:
 
   "@preact/signals-core@1.14.4": {}
 
-  "@puckeditor/core@0.22.2(@floating-ui/dom@1.8.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.7.0(react@18.3.1))":
+  "@puckeditor/core@0.24.0-canary.c1ec9773(@floating-ui/dom@1.8.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.7.0(react@18.3.1))":
     dependencies:
       "@dnd-kit/abstract": 0.4.0
       "@dnd-kit/dom": 0.4.0

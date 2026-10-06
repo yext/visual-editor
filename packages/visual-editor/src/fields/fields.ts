@@ -28,6 +28,38 @@ import type { ComprehensiveCTAField } from "./styledFields/ComprehensiveCTAField
 import { YextAutoField } from "./YextAutoField.tsx";
 import { adaptYextFieldMap } from "./yextFieldAdapter.ts";
 
+type LocalizedRenderValue<Value> = Value extends readonly (infer Item)[]
+  ? LocalizedRenderValue<Item>[]
+  : Value extends object
+    ? "defaultValue" extends keyof Value
+      ? LocalizedRenderValue<Value["defaultValue"]>
+      : { [Key in keyof Value]: LocalizedRenderValue<Value[Key]> }
+    : Value;
+
+type TransformedFieldValue<Value, Definition> = Definition extends {
+  transform: true;
+  type: "translatableString";
+}
+  ? string
+  : Definition extends { transform: true; type: "entityField" }
+    ? Value extends { constantValue: infer Constant }
+      ? LocalizedRenderValue<Constant> | undefined
+      : never
+    : Definition extends { type: "object"; objectFields: infer Nested }
+      ? YextTransformedProps<Value, Nested>
+      : Definition extends { type: "array"; arrayFields: infer Nested }
+        ? Value extends (infer Item)[]
+          ? YextTransformedProps<Item, Nested>[]
+          : Value
+        : Value;
+
+/** Derives render values from authored props and explicitly opted-in field definitions. */
+export type YextTransformedProps<Props, Definitions> = {
+  [Key in keyof Props]: Key extends keyof Definitions
+    ? TransformedFieldValue<Props[Key], Definitions[Key]>
+    : Props[Key];
+};
+
 export type YextPuckFields = {
   basicSelector: BasicSelectorField;
   ctaSelector: CTASelectorField;
@@ -79,13 +111,18 @@ export type YextFieldDefinition<ValueType = any> =
 
 export type YextComponentConfig<
   Props extends DefaultComponentProps = DefaultComponentProps,
+  TransformFields = {},
 > = Omit<
   ComponentConfig<{
     props: Props;
     fields: YextPuckFields;
   }>,
-  "fields" | "resolveFields"
+  "fields" | "resolveFields" | "render"
 > & {
+  render: ComponentConfig<{
+    props: YextTransformedProps<Props, TransformFields>;
+    fields: YextPuckFields;
+  }>["render"];
   fields?: YextFields<Props>;
   resolveFields?: ComponentConfig<{
     props: Props;
