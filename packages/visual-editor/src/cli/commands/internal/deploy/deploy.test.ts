@@ -307,6 +307,68 @@ describe("deploy", () => {
     expect(error).not.toHaveBeenCalled();
   });
 
+  it.each([
+    {
+      name: "built-in library rejection",
+      message:
+        "Provided argument 'section_library_revision' is invalid: cannot create revision for built-in section library",
+      expectedMessage:
+        'Cannot create a revision for a built-in section library. Check the "id" field in src/library/library.json. To deploy your own library, remove the reserved "yext_" prefix and retry.',
+      verbose: false,
+    },
+    {
+      name: "built-in library rejection in verbose mode",
+      message:
+        "Provided argument 'section_library_revision' is invalid: cannot create revision for built-in section library",
+      expectedMessage:
+        'Cannot create a revision for a built-in section library. Check the "id" field in src/library/library.json. To deploy your own library, remove the reserved "yext_" prefix and retry.',
+      verbose: true,
+    },
+    {
+      name: "unrelated rejection with the same error code",
+      message: "The exact API error message.",
+      expectedMessage: "The exact API error message.",
+      verbose: false,
+    },
+  ])("handles $name during revision creation", async (testCase) => {
+    const errorLog = vi.spyOn(console, "error").mockImplementation(() => {});
+    const apiError = {
+      code: 104001,
+      type: "BAD_REQUEST",
+      message: testCase.message,
+      name: "invalidRequest",
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(successfulResponse(sectionLibrary), { status: 200 })
+        )
+        .mockResolvedValueOnce(
+          new Response(successfulResponse({ sectionLibraryRevisions: [] }), {
+            status: 200,
+          })
+        )
+        .mockResolvedValueOnce(
+          new Response(JSON.stringify({ meta: { errors: [apiError] } }), {
+            status: 400,
+          })
+        )
+    );
+
+    await expect(deploy(config, testCase.verbose)).rejects.toThrow(
+      testCase.expectedMessage
+    );
+    if (testCase.verbose) {
+      expect(errorLog).toHaveBeenCalledWith(
+        `[debug] API Errors: ${JSON.stringify([apiError])}`
+      );
+    } else {
+      expect(errorLog).not.toHaveBeenCalled();
+    }
+  });
+
   it("explains how to resolve missing section library write permissions", async () => {
     vi.stubGlobal(
       "fetch",
