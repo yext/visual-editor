@@ -12,6 +12,8 @@ import {
 import { exportDirectoryLocatorSectionLibrary } from "./exportDirectoryLocatorSectionLibrary.ts";
 
 const SAFE_ID = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
+const ID_REQUIREMENTS =
+  "must start with a letter or number and contain only letters, numbers, underscores, and hyphens";
 const VERTICALS = new Set(verticals);
 const PURPOSES = new Set(purposes);
 const REQUIRED_BASE_SECTIONS = new Set(["Directory", "Locator"]);
@@ -225,24 +227,28 @@ const readLegacyTemplates = (rootDirectory: string): LegacyTemplate[] => {
   if (templateDirectories.length === 0) {
     throw new Error(`No legacy templates found in ${registryDirectory}`);
   }
-  const normalizedTemplateIds = new Set<string>();
+  const normalizedTemplateIds = new Map<string, string>();
   return templateDirectories.map((templateDirectory) => {
     if (!SAFE_ID.test(templateDirectory)) {
-      throw new Error(`Template ID is not valid: ${templateDirectory}`);
+      throw new Error(
+        `Template ID is not valid: ${path.join(registryDirectory, templateDirectory)}. Template IDs ${ID_REQUIREMENTS}.`
+      );
     }
     const templateId = removeYextPrefix(templateDirectory);
     if (!SAFE_ID.test(templateId)) {
-      throw new Error(`Template ID is not valid: ${templateDirectory}`);
+      throw new Error(
+        `Template ID is not valid: ${path.join(registryDirectory, templateDirectory)}. After removing the yext prefix, ${JSON.stringify(templateId)} ${ID_REQUIREMENTS}.`
+      );
     }
     if (normalizedTemplateIds.has(templateId)) {
       throw new Error(
-        `Template IDs collide after removing the yext- prefix: ${templateId}`
+        `Template IDs collide after removing the yext prefix: ${path.join(registryDirectory, normalizedTemplateIds.get(templateId)!)} and ${path.join(registryDirectory, templateDirectory)} both normalize to ${JSON.stringify(templateId)}.`
       );
     }
-    normalizedTemplateIds.add(templateId);
+    normalizedTemplateIds.set(templateId, templateDirectory);
     if (RESERVED_LAYOUT_IDS.has(templateId)) {
       throw new Error(
-        `Template ID is reserved for a generated template alias: ${templateId}`
+        `Template ID is reserved for a generated template alias: ${path.join(registryDirectory, templateDirectory)} normalizes to ${JSON.stringify(templateId)}. Reserved IDs: ${Array.from(RESERVED_LAYOUT_IDS).join(", ")}. Rename the template directory.`
       );
     }
     return readLegacyTemplate(
@@ -653,14 +659,38 @@ const readBaseLibrary = (libraryDirectory: string): BaseLibrary => {
         metadataPath,
         `layout metadata for ${entry.name}`
       );
-      if (
-        !isRecord(metadata) ||
-        !["ENTITY", "DIRECTORY", "LOCATOR"].includes(metadata.pageSetType) ||
-        typeof metadata.id !== "string" ||
-        metadata.id !== entry.name ||
-        !SAFE_ID.test(metadata.id)
-      ) {
-        throw new Error(`Base layout metadata is not valid: ${metadataPath}`);
+      const issues: string[] = [];
+      if (!isRecord(metadata)) {
+        issues.push("metadata must be a JSON object.");
+      } else {
+        if (
+          !["ENTITY", "DIRECTORY", "LOCATOR"].includes(metadata.pageSetType)
+        ) {
+          issues.push(
+            `pageSetType must be ENTITY, DIRECTORY, or LOCATOR; received ${JSON.stringify(metadata.pageSetType)}.`
+          );
+        }
+        if (typeof metadata.id !== "string") {
+          issues.push(
+            `id must be a string; received ${JSON.stringify(metadata.id)}.`
+          );
+        } else {
+          if (metadata.id !== entry.name) {
+            issues.push(
+              `id must match directory name ${JSON.stringify(entry.name)}; received ${JSON.stringify(metadata.id)}.`
+            );
+          }
+          if (!SAFE_ID.test(metadata.id)) {
+            issues.push(
+              `id ${ID_REQUIREMENTS}; received ${JSON.stringify(metadata.id)}.`
+            );
+          }
+        }
+      }
+      if (issues.length > 0) {
+        throw new Error(
+          `Base layout metadata is not valid: ${metadataPath}\n${issues.map((issue) => `  - ${issue}`).join("\n")}`
+        );
       }
       const defaultLayoutPath = path.join(directory, "defaultLayout.json");
       const defaultLayout = readJson(
@@ -738,15 +768,14 @@ const buildConversion = (
   const componentIds = new Set(components.keys());
   const directoryLayoutId = `${firstTemplate.templateId}-directory`;
   const locatorLayoutId = `${firstTemplate.templateId}-locator`;
-  if (
-    templates.some(
-      (template) =>
-        template.templateId === directoryLayoutId ||
-        template.templateId === locatorLayoutId
-    )
-  ) {
+  const conflictingTemplate = templates.find(
+    (template) =>
+      template.templateId === directoryLayoutId ||
+      template.templateId === locatorLayoutId
+  );
+  if (conflictingTemplate) {
     throw new Error(
-      "A legacy template ID conflicts with the generated Directory or Locator layout ID"
+      `Legacy template ${conflictingTemplate.directory} conflicts with generated layout ID ${JSON.stringify(conflictingTemplate.templateId)} from ${firstTemplate.directory}. Rename the conflicting template directory.`
     );
   }
   for (const template of templates) {
@@ -848,14 +877,17 @@ const readMetadataList = <T extends string>(
   if (value === undefined) {
     return [];
   }
-  if (
-    !Array.isArray(value) ||
-    value.some(
-      (item) => typeof item !== "string" || !allowedValues.has(item as T)
-    )
-  ) {
+  if (!Array.isArray(value)) {
     throw new Error(
-      `${sourcePath} ${property} must contain supported string values`
+      `${sourcePath} ${property} must be an array of supported strings; received ${JSON.stringify(value)}. Allowed values: ${Array.from(allowedValues).join(", ")}.`
+    );
+  }
+  const invalidValues = value.filter(
+    (item) => typeof item !== "string" || !allowedValues.has(item as T)
+  );
+  if (invalidValues.length > 0) {
+    throw new Error(
+      `${sourcePath} ${property} contains unsupported values: ${invalidValues.map((item) => JSON.stringify(item)).join(", ")}. Allowed values: ${Array.from(allowedValues).join(", ")}.`
     );
   }
   return value as T[];
@@ -866,14 +898,26 @@ function validateDefaultLayout(
   sourcePath: string,
   description: string
 ): asserts defaultLayout is JsonRecord {
-  if (
-    !isRecord(defaultLayout) ||
-    !isRecord(defaultLayout.root) ||
-    !isRecord(defaultLayout.zones) ||
-    !Array.isArray(defaultLayout.content)
-  ) {
+  const issues: string[] = [];
+  if (!isRecord(defaultLayout)) {
+    issues.push("default layout must be a JSON object.");
+  } else {
+    for (const field of ["root", "zones"] as const) {
+      if (!isRecord(defaultLayout[field])) {
+        issues.push(
+          `${field} must be a JSON object; received ${JSON.stringify(defaultLayout[field])}.`
+        );
+      }
+    }
+    if (!Array.isArray(defaultLayout.content)) {
+      issues.push(
+        `content must be an array; received ${JSON.stringify(defaultLayout.content)}.`
+      );
+    }
+  }
+  if (issues.length > 0) {
     throw new Error(
-      `${description} default layout is not valid: ${sourcePath}`
+      `${description} default layout is not valid: ${sourcePath}\n${issues.map((issue) => `  - ${issue}`).join("\n")}`
     );
   }
 }
