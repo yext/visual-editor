@@ -79,6 +79,7 @@
     "textAndLink": "Tekst i veza"
   },
   "currentLocation": "Trenutna lokacija",
+  "custom": "Prilagođeno",
   "customSearchArea": "Područje prilagođenog pretraživanja",
   "dataAttribute": "Atribut",
   "date": "Datum",
@@ -409,6 +410,7 @@
     "metaTitle": "ispunite Meta Title za sve jezike tako što ćete otići do postavki komponente stranice najviše razine",
     "metaTitleWithLocales": "ispunite Meta Title za sljedeće lokalitete dolaskom na postavke komponente stranice najviše razine: {{locales}}"
   },
+  "recommended": "Preporučeno",
   "recommendedColor": "Preporučena boja",
   "recommendedColors": "Preporučene boje",
   "redo": "Ponovno obnavljati",
@@ -418,6 +420,7 @@
   "restaurants": "Restorani",
   "saturday": "subota",
   "schemaMarkup": "Oznaka sheme",
+  "schemaMode": "Način sheme",
   "search": "Pretraživanje",
   "searchHere": "Pretražite ovdje ...",
   "searchThisArea": "Pretražite ovo područje",

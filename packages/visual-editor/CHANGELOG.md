@@ -1,3 +1,16 @@
+#### 2.0.0-beta.3 (2026-10-05)
+
+##### New Features
+
+- fully custom schema ([#1344](https://github.com/yext/visual-editor/pull/1344)) ([8b3417e5](https://github.com/yext/visual-editor/commit/8b3417e5997dd1d86c2d3b9f132e10eb80e96223))
+- preserve q param in language dropdown ([#1345](https://github.com/yext/visual-editor/pull/1345)) ([46507e0b](https://github.com/yext/visual-editor/commit/46507e0b70f8a27dc715ba9cfcd3ebad0bbd41a9))
+
+##### Bug Fixes
+
+- app icon dom nesting ([#1350](https://github.com/yext/visual-editor/pull/1350)) ([ae18e086](https://github.com/yext/visual-editor/commit/ae18e086a400b94f35f791b2bc60a0ab5008ea83))
+- disallow atoms from MainContent ([#1347](https://github.com/yext/visual-editor/pull/1347)) ([836f5474](https://github.com/yext/visual-editor/commit/836f5474f4b4c29fa7a720afb5f39b04d8e08a93))
+- xs variant for rtf ([#1349](https://github.com/yext/visual-editor/pull/1349)) ([ad9f4e5c](https://github.com/yext/visual-editor/commit/ad9f4e5c987f092b5a01115a6f1b37ea081d39f6))
+
 #### 2.0.0-beta.2 (2026-10-02)
 
 ##### New Features

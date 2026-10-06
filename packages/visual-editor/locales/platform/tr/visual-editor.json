@@ -79,6 +79,7 @@
     "textAndLink": "Metin ve Bağlantı"
   },
   "currentLocation": "Mevcut Konum",
+  "custom": "Özel",
   "customSearchArea": "Özel arama alanı",
   "dataAttribute": "Veri Niteliği",
   "date": "Tarih",
@@ -404,6 +405,7 @@
     "metaTitle": "Üst düzey Sayfa bileşeninin ayarlarına giderek tüm yerel ayarlar için Meta Başlığını doldurun",
     "metaTitleWithLocales": "Üst düzey Sayfa bileşeninin ayarlarına giderek aşağıdaki yerel ayarlar için Meta Başlığını doldurun: {{locales}}"
   },
+  "recommended": "Önerilen",
   "recommendedColor": "Önerilen Renk",
   "recommendedColors": "Önerilen renkler",
   "redo": "Yeniden yapmak",
@@ -413,6 +415,7 @@
   "restaurants": "Restoranlar",
   "saturday": "Cumartesi",
   "schemaMarkup": "Şema işaretlemesi",
+  "schemaMode": "Şema modu",
   "search": "Aramak",
   "searchHere": "Burada ara ...",
   "searchThisArea": "Bu alanı arayın",

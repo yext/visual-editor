@@ -10,14 +10,26 @@ import {
 import { useCommonMessageSenders } from "../useMessageSenders.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
 import { migrate, type MigrationRegistry } from "../../../utils/migrate.ts";
+import { resolveCustomSchema } from "../../../utils/schema/resolveCustomSchema.ts";
 import { resolveSchemaJson } from "../../../utils/schema/resolveSchema.ts";
 import { type StreamDocument } from "../../../utils/types/StreamDocument.ts";
-import {
-  resolveUrlTemplate,
-  resolveUrlTemplateOfChild,
-} from "../../../utils/urls/resolveUrlTemplate.ts";
+import { resolveUrlTemplate } from "../../../utils/urls/resolveUrlTemplate.ts";
 
 const devLogger = new DevLogger();
+
+const resolveSchemaPageContext = (streamDocument: StreamDocument) => {
+  // Schema describes the current page; child URL resolution requires a child profile.
+  const path = resolveUrlTemplate(streamDocument, "");
+
+  // Find the relativePrefixToRoot for the page being rendered in the editor.
+  const pathComponents = path.split("/");
+  pathComponents.pop();
+  const relativePrefixToRoot = pathComponents
+    .map(() => "../")
+    .reduce((previousValue, currentValue) => previousValue + currentValue, "");
+
+  return { path, relativePrefixToRoot };
+};
 
 export const useLayoutMessageReceivers = (
   localDev: boolean,
@@ -78,26 +90,8 @@ export const useLayoutMessageReceivers = (
   useReceiveMessage("resolveSchema", TARGET_ORIGINS, (_, payload) => {
     const schema = payload?.schema;
 
-    // Resolve the url path
-    let path = "";
-    if (
-      streamDocument?.meta?.entityType?.id === "locator" ||
-      streamDocument?.meta?.entityType?.id?.startsWith("dm_")
-    ) {
-      path = resolveUrlTemplateOfChild({}, streamDocument, "");
-    } else {
-      path = resolveUrlTemplate(streamDocument, "");
-    }
-
-    // Find the relativePrefixToRoot for the page being rendered in the editor
-    const pathComponents = path.split("/");
-    pathComponents.pop();
-    const relativePrefixToRoot = pathComponents
-      .map(() => "../")
-      .reduce(
-        (previousValue, currentValue) => previousValue + currentValue,
-        ""
-      );
+    const { path, relativePrefixToRoot } =
+      resolveSchemaPageContext(streamDocument);
 
     const resolvedSchema = resolveSchemaJson(
       {
@@ -110,6 +104,46 @@ export const useLayoutMessageReceivers = (
 
     sendResolvedSchemaToParent({ payload: { schema: resolvedSchema } });
   });
+
+  useReceiveMessage(
+    "resolveCustomSchema",
+    TARGET_ORIGINS,
+    (respond, payload) => {
+      if (
+        typeof payload?.requestId !== "string" ||
+        typeof payload?.template !== "string"
+      ) {
+        return;
+      }
+      const { requestId, template } = payload;
+      if (template === "") {
+        respond({ status: "success", payload: { requestId, output: "" } });
+        return;
+      }
+      try {
+        const { path, relativePrefixToRoot } =
+          resolveSchemaPageContext(streamDocument);
+        const result = resolveCustomSchema(template, {
+          document: streamDocument,
+          path,
+          relativePrefixToRoot,
+        });
+        respond({
+          status: result.error ? "error" : "success",
+          payload: { requestId, ...result },
+        });
+      } catch (error) {
+        respond({
+          status: "error",
+          payload: {
+            requestId,
+            output: "",
+            error: error instanceof Error ? error.message : String(error),
+          },
+        });
+      }
+    }
+  );
 
   return {
     layoutSaveState,

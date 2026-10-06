@@ -79,6 +79,7 @@
     "textAndLink": "Tekst en link"
   },
   "currentLocation": "Huidige locatie",
+  "custom": "Aangepast",
   "customSearchArea": "Aangepast zoekgebied",
   "dataAttribute": "Attribuut",
   "date": "Datum",
@@ -404,6 +405,7 @@
     "metaTitle": "vul de metatitel in voor alle landinstellingen door naar de instellingen van de paginacomponent op het hoogste niveau te navigeren",
     "metaTitleWithLocales": "vul de metatitel in voor de volgende landinstellingen door naar de instellingen van de paginacomponent op het hoogste niveau te navigeren: {{locales}}"
   },
+  "recommended": "Aanbevolen",
   "recommendedColor": "Aanbevolen kleur",
   "recommendedColors": "Aanbevolen kleuren",
   "redo": "Opnieuw doen",
@@ -413,6 +415,7 @@
   "restaurants": "Restaurants",
   "saturday": "Zaterdag",
   "schemaMarkup": "Schema -aanmelding",
+  "schemaMode": "Schemamodus",
   "search": "Zoekopdracht",
   "searchHere": "Zoek hier ...",
   "searchThisArea": "Zoek dit gebied",
