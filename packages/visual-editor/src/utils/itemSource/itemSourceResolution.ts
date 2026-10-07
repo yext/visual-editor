@@ -3,7 +3,10 @@ import { type YextFieldDefinition } from "../../fields/fields.ts";
 import { resolveYextEntityField } from "../resolveYextEntityField.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
 import { isEntityFieldDefinition } from "./itemSourceFieldTransforms.ts";
-import { type ResolvedItemField } from "./itemSourceTypes.ts";
+import {
+  ITEM_SOURCE_SELF_FIELD,
+  type ResolvedItemField,
+} from "./itemSourceTypes.ts";
 
 /**
  * Runtime item resolution.
@@ -26,6 +29,13 @@ export const resolveItemValue = <TValue>(
     const entityField = value as Partial<YextEntityField<unknown>> | undefined;
     if (!entityField?.constantValueEnabled && !entityField?.field) {
       return undefined as ResolvedItemField<TValue>;
+    }
+
+    if (
+      !entityField?.constantValueEnabled &&
+      entityField?.field === ITEM_SOURCE_SELF_FIELD
+    ) {
+      return itemDocument as ResolvedItemField<TValue>;
     }
 
     return resolveYextEntityField(
