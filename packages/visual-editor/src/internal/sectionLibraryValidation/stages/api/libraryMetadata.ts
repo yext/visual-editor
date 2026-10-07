@@ -85,7 +85,7 @@ export const validateLibraryMetadata = (
     if (id.length > 63 || !safeIdPattern.test(unprefixedId)) {
       addIssue(
         "field/id/safe",
-        'id must be 2–63 characters, contain only lowercase letters, numbers, and hyphens, start with a lowercase letter, and end with a letter or number. Built-in library ids must also use the reserved "yext_" prefix, included in the length limit.'
+        "id must be 2–63 characters, contain only lowercase letters, numbers, and hyphens, start with a lowercase letter, and end with a letter or number."
       );
     }
   }
