@@ -316,7 +316,7 @@ describe("yextve", () => {
     expect(result.exitCode).toBe(1);
     expect(result.stdout).toContain("src/library/library.json");
     expect(result.stdout).toContain(
-      'id must be 2–63 characters, contain only lowercase letters, numbers, and hyphens, start with a lowercase letter, and end with a letter or number. Built-in library ids may also use the reserved "yext_" prefix, included in the length limit.'
+      'id must be 2–63 characters, contain only lowercase letters, numbers, and hyphens, start with a lowercase letter, and end with a letter or number. Built-in library ids must also use the reserved "yext_" prefix, included in the length limit.'
     );
     expect(result.stdout).toContain("Validation failed. 1 error.");
   });
