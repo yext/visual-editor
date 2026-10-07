@@ -105,9 +105,30 @@ export const ImageFieldOverride = ({
     }
   );
 
-  const handleSelectImage = (e: React.MouseEvent) => {
+  /** Selects an image by URL locally or through the platform asset drawer. */
+  const handleSelectImage = (e: React.MouseEvent): void => {
     e.stopPropagation();
     e.preventDefault();
+
+    // The standalone Local Editor has no platform parent to open an asset drawer.
+    if (window.parent === window.self) {
+      const userInput = window.prompt("Enter Image URL:");
+      if (!userInput) {
+        return;
+      }
+      onChange({
+        ...localizedContainer,
+        [locale]: {
+          alternateText: resolvedValue?.alternateText ?? "",
+          url: userInput,
+          height: 1,
+          width: 1,
+        },
+        hasLocalizedValue: "true",
+      } as TranslatableAssetImage);
+      pendingImageSession = undefined;
+      return;
+    }
 
     /** Instructs Storm to open the image asset selector drawer */
     const messageId = `ImageAsset-${Date.now()}`;

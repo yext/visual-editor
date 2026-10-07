@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { YextAutoField } from "./YextAutoField.tsx";
@@ -127,5 +127,89 @@ describe("ImageField", () => {
       },
     });
     expect(screen.getByText("Alt Text (en)")).toBeDefined();
+  });
+
+  it.each([
+    { name: "choosing", value: undefined, button: "Choose Image" },
+    {
+      name: "changing",
+      value: {
+        en: {
+          alternateText: "Existing alt text",
+          url: "https://example.com/old.jpg",
+          height: 100,
+          width: 200,
+        },
+        fr: {
+          alternateText: "French alt text",
+          url: "https://example.com/french.jpg",
+          height: 100,
+          width: 200,
+        },
+        hasLocalizedValue: "true",
+      },
+      button: "Change",
+    },
+  ])(
+    "when $name an image locally then a URL prompt updates the active locale",
+    ({ value, button }): void => {
+      const promptSpy = vi
+        .spyOn(window, "prompt")
+        .mockReturnValue("https://example.com/new.jpg");
+      const { onChange } = renderImageField(
+        { type: "image", hideAltTextField: true },
+        value
+      );
+
+      fireEvent.click(screen.getByRole("button", { name: button }));
+
+      expect(promptSpy).toHaveBeenCalledWith("Enter Image URL:");
+      expect(onChange).toHaveBeenCalledExactlyOnceWith({
+        ...value,
+        en: {
+          alternateText: value?.en.alternateText ?? "",
+          url: "https://example.com/new.jpg",
+          height: 1,
+          width: 1,
+        },
+        hasLocalizedValue: "true",
+      });
+      expect(sendToParentMock).not.toHaveBeenCalled();
+    }
+  );
+
+  it.each([null, ""])(
+    "when the local prompt returns %s then the image stays unchanged",
+    (input): void => {
+      vi.spyOn(window, "prompt").mockReturnValue(input);
+      const { onChange } = renderImageField();
+
+      fireEvent.click(screen.getByRole("button", { name: "Choose Image" }));
+
+      expect(onChange).not.toHaveBeenCalled();
+      expect(sendToParentMock).not.toHaveBeenCalled();
+    }
+  );
+
+  it("when choosing an image in the platform iframe then the asset selector opens", (): void => {
+    vi.spyOn(window, "parent", "get").mockReturnValue({} as Window);
+    const promptSpy = vi.spyOn(window, "prompt");
+    const { onChange } = renderImageField({
+      type: "image",
+      maxFileSizeBytes: 1000,
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Choose Image" }));
+
+    expect(promptSpy).not.toHaveBeenCalled();
+    expect(onChange).not.toHaveBeenCalled();
+    expect(sendToParentMock).toHaveBeenCalledExactlyOnceWith({
+      payload: {
+        type: "ImageAsset",
+        value: undefined,
+        id: expect.stringMatching(/^ImageAsset-/),
+        maxFileSizeBytes: 1000,
+      },
+    });
   });
 });
