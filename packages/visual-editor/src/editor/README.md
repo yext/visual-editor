@@ -127,21 +127,27 @@ const Example = ({ myField }: ExampleProps) => {
 
 ## Opt-in field transforms
 
-Add `transform: true` to an `entityField` or `translatableString` to resolve its
-value before component rendering. Omitted or false flags keep the authored value
+Add `transform: true` to an `entityField`, `translatableString`, `image`,
+`multiSelector`, `optionalNumber`, or `ctaSelector` to resolve its value before
+component rendering. Omitted or false flags keep the authored value
 unchanged. Defaults, field editors, `resolveData`, and saved layouts continue to
 use authored props.
 
-| Field definition                             | Render value                                                                 |
-| -------------------------------------------- | ---------------------------------------------------------------------------- |
-| `translatableString`                         | Localized, interpolated string                                               |
-| Ordinary `entityField`                       | Resolved entity or constant value with nested localization and interpolation |
-| `entityField` including `type.rich_text_v2`  | Resolved rich-text object or plain string                                    |
-| Rich-text list with `includeListsOnly: true` | Array of resolved rich-text objects or strings                               |
+| Field definition                             | Render value                                                                               |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `translatableString`                         | Localized, interpolated string                                                             |
+| Ordinary `entityField`                       | Resolved entity or constant value with nested localization and interpolation               |
+| `entityField` including `type.rich_text_v2`  | Resolved rich-text object or plain string                                                  |
+| Rich-text list with `includeListsOnly: true` | Array of resolved rich-text objects or strings                                             |
+| `image`                                      | Localized asset image with resolved alt text and preserved asset metadata                  |
+| `multiSelector`                              | Array of selected values, preserving zero, false, and empty strings                        |
+| `optionalNumber`                             | Number or `undefined` when hidden or unset                                                 |
+| `ctaSelector`                                | Resolved CTA object with localized label and link; Get Directions includes a generated URL |
 
 Images retain their simple or complex image shape, dimensions, and asset metadata;
-nested alt text becomes a string. Repeated item sources and CTA field types are
-outside this first pass.
+nested alt text becomes a string. Transforms return data, never components.
+CTA renderers retain presentation choices such as preset images and button styles.
+Repeated item sources and comprehensive CTAs remain outside this pass.
 
 Both editor previews and `VisualEditorRender` pass transforms to Puck's official
 `fieldTransforms` API. This requires `@puckeditor/core@0.24.0-canary.c1ec9773`,
@@ -165,7 +171,7 @@ import { type ComplexImageType } from "@yext/pages-components";
 import {
   ComprehensiveCTA,
   Image,
-  RichTextRenderer,
+  MaybeRTF,
   type ComprehensiveCTAValue,
   type TranslatableAssetImage,
   type TranslatableRichText,
@@ -211,7 +217,7 @@ export const Hero: YextComponentConfig<HeroProps, typeof fields> = {
   render: ({ title, description, image, primaryCta, secondaryCta }) => (
     <section>
       <h1>{title}</h1>
-      <RichTextRenderer data={description} bodyVariant="lg" />
+      <MaybeRTF data={description} bodyVariant="lg" />
       {image && <Image image={image} loading="eager" />}
       <ComprehensiveCTA value={primaryCta} />
       <ComprehensiveCTA value={secondaryCta} />
@@ -222,14 +228,34 @@ export const Hero: YextComponentConfig<HeroProps, typeof fields> = {
 
 Title, description, and image still allow entity bindings and constant values.
 The transform returns resolved data, including translated and interpolated rich-text
-HTML and JSON. `RichTextRenderer` accepts that data and uses the shared `MaybeRTF`
-rendering internally, with optional `className`, `style`, `bodyVariant`, and
-`richTextStyleOverrides`. CTAs keep their existing field and renderer API.
+HTML and JSON. `MaybeRTF` renders that data, with optional `className`, `style`,
+`bodyVariant`, and `richTextStyleOverrides`. CTAs keep their existing field and
+renderer API.
 
 Opted-in fields appear in the editor's component-level entity tooltip when
 entity tooltips are enabled. The tooltip reads authored bindings and does not
 add source metadata to rendered props or require `EntityField` wrappers. Fields
 without `transform: true` retain their existing tooltip behavior.
+
+### Adding field transforms
+
+`fieldTransforms.tsx` dispatches through `fieldToTransform`, keyed by authored
+field type. Puck registration and adapted `custom` fields use that same map.
+Each handler receives the authored definition, its value, and the page document
+and locale. Shared `resolveValue` handles localization and interpolation across
+objects and arrays while retaining rich-text and asset structures.
+
+To support another field, add its `transform?: boolean` option, a handler in
+`fieldToTransform`, and its output type in `TransformedFieldValues` in `fields.ts`.
+The handler map requires an entry for each transformable field definition.
+Keep field-specific source selection in its handler and return resolved data.
+For composite bindings, also describe their authored sources in the component
+tooltip. Defaults, editor fields, and saved data keep their authored shapes.
+
+Ordinary entity lists and nested Puck arrays already support transforms. Repeated
+item sources need a separate implementation that resolves mappings against each
+source item. Comprehensive CTAs also need dedicated handlers
+and renderers that accept their resolved data contracts.
 
 ## Linked Entity Item Sources
 

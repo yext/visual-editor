@@ -109,7 +109,7 @@ export {
   type YextPuckField,
 } from "./fields/fields.ts";
 export { YextAutoField } from "./fields/YextAutoField.tsx";
-export { MaybeRTF as RichTextRenderer } from "./components/helpers/maybeRTF.tsx";
+export { MaybeRTF } from "./components/helpers/maybeRTF.tsx";
 export { createYextFieldTransforms } from "./fields/fieldTransforms.tsx";
 export { BackgroundProvider, useBackground } from "./hooks/useBackground.tsx";
 export {

@@ -1,6 +1,12 @@
 import React from "react";
+import {
+  i18nPageInstance,
+  VISUAL_EDITOR_NAMESPACE,
+} from "../utils/i18n/i18nInstances.ts";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, expectTypeOf, it } from "vitest";
+import type { YextCTAField } from "./CTASelectorField.tsx";
+import type { MultiSelectorValue } from "./MultiSelectorField.tsx";
 import type { TranslatableAssetImage } from "../types/images.ts";
 import type {
   RichText,
@@ -9,7 +15,7 @@ import type {
 } from "../types/types.ts";
 import type { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 import { createYextFieldTransforms } from "./fieldTransforms.tsx";
-import { RichTextRenderer } from "../components/helpers/index.ts";
+import { MaybeRTF } from "../components/helpers/index.ts";
 import {
   toPuckFields,
   type YextComponentConfig,
@@ -91,6 +97,126 @@ describe("field transforms", () => {
       expected: 0,
     },
     {
+      name: "when an asset image opts in then its image and alt text are localized",
+      field: { type: "image", transform: true },
+      value: {
+        hasLocalizedValue: "true",
+        defaultValue: { url: "/default.jpg", alternateText: "Default" },
+        es: {
+          url: "/es.jpg",
+          height: 200,
+          width: 400,
+          alternateText: { defaultValue: "Image", es: "Foto de [[name]]" },
+          assetImage: {
+            sourceUrl: "/original.jpg",
+            transformations: { ROTATION: { degree: 90 } },
+          },
+        },
+      },
+      expected: {
+        url: "/es.jpg",
+        height: 200,
+        width: 400,
+        alternateText: "Foto de Restaurant",
+        assetImage: {
+          sourceUrl: "/original.jpg",
+          transformations: { ROTATION: { degree: 90 } },
+        },
+      },
+    },
+    {
+      name: "when a multi-selector opts in then selected values preserve zero and false",
+      field: { type: "multiSelector", transform: true },
+      value: {
+        selections: [
+          { value: "menu" },
+          { value: undefined },
+          { value: 0 },
+          { value: false },
+        ],
+      },
+      expected: ["menu", 0, false],
+    },
+    {
+      name: "when a multi-selector is empty then its resolved list is empty",
+      field: { type: "multiSelector", transform: true },
+      value: undefined,
+      expected: [],
+    },
+    {
+      name: "when an optional number is zero then zero is preserved",
+      field: { type: "optionalNumber", transform: true },
+      value: 0,
+      expected: 0,
+    },
+    {
+      name: "when an optional number is hidden then its resolved value is undefined",
+      field: { type: "optionalNumber", transform: true },
+      value: "__ve_optionalNumber_hide__",
+      expected: undefined,
+    },
+    {
+      name: "when a constant CTA opts in then its label and link are resolved",
+      field: { type: "ctaSelector", transform: true },
+      value: {
+        constantValueEnabled: true,
+        constantValue: {
+          ctaType: "textAndLink",
+          label: { defaultValue: "Order", es: "Pedir [[name]]" },
+          link: { defaultValue: "/en", es: "/es" },
+          linkType: "URL",
+          openInNewTab: true,
+        },
+      },
+      expected: {
+        ctaType: "textAndLink",
+        label: "Pedir Restaurant",
+        link: "/es",
+        linkType: "URL",
+        openInNewTab: true,
+      },
+    },
+    {
+      name: "when a KG CTA opts in then its source and selected mode are resolved",
+      field: { type: "ctaSelector", transform: true },
+      value: {
+        field: "orderCta",
+        selectedType: "presetImage",
+        constantValue: { label: "Unused", link: "/unused" },
+      },
+      expected: {
+        label: "Pedir Restaurant",
+        link: "/order",
+        ctaType: "presetImage",
+      },
+    },
+    {
+      name: "when a selected CTA source is missing then its value is undefined",
+      field: { type: "ctaSelector", transform: true },
+      value: {
+        field: "missing",
+        constantValue: { label: "Unused", link: "/unused" },
+      },
+      expected: undefined,
+    },
+    {
+      name: "when a text list opts in then each item is localized and interpolated",
+      field: {
+        type: "entityField",
+        transform: true,
+        filter: { types: ["type.string"], includeListsOnly: true },
+      },
+      value: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: [
+          { defaultValue: "Dine-in", es: "Mesa en [[name]]" },
+          { defaultValue: "Delivery" },
+        ],
+      },
+      expected: ["Mesa en Restaurant", "Delivery"],
+    },
+    {
       name: "when rich text is localized then resolved HTML and JSON are returned",
       field: {
         type: "entityField",
@@ -140,6 +266,10 @@ describe("field transforms", () => {
           name: "Restaurant",
           linked: [{ name: "Linked Restaurant" }],
           count: 0,
+          orderCta: {
+            label: { defaultValue: "Order", es: "Pedir [[name]]" },
+            link: "/order",
+          },
         },
         "es"
       ).custom({
@@ -153,6 +283,66 @@ describe("field transforms", () => {
     ).toEqual(expected);
     expect(value).toEqual(authoredValue);
   });
+
+  it("when Get Directions opts in then its URL and translated label are usable without a renderer", () => {
+    i18nPageInstance.addResourceBundle("es", VISUAL_EDITOR_NAMESPACE, {
+      getDirections: "Cómo llegar",
+    });
+    const value = { field: "", selectedType: "getDirections" };
+    const authoredValue = structuredClone(value);
+    try {
+      const resolved = createYextFieldTransforms(
+        { yextDisplayCoordinate: { latitude: 30.2672, longitude: -97.7431 } },
+        "es"
+      ).custom({
+        field: {
+          type: "custom",
+          metadata: { yextField: { type: "ctaSelector", transform: true } },
+        },
+        value,
+        componentId: "hero",
+        propName: "primaryCta",
+        propPath: "primaryCta",
+        isReadOnly: true,
+      });
+      expect(resolved).toMatchObject({
+        ctaType: "getDirections",
+        label: "Cómo llegar",
+        linkType: "DRIVING_DIRECTIONS",
+      });
+      expect(resolved.link).toContain("30.2672");
+      expect(resolved.link).toContain("-97.7431");
+      expect(value).toEqual(authoredValue);
+    } finally {
+      i18nPageInstance.removeResourceBundle("es", VISUAL_EDITOR_NAMESPACE);
+    }
+  });
+
+  it.each(["image", "multiSelector", "optionalNumber", "ctaSelector"])(
+    "when %s does not opt in then its authored value retains its identity",
+    (type) => {
+      for (const transform of [undefined, false]) {
+        const value = {
+          defaultValue: "Authored",
+          selections: [{ value: "menu" }],
+          constantValue: { label: "Order", link: "/order" },
+        };
+        expect(
+          createYextFieldTransforms({}, "en").custom({
+            field: {
+              type: "custom",
+              metadata: { yextField: { type, transform } },
+            },
+            value,
+            componentId: "hero",
+            propName: "value",
+            propPath: "value",
+            isReadOnly: true,
+          })
+        ).toBe(value);
+      }
+    }
+  );
 
   it.each([undefined, false])(
     "when transform is %s then authored values retain their identity",
@@ -218,11 +408,7 @@ describe("field transforms", () => {
       });
       expect(data).toEqual(expected);
       const html = renderToStaticMarkup(
-        <RichTextRenderer
-          data={data}
-          bodyVariant="lg"
-          className="hero-description"
-        />
+        <MaybeRTF data={data} bodyVariant="lg" className="hero-description" />
       );
       expect(html).toContain(expectedText);
       if (expectedText) {
@@ -345,11 +531,51 @@ describe("field transforms", () => {
         expectTypeOf(untouched).toMatchTypeOf<
           YextEntityField<TranslatableString>
         >();
-        return <RichTextRenderer data={description} />;
+        return <MaybeRTF data={description} />;
       },
     };
     expect(toPuckFields(config.fields!).description.metadata?.yextField).toBe(
       fields.description
+    );
+  });
+  it("when the new field types opt in then component render props use resolved data types", () => {
+    type Props = {
+      asset: TranslatableAssetImage;
+      selections: MultiSelectorValue<string | number | boolean>;
+      amount: number | string | null | undefined;
+      cta: YextCTAField;
+    };
+    const fields = {
+      asset: { type: "image", transform: true },
+      selections: {
+        type: "multiSelector",
+        transform: true,
+        label: "Selections",
+        dropdownLabel: "Selection",
+        options: [],
+      },
+      amount: {
+        type: "optionalNumber",
+        transform: true,
+        showNumberFieldRadioLabel: "Show",
+        hideNumberFieldRadioLabel: "Hide",
+        defaultCustomValue: 1,
+      },
+      cta: { type: "ctaSelector", transform: true },
+    } satisfies YextFieldMap<Props>;
+    const config: YextComponentConfig<Props, typeof fields> = {
+      fields,
+      render: ({ asset, selections, amount, cta }) => {
+        expectTypeOf(asset?.alternateText).toEqualTypeOf<string | undefined>();
+        expectTypeOf(selections).toEqualTypeOf<(string | number | boolean)[]>();
+        expectTypeOf(amount).toEqualTypeOf<number | undefined>();
+        expectTypeOf(cta?.label).toEqualTypeOf<string | undefined>();
+        expectTypeOf(cta?.link).toEqualTypeOf<string | undefined>();
+        return <></>;
+      },
+    };
+    expect(toPuckFields(config.fields!).cta.metadata?.yextField).toBe(
+      fields.cta
     );
   });
 });

@@ -19,6 +19,7 @@ describe("transformed field tooltips", () => {
             transform: true,
             filter: {},
           },
+          primaryCta: { type: "ctaSelector", label: "Order", transform: true },
           oldField: { type: "entityField", filter: {} },
           nested: {
             type: "object",
@@ -40,6 +41,7 @@ describe("transformed field tooltips", () => {
             constantValueEnabled: true,
             constantValue: {},
           },
+          primaryCta: { field: "orderCta", constantValueEnabled: false },
           oldField: { field: "description" },
           nested: { text: { defaultValue: "Text" } },
           rows: [{ name: { field: "linked.name" } }],
@@ -48,6 +50,7 @@ describe("transformed field tooltips", () => {
     ).toEqual([
       { label: "Title", field: "name" },
       { label: "Image", field: undefined },
+      { label: "Order", field: "orderCta" },
       { label: "nested.text", field: undefined },
       { label: "rows[0].name", field: "linked.name" },
     ]);

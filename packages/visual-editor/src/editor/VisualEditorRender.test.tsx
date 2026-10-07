@@ -5,7 +5,7 @@ import { render, screen, cleanup } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
-import { MaybeRTF as RichTextRenderer } from "../components/helpers/maybeRTF.tsx";
+import { MaybeRTF } from "../components/helpers/maybeRTF.tsx";
 import { createYextFieldTransforms } from "../fields/fieldTransforms.tsx";
 import { toPuckFields } from "../fields/fields.ts";
 import { VisualEditorRender } from "./VisualEditorRender.tsx";
@@ -46,6 +46,25 @@ describe("native Puck field transforms", () => {
               title: { field: "name", constantValue: "" },
               description: { field: "description", constantValue: "" },
               image: { field: "photo", constantValue: {} },
+              asset: {
+                defaultValue: {
+                  url: "/asset.jpg",
+                  alternateText: { defaultValue: "Asset", es: "Foto [[name]]" },
+                },
+              },
+              categories: {
+                selections: [
+                  { value: "menu" },
+                  { value: 0 },
+                  { value: undefined },
+                ],
+              },
+              seats: 0,
+              primaryCta: {
+                field: "orderCta",
+                selectedType: "textAndLink",
+                constantValue: { label: "", link: "" },
+              },
               nested: {
                 label: { defaultValue: "Welcome", es: "Hola [[name]]" },
               },
@@ -75,6 +94,22 @@ describe("native Puck field transforms", () => {
                 transform: true,
                 filter: { types: ["type.image"] },
               },
+              asset: { type: "image", transform: true },
+              categories: {
+                type: "multiSelector",
+                transform: true,
+                label: "Categories",
+                dropdownLabel: "Category",
+                options: [],
+              },
+              seats: {
+                type: "optionalNumber",
+                transform: true,
+                showNumberFieldRadioLabel: "Show",
+                hideNumberFieldRadioLabel: "Hide",
+                defaultCustomValue: 1,
+              },
+              primaryCta: { type: "ctaSelector", transform: true },
               nested: {
                 type: "object",
                 objectFields: {
@@ -99,11 +134,19 @@ describe("native Puck field transforms", () => {
               nested,
               rows,
               untouched,
+              asset,
+              categories,
+              seats,
+              primaryCta,
             }) => (
               <section>
                 <h1>{title}</h1>
-                <RichTextRenderer data={description} />
+                <MaybeRTF data={description} />
                 <img src={image.url} alt={image.alternateText} />
+                <img src={asset.url} alt={asset.alternateText} />
+                <span>{categories.join(",")}</span>
+                <span data-testid="seats">{seats}</span>
+                <a href={primaryCta.link}>{primaryCta.label}</a>
                 <span>{nested.label}</span>
                 <span>{rows[0].label}</span>
                 <span>{untouched.constantValue}</span>
@@ -114,6 +157,10 @@ describe("native Puck field transforms", () => {
       };
       const streamDocument = {
         locale: "es",
+        orderCta: {
+          label: { defaultValue: "Order", es: "Pedir [[name]]" },
+          link: { defaultValue: "/en", es: "/es" },
+        },
         name: "Restaurant",
         description: { html: "<p>Shared rich text</p>", json: "{}" },
         photo: {
@@ -149,15 +196,23 @@ describe("native Puck field transforms", () => {
       // JSDOM does not measure Puck's layout, so query the preview's content directly.
       expect((await screen.findByText("Restaurant")).tagName).toBe("H1");
       expect(screen.getByText("Shared rich text")).toBeTruthy();
-      expect(
-        screen.getByRole("img", { hidden: true }).getAttribute("src")
-      ).toBe("/hero.jpg");
-      expect(
-        screen.getByRole("img", { hidden: true }).getAttribute("alt")
-      ).toBe("Restaurant image");
+      expect(screen.getByAltText("Restaurant image").getAttribute("src")).toBe(
+        "/hero.jpg"
+      );
+      expect(screen.getByAltText("Restaurant image").getAttribute("alt")).toBe(
+        "Restaurant image"
+      );
       expect(screen.getByText("Hola Restaurant")).toBeTruthy();
       expect(screen.getByText("Fila")).toBeTruthy();
       expect(screen.getByText("Original")).toBeTruthy();
+      expect(screen.getByAltText("Foto Restaurant").getAttribute("src")).toBe(
+        "/asset.jpg"
+      );
+      expect(screen.getByText("menu,0")).toBeTruthy();
+      expect(screen.getByTestId("seats").textContent).toBe("0");
+      expect(screen.getByText("Pedir Restaurant").getAttribute("href")).toBe(
+        "/es"
+      );
       expect(data).toEqual(authoredData);
     }
   );

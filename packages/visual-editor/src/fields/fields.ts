@@ -25,6 +25,7 @@ import type { StyledTextField } from "./styledFields/StyledTextField.tsx";
 import type { TranslatableStringField } from "./TranslatableStringField.tsx";
 import type { VideoField } from "./VideoField.tsx";
 import type { ComprehensiveCTAField } from "./styledFields/ComprehensiveCTAField.tsx";
+import type { EnhancedTranslatableCTA } from "../types/types.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { adaptYextFieldMap } from "./yextFieldAdapter.ts";
 
@@ -36,22 +37,33 @@ type LocalizedRenderValue<Value> = Value extends readonly (infer Item)[]
       : { [Key in keyof Value]: LocalizedRenderValue<Value[Key]> }
     : Value;
 
+type TransformedFieldValues<Value> = {
+  translatableString: string;
+  image: LocalizedRenderValue<Value>;
+  multiSelector: Value extends { selections: { value: infer Selection }[] }
+    ? Exclude<Selection, undefined>[]
+    : never;
+  optionalNumber: number | undefined;
+  ctaSelector: LocalizedRenderValue<EnhancedTranslatableCTA> | undefined;
+  entityField: Value extends { constantValue: infer Constant }
+    ? LocalizedRenderValue<Constant> | undefined
+    : never;
+};
+
 type TransformedFieldValue<Value, Definition> = Definition extends {
   transform: true;
-  type: "translatableString";
+  type: infer FieldType;
 }
-  ? string
-  : Definition extends { transform: true; type: "entityField" }
-    ? Value extends { constantValue: infer Constant }
-      ? LocalizedRenderValue<Constant> | undefined
-      : never
-    : Definition extends { type: "object"; objectFields: infer Nested }
-      ? YextTransformedProps<Value, Nested>
-      : Definition extends { type: "array"; arrayFields: infer Nested }
-        ? Value extends (infer Item)[]
-          ? YextTransformedProps<Item, Nested>[]
-          : Value
-        : Value;
+  ? FieldType extends keyof TransformedFieldValues<Value>
+    ? TransformedFieldValues<Value>[FieldType]
+    : Value
+  : Definition extends { type: "object"; objectFields: infer Nested }
+    ? YextTransformedProps<Value, Nested>
+    : Definition extends { type: "array"; arrayFields: infer Nested }
+      ? Value extends (infer Item)[]
+        ? YextTransformedProps<Item, Nested>[]
+        : Value
+      : Value;
 
 /** Derives render values from authored props and explicitly opted-in field definitions. */
 export type YextTransformedProps<Props, Definitions> = {

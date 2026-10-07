@@ -39,6 +39,8 @@ let pendingImageSession:
 
 export type ImageField = BaseField & {
   type: "image";
+  /** Localizes the asset image and resolves its alt text before rendering. */
+  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   hideAltTextField?: boolean;

@@ -33,7 +33,8 @@ export function getTransformedFieldSources(
         {
           label: authoredField.label ? pt(authoredField.label) : propPath,
           field:
-            authoredField.type === "entityField" &&
+            (authoredField.type === "entityField" ||
+              authoredField.type === "ctaSelector") &&
             !value?.constantValueEnabled &&
             value?.field
               ? value.field
