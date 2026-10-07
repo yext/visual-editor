@@ -1,10 +1,11 @@
-import { createElement } from "react";
+import { createElement, type ReactElement } from "react";
 import type {
   ArrayField,
   CustomField,
   ComponentConfig,
   DefaultComponentProps,
   Field,
+  FieldProps,
   Fields,
   ObjectField,
 } from "@puckeditor/core";
@@ -196,6 +197,20 @@ export type YextFieldMap<
   [PropName in keyof Omit<T, "editMode">]: YextFieldDefinition<T[PropName]>;
 };
 
+/** Keeps custom field components mounted when Puck updates field definitions. */
+const renderYextField = ({
+  field,
+  ...props
+}: FieldProps<CustomField<any>>): ReactElement =>
+  createElement(YextAutoField, {
+    ...props,
+    field: (
+      field as CustomField<any> & {
+        yextField: YextFieldDefinition<any>;
+      }
+    ).yextField,
+  });
+
 /**
  * Converts Yext field definitions into a runtime `Fields` object that Puck can
  * render safely.
@@ -217,10 +232,7 @@ export const toPuckFields = <
     (yextField) => ({
       ...yextField,
       type: "custom",
-      render: ({ field: _, ...props }) =>
-        createElement(YextAutoField, {
-          ...(props as any),
-          field: yextField,
-        }),
+      yextField,
+      render: renderYextField,
     })
   ) as Fields<Props>;

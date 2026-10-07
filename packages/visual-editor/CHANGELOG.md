@@ -1,3 +1,19 @@
+#### 2.0.0-beta.4 (2026-10-07)
+
+##### Chores
+
+- improve convert-template error messages ([#1353](https://github.com/yext/visual-editor/pull/1353)) ([f5153f9b](https://github.com/yext/visual-editor/commit/f5153f9bff14dffb05afa2ecf73c9b99b8c47689))
+
+##### New Features
+
+- support complete list items in itemSource ([#1354](https://github.com/yext/visual-editor/pull/1354)) ([20256417](https://github.com/yext/visual-editor/commit/2025641768a83652a04c629ae31f9e4d53ba24c6))
+
+##### Bug Fixes
+
+- allow built-ins to pass validation ([#1356](https://github.com/yext/visual-editor/pull/1356)) ([a3d116c2](https://github.com/yext/visual-editor/commit/a3d116c2db9a515394fc6f4d72d74039b45a31dd))
+- restore local-editor image modal ([#1351](https://github.com/yext/visual-editor/pull/1351)) ([0ef10c49](https://github.com/yext/visual-editor/commit/0ef10c49b962bb73b95b52f4b07dae6b579b7ad0))
+- adjust yextve validate and deploy commands ([#1352](https://github.com/yext/visual-editor/pull/1352)) ([4c8711f2](https://github.com/yext/visual-editor/commit/4c8711f27ca9ef2dd2cc1b28ae7e0ae3af5dff83))
+
 #### 2.0.0-beta.3 (2026-10-05)
 
 ##### New Features

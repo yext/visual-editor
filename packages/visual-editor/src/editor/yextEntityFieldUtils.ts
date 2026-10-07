@@ -12,6 +12,7 @@ import {
   getListSourceRootFields,
   type MappedSourceFieldFilter,
 } from "../utils/cardSlots/mappedSource.ts";
+import { ITEM_SOURCE_SELF_FIELD } from "../utils/itemSource/itemSourceTypes.ts";
 
 const DISPLAY_NAME_SEPARATOR = " > ";
 
@@ -276,13 +277,33 @@ const getSubdocumentStreamFields = (
 const getScopedFieldsForSelector = (
   entityFields: StreamFields | null,
   sourceField: string,
-  filter: RenderEntityFieldFilter<any>
+  filter: MappedSourceFieldFilter<any>
 ): YextSchemaField[] => {
   const scopedStreamFields = getSubdocumentStreamFields(
     entityFields,
     sourceField
   );
-  if (!scopedStreamFields) {
+  const sourceSchemaField = getSchemaFieldAtPath(entityFields, sourceField);
+  const itemFields =
+    sourceSchemaField?.definition.isList && filter.types?.length
+      ? getFilteredEntityFields(
+          {
+            fields: [
+              {
+                ...sourceSchemaField,
+                name: ITEM_SOURCE_SELF_FIELD,
+                definition: {
+                  ...sourceSchemaField.definition,
+                  isList: false,
+                },
+                children: undefined,
+              },
+            ],
+          },
+          filter
+        )
+      : [];
+  if (!scopedStreamFields && !itemFields.length) {
     return [];
   }
 
@@ -291,7 +312,18 @@ const getScopedFieldsForSelector = (
 
   return sortFields(
     dedupeFieldsByName(
-      getFilteredEntityFields(scopedStreamFields, filter).map((field) => {
+      [
+        ...itemFields.map((field) => ({
+          ...field,
+          displayName: rootDisplayName ?? sourceField,
+        })),
+        ...(scopedStreamFields
+          ? getFilteredEntityFields(scopedStreamFields, filter)
+          : []),
+      ].map((field) => {
+        if (field.name === ITEM_SOURCE_SELF_FIELD) {
+          return field;
+        }
         const displayName =
           getEntityFieldDisplayName(
             `${sourceField}.${field.name}`,
@@ -317,7 +349,8 @@ const getScopedFieldsForSelector = (
  *
  * 1. Scope to a selected source item when `sourceField` is provided.
  * 2. For item-source and mapped-source pickers, restrict roots to fields that
- *    can satisfy the required descendant type sets. `itemSourceTypes` takes
+ *    can satisfy the required type sets. Item sources also accept matching
+ *    complete list items. `itemSourceTypes` takes
  *    precedence over `mappedSourceTypes` when both are present and requires only
  *    one matching group; mapped-source pickers require every group.
  * 3. Filter incompatible resolved values out when a stream document is
@@ -370,7 +403,7 @@ export const getFieldsForSelector = (
   if (filter.itemSourceTypes?.length) {
     return sortFields(
       dedupeFieldsByName(
-        getListSourceRootFields(entityFields)
+        getListSourceRootFields(entityFields, true)
           .map((field) => ({
             ...field,
             displayName:
@@ -378,7 +411,16 @@ export const getFieldsForSelector = (
               field.displayName ??
               field.name,
           }))
-          .filter(hasRequiredDescendants)
+          .filter(
+            (field) =>
+              getFilteredEntityFields(
+                { fields: [{ ...field, children: undefined }] },
+                {
+                  types: filter.itemSourceTypes!.flat(),
+                  includeListsOnly: true,
+                }
+              ).length > 0 || hasRequiredDescendants(field)
+          )
           .filter((field) =>
             !streamDocument
               ? true
