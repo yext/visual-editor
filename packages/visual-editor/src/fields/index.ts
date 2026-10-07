@@ -67,4 +67,4 @@ export {
 export { YextPuckFieldOverrides } from "./fieldOverrides.ts";
 
 export { YextAutoField } from "./YextAutoField.tsx";
-export { createYextFieldTransforms } from "./fieldTransforms.tsx";
+export { createYextFieldTransforms } from "./fieldTransforms/index.ts";

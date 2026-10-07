@@ -2,7 +2,7 @@ import { Config, Data, Metadata, Render } from "@puckeditor/core";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDocument } from "../hooks/useDocument.tsx";
-import { createYextFieldTransforms } from "../fields/fieldTransforms.tsx";
+import { createYextFieldTransforms } from "../fields/fieldTransforms/index.ts";
 import { wrapConfigWithComponentErrorBoundary } from "../internal/utils/wrapConfigWithComponentErrorBoundary.tsx";
 
 export type VisualEditorRenderProps<T extends Config = Config> = {

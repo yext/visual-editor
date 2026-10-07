@@ -22,7 +22,7 @@ import { Metadata } from "../../editor/Editor.tsx";
 import { createPreviewFrameLinkBlocker } from "../utils/previewFrameLinkBlocker.ts";
 import { useTranslation } from "react-i18next";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { createYextFieldTransforms } from "../../fields/fieldTransforms.tsx";
+import { createYextFieldTransforms } from "../../fields/fieldTransforms/index.ts";
 import { TransformedFieldTooltip } from "../puck/components/TransformedFieldTooltip.tsx";
 
 const devLogger = new DevLogger();

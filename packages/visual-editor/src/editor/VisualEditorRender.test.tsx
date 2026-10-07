@@ -8,7 +8,7 @@ import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { createItemSource } from "../utils/itemSource/createItemSource.ts";
 import { ComprehensiveCTA } from "../components/helpers/ComprehensiveCTA.tsx";
 import { MaybeRTF } from "../components/helpers/maybeRTF.tsx";
-import { createYextFieldTransforms } from "../fields/fieldTransforms.tsx";
+import { createYextFieldTransforms } from "../fields/fieldTransforms/index.ts";
 import { toPuckFields } from "../fields/fields.ts";
 import { VisualEditorRender } from "./VisualEditorRender.tsx";
 

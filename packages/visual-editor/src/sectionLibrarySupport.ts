@@ -111,7 +111,7 @@ export {
 } from "./fields/fields.ts";
 export { YextAutoField } from "./fields/YextAutoField.tsx";
 export { MaybeRTF } from "./components/helpers/maybeRTF.tsx";
-export { createYextFieldTransforms } from "./fields/fieldTransforms.tsx";
+export { createYextFieldTransforms } from "./fields/fieldTransforms/index.ts";
 export { BackgroundProvider, useBackground } from "./hooks/useBackground.tsx";
 export {
   CardContextProvider,

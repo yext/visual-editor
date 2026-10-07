@@ -15,7 +15,7 @@ import type {
   TranslatableString,
 } from "../types/types.ts";
 import type { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
-import { createYextFieldTransforms } from "./fieldTransforms.tsx";
+import { createYextFieldTransforms } from "./fieldTransforms/index.ts";
 import { ComprehensiveCTA } from "../components/helpers/ComprehensiveCTA.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { createItemSource } from "../utils/itemSource/createItemSource.ts";

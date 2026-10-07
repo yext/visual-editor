@@ -6,7 +6,7 @@ import {
   type Overrides,
 } from "@puckeditor/core";
 import { useEntityTooltips } from "../../../editor/EntityField.tsx";
-import { getTransformField } from "../../../fields/fieldTransforms.tsx";
+import { getTransformField } from "../../../fields/fieldTransforms/index.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
 import {
   Tooltip,

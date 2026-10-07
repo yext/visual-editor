@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveComprehensiveCTAValue } from "../../fields/fieldTransforms.tsx";
+import { resolveComprehensiveCTAValue } from "../../fields/fieldTransforms/index.ts";
 import { type CTAProps, CTA } from "../atoms/cta.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import {

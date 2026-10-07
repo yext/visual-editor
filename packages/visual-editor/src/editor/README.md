@@ -159,11 +159,13 @@ without `transform: true` retain their existing tooltip behavior.
 
 ### Adding field transforms
 
-`fieldTransforms.tsx` dispatches through `fieldToTransform`, keyed by authored
-field type. Puck registration and adapted `custom` fields use that same map.
+`fields/fieldTransforms/createYextFieldTransforms.ts` registers the transforms,
+while `fields/fieldTransforms/fieldToTransform.ts` dispatches by authored field
+type. Puck registration and adapted `custom` fields use that same map.
 Each handler receives the authored definition, its value, and the page document
-and locale. Shared `resolveValue` handles localization and interpolation across
-objects and arrays while retaining rich-text and asset structures.
+and locale. `resolveValue.ts` handles localization and interpolation across
+objects and arrays while retaining rich-text and asset structures. `cta.ts`
+contains CTA-specific resolution.
 
 To support another field, add its `transform?: boolean` option, a handler in
 `fieldToTransform`, and its output type in `TransformedFieldValues` in `fields.ts`.

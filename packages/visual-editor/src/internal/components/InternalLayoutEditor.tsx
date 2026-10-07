@@ -40,7 +40,7 @@ import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
 import type { MigrationRegistry } from "../../utils/migrate.ts";
 import { useTranslation } from "react-i18next";
-import { createYextFieldTransforms } from "../../fields/fieldTransforms.tsx";
+import { createYextFieldTransforms } from "../../fields/fieldTransforms/index.ts";
 import { TransformedFieldTooltip } from "../puck/components/TransformedFieldTooltip.tsx";
 
 const devLogger = new DevLogger();
