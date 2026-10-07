@@ -120,8 +120,16 @@ const toDataAttributes = (
 };
 
 /**
- * Renders CTA data, retaining styles, accessibility, and interaction behavior.
- * Temporarily resolves authored values through the same resolver as field transforms.
+ * Supports both authored props from fields without `transform: true` and resolved
+ * props from fields with transforms enabled. Both paths retain styles,
+ * accessibility, and interaction behavior.
+ *
+ * 1. Temporarily resolve authored bindings and translated text through the same
+ *    resolver used by field transforms, including defaults for partial values.
+ * 2. Use transformed values directly without resolving or interpolating them again.
+ * 3. Render the resolved data using the shared CTA presentation.
+ *
+ * Remove the authored-value compatibility path once all libraries use transforms.
  */
 export const ComprehensiveCTA = ({
   value,
@@ -136,6 +144,8 @@ export const ComprehensiveCTA = ({
 }: ComprehensiveCTARenderProps) => {
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
+  // Authored values retain field/constant bindings or localized text objects.
+  // Partial authored values also need defaults before they can be rendered.
   const currentValue =
     !value?.data ||
     !value.styles ||
@@ -143,12 +153,14 @@ export const ComprehensiveCTA = ({
       ("field" in value.data.cta || "constantValue" in value.data.cta)) ||
     typeof value.data.buttonText === "object" ||
     typeof value.data.ariaLabel === "object"
-      ? resolveComprehensiveCTAValue(
+      ? // Without transforms, resolve the authored value using the page and locale.
+        resolveComprehensiveCTAValue(
           value as Partial<ComprehensiveCTAValue>,
           streamDocument,
           i18n.language
         )
-      : (value as ResolvedComprehensiveCTAValue);
+      : // With transforms, the value already contains resolved data; keep it as is.
+        (value as ResolvedComprehensiveCTAValue);
   const actionType = currentValue.data.actionType;
   const ctaType =
     actionType === "button" ? "textAndLink" : currentValue.data.cta?.ctaType;

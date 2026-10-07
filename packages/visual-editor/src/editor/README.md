@@ -127,11 +127,8 @@ const Example = ({ myField }: ExampleProps) => {
 
 ## Opt-in field transforms
 
-Add `transform: true` to an `entityField`, `translatableString`, `image`,
-`multiSelector`, `optionalNumber`, `ctaSelector`, `comprehensiveCTA`, or `video` to resolve its value before
-component rendering. Omitted or false flags keep the authored value
-unchanged. Defaults, field editors, `resolveData`, and saved layouts continue to
-use authored props.
+Add `transform: true` to the props of a supported field type and the transform behavior will be enabled, making props come through
+resolved in the render function. The following field types are supported for transforms and the behavior is disabled by default.
 
 | Field definition                             | Render value                                                                                    |
 | -------------------------------------------- | ----------------------------------------------------------------------------------------------- |
@@ -147,100 +144,7 @@ use authored props.
 | Repeated `entityField`                       | Array of item props resolved against each selected item or manual item                          |
 | `video`                                      | Asset video data with interpolated text and preserved metadata                                  |
 
-Images retain their simple or complex image shape, dimensions, and asset metadata;
-nested alt text becomes a string. Transforms return data, never components.
-CTA renderers retain presentation choices such as preset images and button styles.
-Repeated entity sources return resolved item arrays. `ComprehensiveCTA` accepts
-resolved values from an opted-in `comprehensiveCTA` field. During migration, it
-also accepts authored `ComprehensiveCTAValue` values and resolves them through
-the same resolver used by field transforms. Resolved values are rendered directly
-without resolving them again. Defaults and editing keep authored values. This
-compatibility path can be removed once libraries opt in to transforms.
-
-Both editor previews and `VisualEditorRender` pass transforms to Puck's official
-`fieldTransforms` API. This requires `@puckeditor/core@0.24.0-canary.c1ec9773`,
-which includes native support in both client and server `Render`. The generated
-section-library page template uses `VisualEditorRender` inside the existing
-provider. Existing libraries are not migrated automatically.
-
-For direct Puck usage, pass
-`fieldTransforms={createYextFieldTransforms(streamDocument, locale)}` to `Puck`
-or `Render`. Transform resolution belongs to rendering; do not store the
-returned values in layout data.
-
-### Hero without slots
-
-Keep the precise field definitions with `satisfies`, then pass `typeof fields` as
-the second type argument to `YextComponentConfig`. This derives clean render
-props while keeping authored defaults typed separately.
-
-```tsx
-import { type ComplexImageType } from "@yext/pages-components";
-import {
-  ComprehensiveCTA,
-  Image,
-  MaybeRTF,
-  type ComprehensiveCTAValue,
-  type TranslatableAssetImage,
-  type TranslatableRichText,
-  type TranslatableString,
-  type YextComponentConfig,
-  type YextEntityField,
-  type YextFieldMap,
-} from "@yext/visual-editor";
-
-type HeroProps = {
-  title: YextEntityField<TranslatableString>;
-  description: YextEntityField<TranslatableRichText>;
-  image: YextEntityField<ComplexImageType | TranslatableAssetImage>;
-  primaryCta: ComprehensiveCTAValue;
-  secondaryCta: ComprehensiveCTAValue;
-};
-
-const fields = {
-  title: {
-    type: "entityField",
-    label: "Title",
-    transform: true,
-    filter: { types: ["type.string"] },
-  },
-  description: {
-    type: "entityField",
-    label: "Description",
-    transform: true,
-    filter: { types: ["type.rich_text_v2", "type.string"] },
-  },
-  image: {
-    type: "entityField",
-    label: "Image",
-    transform: true,
-    filter: { types: ["type.image"] },
-  },
-  primaryCta: {
-    type: "comprehensiveCTA",
-    transform: true,
-    label: "Primary CTA",
-  },
-  secondaryCta: {
-    type: "comprehensiveCTA",
-    transform: true,
-    label: "Secondary CTA",
-  },
-} satisfies YextFieldMap<HeroProps>;
-
-export const Hero: YextComponentConfig<HeroProps, typeof fields> = {
-  fields,
-  render: ({ title, description, image, primaryCta, secondaryCta }) => (
-    <section>
-      <h1>{title}</h1>
-      <MaybeRTF data={description} bodyVariant="lg" />
-      {image && <Image image={image} loading="eager" />}
-      <ComprehensiveCTA value={primaryCta} />
-      <ComprehensiveCTA value={secondaryCta} />
-    </section>
-  ),
-};
-```
+````
 
 Title, description, and image still allow entity bindings and constant values.
 The transform returns resolved data, including translated and interpolated rich-text
@@ -292,7 +196,7 @@ const fields = {
     <MaybeRTF data={card.description} />
   </article>
 ))}
-```
+````
 
 The library no longer calls `resolveItems` or performs text resolution in its
 render function. Video asset structure and comprehensive CTA styles are retained.
