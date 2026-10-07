@@ -2,12 +2,12 @@ import { getDirections } from "@yext/pages-components";
 import { getCTAType } from "../internal/utils/ctaFieldUtils.ts";
 import { i18nPageInstance } from "../utils/i18n/i18nInstances.ts";
 import type { BaseField, FieldTransformFn } from "@puckeditor/core";
-import type { YextPuckField } from "./fields.ts";
-import type { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
+import { normalizeComprehensiveCTAValue } from "./styledFields/ComprehensiveCTAField.tsx";
+import type { YextFieldMap, YextPuckField } from "./fields.ts";
 import type { StreamDocument } from "../utils/types/StreamDocument.ts";
 import {
   resolveEmbeddedFieldsInString,
-  resolveYextEntityField,
+  resolveField,
 } from "../utils/resolveYextEntityField.ts";
 
 type TransformableField = Extract<YextPuckField, { transform?: boolean }>;
@@ -49,14 +49,46 @@ function resolveValue(value: any, context: FieldTransformContext): any {
 /** Resolves the selected entity or constant source before localizing its data. */
 function resolveEntityValue(value: any, context: FieldTransformContext): any {
   return resolveValue(
-    value?.constantValueEnabled && value.constantValue !== undefined
+    value?.constantValueEnabled
       ? value.constantValue
-      : resolveYextEntityField(
-          context.streamDocument,
-          value as YextEntityField<unknown>,
-          context.locale
-        ),
+      : value?.field
+        ? resolveField(context.streamDocument, value.field).value
+        : undefined,
     context
+  );
+}
+
+/** Resolves repeated-item mappings recursively against the selected item document. */
+function resolveItemFields(
+  fields: YextFieldMap<any>,
+  value: any,
+  context: FieldTransformContext
+): any {
+  return Object.fromEntries(
+    Object.entries(fields).map(([key, field]) => {
+      const itemValue = value?.[key];
+      if (field.type === "object") {
+        return [key, resolveItemFields(field.objectFields, itemValue, context)];
+      }
+      if (field.type === "array") {
+        return [
+          key,
+          (itemValue ?? []).map((item: any) =>
+            resolveItemFields(field.arrayFields, item, context)
+          ),
+        ];
+      }
+      return [
+        key,
+        Object.hasOwn(fieldToTransform, field.type)
+          ? fieldToTransform[field.type as TransformableField["type"]](
+              field as TransformableField,
+              itemValue,
+              context
+            )
+          : resolveValue(itemValue, context),
+      ];
+    })
   );
 }
 
@@ -67,14 +99,49 @@ const fieldToTransform: Record<
 > = {
   entityField: (field, value, context) => {
     if ("repeated" in field && field.repeated) {
-      throw new Error(
-        "Field transforms do not support repeated entity sources."
-      );
+      const { repeated } = field;
+      const manual = value?.constantValueEnabled === true;
+      const items = manual
+        ? value?.constantValue
+        : value?.field
+          ? resolveField(context.streamDocument, value.field).value
+          : undefined;
+      return Array.isArray(items)
+        ? items.map((item) =>
+            resolveItemFields(
+              manual ? repeated.manualItemFields : repeated.mappingFields,
+              manual ? item : value.mappings,
+              manual
+                ? context
+                : { ...context, streamDocument: item as StreamDocument }
+            )
+          )
+        : [];
     }
     return resolveEntityValue(value, context);
   },
   translatableString: (_field, value, context) =>
     resolveValue(value, context) ?? "",
+  video: (_field, value, context) => resolveValue(value, context),
+  comprehensiveCTA: (_field, value, context) => {
+    const normalized = normalizeComprehensiveCTAValue(value);
+    return {
+      ...normalized,
+      data: {
+        ...normalized.data,
+        cta:
+          normalized.data.actionType === "link"
+            ? fieldToTransform.ctaSelector(
+                { type: "ctaSelector" },
+                normalized.data.cta,
+                context
+              )
+            : undefined,
+        buttonText: resolveValue(normalized.data.buttonText, context),
+        ariaLabel: resolveValue(normalized.data.ariaLabel, context),
+      },
+    };
+  },
   image: (_field, value, context) => resolveValue(value, context),
   multiSelector: (_field, value) =>
     (value?.selections ?? []).flatMap(({ value }: { value: unknown }) =>

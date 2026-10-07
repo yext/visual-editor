@@ -15,11 +15,18 @@ import type {
 } from "../types/types.ts";
 import type { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 import { createYextFieldTransforms } from "./fieldTransforms.tsx";
+import { ComprehensiveCTA } from "../components/helpers/ComprehensiveCTA.tsx";
+import { TemplatePropsContext } from "../hooks/useDocument.tsx";
+import { createItemSource } from "../utils/itemSource/createItemSource.ts";
+import type { ComprehensiveCTAValue } from "./styledFields/ComprehensiveCTAField.tsx";
+import type { AssetVideo } from "../types/videos.ts";
 import { MaybeRTF } from "../components/helpers/index.ts";
 import {
   toPuckFields,
   type YextComponentConfig,
   type YextFieldMap,
+  type YextTransformedProps,
+  type ResolvedComprehensiveCTAValue,
 } from "./fields.ts";
 
 describe("field transforms", () => {
@@ -33,6 +40,26 @@ describe("field transforms", () => {
       },
       value: { field: "name", constantValue: "Unused" },
       expected: "Restaurant",
+    },
+    {
+      name: "when a selected constant is unset then its value is undefined",
+      field: { type: "entityField", transform: true, filter: {} },
+      value: {
+        field: "name",
+        constantValueEnabled: true,
+        constantValue: undefined,
+      },
+      expected: undefined,
+    },
+    {
+      name: "when no entity source is selected then its value is undefined",
+      field: { type: "entityField", transform: true, filter: {} },
+      value: {
+        field: "",
+        constantValueEnabled: false,
+        constantValue: "Unused",
+      },
+      expected: undefined,
     },
     {
       name: "when a linked field is selected then its value is resolved",
@@ -318,7 +345,14 @@ describe("field transforms", () => {
     }
   });
 
-  it.each(["image", "multiSelector", "optionalNumber", "ctaSelector"])(
+  it.each([
+    "image",
+    "multiSelector",
+    "optionalNumber",
+    "ctaSelector",
+    "comprehensiveCTA",
+    "video",
+  ])(
     "when %s does not opt in then its authored value retains its identity",
     (type) => {
       for (const transform of [undefined, false]) {
@@ -461,29 +495,6 @@ describe("field transforms", () => {
     expect(value).toEqual(authoredValue);
   });
 
-  it("when a repeated source opts in then it reports the unsupported configuration", () => {
-    expect(() =>
-      createYextFieldTransforms({}, "en").entityField({
-        field: {
-          type: "custom",
-          metadata: {
-            yextField: {
-              type: "entityField",
-              transform: true,
-              repeated: {},
-              filter: {},
-            },
-          },
-        },
-        value: { field: "items", constantValue: [] },
-        componentId: "hero",
-        propName: "items",
-        propPath: "items",
-        isReadOnly: true,
-      })
-    ).toThrow("Field transforms do not support repeated entity sources.");
-  });
-
   it("when fields opt in then their config derives render types while retaining authored defaults", () => {
     const fields = {
       title: {
@@ -578,4 +589,334 @@ describe("field transforms", () => {
       fields.cta
     );
   });
+  it.each([
+    {
+      name: "linked items",
+      value: {
+        field: "articles",
+        constantValue: [],
+        mappings: {
+          title: { field: "name" },
+          description: { field: "description", constantValue: "" },
+          nested: {
+            label: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: {
+                defaultValue: "Welcome [[name]]",
+                es: "Hola [[name]]",
+              },
+            },
+          },
+        },
+      },
+      expected: [
+        {
+          title: "Artículo",
+          description: { html: "<p>Leer Artículo</p>" },
+          nested: { label: "Hola Artículo" },
+        },
+      ],
+    },
+    {
+      name: "manual items",
+      value: {
+        field: "articles",
+        constantValueEnabled: true,
+        constantValue: [
+          {
+            title: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: { defaultValue: "Manual", es: "Manual [[name]]" },
+            },
+            description: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: { defaultValue: { html: "<p>Read [[name]]</p>" } },
+            },
+            nested: {
+              label: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: "[[name]]",
+              },
+            },
+          },
+        ],
+      },
+      expected: [
+        {
+          title: "Manual Restaurant",
+          description: { html: "<p>Read Restaurant</p>" },
+          nested: { label: "Restaurant" },
+        },
+      ],
+    },
+    {
+      name: "missing linked items",
+      value: { field: "missing", constantValue: [] },
+      expected: [],
+    },
+    { name: "unset items", value: undefined, expected: [] },
+  ])(
+    "when a repeated source contains $name then its item props are resolved",
+    ({ value, expected }) => {
+      const source = createItemSource({
+        label: "Articles",
+        mappingFields: {
+          title: { type: "entityField", filter: { types: ["type.string"] } },
+          description: {
+            type: "entityField",
+            filter: { types: ["type.rich_text_v2"] },
+          },
+          nested: {
+            type: "object",
+            objectFields: {
+              label: {
+                type: "entityField",
+                filter: { types: ["type.string"] },
+              },
+            },
+          },
+        },
+      });
+      const authored = structuredClone(value);
+      expect(
+        createYextFieldTransforms(
+          {
+            name: "Restaurant",
+            articles: [
+              {
+                name: "Artículo",
+                description: { html: "<p>Leer [[name]]</p>" },
+              },
+            ],
+          },
+          "es"
+        ).custom({
+          field: toPuckFields({
+            articles: { ...source.field, transform: true },
+          }).articles!,
+          value,
+          componentId: "cards",
+          propName: "articles",
+          propPath: "articles",
+          isReadOnly: true,
+        })
+      ).toEqual(expected);
+      expect(value).toEqual(authored);
+    }
+  );
+
+  it.each(["link", "button"] as const)(
+    "when a comprehensive CTA is a %s then it returns resolved data for presentation",
+    (actionType) => {
+      const value = {
+        data: {
+          actionType,
+          cta: {
+            field: "order",
+            constantValue: undefined,
+            constantValueEnabled: false,
+            selectedType: "textAndLink",
+          },
+          buttonText: { defaultValue: "Book", es: "Reservar [[name]]" },
+          ariaLabel: {
+            defaultValue: "Book a table",
+            es: "Reservar en [[name]]",
+          },
+          customId: "booking",
+          customClass: "booking-button",
+          dataAttributes: [{ key: "booking", value: "table" }],
+          openInNewTab: true,
+        },
+        styles: { variant: "primary", button: { fontWeight: "700" } },
+        eventName: "booking-click",
+      };
+      const authored = structuredClone(value);
+      const resolved = createYextFieldTransforms(
+        {
+          name: "Restaurant",
+          order: {
+            label: { defaultValue: "Order", es: "Pedir [[name]]" },
+            link: "/order",
+            linkType: "URL",
+          },
+        },
+        "es"
+      ).custom({
+        field: toPuckFields({
+          cta: { type: "comprehensiveCTA", transform: true },
+        }).cta!,
+        value,
+        componentId: "hero",
+        propName: "cta",
+        propPath: "cta",
+        isReadOnly: true,
+      });
+      expect(resolved.data).toEqual({
+        ...value.data,
+        cta:
+          actionType === "link"
+            ? {
+                ctaType: "textAndLink",
+                label: "Pedir Restaurant",
+                link: "/order",
+                linkType: "URL",
+              }
+            : undefined,
+        buttonText: "Reservar Restaurant",
+        ariaLabel: "Reservar en Restaurant",
+      });
+      expect(resolved.styles.button.fontWeight).toBe("700");
+      expect(value).toEqual(authored);
+      const html = renderToStaticMarkup(
+        <TemplatePropsContext.Provider value={{ document: {} }}>
+          <ComprehensiveCTA value={resolved} />
+        </TemplatePropsContext.Provider>
+      );
+      expect(html).toContain(
+        actionType === "link" ? "Pedir Restaurant" : "Reservar Restaurant"
+      );
+      expect(html).toContain("font-weight:700");
+      if (actionType === "button") {
+        expect(html).toContain('id="booking"');
+        expect(html).toContain('data-booking="table"');
+        expect(html).toContain('aria-label="Reservar en Restaurant"');
+      } else {
+        expect(html).toContain('href="/order"');
+        expect(html).toContain('target="_blank"');
+      }
+    }
+  );
+
+  it("when a video opts in then its text is interpolated and asset metadata stays intact", () => {
+    const value = {
+      id: "asset",
+      name: "Video [[name]]",
+      video: {
+        id: "youtube",
+        title: "Welcome [[name]]",
+        url: "/watch",
+        embeddedUrl: "/embed",
+        duration: "PT30S",
+        thumbnail: "/thumb.jpg",
+      },
+      videoDescription: "Visit [[name]]",
+    };
+    const authored = structuredClone(value);
+    expect(
+      createYextFieldTransforms({ name: "Restaurant" }, "en").custom({
+        field: toPuckFields({ video: { type: "video", transform: true } })
+          .video!,
+        value,
+        componentId: "hero",
+        propName: "video",
+        propPath: "video",
+        isReadOnly: true,
+      })
+    ).toEqual({
+      ...value,
+      name: "Video Restaurant",
+      video: { ...value.video, title: "Welcome Restaurant" },
+      videoDescription: "Visit Restaurant",
+    });
+    expect(value).toEqual(authored);
+    expectTypeOf<
+      YextTransformedProps<
+        { cta: ComprehensiveCTAValue; video: AssetVideo },
+        {
+          cta: { type: "comprehensiveCTA"; transform: true };
+          video: { type: "video"; transform: true };
+        }
+      >["cta"]
+    >().toEqualTypeOf<ResolvedComprehensiveCTAValue>();
+  });
+
+  it("when a repeated source opts in then inferred item props contain resolved values", () => {
+    const source = createItemSource<{
+      title: YextEntityField<TranslatableString>;
+      nested: { description: YextEntityField<TranslatableRichText> };
+    }>({
+      label: "Cards",
+      mappingFields: {
+        title: { type: "entityField", filter: { types: ["type.string"] } },
+        nested: {
+          type: "object",
+          objectFields: {
+            description: {
+              type: "entityField",
+              filter: { types: ["type.rich_text_v2"] },
+            },
+          },
+        },
+      },
+    });
+    type Items = YextTransformedProps<
+      { cards: typeof source.value },
+      { cards: typeof source.field & { transform: true } }
+    >["cards"];
+    expectTypeOf<Items[number]["title"]>().toEqualTypeOf<string | undefined>();
+    expectTypeOf<Items[number]["nested"]["description"]>().toEqualTypeOf<
+      RichText | string | undefined
+    >();
+    expect(source.field.type).toBe("entityField");
+  });
+  it.each([
+    {
+      name: "directions",
+      cta: {
+        field: "",
+        constantValueEnabled: false,
+        selectedType: "getDirections",
+      },
+      expectedLabel: "Get Directions",
+      expectedLink: "30.2672",
+    },
+    {
+      name: "preset image",
+      cta: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          ctaType: "presetImage",
+          label: { defaultValue: "" },
+          link: { defaultValue: "/download" },
+        },
+      },
+      expectedLabel: "",
+      expectedLink: "/download",
+    },
+  ])(
+    "when a comprehensive CTA uses $name then the renderer consumes resolved data",
+    ({ cta, expectedLabel, expectedLink }) => {
+      const value = {
+        data: { actionType: "link", cta },
+        styles: { presetImage: "app-store" },
+      };
+      const resolved = createYextFieldTransforms(
+        { yextDisplayCoordinate: { latitude: 30.2672, longitude: -97.7431 } },
+        "en"
+      ).custom({
+        field: toPuckFields({
+          cta: { type: "comprehensiveCTA", transform: true },
+        }).cta!,
+        value,
+        componentId: "hero",
+        propName: "cta",
+        propPath: "cta",
+        isReadOnly: true,
+      });
+      expect(resolved.data.cta.label).toBe(expectedLabel);
+      expect(resolved.data.cta.link).toContain(expectedLink);
+      const html = renderToStaticMarkup(
+        <TemplatePropsContext.Provider value={{ document: {} }}>
+          <ComprehensiveCTA value={resolved} />
+        </TemplatePropsContext.Provider>
+      );
+      expect(html).toContain(expectedLink);
+      if (expectedLabel) expect(html).toContain(expectedLabel);
+    }
+  );
 });

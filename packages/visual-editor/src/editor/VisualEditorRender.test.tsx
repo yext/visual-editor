@@ -5,6 +5,8 @@ import { render, screen, cleanup } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
+import { createItemSource } from "../utils/itemSource/createItemSource.ts";
+import { ComprehensiveCTA } from "../components/helpers/ComprehensiveCTA.tsx";
 import { MaybeRTF } from "../components/helpers/maybeRTF.tsx";
 import { createYextFieldTransforms } from "../fields/fieldTransforms.tsx";
 import { toPuckFields } from "../fields/fields.ts";
@@ -12,7 +14,10 @@ import { VisualEditorRender } from "./VisualEditorRender.tsx";
 
 vi.mock("react-i18next", async () => ({
   ...(await vi.importActual("react-i18next")),
-  useTranslation: () => ({ i18n: { language: "es" } }),
+  useTranslation: () => ({
+    i18n: { language: "es" },
+    t: (_key: string, defaultValue: string): string => defaultValue,
+  }),
 }));
 
 beforeEach(() => {
@@ -36,6 +41,12 @@ describe("native Puck field transforms", () => {
   it.each(["live page", "server render", "editor preview"])(
     "when fields opt in then the %s receives resolved props and keeps authored data",
     async (mode) => {
+      const cardsSource = createItemSource({
+        label: "Cards",
+        mappingFields: {
+          title: { type: "entityField", filter: { types: ["type.string"] } },
+        },
+      });
       const data: Data = {
         root: { props: {} },
         content: [
@@ -60,6 +71,34 @@ describe("native Puck field transforms", () => {
                 ],
               },
               seats: 0,
+              video: {
+                id: "asset",
+                name: "Video",
+                video: {
+                  id: "abc",
+                  title: "Video [[name]]",
+                  embeddedUrl: "/embed",
+                  thumbnail: "/thumb.jpg",
+                  url: "/watch",
+                  duration: "PT30S",
+                },
+              },
+              cards: {
+                field: "articles",
+                constantValue: [],
+                mappings: { title: { field: "name", constantValue: "" } },
+              },
+              action: {
+                data: {
+                  actionType: "link",
+                  cta: {
+                    field: "orderCta",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                  openInNewTab: true,
+                },
+              },
               primaryCta: {
                 field: "orderCta",
                 selectedType: "textAndLink",
@@ -110,6 +149,9 @@ describe("native Puck field transforms", () => {
                 defaultCustomValue: 1,
               },
               primaryCta: { type: "ctaSelector", transform: true },
+              action: { type: "comprehensiveCTA", transform: true },
+              video: { type: "video", transform: true },
+              cards: { ...cardsSource.field, transform: true },
               nested: {
                 type: "object",
                 objectFields: {
@@ -138,6 +180,9 @@ describe("native Puck field transforms", () => {
               categories,
               seats,
               primaryCta,
+              action,
+              video,
+              cards,
             }) => (
               <section>
                 <h1>{title}</h1>
@@ -147,6 +192,9 @@ describe("native Puck field transforms", () => {
                 <span>{categories.join(",")}</span>
                 <span data-testid="seats">{seats}</span>
                 <a href={primaryCta.link}>{primaryCta.label}</a>
+                <ComprehensiveCTA value={action} label="Comprehensive order" />
+                <span>{video.video.title}</span>
+                <span>{cards[0].title}</span>
                 <span>{nested.label}</span>
                 <span>{rows[0].label}</span>
                 <span>{untouched.constantValue}</span>
@@ -162,6 +210,7 @@ describe("native Puck field transforms", () => {
           link: { defaultValue: "/en", es: "/es" },
         },
         name: "Restaurant",
+        articles: [{ name: "Article" }],
         description: { html: "<p>Shared rich text</p>", json: "{}" },
         photo: {
           url: "/hero.jpg",
@@ -213,6 +262,14 @@ describe("native Puck field transforms", () => {
       expect(screen.getByText("Pedir Restaurant").getAttribute("href")).toBe(
         "/es"
       );
+      expect(screen.getByText("Video Restaurant")).toBeTruthy();
+      expect(screen.getByText("Article")).toBeTruthy();
+      expect(
+        screen
+          .getByText("Comprehensive order")
+          .closest("a")
+          ?.getAttribute("href")
+      ).toBe("/es");
       expect(data).toEqual(authoredData);
     }
   );

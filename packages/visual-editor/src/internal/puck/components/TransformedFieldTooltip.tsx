@@ -29,15 +29,18 @@ export function getTransformedFieldSources(
     const propPath = path ? `${path}.${key}` : key;
     const authoredField = getTransformField(field);
     if (authoredField) {
+      const source =
+        authoredField.type === "comprehensiveCTA" ? value?.data?.cta : value;
       return [
         {
           label: authoredField.label ? pt(authoredField.label) : propPath,
           field:
             (authoredField.type === "entityField" ||
-              authoredField.type === "ctaSelector") &&
-            !value?.constantValueEnabled &&
-            value?.field
-              ? value.field
+              authoredField.type === "ctaSelector" ||
+              authoredField.type === "comprehensiveCTA") &&
+            !source?.constantValueEnabled &&
+            source?.field
+              ? source.field
               : undefined,
         },
       ];

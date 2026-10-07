@@ -1,25 +1,18 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 import { type CTAProps, CTA } from "../atoms/cta.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
-import { getCTAType } from "../../internal/utils/ctaFieldUtils.ts";
 import {
   type ComprehensiveCTAValue,
   defaultButtonStyleValue,
   defaultLinkStyleValue,
-  normalizeComprehensiveCTAValue,
 } from "../../fields/styledFields/ComprehensiveCTAField.tsx";
-import {
-  FOOD_DELIVERY_SERVICES,
-  type EnhancedTranslatableCTA,
-} from "../../types/types.ts";
+import { FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
+import type { ResolvedComprehensiveCTAValue } from "../../fields/fields.ts";
 import { type StyledButtonValue } from "../../fields/styledFields/StyledButtonField.tsx";
 import { type StyledLinkValue } from "../../fields/styledFields/StyledLinkField.tsx";
 
 export type ComprehensiveCTARenderProps = {
-  value?: Partial<ComprehensiveCTAValue>;
+  value?: ResolvedComprehensiveCTAValue;
   label?: React.ReactNode;
   ariaLabel?: string;
   className?: string;
@@ -34,12 +27,12 @@ const resolveTextStyleValue = (value: string | undefined) =>
   value && value !== "default" ? value : undefined;
 
 const getComprehensiveCTAStyle = (
-  value: ComprehensiveCTAValue
+  value: ResolvedComprehensiveCTAValue
 ): React.CSSProperties | undefined => {
   const ctaType =
     value.data.actionType === "button"
       ? "textAndLink"
-      : getCTAType(value.data.cta).ctaType;
+      : value.data.cta?.ctaType;
 
   if (ctaType === "presetImage") {
     return value.sx;
@@ -123,8 +116,9 @@ const toDataAttributes = (
   );
 };
 
+/** Renders resolved CTA data, retaining styles, accessibility, and interaction behavior. */
 export const ComprehensiveCTA = ({
-  value,
+  value: currentValue,
   label,
   ariaLabel,
   className,
@@ -134,40 +128,15 @@ export const ComprehensiveCTA = ({
   alwaysHideCaret,
   onClick,
 }: ComprehensiveCTARenderProps) => {
-  const streamDocument = useDocument();
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language;
-  const currentValue = normalizeComprehensiveCTAValue(value);
-
-  const actionType = currentValue.data.actionType;
-  const { ctaType } =
-    actionType === "link"
-      ? getCTAType(currentValue.data.cta)
-      : { ctaType: "textAndLink" as const };
-  const resolvedCta =
-    actionType === "link"
-      ? (resolveComponentData(currentValue.data.cta, locale, streamDocument) as
-          EnhancedTranslatableCTA | undefined)
-      : undefined;
-
-  const resolvedButtonLabel = currentValue.data.buttonText
-    ? resolveComponentData(currentValue.data.buttonText, locale, streamDocument)
-    : "";
-  const resolvedFieldAriaLabel = currentValue.data.ariaLabel
-    ? resolveComponentData(currentValue.data.ariaLabel, locale, streamDocument)
-    : "";
-
-  let resolvedLinkLabel =
-    resolvedCta &&
-    resolveComponentData(resolvedCta.label, locale, streamDocument);
-
-  if (
-    actionType === "link" &&
-    !currentValue.data.cta.constantValueEnabled &&
-    ctaType === "getDirections"
-  ) {
-    resolvedLinkLabel = t("getDirections", "Get Directions");
+  if (!currentValue) {
+    return null;
   }
+  const actionType = currentValue.data.actionType;
+  const ctaType =
+    actionType === "button" ? "textAndLink" : currentValue.data.cta?.ctaType;
+  const resolvedCta = currentValue.data.cta;
+  const resolvedButtonLabel = currentValue.data.buttonText;
+  const resolvedLinkLabel = resolvedCta?.label;
 
   const effectiveLabel =
     label !== undefined
@@ -211,7 +180,7 @@ export const ComprehensiveCTA = ({
   const resolvedAriaLabel =
     ariaLabel ??
     (actionType === "button"
-      ? resolvedFieldAriaLabel || undefined
+      ? currentValue.data.ariaLabel || undefined
       : typeof effectiveLabel === "string"
         ? effectiveLabel
         : undefined);
@@ -223,7 +192,8 @@ export const ComprehensiveCTA = ({
       alwaysHideCaret={alwaysHideCaret}
       className={resolvedClassName}
       color={currentValue.styles.color}
-      ctaType={ctaType}
+      // Directions are already resolved and use the ordinary link presentation.
+      ctaType={ctaType === "presetImage" ? "presetImage" : "textAndLink"}
       dataAttributes={
         actionType === "button"
           ? toDataAttributes(currentValue.data.dataAttributes)
@@ -232,11 +202,7 @@ export const ComprehensiveCTA = ({
       eventName={eventName ?? currentValue.eventName}
       id={actionType === "button" ? currentValue.data.customId : undefined}
       label={effectiveLabel}
-      link={
-        actionType === "link" && ctaType !== "getDirections" && resolvedCta
-          ? resolveComponentData(resolvedCta.link, locale, streamDocument)
-          : undefined
-      }
+      link={actionType === "link" && resolvedCta ? resolvedCta.link : undefined}
       linkType={
         actionType === "link" && resolvedCta ? resolvedCta.linkType : undefined
       }

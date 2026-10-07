@@ -128,26 +128,33 @@ const Example = ({ myField }: ExampleProps) => {
 ## Opt-in field transforms
 
 Add `transform: true` to an `entityField`, `translatableString`, `image`,
-`multiSelector`, `optionalNumber`, or `ctaSelector` to resolve its value before
+`multiSelector`, `optionalNumber`, `ctaSelector`, `comprehensiveCTA`, or `video` to resolve its value before
 component rendering. Omitted or false flags keep the authored value
 unchanged. Defaults, field editors, `resolveData`, and saved layouts continue to
 use authored props.
 
-| Field definition                             | Render value                                                                               |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `translatableString`                         | Localized, interpolated string                                                             |
-| Ordinary `entityField`                       | Resolved entity or constant value with nested localization and interpolation               |
-| `entityField` including `type.rich_text_v2`  | Resolved rich-text object or plain string                                                  |
-| Rich-text list with `includeListsOnly: true` | Array of resolved rich-text objects or strings                                             |
-| `image`                                      | Localized asset image with resolved alt text and preserved asset metadata                  |
-| `multiSelector`                              | Array of selected values, preserving zero, false, and empty strings                        |
-| `optionalNumber`                             | Number or `undefined` when hidden or unset                                                 |
-| `ctaSelector`                                | Resolved CTA object with localized label and link; Get Directions includes a generated URL |
+| Field definition                             | Render value                                                                                    |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `translatableString`                         | Localized, interpolated string                                                                  |
+| Ordinary `entityField`                       | Resolved entity or constant value with nested localization and interpolation                    |
+| `entityField` including `type.rich_text_v2`  | Resolved rich-text object or plain string                                                       |
+| Rich-text list with `includeListsOnly: true` | Array of resolved rich-text objects or strings                                                  |
+| `image`                                      | Localized asset image with resolved alt text and preserved asset metadata                       |
+| `multiSelector`                              | Array of selected values, preserving zero, false, and empty strings                             |
+| `optionalNumber`                             | Number or `undefined` when hidden or unset                                                      |
+| `ctaSelector`                                | Resolved CTA object with localized label and link; Get Directions includes a generated URL      |
+| `comprehensiveCTA`                           | Resolved nested CTA, button text, and aria label; styles and interaction settings are preserved |
+| Repeated `entityField`                       | Array of item props resolved against each selected item or manual item                          |
+| `video`                                      | Asset video data with interpolated text and preserved metadata                                  |
 
 Images retain their simple or complex image shape, dimensions, and asset metadata;
 nested alt text becomes a string. Transforms return data, never components.
 CTA renderers retain presentation choices such as preset images and button styles.
-Repeated item sources and comprehensive CTAs remain outside this pass.
+Repeated entity sources return resolved item arrays. `ComprehensiveCTA` accepts
+resolved values from an opted-in `comprehensiveCTA` field; it handles presentation
+without resolving authored bindings. Its `value` prop uses
+`ResolvedComprehensiveCTAValue`, while defaults and editing use
+`ComprehensiveCTAValue`.
 
 Both editor previews and `VisualEditorRender` pass transforms to Puck's official
 `fieldTransforms` API. This requires `@puckeditor/core@0.24.0-canary.c1ec9773`,
@@ -208,8 +215,16 @@ const fields = {
     transform: true,
     filter: { types: ["type.image"] },
   },
-  primaryCta: { type: "comprehensiveCTA", label: "Primary CTA" },
-  secondaryCta: { type: "comprehensiveCTA", label: "Secondary CTA" },
+  primaryCta: {
+    type: "comprehensiveCTA",
+    transform: true,
+    label: "Primary CTA",
+  },
+  secondaryCta: {
+    type: "comprehensiveCTA",
+    transform: true,
+    label: "Secondary CTA",
+  },
 } satisfies YextFieldMap<HeroProps>;
 
 export const Hero: YextComponentConfig<HeroProps, typeof fields> = {
@@ -252,10 +267,34 @@ Keep field-specific source selection in its handler and return resolved data.
 For composite bindings, also describe their authored sources in the component
 tooltip. Defaults, editor fields, and saved data keep their authored shapes.
 
-Ordinary entity lists and nested Puck arrays already support transforms. Repeated
-item sources need a separate implementation that resolves mappings against each
-source item. Comprehensive CTAs also need dedicated handlers
-and renderers that accept their resolved data contracts.
+Ordinary entity lists, repeated item sources, and nested Puck arrays support
+transforms. For repeated sources, opt in on the parent field; its mappings are
+resolved against each selected linked item, including translations and embedded
+fields. Manual items resolve against the page document. Missing lists return `[]`.
+
+```tsx
+const fields = {
+  cards: { ...cardSource.field, transform: true },
+  primaryCta: { type: "comprehensiveCTA", transform: true },
+  video: { type: "video", transform: true },
+} satisfies YextFieldMap<AuthoredProps>;
+
+// In the component's render function:
+<ComprehensiveCTA value={primaryCta} />
+<VideoAtom
+  youTubeEmbedUrl={video.video.embeddedUrl}
+  title={video.video.title}
+/>
+{cards.map((card, index) => (
+  <article key={index}>
+    <h2>{card.title}</h2>
+    <MaybeRTF data={card.description} />
+  </article>
+))}
+```
+
+The library no longer calls `resolveItems` or performs text resolution in its
+render function. Video asset structure and comprehensive CTA styles are retained.
 
 ## Linked Entity Item Sources
 

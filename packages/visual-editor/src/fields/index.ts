@@ -54,6 +54,7 @@ export {
   toPuckFields,
   type YextComponentConfig,
   type YextTransformedProps,
+  type ResolvedComprehensiveCTAValue,
   type YextArrayField,
   type YextFields,
   type YextFieldMap,

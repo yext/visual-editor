@@ -24,7 +24,10 @@ import type { StyledPageSectionField } from "./styledFields/StyledPageSection.ts
 import type { StyledTextField } from "./styledFields/StyledTextField.tsx";
 import type { TranslatableStringField } from "./TranslatableStringField.tsx";
 import type { VideoField } from "./VideoField.tsx";
-import type { ComprehensiveCTAField } from "./styledFields/ComprehensiveCTAField.tsx";
+import type {
+  ComprehensiveCTAField,
+  ComprehensiveCTAValue,
+} from "./styledFields/ComprehensiveCTAField.tsx";
 import type { EnhancedTranslatableCTA } from "../types/types.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { adaptYextFieldMap } from "./yextFieldAdapter.ts";
@@ -37,25 +40,61 @@ type LocalizedRenderValue<Value> = Value extends readonly (infer Item)[]
       : { [Key in keyof Value]: LocalizedRenderValue<Value[Key]> }
     : Value;
 
-type TransformedFieldValues<Value> = {
+/** The presentation component consumes this data contract without resolving authored bindings. */
+export type ResolvedComprehensiveCTAValue = Omit<
+  ComprehensiveCTAValue,
+  "data"
+> & {
+  data: Omit<
+    ComprehensiveCTAValue["data"],
+    "cta" | "buttonText" | "ariaLabel"
+  > & {
+    cta?: LocalizedRenderValue<EnhancedTranslatableCTA>;
+    buttonText?: string;
+    ariaLabel?: string;
+  };
+};
+
+/** Repeated-item props retain their structure while authored value wrappers are resolved. */
+type ResolvedRepeatedItem<Value> = Value extends {
+  constantValue: infer Constant;
+}
+  ? LocalizedRenderValue<Constant> | undefined
+  : Value extends ComprehensiveCTAValue
+    ? ResolvedComprehensiveCTAValue
+    : Value extends { selections: { value: infer Selection }[] }
+      ? Exclude<Selection, undefined>[]
+      : Value extends readonly (infer Item)[]
+        ? ResolvedRepeatedItem<Item>[]
+        : Value extends object
+          ? { [Key in keyof Value]: ResolvedRepeatedItem<Value[Key]> }
+          : Value;
+
+type TransformedFieldValues<Value, Definition> = {
   translatableString: string;
   image: LocalizedRenderValue<Value>;
+  video: LocalizedRenderValue<Value>;
+  comprehensiveCTA: ResolvedComprehensiveCTAValue;
   multiSelector: Value extends { selections: { value: infer Selection }[] }
     ? Exclude<Selection, undefined>[]
     : never;
   optionalNumber: number | undefined;
   ctaSelector: LocalizedRenderValue<EnhancedTranslatableCTA> | undefined;
-  entityField: Value extends { constantValue: infer Constant }
-    ? LocalizedRenderValue<Constant> | undefined
-    : never;
+  entityField: Definition extends { repeated: object }
+    ? Value extends { constantValue: infer Constant }
+      ? LocalizedRenderValue<ResolvedRepeatedItem<Constant>>
+      : never
+    : Value extends { constantValue: infer Constant }
+      ? LocalizedRenderValue<Constant> | undefined
+      : never;
 };
 
 type TransformedFieldValue<Value, Definition> = Definition extends {
   transform: true;
   type: infer FieldType;
 }
-  ? FieldType extends keyof TransformedFieldValues<Value>
-    ? TransformedFieldValues<Value>[FieldType]
+  ? FieldType extends keyof TransformedFieldValues<Value, Definition>
+    ? TransformedFieldValues<Value, Definition>[FieldType]
     : Value
   : Definition extends { type: "object"; objectFields: infer Nested }
     ? YextTransformedProps<Value, Nested>

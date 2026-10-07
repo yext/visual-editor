@@ -101,6 +101,7 @@ export {
   type YextArrayField,
   type YextComponentConfig,
   type YextTransformedProps,
+  type ResolvedComprehensiveCTAValue,
   type YextCustomFieldRenderProps,
   type YextFieldDefinition,
   type YextFieldMap,
