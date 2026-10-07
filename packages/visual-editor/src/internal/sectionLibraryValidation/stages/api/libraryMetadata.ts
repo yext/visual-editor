@@ -80,11 +80,14 @@ export const validateLibraryMetadata = (
 
   // Validate id
   const id = libraryMetadataValues.get("id");
-  if (id && !safeIdPattern.test(id)) {
-    addIssue(
-      "field/id/safe",
-      "id must be 2–63 characters, contain only lowercase letters, numbers, and hyphens, start with a lowercase letter, and end with a letter or number."
-    );
+  if (id) {
+    const unprefixedId = id.startsWith("yext_") ? id.slice(5) : id;
+    if (id.length > 63 || !safeIdPattern.test(unprefixedId)) {
+      addIssue(
+        "field/id/safe",
+        'id must be 2–63 characters, contain only lowercase letters, numbers, and hyphens, start with a lowercase letter, and end with a letter or number. Built-in library ids may also use the reserved "yext_" prefix, included in the length limit.'
+      );
+    }
   }
 
   if (issues.length > 0) {

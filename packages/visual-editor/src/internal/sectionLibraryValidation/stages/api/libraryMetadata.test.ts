@@ -74,6 +74,13 @@ describe("validateLibraryMetadata", () => {
   it.each([
     "unsafe id",
     "foo_test",
+    "yext_",
+    "yext_a",
+    "yext_foo_test",
+    "yext_1safe-id",
+    "yext_safe-id-",
+    "yext_safe-id\n",
+    `yext_${"a".repeat(59)}`,
     "safe-id\n",
     "Safe-id",
     "safe-Id",
@@ -90,23 +97,28 @@ describe("validateLibraryMetadata", () => {
       expect.objectContaining({
         rule: "field/id/safe",
         message:
-          "id must be 2–63 characters, contain only lowercase letters, numbers, and hyphens, start with a lowercase letter, and end with a letter or number.",
+          'id must be 2–63 characters, contain only lowercase letters, numbers, and hyphens, start with a lowercase letter, and end with a letter or number. Built-in library ids may also use the reserved "yext_" prefix, included in the length limit.',
       })
     );
   });
 
-  it.each(["ab", "a0", "a-b", "a".repeat(63)])(
-    "accepts a valid id %s",
-    (id) => {
-      const rootDir = createTempRoot();
-      writeLibraryJson(rootDir, validMetadata({ id }));
+  it.each([
+    "ab",
+    "a0",
+    "a-b",
+    "a".repeat(63),
+    "yext_standard-library",
+    "yext_ab",
+    `yext_${"a".repeat(58)}`,
+  ])("accepts a valid id %s", (id) => {
+    const rootDir = createTempRoot();
+    writeLibraryJson(rootDir, validMetadata({ id }));
 
-      expect(validateLibraryMetadata(rootDir)).toEqual({
-        issues: [],
-        metadata: validMetadata({ id }),
-      });
-    }
-  );
+    expect(validateLibraryMetadata(rootDir)).toEqual({
+      issues: [],
+      metadata: validMetadata({ id }),
+    });
+  });
 
   it("aggregates independent field errors", () => {
     const rootDir = createTempRoot();
