@@ -48,7 +48,17 @@ export function TranslatableRichTextField<
         }
       );
 
-      const handleClick = () => {
+      /** Opens the local HTML prompt or the platform rich text editor. */
+      const handleClick = (): void => {
+        // The standalone Local Editor has no platform parent to open the rich text editor.
+        if (window.parent === window.self) {
+          const userInput = window.prompt("Enter Rich Text (HTML):");
+          if (userInput !== null) {
+            handleNewValue({ json: "", html: userInput }, locale);
+          }
+          return;
+        }
+
         const messageId = `RichText-${Date.now()}`;
         pendingRichTextSession = {
           messageId,
