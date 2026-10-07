@@ -30,11 +30,30 @@ import { TemplateMetadataContext } from "../internal/hooks/useMessageReceivers.t
 import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type StreamFields } from "../types/entityFields.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
+import { createItemSource } from "../utils/itemSource/createItemSource.ts";
 import {
   getConstantConfigFromType,
   returnConstantFieldConfig,
   type EntityFieldSelectorField,
 } from "./EntityFieldSelectorField.tsx";
+
+const photoGallerySource = createItemSource({
+  label: "Images",
+  mappingFields: {
+    image: {
+      type: "entityField",
+      label: "Image",
+      filter: { types: ["type.image"] },
+    },
+    link: {
+      type: "entityField",
+      label: "Link",
+      filter: { types: ["type.cta"] },
+      constantValueFilter: { types: ["type.string"] },
+      disableConstantValueToggle: true,
+    },
+  },
+});
 
 const defaultEntityFields: StreamFields = {
   fields: [
@@ -1114,6 +1133,381 @@ describe("EntityFieldSelectorField", () => {
           constantValueEnabled: false,
           constantValue: { defaultValue: "" },
         },
+      },
+    });
+  });
+
+  it.each([
+    {
+      previousField: "c_brands",
+      nextField: "photoGallery",
+      label: "Photos",
+      expectedImageField: "$item",
+    },
+    {
+      previousField: "photoGallery",
+      nextField: "c_brands",
+      label: "Brands",
+      expectedImageField: "",
+    },
+  ])(
+    "when the gallery source changes to $nextField then its mappings update",
+    ({ previousField, nextField, label, expectedImageField }) => {
+      const { onChange } = renderRepeatedEntityField({
+        field: photoGallerySource.field as EntityFieldSelectorField,
+        value: {
+          field: previousField,
+          constantValueEnabled: false,
+          constantValue: [],
+          mappings: {
+            image: {
+              field: previousField === "photoGallery" ? "$item" : "logo",
+              constantValueEnabled: false,
+            },
+            link: { field: "cta", constantValueEnabled: false },
+          },
+        },
+        entityFields: {
+          fields: [
+            {
+              name: "photoGallery",
+              displayName: "Photos",
+              definition: {
+                name: "photoGallery",
+                typeName: "type.image",
+                isList: true,
+                type: {},
+              },
+            },
+            {
+              name: "c_brands",
+              displayName: "Brands",
+              definition: { name: "c_brands", isList: true, type: {} },
+              children: {
+                fields: [
+                  {
+                    name: "logo",
+                    definition: {
+                      name: "logo",
+                      typeName: "type.image",
+                      type: {},
+                    },
+                  },
+                  {
+                    name: "cta",
+                    definition: { name: "cta", typeName: "type.cta", type: {} },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      fireEvent.click(screen.getAllByRole("combobox")[0]);
+      fireEvent.click(within(screen.getByRole("listbox")).getByText(label));
+
+      expect(onChange).toHaveBeenCalledWith({
+        field: nextField,
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          image: { field: expectedImageField, constantValueEnabled: false },
+          link: { field: "", constantValueEnabled: false },
+        },
+      });
+    }
+  );
+
+  it("when a brand has a CTA then the gallery link selector offers the complete CTA", () => {
+    renderRepeatedEntityField({
+      field: photoGallerySource.field as EntityFieldSelectorField,
+      value: {
+        ...photoGallerySource.defaultValue,
+        field: "c_brands",
+        constantValueEnabled: false,
+      },
+      entityFields: {
+        fields: [
+          {
+            name: "c_brands",
+            definition: { name: "c_brands", isList: true, type: {} },
+            children: {
+              fields: [
+                {
+                  name: "logo",
+                  displayName: "Brand Image",
+                  definition: {
+                    name: "logo",
+                    typeName: "type.image",
+                    type: {},
+                  },
+                },
+                {
+                  name: "cta",
+                  displayName: "Brand CTA",
+                  definition: { name: "cta", typeName: "type.cta", type: {} },
+                  children: {
+                    fields: [
+                      {
+                        name: "label",
+                        definition: {
+                          name: "label",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                      {
+                        name: "link",
+                        definition: {
+                          name: "link",
+                          typeName: "type.string",
+                          type: {},
+                        },
+                      },
+                      {
+                        name: "linkType",
+                        definition: {
+                          name: "linkType",
+                          typeName: "type.option",
+                          type: {},
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[2]);
+
+    expect(
+      within(screen.getByRole("listbox"))
+        .getAllByRole("option")
+        .map((option) => option.textContent)
+    ).toEqual(["Select a Field", "Brand CTA"]);
+  });
+
+  it("when a manual gallery image uses an entity field then single images are available", () => {
+    renderEntityField({
+      field: (photoGallerySource.field as EntityFieldSelectorField).repeated!
+        .manualItemFields.image as EntityFieldSelectorField,
+      value: {
+        field: "",
+        constantValueEnabled: false,
+        constantValue: undefined,
+      },
+      entityFields: {
+        fields: [
+          {
+            name: "logo",
+            displayName: "Logo",
+            definition: { name: "logo", typeName: "type.image", type: {} },
+          },
+        ],
+      },
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+
+    expect(within(screen.getByRole("listbox")).getByText("Logo")).toBeDefined();
+  });
+
+  it("when a manual gallery link uses text then the link input is available", () => {
+    renderEntityField({
+      field: (photoGallerySource.field as EntityFieldSelectorField).repeated!
+        .manualItemFields.link as EntityFieldSelectorField,
+      value: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: { defaultValue: "/brand" },
+      },
+    });
+
+    expect(screen.getByDisplayValue("/brand")).toBeDefined();
+  });
+  it.each([
+    { previousField: "photoGallery", nextField: "", label: "Select a Field" },
+    { previousField: "", nextField: "c_brands", label: "Brands" },
+  ])(
+    "when the source changes from '$previousField' to '$nextField' then old mappings are cleared",
+    ({ previousField, nextField, label }): void => {
+      const { onChange } = renderRepeatedEntityField({
+        field: photoGallerySource.field as EntityFieldSelectorField,
+        value: {
+          field: previousField,
+          constantValueEnabled: false,
+          constantValue: [],
+          mappings: {
+            image: { field: "$item", constantValueEnabled: false },
+            link: { field: "cta", constantValueEnabled: false },
+          },
+        },
+        entityFields: {
+          fields: [
+            {
+              name: "photoGallery",
+              definition: {
+                name: "photoGallery",
+                isList: true,
+                typeName: "type.image",
+                type: {},
+              },
+            },
+            {
+              name: "c_brands",
+              displayName: "Brands",
+              definition: { name: "c_brands", isList: true, type: {} },
+              children: {
+                fields: [
+                  {
+                    name: "logo",
+                    definition: {
+                      name: "logo",
+                      typeName: "type.image",
+                      type: {},
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+      fireEvent.click(screen.getAllByRole("combobox")[0]);
+      fireEvent.click(within(screen.getByRole("listbox")).getByText(label));
+      expect(onChange).toHaveBeenCalledWith({
+        field: nextField,
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          image: { field: "", constantValueEnabled: false },
+          link: { field: "", constantValueEnabled: false },
+        },
+      });
+    }
+  );
+
+  it.each([
+    { secondaryType: "type.string" as const, expectedPrimary: "$item" },
+    { secondaryType: "type.image" as const, expectedPrimary: "" },
+  ])(
+    "when the second mapping accepts $secondaryType then automatic mapping is '$expectedPrimary'",
+    ({ secondaryType, expectedPrimary }): void => {
+      const source = createItemSource({
+        label: "Items",
+        mappingFields: {
+          primary: {
+            type: "entityField",
+            label: "Primary",
+            filter: { types: ["type.image"] },
+          },
+          secondary: {
+            type: "entityField",
+            label: "Secondary",
+            filter: { types: [secondaryType] },
+          },
+        },
+      });
+      const { onChange } = renderRepeatedEntityField({
+        field: source.field as EntityFieldSelectorField,
+        value: {
+          field: "previous",
+          constantValueEnabled: false,
+          constantValue: [],
+          mappings: {
+            primary: { field: "cover", constantValueEnabled: false },
+            secondary: { field: "caption", constantValueEnabled: false },
+          },
+        },
+        entityFields: {
+          fields: [
+            {
+              name: "images",
+              displayName: "Images",
+              definition: {
+                name: "images",
+                typeRegistryId: "type.image",
+                isList: true,
+                type: {},
+              },
+            },
+          ],
+        },
+      });
+
+      fireEvent.click(screen.getAllByRole("combobox")[0]);
+      fireEvent.click(within(screen.getByRole("listbox")).getByText("Images"));
+
+      expect(onChange).toHaveBeenCalledWith({
+        field: "images",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          primary: { field: expectedPrimary, constantValueEnabled: false },
+          secondary: { field: "", constantValueEnabled: false },
+        },
+      });
+    }
+  );
+
+  it("when several mappings accept image items then the user can select a complete item", () => {
+    const source = createItemSource({
+      label: "Images",
+      mappingFields: {
+        primary: {
+          type: "entityField",
+          label: "Primary",
+          filter: { types: ["type.image"] },
+        },
+        secondary: {
+          type: "entityField",
+          label: "Secondary",
+          filter: { types: ["type.image"] },
+        },
+      },
+    });
+    const { onChange } = renderRepeatedEntityField({
+      field: source.field as EntityFieldSelectorField,
+      value: {
+        field: "images",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          primary: { field: "", constantValueEnabled: false },
+          secondary: { field: "", constantValueEnabled: false },
+        },
+      },
+      entityFields: {
+        fields: [
+          {
+            name: "images",
+            displayName: "Images",
+            definition: {
+              name: "images",
+              typeName: "type.image",
+              isList: true,
+              type: {},
+            },
+          },
+        ],
+      },
+    });
+
+    fireEvent.click(screen.getAllByRole("combobox")[1]);
+    fireEvent.click(within(screen.getByRole("listbox")).getByText("Images"));
+
+    expect(onChange).toHaveBeenCalledWith({
+      field: "images",
+      constantValueEnabled: false,
+      constantValue: [],
+      mappings: {
+        primary: { field: "$item", constantValueEnabled: false },
+        secondary: { field: "", constantValueEnabled: false },
       },
     });
   });
