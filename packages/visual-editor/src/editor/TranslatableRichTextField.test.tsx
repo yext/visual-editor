@@ -131,10 +131,16 @@ describe("TranslatableRichTextField", () => {
     fireEvent.click(screen.getByRole("button"));
 
     expect(promptSpy).toHaveBeenCalledWith("Enter Rich Text (HTML):");
+    const updatedValue = onChange.mock.calls[0][0];
     expect(onChange).toHaveBeenCalledExactlyOnceWith({
-      en: { html: "<p>New text</p>", json: "" },
+      en: { html: "<p>New text</p>", json: expect.any(String) },
       fr: { html: "<p>French text</p>", json: "french json" },
       hasLocalizedValue: "true",
+    });
+    expect(JSON.parse(updatedValue.en.json)).toMatchObject({
+      root: {
+        children: [{ children: [{ text: "New text" }] }],
+      },
     });
     expect(sendToParentMock).not.toHaveBeenCalled();
   });

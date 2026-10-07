@@ -10,6 +10,7 @@ import {
 } from "../internal/hooks/useMessage.ts";
 import { useTranslation } from "react-i18next";
 import { RepeatedSourceFieldContext } from "../fields/repeatedSourceFieldContext.ts";
+import { richTextHtmlToPlainText } from "../utils/plainText.ts";
 
 let pendingRichTextSession:
   { messageId: string; apply: (payload: any) => void } | undefined;
@@ -54,7 +55,13 @@ export function TranslatableRichTextField<
         if (window.parent === window.self) {
           const userInput = window.prompt("Enter Rich Text (HTML):");
           if (userInput !== null) {
-            handleNewValue({ json: "", html: userInput }, locale);
+            handleNewValue(
+              {
+                ...getDefaultRTF(richTextHtmlToPlainText(userInput)),
+                html: userInput,
+              },
+              locale
+            );
           }
           return;
         }
