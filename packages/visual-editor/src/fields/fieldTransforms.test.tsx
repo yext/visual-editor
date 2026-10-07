@@ -1,4 +1,5 @@
 import React from "react";
+import { I18nextProvider } from "react-i18next";
 import {
   i18nPageInstance,
   VISUAL_EDITOR_NAMESPACE,
@@ -919,4 +920,148 @@ describe("field transforms", () => {
       if (expectedLabel) expect(html).toContain(expectedLabel);
     }
   );
+  it.each([
+    { name: "unset value", value: undefined, expected: "Call to Action" },
+    { name: "partial value", value: {}, expected: "Call to Action" },
+    {
+      name: "preset image",
+      value: {
+        data: {
+          actionType: "link",
+          cta: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: {
+              ctaType: "presetImage",
+              label: "",
+              link: "/download",
+            },
+          },
+          openInNewTab: false,
+        },
+        styles: { variant: "primary", presetImage: "app-store" },
+      },
+      expected: "/download",
+    },
+    {
+      name: "KG link",
+      value: {
+        data: {
+          actionType: "link",
+          cta: {
+            field: "order",
+            constantValueEnabled: false,
+            constantValue: { label: "Unused", link: "/unused" },
+          },
+          openInNewTab: true,
+        },
+      },
+      expected: "Pedir Restaurant",
+    },
+    {
+      name: "constant link",
+      value: {
+        data: {
+          actionType: "link",
+          cta: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: {
+              label: { defaultValue: "Order", es: "Pedir [[name]]" },
+              link: "/order",
+            },
+          },
+          openInNewTab: false,
+        },
+      },
+      expected: "Pedir Restaurant",
+    },
+    {
+      name: "button",
+      value: {
+        data: {
+          actionType: "button",
+          cta: { field: "", constantValue: undefined },
+          buttonText: { defaultValue: "Book", es: "Reservar [[name]]" },
+          ariaLabel: { defaultValue: "Book a table", es: "Mesa en [[name]]" },
+          openInNewTab: false,
+        },
+      },
+      expected: "Reservar Restaurant",
+    },
+    {
+      name: "directions",
+      value: {
+        data: {
+          actionType: "link",
+          cta: {
+            field: "",
+            constantValueEnabled: false,
+            selectedType: "getDirections",
+          },
+          openInNewTab: false,
+        },
+      },
+      expected: "30.2672",
+    },
+  ])(
+    "when ComprehensiveCTA receives an authored $name then it matches its transformed rendering",
+    ({ value, expected }) => {
+      const streamDocument = {
+        name: "Restaurant",
+        order: {
+          label: { defaultValue: "Order", es: "Pedir [[name]]" },
+          link: "/order",
+        },
+        yextDisplayCoordinate: { latitude: 30.2672, longitude: -97.7431 },
+      };
+      const authored = structuredClone(value);
+      const resolved = createYextFieldTransforms(streamDocument, "es").custom({
+        field: toPuckFields({
+          cta: { type: "comprehensiveCTA", transform: true },
+        }).cta!,
+        value,
+        componentId: "hero",
+        propName: "cta",
+        propPath: "cta",
+        isReadOnly: true,
+      });
+      const markup = [value as Partial<ComprehensiveCTAValue>, resolved].map(
+        (value) =>
+          renderToStaticMarkup(
+            <I18nextProvider
+              i18n={i18nPageInstance.cloneInstance({ lng: "es" })}
+            >
+              <TemplatePropsContext.Provider
+                value={{ document: streamDocument }}
+              >
+                <ComprehensiveCTA value={value} />
+              </TemplatePropsContext.Provider>
+            </I18nextProvider>
+          )
+      );
+      expect(markup[0]).toBe(markup[1]);
+      expect(markup[0]).toContain(expected);
+      expect(value).toEqual(authored);
+    }
+  );
+
+  it("when ComprehensiveCTA receives resolved text then embedded syntax is not resolved again", () => {
+    const value = {
+      data: {
+        actionType: "link" as const,
+        cta: { label: "Literal [[name]]", link: "/order" },
+        openInNewTab: false,
+      },
+      styles: { variant: "primary" as const },
+    };
+    const html = renderToStaticMarkup(
+      <TemplatePropsContext.Provider
+        value={{ document: { name: "Restaurant" } }}
+      >
+        <ComprehensiveCTA value={value} />
+      </TemplatePropsContext.Provider>
+    );
+    expect(html).toContain("Literal [[name]]");
+  });
 });

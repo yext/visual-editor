@@ -2,8 +2,15 @@ import { getDirections } from "@yext/pages-components";
 import { getCTAType } from "../internal/utils/ctaFieldUtils.ts";
 import { i18nPageInstance } from "../utils/i18n/i18nInstances.ts";
 import type { BaseField, FieldTransformFn } from "@puckeditor/core";
-import { normalizeComprehensiveCTAValue } from "./styledFields/ComprehensiveCTAField.tsx";
-import type { YextFieldMap, YextPuckField } from "./fields.ts";
+import {
+  normalizeComprehensiveCTAValue,
+  type ComprehensiveCTAValue,
+} from "./styledFields/ComprehensiveCTAField.tsx";
+import type {
+  ResolvedComprehensiveCTAValue,
+  YextFieldMap,
+  YextPuckField,
+} from "./fields.ts";
 import type { StreamDocument } from "../utils/types/StreamDocument.ts";
 import {
   resolveEmbeddedFieldsInString,
@@ -92,6 +99,32 @@ function resolveItemFields(
   );
 }
 
+/** Resolves authored CTA data for both field transforms and the temporary renderer compatibility path. */
+export function resolveComprehensiveCTAValue(
+  value: Partial<ComprehensiveCTAValue> | undefined,
+  streamDocument: StreamDocument,
+  locale: string
+): ResolvedComprehensiveCTAValue {
+  const context = { streamDocument, locale };
+  const normalized = normalizeComprehensiveCTAValue(value);
+  return {
+    ...normalized,
+    data: {
+      ...normalized.data,
+      cta:
+        normalized.data.actionType === "link"
+          ? fieldToTransform.ctaSelector(
+              { type: "ctaSelector" },
+              normalized.data.cta,
+              context
+            )
+          : undefined,
+      buttonText: resolveValue(normalized.data.buttonText, context),
+      ariaLabel: resolveValue(normalized.data.ariaLabel, context),
+    },
+  };
+}
+
 /** Each supported authored field owns its source selection and render-value contract. */
 const fieldToTransform: Record<
   TransformableField["type"],
@@ -123,25 +156,8 @@ const fieldToTransform: Record<
   translatableString: (_field, value, context) =>
     resolveValue(value, context) ?? "",
   video: (_field, value, context) => resolveValue(value, context),
-  comprehensiveCTA: (_field, value, context) => {
-    const normalized = normalizeComprehensiveCTAValue(value);
-    return {
-      ...normalized,
-      data: {
-        ...normalized.data,
-        cta:
-          normalized.data.actionType === "link"
-            ? fieldToTransform.ctaSelector(
-                { type: "ctaSelector" },
-                normalized.data.cta,
-                context
-              )
-            : undefined,
-        buttonText: resolveValue(normalized.data.buttonText, context),
-        ariaLabel: resolveValue(normalized.data.ariaLabel, context),
-      },
-    };
-  },
+  comprehensiveCTA: (_field, value, context) =>
+    resolveComprehensiveCTAValue(value, context.streamDocument, context.locale),
   image: (_field, value, context) => resolveValue(value, context),
   multiSelector: (_field, value) =>
     (value?.selections ?? []).flatMap(({ value }: { value: unknown }) =>

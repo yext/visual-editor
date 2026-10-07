@@ -151,10 +151,11 @@ Images retain their simple or complex image shape, dimensions, and asset metadat
 nested alt text becomes a string. Transforms return data, never components.
 CTA renderers retain presentation choices such as preset images and button styles.
 Repeated entity sources return resolved item arrays. `ComprehensiveCTA` accepts
-resolved values from an opted-in `comprehensiveCTA` field; it handles presentation
-without resolving authored bindings. Its `value` prop uses
-`ResolvedComprehensiveCTAValue`, while defaults and editing use
-`ComprehensiveCTAValue`.
+resolved values from an opted-in `comprehensiveCTA` field. During migration, it
+also accepts authored `ComprehensiveCTAValue` values and resolves them through
+the same resolver used by field transforms. Resolved values are rendered directly
+without resolving them again. Defaults and editing keep authored values. This
+compatibility path can be removed once libraries opt in to transforms.
 
 Both editor previews and `VisualEditorRender` pass transforms to Puck's official
 `fieldTransforms` API. This requires `@puckeditor/core@0.24.0-canary.c1ec9773`,

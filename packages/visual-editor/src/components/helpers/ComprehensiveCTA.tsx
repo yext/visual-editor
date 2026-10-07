@@ -1,4 +1,7 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComprehensiveCTAValue } from "../../fields/fieldTransforms.tsx";
 import { type CTAProps, CTA } from "../atoms/cta.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import {
@@ -12,7 +15,7 @@ import { type StyledButtonValue } from "../../fields/styledFields/StyledButtonFi
 import { type StyledLinkValue } from "../../fields/styledFields/StyledLinkField.tsx";
 
 export type ComprehensiveCTARenderProps = {
-  value?: ResolvedComprehensiveCTAValue;
+  value?: Partial<ComprehensiveCTAValue> | ResolvedComprehensiveCTAValue;
   label?: React.ReactNode;
   ariaLabel?: string;
   className?: string;
@@ -116,9 +119,12 @@ const toDataAttributes = (
   );
 };
 
-/** Renders resolved CTA data, retaining styles, accessibility, and interaction behavior. */
+/**
+ * Renders CTA data, retaining styles, accessibility, and interaction behavior.
+ * Temporarily resolves authored values through the same resolver as field transforms.
+ */
 export const ComprehensiveCTA = ({
-  value: currentValue,
+  value,
   label,
   ariaLabel,
   className,
@@ -128,9 +134,21 @@ export const ComprehensiveCTA = ({
   alwaysHideCaret,
   onClick,
 }: ComprehensiveCTARenderProps) => {
-  if (!currentValue) {
-    return null;
-  }
+  const streamDocument = useDocument();
+  const { i18n } = useTranslation();
+  const currentValue =
+    !value?.data ||
+    !value.styles ||
+    (value.data.cta &&
+      ("field" in value.data.cta || "constantValue" in value.data.cta)) ||
+    typeof value.data.buttonText === "object" ||
+    typeof value.data.ariaLabel === "object"
+      ? resolveComprehensiveCTAValue(
+          value as Partial<ComprehensiveCTAValue>,
+          streamDocument,
+          i18n.language
+        )
+      : (value as ResolvedComprehensiveCTAValue);
   const actionType = currentValue.data.actionType;
   const ctaType =
     actionType === "button" ? "textAndLink" : currentValue.data.cta?.ctaType;
