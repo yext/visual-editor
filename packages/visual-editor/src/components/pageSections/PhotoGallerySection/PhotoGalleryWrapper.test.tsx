@@ -7,14 +7,17 @@ import {
   within,
 } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { useGetPuck, type Config } from "@puckeditor/core";
+import { useGetPuck, type Config, type Fields } from "@puckeditor/core";
 import { InternalLayoutEditor } from "../../../internal/components/InternalLayoutEditor.tsx";
 import { generateTemplateMetadata } from "../../../internal/types/templateMetadata.ts";
 import { type LayoutSaveState } from "../../../internal/types/saveState.ts";
 import { toPuckFields } from "../../../fields/fields.ts";
 import { page } from "@vitest/browser/context";
 import { axe, viewports } from "../../testing/componentTests.setup.ts";
-import { PhotoGalleryWrapper } from "./PhotoGalleryWrapper.tsx";
+import {
+  PhotoGalleryWrapper,
+  type PhotoGalleryWrapperProps,
+} from "./PhotoGalleryWrapper.tsx";
 import { photoGallerySource } from "./photoGallerySource.ts";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 
@@ -812,6 +815,147 @@ describe("PhotoGalleryWrapper", () => {
         ).toBe(input);
         expect(within(container).getByDisplayValue("/brand")).toBe(input);
       });
+    }
+  );
+
+  it.each([
+    { variant: "gallery" as const, carouselControlsVisible: false },
+    { variant: "carousel" as const, carouselControlsVisible: true },
+  ])(
+    "when the variant is $variant then Image Fill Type is available",
+    async ({ variant, carouselControlsVisible }): Promise<void> => {
+      // This resolver only reads component props, so no editor context is needed.
+      const fields = await (
+        PhotoGalleryWrapper.resolveFields as (data: {
+          props: PhotoGalleryWrapperProps;
+        }) =>
+          | Fields<PhotoGalleryWrapperProps>
+          | Promise<Fields<PhotoGalleryWrapperProps>>
+      )({
+        props: {
+          ...PhotoGalleryWrapper.defaultProps,
+          data: { images: photoGallerySource.defaultValue },
+          styles: { image: { aspectRatio: 1.78 }, carouselImageCount: 1 },
+          parentData: { variant },
+        },
+      });
+      expect(fields.styles.type).toBe("object");
+      if (fields.styles.type !== "object") {
+        throw new Error("Expected an object field for gallery styles");
+      }
+      expect(fields.styles.objectFields.imageFillType).toMatchObject({
+        type: "custom",
+        options: [
+          expect.objectContaining({ value: "fill" }),
+          expect.objectContaining({ value: "fit" }),
+        ],
+      });
+      expect(fields.styles.objectFields.imageFillType).not.toMatchObject({
+        visible: false,
+      });
+      expect(fields.styles.objectFields.carouselImageCount).toMatchObject({
+        visible: carouselControlsVisible,
+      });
+      expect(fields.styles.objectFields.accentColor).toMatchObject({
+        visible: carouselControlsVisible,
+      });
+    }
+  );
+
+  it.each([
+    {
+      variant: "gallery" as const,
+      imageFillType: "fit" as const,
+      objectFit: "contain",
+    },
+    {
+      variant: "gallery" as const,
+      imageFillType: "fill" as const,
+      objectFit: "cover",
+    },
+    {
+      variant: "carousel" as const,
+      imageFillType: "fit" as const,
+      objectFit: "contain",
+    },
+    {
+      variant: "carousel" as const,
+      imageFillType: "fill" as const,
+      objectFit: "cover",
+    },
+  ])(
+    "when $variant uses $imageFillType then wide and tall images use $objectFit",
+    ({ variant, imageFillType, objectFit }): void => {
+      const { container } = render(
+        <VisualEditorProvider
+          templateProps={{
+            document: {
+              locale: "en",
+              photos: [
+                {
+                  url: "https://example.com/wide.jpg",
+                  width: 1200,
+                  height: 100,
+                  alternateText: "Wide",
+                  clickthroughUrl: "/wide",
+                },
+                {
+                  url: "https://example.com/tall.jpg",
+                  width: 100,
+                  height: 1200,
+                  alternateText: "Tall",
+                },
+              ],
+            },
+          }}
+        >
+          <PhotoGalleryWrapper.render
+            id="image-fit-gallery"
+            data={{
+              images: {
+                ...photoGallerySource.defaultValue,
+                field: "photos",
+                constantValueEnabled: false,
+                mappings: {
+                  link: {
+                    field: "",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                  image: {
+                    field: "$item",
+                    constantValueEnabled: false,
+                    constantValue: undefined,
+                  },
+                },
+              },
+            }}
+            styles={{
+              image: { width: 200, aspectRatio: 1 },
+              imageFillType,
+              carouselImageCount: 1,
+            }}
+            parentData={{ variant }}
+            puck={{
+              isEditing: false,
+              dragRef: null,
+              metadata: {},
+              renderDropZone: () => <div />,
+            }}
+          />
+        </VisualEditorProvider>
+      );
+      for (const alt of ["Wide", "Tall"]) {
+        const images = within(container).getAllByAltText(alt);
+        for (const image of images) {
+          expect(getComputedStyle(image).objectFit).toBe(objectFit);
+          if (alt === "Wide") {
+            expect(image.closest("a")).toHaveAttribute("href", "/wide");
+          } else {
+            expect(image.closest("a")).toBeNull();
+          }
+        }
+      }
     }
   );
 });

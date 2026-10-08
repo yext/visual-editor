@@ -57,7 +57,7 @@ export interface PhotoGalleryWrapperProps {
     image: Omit<ImageStylingProps, "imageFillType">;
 
     /**
-     * Determines whether carousel images should fill or fit within the frame.
+     * Determines whether gallery images should fill or fit within the frame.
      * @defaultValue "fill"
      */
     imageFillType?: ImageFillType;
@@ -107,7 +107,6 @@ const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
           { label: msg("fields.options.fill", "Fill"), value: "fill" },
           { label: msg("fields.options.fit", "Fit"), value: "fit" },
         ],
-        visible: false,
       },
       accentColor: {
         type: "basicSelector",
@@ -479,7 +478,8 @@ const GalleryGrid = ({
   isEditing,
   imagesFieldId,
   constantValueEnabled,
-}: GalleryRenderProps) => {
+  imageFillType = "fill",
+}: GalleryRenderProps & { imageFillType?: ImageFillType }) => {
   return (
     <EntityField
       displayName={pt("fields.images", "Images")}
@@ -492,6 +492,7 @@ const GalleryGrid = ({
             <DesktopImageItem
               imageData={imageData}
               isEditing={isEditing}
+              imageFillType={imageFillType}
               sizes={`(min-width: 1024px) min(${imageWidth}px, calc((100vw - 6rem) / 3)), (min-width: 640px) min(${imageWidth}px, calc((100vw - 4rem) / 2)), min(${imageWidth}px, 100vw)`}
             />
           </div>
@@ -521,7 +522,6 @@ export const PhotoGalleryWrapper: YextComponentConfig<PhotoGalleryWrapperProps> 
         photoGalleryWrapperFields,
         [
           "styles.objectFields.carouselImageCount.visible",
-          "styles.objectFields.imageFillType.visible",
           "styles.objectFields.accentColor.visible",
         ],
         isCarousel
@@ -603,7 +603,10 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     <div ref={containerRef}>
       {hasAnyImages ? (
         parentData?.variant === "gallery" ? (
-          <GalleryGrid {...sharedRenderProps} />
+          <GalleryGrid
+            {...sharedRenderProps}
+            imageFillType={styles.imageFillType ?? "fill"}
+          />
         ) : (
           <CarouselProvider
             className="flex flex-col gap-8"
