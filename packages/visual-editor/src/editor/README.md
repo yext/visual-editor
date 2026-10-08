@@ -145,6 +145,7 @@ resolved in the render function. The following field types are supported for tra
 | Repeated `entityField`                       | Array of item props resolved against each selected item or manual item                          |
 | `video`                                      | Asset video data with interpolated text and preserved metadata                                  |
 | Color `basicSelector`                        | CSS color from a `SITE_COLOR` or `BACKGROUND_COLOR` selection                                   |
+| `BACKGROUND_COLOR` with `format: "surface"`  | Authored `ThemeColor` plus resolved background and foreground CSS colors, or `undefined`        |
 | `styledText`, `styledButton`, `styledLink`   | CSS style object with inherited `"default"` choices omitted                                     |
 | `styledImage`, `styledPageSection`           | CSS style object for border radius, width, or vertical padding                                  |
 | `code`                                       | Interpolated code string; HTML also processes Handlebars templates                              |
@@ -177,7 +178,10 @@ HTML templates. Price formatting is an explicit `entityField` option rather
 than the default behavior for all entity fields.
 
 For a color selector, opt in only with `SITE_COLOR` or `BACKGROUND_COLOR`;
-other `basicSelector` values are left as authored. A price field uses
+other `basicSelector` values are left as authored. `BACKGROUND_COLOR` with
+`format: "surface"` returns `{ themeColor, backgroundColor, color }`, which can
+be passed directly to `Background` or `PageSection` as the `background` prop.
+Without that format, color selectors return a CSS string. A price field uses
 `{ type: "entityField", filter: { types: ["type.price"] }, format: "price", transform: true }`
 and renders a localized string. Styled fields render CSS style objects that can
 be passed to React's `style` prop. Code fields use `codeLanguage: "html"` to

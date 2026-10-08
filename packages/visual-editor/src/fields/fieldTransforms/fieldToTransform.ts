@@ -1,7 +1,10 @@
 import type { YextFieldMap, YextPuckField } from "../fields.ts";
 import type { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { resolveField } from "../../utils/resolveYextEntityField.ts";
-import { getThemeColorCssValue } from "../../utils/colors.ts";
+import {
+  getSurfaceColorStyle,
+  getThemeColorCssValue,
+} from "../../utils/colors.ts";
 import { formatCurrency } from "../../utils/productPrice.ts";
 import { resolveCTAValue, resolveComprehensiveCTAValue } from "./cta.ts";
 import { resolveCode } from "./code.ts";
@@ -93,11 +96,20 @@ export const fieldToTransform: Record<
     }
     return resolved;
   },
-  basicSelector: (field, value) =>
-    field.type === "basicSelector" &&
-    (field.options === "SITE_COLOR" || field.options === "BACKGROUND_COLOR")
-      ? getThemeColorCssValue(value)
-      : value,
+  basicSelector: (field, value, context) => {
+    if (field.type !== "basicSelector") {
+      return value;
+    }
+    if (field.options === "BACKGROUND_COLOR" && field.format === "surface") {
+      return value?.selectedColor
+        ? {
+            themeColor: { ...value },
+            ...getSurfaceColorStyle(value, context.streamDocument),
+          }
+        : undefined;
+    }
+    return getThemeColorCssValue(value);
+  },
   code: (field, value, context) =>
     field.type === "code" ? resolveCode(field, value, context) : value,
   translatableString: (_field, value, context) =>

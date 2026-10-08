@@ -18,6 +18,7 @@ export {
   getThemeColorHexValue,
   isDarkColor,
   normalizeThemeColorToken,
+  type ResolvedSurfaceColor,
 } from "./colors.ts";
 export {
   migrate,

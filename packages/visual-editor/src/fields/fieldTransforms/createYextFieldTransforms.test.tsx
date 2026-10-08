@@ -22,6 +22,10 @@ import { createItemSource } from "../../utils/itemSource/createItemSource.ts";
 import type { ComprehensiveCTAValue } from "../styledFields/ComprehensiveCTAField.tsx";
 import type { AssetVideo } from "../../types/videos.ts";
 import { MaybeRTF } from "../../components/helpers/index.ts";
+import { Background } from "../../components/atoms/background.tsx";
+import { PageSection } from "../../components/atoms/pageSection.tsx";
+import { useBackground } from "../../hooks/useBackground.tsx";
+import type { ResolvedSurfaceColor } from "../../utils/colors.ts";
 import {
   toPuckFields,
   type YextComponentConfig,
@@ -1241,5 +1245,149 @@ describe("field transforms", () => {
       typography: React.CSSProperties;
       script: string;
     }>();
+  });
+
+  it.each([
+    {
+      name: "when a palette background has an explicit contrast token then both CSS colors resolve",
+      value: {
+        selectedColor: "palette-primary",
+        contrastingColor: "palette-primary-contrast",
+      },
+      streamDocument: {
+        __: {
+          theme: JSON.stringify({
+            "--colors-palette-primary-contrast": "#FFFFFF",
+          }),
+        },
+      },
+      expected: {
+        backgroundColor: "var(--colors-palette-primary)",
+        color: "var(--colors-palette-primary-contrast)",
+      },
+    },
+    {
+      name: "when a custom background has an explicit contrast color then both hex colors resolve",
+      value: {
+        selectedColor: "[#123ABC]",
+        contrastingColor: "[#FAEBCD]",
+      },
+      streamDocument: {},
+      expected: { backgroundColor: "#123ABC", color: "#FAEBCD" },
+    },
+    {
+      name: "when contrast is unset then the stream document determines the foreground",
+      value: { selectedColor: "palette-primary", contrastingColor: "" },
+      streamDocument: {
+        __: {
+          theme: JSON.stringify({ "--colors-palette-primary": "#000000" }),
+        },
+      },
+      expected: {
+        backgroundColor: "var(--colors-palette-primary)",
+        color: "white",
+      },
+    },
+    {
+      name: "when no background is selected then the surface is undefined",
+      value: undefined,
+      streamDocument: {},
+      expected: undefined,
+    },
+  ])("$name", ({ value, streamDocument, expected }) => {
+    const authored = structuredClone(value);
+    const result = createYextFieldTransforms(streamDocument, "en").custom({
+      field: {
+        type: "custom",
+        metadata: {
+          yextField: {
+            type: "basicSelector",
+            options: "BACKGROUND_COLOR",
+            format: "surface",
+            transform: true,
+          },
+        },
+      },
+      value,
+      componentId: "test",
+      propName: "background",
+      propPath: "background",
+      isReadOnly: false,
+    });
+
+    expect(result).toEqual(
+      value ? { themeColor: value, ...expected } : expected
+    );
+    expect(value).toEqual(authored);
+  });
+
+  it("when a surface is passed to Background then its classes, CSS, and context use the authored color", () => {
+    const surface: ResolvedSurfaceColor = {
+      themeColor: {
+        selectedColor: "palette-primary",
+        contrastingColor: "white",
+      },
+      backgroundColor: "var(--colors-palette-primary)",
+      color: "white",
+    };
+    const ContextReader = (): React.ReactElement => {
+      const background = useBackground();
+      return (
+        <span>{`${background?.selectedColor}:${background?.contrastingColor}:${background?.isDarkColor}`}</span>
+      );
+    };
+    const html = renderToStaticMarkup(
+      <TemplatePropsContext.Provider value={{ document: {} }}>
+        <Background background={surface} className="custom-background">
+          <ContextReader />
+        </Background>
+      </TemplatePropsContext.Provider>
+    );
+
+    expect(html).toContain("bg-palette-primary");
+    expect(html).toContain("text-white");
+    expect(html).toContain("custom-background");
+    expect(html).toContain("background-color:var(--colors-palette-primary)");
+    expect(html).toContain("color:white");
+    expect(html).toContain("palette-primary:white:true");
+  });
+
+  it("when a surface is passed to PageSection then its outer background uses both CSS colors", () => {
+    const html = renderToStaticMarkup(
+      <TemplatePropsContext.Provider value={{ document: {} }}>
+        <PageSection
+          background={{
+            themeColor: {
+              selectedColor: "[#123ABC]",
+              contrastingColor: "white",
+            },
+            backgroundColor: "#123ABC",
+            color: "white",
+          }}
+        >
+          Content
+        </PageSection>
+      </TemplatePropsContext.Provider>
+    );
+
+    expect(html).toContain("background-color:#123ABC");
+    expect(html).toContain("color:white");
+    expect(html).toContain("Content");
+  });
+
+  it("when surface mode opts in then transformed props contain the authored color and CSS", () => {
+    expectTypeOf<
+      YextTransformedProps<
+        { background: { selectedColor: string; contrastingColor: string } },
+        {
+          background: {
+            type: "basicSelector";
+            options: "BACKGROUND_COLOR";
+            format: "surface";
+            transform: true;
+          };
+        }
+      >["background"]
+    >().toEqualTypeOf<ResolvedSurfaceColor | undefined>();
   });
 });

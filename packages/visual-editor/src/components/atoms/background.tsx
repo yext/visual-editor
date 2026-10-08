@@ -10,10 +10,11 @@ import { getThemeValue } from "../../utils/getThemeValue.ts";
 import {
   getBackgroundColorClasses,
   getBackgroundColorStyle,
+  type ResolvedSurfaceColor,
 } from "../../utils/colors.ts";
 
 export interface BackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
-  background?: ThemeColor;
+  background?: ThemeColor | ResolvedSurfaceColor;
   as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
 }
 
@@ -21,7 +22,12 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
   ({ className, background, as, children, style, ...props }, ref) => {
     const streamDocument = useDocument();
     const Component = as ?? "div";
-    const selectedBackground = background ?? backgroundColors.background1.value;
+    const authoredBackground =
+      background && "themeColor" in background
+        ? background.themeColor
+        : background;
+    const selectedBackground =
+      authoredBackground ?? backgroundColors.background1.value;
 
     const backgroundValue: Required<ThemeColor> = React.useMemo(() => {
       // Our built-in backgrounds are always light or dark
@@ -85,11 +91,16 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
         <Component
           className={themeManagerCn(
             "components",
-            getBackgroundColorClasses(background),
+            getBackgroundColorClasses(authoredBackground),
             className
           )}
           style={{
-            ...getBackgroundColorStyle(background),
+            ...(background && "themeColor" in background
+              ? {
+                  backgroundColor: background.backgroundColor,
+                  color: background.color,
+                }
+              : getBackgroundColorStyle(authoredBackground)),
             ...style,
           }}
           ref={ref}

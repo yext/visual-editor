@@ -68,14 +68,23 @@ type BasicSelectorFieldBase = BaseField & {
 type BasicSelectorFieldWithOptions = BasicSelectorFieldBase &
   (
     | {
-        /** Resolves SITE_COLOR or BACKGROUND_COLOR selections to CSS color values. */
+        /** Resolves SITE_COLOR selections to CSS color values. */
         transform: true;
-        options: "SITE_COLOR" | "BACKGROUND_COLOR";
+        options: "SITE_COLOR";
+        format?: never;
+        optionGroups?: never;
+      }
+    | {
+        /** Surface format preserves the authored color and resolves both CSS colors. */
+        transform: true;
+        options: "BACKGROUND_COLOR";
+        format?: "surface";
         optionGroups?: never;
       }
     | {
         transform?: false;
         options: BasicSelectorOptions;
+        format?: never;
         optionGroups?: never;
       }
   );

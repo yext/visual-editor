@@ -2,6 +2,13 @@ import { getThemeValue } from "./getThemeValue.ts";
 import { type ThemeColor } from "./themeConfigOptions.ts";
 import { type StreamDocument } from "./types/StreamDocument.ts";
 
+/** A themed surface with its authored tokens and render-ready CSS colors. */
+export type ResolvedSurfaceColor = {
+  themeColor: ThemeColor;
+  backgroundColor?: string;
+  color?: string;
+};
+
 /**
  * hexToRGB converts a hex color to rgb
  * @param H hex string beginning with '#'

@@ -1,5 +1,6 @@
 import { createElement, type CSSProperties, type ReactElement } from "react";
 import type { LinkType } from "@yext/pages-components";
+import type { ResolvedSurfaceColor } from "../utils/colors.ts";
 import type {
   ArrayField,
   CustomField,
@@ -84,10 +85,13 @@ type ResolvedRepeatedItem<Value> = Value extends {
 
 type TransformedFieldValues<Value, Definition> = {
   basicSelector: Definition extends {
-    options: "SITE_COLOR" | "BACKGROUND_COLOR";
+    options: "BACKGROUND_COLOR";
+    format: "surface";
   }
-    ? string | undefined
-    : never;
+    ? ResolvedSurfaceColor | undefined
+    : Definition extends { options: "SITE_COLOR" | "BACKGROUND_COLOR" }
+      ? string | undefined
+      : never;
   code: string;
   styledText: CSSProperties;
   styledButton: CSSProperties;
