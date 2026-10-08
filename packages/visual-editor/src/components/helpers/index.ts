@@ -26,10 +26,6 @@ export {
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown.tsx";
 export { type MainContentProps, MainContent } from "./MainContent.tsx";
-/**
- * A shared rich-text renderer that accepts resolved content through `data`.
- * Renders resolved content without exposing field resolution to consumers.
- */
 export {
   type RichTextStyleOverrides,
   type MaybeRTFProps,

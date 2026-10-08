@@ -154,11 +154,10 @@ export const ComprehensiveCTA = ({
     typeof value.data.buttonText === "object" ||
     typeof value.data.ariaLabel === "object"
       ? // Without transforms, resolve the authored value using the page and locale.
-        resolveComprehensiveCTAValue(
-          value as Partial<ComprehensiveCTAValue>,
+        resolveComprehensiveCTAValue(value as Partial<ComprehensiveCTAValue>, {
           streamDocument,
-          i18n.language
-        )
+          locale: i18n.language,
+        })
       : // With transforms, the value already contains resolved data; keep it as is.
         (value as ResolvedComprehensiveCTAValue);
   const actionType = currentValue.data.actionType;

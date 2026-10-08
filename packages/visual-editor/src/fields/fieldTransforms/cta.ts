@@ -5,8 +5,10 @@ import {
   normalizeComprehensiveCTAValue,
   type ComprehensiveCTAValue,
 } from "../styledFields/ComprehensiveCTAField.tsx";
-import type { ResolvedComprehensiveCTAValue } from "../fields.ts";
-import type { StreamDocument } from "../../utils/types/StreamDocument.ts";
+import type {
+  ResolvedCTAValue,
+  ResolvedComprehensiveCTAValue,
+} from "../fields.ts";
 import {
   resolveEntityValue,
   resolveValue,
@@ -16,10 +18,8 @@ import {
 /** Resolves authored CTA data for both field transforms and the temporary renderer compatibility path. */
 export function resolveComprehensiveCTAValue(
   value: Partial<ComprehensiveCTAValue> | undefined,
-  streamDocument: StreamDocument,
-  locale: string
+  context: FieldTransformContext
 ): ResolvedComprehensiveCTAValue {
-  const context = { streamDocument, locale };
   const normalized = normalizeComprehensiveCTAValue(value);
   return {
     ...normalized,
@@ -39,7 +39,7 @@ export function resolveComprehensiveCTAValue(
 export function resolveCTAValue(
   value: any,
   context: FieldTransformContext
-): any {
+): ResolvedCTAValue | undefined {
   const { ctaType } = getCTAType(value);
   const resolved =
     ctaType === "getDirections" && !value?.constantValueEnabled
