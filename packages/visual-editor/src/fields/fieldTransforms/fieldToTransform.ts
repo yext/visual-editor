@@ -79,7 +79,7 @@ export const fieldToTransform: Record<
     resolveValue(value, context) ?? "",
   video: (_field, value, context) => resolveValue(value, context),
   comprehensiveCTA: (_field, value, context) =>
-    resolveComprehensiveCTAValue(value, context.streamDocument, context.locale),
+    resolveComprehensiveCTAValue(value, context),
   image: (_field, value, context) => resolveValue(value, context),
   multiSelector: (_field, value) =>
     (value?.selections ?? []).flatMap(({ value }: { value: unknown }) =>

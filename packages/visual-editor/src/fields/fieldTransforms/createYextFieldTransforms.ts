@@ -5,7 +5,12 @@ import {
   type TransformableField,
 } from "./fieldToTransform.ts";
 
-/** Retrieves the authored field definition retained by the Puck field adapter. */
+/**
+ * Returns the authored field as a TransformableField when it opts into a
+ * supported transform. For example, a Puck `custom` field wrapping an
+ * `entityField` with `transform: true` returns the unwrapped `entityField`;
+ * unsupported or unmarked fields return `undefined`.
+ */
 export function getTransformField(
   field: BaseField & { type: string }
 ): TransformableField | undefined {

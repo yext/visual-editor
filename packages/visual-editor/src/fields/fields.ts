@@ -1,4 +1,5 @@
 import { createElement, type ReactElement } from "react";
+import type { LinkType } from "@yext/pages-components";
 import type {
   ArrayField,
   CustomField,
@@ -41,6 +42,16 @@ type LocalizedRenderValue<Value> = Value extends readonly (infer Item)[]
       : { [Key in keyof Value]: LocalizedRenderValue<Value[Key]> }
     : Value;
 
+/** CTA data after localized text and links are resolved for rendering. */
+export type ResolvedCTAValue = {
+  link: string;
+  label?: string;
+  linkType?: LinkType;
+  normalizeLink?: boolean;
+  openInNewTab?: boolean;
+  ctaType?: "textAndLink" | "getDirections" | "presetImage";
+};
+
 /** The presentation component consumes this data contract without resolving authored bindings. */
 export type ResolvedComprehensiveCTAValue = Omit<
   ComprehensiveCTAValue,
@@ -50,7 +61,7 @@ export type ResolvedComprehensiveCTAValue = Omit<
     ComprehensiveCTAValue["data"],
     "cta" | "buttonText" | "ariaLabel"
   > & {
-    cta?: LocalizedRenderValue<EnhancedTranslatableCTA>;
+    cta: ResolvedCTAValue | undefined;
     buttonText?: string;
     ariaLabel?: string;
   };
