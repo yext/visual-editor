@@ -4,6 +4,7 @@ import {
   type TranslatableString,
 } from "../../types/types.ts";
 import { createItemSource } from "./index.ts";
+import { ITEM_SOURCE_SELF_FIELD } from "./itemSourceTypes.ts";
 
 type ArticleItemProps = {
   title: {
@@ -401,4 +402,204 @@ describe("createItemSource", () => {
       },
     ]);
   });
+
+  it("resolves direct image items and mapped object items with optional links", () => {
+    const gallerySource = createItemSource<{
+      image: {
+        field: string;
+        constantValueEnabled?: boolean;
+        constantValue: { url: string };
+      };
+      link: {
+        field: string;
+        constantValueEnabled?: boolean;
+        constantValue: string;
+      };
+    }>({
+      label: "Images",
+      mappingFields: {
+        image: {
+          type: "entityField",
+          filter: { types: ["type.image"] },
+        },
+        link: {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        },
+      },
+    });
+
+    expect((gallerySource.field as any).filter).toEqual({
+      itemSourceTypes: [["type.image"], ["type.string"]],
+    });
+    expect(
+      (gallerySource.field as any).repeated.mappingFields.image.filter
+    ).toEqual({
+      types: ["type.image"],
+    });
+
+    expect(
+      gallerySource.resolveItems(
+        {
+          field: "images",
+          constantValue: [],
+          constantValueEnabled: false,
+          mappings: {
+            image: {
+              field: ITEM_SOURCE_SELF_FIELD,
+              constantValue: { url: "" },
+              constantValueEnabled: false,
+            },
+            link: {
+              field: "clickthroughUrl",
+              constantValue: "",
+              constantValueEnabled: false,
+            },
+          },
+        },
+        {
+          locale: "en",
+          images: [
+            { url: "https://example.com/one.jpg" },
+            {
+              image: { url: "https://example.com/two.jpg" },
+              clickthroughUrl: "https://example.com/two",
+            },
+          ],
+        }
+      )
+    ).toEqual([
+      { image: { url: "https://example.com/one.jpg" }, link: undefined },
+      {
+        image: {
+          image: { url: "https://example.com/two.jpg" },
+          clickthroughUrl: "https://example.com/two",
+        },
+        link: "https://example.com/two",
+      },
+    ]);
+
+    expect(
+      gallerySource.resolveItems(
+        {
+          field: "products",
+          constantValue: [],
+          constantValueEnabled: false,
+          mappings: {
+            image: {
+              field: "cover",
+              constantValue: { url: "" },
+              constantValueEnabled: false,
+            },
+            link: {
+              field: "destination",
+              constantValue: "",
+              constantValueEnabled: false,
+            },
+          },
+        },
+        {
+          locale: "en",
+          products: [
+            {
+              cover: { url: "https://example.com/product.jpg" },
+              destination: "/product",
+            },
+          ],
+        }
+      )
+    ).toEqual([
+      { image: { url: "https://example.com/product.jpg" }, link: "/product" },
+    ]);
+  });
+
+  it.each([
+    {
+      constantValueEnabled: false,
+      expected: { url: "https://example.com/source.jpg" },
+    },
+    {
+      constantValueEnabled: true,
+      expected: { url: "https://example.com/manual.jpg" },
+    },
+  ])(
+    "when a direct mapping has constant mode $constantValueEnabled then it uses the selected value",
+    ({ constantValueEnabled, expected }) => {
+      const source = createItemSource<{
+        image: {
+          field: string;
+          constantValueEnabled: boolean;
+          constantValue: { url: string };
+        };
+      }>({
+        label: "Images",
+        mappingFields: {
+          image: {
+            type: "entityField",
+            filter: { types: ["type.image"] },
+            disableConstantValueToggle: false,
+          },
+        },
+      });
+
+      expect(
+        source.resolveItems(
+          {
+            field: "images",
+            constantValueEnabled: false,
+            constantValue: [],
+            mappings: {
+              image: {
+                field: "$item",
+                constantValueEnabled,
+                constantValue: { url: "https://example.com/manual.jpg" },
+              },
+            },
+          },
+          { locale: "en", images: [{ url: "https://example.com/source.jpg" }] }
+        )
+      ).toEqual([{ image: expected }]);
+    }
+  );
+  it.each([
+    {
+      type: "type.image" as const,
+      item: { url: "https://example.com/image.jpg" },
+    },
+    { type: "type.string" as const, item: "Caption" },
+  ])(
+    "when the mapping accepts $type then complete items resolve",
+    ({ type, item }): void => {
+      const source = createItemSource({
+        label: "Items",
+        mappingFields: {
+          value: {
+            type: "entityField",
+            filter: { types: [type] },
+          },
+        },
+      });
+
+      expect(source.field).toMatchObject({
+        filter: { itemSourceTypes: [[type]] },
+        repeated: {
+          mappingFields: { value: { filter: { types: [type] } } },
+          manualItemFields: { value: { filter: { types: [type] } } },
+        },
+      });
+      expect(
+        source.resolveItems(
+          {
+            field: "items",
+            constantValueEnabled: false,
+            constantValue: [],
+            mappings: {
+              value: { field: "$item", constantValueEnabled: false },
+            },
+          },
+          { items: [item] }
+        )
+      ).toEqual([{ value: item }]);
+    }
+  );
 });

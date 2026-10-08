@@ -97,6 +97,11 @@ type InternalLayoutEditorProps = {
   sectionLibraryMigrationRegistry?: MigrationRegistry;
 };
 
+/** Keeps field contents mounted when the editor saves state, and removes label icons. */
+const LayoutFieldLabel = (
+  props: React.ComponentProps<typeof FieldLabel>
+): React.ReactElement => <FieldLabel {...props} icon={undefined} />;
+
 // Render Puck editor
 export const InternalLayoutEditor = ({
   puckConfig,
@@ -122,6 +127,11 @@ export const InternalLayoutEditor = ({
     [streamDocument, pageI18n.language]
   );
   const { errorCount, errorSources, errorDetails } = useErrorContext();
+  // Keep plugin sidebar fields mounted when saved state changes.
+  const plugins = React.useMemo(
+    () => [{ ...blocks, label: pt("sections", "Sections") }, outline],
+    [i18n.language]
+  );
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -408,7 +418,7 @@ export const InternalLayoutEditor = ({
         fieldTransforms={fieldTransforms}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
-        plugins={[{ ...blocks, label: pt("sections", "Sections") }, outline]}
+        plugins={plugins}
         overrides={{
           componentOverlay: TransformedFieldTooltip,
           fields: fieldsOverride,
@@ -608,10 +618,7 @@ export const InternalLayoutEditor = ({
               </ActionBar>
             );
           },
-          // oxlint-disable-next-line no-unused-vars removed all icons from all field labels
-          fieldLabel: ({ icon, children, ...rest }) => (
-            <FieldLabel {...rest}>{children}</FieldLabel>
-          ),
+          fieldLabel: LayoutFieldLabel,
           puck: puckOverride,
         }}
         metadata={metadata}

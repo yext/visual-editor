@@ -114,4 +114,17 @@ describe("toPuckFields", () => {
       basicSelectorField
     );
   });
+  it("when field definitions change then the renderer stays the same and uses the new field", (): void => {
+    const first = toPuckFields({
+      choice: { type: "basicSelector", label: "First", options: [] },
+    }).choice as CustomField<string>;
+    const second = toPuckFields({
+      choice: { type: "basicSelector", label: "Second", options: [] },
+    }).choice as CustomField<string>;
+
+    expect(second.render).toBe(first.render);
+    expect(
+      (renderCustomField(second) as React.ReactElement).props.field.label
+    ).toBe("Second");
+  });
 });

@@ -6,6 +6,8 @@ import {
 } from "../../fields/fields.ts";
 import { type StreamDocument } from "../types/StreamDocument.ts";
 
+export const ITEM_SOURCE_SELF_FIELD = "$item";
+
 /**
  * Public item-source types.
  *
@@ -16,8 +18,16 @@ import { type StreamDocument } from "../types/StreamDocument.ts";
 export type CreateItemSourceOptions<
   TItemProps extends Record<string, unknown>,
 > = {
+  /** Label shown above the item source controls. */
   label: string;
+  /**
+   * Fields for each item. These define both the manual item inputs and the
+   * mappings to fields within each object in a selected entity list.
+   * A list can be selected when its item type or a child field matches any
+   * mapping field filter.
+   */
   mappingFields: YextFieldMap<TItemProps>;
+  /** Initial manual items. The first item is also the template for new items. */
   defaultValues?: TItemProps[];
 };
 
