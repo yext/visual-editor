@@ -8,6 +8,7 @@ import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { createItemSource } from "../utils/itemSource/createItemSource.ts";
 import { ComprehensiveCTA } from "../components/helpers/ComprehensiveCTA.tsx";
 import { CustomCodeSection } from "../components/sections/customCode/CustomCodeSection.tsx";
+import { Image } from "../components/atoms/image.tsx";
 import { MaybeRTF } from "../components/helpers/maybeRTF.tsx";
 import { createYextFieldTransforms } from "../fields/fieldTransforms/index.ts";
 import { toPuckFields } from "../fields/fields.ts";
@@ -313,4 +314,128 @@ describe("native Puck field transforms", () => {
     ).toBe("window.message = 'Restaurant';");
     expect(data).toEqual(authoredData);
   });
+
+  it.each(["live page", "server render", "editor preview"])(
+    "when localized data images are transformed then %s renders aspect and fixed images without changing authored data",
+    async (mode) => {
+      const dataUrl =
+        "data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA";
+      const data: Data = {
+        root: { props: {} },
+        content: [
+          {
+            type: "AspectImage",
+            props: {
+              id: "aspect-image",
+              image: {
+                constantValueEnabled: true,
+                constantValue: {
+                  defaultValue: { url: dataUrl, width: 1, height: 1 },
+                  es: {
+                    url: dataUrl,
+                    width: 1,
+                    height: 1,
+                    alternateText: "Foto de [[name]]",
+                  },
+                },
+              },
+            },
+          },
+          {
+            type: "FixedImage",
+            props: {
+              id: "fixed-image",
+              image: {
+                constantValueEnabled: true,
+                constantValue: {
+                  defaultValue: {
+                    image: { url: dataUrl, width: 1, height: 1 },
+                  },
+                  es: {
+                    image: {
+                      url: dataUrl,
+                      width: 1,
+                      height: 1,
+                      alternateText: "Complex [[name]]",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
+      };
+      const authoredData = structuredClone(data);
+      const streamDocument = { locale: "es", name: "Restaurant" };
+      const fieldTransforms = createYextFieldTransforms(streamDocument, "es");
+      const imageFields = toPuckFields({
+        image: {
+          type: "entityField",
+          transform: true,
+          filter: { types: ["type.image"] },
+        },
+      });
+      const config: Config = {
+        components: {
+          AspectImage: {
+            fields: imageFields,
+            render: ({ image }) => (
+              <Image image={image} aspectRatio={2} sizes="50vw" />
+            ),
+          },
+          FixedImage: {
+            fields: imageFields,
+            render: ({ image }) => (
+              <Image
+                image={image}
+                width={40}
+                imageFillType="fit"
+                loading="eager"
+                style={{ borderRadius: "5px" }}
+              />
+            ),
+          },
+        },
+      };
+      render(
+        <ErrorProvider>
+          <TemplatePropsContext.Provider value={{ document: streamDocument }}>
+            {mode === "live page" ? (
+              <VisualEditorRender config={config} data={data} />
+            ) : mode === "server render" ? (
+              <ServerRender
+                config={config}
+                data={data}
+                fieldTransforms={fieldTransforms}
+              />
+            ) : (
+              <Puck
+                config={config}
+                data={data}
+                fieldTransforms={fieldTransforms}
+                iframe={{ enabled: false }}
+              >
+                <Puck.Preview />
+              </Puck>
+            )}
+          </TemplatePropsContext.Provider>
+        </ErrorProvider>
+      );
+
+      const aspectImage = await screen.findByAltText("Foto de Restaurant");
+      const fixedImage = await screen.findByAltText("Complex Restaurant");
+      expect(aspectImage.getAttribute("src")).toBe(dataUrl);
+      expect(aspectImage.getAttribute("srcset")).toBeNull();
+      expect(aspectImage.getAttribute("loading")).toBe("lazy");
+      expect(aspectImage.getAttribute("sizes")).toBe("50vw");
+      expect(aspectImage.parentElement?.style.aspectRatio).toBe("2");
+      expect(fixedImage.getAttribute("src")).toBe(dataUrl);
+      expect(fixedImage.getAttribute("srcset")).toBeNull();
+      expect(fixedImage.getAttribute("loading")).toBe("eager");
+      expect(fixedImage.style.objectFit).toBe("contain");
+      expect(fixedImage.style.borderRadius).toBe("5px");
+      expect(fixedImage.parentElement?.style.width).toBe("40px");
+      expect(data).toEqual(authoredData);
+    }
+  );
 });

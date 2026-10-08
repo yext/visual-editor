@@ -47,7 +47,7 @@ export const getImageAltText = (
 
   let altTextField: string | TranslatableString | undefined = undefined;
   if (isComplexImageType(image)) {
-    altTextField = image.image.alternateText;
+    altTextField = image.image?.alternateText;
   } else if (image?.alternateText) {
     altTextField = image.alternateText;
   }
@@ -78,8 +78,18 @@ export const Image: React.FC<ImageProps> = ({
     }
     return rawImage as ImageType | ComplexImageType | AssetImageType;
   }, [rawImage, i18n.language]);
+  const [failedImageUrl, setFailedImageUrl] = React.useState<string>();
 
   if (!image) {
+    return null;
+  }
+
+  const imageUrl = isComplexImageType(image) ? image.image?.url : image.url;
+  if (
+    typeof imageUrl !== "string" ||
+    !imageUrl ||
+    failedImageUrl === imageUrl
+  ) {
     return null;
   }
 
@@ -100,19 +110,38 @@ export const Image: React.FC<ImageProps> = ({
   const imageTransformations = {
     fit: imageFillType === "fit" ? ("contain" as const) : ("cover" as const),
   };
+  // Data URLs bypass the optimized image renderer, which rejects them.
+  const isInlineImage = /^\s*data:/i.test(imageUrl);
 
   return (
     <div
       className={themeManagerCn(containerStyles, className)}
-      style={width ? { width: `${width}px` } : undefined}
+      style={{
+        width: width ? `${width}px` : undefined,
+        aspectRatio: isInlineImage ? aspectRatio : undefined,
+      }}
     >
-      {aspectRatio ? (
+      {isInlineImage ? (
+        <img
+          src={imageUrl}
+          alt={altText ?? ""}
+          className="object-cover w-full h-full"
+          sizes={sizes}
+          loading={loading}
+          style={{
+            width: "100%",
+            height: aspectRatio ? "100%" : "auto",
+            ...imageStyle,
+          }}
+          onError={() => setFailedImageUrl(imageUrl)}
+        />
+      ) : aspectRatio ? (
         <ImageComponent
           image={{ ...image, alternateText: altText }}
           layout={"aspect"}
           aspectRatio={aspectRatio}
           className="object-cover w-full h-full"
-          imgOverrides={{ sizes }}
+          imgOverrides={{ sizes, onError: () => setFailedImageUrl(imageUrl) }}
           imageTransformations={imageTransformations}
           loading={loading}
           style={imageStyle}
@@ -124,18 +153,19 @@ export const Image: React.FC<ImageProps> = ({
           width={width}
           height={calculatedHeight}
           className="object-cover"
-          imgOverrides={{ sizes }}
+          imgOverrides={{ sizes, onError: () => setFailedImageUrl(imageUrl) }}
           imageTransformations={imageTransformations}
           loading={loading}
           style={imageStyle}
         />
       ) : (
         <img
-          src={isComplexImageType(image) ? image.image.url : image.url}
+          src={imageUrl}
           alt={altText}
           className="object-cover w-full h-full"
           loading={loading}
           style={imageStyle}
+          onError={() => setFailedImageUrl(imageUrl)}
         />
       )}
     </div>
@@ -145,7 +175,7 @@ export const Image: React.FC<ImageProps> = ({
 function isComplexImageType(
   image: ImageType | ComplexImageType | AssetImageType
 ): image is ComplexImageType {
-  return "image" in image;
+  return typeof image === "object" && image !== null && "image" in image;
 }
 
 export type ImgSizesByBreakpoint = {

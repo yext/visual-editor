@@ -150,6 +150,13 @@ resolved in the render function. The following field types are supported for tra
 | `styledImage`, `styledPageSection`           | CSS style object for border radius, width, or vertical padding                                  |
 | `code`                                       | Interpolated code string; HTML also processes Handlebars templates                              |
 
+The shared `Image` component passes data URLs directly to a native image,
+including formats the browser can display without base64 encoding. It does not
+optimize those URLs or create a `srcset`; HTTP images retain their optimized
+path. Missing URLs and images that fail to load render nothing. Hosts must
+allow `data:` in the `img-src` Content Security Policy for editor previews and
+published pages to load inline images.
+
 ````
 
 Title, description, and image still allow entity bindings and constant values.
