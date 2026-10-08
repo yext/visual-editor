@@ -14,6 +14,8 @@ type OptionalNumberValue = number | string | null | undefined;
 
 export type OptionalNumberField = BaseField & {
   type: "optionalNumber";
+  /** Returns a number or undefined before rendering. */
+  transform?: boolean;
   label?: string | MsgString;
   hideNumberFieldRadioLabel: string | MsgString;
   showNumberFieldRadioLabel: string | MsgString;

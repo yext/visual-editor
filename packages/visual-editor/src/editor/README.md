@@ -125,6 +125,84 @@ const Example = ({ myField }: ExampleProps) => {
 };
 ```
 
+## Opt-in field transforms
+
+Add `transform: true` to the props of a supported field type and the transform behavior will be enabled, making props come through
+resolved in the render function. The following field types are supported for transforms and the behavior is disabled by default.
+
+| Field definition                             | Render value                                                                                    |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `translatableString`                         | Localized, interpolated string                                                                  |
+| Ordinary `entityField`                       | Resolved entity or constant value with nested localization and interpolation                    |
+| `entityField` including `type.rich_text_v2`  | Resolved rich-text object or plain string                                                       |
+| Rich-text list with `includeListsOnly: true` | Array of resolved rich-text objects or strings                                                  |
+| `image`                                      | Localized asset image with resolved alt text and preserved asset metadata                       |
+| `multiSelector`                              | Array of selected values, preserving zero, false, and empty strings                             |
+| `optionalNumber`                             | Number or `undefined` when hidden or unset                                                      |
+| `ctaSelector`                                | Resolved CTA object with localized label and link; Get Directions includes a generated URL      |
+| `comprehensiveCTA`                           | Resolved nested CTA, button text, and aria label; styles and interaction settings are preserved |
+| Repeated `entityField`                       | Array of item props resolved against each selected item or manual item                          |
+| `video`                                      | Asset video data with interpolated text and preserved metadata                                  |
+
+````
+
+Title, description, and image still allow entity bindings and constant values.
+The transform returns resolved data, including translated and interpolated rich-text
+HTML and JSON. `MaybeRTF` renders that data, with optional `className`, `style`,
+`bodyVariant`, and `richTextStyleOverrides`. CTAs keep their existing field and
+renderer API.
+
+Opted-in fields appear in the editor's component-level entity tooltip when
+entity tooltips are enabled. The tooltip reads authored bindings and does not
+add source metadata to rendered props or require `EntityField` wrappers. Fields
+without `transform: true` retain their existing tooltip behavior.
+
+### Adding field transforms
+
+`fields/fieldTransforms/createYextFieldTransforms.ts` registers the transforms,
+while `fields/fieldTransforms/fieldToTransform.ts` dispatches by authored field
+type. Puck registration and adapted `custom` fields use that same map.
+Each handler receives the authored definition, its value, and the page document
+and locale. `resolveValue.ts` handles localization and interpolation across
+objects and arrays while retaining rich-text and asset structures. `cta.ts`
+contains CTA-specific resolution.
+
+To support another field, add its `transform?: boolean` option, a handler in
+`fieldToTransform`, and its output type in `TransformedFieldValues` in `fields.ts`.
+The handler map requires an entry for each transformable field definition.
+Keep field-specific source selection in its handler and return resolved data.
+For composite bindings, also describe their authored sources in the component
+tooltip. Defaults, editor fields, and saved data keep their authored shapes.
+
+Ordinary entity lists, repeated item sources, and nested Puck arrays support
+transforms. For repeated sources, opt in on the parent field; its mappings are
+resolved against each selected linked item, including translations and embedded
+fields. Manual items resolve against the page document. Missing lists return `[]`.
+
+```tsx
+const fields = {
+  cards: { ...cardSource.field, transform: true },
+  primaryCta: { type: "comprehensiveCTA", transform: true },
+  video: { type: "video", transform: true },
+} satisfies YextFieldMap<AuthoredProps>;
+
+// In the component's render function:
+<ComprehensiveCTA value={primaryCta} />
+<VideoAtom
+  youTubeEmbedUrl={video.video.embeddedUrl}
+  title={video.video.title}
+/>
+{cards.map((card, index) => (
+  <article key={index}>
+    <h2>{card.title}</h2>
+    <MaybeRTF data={card.description} />
+  </article>
+))}
+````
+
+The library no longer calls `resolveItems` or performs text resolution in its
+render function. Video asset structure and comprehensive CTA styles are retained.
+
 ## Linked Entity Item Sources
 
 Use `createItemSource(...)` when a component needs to render repeated content

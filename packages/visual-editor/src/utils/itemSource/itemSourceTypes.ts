@@ -68,7 +68,7 @@ export type ResolvedItemField<TValue> =
  * Public contract returned by `createItemSource(...)`.
  */
 export type ItemSourceInstance<TItemProps extends Record<string, unknown>> = {
-  field: YextFieldDefinition<RepeatedEntityFieldValue<TItemProps>>;
+  field: RepeatedEntityFieldDefinition<TItemProps>;
   defaultValue: RepeatedEntityFieldValue<TItemProps>;
   value: RepeatedEntityFieldValue<TItemProps>;
   resolveItems: (

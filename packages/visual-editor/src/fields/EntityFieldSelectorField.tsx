@@ -70,6 +70,8 @@ export type EntityFieldSelectorField<
   T extends Record<string, any> = Record<string, any>,
 > = BaseField & {
   type: "entityField";
+  /** Resolves this field before rendering. Repeated sources are not supported. */
+  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   filter: MappedSourceFieldFilter<T>;

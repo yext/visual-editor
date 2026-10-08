@@ -21,6 +21,8 @@ export type YextCTAField = YextEntityField<EnhancedTranslatableCTA> & {
 
 export type CTASelectorField = BaseField & {
   type: "ctaSelector";
+  /** Resolves the CTA source, localized text, and directions URL before rendering. */
+  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   disableConstantValueToggle?: boolean;

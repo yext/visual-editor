@@ -52,6 +52,8 @@ export type MultiSelectorOptions<T extends MultiSelectorOptionValue> =
 export type MultiSelectorField<T extends MultiSelectorOptionValue = any> =
   BaseField & {
     type: "multiSelector";
+    /** Returns the selected values as an array before rendering. */
+    transform?: boolean;
     label: string | MsgString;
     dropdownLabel: string | MsgString;
     options: MultiSelectorOptions<T>;

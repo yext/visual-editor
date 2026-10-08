@@ -1,4 +1,5 @@
 import { createElement, type ReactElement } from "react";
+import type { LinkType } from "@yext/pages-components";
 import type {
   ArrayField,
   CustomField,
@@ -25,9 +26,102 @@ import type { StyledPageSectionField } from "./styledFields/StyledPageSection.ts
 import type { StyledTextField } from "./styledFields/StyledTextField.tsx";
 import type { TranslatableStringField } from "./TranslatableStringField.tsx";
 import type { VideoField } from "./VideoField.tsx";
-import type { ComprehensiveCTAField } from "./styledFields/ComprehensiveCTAField.tsx";
+import type {
+  ComprehensiveCTAField,
+  ComprehensiveCTAValue,
+} from "./styledFields/ComprehensiveCTAField.tsx";
+import type { EnhancedTranslatableCTA } from "../types/types.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { adaptYextFieldMap } from "./yextFieldAdapter.ts";
+
+type LocalizedRenderValue<Value> = Value extends readonly (infer Item)[]
+  ? LocalizedRenderValue<Item>[]
+  : Value extends object
+    ? "defaultValue" extends keyof Value
+      ? LocalizedRenderValue<Value["defaultValue"]>
+      : { [Key in keyof Value]: LocalizedRenderValue<Value[Key]> }
+    : Value;
+
+/** CTA data after localized text and links are resolved for rendering. */
+export type ResolvedCTAValue = {
+  link: string;
+  label?: string;
+  linkType?: LinkType;
+  normalizeLink?: boolean;
+  openInNewTab?: boolean;
+  ctaType?: "textAndLink" | "getDirections" | "presetImage";
+};
+
+/** The presentation component consumes this data contract without resolving authored bindings. */
+export type ResolvedComprehensiveCTAValue = Omit<
+  ComprehensiveCTAValue,
+  "data"
+> & {
+  data: Omit<
+    ComprehensiveCTAValue["data"],
+    "cta" | "buttonText" | "ariaLabel"
+  > & {
+    cta: ResolvedCTAValue | undefined;
+    buttonText?: string;
+    ariaLabel?: string;
+  };
+};
+
+/** Repeated-item props retain their structure while authored value wrappers are resolved. */
+type ResolvedRepeatedItem<Value> = Value extends {
+  constantValue: infer Constant;
+}
+  ? LocalizedRenderValue<Constant> | undefined
+  : Value extends ComprehensiveCTAValue
+    ? ResolvedComprehensiveCTAValue
+    : Value extends { selections: { value: infer Selection }[] }
+      ? Exclude<Selection, undefined>[]
+      : Value extends readonly (infer Item)[]
+        ? ResolvedRepeatedItem<Item>[]
+        : Value extends object
+          ? { [Key in keyof Value]: ResolvedRepeatedItem<Value[Key]> }
+          : Value;
+
+type TransformedFieldValues<Value, Definition> = {
+  translatableString: string;
+  image: LocalizedRenderValue<Value>;
+  video: LocalizedRenderValue<Value>;
+  comprehensiveCTA: ResolvedComprehensiveCTAValue;
+  multiSelector: Value extends { selections: { value: infer Selection }[] }
+    ? Exclude<Selection, undefined>[]
+    : never;
+  optionalNumber: number | undefined;
+  ctaSelector: LocalizedRenderValue<EnhancedTranslatableCTA> | undefined;
+  entityField: Definition extends { repeated: object }
+    ? Value extends { constantValue: infer Constant }
+      ? LocalizedRenderValue<ResolvedRepeatedItem<Constant>>
+      : never
+    : Value extends { constantValue: infer Constant }
+      ? LocalizedRenderValue<Constant> | undefined
+      : never;
+};
+
+type TransformedFieldValue<Value, Definition> = Definition extends {
+  transform: true;
+  type: infer FieldType;
+}
+  ? FieldType extends keyof TransformedFieldValues<Value, Definition>
+    ? TransformedFieldValues<Value, Definition>[FieldType]
+    : Value
+  : Definition extends { type: "object"; objectFields: infer Nested }
+    ? YextTransformedProps<Value, Nested>
+    : Definition extends { type: "array"; arrayFields: infer Nested }
+      ? Value extends (infer Item)[]
+        ? YextTransformedProps<Item, Nested>[]
+        : Value
+      : Value;
+
+/** Derives render values from authored props and explicitly opted-in field definitions. */
+export type YextTransformedProps<Props, Definitions> = {
+  [Key in keyof Props]: Key extends keyof Definitions
+    ? TransformedFieldValue<Props[Key], Definitions[Key]>
+    : Props[Key];
+};
 
 export type YextPuckFields = {
   basicSelector: BasicSelectorField;
@@ -80,13 +174,18 @@ export type YextFieldDefinition<ValueType = any> =
 
 export type YextComponentConfig<
   Props extends DefaultComponentProps = DefaultComponentProps,
+  TransformFields = {},
 > = Omit<
   ComponentConfig<{
     props: Props;
     fields: YextPuckFields;
   }>,
-  "fields" | "resolveFields"
+  "fields" | "resolveFields" | "render"
 > & {
+  render: ComponentConfig<{
+    props: YextTransformedProps<Props, TransformFields>;
+    fields: YextPuckFields;
+  }>["render"];
   fields?: YextFields<Props>;
   resolveFields?: ComponentConfig<{
     props: Props;
