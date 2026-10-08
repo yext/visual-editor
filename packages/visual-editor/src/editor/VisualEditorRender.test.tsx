@@ -7,6 +7,7 @@ import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { createItemSource } from "../utils/itemSource/createItemSource.ts";
 import { ComprehensiveCTA } from "../components/helpers/ComprehensiveCTA.tsx";
+import { CustomCodeSection } from "../components/sections/customCode/CustomCodeSection.tsx";
 import { MaybeRTF } from "../components/helpers/maybeRTF.tsx";
 import { createYextFieldTransforms } from "../fields/fieldTransforms/index.ts";
 import { toPuckFields } from "../fields/fields.ts";
@@ -273,4 +274,43 @@ describe("native Puck field transforms", () => {
       expect(data).toEqual(authoredData);
     }
   );
+
+  it("when built-in custom code opts in then HTML and JavaScript resolve while CSS stays authored", () => {
+    const data: Data = {
+      root: { props: {} },
+      content: [
+        {
+          type: "CustomCodeSection",
+          props: {
+            ...CustomCodeSection.defaultProps,
+            id: "custom-code",
+            html: "<span>{{name}} [[name]]</span>",
+            css: ".message::after { content: '[[name]]'; }",
+            javascript: "window.message = '[[name]]';",
+          },
+        },
+      ],
+    };
+    const authoredData = structuredClone(data);
+    const { container } = render(
+      <ErrorProvider>
+        <TemplatePropsContext.Provider
+          value={{ document: { locale: "es", name: "Restaurant" } }}
+        >
+          <VisualEditorRender
+            config={{ components: { CustomCodeSection } }}
+            data={data}
+          />
+        </TemplatePropsContext.Provider>
+      </ErrorProvider>
+    );
+
+    expect(screen.getByText("Restaurant Restaurant")).toBeTruthy();
+    expect(container.querySelector("style")?.textContent).toContain("[[name]]");
+    expect(
+      container.querySelector("script[id^='custom-code-section-script-']")
+        ?.textContent
+    ).toBe("window.message = 'Restaurant';");
+    expect(data).toEqual(authoredData);
+  });
 });

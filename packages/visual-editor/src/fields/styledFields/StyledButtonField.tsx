@@ -18,6 +18,8 @@ export type StyledButtonValue = BaseTextStyles & {
 
 export type StyledButtonField = BaseField & {
   type: "styledButton";
+  /** Converts authored button typography into CSS styles. */
+  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
 };

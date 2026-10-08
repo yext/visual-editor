@@ -65,10 +65,20 @@ type BasicSelectorFieldBase = BaseField & {
   disableSearch?: boolean;
 };
 
-type BasicSelectorFieldWithOptions = BasicSelectorFieldBase & {
-  options: BasicSelectorOptions;
-  optionGroups?: never;
-};
+type BasicSelectorFieldWithOptions = BasicSelectorFieldBase &
+  (
+    | {
+        /** Resolves SITE_COLOR or BACKGROUND_COLOR selections to CSS color values. */
+        transform: true;
+        options: "SITE_COLOR" | "BACKGROUND_COLOR";
+        optionGroups?: never;
+      }
+    | {
+        transform?: false;
+        options: BasicSelectorOptions;
+        optionGroups?: never;
+      }
+  );
 
 type BasicSelectorFieldWithGroups = BasicSelectorFieldBase & {
   options?: never;

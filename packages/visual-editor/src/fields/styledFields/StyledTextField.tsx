@@ -16,6 +16,8 @@ export type StyledTextValue = BaseTextStyles & {
 
 export type StyledTextField = BaseField & {
   type: "styledText";
+  /** Converts authored typography and color choices into CSS styles. */
+  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   includeColor?: boolean;

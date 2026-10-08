@@ -1,4 +1,4 @@
-import { createElement } from "react";
+import { createElement, type CSSProperties } from "react";
 import type {
   ArrayField,
   CustomField,
@@ -71,6 +71,17 @@ type ResolvedRepeatedItem<Value> = Value extends {
           : Value;
 
 type TransformedFieldValues<Value, Definition> = {
+  basicSelector: Definition extends {
+    options: "SITE_COLOR" | "BACKGROUND_COLOR";
+  }
+    ? string | undefined
+    : never;
+  code: string;
+  styledText: CSSProperties;
+  styledButton: CSSProperties;
+  styledLink: CSSProperties;
+  styledImage: CSSProperties;
+  styledPageSection: CSSProperties;
   translatableString: string;
   image: LocalizedRenderValue<Value>;
   video: LocalizedRenderValue<Value>;
@@ -80,13 +91,15 @@ type TransformedFieldValues<Value, Definition> = {
     : never;
   optionalNumber: number | undefined;
   ctaSelector: LocalizedRenderValue<EnhancedTranslatableCTA> | undefined;
-  entityField: Definition extends { repeated: object }
-    ? Value extends { constantValue: infer Constant }
-      ? LocalizedRenderValue<ResolvedRepeatedItem<Constant>>
-      : never
-    : Value extends { constantValue: infer Constant }
-      ? LocalizedRenderValue<Constant> | undefined
-      : never;
+  entityField: Definition extends { format: "price" }
+    ? string | undefined
+    : Definition extends { repeated: object }
+      ? Value extends { constantValue: infer Constant }
+        ? LocalizedRenderValue<ResolvedRepeatedItem<Constant>>
+        : never
+      : Value extends { constantValue: infer Constant }
+        ? LocalizedRenderValue<Constant> | undefined
+        : never;
 };
 
 type TransformedFieldValue<Value, Definition> = Definition extends {

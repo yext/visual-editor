@@ -11,6 +11,13 @@ export function getTransformField(
 ): TransformableField | undefined {
   const authoredField =
     field.type === "custom" ? field.metadata?.yextField : field;
+  if (
+    authoredField?.type === "basicSelector" &&
+    authoredField.options !== "SITE_COLOR" &&
+    authoredField.options !== "BACKGROUND_COLOR"
+  ) {
+    return undefined;
+  }
   return authoredField?.transform === true &&
     Object.hasOwn(fieldToTransform, authoredField.type)
     ? authoredField

@@ -134,6 +134,7 @@ resolved in the render function. The following field types are supported for tra
 | -------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | `translatableString`                         | Localized, interpolated string                                                                  |
 | Ordinary `entityField`                       | Resolved entity or constant value with nested localization and interpolation                    |
+| `entityField` with `format: "price"`         | Localized currency string from a structured price, or `undefined` when incomplete               |
 | `entityField` including `type.rich_text_v2`  | Resolved rich-text object or plain string                                                       |
 | Rich-text list with `includeListsOnly: true` | Array of resolved rich-text objects or strings                                                  |
 | `image`                                      | Localized asset image with resolved alt text and preserved asset metadata                       |
@@ -143,6 +144,10 @@ resolved in the render function. The following field types are supported for tra
 | `comprehensiveCTA`                           | Resolved nested CTA, button text, and aria label; styles and interaction settings are preserved |
 | Repeated `entityField`                       | Array of item props resolved against each selected item or manual item                          |
 | `video`                                      | Asset video data with interpolated text and preserved metadata                                  |
+| Color `basicSelector`                        | CSS color from a `SITE_COLOR` or `BACKGROUND_COLOR` selection                                   |
+| `styledText`, `styledButton`, `styledLink`   | CSS style object with inherited `"default"` choices omitted                                     |
+| `styledImage`, `styledPageSection`           | CSS style object for border radius, width, or vertical padding                                  |
+| `code`                                       | Interpolated code string; HTML also processes Handlebars templates                              |
 
 ````
 
@@ -165,7 +170,21 @@ type. Puck registration and adapted `custom` fields use that same map.
 Each handler receives the authored definition, its value, and the page document
 and locale. `resolveValue.ts` handles localization and interpolation across
 objects and arrays while retaining rich-text and asset structures. `cta.ts`
-contains CTA-specific resolution.
+contains CTA-specific resolution, and `styles.ts` converts styled fields to
+CSS objects through field-specific functions. `code.ts` handles code
+interpolation and uses the shared `utils/customCodeHandlebars.ts` utility for
+HTML templates. Price formatting is an explicit `entityField` option rather
+than the default behavior for all entity fields.
+
+For a color selector, opt in only with `SITE_COLOR` or `BACKGROUND_COLOR`;
+other `basicSelector` values are left as authored. A price field uses
+`{ type: "entityField", filter: { types: ["type.price"] }, format: "price", transform: true }`
+and renders a localized string. Styled fields render CSS style objects that can
+be passed to React's `style` prop. Code fields use `codeLanguage: "html"` to
+process Handlebars before resolving embedded fields.
+The built-in `CustomCodeSection` opts its HTML and JavaScript fields in; its CSS
+remains authored. Renderers using the component directly through Puck must pass
+`createYextFieldTransforms`, as `VisualEditorRender` does.
 
 To support another field, add its `transform?: boolean` option, a handler in
 `fieldToTransform`, and its output type in `TransformedFieldValues` in `fields.ts`.

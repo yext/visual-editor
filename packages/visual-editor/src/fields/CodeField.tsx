@@ -23,6 +23,8 @@ export type CodeLanguageOptions =
 
 export type CodeField = BaseField & {
   type: "code";
+  /** Resolves embedded fields and HTML Handlebars templates before rendering. */
+  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   codeLanguage: CodeLanguageOptions;

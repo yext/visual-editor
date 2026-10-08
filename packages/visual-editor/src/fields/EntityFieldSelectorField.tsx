@@ -71,6 +71,8 @@ export type EntityFieldSelectorField<
   type: "entityField";
   /** Resolves this field before rendering. Repeated sources are not supported. */
   transform?: boolean;
+  /** Formats a resolved structured price as localized currency when transformed. */
+  format?: "price";
   label?: string | MsgString;
   visible?: boolean;
   filter: MappedSourceFieldFilter<T>;

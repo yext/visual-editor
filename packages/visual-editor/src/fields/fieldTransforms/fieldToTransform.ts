@@ -1,7 +1,17 @@
 import type { YextFieldMap, YextPuckField } from "../fields.ts";
 import type { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { resolveField } from "../../utils/resolveYextEntityField.ts";
+import { getThemeColorCssValue } from "../../utils/colors.ts";
+import { formatCurrency } from "../../utils/productPrice.ts";
 import { resolveCTAValue, resolveComprehensiveCTAValue } from "./cta.ts";
+import { resolveCode } from "./code.ts";
+import {
+  resolveStyledButton,
+  resolveStyledImage,
+  resolveStyledLink,
+  resolveStyledPageSection,
+  resolveStyledText,
+} from "./styles.ts";
 import {
   resolveEntityValue,
   resolveValue,
@@ -73,8 +83,23 @@ export const fieldToTransform: Record<
           )
         : [];
     }
-    return resolveEntityValue(value, context);
+    const resolved = resolveEntityValue(value, context);
+    if (field.type === "entityField" && field.format === "price") {
+      return formatCurrency(
+        resolved?.value,
+        resolved?.currencyCode,
+        context.locale
+      );
+    }
+    return resolved;
   },
+  basicSelector: (field, value) =>
+    field.type === "basicSelector" &&
+    (field.options === "SITE_COLOR" || field.options === "BACKGROUND_COLOR")
+      ? getThemeColorCssValue(value)
+      : value,
+  code: (field, value, context) =>
+    field.type === "code" ? resolveCode(field, value, context) : value,
   translatableString: (_field, value, context) =>
     resolveValue(value, context) ?? "",
   video: (_field, value, context) => resolveValue(value, context),
@@ -88,4 +113,9 @@ export const fieldToTransform: Record<
   ctaSelector: (_field, value, context) => resolveCTAValue(value, context),
   optionalNumber: (_field, value) =>
     typeof value === "number" ? value : undefined,
+  styledText: (_field, value) => resolveStyledText(value),
+  styledButton: (_field, value) => resolveStyledButton(value),
+  styledLink: (_field, value) => resolveStyledLink(value),
+  styledImage: (_field, value) => resolveStyledImage(value),
+  styledPageSection: (_field, value) => resolveStyledPageSection(value),
 };
