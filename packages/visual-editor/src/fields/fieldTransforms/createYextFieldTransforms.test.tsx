@@ -3,32 +3,36 @@ import { I18nextProvider } from "react-i18next";
 import {
   i18nPageInstance,
   VISUAL_EDITOR_NAMESPACE,
-} from "../utils/i18n/i18nInstances.ts";
+} from "../../utils/i18n/i18nInstances.ts";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, expectTypeOf, it } from "vitest";
-import type { YextCTAField } from "./CTASelectorField.tsx";
-import type { MultiSelectorValue } from "./MultiSelectorField.tsx";
-import type { TranslatableAssetImage } from "../types/images.ts";
+import type { YextCTAField } from "../CTASelectorField.tsx";
+import type { MultiSelectorValue } from "../MultiSelectorField.tsx";
+import type { TranslatableAssetImage } from "../../types/images.ts";
 import type {
   RichText,
   TranslatableRichText,
   TranslatableString,
-} from "../types/types.ts";
-import type { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
-import { createYextFieldTransforms } from "./fieldTransforms/index.ts";
-import { ComprehensiveCTA } from "../components/helpers/ComprehensiveCTA.tsx";
-import { TemplatePropsContext } from "../hooks/useDocument.tsx";
-import { createItemSource } from "../utils/itemSource/createItemSource.ts";
-import type { ComprehensiveCTAValue } from "./styledFields/ComprehensiveCTAField.tsx";
-import type { AssetVideo } from "../types/videos.ts";
-import { MaybeRTF } from "../components/helpers/index.ts";
+} from "../../types/types.ts";
+import type { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { createYextFieldTransforms } from "./index.ts";
+import { ComprehensiveCTA } from "../../components/helpers/ComprehensiveCTA.tsx";
+import { TemplatePropsContext } from "../../hooks/useDocument.tsx";
+import { createItemSource } from "../../utils/itemSource/createItemSource.ts";
+import type { ComprehensiveCTAValue } from "../styledFields/ComprehensiveCTAField.tsx";
+import type { AssetVideo } from "../../types/videos.ts";
+import { MaybeRTF } from "../../components/helpers/index.ts";
+import { Background } from "../../components/atoms/background.tsx";
+import { PageSection } from "../../components/atoms/pageSection.tsx";
+import { useBackground } from "../../hooks/useBackground.tsx";
+import type { ResolvedThemeColor } from "../../utils/colors.ts";
 import {
   toPuckFields,
   type YextComponentConfig,
   type YextFieldMap,
   type YextTransformedProps,
   type ResolvedComprehensiveCTAValue,
-} from "./fields.ts";
+} from "../fields.ts";
 
 describe("field transforms", () => {
   it.each([
@@ -1063,5 +1067,333 @@ describe("field transforms", () => {
       </TemplatePropsContext.Provider>
     );
     expect(html).toContain("Literal [[name]]");
+  });
+
+  it.each([
+    {
+      name: "when a theme color is selected then it retains tokens and resolves CSS colors",
+      field: { type: "themeColor", options: "SITE_COLOR" },
+      value: { selectedColor: "palette-primary", contrastingColor: "white" },
+      expected: {
+        selectedColor: "palette-primary",
+        contrastingColor: "white",
+        selectedColorCss: "var(--colors-palette-primary)",
+        contrastingColorCss: "white",
+      },
+    },
+    {
+      name: "when a custom background color is selected then it resolves both CSS colors",
+      field: {
+        type: "themeColor",
+        options: "BACKGROUND_COLOR",
+      },
+      value: {
+        selectedColor: "[#123ABC]",
+        contrastingColor: "white",
+        isDarkColor: true,
+      },
+      expected: {
+        selectedColor: "[#123ABC]",
+        contrastingColor: "white",
+        isDarkColor: true,
+        selectedColorCss: "#123ABC",
+        contrastingColorCss: "white",
+      },
+    },
+    {
+      name: "when a styled text field opts in then defaults are omitted and color is resolved",
+      field: { type: "styledText", transform: true },
+      value: {
+        fontFamily: "default",
+        fontSize: "18px",
+        fontWeight: "700",
+        fontStyle: "default",
+        textTransform: "uppercase",
+        color: { selectedColor: "palette-primary", contrastingColor: "white" },
+      },
+      expected: {
+        fontSize: "18px",
+        fontWeight: "700",
+        textTransform: "uppercase",
+        color: "var(--colors-palette-primary)",
+      },
+    },
+    {
+      name: "when a styled button field opts in then its border radius is CSS-ready",
+      field: { type: "styledButton", transform: true },
+      value: {
+        fontFamily: "Inter",
+        letterSpacing: "0.05em",
+        borderRadius: "8px",
+      },
+      expected: {
+        fontFamily: "Inter",
+        letterSpacing: "0.05em",
+        borderRadius: "8px",
+      },
+    },
+    {
+      name: "when a styled link field opts in then its caret choice is CSS-ready",
+      field: { type: "styledLink", transform: true },
+      value: { includeCaret: "none", letterSpacing: "default" },
+      expected: { "--display-link-caret": "none" },
+    },
+    {
+      name: "when a styled image field opts in then its radius is CSS-ready",
+      field: { type: "styledImage", transform: true },
+      value: { borderRadius: "12px" },
+      expected: { borderRadius: "12px" },
+    },
+    {
+      name: "when a styled page section opts in then width and padding are CSS-ready",
+      field: { type: "styledPageSection", transform: true },
+      value: { contentWidth: "960px", verticalPadding: "24px" },
+      expected: {
+        maxWidth: "960px",
+        paddingTop: "24px",
+        paddingBottom: "24px",
+      },
+    },
+    {
+      name: "when a price binding opts in then it returns localized currency",
+      field: {
+        type: "entityField",
+        filter: { types: ["type.price"] },
+        format: "price",
+        transform: true,
+      },
+      value: {
+        constantValueEnabled: true,
+        constantValue: { value: 49.95, currencyCode: "EUR" },
+      },
+      expected: "49,95 €",
+    },
+    {
+      name: "when a price is incomplete then it returns undefined",
+      field: {
+        type: "entityField",
+        filter: { types: ["type.price"] },
+        format: "price",
+        transform: true,
+      },
+      value: { constantValueEnabled: true, constantValue: { value: 49.95 } },
+      expected: undefined,
+    },
+    {
+      name: "when JavaScript code opts in then embedded fields are resolved",
+      field: { type: "code", codeLanguage: "javascript", transform: true },
+      value: 'const name = "[[name]]";',
+      expected: 'const name = "Restaurant";',
+    },
+    {
+      name: "when HTML code opts in then Handlebars and embedded fields are resolved",
+      field: { type: "code", codeLanguage: "html", transform: true },
+      value: "<p>{{name}} [[name]]</p>",
+      expected: "<p>Restaurant Restaurant</p>",
+    },
+  ])("$name", ({ field, value, expected }) => {
+    const authored = structuredClone(value);
+    const result = createYextFieldTransforms(
+      { name: "Restaurant" },
+      "de-DE"
+    ).custom({
+      field: { type: "custom", metadata: { yextField: field } },
+      value,
+      componentId: "test",
+      propName: "value",
+      propPath: "value",
+      isReadOnly: false,
+    });
+    expect(result).toEqual(expected);
+    expect(value).toEqual(authored);
+  });
+
+  it("when a non-color basic selector requests a transform then it is ignored", () => {
+    const field = {
+      type: "custom",
+      metadata: {
+        yextField: { type: "basicSelector", options: [], transform: true },
+      },
+    };
+    expect(
+      createYextFieldTransforms({}, "en").custom({
+        field,
+        value: "plain",
+        componentId: "test",
+        propName: "value",
+        propPath: "value",
+        isReadOnly: false,
+      })
+    ).toBe("plain");
+  });
+
+  it("when price formatting is selected then transformed props are typed as a string", () => {
+    expectTypeOf<
+      YextTransformedProps<
+        { price: YextEntityField<{ value?: number; currencyCode?: string }> },
+        { price: { type: "entityField"; format: "price"; transform: true } }
+      >["price"]
+    >().toEqualTypeOf<string | undefined>();
+  });
+
+  it("when color and styling fields transform then props have render types", () => {
+    expectTypeOf<
+      YextTransformedProps<
+        {
+          accent: { selectedColor: string; contrastingColor: string };
+          typography: { fontFamily: string; fontSize: string };
+          script: string;
+        },
+        {
+          accent: {
+            type: "themeColor";
+            options: "SITE_COLOR";
+          };
+          typography: { type: "styledText"; transform: true };
+          script: { type: "code"; transform: true };
+        }
+      >
+    >().toEqualTypeOf<{
+      accent: ResolvedThemeColor | undefined;
+      typography: React.CSSProperties;
+      script: string;
+    }>();
+  });
+
+  it.each([
+    {
+      name: "when a palette background has an explicit contrast token then both CSS colors resolve",
+      value: {
+        selectedColor: "palette-primary",
+        contrastingColor: "palette-primary-contrast",
+      },
+      streamDocument: {
+        __: {
+          theme: JSON.stringify({
+            "--colors-palette-primary-contrast": "#FFFFFF",
+          }),
+        },
+      },
+      expected: {
+        selectedColorCss: "var(--colors-palette-primary)",
+        contrastingColorCss: "var(--colors-palette-primary-contrast)",
+      },
+    },
+    {
+      name: "when a custom background has an explicit contrast color then both hex colors resolve",
+      value: {
+        selectedColor: "[#123ABC]",
+        contrastingColor: "[#FAEBCD]",
+      },
+      streamDocument: {},
+      expected: {
+        selectedColorCss: "#123ABC",
+        contrastingColorCss: "#FAEBCD",
+      },
+    },
+    {
+      name: "when contrast is unset then the stream document determines the foreground",
+      value: { selectedColor: "palette-primary", contrastingColor: "" },
+      streamDocument: {
+        __: {
+          theme: JSON.stringify({ "--colors-palette-primary": "#000000" }),
+        },
+      },
+      expected: {
+        selectedColorCss: "var(--colors-palette-primary)",
+        contrastingColorCss: "white",
+      },
+    },
+    {
+      name: "when no color is selected then the resolved color is undefined",
+      value: undefined,
+      streamDocument: {},
+      expected: undefined,
+    },
+  ])("$name", ({ value, streamDocument, expected }) => {
+    const authored = structuredClone(value);
+    const result = createYextFieldTransforms(streamDocument, "en").custom({
+      field: {
+        type: "custom",
+        metadata: {
+          yextField: {
+            type: "themeColor",
+            options: "BACKGROUND_COLOR",
+          },
+        },
+      },
+      value,
+      componentId: "test",
+      propName: "background",
+      propPath: "background",
+      isReadOnly: false,
+    });
+
+    expect(result).toEqual(value ? { ...value, ...expected } : expected);
+    expect(value).toEqual(authored);
+  });
+
+  it("when a resolved theme color is passed to Background then classes, CSS, and context use its authored tokens", () => {
+    const surface: ResolvedThemeColor = {
+      selectedColor: "palette-primary",
+      contrastingColor: "white",
+      selectedColorCss: "var(--colors-palette-primary)",
+      contrastingColorCss: "white",
+    };
+    const ContextReader = (): React.ReactElement => {
+      const background = useBackground();
+      return (
+        <span>{`${background?.selectedColor}:${background?.contrastingColor}:${background?.isDarkColor}`}</span>
+      );
+    };
+    const html = renderToStaticMarkup(
+      <TemplatePropsContext.Provider value={{ document: {} }}>
+        <Background background={surface} className="custom-background">
+          <ContextReader />
+        </Background>
+      </TemplatePropsContext.Provider>
+    );
+
+    expect(html).toContain("bg-palette-primary");
+    expect(html).toContain("text-white");
+    expect(html).toContain("custom-background");
+    expect(html).toContain("background-color:var(--colors-palette-primary)");
+    expect(html).toContain("color:white");
+    expect(html).toContain("palette-primary:white:true");
+  });
+
+  it("when a resolved theme color is passed to PageSection then its outer background uses both CSS colors", () => {
+    const html = renderToStaticMarkup(
+      <TemplatePropsContext.Provider value={{ document: {} }}>
+        <PageSection
+          background={{
+            selectedColor: "[#123ABC]",
+            contrastingColor: "white",
+            selectedColorCss: "#123ABC",
+            contrastingColorCss: "white",
+          }}
+        >
+          Content
+        </PageSection>
+      </TemplatePropsContext.Provider>
+    );
+
+    expect(html).toContain("background-color:#123ABC");
+    expect(html).toContain("color:white");
+    expect(html).toContain("Content");
+  });
+
+  it("when theme color is selected then transformed props contain the authored color and CSS", () => {
+    expectTypeOf<
+      YextTransformedProps<
+        { background: { selectedColor: string; contrastingColor: string } },
+        {
+          background: {
+            type: "themeColor";
+            options: "BACKGROUND_COLOR";
+          };
+        }
+      >["background"]
+    >().toEqualTypeOf<ResolvedThemeColor | undefined>();
   });
 });

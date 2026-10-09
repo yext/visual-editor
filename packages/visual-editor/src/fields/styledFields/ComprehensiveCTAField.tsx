@@ -261,7 +261,7 @@ export const ComprehensiveCTAFieldOverride = ({
           visible: showPresetImageField,
         },
         color: {
-          type: "basicSelector",
+          type: "themeColor",
           label: pt("fields.color", "Color"),
           options: "SITE_COLOR",
           visible: showColorField,

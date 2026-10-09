@@ -212,4 +212,20 @@ describe("BasicSelectorField", () => {
 
     consoleWarn.mockRestore();
   });
+
+  it("when an existing color selector chooses Other then it keeps authoring a ThemeColor", () => {
+    const { onChange } = renderField({
+      type: "basicSelector",
+      options: "SITE_COLOR",
+    });
+
+    fireEvent.click(screen.getByRole("combobox"));
+    fireEvent.click(screen.getByText("Other"));
+
+    expect(onChange).toHaveBeenCalledWith({
+      selectedColor: "[#000000]",
+      contrastingColor: "white",
+      isDarkColor: true,
+    });
+  });
 });

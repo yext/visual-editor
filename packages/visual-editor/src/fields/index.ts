@@ -4,6 +4,10 @@ export {
   BasicSelectorFieldOverride,
   type BasicSelectorField,
 } from "./BasicSelectorField.tsx";
+export {
+  ThemeColorFieldOverride,
+  type ThemeColorField,
+} from "./ThemeColorField.tsx";
 
 export {
   CTASelectorFieldOverride,

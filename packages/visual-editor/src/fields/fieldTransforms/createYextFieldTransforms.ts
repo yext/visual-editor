@@ -6,26 +6,26 @@ import {
 } from "./fieldToTransform.ts";
 
 /**
- * Returns the authored field as a TransformableField when it opts into a
- * supported transform. For example, a Puck `custom` field wrapping an
- * `entityField` with `transform: true` returns the unwrapped `entityField`;
- * unsupported or unmarked fields return `undefined`.
+ * Returns the authored field when it uses a supported transform. Theme colors
+ * always transform; other fields opt in with `transform: true`. Puck `custom`
+ * fields return their unwrapped Yext field. Unsupported fields return `undefined`.
  */
 export function getTransformField(
   field: BaseField & { type: string }
 ): TransformableField | undefined {
   const authoredField =
     field.type === "custom" ? field.metadata?.yextField : field;
-  return authoredField?.transform === true &&
+  return (authoredField?.type === "themeColor" ||
+    authoredField?.transform === true) &&
     Object.hasOwn(fieldToTransform, authoredField.type)
     ? authoredField
     : undefined;
 }
 
 /**
- * Creates opt-in render transforms for one page and locale.
+ * Creates render transforms for one page and locale.
  *
- * 1. Identify opted-in authored fields, including fields adapted to `custom`.
+ * 1. Identify theme colors and opted-in authored fields, including fields adapted to `custom`.
  * 2. Dispatch source resolution to the field handler, sharing localization and interpolation.
  * 3. Register handlers with Puck while preserving resolved data shapes for their renderers.
  * Authored values are never mutated or replaced in saved Puck data.

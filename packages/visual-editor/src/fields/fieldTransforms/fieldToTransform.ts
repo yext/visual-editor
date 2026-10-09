@@ -1,7 +1,17 @@
 import type { YextFieldMap, YextPuckField } from "../fields.ts";
 import type { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { resolveField } from "../../utils/resolveYextEntityField.ts";
+import { entityFieldFormatters } from "./entityFieldFormats.ts";
 import { resolveCTAValue, resolveComprehensiveCTAValue } from "./cta.ts";
+import { resolveCode } from "./code.ts";
+import { resolveThemeColor } from "./themeColor.ts";
+import {
+  resolveStyledButton,
+  resolveStyledImage,
+  resolveStyledLink,
+  resolveStyledPageSection,
+  resolveStyledText,
+} from "./styles.ts";
 import {
   resolveEntityValue,
   resolveValue,
@@ -10,7 +20,7 @@ import {
 
 export type TransformableField = Extract<
   YextPuckField,
-  { transform?: boolean }
+  { transform?: boolean } | { type: "themeColor" }
 >;
 
 /** Resolves repeated-item mappings recursively against the selected item document. */
@@ -53,7 +63,10 @@ export const fieldToTransform: Record<
   (field: TransformableField, value: any, context: FieldTransformContext) => any
 > = {
   entityField: (field, value, context) => {
-    if ("repeated" in field && field.repeated) {
+    if (field.type !== "entityField") {
+      return value;
+    }
+    if (field.repeated) {
       const { repeated } = field;
       const manual = value?.constantValueEnabled === true;
       const items = manual
@@ -73,8 +86,14 @@ export const fieldToTransform: Record<
           )
         : [];
     }
-    return resolveEntityValue(value, context);
+    const resolved = resolveEntityValue(value, context);
+    return field.format
+      ? entityFieldFormatters[field.format](resolved, context)
+      : resolved;
   },
+  themeColor: (_field, value, context) => resolveThemeColor(value, context),
+  code: (field, value, context) =>
+    field.type === "code" ? resolveCode(field, value, context) : value,
   translatableString: (_field, value, context) =>
     resolveValue(value, context) ?? "",
   video: (_field, value, context) => resolveValue(value, context),
@@ -88,4 +107,9 @@ export const fieldToTransform: Record<
   ctaSelector: (_field, value, context) => resolveCTAValue(value, context),
   optionalNumber: (_field, value) =>
     typeof value === "number" ? value : undefined,
+  styledText: (_field, value) => resolveStyledText(value),
+  styledButton: (_field, value) => resolveStyledButton(value),
+  styledLink: (_field, value) => resolveStyledLink(value),
+  styledImage: (_field, value) => resolveStyledImage(value),
+  styledPageSection: (_field, value) => resolveStyledPageSection(value),
 };

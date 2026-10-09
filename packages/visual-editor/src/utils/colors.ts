@@ -2,6 +2,12 @@ import { getThemeValue } from "./getThemeValue.ts";
 import { type ThemeColor } from "./themeConfigOptions.ts";
 import { type StreamDocument } from "./types/StreamDocument.ts";
 
+/** An authored theme color with render-ready CSS for both selected and contrasting colors. */
+export type ResolvedThemeColor = ThemeColor & {
+  selectedColorCss: string;
+  contrastingColorCss: string;
+};
+
 /**
  * hexToRGB converts a hex color to rgb
  * @param H hex string beginning with '#'

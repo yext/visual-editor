@@ -1,5 +1,6 @@
-import { createElement, type ReactElement } from "react";
+import { createElement, type CSSProperties, type ReactElement } from "react";
 import type { LinkType } from "@yext/pages-components";
+import type { ResolvedThemeColor } from "../utils/colors.ts";
 import type {
   ArrayField,
   CustomField,
@@ -11,6 +12,7 @@ import type {
   ObjectField,
 } from "@puckeditor/core";
 import type { BasicSelectorField } from "./BasicSelectorField.tsx";
+import type { ThemeColorField } from "./ThemeColorField.tsx";
 import type { CodeField } from "./CodeField.tsx";
 import type { DateTimeSelectorField } from "./DateTimeSelectorField.tsx";
 import type { EntityFieldSelectorField } from "./EntityFieldSelectorField.tsx";
@@ -83,6 +85,13 @@ type ResolvedRepeatedItem<Value> = Value extends {
           : Value;
 
 type TransformedFieldValues<Value, Definition> = {
+  themeColor: ResolvedThemeColor | undefined;
+  code: string;
+  styledText: CSSProperties;
+  styledButton: CSSProperties;
+  styledLink: CSSProperties;
+  styledImage: CSSProperties;
+  styledPageSection: CSSProperties;
   translatableString: string;
   image: LocalizedRenderValue<Value>;
   video: LocalizedRenderValue<Value>;
@@ -92,31 +101,37 @@ type TransformedFieldValues<Value, Definition> = {
     : never;
   optionalNumber: number | undefined;
   ctaSelector: LocalizedRenderValue<EnhancedTranslatableCTA> | undefined;
-  entityField: Definition extends { repeated: object }
-    ? Value extends { constantValue: infer Constant }
-      ? LocalizedRenderValue<ResolvedRepeatedItem<Constant>>
-      : never
-    : Value extends { constantValue: infer Constant }
-      ? LocalizedRenderValue<Constant> | undefined
-      : never;
+  entityField: Definition extends { format: "price" }
+    ? string | undefined
+    : Definition extends { repeated: object }
+      ? Value extends { constantValue: infer Constant }
+        ? LocalizedRenderValue<ResolvedRepeatedItem<Constant>>
+        : never
+      : Value extends { constantValue: infer Constant }
+        ? LocalizedRenderValue<Constant> | undefined
+        : never;
 };
 
 type TransformedFieldValue<Value, Definition> = Definition extends {
-  transform: true;
-  type: infer FieldType;
+  type: "themeColor";
 }
-  ? FieldType extends keyof TransformedFieldValues<Value, Definition>
-    ? TransformedFieldValues<Value, Definition>[FieldType]
-    : Value
-  : Definition extends { type: "object"; objectFields: infer Nested }
-    ? YextTransformedProps<Value, Nested>
-    : Definition extends { type: "array"; arrayFields: infer Nested }
-      ? Value extends (infer Item)[]
-        ? YextTransformedProps<Item, Nested>[]
-        : Value
-      : Value;
+  ? TransformedFieldValues<Value, Definition>["themeColor"]
+  : Definition extends {
+        transform: true;
+        type: infer FieldType;
+      }
+    ? FieldType extends keyof TransformedFieldValues<Value, Definition>
+      ? TransformedFieldValues<Value, Definition>[FieldType]
+      : Value
+    : Definition extends { type: "object"; objectFields: infer Nested }
+      ? YextTransformedProps<Value, Nested>
+      : Definition extends { type: "array"; arrayFields: infer Nested }
+        ? Value extends (infer Item)[]
+          ? YextTransformedProps<Item, Nested>[]
+          : Value
+        : Value;
 
-/** Derives render values from authored props and explicitly opted-in field definitions. */
+/** Derives render values from authored props and supported field definitions. */
 export type YextTransformedProps<Props, Definitions> = {
   [Key in keyof Props]: Key extends keyof Definitions
     ? TransformedFieldValue<Props[Key], Definitions[Key]>
@@ -125,6 +140,7 @@ export type YextTransformedProps<Props, Definitions> = {
 
 export type YextPuckFields = {
   basicSelector: BasicSelectorField;
+  themeColor: ThemeColorField;
   ctaSelector: CTASelectorField;
   code: CodeField;
   comprehensiveCTA: ComprehensiveCTAField;
