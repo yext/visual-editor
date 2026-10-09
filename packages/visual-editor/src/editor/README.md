@@ -125,10 +125,9 @@ const Example = ({ myField }: ExampleProps) => {
 };
 ```
 
-## Opt-in field transforms
+## Field transforms
 
-Add `transform: true` to the props of a supported field type and the transform behavior will be enabled, making props come through
-resolved in the render function. The following field types are supported for transforms and the behavior is disabled by default.
+Add `transform: true` to a supported field type to receive resolved props in the render function. The behavior is disabled by default except for `themeColor`, which always transforms.
 
 | Field definition                             | Render value                                                                                    |
 | -------------------------------------------- | ----------------------------------------------------------------------------------------------- |
@@ -144,8 +143,8 @@ resolved in the render function. The following field types are supported for tra
 | `comprehensiveCTA`                           | Resolved nested CTA, button text, and aria label; styles and interaction settings are preserved |
 | Repeated `entityField`                       | Array of item props resolved against each selected item or manual item                          |
 | `video`                                      | Asset video data with interpolated text and preserved metadata                                  |
-| Color `basicSelector`                        | CSS color from a `SITE_COLOR` or `BACKGROUND_COLOR` selection                                   |
-| `BACKGROUND_COLOR` with `format: "surface"`  | Authored `ThemeColor` plus resolved background and foreground CSS colors, or `undefined`        |
+| `themeColor`                                 | CSS color from a `SITE_COLOR` or `BACKGROUND_COLOR` selection                                   |
+| `themeColor` with `format: "surface"`        | Authored `ThemeColor` plus resolved background and foreground CSS colors, or `undefined`        |
 | `styledText`, `styledButton`, `styledLink`   | CSS style object with inherited `"default"` choices omitted                                     |
 | `styledImage`, `styledPageSection`           | CSS style object for border radius, width, or vertical padding                                  |
 | `code`                                       | Interpolated code string; HTML also processes Handlebars templates                              |
@@ -178,15 +177,16 @@ type. Puck registration and adapted `custom` fields use that same map.
 Each handler receives the authored definition, its value, and the page document
 and locale. `resolveValue.ts` handles localization and interpolation across
 objects and arrays while retaining rich-text and asset structures. `cta.ts`
-contains CTA-specific resolution, and `styles.ts` converts styled fields to
-CSS objects through field-specific functions. `code.ts` handles code
+contains CTA-specific resolution, `themeColor.ts` resolves theme colors, and
+`styles.ts` converts styled fields to CSS objects through field-specific functions. `code.ts` handles code
 interpolation and uses the shared `utils/customCodeHandlebars.ts` utility for
 HTML templates. Price formatting is an explicit `entityField` option rather
 than the default behavior for all entity fields.
 
-For a color selector, opt in only with `SITE_COLOR` or `BACKGROUND_COLOR`;
-other `basicSelector` values are left as authored. `BACKGROUND_COLOR` with
-`format: "surface"` returns `{ themeColor, backgroundColor, color }`, which can
+Use `themeColor` with `SITE_COLOR` or `BACKGROUND_COLOR` for color selections.
+Existing `basicSelector` color fields remain editable, but their values are not
+transformed. `themeColor` with `BACKGROUND_COLOR` and `format: "surface"`
+returns `{ themeColor, backgroundColor, color }`, which can
 be passed directly to `Background` or `PageSection` as the `background` prop.
 Without that format, color selectors return a CSS string. A price field uses
 `{ type: "entityField", filter: { types: ["type.price"] }, format: "price", transform: true }`
@@ -197,8 +197,10 @@ The built-in `CustomCodeSection` opts its HTML and JavaScript fields in; its CSS
 remains authored. Renderers using the component directly through Puck must pass
 `createYextFieldTransforms`, as `VisualEditorRender` does.
 
-To support another field, add its `transform?: boolean` option, a handler in
+To support another opt-in field, add its `transform?: boolean` option, a handler in
 `fieldToTransform`, and its output type in `TransformedFieldValues` in `fields.ts`.
+An always-transformed field uses its field type directly in the registration and
+`YextTransformedProps` mapping instead of an opt-in option.
 The handler map requires an entry for each transformable field definition.
 Keep field-specific source selection in its handler and return resolved data.
 For composite bindings, also describe their authored sources in the component
@@ -594,6 +596,20 @@ const ToneField = ({
 ```
 
 When the field definition is part of a normal component `fields` config, Puck renders it through the registered Yext field override automatically. Use `YextAutoField` only when you are manually rendering a field definition inside a custom render path.
+
+## themeColor Field Type
+
+Use `themeColor` for site and background palette choices, including custom colors. It authors the same `ThemeColor` value as existing color `basicSelector` fields and always resolves the render prop to a CSS color string by default. For backgrounds, `format: "surface"` returns the authored color together with resolved background and foreground CSS values:
+
+```tsx
+const backgroundField = {
+  type: "themeColor" as const,
+  options: "BACKGROUND_COLOR" as const,
+  format: "surface" as const,
+};
+```
+
+The surface value can be passed to `Background` or `PageSection`. Existing color `basicSelector` definitions remain editable; use `themeColor` for transformed color values.
 
 ## image Field
 

@@ -51,6 +51,7 @@ export {
 
 const YEXT_FIELD_OVERRIDE_TYPES = new Set([
   "basicSelector",
+  "themeColor",
   "ctaSelector",
   "code",
   "dateTimeSelector",

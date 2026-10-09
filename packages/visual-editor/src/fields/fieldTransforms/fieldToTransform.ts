@@ -1,13 +1,10 @@
 import type { YextFieldMap, YextPuckField } from "../fields.ts";
 import type { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { resolveField } from "../../utils/resolveYextEntityField.ts";
-import {
-  getSurfaceColorStyle,
-  getThemeColorCssValue,
-} from "../../utils/colors.ts";
-import { formatCurrency } from "../../utils/productPrice.ts";
+import { entityFieldFormatters } from "./entityFieldFormats.ts";
 import { resolveCTAValue, resolveComprehensiveCTAValue } from "./cta.ts";
 import { resolveCode } from "./code.ts";
+import { resolveThemeColor } from "./themeColor.ts";
 import {
   resolveStyledButton,
   resolveStyledImage,
@@ -23,7 +20,7 @@ import {
 
 export type TransformableField = Extract<
   YextPuckField,
-  { transform?: boolean }
+  { transform?: boolean } | { type: "themeColor" }
 >;
 
 /** Resolves repeated-item mappings recursively against the selected item document. */
@@ -66,7 +63,10 @@ export const fieldToTransform: Record<
   (field: TransformableField, value: any, context: FieldTransformContext) => any
 > = {
   entityField: (field, value, context) => {
-    if ("repeated" in field && field.repeated) {
+    if (field.type !== "entityField") {
+      return value;
+    }
+    if (field.repeated) {
       const { repeated } = field;
       const manual = value?.constantValueEnabled === true;
       const items = manual
@@ -87,29 +87,14 @@ export const fieldToTransform: Record<
         : [];
     }
     const resolved = resolveEntityValue(value, context);
-    if (field.type === "entityField" && field.format === "price") {
-      return formatCurrency(
-        resolved?.value,
-        resolved?.currencyCode,
-        context.locale
-      );
-    }
-    return resolved;
+    return field.format
+      ? entityFieldFormatters[field.format](resolved, context)
+      : resolved;
   },
-  basicSelector: (field, value, context) => {
-    if (field.type !== "basicSelector") {
-      return value;
-    }
-    if (field.options === "BACKGROUND_COLOR" && field.format === "surface") {
-      return value?.selectedColor
-        ? {
-            themeColor: { ...value },
-            ...getSurfaceColorStyle(value, context.streamDocument),
-          }
-        : undefined;
-    }
-    return getThemeColorCssValue(value);
-  },
+  themeColor: (field, value, context) =>
+    field.type === "themeColor"
+      ? resolveThemeColor(field, value, context)
+      : value,
   code: (field, value, context) =>
     field.type === "code" ? resolveCode(field, value, context) : value,
   translatableString: (_field, value, context) =>

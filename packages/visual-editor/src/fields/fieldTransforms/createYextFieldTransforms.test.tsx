@@ -1071,17 +1071,16 @@ describe("field transforms", () => {
 
   it.each([
     {
-      name: "when a theme color selector opts in then it returns a CSS color",
-      field: { type: "basicSelector", options: "SITE_COLOR", transform: true },
+      name: "when a theme color is selected then it returns a CSS color",
+      field: { type: "themeColor", options: "SITE_COLOR" },
       value: { selectedColor: "palette-primary", contrastingColor: "white" },
       expected: "var(--colors-palette-primary)",
     },
     {
-      name: "when a custom background color opts in then it returns its CSS color",
+      name: "when a custom background color is selected then it returns its CSS color",
       field: {
-        type: "basicSelector",
+        type: "themeColor",
         options: "BACKGROUND_COLOR",
-        transform: true,
       },
       value: { selectedColor: "[#123ABC]", contrastingColor: "white" },
       expected: "#123ABC",
@@ -1222,7 +1221,7 @@ describe("field transforms", () => {
     >().toEqualTypeOf<string | undefined>();
   });
 
-  it("when color and styling fields opt in then transformed props have render types", () => {
+  it("when color and styling fields transform then props have render types", () => {
     expectTypeOf<
       YextTransformedProps<
         {
@@ -1232,9 +1231,8 @@ describe("field transforms", () => {
         },
         {
           accent: {
-            type: "basicSelector";
+            type: "themeColor";
             options: "SITE_COLOR";
-            transform: true;
           };
           typography: { type: "styledText"; transform: true };
           script: { type: "code"; transform: true };
@@ -1301,10 +1299,9 @@ describe("field transforms", () => {
         type: "custom",
         metadata: {
           yextField: {
-            type: "basicSelector",
+            type: "themeColor",
             options: "BACKGROUND_COLOR",
             format: "surface",
-            transform: true,
           },
         },
       },
@@ -1375,16 +1372,15 @@ describe("field transforms", () => {
     expect(html).toContain("Content");
   });
 
-  it("when surface mode opts in then transformed props contain the authored color and CSS", () => {
+  it("when surface mode is selected then transformed props contain the authored color and CSS", () => {
     expectTypeOf<
       YextTransformedProps<
         { background: { selectedColor: string; contrastingColor: string } },
         {
           background: {
-            type: "basicSelector";
+            type: "themeColor";
             options: "BACKGROUND_COLOR";
             format: "surface";
-            transform: true;
           };
         }
       >["background"]
