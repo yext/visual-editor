@@ -1,3 +1,10 @@
+#### 1.4.13 (2026-10-09)
+
+##### New Features
+
+- add image fill type option to both gallery variants ([#1358](https://github.com/yext/visual-editor/pull/1358)) ([7ab2a659](https://github.com/yext/visual-editor/commit/7ab2a6597a7390afde89a8a20b94ff013e895aed))
+- gracefully handle WebGL dependency ([#1360](https://github.com/yext/visual-editor/pull/1360)) ([873a2a78](https://github.com/yext/visual-editor/commit/873a2a78a82c2e00707a79f0a9447c2b95f31ea1))
+
 #### 1.4.12 (2026-10-06)
 
 ##### New Features
