@@ -57,7 +57,7 @@ export interface PhotoGalleryWrapperProps {
     image: Omit<ImageStylingProps, "imageFillType">;
 
     /**
-     * Determines whether carousel images should fill or fit within the frame.
+     * Determines whether gallery images should fill or fit within the frame.
      * @defaultValue "fill"
      */
     imageFillType?: ImageFillType;
@@ -107,7 +107,6 @@ const photoGalleryWrapperFields: YextFields<PhotoGalleryWrapperProps> = {
           { label: msg("fields.options.fill", "Fill"), value: "fill" },
           { label: msg("fields.options.fit", "Fit"), value: "fit" },
         ],
-        visible: false,
       },
       accentColor: {
         type: "basicSelector",
@@ -171,6 +170,7 @@ const DynamicChildColors = ({
 };
 
 type GalleryRenderProps = {
+  imageFillType: ImageFillType;
   galleryImages: ResolvedGalleryImage[];
   imageWidth: number;
   isEditing: boolean;
@@ -219,7 +219,7 @@ const DesktopImageItem = ({
   isEditing: boolean;
   sizes: string;
   constrainToParent?: boolean;
-  imageFillType?: "fill" | "fit";
+  imageFillType?: ImageFillType;
 }) => {
   if (imageData.isEmpty && isEditing) {
     return <EmptyImage imageData={imageData} />;
@@ -277,7 +277,7 @@ const MobileImageItem = ({
 }: {
   imageData: ResolvedGalleryImage;
   isEditing: boolean;
-  imageFillType?: "fill" | "fit";
+  imageFillType?: ImageFillType;
 }) => {
   if (imageData.isEmpty && isEditing) {
     return <EmptyImage imageData={imageData} />;
@@ -328,10 +328,9 @@ const DesktopCarousel = ({
   imagesFieldId,
   constantValueEnabled,
   accentColor,
-  imageFillType = "fill",
+  imageFillType,
 }: GalleryRenderProps & {
   carouselImageCount: number;
-  imageFillType?: "fill" | "fit";
 }) => {
   const hasCarouselGap = carouselImageCount > 1;
   return (
@@ -417,8 +416,8 @@ const MobileCarousel = ({
   imagesFieldId,
   constantValueEnabled,
   accentColor,
-  imageFillType = "fill",
-}: GalleryRenderProps & { imageFillType?: "fill" | "fit" }) => {
+  imageFillType,
+}: GalleryRenderProps) => {
   return (
     <div className="flex flex-col gap-y-8 items-center justify-center md:hidden w-full">
       <EntityField
@@ -479,6 +478,7 @@ const GalleryGrid = ({
   isEditing,
   imagesFieldId,
   constantValueEnabled,
+  imageFillType,
 }: GalleryRenderProps) => {
   return (
     <EntityField
@@ -492,6 +492,7 @@ const GalleryGrid = ({
             <DesktopImageItem
               imageData={imageData}
               isEditing={isEditing}
+              imageFillType={imageFillType}
               sizes={`(min-width: 1024px) min(${imageWidth}px, calc((100vw - 6rem) / 3)), (min-width: 640px) min(${imageWidth}px, calc((100vw - 4rem) / 2)), min(${imageWidth}px, 100vw)`}
             />
           </div>
@@ -521,7 +522,6 @@ export const PhotoGalleryWrapper: YextComponentConfig<PhotoGalleryWrapperProps> 
         photoGalleryWrapperFields,
         [
           "styles.objectFields.carouselImageCount.visible",
-          "styles.objectFields.imageFillType.visible",
           "styles.objectFields.accentColor.visible",
         ],
         isCarousel
@@ -568,6 +568,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
 
   const isEditing = Boolean(puck?.isEditing);
   const sharedRenderProps: GalleryRenderProps = {
+    imageFillType: styles.imageFillType ?? "fill",
     galleryImages,
     imageWidth,
     isEditing,
@@ -616,12 +617,8 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
             <DesktopCarousel
               {...sharedRenderProps}
               carouselImageCount={styles.carouselImageCount}
-              imageFillType={styles.imageFillType ?? "fill"}
             />
-            <MobileCarousel
-              {...sharedRenderProps}
-              imageFillType={styles.imageFillType ?? "fill"}
-            />
+            <MobileCarousel {...sharedRenderProps} />
           </CarouselProvider>
         )
       ) : puck?.isEditing ? (
