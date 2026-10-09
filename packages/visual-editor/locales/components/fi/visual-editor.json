@@ -60,6 +60,7 @@
   "logo": "Logo",
   "map": "Kartta",
   "mapRequiresOptIn": "Tämä kartta voidaan näyttää vain, jos evästeet ovat käytössä",
+  "mapRequiresWebGL": "Kartta ei ole käytettävissä, koska WebGL ei ole käytettävissä.",
   "mile_one": "maili",
   "mile_other": "mailia",
   "mile_zero": "mailia",

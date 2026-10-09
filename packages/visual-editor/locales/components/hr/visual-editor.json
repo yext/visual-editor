@@ -64,6 +64,7 @@
   "logo": "Logo",
   "map": "Karta",
   "mapRequiresOptIn": "Ova se karta može prikazati samo ako su omogućeni kolačići",
+  "mapRequiresWebGL": "Karta nije dostupna jer WebGL nije dostupan.",
   "mile_few": "milje",
   "mile_one": "milja",
   "mile_other": "milja",

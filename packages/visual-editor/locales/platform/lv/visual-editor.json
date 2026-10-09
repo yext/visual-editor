@@ -647,6 +647,7 @@
   "logo": "Logotips",
   "map": "Karte",
   "mapRequiresOptIn": "Šo karti var parādīt tikai tad, ja ir iespējoti sīkfaili",
+  "mapRequiresWebGL": "Karte nav pieejama, jo WebGL nav pieejams.",
   "maxWidthTip": "Lai iegūtu optimālu satura izlīdzināšanu, mēs iesakām iestatīt galvenes un kājenes platumu, lai tas atbilstu vai pārsniegtu lapas satura režģi.",
   "metaTitleMissingLocales": "Trūkst metanosaukuma lokalizācijai(-ām): {{locales}}",
   "mile_zero": "jūdzes",

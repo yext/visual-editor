@@ -644,6 +644,7 @@
   "logo": "Logo",
   "map": "Kort",
   "mapRequiresOptIn": "Dette kort kan kun vises, hvis cookies er aktiveret",
+  "mapRequiresWebGL": "Kortet er ikke tilgængeligt, fordi WebGL ikke er tilgængeligt.",
   "maxWidthTip": "For optimal indholdsjustering anbefaler vi at indstille overskriften og sidefodbredden for at matche eller overskride sideindholdsnettet.",
   "metaTitleMissingLocales": "Metatitel mangler for lokalitet(er): {{locales}}",
   "mile_zero": "mil",

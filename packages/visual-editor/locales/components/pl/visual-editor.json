@@ -68,6 +68,7 @@
   "logo": "Logo",
   "map": "Mapa",
   "mapRequiresOptIn": "Ta mapa może być wyświetlana tylko wtedy, gdy włączona jest obsługa plików cookie",
+  "mapRequiresWebGL": "Mapa jest niedostępna, ponieważ WebGL jest niedostępny.",
   "mile_few": "mile",
   "mile_many": "mil",
   "mile_one": "mila",

@@ -64,6 +64,7 @@
   "logo": "Logo",
   "map": "Carte",
   "mapRequiresOptIn": "Cette carte ne peut être affichée que si les cookies sont activés",
+  "mapRequiresWebGL": "La carte est indisponible car WebGL est indisponible.",
   "mile_many": "miles",
   "mile_one": "mile",
   "mile_other": "miles",

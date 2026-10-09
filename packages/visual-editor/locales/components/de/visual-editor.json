@@ -60,6 +60,7 @@
   "logo": "Logo",
   "map": "Karte",
   "mapRequiresOptIn": "Diese Karte kann nur angezeigt werden, wenn Cookies aktiviert sind",
+  "mapRequiresWebGL": "Die Karte ist nicht verfügbar, weil WebGL nicht verfügbar ist.",
   "mile_one": "Meile",
   "mile_other": "Meilen",
   "mile_zero": "Meile",

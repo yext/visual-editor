@@ -648,6 +648,7 @@
   "logo": "Logo",
   "map": "Hartă",
   "mapRequiresOptIn": "Această hartă poate fi afișată numai dacă cookie-urile sunt activate",
+  "mapRequiresWebGL": "Harta nu este disponibilă deoarece WebGL nu este disponibil.",
   "maxWidthTip": "Pentru o aliniere optimă a conținutului, vă recomandăm să setați antetul și lățimea subsolului pentru a se potrivi sau a depăși grila de conținut a paginii.",
   "metaTitleMissingLocales": "Lipsește meta titlul pentru localități: {{locales}}",
   "mile_zero": "milă",

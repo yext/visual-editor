@@ -652,6 +652,7 @@
   "logo": "Logo",
   "map": "Mapa",
   "mapRequiresOptIn": "Túto mapu je možné zobraziť iba vtedy, ak sú povolené súbory cookie",
+  "mapRequiresWebGL": "Mapa nie je dostupná, pretože WebGL nie je k dispozícii.",
   "maxWidthTip": "Pre optimálne zarovnanie obsahu odporúčame nastaviť šírku hlavičky a päty tak, aby zodpovedala alebo prekročila mriežku obsahu stránky.",
   "metaTitleMissingLocales": "Chýba meta názov pre miestne nastavenia: {{locales}}",
   "mile_zero": "míľa",

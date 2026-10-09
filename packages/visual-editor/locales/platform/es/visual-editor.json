@@ -648,6 +648,7 @@
   "logo": "Logo",
   "map": "Mapa",
   "mapRequiresOptIn": "Este mapa sólo se puede mostrar si las cookies están habilitadas",
+  "mapRequiresWebGL": "El mapa no está disponible porque WebGL no está disponible.",
   "maxWidthTip": "Para una alineación de contenido óptimo, recomendamos establecer el ancho del encabezado y el pie de página para que coincidan o excedan la cuadrícula de contenido de la página.",
   "metaTitleMissingLocales": "Falta el metatítulo para las configuraciones regionales: {{locales}}",
   "mile_zero": "milla",
