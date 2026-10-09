@@ -204,14 +204,26 @@ export const LocatorMap: React.FC<MapProps> = ({
     [locationStyleConfig]
   );
 
+  const [mapboxSupported, setMapboxSupported] = React.useState<
+    boolean | undefined
+  >(undefined);
+  React.useEffect(() => {
+    if (!isVisualEditorTestEnv()) {
+      setMapboxSupported(
+        (mapboxgl as unknown as { supported: () => boolean }).supported()
+      );
+    }
+  }, []);
+
   if (isVisualEditorTestEnv()) {
     return <LocatorTestMap />;
   }
 
-  if (
-    typeof window !== "undefined" &&
-    !(mapboxgl as unknown as { supported: () => boolean }).supported()
-  ) {
+  if (mapboxSupported === undefined) {
+    return <LoadingMapPlaceholder />;
+  }
+
+  if (!mapboxSupported) {
     return <UnsupportedMapPlaceholder />;
   }
 
