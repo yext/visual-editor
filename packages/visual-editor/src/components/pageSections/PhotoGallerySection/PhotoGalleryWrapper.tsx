@@ -170,6 +170,7 @@ const DynamicChildColors = ({
 };
 
 type GalleryRenderProps = {
+  imageFillType: ImageFillType;
   galleryImages: ResolvedGalleryImage[];
   imageWidth: number;
   isEditing: boolean;
@@ -218,7 +219,7 @@ const DesktopImageItem = ({
   isEditing: boolean;
   sizes: string;
   constrainToParent?: boolean;
-  imageFillType?: "fill" | "fit";
+  imageFillType?: ImageFillType;
 }) => {
   if (imageData.isEmpty && isEditing) {
     return <EmptyImage imageData={imageData} />;
@@ -276,7 +277,7 @@ const MobileImageItem = ({
 }: {
   imageData: ResolvedGalleryImage;
   isEditing: boolean;
-  imageFillType?: "fill" | "fit";
+  imageFillType?: ImageFillType;
 }) => {
   if (imageData.isEmpty && isEditing) {
     return <EmptyImage imageData={imageData} />;
@@ -327,10 +328,9 @@ const DesktopCarousel = ({
   imagesFieldId,
   constantValueEnabled,
   accentColor,
-  imageFillType = "fill",
+  imageFillType,
 }: GalleryRenderProps & {
   carouselImageCount: number;
-  imageFillType?: "fill" | "fit";
 }) => {
   const hasCarouselGap = carouselImageCount > 1;
   return (
@@ -416,8 +416,8 @@ const MobileCarousel = ({
   imagesFieldId,
   constantValueEnabled,
   accentColor,
-  imageFillType = "fill",
-}: GalleryRenderProps & { imageFillType?: "fill" | "fit" }) => {
+  imageFillType,
+}: GalleryRenderProps) => {
   return (
     <div className="flex flex-col gap-y-8 items-center justify-center md:hidden w-full">
       <EntityField
@@ -478,8 +478,8 @@ const GalleryGrid = ({
   isEditing,
   imagesFieldId,
   constantValueEnabled,
-  imageFillType = "fill",
-}: GalleryRenderProps & { imageFillType?: ImageFillType }) => {
+  imageFillType,
+}: GalleryRenderProps) => {
   return (
     <EntityField
       displayName={pt("fields.images", "Images")}
@@ -568,6 +568,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
 
   const isEditing = Boolean(puck?.isEditing);
   const sharedRenderProps: GalleryRenderProps = {
+    imageFillType: styles.imageFillType ?? "fill",
     galleryImages,
     imageWidth,
     isEditing,
@@ -603,10 +604,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     <div ref={containerRef}>
       {hasAnyImages ? (
         parentData?.variant === "gallery" ? (
-          <GalleryGrid
-            {...sharedRenderProps}
-            imageFillType={styles.imageFillType ?? "fill"}
-          />
+          <GalleryGrid {...sharedRenderProps} />
         ) : (
           <CarouselProvider
             className="flex flex-col gap-8"
@@ -619,12 +617,8 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
             <DesktopCarousel
               {...sharedRenderProps}
               carouselImageCount={styles.carouselImageCount}
-              imageFillType={styles.imageFillType ?? "fill"}
             />
-            <MobileCarousel
-              {...sharedRenderProps}
-              imageFillType={styles.imageFillType ?? "fill"}
-            />
+            <MobileCarousel {...sharedRenderProps} />
           </CarouselProvider>
         )
       ) : puck?.isEditing ? (
