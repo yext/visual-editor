@@ -65,8 +65,12 @@ describe("LocatorMap", () => {
     render(<LocatorMap />);
 
     expect(Boolean(screen.queryByTestId("mapbox-map"))).toBe(mapVisible);
-    expect(Boolean(screen.queryByText(/WebGL is unavailable/))).toBe(
-      fallbackVisible
-    );
+    expect(
+      Boolean(
+        screen.queryByText(
+          "The map is unavailable because WebGL is unavailable."
+        )
+      )
+    ).toBe(fallbackVisible);
   });
 });

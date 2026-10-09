@@ -644,7 +644,7 @@
   "logo": "Logo",
   "map": "Kartta",
   "mapRequiresOptIn": "Tämä kartta voidaan näyttää vain, jos evästeet ovat käytössä",
-  "mapRequiresWebGL": "Kartta ei ole käytettävissä, koska WebGL ei ole käytettävissä. Voit silti etsiä toimipaikkoja tulosluettelosta.",
+  "mapRequiresWebGL": "Kartta ei ole käytettävissä, koska WebGL ei ole käytettävissä.",
   "maxWidthTip": "Sisällön optimaalisen kohdistamisen saavuttamiseksi suosittelemme otsikon ja alatunnisteen leveyden asettamista vastaamaan tai ylittämään sivun sisältöverkon.",
   "metaTitleMissingLocales": "Metaotsikko puuttuu lokaaleilta: {{locales}}",
   "mile_zero": "mailia",

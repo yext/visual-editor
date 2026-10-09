@@ -644,7 +644,7 @@
   "logo": "Logo",
   "map": "Karte",
   "mapRequiresOptIn": "Diese Karte kann nur angezeigt werden, wenn Cookies aktiviert sind",
-  "mapRequiresWebGL": "Die Karte ist nicht verfügbar, weil WebGL nicht verfügbar ist. Sie können Standorte weiterhin in der Ergebnisliste finden.",
+  "mapRequiresWebGL": "Die Karte ist nicht verfügbar, weil WebGL nicht verfügbar ist.",
   "maxWidthTip": "Für eine optimale Ausrichtung des Inhalts empfehlen wir, die Breite von Header und Footer so einzustellen, dass sie dem Content Grid der Seite entspricht oder dieses überschreitet.",
   "metaTitleMissingLocales": "Für Gebietsschema(s) fehlt der Metatitel: {{locales}}",
   "mile_zero": "Meile",

@@ -119,7 +119,7 @@ const UnsupportedMapPlaceholder = () => {
       <Body className="text-gray-700 font-bold text-center p-6" variant="lg">
         {t(
           "mapRequiresWebGL",
-          "The map is unavailable because WebGL is unavailable. You can still find locations in the results list."
+          "The map is unavailable because WebGL is unavailable."
         )}
       </Body>
     </div>

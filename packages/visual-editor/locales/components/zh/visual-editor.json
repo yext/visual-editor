@@ -60,7 +60,7 @@
   "logo": "标识",
   "map": "地图",
   "mapRequiresOptIn": "该地图仅在启用cookies的情况下才能显示",
-  "mapRequiresWebGL": "由于 WebGL 不可用，无法显示地图。您仍可在结果列表中查找地点。",
+  "mapRequiresWebGL": "由于 WebGL 不可用，无法显示地图。",
   "mile_one": "英里",
   "mile_other": "英里",
   "mile_zero": "英里",

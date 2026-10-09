@@ -648,7 +648,7 @@
   "logo": "Logotipo",
   "map": "Mapa",
   "mapRequiresOptIn": "Este mapa só pode ser exibido se os cookies estiverem ativados",
-  "mapRequiresWebGL": "O mapa não está disponível porque o WebGL não está disponível. Ainda pode encontrar localizações na lista de resultados.",
+  "mapRequiresWebGL": "O mapa não está disponível porque o WebGL não está disponível.",
   "maxWidthTip": "Para um alinhamento ideal de conteúdo, recomendamos definir a largura do cabeçalho e do rodapé para corresponder ou exceder a grade de conteúdo da página.",
   "metaTitleMissingLocales": "O meta título está faltando para locais: {{locales}}",
   "mile_zero": "milha",

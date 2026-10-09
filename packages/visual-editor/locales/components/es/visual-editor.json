@@ -64,7 +64,7 @@
   "logo": "Logo",
   "map": "Mapa",
   "mapRequiresOptIn": "Este mapa sólo se puede mostrar si las cookies están habilitadas",
-  "mapRequiresWebGL": "El mapa no está disponible porque WebGL no está disponible. Aún puedes encontrar ubicaciones en la lista de resultados.",
+  "mapRequiresWebGL": "El mapa no está disponible porque WebGL no está disponible.",
   "mile_many": "millas",
   "mile_one": "milla",
   "mile_other": "millas",

@@ -644,7 +644,7 @@
   "logo": "Logo",
   "map": "Kart",
   "mapRequiresOptIn": "Dette kartet kan bare vises hvis informasjonskapsler er aktivert",
-  "mapRequiresWebGL": "Kartet er ikke tilgjengelig fordi WebGL ikke er tilgjengelig. Du kan fortsatt finne steder i resultatlisten.",
+  "mapRequiresWebGL": "Kartet er ikke tilgjengelig fordi WebGL ikke er tilgjengelig.",
   "maxWidthTip": "For optimal innholdsjustering anbefaler vi å sette overskrift og bunntekstbredde for å matche eller overstige sideinnholdsnettet.",
   "metaTitleMissingLocales": "Metatittel mangler for lokal(er): {{locales}}",
   "mile_zero": "mil",

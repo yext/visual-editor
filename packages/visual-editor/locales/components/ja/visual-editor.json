@@ -60,7 +60,7 @@
   "logo": "ロゴ",
   "map": "地図",
   "mapRequiresOptIn": "この地図は Cookie が有効になっている場合にのみ表示できます",
-  "mapRequiresWebGL": "WebGL が利用できないため、地図を表示できません。結果の一覧から引き続き場所を探すことができます。",
+  "mapRequiresWebGL": "WebGL が利用できないため、地図を表示できません。",
   "mile_one": "マイル",
   "mile_other": "マイル",
   "mile_zero": "マイル",

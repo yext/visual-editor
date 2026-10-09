@@ -652,7 +652,7 @@
   "logo": "Logo",
   "map": "Mapa",
   "mapRequiresOptIn": "Ta mapa może być wyświetlana tylko wtedy, gdy włączona jest obsługa plików cookie",
-  "mapRequiresWebGL": "Mapa jest niedostępna, ponieważ WebGL jest niedostępny. Nadal możesz znaleźć lokalizacje na liście wyników.",
+  "mapRequiresWebGL": "Mapa jest niedostępna, ponieważ WebGL jest niedostępny.",
   "maxWidthTip": "Aby uzyskać optymalne dostosowanie treści, zalecamy ustawienie szerokości nagłówka i stopki w celu dopasowania lub przekroczenia sieci treści strony.",
   "metaTitleMissingLocales": "Brak tytułu meta dla ustawień regionalnych: {{locales}}",
   "mile_zero": "mila",

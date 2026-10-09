@@ -652,7 +652,7 @@
   "logo": "Logo",
   "map": "Mapa",
   "mapRequiresOptIn": "Tuto mapu lze zobrazit pouze v případě, že jsou povoleny soubory cookie",
-  "mapRequiresWebGL": "Mapa není dostupná, protože WebGL není k dispozici. Lokality můžete stále najít v seznamu výsledků.",
+  "mapRequiresWebGL": "Mapa není dostupná, protože WebGL není k dispozici.",
   "maxWidthTip": "Pro optimální zarovnání obsahu doporučujeme nastavit šířku záhlaví a zápatí tak, aby odpovídala nebo překročila mřížku obsahu stránky.",
   "metaTitleMissingLocales": "Metanázev chybí pro národní prostředí: {{locales}}",
   "mile_zero": "míle",
