@@ -11,27 +11,18 @@ import {
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { BasicSelectorCombobox } from "./BasicSelectorCombobox.tsx";
 
-/** Theme colors always resolve to a CSS color or a surface render value. */
+/** Theme colors always retain authored tokens and resolve both CSS colors. */
 export type ThemeColorField = BaseField & {
   type: "themeColor";
+  /** Selects site or background palette choices. */
+  options: "SITE_COLOR" | "BACKGROUND_COLOR";
   label?: string | MsgString;
   visible?: boolean;
   translateOptions?: boolean;
   noOptionsPlaceholder?: string | MsgString;
   noOptionsMessage?: string | MsgString;
   disableSearch?: boolean;
-} & (
-    | {
-        /** Resolves SITE_COLOR selections to CSS color values. */
-        options: "SITE_COLOR";
-        format?: never;
-      }
-    | {
-        options: "BACKGROUND_COLOR";
-        /** Surface format preserves the authored color and resolves both CSS colors. */
-        format?: "surface";
-      }
-  );
+};
 
 // The combobox returns only option.value, so use a marker value to detect
 // the Other option before converting it to a ThemeColor.

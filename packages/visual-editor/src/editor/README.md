@@ -143,8 +143,7 @@ Add `transform: true` to a supported field type to receive resolved props in the
 | `comprehensiveCTA`                           | Resolved nested CTA, button text, and aria label; styles and interaction settings are preserved |
 | Repeated `entityField`                       | Array of item props resolved against each selected item or manual item                          |
 | `video`                                      | Asset video data with interpolated text and preserved metadata                                  |
-| `themeColor`                                 | CSS color from a `SITE_COLOR` or `BACKGROUND_COLOR` selection                                   |
-| `themeColor` with `format: "surface"`        | Authored `ThemeColor` plus resolved background and foreground CSS colors, or `undefined`        |
+| `themeColor`                                 | Authored tokens plus `selectedColorCss` and `contrastingColorCss`, or `undefined`               |
 | `styledText`, `styledButton`, `styledLink`   | CSS style object with inherited `"default"` choices omitted                                     |
 | `styledImage`, `styledPageSection`           | CSS style object for border radius, width, or vertical padding                                  |
 | `code`                                       | Interpolated code string; HTML also processes Handlebars templates                              |
@@ -185,10 +184,10 @@ than the default behavior for all entity fields.
 
 Use `themeColor` with `SITE_COLOR` or `BACKGROUND_COLOR` for color selections.
 Existing `basicSelector` color fields remain editable, but their values are not
-transformed. `themeColor` with `BACKGROUND_COLOR` and `format: "surface"`
-returns `{ themeColor, backgroundColor, color }`, which can
-be passed directly to `Background` or `PageSection` as the `background` prop.
-Without that format, color selectors return a CSS string. A price field uses
+transformed. `themeColor` returns the authored `selectedColor`,
+`contrastingColor`, and optional `isDarkColor` together with
+`selectedColorCss` and `contrastingColorCss`. The same value can be passed to
+`Background` or `PageSection` as the `background` prop. A price field uses
 `{ type: "entityField", filter: { types: ["type.price"] }, format: "price", transform: true }`
 and renders a localized string. Styled fields render CSS style objects that can
 be passed to React's `style` prop. Code fields use `codeLanguage: "html"` to
@@ -599,17 +598,16 @@ When the field definition is part of a normal component `fields` config, Puck re
 
 ## themeColor Field Type
 
-Use `themeColor` for site and background palette choices, including custom colors. It authors the same `ThemeColor` value as existing color `basicSelector` fields and always resolves the render prop to a CSS color string by default. For backgrounds, `format: "surface"` returns the authored color together with resolved background and foreground CSS values:
+Use `themeColor` for site and background palette choices, including custom colors. It authors the same `ThemeColor` value as existing color `basicSelector` fields. The render prop always contains the authored tokens plus CSS values for the selected and contrasting colors:
 
 ```tsx
 const backgroundField = {
   type: "themeColor" as const,
   options: "BACKGROUND_COLOR" as const,
-  format: "surface" as const,
 };
 ```
 
-The surface value can be passed to `Background` or `PageSection`. Existing color `basicSelector` definitions remain editable; use `themeColor` for transformed color values.
+For a palette color, the render value has the shape `{ selectedColor: "palette-primary", contrastingColor: "palette-primary-contrast", selectedColorCss: "var(--colors-palette-primary)", contrastingColorCss: "var(--colors-palette-primary-contrast)" }`. An empty selection returns `undefined`. The value can be passed to `Background` or `PageSection`. Existing color `basicSelector` definitions remain editable; use `themeColor` for resolved color values.
 
 ## image Field
 

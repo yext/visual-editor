@@ -25,7 +25,7 @@ import { MaybeRTF } from "../../components/helpers/index.ts";
 import { Background } from "../../components/atoms/background.tsx";
 import { PageSection } from "../../components/atoms/pageSection.tsx";
 import { useBackground } from "../../hooks/useBackground.tsx";
-import type { ResolvedSurfaceColor } from "../../utils/colors.ts";
+import type { ResolvedThemeColor } from "../../utils/colors.ts";
 import {
   toPuckFields,
   type YextComponentConfig,
@@ -1071,19 +1071,34 @@ describe("field transforms", () => {
 
   it.each([
     {
-      name: "when a theme color is selected then it returns a CSS color",
+      name: "when a theme color is selected then it retains tokens and resolves CSS colors",
       field: { type: "themeColor", options: "SITE_COLOR" },
       value: { selectedColor: "palette-primary", contrastingColor: "white" },
-      expected: "var(--colors-palette-primary)",
+      expected: {
+        selectedColor: "palette-primary",
+        contrastingColor: "white",
+        selectedColorCss: "var(--colors-palette-primary)",
+        contrastingColorCss: "white",
+      },
     },
     {
-      name: "when a custom background color is selected then it returns its CSS color",
+      name: "when a custom background color is selected then it resolves both CSS colors",
       field: {
         type: "themeColor",
         options: "BACKGROUND_COLOR",
       },
-      value: { selectedColor: "[#123ABC]", contrastingColor: "white" },
-      expected: "#123ABC",
+      value: {
+        selectedColor: "[#123ABC]",
+        contrastingColor: "white",
+        isDarkColor: true,
+      },
+      expected: {
+        selectedColor: "[#123ABC]",
+        contrastingColor: "white",
+        isDarkColor: true,
+        selectedColorCss: "#123ABC",
+        contrastingColorCss: "white",
+      },
     },
     {
       name: "when a styled text field opts in then defaults are omitted and color is resolved",
@@ -1239,7 +1254,7 @@ describe("field transforms", () => {
         }
       >
     >().toEqualTypeOf<{
-      accent: string | undefined;
+      accent: ResolvedThemeColor | undefined;
       typography: React.CSSProperties;
       script: string;
     }>();
@@ -1260,8 +1275,8 @@ describe("field transforms", () => {
         },
       },
       expected: {
-        backgroundColor: "var(--colors-palette-primary)",
-        color: "var(--colors-palette-primary-contrast)",
+        selectedColorCss: "var(--colors-palette-primary)",
+        contrastingColorCss: "var(--colors-palette-primary-contrast)",
       },
     },
     {
@@ -1271,7 +1286,10 @@ describe("field transforms", () => {
         contrastingColor: "[#FAEBCD]",
       },
       streamDocument: {},
-      expected: { backgroundColor: "#123ABC", color: "#FAEBCD" },
+      expected: {
+        selectedColorCss: "#123ABC",
+        contrastingColorCss: "#FAEBCD",
+      },
     },
     {
       name: "when contrast is unset then the stream document determines the foreground",
@@ -1282,12 +1300,12 @@ describe("field transforms", () => {
         },
       },
       expected: {
-        backgroundColor: "var(--colors-palette-primary)",
-        color: "white",
+        selectedColorCss: "var(--colors-palette-primary)",
+        contrastingColorCss: "white",
       },
     },
     {
-      name: "when no background is selected then the surface is undefined",
+      name: "when no color is selected then the resolved color is undefined",
       value: undefined,
       streamDocument: {},
       expected: undefined,
@@ -1301,7 +1319,6 @@ describe("field transforms", () => {
           yextField: {
             type: "themeColor",
             options: "BACKGROUND_COLOR",
-            format: "surface",
           },
         },
       },
@@ -1312,20 +1329,16 @@ describe("field transforms", () => {
       isReadOnly: false,
     });
 
-    expect(result).toEqual(
-      value ? { themeColor: value, ...expected } : expected
-    );
+    expect(result).toEqual(value ? { ...value, ...expected } : expected);
     expect(value).toEqual(authored);
   });
 
-  it("when a surface is passed to Background then its classes, CSS, and context use the authored color", () => {
-    const surface: ResolvedSurfaceColor = {
-      themeColor: {
-        selectedColor: "palette-primary",
-        contrastingColor: "white",
-      },
-      backgroundColor: "var(--colors-palette-primary)",
-      color: "white",
+  it("when a resolved theme color is passed to Background then classes, CSS, and context use its authored tokens", () => {
+    const surface: ResolvedThemeColor = {
+      selectedColor: "palette-primary",
+      contrastingColor: "white",
+      selectedColorCss: "var(--colors-palette-primary)",
+      contrastingColorCss: "white",
     };
     const ContextReader = (): React.ReactElement => {
       const background = useBackground();
@@ -1349,17 +1362,15 @@ describe("field transforms", () => {
     expect(html).toContain("palette-primary:white:true");
   });
 
-  it("when a surface is passed to PageSection then its outer background uses both CSS colors", () => {
+  it("when a resolved theme color is passed to PageSection then its outer background uses both CSS colors", () => {
     const html = renderToStaticMarkup(
       <TemplatePropsContext.Provider value={{ document: {} }}>
         <PageSection
           background={{
-            themeColor: {
-              selectedColor: "[#123ABC]",
-              contrastingColor: "white",
-            },
-            backgroundColor: "#123ABC",
-            color: "white",
+            selectedColor: "[#123ABC]",
+            contrastingColor: "white",
+            selectedColorCss: "#123ABC",
+            contrastingColorCss: "white",
           }}
         >
           Content
@@ -1372,7 +1383,7 @@ describe("field transforms", () => {
     expect(html).toContain("Content");
   });
 
-  it("when surface mode is selected then transformed props contain the authored color and CSS", () => {
+  it("when theme color is selected then transformed props contain the authored color and CSS", () => {
     expectTypeOf<
       YextTransformedProps<
         { background: { selectedColor: string; contrastingColor: string } },
@@ -1380,10 +1391,9 @@ describe("field transforms", () => {
           background: {
             type: "themeColor";
             options: "BACKGROUND_COLOR";
-            format: "surface";
           };
         }
       >["background"]
-    >().toEqualTypeOf<ResolvedSurfaceColor | undefined>();
+    >().toEqualTypeOf<ResolvedThemeColor | undefined>();
   });
 });

@@ -1,25 +1,21 @@
-import type { ThemeColorField } from "../ThemeColorField.tsx";
 import type { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import {
-  getSurfaceColorStyle,
+  getDefaultForegroundColor,
   getThemeColorCssValue,
-  type ResolvedSurfaceColor,
+  type ResolvedThemeColor,
 } from "../../utils/colors.ts";
 import type { FieldTransformContext } from "./resolveValue.ts";
 
-/** Resolves an authored theme color as CSS or as a surface with foreground. */
+/** Preserves authored tokens and resolves CSS values, deriving missing contrast from the stream document. */
 export function resolveThemeColor(
-  field: ThemeColorField,
   value: ThemeColor | undefined,
   context: FieldTransformContext
-): string | ResolvedSurfaceColor | undefined {
-  if (field.options === "BACKGROUND_COLOR" && field.format === "surface") {
-    return value?.selectedColor
-      ? {
-          themeColor: { ...value },
-          ...getSurfaceColorStyle(value, context.streamDocument),
-        }
-      : undefined;
-  }
-  return getThemeColorCssValue(value);
+): ResolvedThemeColor | undefined {
+  const selectedColorCss = getThemeColorCssValue(value);
+  const contrastingColorCss = getThemeColorCssValue(
+    getDefaultForegroundColor(value, context.streamDocument)
+  );
+  return value && selectedColorCss && contrastingColorCss
+    ? { ...value, selectedColorCss, contrastingColorCss }
+    : undefined;
 }

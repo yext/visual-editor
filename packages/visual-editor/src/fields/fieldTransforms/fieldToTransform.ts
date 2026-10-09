@@ -91,10 +91,7 @@ export const fieldToTransform: Record<
       ? entityFieldFormatters[field.format](resolved, context)
       : resolved;
   },
-  themeColor: (field, value, context) =>
-    field.type === "themeColor"
-      ? resolveThemeColor(field, value, context)
-      : value,
+  themeColor: (_field, value, context) => resolveThemeColor(value, context),
   code: (field, value, context) =>
     field.type === "code" ? resolveCode(field, value, context) : value,
   translatableString: (_field, value, context) =>

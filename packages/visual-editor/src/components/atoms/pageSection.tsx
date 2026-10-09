@@ -1,7 +1,7 @@
 import * as React from "react";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
-import type { ResolvedSurfaceColor } from "../../utils/colors.ts";
+import type { ResolvedThemeColor } from "../../utils/colors.ts";
 import { Background } from "./background.tsx";
 import { cva, VariantProps } from "class-variance-authority";
 
@@ -42,7 +42,7 @@ export interface PageSectionProps
   extends
     VariantProps<typeof maxWidthVariants>,
     React.HTMLAttributes<HTMLDivElement> {
-  background?: ThemeColor | ResolvedSurfaceColor;
+  background?: ThemeColor | ResolvedThemeColor;
   verticalPadding?: VariantProps<typeof pageSectionVariants>["verticalPadding"];
   as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
   outerClassName?: string;

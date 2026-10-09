@@ -10,11 +10,11 @@ import { getThemeValue } from "../../utils/getThemeValue.ts";
 import {
   getBackgroundColorClasses,
   getBackgroundColorStyle,
-  type ResolvedSurfaceColor,
+  type ResolvedThemeColor,
 } from "../../utils/colors.ts";
 
 export interface BackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
-  background?: ThemeColor | ResolvedSurfaceColor;
+  background?: ThemeColor | ResolvedThemeColor;
   as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
 }
 
@@ -22,12 +22,7 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
   ({ className, background, as, children, style, ...props }, ref) => {
     const streamDocument = useDocument();
     const Component = as ?? "div";
-    const authoredBackground =
-      background && "themeColor" in background
-        ? background.themeColor
-        : background;
-    const selectedBackground =
-      authoredBackground ?? backgroundColors.background1.value;
+    const selectedBackground = background ?? backgroundColors.background1.value;
 
     const backgroundValue: Required<ThemeColor> = React.useMemo(() => {
       // Our built-in backgrounds are always light or dark
@@ -91,16 +86,16 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
         <Component
           className={themeManagerCn(
             "components",
-            getBackgroundColorClasses(authoredBackground),
+            getBackgroundColorClasses(background),
             className
           )}
           style={{
-            ...(background && "themeColor" in background
+            ...(background && "selectedColorCss" in background
               ? {
-                  backgroundColor: background.backgroundColor,
-                  color: background.color,
+                  backgroundColor: background.selectedColorCss,
+                  color: background.contrastingColorCss,
                 }
-              : getBackgroundColorStyle(authoredBackground)),
+              : getBackgroundColorStyle(background)),
             ...style,
           }}
           ref={ref}

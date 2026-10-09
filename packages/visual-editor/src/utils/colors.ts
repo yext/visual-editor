@@ -2,11 +2,10 @@ import { getThemeValue } from "./getThemeValue.ts";
 import { type ThemeColor } from "./themeConfigOptions.ts";
 import { type StreamDocument } from "./types/StreamDocument.ts";
 
-/** A themed surface with its authored tokens and render-ready CSS colors. */
-export type ResolvedSurfaceColor = {
-  themeColor: ThemeColor;
-  backgroundColor?: string;
-  color?: string;
+/** An authored theme color with render-ready CSS for both selected and contrasting colors. */
+export type ResolvedThemeColor = ThemeColor & {
+  selectedColorCss: string;
+  contrastingColorCss: string;
 };
 
 /**
