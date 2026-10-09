@@ -644,6 +644,7 @@
   "logo": "Logo",
   "map": "Kaart",
   "mapRequiresOptIn": "Seda kaarti saab kuvada ainult siis, kui küpsised on lubatud",
+  "mapRequiresWebGL": "Kaart pole saadaval, sest WebGL pole saadaval. Asukohti saab endiselt leida tulemuste loendist.",
   "maxWidthTip": "Sisu optimaalse joondamise tagamiseks soovitame seada päise ja jaluse laiuse, et see vastaks lehe sisuvõrgule või ületada.",
   "metaTitleMissingLocales": "Metapealkiri puudub järgmiste lokaatide jaoks: {{locales}}",
   "mile_zero": "miil",

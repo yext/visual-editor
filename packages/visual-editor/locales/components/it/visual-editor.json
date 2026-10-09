@@ -64,6 +64,7 @@
   "logo": "Logo",
   "map": "Mappa",
   "mapRequiresOptIn": "Questa mappa può essere visualizzata solo se i cookie sono abilitati",
+  "mapRequiresWebGL": "La mappa non è disponibile perché WebGL non è disponibile. Puoi comunque trovare le sedi nell’elenco dei risultati.",
   "mile_many": "miglia",
   "mile_one": "miglio",
   "mile_other": "miglia",

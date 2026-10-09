@@ -644,6 +644,7 @@
   "logo": "Logotyp",
   "map": "Karta",
   "mapRequiresOptIn": "Denna karta kan endast visas om cookies är aktiverade",
+  "mapRequiresWebGL": "Kartan är inte tillgänglig eftersom WebGL inte är tillgängligt. Du kan fortfarande hitta platser i resultatlistan.",
   "maxWidthTip": "För optimal innehållsinriktning rekommenderar vi att du ställer in huvud- och sidfotbredden för att matcha eller överskrida sidinnehållsnätet.",
   "metaTitleMissingLocales": "Metatitel saknas för lokal(er): {{locales}}",
   "mile_zero": "mil",

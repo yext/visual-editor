@@ -60,6 +60,7 @@
   "logo": "Logo",
   "map": "Kaart",
   "mapRequiresOptIn": "Deze kaart kan alleen worden weergegeven als cookies zijn ingeschakeld",
+  "mapRequiresWebGL": "De kaart is niet beschikbaar omdat WebGL niet beschikbaar is. U kunt locaties nog steeds vinden in de resultatenlijst.",
   "mile_one": "mijl",
   "mile_other": "mijlen",
   "mile_zero": "mijl",

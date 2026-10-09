@@ -648,6 +648,7 @@
   "logo": "Logo",
   "map": "Karta",
   "mapRequiresOptIn": "Ova se karta može prikazati samo ako su omogućeni kolačići",
+  "mapRequiresWebGL": "Karta nije dostupna jer WebGL nije dostupan. Lokacije i dalje možete pronaći na popisu rezultata.",
   "maxWidthTip": "Za optimalno poravnavanje sadržaja, preporučujemo postavljanje širine zaglavlja i podnožja kako bi se podudarala ili premašila rešetku sadržaja stranice.",
   "metaTitleMissingLocales": "Nedostaje meta naslov za lokalitet(e): {{locales}}",
   "mile_zero": "milja",

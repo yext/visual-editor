@@ -60,6 +60,7 @@
   "logo": "Logo",
   "map": "Kort",
   "mapRequiresOptIn": "Dette kort kan kun vises, hvis cookies er aktiveret",
+  "mapRequiresWebGL": "Kortet er ikke tilgængeligt, fordi WebGL ikke er tilgængeligt. Du kan stadig finde steder på resultatlisten.",
   "mile_one": "mil",
   "mile_other": "mil",
   "mile_zero": "mil",

@@ -64,6 +64,7 @@
   "logo": "Logo",
   "map": "Hartă",
   "mapRequiresOptIn": "Această hartă poate fi afișată numai dacă cookie-urile sunt activate",
+  "mapRequiresWebGL": "Harta nu este disponibilă deoarece WebGL nu este disponibil. Puteți găsi în continuare locații în lista de rezultate.",
   "mile_few": "mile",
   "mile_one": "milă",
   "mile_other": "mile",

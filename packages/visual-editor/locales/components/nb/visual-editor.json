@@ -60,6 +60,7 @@
   "logo": "Logo",
   "map": "Kart",
   "mapRequiresOptIn": "Dette kartet kan bare vises hvis informasjonskapsler er aktivert",
+  "mapRequiresWebGL": "Kartet er ikke tilgjengelig fordi WebGL ikke er tilgjengelig. Du kan fortsatt finne steder i resultatlisten.",
   "mile_one": "mil",
   "mile_other": "mil",
   "mile_zero": "mil",

@@ -648,6 +648,7 @@
   "logo": "Logo",
   "map": "Carte",
   "mapRequiresOptIn": "Cette carte ne peut être affichée que si les cookies sont activés",
+  "mapRequiresWebGL": "La carte est indisponible car WebGL est indisponible. Vous pouvez toujours trouver des établissements dans la liste des résultats.",
   "maxWidthTip": "Pour l'alignement optimal du contenu, nous vous recommandons de définir la largeur de l'en-tête et du pied de page pour correspondre ou dépasser la grille de contenu de la page.",
   "metaTitleMissingLocales": "Le méta-titre est manquant pour les paramètres régionaux : {{locales}}",
   "mile_zero": "mile",

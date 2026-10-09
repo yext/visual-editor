@@ -68,6 +68,7 @@
   "logo": "Logo",
   "map": "Mapa",
   "mapRequiresOptIn": "Tuto mapu lze zobrazit pouze v případě, že jsou povoleny soubory cookie",
+  "mapRequiresWebGL": "Mapa není dostupná, protože WebGL není k dispozici. Lokality můžete stále najít v seznamu výsledků.",
   "mile_few": "míle",
   "mile_many": "mil",
   "mile_one": "míle",

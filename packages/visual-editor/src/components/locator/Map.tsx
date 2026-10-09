@@ -6,6 +6,7 @@ import {
   PinComponentProps,
 } from "@yext/search-ui-react";
 import { Result } from "@yext/search-headless-react";
+import mapboxgl from "mapbox-gl";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ImageField } from "../../fields/ImageField.tsx";
@@ -110,6 +111,21 @@ export const LoadingMapPlaceholder = () => {
   );
 };
 
+const UnsupportedMapPlaceholder = () => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="flex items-center justify-center w-full h-full bg-gray-100">
+      <Body className="text-gray-700 font-bold text-center p-6" variant="lg">
+        {t(
+          "mapRequiresWebGL",
+          "The map is unavailable because WebGL is unavailable. You can still find locations in the results list."
+        )}
+      </Body>
+    </div>
+  );
+};
+
 const LocatorTestMap = () => {
   return (
     <div
@@ -190,6 +206,13 @@ export const LocatorMap: React.FC<MapProps> = ({
 
   if (isVisualEditorTestEnv()) {
     return <LocatorTestMap />;
+  }
+
+  if (
+    typeof window !== "undefined" &&
+    !(mapboxgl as unknown as { supported: () => boolean }).supported()
+  ) {
+    return <UnsupportedMapPlaceholder />;
   }
 
   // During page generation we don't exist in a browser context

@@ -644,6 +644,7 @@
   "logo": "標識",
   "map": "地圖",
   "mapRequiresOptIn": "該地圖僅在啟用cookies的情況下才能顯示",
+  "mapRequiresWebGL": "由於 WebGL 無法使用，無法顯示地圖。您仍可在結果清單中尋找地點。",
   "maxWidthTip": "對於最佳內容對齊，我們建議將標題和頁腳寬度設置為匹配或超過頁面內容網格。",
   "metaTitleMissingLocales": "語言環境缺少元標題：{{locales}}",
   "mile_zero": "英里",
