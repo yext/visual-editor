@@ -90,20 +90,23 @@ export const generateSectionLibraryFiles = (
   );
   const i18nPath = path.join(generatedDirectory, "i18n.ts");
   const generatedFiles = [...generatedTranslations.generatedFiles];
-  for (const name of ["catalog", "registry"] as const) {
-    const filePath = path.join(generatedDirectory, `${name}.js`);
-    if (
-      !writeGeneratedFile(
-        filePath,
-        buildJsonRenderSource(rootDir, filePath, structure.sections, name)
+  const catalogPath = path.join(generatedDirectory, "catalog.js");
+  if (
+    !writeGeneratedFile(
+      catalogPath,
+      buildJsonRenderSource(
+        rootDir,
+        catalogPath,
+        structure.sections,
+        structure.layouts
       )
-    ) {
-      throw new Error(
-        `Refusing to overwrite json-render ${name} at ${filePath}.`
-      );
-    }
-    generatedFiles.push(filePath);
+    )
+  ) {
+    throw new Error(
+      `Refusing to overwrite json-render catalog at ${catalogPath}.`
+    );
   }
+  generatedFiles.push(catalogPath);
   if (
     writeGeneratedFile(
       i18nPath,
@@ -358,12 +361,12 @@ const writeTemplateManifest = (rootDir: string, layouts: Layout[]): void => {
   }
 };
 
-/** Imports runtime schemas rather than evaluating section source during generation. */
+/** Catalogs use saved Puck props and are scoped to each layout's page-set type. */
 const buildJsonRenderSource = (
   rootDir: string,
   generatedPath: string,
   sections: ResolvedSection[],
-  kind: "catalog" | "registry"
+  layouts: Layout[]
 ): string => {
   if (sections.some((section) => section.id === "MainContent")) {
     throw new Error("MainContent is reserved for json-render composition.");
@@ -380,70 +383,44 @@ const buildJsonRenderSource = (
     const specifier = relativePath.startsWith(".")
       ? relativePath
       : `./${relativePath}`;
-    return kind === "catalog"
-      ? `import { config as sectionConfig${index} } from ${JSON.stringify(specifier)};`
-      : `import { ${section.componentName} as Section${index} } from ${JSON.stringify(specifier)};`;
+    return `import { config as sectionConfig${index}, ${section.componentName} as Section${index} } from ${JSON.stringify(specifier)};`;
   });
-  const sharedRegistryPath = path.join(
-    rootDir,
-    "src/library/shared/componentRegistry.ts"
-  );
-  const entries = sections.map((section, index) =>
-    kind === "catalog"
-      ? `    ...(sectionConfig${index}.formalProps ? { ${JSON.stringify(section.id)}: { props: sectionConfig${index}.formalProps, slots: [], description: sectionConfig${index}.description } } : {}),`
-      : `    ...(catalog.data.components[${JSON.stringify(section.id)}] ? { ${JSON.stringify(section.id)}: adaptSection(Section${index}, catalog.data.components[${JSON.stringify(section.id)}].props) } : {}),`
+  const hasSharedRegistry = fs.existsSync(
+    path.join(rootDir, "src/library/shared/componentRegistry.ts")
   );
   return [
     GENERATED_FILE_PREFIX,
-    ...(kind === "catalog"
+    'import { createPuckGenerationCatalog } from "@yext/visual-editor/section-library-support";',
+    ...(hasSharedRegistry
       ? [
-          'import { defineCatalog } from "@json-render/core";',
-          'import { schema } from "@json-render/react/schema";',
-          'import { z } from "zod";',
-        ]
-      : [
-          'import { createElement } from "react";',
-          'import { JsonRenderSection, JsonRenderMainContent } from "@yext/visual-editor/section-library-support";',
-          'import { defineRegistry } from "@json-render/react";',
-          'import { catalog } from "./catalog.js";',
-          ...(fs.existsSync(sharedRegistryPath)
-            ? [
-                'import { sharedComponentConfigs } from "../shared/componentRegistry";',
-              ]
-            : ["const sharedComponentConfigs = {};"]),
-        ]),
-    ...imports,
-    "",
-    ...(kind === "registry"
-      ? [
-          "/**",
-          " * @param {import('react').ComponentType<any> | { render: import('react').ComponentType<any> }} section",
-          " * @param {import('zod').ZodType} schema",
-          " * @returns {import('@json-render/react').ComponentFn<typeof catalog, keyof typeof catalog.data.components>}",
-          " */",
-          "const adaptSection = (section, schema) => {",
-          '  const Render = typeof section === "function" ? section : section.render;',
-          '  const puckConfig = typeof section === "function" ? undefined : { components: { ...sharedComponentConfigs, Section: section } };',
-          "  return ({ props, children }) => createElement(JsonRenderSection, { render: Render, schema, props, puckConfig }, children);",
-          "};",
-          "",
+          'import { sharedComponentConfigs, sharedComponentMetadata, sharedRootAllowedComponentIds } from "../shared/componentRegistry";',
         ]
       : []),
-    kind === "catalog"
-      ? "export const catalog = defineCatalog(schema, {"
-      : "export const { registry } = defineRegistry(catalog, {",
-    "  components: {",
-    ...(kind === "catalog"
-      ? [
-          '    "MainContent": { props: z.object({}), slots: ["default"], description: "The main content area of the page. Use as the root for multiple sections and place the sections in its children in display order; section components are leaves." },',
-        ]
-      : [
-          '    "MainContent": ({ children }) => createElement(JsonRenderMainContent, null, children),',
-        ]),
-    ...entries,
-    "  },",
-    ...(kind === "catalog" ? ["  actions: {},"] : []),
-    "});",
+    ...imports,
+    "",
+    "export const catalogs = {",
+    ...layouts.map((layout) => {
+      const pageSetType = JSON.stringify(layout.metadata.pageSetType);
+      return [
+        `  ${JSON.stringify(layout.metadata.id)}: createPuckGenerationCatalog({`,
+        ...sections.flatMap((section, index) =>
+          section.pageSetTypes.includes(layout.metadata.pageSetType)
+            ? [
+                `    ...(sectionConfig${index}.formalProps ? { ${JSON.stringify(section.id)}: { props: sectionConfig${index}.formalProps, description: sectionConfig${index}.description, fields: Section${index}.fields, defaultProps: Section${index}.defaultProps, derivedSlotPaths: Section${index}.derivedSlotPaths } } : {}),`,
+              ]
+            : []
+        ),
+        ...(hasSharedRegistry
+          ? [
+              `    ...Object.fromEntries(sharedComponentMetadata.filter((component) => component.pageSetTypes.includes(${pageSetType})).map((component) => [component.id, { props: sharedComponentConfigs[component.id]?.formalProps, fields: sharedComponentConfigs[component.id]?.fields, defaultProps: sharedComponentConfigs[component.id]?.defaultProps, derivedSlotPaths: sharedComponentConfigs[component.id]?.derivedSlotPaths, nestedOnly: true }])),`,
+            ]
+          : []),
+        hasSharedRegistry
+          ? `  }, { rootAllowedComponentIds: sharedRootAllowedComponentIds[${pageSetType}] }),`
+          : "  }),",
+      ].join("\n");
+    }),
+    "};",
     "",
   ].join("\n");
 };

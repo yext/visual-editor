@@ -1,3 +1,4 @@
+import { LocalEditorChatBridge } from "../../local-editor/chat/LocalEditorChatBridge.tsx";
 import {
   Puck,
   Data,
@@ -286,6 +287,7 @@ export const InternalLayoutEditor = ({
       const getPuck = useGetPuck();
 
       React.useEffect(() => {
+        let active = true;
         const resolveData = async () => {
           devLogger.logFunc("reloadDataOnDocumentChange");
           const { appState, config, dispatch } = getPuck();
@@ -296,6 +298,11 @@ export const InternalLayoutEditor = ({
           const resolvedData = await resolveAllData(dataToResolve, config, {
             streamDocument,
           });
+
+          // A newer document or canvas update supersedes this resolution.
+          if (!active || getPuck().appState.data !== appState.data) {
+            return;
+          }
 
           devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
 
@@ -310,6 +317,9 @@ export const InternalLayoutEditor = ({
         };
 
         resolveData();
+        return () => {
+          active = false;
+        };
       }, [streamDocument]);
 
       return <>{props.children}</>;
@@ -321,6 +331,7 @@ export const InternalLayoutEditor = ({
     (props: { children: React.ReactNode }) => (
       <>
         <ValidationReporters />
+        <LocalEditorChatBridge />
         {reloadDataOnDocumentChange(props)}
       </>
     ),

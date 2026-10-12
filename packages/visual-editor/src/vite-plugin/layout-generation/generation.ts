@@ -1,19 +1,32 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { randomUUID } from "node:crypto";
 import { StringDecoder } from "node:string_decoder";
-import type { Catalog, Spec } from "@json-render/core";
+import type { PuckGenerationCatalog } from "./puckGenerationCatalog.ts";
+import type { GeneratedContent } from "../../local-editor/types.ts";
+import { compileGenerationSchema } from "./generationSchema.ts";
+import { createPuckGenerationPreview } from "./generationPreview.ts";
 import {
   buildGenerationPrompt,
-  normalizeGeneratedElement,
-  isGeneratedElementShape,
-  validateGeneratedText,
+  generatedContentShape,
+  validateGeneratedContent,
 } from "./generationValidation.ts";
 import { createStructuredGenerationParser } from "./structuredGenerationStream.ts";
-import { sendJsonResponse } from "./server.ts";
+import {
+  createGenerationRepetitionGuard,
+  GENERATION_ATTEMPT_DEADLINE_MS,
+  generationTokenBudget,
+} from "./generationLimits.ts";
+import { sendJsonResponse } from "../local-editor/server.ts";
 
 type GenerationOptions = {
   model: string;
-  loadCatalog: () => Promise<Catalog>;
+  loadContext: (layoutId: string) => Promise<
+    | {
+        catalog: PuckGenerationCatalog;
+        locales: string[];
+      }
+    | undefined
+  >;
   log: (message: string, details: object) => void;
 };
 
@@ -29,6 +42,7 @@ type GatewayResponse = {
     output_tokens?: number;
   };
   status?: string;
+  incomplete_details?: { reason?: string };
   error?: unknown;
   output_text?: string;
   output?: {
@@ -38,6 +52,16 @@ type GatewayResponse = {
 };
 
 const readOutputText = (result: GatewayResponse): string => {
+  if (
+    result.output?.some((item) =>
+      item.content?.some((content) => content.type === "refusal")
+    )
+  )
+    throw new Error("The AI gateway refused generation.");
+  if (result.incomplete_details?.reason === "max_output_tokens")
+    throw new Error(
+      "Generation exceeded its output token budget. Try a smaller request."
+    );
   if (
     result.error ||
     result.status === "failed" ||
@@ -57,63 +81,11 @@ const readOutputText = (result: GatewayResponse): string => {
   return text;
 };
 
-/** Serialize complete structured specs ourselves so nested JSON never needs patch repair. */
-export const serializeGenerationResponse = (
-  text: string,
-  catalog?: Catalog
-): string => {
-  // Retain compatibility with gateways that return the earlier mixed-stream format.
-  if (!text.trimStart().startsWith("{")) return text;
-  const response: unknown = JSON.parse(text);
-  if (
-    !response ||
-    typeof response !== "object" ||
-    !("text" in response) ||
-    typeof response.text !== "string" ||
-    !("spec" in response)
-  ) {
-    throw new Error("Generation must return a JSON object with text and spec.");
-  }
-  if (response.spec === null) return response.text;
-  if (
-    !response.spec ||
-    typeof response.spec !== "object" ||
-    Array.isArray(response.spec)
-  ) {
-    throw new Error("Generated spec must be an object or null.");
-  }
-  const spec = response.spec as Record<string, unknown>;
-  if (
-    catalog &&
-    spec.elements &&
-    typeof spec.elements === "object" &&
-    !Array.isArray(spec.elements)
-  ) {
-    spec.elements = Object.fromEntries(
-      Object.entries(spec.elements).map(([key, element]) => [
-        key,
-        normalizeGeneratedElement(catalog, element),
-      ])
-    );
-  }
-  const patches = Object.entries(spec).map(([key, value]) => ({
-    op: "add",
-    path: "/" + key.replaceAll("~", "~0").replaceAll("/", "~1"),
-    value,
-  }));
-  return (
-    response.text +
-    "\n```spec\n" +
-    patches.map((patch) => JSON.stringify(patch)).join("\n") +
-    "\n```\n"
-  );
-};
-
-/** Streams the company's Responses gateway output as mixed text and spec patches. */
+/** Streams the company gateway output as validated native Puck data. */
 export const handleLocalEditorGenerationRequest = async (
   request: IncomingMessage & { body?: unknown },
   response: ServerResponse,
-  { model, loadCatalog, log }: GenerationOptions
+  { model, loadContext, log }: GenerationOptions
 ): Promise<void> => {
   const correlationId = randomUUID();
   const requestDetails = {
@@ -201,15 +173,94 @@ export const handleLocalEditorGenerationRequest = async (
     return;
   }
 
+  const layoutId =
+    payload && typeof payload === "object" && "layoutId" in payload
+      ? payload.layoutId
+      : undefined;
+  if (typeof layoutId !== "string" || !layoutId.trim()) {
+    rejectRequest("A layoutId is required.", 400);
+    return;
+  }
+  const context = await loadContext(layoutId);
+  if (!context) {
+    rejectRequest("Unknown generation layoutId.", 400);
+    return;
+  }
+  const { catalog, locales } = context;
+
+  const currentData =
+    payload && typeof payload === "object" && "currentData" in payload
+      ? payload.currentData
+      : undefined;
+  if (
+    currentData !== undefined &&
+    !generatedContentShape.safeParse(currentData).success
+  ) {
+    rejectRequest("currentData must contain native Puck content.", 400);
+    return;
+  }
+
+  let compiled: ReturnType<typeof compileGenerationSchema>;
+  try {
+    compiled = compileGenerationSchema(
+      catalog,
+      locales,
+      currentData as GeneratedContent | undefined
+    );
+    if (currentData !== undefined) {
+      const errors = validateGeneratedContent(catalog, currentData);
+      if (errors.length)
+        throw new Error(
+          "Current editor content is invalid: " + errors.join("; ")
+        );
+    }
+  } catch (error) {
+    rejectRequest(error instanceof Error ? error.message : String(error), 422);
+    return;
+  }
+
   const abortController = new AbortController();
   let generatedText = "";
-  const abort = () => abortController.abort();
+  let started = false;
+  let disconnected = false;
+  let deadline: ReturnType<typeof setTimeout> | undefined;
+  const abort = () => {
+    disconnected = true;
+    abortController.abort();
+  };
   response.once("close", abort);
   try {
-    const catalog = await loadCatalog();
-    const input = messages.map(({ role, content }) => ({ role, content }));
-    const instructions = buildGenerationPrompt(catalog);
-    let started = false;
+    const input = messages.map(({ role, content }) => {
+      if (role === "assistant") {
+        try {
+          const historical = JSON.parse(content);
+          if (generatedContentShape.safeParse(historical.spec).success)
+            content = JSON.stringify({
+              ...historical,
+              spec: compiled.stripMetadata(historical.spec),
+            });
+        } catch {
+          /* Plain assistant prose has no structured metadata. */
+        }
+      }
+      return { role, content };
+    });
+    if (currentData !== undefined) {
+      input.splice(input.length - 1, 0, {
+        role: "user",
+        content:
+          "CURRENT EDITOR CONTENT (authoritative starting point; overrides content in earlier messages):\n" +
+          JSON.stringify({
+            text: "",
+            spec: compiled.stripMetadata(currentData as GeneratedContent),
+          }),
+      });
+    }
+    const instructions = buildGenerationPrompt(
+      catalog,
+      compiled.availableComponentNames,
+      compiled.stripMetadata
+    );
     const writeEvent = (event: object) => {
       if (!started) {
         started = true;
@@ -218,7 +269,10 @@ export const handleLocalEditorGenerationRequest = async (
           "Content-Type",
           "application/x-ndjson; charset=utf-8"
         );
-        response.setHeader("X-Visual-Editor-Generation", "validated-v1");
+        response.setHeader(
+          "X-Visual-Editor-Generation",
+          "validated-puck-content-v1"
+        );
         response.setHeader("Cache-Control", "no-cache, no-transform");
         response.setHeader("X-Accel-Buffering", "no");
         response.flushHeaders();
@@ -238,122 +292,27 @@ export const handleLocalEditorGenerationRequest = async (
       });
     };
     for (let attempt = 0; attempt < 3; attempt++) {
+      clearTimeout(deadline);
+      deadline = setTimeout(
+        () =>
+          abortController.abort(
+            new Error(
+              "Generation exceeded the two-minute deadline. Try a smaller request."
+            )
+          ),
+        GENERATION_ATTEMPT_DEADLINE_MS
+      );
       generatedText = "";
-      const preview: Spec = { root: "", elements: {} };
-      const components = (
-        catalog.data as { components: Record<string, { slots?: string[] }> }
-      ).components;
-      let stateReady = false;
-      const needsState = (value: unknown): boolean => {
-        if (!value || typeof value !== "object") return false;
-        if ("$state" in value || "statePath" in value) return true;
-        return Object.values(value).some(needsState);
-      };
-      const writePreview = () => {
-        const elements: Spec["elements"] = {};
-        for (const [key, element] of Object.entries(preview.elements)) {
-          if (
-            !isGeneratedElementShape(key, element) ||
-            (!stateReady && needsState(element))
-          )
-            continue;
-          // Validate complete props, including initial state bindings. Child references
-          // may still be arriving; the client substitutes placeholders for those.
-          const component = components[element.type];
-          const leaf = component?.slots?.length === 0;
-          const candidate = {
-            ...preview,
-            root: key,
-            elements: {
-              [key]: leaf ? element : { ...element, children: [], slots: {} },
-            },
-          };
-          const content = serializeGenerationResponse(
-            JSON.stringify({ text: "", spec: candidate }),
-            catalog
-          );
-          if (!validateGeneratedText(catalog, content).length)
-            Object.defineProperty(elements, key, {
-              value: element,
-              enumerable: true,
-              configurable: true,
-            });
-        }
-        // A provisional graph must not recurse into a cycle before final validation.
-        const visit = (key: string, ancestors: Set<string>) => {
-          if (ancestors.has(key)) {
-            for (const ancestor of ancestors) delete elements[ancestor];
-            return;
-          }
-          const element = Object.hasOwn(elements, key)
-            ? elements[key]
-            : undefined;
-          if (!element) return;
-          const next = new Set(ancestors).add(key);
-          for (const child of [
-            ...(element.children ?? []),
-            ...Object.values(element.slots ?? {}).flat(),
-          ])
-            visit(child, next);
-        };
-        visit(preview.root, new Set());
-        if (preview.root)
-          writeEvent({ type: "preview-spec", spec: { ...preview, elements } });
-      };
+      const guardRepetition = createGenerationRepetitionGuard();
       const structuredParser = createStructuredGenerationParser({
         onText: (delta) => writeEvent({ type: "preview-text", delta }),
-        onValue: (path, value) => {
-          if (
-            path.length === 2 &&
-            path[0] === "spec" &&
-            path[1] === "root" &&
-            typeof value === "string"
-          ) {
-            preview.root = value;
-            writePreview();
-          } else if (
-            path.length === 2 &&
-            path[0] === "spec" &&
-            path[1] === "state" &&
-            value &&
-            typeof value === "object" &&
-            !Array.isArray(value)
-          ) {
-            preview.state = value as Record<string, unknown>;
-            stateReady = true;
-            writePreview();
-          } else if (
-            path.length === 3 &&
-            path[0] === "spec" &&
-            path[1] === "elements"
-          ) {
-            const element = normalizeGeneratedElement(catalog, value);
-            if (
-              element &&
-              typeof element === "object" &&
-              !Array.isArray(element)
-            ) {
-              Object.defineProperty(preview.elements, path[2], {
-                value: element,
-                enumerable: true,
-                configurable: true,
-                writable: true,
-              });
-              writePreview();
-            }
-          }
-        },
+        onValue: createPuckGenerationPreview(
+          catalog,
+          (spec) => writeEvent({ type: "preview-spec", spec }),
+          compiled.normalizeContent
+        ),
       });
-      let streamFormat: "structured" | "mixed" | undefined;
-      const previewDelta = (delta: string) => {
-        if (!streamFormat && generatedText.trimStart())
-          streamFormat = generatedText.trimStart().startsWith("{")
-            ? "structured"
-            : "mixed";
-        if (streamFormat === "structured") structuredParser.push(delta);
-        else if (streamFormat === "mixed")
-          writeEvent({ type: "preview", delta });
-      };
+      const previewDelta = (delta: string) => structuredParser.push(delta);
       const gatewayRequest = {
         method: "POST",
         headers: {
@@ -365,33 +324,17 @@ export const handleLocalEditorGenerationRequest = async (
         body: JSON.stringify({
           model,
           stream: true,
+          max_output_tokens: generationTokenBudget(
+            currentData === undefined
+              ? undefined
+              : compiled.stripMetadata(currentData as GeneratedContent)
+          ),
           text: {
             format: {
               type: "json_schema",
               name: "visual_editor_response",
-              strict: false,
-              schema: {
-                type: "object",
-                required: ["text", "spec"],
-                additionalProperties: false,
-                properties: {
-                  text: { type: "string" },
-                  spec: {
-                    anyOf: [
-                      { type: "null" },
-                      {
-                        type: "object",
-                        required: ["root", "elements"],
-                        properties: {
-                          root: { type: "string" },
-                          elements: { type: "object" },
-                          state: { type: "object" },
-                        },
-                      },
-                    ],
-                  },
-                },
-              },
+              strict: true,
+              schema: compiled.jsonSchema,
             },
           },
           instructions,
@@ -448,6 +391,7 @@ export const handleLocalEditorGenerationRequest = async (
         });
         writeUsage(result.usage);
         generatedText = readOutputText(result);
+        guardRepetition(generatedText);
         log("[local-editor generation] Completed response", {
           correlationId,
           model: result.model ?? model,
@@ -473,6 +417,16 @@ export const handleLocalEditorGenerationRequest = async (
             const data = line.slice(5).trim();
             if (!data || data === "[DONE]") continue;
             const event = JSON.parse(data);
+            if (
+              event.type === "response.refusal.delta" ||
+              event.type === "response.refusal.done" ||
+              (event.type === "response.completed" &&
+                event.response?.output?.some(
+                  (item: NonNullable<GatewayResponse["output"]>[number]) =>
+                    item.content?.some((content) => content.type === "refusal")
+                ))
+            )
+              throw new Error("The AI gateway refused generation.");
             log("[local-editor generation] Gateway stream event", {
               correlationId,
               event,
@@ -497,6 +451,13 @@ export const handleLocalEditorGenerationRequest = async (
                 error: event.error ?? event.response?.error ?? event.message,
                 incompleteDetails: event.response?.incomplete_details,
               });
+              if (
+                event.response?.incomplete_details?.reason ===
+                "max_output_tokens"
+              )
+                throw new Error(
+                  "Generation exceeded its output token budget. Try a smaller request."
+                );
               throw new Error(
                 `The AI gateway returned a streaming error (correlation ${correlationId}).`
               );
@@ -507,6 +468,7 @@ export const handleLocalEditorGenerationRequest = async (
             ) {
               receivedText = true;
               generatedText += event.delta;
+              guardRepetition(event.delta);
               previewDelta(event.delta);
             }
             if (event.type === "response.completed") {
@@ -514,6 +476,7 @@ export const handleLocalEditorGenerationRequest = async (
               completedResponse = event.response;
               if (!receivedText) {
                 generatedText = readOutputText(event.response);
+                guardRepetition(generatedText);
                 previewDelta(generatedText);
               }
             }
@@ -533,13 +496,22 @@ export const handleLocalEditorGenerationRequest = async (
           text: generatedText,
         });
       }
-      const structured = generatedText.trimStart().startsWith("{");
-      generatedText = serializeGenerationResponse(generatedText, catalog);
-      if (structured && streamFormat !== "structured")
-        writeEvent({ type: "preview", delta: generatedText });
-      const errors = validateGeneratedText(catalog, generatedText);
+      let accepted: { text: string; spec: GeneratedContent | null } | undefined;
+      let errors: string[];
+      try {
+        accepted = compiled.parseResponse(generatedText);
+        errors =
+          accepted.spec === null
+            ? []
+            : validateGeneratedContent(catalog, accepted.spec);
+      } catch (error) {
+        errors = [error instanceof Error ? error.message : String(error)];
+      }
       if (!errors.length) {
-        writeEvent({ type: "accepted", content: generatedText });
+        writeEvent({
+          type: "accepted",
+          ...accepted,
+        });
         response.end();
         return;
       }
@@ -563,14 +535,37 @@ export const handleLocalEditorGenerationRequest = async (
       );
     }
   } catch (error) {
+    const failure =
+      !disconnected && abortController.signal.reason instanceof Error
+        ? abortController.signal.reason
+        : error;
     log("[local-editor generation] Generation failed", {
       correlationId,
       model,
-      error: error instanceof Error ? error.message : String(error),
+      error: failure instanceof Error ? failure.message : String(failure),
       text: generatedText,
     });
+    if (started && !disconnected) {
+      response.write(
+        JSON.stringify({
+          type: "error",
+          error: failure instanceof Error ? failure.message : String(failure),
+        }) + "\n"
+      );
+      response.end();
+      return;
+    }
+    if (!disconnected && abortController.signal.aborted) {
+      sendJsonResponse(
+        response,
+        { error: String((failure as Error).message) },
+        504
+      );
+      return;
+    }
     throw error;
   } finally {
+    clearTimeout(deadline);
     response.off("close", abort);
     abortController.abort();
   }

@@ -4,7 +4,9 @@ import { Editor } from "../editor/Editor.tsx";
 import type { LocalDevOptions } from "../editor/types.ts";
 import { SectionLibraryVisualEditorProvider } from "../utils/SectionLibraryVisualEditorProvider.tsx";
 import { LocalEditorControls } from "./LocalEditorControls.tsx";
-import { LocalEditorJsonRender } from "./LocalEditorJsonRender.tsx";
+import { LocalEditorChat } from "./chat/LocalEditorChat.tsx";
+import { LocalEditorChatContext } from "./chat/LocalEditorChatContext.tsx";
+import { useLocalEditorChat } from "./chat/useLocalEditorChat.ts";
 import { LocalEditorNotice } from "./LocalEditorNotice.tsx";
 import {
   buildEditorLocalDevOptions,
@@ -79,9 +81,9 @@ export const LocalEditorShell = ({
   themeConfig,
   sectionLibraryMigrationRegistry,
   translationLoaders,
-  jsonRenderRegistry,
+  chatEnabled,
 }: LocalEditorShellProps) => {
-  const [useJsonRender, setUseJsonRender] = React.useState(false);
+  const editorFrameRef = React.useRef<HTMLDivElement>(null);
   const [previewContext, setPreviewContext] = React.useState<{
     config: Config;
     defaultLayoutData?: unknown;
@@ -146,6 +148,11 @@ export const LocalEditorShell = ({
     return buildLocalEditorSelection(manifest, componentRegistry, searchParams);
   }, [componentRegistry, manifest, searchParams]);
 
+  const chat = useLocalEditorChat(`${apiBasePath}/generate`, selectedLayoutId);
+  React.useEffect(() => {
+    if (selectedMode === "theme" || previewContext) chat.cancel();
+  }, [selectedMode, previewContext, chat.cancel]);
+
   React.useEffect(() => {
     syncSelectionToUrl(
       selectedLayoutId,
@@ -184,6 +191,9 @@ export const LocalEditorShell = ({
   ]);
   const { documentError, documentResponse, isDocumentLoading } =
     useLocalEditorDocument(documentRequestPath);
+  React.useEffect(() => {
+    if (documentError) chat.cancel();
+  }, [documentError, chat.cancel]);
 
   const diagnostics = React.useMemo(() => {
     return [
@@ -329,6 +339,26 @@ export const LocalEditorShell = ({
   ]);
 
   React.useEffect(() => {
+    const frame = editorFrameRef.current;
+    if (!chat.isStreaming || !frame) return;
+    frame.setAttribute("inert", "");
+    const blockHistoryShortcut = (event: KeyboardEvent) => {
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        ["z", "y"].includes(event.key.toLowerCase())
+      ) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    };
+    window.addEventListener("keydown", blockHistoryShortcut, true);
+    return () => {
+      frame.removeAttribute("inert");
+      window.removeEventListener("keydown", blockHistoryShortcut, true);
+    };
+  }, [chat.isStreaming, streamDocument]);
+
+  React.useEffect(() => {
     if (
       !isLocatorDocument ||
       documentResponse?.locatorDataSource !== "fixture"
@@ -406,6 +436,7 @@ export const LocalEditorShell = ({
       return;
     }
 
+    chat.cancel();
     writePreviewOpenState(true);
     setShouldOpenPreview(true);
     setPreviewContext({
@@ -416,6 +447,7 @@ export const LocalEditorShell = ({
       localDevOptions: editorLocalDevOptions,
     });
   }, [
+    chat.cancel,
     activeConfig,
     canOpenPreview,
     documentResponse,
@@ -486,15 +518,6 @@ export const LocalEditorShell = ({
             justifyContent: "flex-end",
           }}
         >
-          {jsonRenderRegistry && (
-            <EditorShellButton
-              onClick={() => setUseJsonRender((value) => !value)}
-            >
-              {useJsonRender
-                ? "Switch to Visual Editor"
-                : "Switch to json-render"}
-            </EditorShellButton>
-          )}
           {manifest?.pageSetTypeByLayout[selectedLayoutId] === "DIRECTORY" &&
             manifest.dataSourceByLayout[selectedLayoutId] === "fixture" && (
               <EditorShellButton onClick={handleDirectoryChildCountUpdate}>
@@ -623,24 +646,19 @@ export const LocalEditorShell = ({
         />
       )}
 
-      {useJsonRender && jsonRenderRegistry && (
-        <SectionLibraryVisualEditorProvider
-          templateProps={{
-            document: streamDocument ?? { locale: selectedLocale },
-          }}
-          entityFields={documentResponse?.entityFields}
-          tailwindConfig={tailwindConfig}
-          translationLoaders={translationLoaders}
-        >
-          <LocalEditorJsonRender
-            api={`${apiBasePath}/generate`}
-            registry={jsonRenderRegistry}
-          />
-        </SectionLibraryVisualEditorProvider>
+      {chatEnabled && selectedMode === "layout" && (
+        <LocalEditorChat
+          key={selectedLayoutId}
+          chat={chat}
+          disabled={
+            isDocumentLoading || !streamDocument || !activeConfig || !chat.ready
+          }
+        />
       )}
 
-      {!useJsonRender && shouldRenderEditorFrame && (
+      {shouldRenderEditorFrame && (
         <div
+          ref={editorFrameRef}
           style={{
             position: "relative",
             background: "#fff",
@@ -675,18 +693,22 @@ export const LocalEditorShell = ({
               tailwindConfig={tailwindConfig}
               translationLoaders={translationLoaders}
             >
-              <Editor
-                key={editorKey}
-                document={streamDocument}
-                componentRegistry={componentRegistry}
-                themeConfig={themeConfig}
-                localDev={true}
-                localDevOptions={editorLocalDevOptions}
-                forceThemeMode={selectedMode === "theme"}
-                sectionLibraryMigrationRegistry={
-                  sectionLibraryMigrationRegistry
-                }
-              />
+              <LocalEditorChatContext.Provider
+                value={chatEnabled ? chat.canvas : null}
+              >
+                <Editor
+                  key={editorKey}
+                  document={streamDocument}
+                  componentRegistry={componentRegistry}
+                  themeConfig={themeConfig}
+                  localDev={true}
+                  localDevOptions={editorLocalDevOptions}
+                  forceThemeMode={selectedMode === "theme"}
+                  sectionLibraryMigrationRegistry={
+                    sectionLibraryMigrationRegistry
+                  }
+                />
+              </LocalEditorChatContext.Provider>
             </SectionLibraryVisualEditorProvider>
           )}
         </div>

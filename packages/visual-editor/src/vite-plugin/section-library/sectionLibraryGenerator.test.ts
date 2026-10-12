@@ -6,11 +6,12 @@ import fs from "fs-extra";
 import { createServer } from "vite";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { Renderer, JSONUIProvider } from "@json-render/react";
+import { Render } from "@puckeditor/core";
+import { MainContent } from "../../components/helpers/MainContent.tsx";
 import {
   buildGenerationPrompt,
   validateGeneratedText,
-} from "../local-editor/generationValidation.ts";
+} from "../layout-generation/generationValidation.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   cleanupGeneratedSectionLibraryFiles,
@@ -50,7 +51,7 @@ describe("generateSectionLibraryFiles", () => {
               `export const ${name} = {};`,
               name === "Hero"
                 ? 'export const Hero = ({ title, children }) => createElement("h2", null, title, children);'
-                : `export const ${name} = { render: ({ title }) => createElement("p", null, title) };`
+                : `export const ${name} = { render: ({ title }) => createElement("p", null, title), derivedSlotPaths: [["parentValues", "copiedSlot"]] };`
             )
             .replace(
               "pageSetTypes:",
@@ -66,7 +67,7 @@ describe("generateSectionLibraryFiles", () => {
         alias: {
           "@yext/visual-editor/section-library-support": path.join(
             process.cwd(),
-            "src/local-editor/JsonRenderSection.tsx"
+            "src/vite-plugin/layout-generation/puckGenerationCatalog.ts"
           ),
         },
       },
@@ -75,153 +76,136 @@ describe("generateSectionLibraryFiles", () => {
       appType: "custom",
     });
     try {
-      const { catalog } = await server.ssrLoadModule(
+      const { catalogs } = await server.ssrLoadModule(
         "/src/library/.generated/catalog.js"
       );
-      const { registry } = await server.ssrLoadModule(
-        "/src/library/.generated/registry.js"
-      );
-      expect(catalog.componentNames).not.toContain("Locator");
-      expect(registry.Locator).toBeUndefined();
-      expect(buildGenerationPrompt(catalog)).not.toContain("Locator");
+      const catalog = catalogs.location;
+      const directoryCatalog = catalogs["directory-layout"];
+      expect(catalog.componentNames).toContain("hero");
       expect(catalog.componentNames).toContain("MainContent");
-      expect(catalog.componentNames).not.toContain(
-        "__VisualEditorSectionStack"
-      );
+      expect(catalog.componentNames).not.toContain("Directory");
+      expect(directoryCatalog.componentNames).toContain("Directory");
       expect(
-        catalog.data.components.hero.props.safeParse({ title: "Hello" }).success
+        directoryCatalog.data.components.Directory.derivedSlotPaths
+      ).toEqual([["parentValues", "copiedSlot"]]);
+      expect(directoryCatalog.componentNames).not.toContain("hero");
+      expect(catalog.componentNames).not.toContain("Locator");
+      expect(buildGenerationPrompt(catalog)).not.toContain("Locator");
+      expect(
+        catalog.data.components.hero.props.safeParse({
+          id: "hero",
+          title: "Hello",
+        }).success
       ).toBe(true);
       expect(
-        catalog.data.components.hero.props.safeParse({ title: 42 }).success
+        catalog.data.components.hero.props.safeParse({ id: "hero", title: 42 })
+          .success
       ).toBe(false);
-      expect(
-        catalog.data.components.Directory.props.parse({ title: "Directory" })
-      ).toEqual({ title: "Directory" });
-      const heading = createElement(
-        registry.hero,
-        { element: { type: "hero", props: { title: "Hello" } } },
-        " child"
+      const { Hero } = await server.ssrLoadModule(
+        "/src/library/sections/Hero.tsx"
       );
-      expect(renderToStaticMarkup(heading)).toBe("<h2>Hello child</h2>");
+      const { Directory } = await server.ssrLoadModule(
+        "/src/library/sections/Directory.tsx"
+      );
+      const data = {
+        root: { props: {} },
+        content: [
+          {
+            type: "MainContent",
+            props: {
+              id: "main",
+              content: [
+                { type: "hero", props: { id: "first", title: "First" } },
+                { type: "hero", props: { id: "second", title: "Second" } },
+              ],
+            },
+          },
+        ],
+        zones: {},
+      };
+      expect(
+        validateGeneratedText(
+          catalog,
+          JSON.stringify({ text: "Created", spec: { content: data.content } })
+        )
+      ).toEqual([]);
+      expect(
+        validateGeneratedText(
+          directoryCatalog,
+          JSON.stringify({ text: "Created", spec: { content: data.content } })
+        ).join()
+      ).toContain("Unknown component hero");
       expect(
         renderToStaticMarkup(
-          createElement(registry.Directory, {
-            element: { type: "Directory", props: { title: "Directory" } },
+          createElement(Render, {
+            config: { components: { MainContent, hero: { render: Hero } } },
+            data,
           })
         )
-      ).toBe("<p>Directory</p>");
-      const spec = {
-        root: "page",
-        elements: {
-          page: {
-            type: "MainContent",
-            props: {},
-            children: ["first", "second", "third"],
-          },
-          first: { type: "hero", props: { title: "First" }, children: [] },
-          second: {
-            type: "Directory",
-            props: { title: "Second" },
-            children: [],
-          },
-          third: { type: "hero", props: { title: "Third" }, children: [] },
-        },
-      };
-      const output =
-        "```spec\n" +
-        [
-          { op: "add", path: "/root", value: spec.root },
-          { op: "add", path: "/elements", value: spec.elements },
-        ]
-          .map((patch) => JSON.stringify(patch))
-          .join("\n") +
-        "\n```";
-      expect(validateGeneratedText(catalog, output)).toEqual([]);
+      ).toBe(
+        '<div><main id="main-content"><div><h2>First</h2><h2>Second</h2></div></main></div>'
+      );
       expect(
-        validateGeneratedText(
-          catalog,
-          output.replace('"MainContent"', '"Locator"')
+        renderToStaticMarkup(
+          createElement(Render, {
+            config: { components: { Directory } },
+            data: {
+              root: {
+                props: {},
+              },
+              content: [
+                {
+                  type: "Directory",
+                  props: { id: "directory", title: "Directory" },
+                },
+              ],
+            },
+          })
         )
-      ).toContain("page: Unknown component Locator");
-      expect(
-        validateGeneratedText(
-          catalog,
-          output.replace('"MainContent"', '"hero"')
-        ).join(";")
-      ).toContain("is a leaf section");
-      const markup = renderToStaticMarkup(
-        createElement(JSONUIProvider, {
-          registry,
-          initialState: {},
-          children: createElement(Renderer, { spec, registry }),
-        })
-      );
-      expect(markup).toBe(
-        '<main id="main-content"><h2>First</h2><p>Second</p><h2>Third</h2></main>'
-      );
+      ).toBe("<div><p>Directory</p></div>");
     } finally {
       await server.close();
     }
-  });
+  }, 15000);
 
-  it("generates catalogs and render adapters keyed by section metadata ids", () => {
+  it("generates Puck catalogs keyed by layout and section metadata ids", () => {
     const rootDir = createLibrary();
     const result = generateSectionLibraryFiles(rootDir, "revision");
     const directory = path.join(rootDir, "src", "library", ".generated");
     const catalogPath = path.join(directory, "catalog.js");
-    const registryPath = path.join(directory, "registry.js");
-    const catalog = fs.readFileSync(catalogPath, "utf8");
-    const registry = fs.readFileSync(registryPath, "utf8");
-
-    expect(result.generatedFiles).toEqual(
-      expect.arrayContaining([catalogPath, registryPath])
+    const source = fs.readFileSync(catalogPath, "utf8");
+    expect(result.generatedFiles).toContain(catalogPath);
+    expect(source).toContain(
+      'import { createPuckGenerationCatalog } from "@yext/visual-editor/section-library-support"'
     );
-    expect(catalog).toContain(
-      'import { schema } from "@json-render/react/schema"'
+    expect(source).toContain("config as sectionConfig1, Hero as Section1");
+    expect(source).toContain('"hero": { props: sectionConfig1.formalProps');
+    expect(source).toContain("fields: Section1.fields");
+    expect(source).toContain("derivedSlotPaths: Section1.derivedSlotPaths");
+    expect(source).toContain(
+      "derivedSlotPaths: sharedComponentConfigs[component.id]?.derivedSlotPaths"
     );
-    expect(catalog).toContain(
-      'import { config as sectionConfig1 } from "../sections/Hero"'
-    );
-    expect(catalog).toContain(
-      '"hero": { props: sectionConfig1.formalProps, slots: [], description: sectionConfig1.description }'
-    );
-    expect(catalog).not.toContain('"Hero":');
-    expect(catalog).not.toContain("passthrough");
-    expect(catalog).toContain("sectionConfig1.formalProps ?");
-    expect(registry).toContain(
-      'import { Hero as Section1 } from "../sections/Hero"'
-    );
-    expect(registry).toContain(
-      '"hero": adaptSection(Section1, catalog.data.components["hero"].props)'
-    );
-    expect(registry).toContain(
-      'const Render = typeof section === "function" ? section : section.render'
-    );
-    expect(registry).toContain("puckConfig");
-    expect(registry).toContain("Section: section");
+    expect(source).toContain('"location": createPuckGenerationCatalog');
+    expect(source).toContain("sectionConfig1.formalProps ?");
     cleanupGeneratedSectionLibraryFiles(result.generatedFiles);
     expect(fs.existsSync(catalogPath)).toBe(false);
-    expect(fs.existsSync(registryPath)).toBe(false);
   });
 
-  it.each(["catalog", "registry"])(
-    "does not overwrite a hand-authored %s",
-    (name) => {
-      const rootDir = createLibrary();
-      const filePath = path.join(
-        rootDir,
-        "src",
-        "library",
-        ".generated",
-        `${name}.js`
-      );
-      fs.outputFileSync(filePath, "// hand-authored");
-      expect(() => generateSectionLibraryFiles(rootDir, "revision")).toThrow(
-        /Refusing to overwrite json-render/
-      );
-      expect(fs.readFileSync(filePath, "utf8")).toBe("// hand-authored");
-    }
-  );
+  it.each(["catalog"])("does not overwrite a hand-authored %s", (name) => {
+    const rootDir = createLibrary();
+    const filePath = path.join(
+      rootDir,
+      "src",
+      "library",
+      ".generated",
+      `${name}.js`
+    );
+    fs.outputFileSync(filePath, "// hand-authored");
+    expect(() => generateSectionLibraryFiles(rootDir, "revision")).toThrow(
+      /Refusing to overwrite json-render/
+    );
+    expect(fs.readFileSync(filePath, "utf8")).toBe("// hand-authored");
+  });
 
   it("maps all layouts to current Platform templates", () => {
     const rootDir = createLibrary();
@@ -231,7 +215,7 @@ describe("generateSectionLibraryFiles", () => {
       "123e4567-e89b-12d3-a456-426614174000"
     );
 
-    expect(result.generatedFiles).toHaveLength(62);
+    expect(result.generatedFiles).toHaveLength(61);
     const config = fs.readFileSync(
       path.join(
         rootDir,
@@ -557,7 +541,7 @@ describe("generateSectionLibraryFiles", () => {
       "directory-layout",
       "locator-layout",
     ]);
-    expect(result.generatedFiles).toHaveLength(65);
+    expect(result.generatedFiles).toHaveLength(64);
     expect(
       fs.existsSync(
         path.join(
@@ -728,7 +712,7 @@ describe("generateSectionLibraryFiles", () => {
     expect(fs.readFileSync(handwrittenMainPath, "utf8")).toBe(
       "export default null;"
     );
-    expect(generatedFiles).toHaveLength(62);
+    expect(generatedFiles).toHaveLength(61);
     for (const filePath of generatedFiles) {
       expect(fs.existsSync(filePath)).toBe(false);
     }

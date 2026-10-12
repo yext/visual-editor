@@ -187,6 +187,10 @@ export type YextComponentConfig<
     fields: YextPuckFields;
   }>["render"];
   fields?: YextFields<Props>;
+  /** Paths relative to props identifying slots copied from authored content.
+   * For example: [["parentValues", "SecondaryHeaderSlot"]]. Generation validation
+   * skips ID uniqueness checks in these subtrees, retaining all other checks. */
+  derivedSlotPaths?: readonly (readonly string[])[];
   resolveFields?: ComponentConfig<{
     props: Props;
     fields: YextPuckFields;

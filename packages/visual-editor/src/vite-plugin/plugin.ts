@@ -1,7 +1,8 @@
 import type { Plugin } from "vite";
 import path from "node:path";
-import { createGenerationLogger } from "./local-editor/generationLogger.ts";
-import { handleLocalEditorGenerationRequest } from "./local-editor/generation.ts";
+import { createGenerationLogger } from "./layout-generation/generationLogger.ts";
+import { handleLocalEditorGenerationRequest } from "./layout-generation/generation.ts";
+import { getLocalEditorGenerationLocales } from "./local-editor/data.ts";
 import {
   cleanupGeneratedSectionLibraryFiles,
   generateSectionLibraryFiles,
@@ -33,6 +34,7 @@ export const yextVisualEditorPlugin = (
   let sectionLibraryManifest: string | undefined;
   let sectionLibraryLayouts: SectionLibraryLayout[] = [];
   let sectionLibraryGenerated = false;
+  let closeGenerationLog: (() => Promise<void>) | undefined;
   const localEditorArtifacts = createLocalEditorArtifactsManager({
     localEditorTemplateSource: localEditorTemplate,
     localEditorDataTemplateSource: localEditorDataTemplate,
@@ -51,8 +53,16 @@ export const yextVisualEditorPlugin = (
 
   const syncLocalEditorArtifacts = async (): Promise<void> => {
     ensureLocalEditorStreamConfig(process.cwd());
-    await readResolvedLayoutConfigs(process.cwd(), sectionLibraryLayouts, []);
-    localEditorArtifacts.syncLocalEditorDataTemplates(sectionLibraryLayouts);
+    const resolvedConfig = await readResolvedLayoutConfigs(
+      process.cwd(),
+      sectionLibraryLayouts,
+      []
+    );
+    localEditorArtifacts.syncLocalEditorDataTemplates(
+      sectionLibraryLayouts,
+      process.cwd(),
+      resolvedConfig.layouts
+    );
     localEditorArtifacts.syncLocalEditorTemplate(sectionLibraryLayouts);
   };
 
@@ -70,17 +80,24 @@ export const yextVisualEditorPlugin = (
     // cleanup on interruption (ctrl + C)
     process.once("SIGINT", () => {
       cleanupGeneratedArtifacts();
-      process.nextTick(() => process.exit(130));
+      void Promise.resolve(closeGenerationLog?.()).finally(() =>
+        process.exit(130)
+      );
     });
 
     process.once("SIGTERM", () => {
       cleanupGeneratedArtifacts();
-      process.nextTick(() => process.exit(143));
+      void Promise.resolve(closeGenerationLog?.()).finally(() =>
+        process.exit(143)
+      );
     });
   }
 
   return {
     name: "vite-plugin-yext-visual-editor",
+    async closeBundle() {
+      await closeGenerationLog?.();
+    },
     async config(_, { command }) {
       isBuildMode = command === "build";
 
@@ -129,7 +146,9 @@ export const yextVisualEditorPlugin = (
       const logGeneration = createGenerationLogger(
         path.join(server.config.root, "src/library/.generated/logs")
       );
+      closeGenerationLog = logGeneration.close;
       server.httpServer?.once("close", () => {
+        void logGeneration.close();
         cleanupGeneratedArtifacts();
       });
 
@@ -145,11 +164,20 @@ export const yextVisualEditorPlugin = (
           void handleLocalEditorGenerationRequest(request, response, {
             log: logGeneration,
             model: options.localEditor?.generationModel ?? "gpt-6-luna",
-            loadCatalog: async () => {
-              const { catalog } = await server.ssrLoadModule(
+            loadContext: async (layoutId) => {
+              const { catalogs } = await server.ssrLoadModule(
                 "/src/library/.generated/catalog.js"
               );
-              return catalog;
+              return Object.hasOwn(catalogs, layoutId)
+                ? {
+                    catalog: catalogs[layoutId],
+                    locales: await getLocalEditorGenerationLocales(
+                      server.config.root,
+                      sectionLibraryLayouts,
+                      layoutId
+                    ),
+                  }
+                : undefined;
             },
           }).catch((error: unknown) => {
             if (response.headersSent) {

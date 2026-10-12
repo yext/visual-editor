@@ -64,6 +64,11 @@ describe("createLocalEditorArtifactsManager", () => {
     );
   });
 
+  it("enables native Puck generation without importing a React registry", () => {
+    expect(localEditorTemplate).toContain("chatEnabled");
+    expect(localEditorTemplate).not.toContain("registry.js");
+  });
+
   it("passes repo translation loaders to the local editor runtime", () => {
     expect(localEditorTemplate).toContain('from "../library/.generated/i18n"');
     expect(localEditorTemplate).toContain(
@@ -81,7 +86,7 @@ describe("createLocalEditorArtifactsManager", () => {
         "/* LOCAL_EDITOR_COMPONENT_REGISTRY */",
       ].join("\n"),
       localEditorDataTemplateSource: [
-        '"__LOCAL_EDITOR_STREAM_CONFIG_IMPORT__"',
+        '"__LOCAL_EDITOR_STREAM_CONFIG__"',
         '"__LOCAL_EDITOR_TEMPLATE_ID__"',
         '"__LOCAL_EDITOR_PAGE_SET_TYPE__"',
         '"__LOCAL_EDITOR_DATA_TEMPLATE_NAME__"',

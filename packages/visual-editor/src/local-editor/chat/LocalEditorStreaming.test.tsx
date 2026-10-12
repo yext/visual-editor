@@ -1,8 +1,7 @@
 import React from "react";
 import { EventEmitter } from "node:events";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { defineCatalog } from "@json-render/core";
-import { schema } from "@json-render/react/schema";
+import { createPuckGenerationCatalog } from "../../vite-plugin/layout-generation/puckGenerationCatalog.ts";
 import {
   act,
   fireEvent,
@@ -12,12 +11,11 @@ import {
 } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { z } from "zod";
-import { handleLocalEditorGenerationRequest } from "../vite-plugin/local-editor/generation.ts";
-import { LocalEditorJsonRender } from "./LocalEditorJsonRender.tsx";
-import { JsonRenderSection } from "./JsonRenderSection.tsx";
+import { handleLocalEditorGenerationRequest } from "../../vite-plugin/layout-generation/generation.ts";
+import { ChatHarness } from "./chatTestUtils.tsx";
 
 // Document/manifest routes are unrelated to generation and load Node-only tooling.
-vi.mock("../vite-plugin/local-editor/data.ts", () => ({
+vi.mock("../../vite-plugin/local-editor/data.ts", () => ({
   getLocalEditorDocument: vi.fn(),
   getLocalEditorManifest: vi.fn(),
 }));
@@ -28,12 +26,8 @@ it("renders decoded prose and complete validated sections through the real serve
   let upstream!: ReadableStreamDefaultController<Uint8Array>;
   let running!: Promise<void>;
   const headingSchema = z.object({ text: z.string() });
-  const catalog = defineCatalog(schema, {
-    components: {
-      MainContent: { props: z.object({}), slots: ["default"] },
-      Heading: { props: headingSchema, slots: [] },
-    },
-    actions: {},
+  const catalog = createPuckGenerationCatalog({
+    Heading: { props: headingSchema },
   });
   const fetchMock = vi.fn((url: string, init?: RequestInit) => {
     if (url !== "/local/generate")
@@ -74,7 +68,11 @@ it("renders decoded prose and complete validated sections through the real serve
       running = handleLocalEditorGenerationRequest(
         request as unknown as IncomingMessage,
         response as unknown as ServerResponse,
-        { model: "test-model", loadCatalog: async () => catalog, log: () => {} }
+        {
+          model: "test-model",
+          loadContext: async () => ({ catalog, locales: [] }),
+          log: () => {},
+        }
       );
       void running.catch((error) => {
         downstream.error(error);
@@ -83,25 +81,12 @@ it("renders decoded prose and complete validated sections through the real serve
     });
   });
   vi.stubGlobal("fetch", fetchMock);
-  render(
-    <LocalEditorJsonRender
-      api="/local/generate"
-      registry={{
-        MainContent: ({ children }) => <main>{children}</main>,
-        Heading: ({ element }) => (
-          <JsonRenderSection
-            render={({ text }) => <h2>{text}</h2>}
-            schema={headingSchema}
-            props={element.props}
-          />
-        ),
-      }}
-    />
-  );
+  render(<ChatHarness initialData={{ root: { props: {} }, content: [] }} />);
+  fireEvent.click(screen.getByRole("button", { name: "Show chat" }));
   fireEvent.change(screen.getByRole("textbox"), {
     target: { value: "Create two sections" },
   });
-  fireEvent.click(screen.getByRole("button", { name: "Generate" }));
+  fireEvent.click(screen.getByRole("button", { name: "Send" }));
   await waitFor(() => expect(upstream).toBeDefined());
   const emit = (event: object) =>
     upstream.enqueue(
@@ -115,31 +100,30 @@ it("renders decoded prose and complete validated sections through the real serve
   await delta('{"text":"Building');
   await screen.findByText("Building");
   await delta(
-    ' the page.","spec":{"root":"page","state":{},"elements":{"page":{"type":"MainContent","props":{},"children":["first","second"]},"first":{"type":"Heading","props":{"text":"First'
-  );
-  await waitFor(() =>
-    expect(screen.getAllByLabelText("Section pending")).toHaveLength(2)
+    ` the page.","spec":{"content":[{"type":"MainContent","props":{"id":"main","content":[{"type":"Heading","props":{"id":"first","text":"First`
   );
   expect(screen.queryByRole("heading")).toBeNull();
-  await delta(' section"}},"second":{"type":"Heading","props":{"text":"Second');
-  await screen.findByRole("heading", { name: "First section" });
-  expect(screen.getAllByLabelText("Section pending")).toHaveLength(1);
-  expect(
-    (screen.getByRole("button", { name: "Generating…" }) as HTMLButtonElement)
-      .disabled
-  ).toBe(true);
-  await delta(' section"}}}}}');
-  await screen.findByRole("heading", { name: "Second section" });
-  expect(screen.queryByLabelText("Section pending")).toBeNull();
+  await delta(
+    ' section"}},{"type":"Heading","props":{"id":"second","text":"Second'
+  );
+  await screen.findByText("First section", { selector: "h2" });
+  expect(screen.queryByText("Second section", { selector: "h2" })).toBeNull();
+  await delta(' section"}}]}}]}}');
+  await screen.findByText("Second section", { selector: "h2" });
   // The gateway is still open: neither response.completed nor acceptance has arrived.
-  expect(screen.getByRole("status").textContent).toContain("Provisional");
+  expect(screen.getByText(/Editor updates are provisional/)).toBeDefined();
   await act(async () => {
     emit({ type: "response.completed" });
     upstream.close();
     await running;
   });
-  await screen.findByRole("button", { name: "Generate" });
-  expect(screen.queryByRole("status")).toBeNull();
+  await waitFor(() =>
+    expect(
+      (screen.getByRole("button", { name: "Send" }) as HTMLButtonElement)
+        .disabled
+    ).toBe(false)
+  );
+  expect(screen.queryByText(/Editor updates are provisional/)).toBeNull();
   expect(
     fetchMock.mock.calls.filter(([url]) => url !== "/local/generate")
   ).toHaveLength(1);

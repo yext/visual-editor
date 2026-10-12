@@ -1,5 +1,4 @@
-import type { Config } from "@puckeditor/core";
-import type { ComponentRegistry } from "@json-render/react";
+import type { Config, Data } from "@puckeditor/core";
 import type { TailwindConfig, ThemeConfig } from "../utils/themeResolver.ts";
 import type { MigrationRegistry } from "../utils/migrate.ts";
 import type {
@@ -25,7 +24,7 @@ export type LocalEditorShellProps = {
   themeConfig?: ThemeConfig;
   sectionLibraryMigrationRegistry?: MigrationRegistry;
   translationLoaders?: SectionLibraryTranslationLoaders;
-  jsonRenderRegistry?: ComponentRegistry;
+  chatEnabled?: boolean;
 };
 
 export type LocalEditorMode = "layout" | "theme";
@@ -42,3 +41,6 @@ export type GenerationTokenUsage = {
   uncachedInput: number;
   output: number;
 };
+
+/** The model authors only the editor’s component content. */
+export type GeneratedContent = Pick<Data, "content">;
