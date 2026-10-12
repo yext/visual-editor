@@ -1343,4 +1343,38 @@ describe("field transforms", () => {
       >["background"]
     >().toEqualTypeOf<ResolvedThemeColor | undefined>();
   });
+
+  it.each([
+    {
+      name: "when HTML code embeds a field then the field is escaped and triple braces remain raw",
+      codeLanguage: "html" as const,
+      value: "<p>[[name]] {{{description.html}}}</p>",
+      expected: "<p>A &amp; &lt;B&gt; &quot;C&quot; <strong>raw</strong></p>",
+    },
+    {
+      name: "when JavaScript code embeds a field then the field remains unescaped",
+      codeLanguage: "javascript" as const,
+      value: "const text = `[[name]]`;",
+      expected: 'const text = `A & <B> "C"`;',
+    },
+  ])("$name", ({ codeLanguage, value, expected }) => {
+    expect(
+      createYextFieldTransforms(
+        { name: 'A & <B> "C"', description: { html: "<strong>raw</strong>" } },
+        "en"
+      ).custom({
+        field: {
+          type: "custom",
+          metadata: {
+            yextField: { type: "code", codeLanguage, transform: true },
+          },
+        },
+        value,
+        componentId: "test",
+        propName: "code",
+        propPath: "code",
+        isReadOnly: false,
+      })
+    ).toBe(expected);
+  });
 });

@@ -316,10 +316,10 @@ describe("native Puck field transforms", () => {
   });
 
   it.each(["live page", "server render", "editor preview"])(
-    "when localized data images are transformed then %s renders aspect and fixed images without changing authored data",
+    "when localized images are transformed then %s renders aspect and fixed images without changing authored data",
     async (mode) => {
-      const dataUrl =
-        "data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA";
+      const imageUrl =
+        "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/2048x2048.jpg";
       const data: Data = {
         root: { props: {} },
         content: [
@@ -330,11 +330,11 @@ describe("native Puck field transforms", () => {
               image: {
                 constantValueEnabled: true,
                 constantValue: {
-                  defaultValue: { url: dataUrl, width: 1, height: 1 },
+                  defaultValue: { url: imageUrl, width: 2048, height: 2048 },
                   es: {
-                    url: dataUrl,
-                    width: 1,
-                    height: 1,
+                    url: imageUrl,
+                    width: 2048,
+                    height: 2048,
                     alternateText: "Foto de [[name]]",
                   },
                 },
@@ -349,13 +349,13 @@ describe("native Puck field transforms", () => {
                 constantValueEnabled: true,
                 constantValue: {
                   defaultValue: {
-                    image: { url: dataUrl, width: 1, height: 1 },
+                    image: { url: imageUrl, width: 2048, height: 2048 },
                   },
                   es: {
                     image: {
-                      url: dataUrl,
-                      width: 1,
-                      height: 1,
+                      url: imageUrl,
+                      width: 2048,
+                      height: 2048,
                       alternateText: "Complex [[name]]",
                     },
                   },
@@ -424,12 +424,12 @@ describe("native Puck field transforms", () => {
 
       const aspectImage = await screen.findByAltText("Foto de Restaurant");
       const fixedImage = await screen.findByAltText("Complex Restaurant");
-      expect(aspectImage.getAttribute("src")).toBe(dataUrl);
-      expect(aspectImage.getAttribute("srcset")).toBeNull();
+      expect(aspectImage.getAttribute("src")).toContain("dyn.mktgcdn.com");
+      expect(aspectImage.getAttribute("srcset")).toContain("dyn.mktgcdn.com");
       expect(aspectImage.getAttribute("loading")).toBe("lazy");
       expect(aspectImage.getAttribute("sizes")).toBe("50vw");
-      expect(aspectImage.parentElement?.style.aspectRatio).toBe("2");
-      expect(fixedImage.getAttribute("src")).toBe(dataUrl);
+      expect(aspectImage.style.aspectRatio).toBe("2");
+      expect(fixedImage.getAttribute("src")).toBe(imageUrl);
       expect(fixedImage.getAttribute("srcset")).toBeNull();
       expect(fixedImage.getAttribute("loading")).toBe("eager");
       expect(fixedImage.style.objectFit).toBe("contain");

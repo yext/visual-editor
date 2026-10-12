@@ -140,7 +140,7 @@ describe("exportDirectoryLocatorSectionLibrary", () => {
     });
 
     expect(fs.readFileSync(registryPath, "utf8")).toBe(registry);
-  }, 20_000);
+  });
 
   it("uses the existing library ID for layout names", () => {
     const targetDirectory = fs.mkdtempSync(

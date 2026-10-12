@@ -56,12 +56,14 @@ export const resolveYextEntityField = <T>(
  * Takes a string and resolves any [[embedded_fields]] within it.
  * @param stringToResolve The string containing potential embedded fields.
  * @param streamDocument The entity document to use for resolving fields.
+ * @param escapeResolvedValue Optional escaping for inserted field values.
  * @returns The string with embedded fields replaced by their resolved values.
  */
 export const resolveEmbeddedFieldsInString = (
   stringToResolve: string,
   streamDocument: StreamDocument | undefined,
-  locale?: string
+  locale?: string,
+  escapeResolvedValue?: (value: string) => string
 ): string => {
   return stringToResolve.replace(embeddedFieldRegex, (match, fieldName) => {
     const trimmedFieldName = fieldName.trim();
@@ -87,16 +89,14 @@ export const resolveEmbeddedFieldsInString = (
       return "";
     }
 
-    if (typeof resolvedValue === "number") {
-      return resolvedValue.toString();
-    }
-
     // If the resolved value is an object, stringify it.
-    if (typeof resolvedValue === "object") {
-      return JSON.stringify(resolvedValue);
-    }
-
-    return String(resolvedValue);
+    const resolvedString =
+      typeof resolvedValue === "object"
+        ? JSON.stringify(resolvedValue)
+        : String(resolvedValue);
+    return escapeResolvedValue
+      ? escapeResolvedValue(resolvedString)
+      : resolvedString;
   });
 };
 

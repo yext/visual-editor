@@ -1,3 +1,4 @@
+import Handlebars from "handlebars";
 import type { CodeField } from "../CodeField.tsx";
 import { processHandlebarsTemplate } from "../../utils/customCodeHandlebars.ts";
 import { resolveEmbeddedFieldsInString } from "../../utils/resolveYextEntityField.ts";
@@ -9,11 +10,13 @@ export function resolveCode(
   value: string | undefined,
   context: FieldTransformContext
 ): string {
+  const isHtml = field.codeLanguage === "html";
   return resolveEmbeddedFieldsInString(
-    field.codeLanguage === "html"
+    isHtml
       ? processHandlebarsTemplate(value ?? "", context.streamDocument)
       : (value ?? ""),
     context.streamDocument,
-    context.locale
+    context.locale,
+    isHtml ? Handlebars.escapeExpression : undefined
   );
 }
