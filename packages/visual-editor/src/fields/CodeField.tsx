@@ -22,9 +22,8 @@ export type CodeLanguageOptions =
   | "typescript";
 
 export type CodeField = BaseField & {
+  /** Processes HTML templates and JavaScript embedded fields; other code stays authored. */
   type: "code";
-  /** Resolves embedded fields and HTML Handlebars templates before rendering. */
-  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   codeLanguage: CodeLanguageOptions;

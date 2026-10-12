@@ -19,6 +19,7 @@ import {
 } from "./resolveValue.ts";
 
 export const alwaysTransformedFieldTypes = [
+  "code",
   "themeColor",
 ] as const satisfies readonly YextPuckField["type"][];
 

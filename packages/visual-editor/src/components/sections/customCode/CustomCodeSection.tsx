@@ -41,7 +41,6 @@ const customCodeSectionFields: YextFields<CustomCodeSectionProps> = {
     label: msg("fields.html", "HTML"),
     type: "code",
     codeLanguage: "html",
-    transform: true,
   },
   css: {
     label: msg("fields.css", "CSS"),
@@ -52,7 +51,6 @@ const customCodeSectionFields: YextFields<CustomCodeSectionProps> = {
     label: msg("fields.javascript", "JavaScript"),
     type: "code",
     codeLanguage: "javascript",
-    transform: true,
   },
   liveVisibility: {
     label: msg("fields.visibleOnLivePage", "Visible on Live Page"),

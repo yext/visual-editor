@@ -1177,16 +1177,22 @@ describe("field transforms", () => {
       expected: undefined,
     },
     {
-      name: "when JavaScript code opts in then embedded fields are resolved",
-      field: { type: "code", codeLanguage: "javascript", transform: true },
+      name: "when JavaScript code transforms then embedded fields are resolved",
+      field: { type: "code", codeLanguage: "javascript" },
       value: 'const name = "[[name]]";',
       expected: 'const name = "Restaurant";',
     },
     {
-      name: "when HTML code opts in then Handlebars and embedded fields are resolved",
-      field: { type: "code", codeLanguage: "html", transform: true },
+      name: "when HTML code transforms then Handlebars resolves and embedded fields stay authored",
+      field: { type: "code", codeLanguage: "html" },
       value: "<p>{{name}} [[name]]</p>",
-      expected: "<p>Restaurant Restaurant</p>",
+      expected: "<p>Restaurant [[name]]</p>",
+    },
+    {
+      name: "when CSS code transforms then it stays authored",
+      field: { type: "code", codeLanguage: "css" },
+      value: ".message::after { content: '[[name]]'; }",
+      expected: ".message::after { content: '[[name]]'; }",
     },
   ])("$name", ({ field, value, expected }) => {
     const authored = structuredClone(value);
@@ -1247,7 +1253,7 @@ describe("field transforms", () => {
             options: "SITE_COLOR";
           };
           typography: { type: "styledText"; transform: true };
-          script: { type: "code"; transform: true };
+          script: { type: "code" };
         }
       >
     >().toEqualTypeOf<{
@@ -1346,10 +1352,10 @@ describe("field transforms", () => {
 
   it.each([
     {
-      name: "when HTML code embeds a field then the field is escaped and triple braces remain raw",
+      name: "when HTML code contains an embedded field then it stays authored and triple braces remain raw",
       codeLanguage: "html" as const,
       value: "<p>[[name]] {{{description.html}}}</p>",
-      expected: "<p>A &amp; &lt;B&gt; &quot;C&quot; <strong>raw</strong></p>",
+      expected: "<p>[[name]] <strong>raw</strong></p>",
     },
     {
       name: "when JavaScript code embeds a field then the field remains unescaped",
@@ -1366,7 +1372,7 @@ describe("field transforms", () => {
         field: {
           type: "custom",
           metadata: {
-            yextField: { type: "code", codeLanguage, transform: true },
+            yextField: { type: "code", codeLanguage },
           },
         },
         value,

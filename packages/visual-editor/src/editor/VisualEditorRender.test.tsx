@@ -276,7 +276,7 @@ describe("native Puck field transforms", () => {
     }
   );
 
-  it("when built-in custom code opts in then HTML and JavaScript resolve while CSS stays authored", () => {
+  it("when built-in custom code renders then HTML and JavaScript match main while CSS stays authored", () => {
     const data: Data = {
       root: { props: {} },
       content: [
@@ -306,7 +306,7 @@ describe("native Puck field transforms", () => {
       </ErrorProvider>
     );
 
-    expect(screen.getByText("Restaurant Restaurant")).toBeTruthy();
+    expect(screen.getByText("Restaurant [[name]]")).toBeTruthy();
     expect(container.querySelector("style")?.textContent).toContain("[[name]]");
     expect(
       container.querySelector("script[id^='custom-code-section-script-']")

@@ -127,26 +127,26 @@ const Example = ({ myField }: ExampleProps) => {
 
 ## Field transforms
 
-Add `transform: true` to a supported field type to receive resolved props in the render function. The behavior is disabled by default except for `themeColor`, which always transforms.
+Add `transform: true` to a supported field type to receive resolved props in the render function. The behavior is disabled by default except for `code` and `themeColor`, which always transform.
 
-| Field definition                             | Render value                                                                                    |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `translatableString`                         | Localized, interpolated string                                                                  |
-| Ordinary `entityField`                       | Resolved entity or constant value with nested localization and interpolation                    |
-| `entityField` with `format: "price"`         | Localized currency string from a structured price, or `undefined` when incomplete               |
-| `entityField` including `type.rich_text_v2`  | Resolved rich-text object or plain string                                                       |
-| Rich-text list with `includeListsOnly: true` | Array of resolved rich-text objects or strings                                                  |
-| `image`                                      | Localized asset image with resolved alt text and preserved asset metadata                       |
-| `multiSelector`                              | Array of selected values, preserving zero, false, and empty strings                             |
-| `optionalNumber`                             | Number or `undefined` when hidden or unset                                                      |
-| `ctaSelector`                                | Resolved CTA object with localized label and link; Get Directions includes a generated URL      |
-| `comprehensiveCTA`                           | Resolved nested CTA, button text, and aria label; styles and interaction settings are preserved |
-| Repeated `entityField`                       | Array of item props resolved against each selected item or manual item                          |
-| `video`                                      | Asset video data with interpolated text and preserved metadata                                  |
-| `themeColor`                                 | Authored tokens plus `selectedColorCss` and `contrastingColorCss`, or `undefined`               |
-| `styledText`, `styledButton`, `styledLink`   | CSS style object with inherited `"default"` choices omitted                                     |
-| `styledImage`, `styledPageSection`           | CSS style object for border radius, width, or vertical padding                                  |
-| `code`                                       | Interpolated code string; HTML also processes Handlebars templates                              |
+| Field definition                             | Render value                                                                                      |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `translatableString`                         | Localized, interpolated string                                                                    |
+| Ordinary `entityField`                       | Resolved entity or constant value with nested localization and interpolation                      |
+| `entityField` with `format: "price"`         | Localized currency string from a structured price, or `undefined` when incomplete                 |
+| `entityField` including `type.rich_text_v2`  | Resolved rich-text object or plain string                                                         |
+| Rich-text list with `includeListsOnly: true` | Array of resolved rich-text objects or strings                                                    |
+| `image`                                      | Localized asset image with resolved alt text and preserved asset metadata                         |
+| `multiSelector`                              | Array of selected values, preserving zero, false, and empty strings                               |
+| `optionalNumber`                             | Number or `undefined` when hidden or unset                                                        |
+| `ctaSelector`                                | Resolved CTA object with localized label and link; Get Directions includes a generated URL        |
+| `comprehensiveCTA`                           | Resolved nested CTA, button text, and aria label; styles and interaction settings are preserved   |
+| Repeated `entityField`                       | Array of item props resolved against each selected item or manual item                            |
+| `video`                                      | Asset video data with interpolated text and preserved metadata                                    |
+| `themeColor`                                 | Authored tokens plus `selectedColorCss` and `contrastingColorCss`, or `undefined`                 |
+| `styledText`, `styledButton`, `styledLink`   | CSS style object with inherited `"default"` choices omitted                                       |
+| `styledImage`, `styledPageSection`           | CSS style object for border radius, width, or vertical padding                                    |
+| `code`                                       | HTML processes Handlebars; JavaScript interpolates embedded fields; other languages stay authored |
 
 The shared `Image` component passes data URLs directly to a native image,
 including formats the browser can display without base64 encoding. It does not
@@ -177,9 +177,9 @@ Each handler receives the authored definition, its value, and the page document
 and locale. `resolveValue.ts` handles localization and interpolation across
 objects and arrays while retaining rich-text and asset structures. `cta.ts`
 contains CTA-specific resolution, `themeColor.ts` resolves theme colors, and
-`styles.ts` converts styled fields to CSS objects through field-specific functions. `code.ts` handles code
-interpolation and uses the shared `utils/customCodeHandlebars.ts` utility for
-HTML templates. Price formatting is an explicit `entityField` option rather
+`styles.ts` converts styled fields to CSS objects through field-specific functions. `code.ts` processes
+HTML templates through the shared `utils/customCodeHandlebars.ts` utility and
+interpolates embedded fields in JavaScript. Price formatting is an explicit `entityField` option rather
 than the default behavior for all entity fields.
 
 Use `themeColor` with `SITE_COLOR` or `BACKGROUND_COLOR` for color selections.
@@ -190,11 +190,11 @@ transformed. `themeColor` returns the authored `selectedColor`,
 `Background` or `PageSection` as the `background` prop. A price field uses
 `{ type: "entityField", filter: { types: ["type.price"] }, format: "price", transform: true }`
 and renders a localized string. Styled fields render CSS style objects that can
-be passed to React's `style` prop. Code fields use `codeLanguage: "html"` to
-process Handlebars before resolving embedded fields.
-The built-in `CustomCodeSection` opts its HTML and JavaScript fields in; its CSS
-remains authored. Renderers using the component directly through Puck must pass
-`createYextFieldTransforms`, as `VisualEditorRender` does.
+be passed to React's `style` prop. Code fields always transform: HTML uses
+Handlebars, JavaScript resolves embedded fields, and CSS remains authored.
+The built-in `CustomCodeSection` uses those render values. Renderers using the
+component directly through Puck must pass `createYextFieldTransforms`, as
+`VisualEditorRender` does.
 
 To support another opt-in field, add its `transform?: boolean` option, a handler in
 `fieldToTransform`, and its output type in `TransformedFieldValues` in `fields.ts`.
