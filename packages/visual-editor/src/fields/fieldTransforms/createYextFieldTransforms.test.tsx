@@ -22,9 +22,6 @@ import { createItemSource } from "../../utils/itemSource/createItemSource.ts";
 import type { ComprehensiveCTAValue } from "../styledFields/ComprehensiveCTAField.tsx";
 import type { AssetVideo } from "../../types/videos.ts";
 import { MaybeRTF } from "../../components/helpers/index.ts";
-import { Background } from "../../components/atoms/background.tsx";
-import { PageSection } from "../../components/atoms/pageSection.tsx";
-import { useBackground } from "../../hooks/useBackground.tsx";
 import type { ResolvedThemeColor } from "../../utils/colors.ts";
 import {
   toPuckFields,
@@ -1331,56 +1328,6 @@ describe("field transforms", () => {
 
     expect(result).toEqual(value ? { ...value, ...expected } : expected);
     expect(value).toEqual(authored);
-  });
-
-  it("when a resolved theme color is passed to Background then classes, CSS, and context use its authored tokens", () => {
-    const surface: ResolvedThemeColor = {
-      selectedColor: "palette-primary",
-      contrastingColor: "white",
-      selectedColorCss: "var(--colors-palette-primary)",
-      contrastingColorCss: "white",
-    };
-    const ContextReader = (): React.ReactElement => {
-      const background = useBackground();
-      return (
-        <span>{`${background?.selectedColor}:${background?.contrastingColor}:${background?.isDarkColor}`}</span>
-      );
-    };
-    const html = renderToStaticMarkup(
-      <TemplatePropsContext.Provider value={{ document: {} }}>
-        <Background background={surface} className="custom-background">
-          <ContextReader />
-        </Background>
-      </TemplatePropsContext.Provider>
-    );
-
-    expect(html).toContain("bg-palette-primary");
-    expect(html).toContain("text-white");
-    expect(html).toContain("custom-background");
-    expect(html).toContain("background-color:var(--colors-palette-primary)");
-    expect(html).toContain("color:white");
-    expect(html).toContain("palette-primary:white:true");
-  });
-
-  it("when a resolved theme color is passed to PageSection then its outer background uses both CSS colors", () => {
-    const html = renderToStaticMarkup(
-      <TemplatePropsContext.Provider value={{ document: {} }}>
-        <PageSection
-          background={{
-            selectedColor: "[#123ABC]",
-            contrastingColor: "white",
-            selectedColorCss: "#123ABC",
-            contrastingColorCss: "white",
-          }}
-        >
-          Content
-        </PageSection>
-      </TemplatePropsContext.Provider>
-    );
-
-    expect(html).toContain("background-color:#123ABC");
-    expect(html).toContain("color:white");
-    expect(html).toContain("Content");
   });
 
   it("when theme color is selected then transformed props contain the authored color and CSS", () => {

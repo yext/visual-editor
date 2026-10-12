@@ -90,12 +90,7 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
             className
           )}
           style={{
-            ...(background && "selectedColorCss" in background
-              ? {
-                  backgroundColor: background.selectedColorCss,
-                  color: background.contrastingColorCss,
-                }
-              : getBackgroundColorStyle(background)),
+            ...getBackgroundColorStyle(background),
             ...style,
           }}
           ref={ref}

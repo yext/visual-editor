@@ -328,11 +328,15 @@ const RepeatedEntityFieldSelector = ({
   );
 };
 
-export const EntityFieldSelectorFieldOverride = ({
+/**
+ * Renders entity field controls. Its declaration is available when the field
+ * registry initializes.
+ */
+export function EntityFieldSelectorFieldOverride({
   field,
   value,
   onChange,
-}: EntityFieldSelectorFieldProps) => {
+}: EntityFieldSelectorFieldProps) {
   if (field.repeated) {
     return (
       <RepeatedEntityFieldSelector
@@ -400,7 +404,7 @@ export const EntityFieldSelectorFieldOverride = ({
       )}
     </>
   );
-};
+}
 
 export const ConstantValueModeToggler = ({
   fieldTypeFilter,

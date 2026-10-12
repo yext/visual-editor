@@ -110,32 +110,13 @@ export const Image: React.FC<ImageProps> = ({
   const imageTransformations = {
     fit: imageFillType === "fit" ? ("contain" as const) : ("cover" as const),
   };
-  // Data URLs bypass the optimized image renderer, which rejects them.
-  const isInlineImage = /^\s*data:/i.test(imageUrl);
 
   return (
     <div
       className={themeManagerCn(containerStyles, className)}
-      style={{
-        width: width ? `${width}px` : undefined,
-        aspectRatio: isInlineImage ? aspectRatio : undefined,
-      }}
+      style={width ? { width: `${width}px` } : undefined}
     >
-      {isInlineImage ? (
-        <img
-          src={imageUrl}
-          alt={altText ?? ""}
-          className="object-cover w-full h-full"
-          sizes={sizes}
-          loading={loading}
-          style={{
-            width: "100%",
-            height: aspectRatio ? "100%" : "auto",
-            ...imageStyle,
-          }}
-          onError={() => setFailedImageUrl(imageUrl)}
-        />
-      ) : aspectRatio ? (
+      {aspectRatio ? (
         <ImageComponent
           image={{ ...image, alternateText: altText }}
           layout={"aspect"}

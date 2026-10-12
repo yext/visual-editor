@@ -9,27 +9,7 @@ vi.mock("react-i18next", async () => ({
   useTranslation: () => ({ i18n: { language: "en" } }),
 }));
 
-describe("Image inline data", () => {
-  it.each([
-    {
-      name: "when the data URL uses SVG then it is passed through unchanged",
-      url: "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'/%3E",
-    },
-    {
-      name: "when the data URL is malformed then the browser still receives it",
-      url: "data:image/webp;base64,invalid!",
-    },
-  ])("$name", ({ url }) => {
-    const { container } = render(
-      <TemplatePropsContext.Provider value={{ document: {} }}>
-        <Image image={{ url, width: 1, height: 1 }} aspectRatio={2} />
-      </TemplatePropsContext.Provider>
-    );
-
-    expect(container.querySelector("img")?.getAttribute("src")).toBe(url);
-    expect(screen.queryByRole("alert")).toBeNull();
-  });
-
+describe("Image", () => {
   it("when the image URL is missing then the component returns null", () => {
     const { container } = render(
       <TemplatePropsContext.Provider value={{ document: {} }}>
@@ -37,24 +17,6 @@ describe("Image inline data", () => {
       </TemplatePropsContext.Provider>
     );
 
-    expect(container.innerHTML).toBe("");
-  });
-
-  it("when an inline image fails to load then the component returns null", () => {
-    const { container } = render(
-      <TemplatePropsContext.Provider value={{ document: {} }}>
-        <Image
-          image={{
-            url: "data:image/png;base64,AAAA",
-            width: 1,
-            height: 1,
-            alternateText: "Inline photo",
-          }}
-        />
-      </TemplatePropsContext.Provider>
-    );
-
-    fireEvent.error(screen.getByAltText("Inline photo"));
     expect(container.innerHTML).toBe("");
   });
 
