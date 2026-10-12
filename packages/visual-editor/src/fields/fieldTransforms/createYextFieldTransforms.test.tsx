@@ -1366,12 +1366,14 @@ describe("field transforms", () => {
     const html = renderToStaticMarkup(
       <TemplatePropsContext.Provider value={{ document: {} }}>
         <PageSection
-          background={{
-            selectedColor: "[#123ABC]",
-            contrastingColor: "white",
-            selectedColorCss: "#123ABC",
-            contrastingColorCss: "white",
-          }}
+          background={
+            {
+              selectedColor: "[#123ABC]",
+              contrastingColor: "white",
+              selectedColorCss: "#123ABC",
+              contrastingColorCss: "white",
+            } as ResolvedThemeColor
+          }
         >
           Content
         </PageSection>
