@@ -78,12 +78,18 @@ export const Image: React.FC<ImageProps> = ({
     }
     return rawImage as ImageType | ComplexImageType | AssetImageType;
   }, [rawImage, i18n.language]);
+  const [failedImageUrl, setFailedImageUrl] = React.useState<string>();
+
   if (!image) {
     return null;
   }
 
   const imageUrl = isComplexImageType(image) ? image.image?.url : image.url;
-  if (typeof imageUrl !== "string" || !imageUrl) {
+  if (
+    typeof imageUrl !== "string" ||
+    !imageUrl ||
+    failedImageUrl === imageUrl
+  ) {
     return null;
   }
 
@@ -116,7 +122,7 @@ export const Image: React.FC<ImageProps> = ({
           layout={"aspect"}
           aspectRatio={aspectRatio}
           className="object-cover w-full h-full"
-          imgOverrides={{ sizes }}
+          imgOverrides={{ sizes, onError: () => setFailedImageUrl(imageUrl) }}
           imageTransformations={imageTransformations}
           loading={loading}
           style={imageStyle}
@@ -128,7 +134,7 @@ export const Image: React.FC<ImageProps> = ({
           width={width}
           height={calculatedHeight}
           className="object-cover"
-          imgOverrides={{ sizes }}
+          imgOverrides={{ sizes, onError: () => setFailedImageUrl(imageUrl) }}
           imageTransformations={imageTransformations}
           loading={loading}
           style={imageStyle}
@@ -140,6 +146,7 @@ export const Image: React.FC<ImageProps> = ({
           className="object-cover w-full h-full"
           loading={loading}
           style={imageStyle}
+          onError={() => setFailedImageUrl(imageUrl)}
         />
       )}
     </div>
