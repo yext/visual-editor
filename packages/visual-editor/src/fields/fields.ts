@@ -33,6 +33,8 @@ import type {
   ComprehensiveCTAValue,
 } from "./styledFields/ComprehensiveCTAField.tsx";
 import type { EnhancedTranslatableCTA } from "../types/types.ts";
+import type { alwaysTransformedFieldTypes } from "./fieldTransforms/fieldToTransform.ts";
+import type { entityFieldFormatters } from "./fieldTransforms/entityFieldFormats.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { adaptYextFieldMap } from "./yextFieldAdapter.ts";
 
@@ -101,8 +103,10 @@ type TransformedFieldValues<Value, Definition> = {
     : never;
   optionalNumber: number | undefined;
   ctaSelector: LocalizedRenderValue<EnhancedTranslatableCTA> | undefined;
-  entityField: Definition extends { format: "price" }
-    ? string | undefined
+  entityField: Definition extends { format: infer Format }
+    ? Format extends keyof typeof entityFieldFormatters
+      ? ReturnType<(typeof entityFieldFormatters)[Format]>
+      : never
     : Definition extends { repeated: object }
       ? Value extends { constantValue: infer Constant }
         ? LocalizedRenderValue<ResolvedRepeatedItem<Constant>>
@@ -112,24 +116,26 @@ type TransformedFieldValues<Value, Definition> = {
         : never;
 };
 
-type TransformedFieldValue<Value, Definition> = Definition extends {
-  type: "themeColor";
+/** Derives render prop types for nested object fields and array items; leaves other values unchanged. */
+type NestedFieldValue<Value, Definition> = Definition extends {
+  type: "object";
+  objectFields: object;
 }
-  ? TransformedFieldValues<Value, Definition>["themeColor"]
-  : Definition extends {
-        transform: true;
-        type: infer FieldType;
-      }
+  ? YextTransformedProps<Value, Definition["objectFields"]>
+  : Definition extends { type: "array"; arrayFields: object }
+    ? Value extends unknown[]
+      ? YextTransformedProps<Value[number], Definition["arrayFields"]>[]
+      : Value
+    : Value;
+
+type TransformedFieldValue<Value, Definition> = Definition extends
+  { transform: true } | { type: (typeof alwaysTransformedFieldTypes)[number] }
+  ? Definition extends { type: infer FieldType }
     ? FieldType extends keyof TransformedFieldValues<Value, Definition>
       ? TransformedFieldValues<Value, Definition>[FieldType]
       : Value
-    : Definition extends { type: "object"; objectFields: infer Nested }
-      ? YextTransformedProps<Value, Nested>
-      : Definition extends { type: "array"; arrayFields: infer Nested }
-        ? Value extends (infer Item)[]
-          ? YextTransformedProps<Item, Nested>[]
-          : Value
-        : Value;
+    : Value
+  : NestedFieldValue<Value, Definition>;
 
 /** Derives render values from authored props and supported field definitions. */
 export type YextTransformedProps<Props, Definitions> = {
