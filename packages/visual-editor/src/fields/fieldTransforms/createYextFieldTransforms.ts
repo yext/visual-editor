@@ -1,21 +1,25 @@
 import type { BaseField, FieldTransformFn } from "@puckeditor/core";
 import type { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import {
+  alwaysTransformedFieldTypes,
   fieldToTransform,
   type TransformableField,
 } from "./fieldToTransform.ts";
 
+const alwaysTransformedFields = new Set<string>(alwaysTransformedFieldTypes);
+
 /**
- * Returns the authored field when it uses a supported transform. Theme colors
- * always transform; other fields opt in with `transform: true`. Puck `custom`
- * fields return their unwrapped Yext field. Unsupported fields return `undefined`.
+ * Returns the authored field as a TransformableField when its type always
+ * transforms or it opts into a supported transform. For example, a Puck
+ * `custom` field wrapping an `entityField` with `transform: true` returns the
+ * unwrapped `entityField`; unsupported fields return `undefined`.
  */
 export function getTransformField(
   field: BaseField & { type: string }
 ): TransformableField | undefined {
   const authoredField =
     field.type === "custom" ? field.metadata?.yextField : field;
-  return (authoredField?.type === "themeColor" ||
+  return (alwaysTransformedFields.has(authoredField?.type) ||
     authoredField?.transform === true) &&
     Object.hasOwn(fieldToTransform, authoredField.type)
     ? authoredField
@@ -25,7 +29,7 @@ export function getTransformField(
 /**
  * Creates render transforms for one page and locale.
  *
- * 1. Identify theme colors and opted-in authored fields, including fields adapted to `custom`.
+ * 1. Identify always-transformed and opted-in authored fields, including fields adapted to `custom`.
  * 2. Dispatch source resolution to the field handler, sharing localization and interpolation.
  * 3. Register handlers with Puck while preserving resolved data shapes for their renderers.
  * Authored values are never mutated or replaced in saved Puck data.

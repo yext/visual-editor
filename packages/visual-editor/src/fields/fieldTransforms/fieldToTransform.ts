@@ -18,9 +18,14 @@ import {
   type FieldTransformContext,
 } from "./resolveValue.ts";
 
+export const alwaysTransformedFieldTypes = [
+  "themeColor",
+] as const satisfies readonly YextPuckField["type"][];
+
 export type TransformableField = Extract<
   YextPuckField,
-  { transform?: boolean } | { type: "themeColor" }
+  | { transform?: boolean }
+  | { type: (typeof alwaysTransformedFieldTypes)[number] }
 >;
 
 /** Resolves repeated-item mappings recursively against the selected item document. */
