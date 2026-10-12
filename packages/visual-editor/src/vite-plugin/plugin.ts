@@ -1,4 +1,7 @@
-import { Plugin } from "vite";
+import type { Plugin } from "vite";
+import path from "node:path";
+import { createGenerationLogger } from "./local-editor/generationLogger.ts";
+import { handleLocalEditorGenerationRequest } from "./local-editor/generation.ts";
 import {
   cleanupGeneratedSectionLibraryFiles,
   generateSectionLibraryFiles,
@@ -123,6 +126,9 @@ export const yextVisualEditorPlugin = (
         return;
       }
 
+      const logGeneration = createGenerationLogger(
+        path.join(server.config.root, "src/library/.generated/logs")
+      );
       server.httpServer?.once("close", () => {
         cleanupGeneratedArtifacts();
       });
@@ -130,6 +136,36 @@ export const yextVisualEditorPlugin = (
       server.middlewares.use((request, response, next) => {
         if (!request.url) {
           next();
+          return;
+        }
+        if (
+          new URL(request.url, "http://localhost").pathname ===
+          "/__yext_visual_editor/local-editor/generate"
+        ) {
+          void handleLocalEditorGenerationRequest(request, response, {
+            log: logGeneration,
+            model: options.localEditor?.generationModel ?? "gpt-6-luna",
+            loadCatalog: async () => {
+              const { catalog } = await server.ssrLoadModule(
+                "/src/library/.generated/catalog.js"
+              );
+              return catalog;
+            },
+          }).catch((error: unknown) => {
+            if (response.headersSent) {
+              response.destroy(
+                error instanceof Error ? error : new Error(String(error))
+              );
+            } else {
+              sendJsonResponse(
+                response,
+                {
+                  error: error instanceof Error ? error.message : String(error),
+                },
+                500
+              );
+            }
+          });
           return;
         }
         void handleLocalEditorRequest(

@@ -1,4 +1,5 @@
 import type { Config } from "@puckeditor/core";
+import type { ComponentRegistry } from "@json-render/react";
 import type { TailwindConfig, ThemeConfig } from "../utils/themeResolver.ts";
 import type { MigrationRegistry } from "../utils/migrate.ts";
 import type {
@@ -24,6 +25,7 @@ export type LocalEditorShellProps = {
   themeConfig?: ThemeConfig;
   sectionLibraryMigrationRegistry?: MigrationRegistry;
   translationLoaders?: SectionLibraryTranslationLoaders;
+  jsonRenderRegistry?: ComponentRegistry;
 };
 
 export type LocalEditorMode = "layout" | "theme";
@@ -33,4 +35,10 @@ export type BuildEditorLocalDevOptionsArgs = {
   selectedEntity?: LocalEditorEntityOption;
   selectedLocale: string;
   selectedLayoutDefaults?: LocalEditorLayoutDefaults;
+};
+
+export type GenerationTokenUsage = {
+  cachedInput: number;
+  uncachedInput: number;
+  output: number;
 };

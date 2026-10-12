@@ -18,6 +18,7 @@ import {
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
 import { translationLoaders } from "../library/.generated/i18n";
+import { registry } from "../library/.generated/registry.js";
 /* LOCAL_EDITOR_CONFIG_IMPORTS */
 /* LOCAL_EDITOR_MIGRATION_REGISTRY */
 
@@ -62,6 +63,7 @@ const LocalEditor: Template<TemplateRenderProps> = () => {
       themeConfig={defaultThemeConfig}
       sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
       translationLoaders={translationLoaders}
+      jsonRenderRegistry={registry}
     />
   );
 };

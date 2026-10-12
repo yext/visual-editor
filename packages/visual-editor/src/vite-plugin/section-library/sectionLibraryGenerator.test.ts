@@ -1,6 +1,16 @@
+// @vitest-environment node
 import os from "node:os";
 import path from "node:path";
+import { createServer as createHttpServer } from "node:http";
 import fs from "fs-extra";
+import { createServer } from "vite";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { Renderer, JSONUIProvider } from "@json-render/react";
+import {
+  buildGenerationPrompt,
+  validateGeneratedText,
+} from "../local-editor/generationValidation.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   cleanupGeneratedSectionLibraryFiles,
@@ -16,6 +26,203 @@ afterEach(() => {
 });
 
 describe("generateSectionLibraryFiles", () => {
+  it("loads generated schemas and renders both section export formats", async () => {
+    const rootDir = createLibrary();
+    fs.ensureSymlinkSync(
+      path.join(process.cwd(), "node_modules"),
+      path.join(rootDir, "node_modules"),
+      "dir"
+    );
+    for (const name of ["Hero", "Directory"]) {
+      const filePath = path.join(
+        rootDir,
+        "src",
+        "library",
+        "sections",
+        `${name}.tsx`
+      );
+      const source = fs.readFileSync(filePath, "utf8");
+      fs.writeFileSync(
+        filePath,
+        'import { createElement } from "react";\nimport { z } from "zod";\n' +
+          source
+            .replace(
+              `export const ${name} = {};`,
+              name === "Hero"
+                ? 'export const Hero = ({ title, children }) => createElement("h2", null, title, children);'
+                : `export const ${name} = { render: ({ title }) => createElement("p", null, title) };`
+            )
+            .replace(
+              "pageSetTypes:",
+              "formalProps: z.object({ title: z.string() }), pageSetTypes:"
+            )
+      );
+    }
+    generateSectionLibraryFiles(rootDir, "revision");
+    const server = await createServer({
+      root: rootDir,
+      configFile: false,
+      resolve: {
+        alias: {
+          "@yext/visual-editor/section-library-support": path.join(
+            process.cwd(),
+            "src/local-editor/JsonRenderSection.tsx"
+          ),
+        },
+      },
+      server: { middlewareMode: true, hmr: { server: createHttpServer() } },
+      optimizeDeps: { noDiscovery: true },
+      appType: "custom",
+    });
+    try {
+      const { catalog } = await server.ssrLoadModule(
+        "/src/library/.generated/catalog.js"
+      );
+      const { registry } = await server.ssrLoadModule(
+        "/src/library/.generated/registry.js"
+      );
+      expect(catalog.componentNames).not.toContain("Locator");
+      expect(registry.Locator).toBeUndefined();
+      expect(buildGenerationPrompt(catalog)).not.toContain("Locator");
+      expect(catalog.componentNames).toContain("MainContent");
+      expect(catalog.componentNames).not.toContain(
+        "__VisualEditorSectionStack"
+      );
+      expect(
+        catalog.data.components.hero.props.safeParse({ title: "Hello" }).success
+      ).toBe(true);
+      expect(
+        catalog.data.components.hero.props.safeParse({ title: 42 }).success
+      ).toBe(false);
+      expect(
+        catalog.data.components.Directory.props.parse({ title: "Directory" })
+      ).toEqual({ title: "Directory" });
+      const heading = createElement(
+        registry.hero,
+        { element: { type: "hero", props: { title: "Hello" } } },
+        " child"
+      );
+      expect(renderToStaticMarkup(heading)).toBe("<h2>Hello child</h2>");
+      expect(
+        renderToStaticMarkup(
+          createElement(registry.Directory, {
+            element: { type: "Directory", props: { title: "Directory" } },
+          })
+        )
+      ).toBe("<p>Directory</p>");
+      const spec = {
+        root: "page",
+        elements: {
+          page: {
+            type: "MainContent",
+            props: {},
+            children: ["first", "second", "third"],
+          },
+          first: { type: "hero", props: { title: "First" }, children: [] },
+          second: {
+            type: "Directory",
+            props: { title: "Second" },
+            children: [],
+          },
+          third: { type: "hero", props: { title: "Third" }, children: [] },
+        },
+      };
+      const output =
+        "```spec\n" +
+        [
+          { op: "add", path: "/root", value: spec.root },
+          { op: "add", path: "/elements", value: spec.elements },
+        ]
+          .map((patch) => JSON.stringify(patch))
+          .join("\n") +
+        "\n```";
+      expect(validateGeneratedText(catalog, output)).toEqual([]);
+      expect(
+        validateGeneratedText(
+          catalog,
+          output.replace('"MainContent"', '"Locator"')
+        )
+      ).toContain("page: Unknown component Locator");
+      expect(
+        validateGeneratedText(
+          catalog,
+          output.replace('"MainContent"', '"hero"')
+        ).join(";")
+      ).toContain("is a leaf section");
+      const markup = renderToStaticMarkup(
+        createElement(JSONUIProvider, {
+          registry,
+          initialState: {},
+          children: createElement(Renderer, { spec, registry }),
+        })
+      );
+      expect(markup).toBe(
+        '<main id="main-content"><h2>First</h2><p>Second</p><h2>Third</h2></main>'
+      );
+    } finally {
+      await server.close();
+    }
+  });
+
+  it("generates catalogs and render adapters keyed by section metadata ids", () => {
+    const rootDir = createLibrary();
+    const result = generateSectionLibraryFiles(rootDir, "revision");
+    const directory = path.join(rootDir, "src", "library", ".generated");
+    const catalogPath = path.join(directory, "catalog.js");
+    const registryPath = path.join(directory, "registry.js");
+    const catalog = fs.readFileSync(catalogPath, "utf8");
+    const registry = fs.readFileSync(registryPath, "utf8");
+
+    expect(result.generatedFiles).toEqual(
+      expect.arrayContaining([catalogPath, registryPath])
+    );
+    expect(catalog).toContain(
+      'import { schema } from "@json-render/react/schema"'
+    );
+    expect(catalog).toContain(
+      'import { config as sectionConfig1 } from "../sections/Hero"'
+    );
+    expect(catalog).toContain(
+      '"hero": { props: sectionConfig1.formalProps, slots: [], description: sectionConfig1.description }'
+    );
+    expect(catalog).not.toContain('"Hero":');
+    expect(catalog).not.toContain("passthrough");
+    expect(catalog).toContain("sectionConfig1.formalProps ?");
+    expect(registry).toContain(
+      'import { Hero as Section1 } from "../sections/Hero"'
+    );
+    expect(registry).toContain(
+      '"hero": adaptSection(Section1, catalog.data.components["hero"].props)'
+    );
+    expect(registry).toContain(
+      'const Render = typeof section === "function" ? section : section.render'
+    );
+    expect(registry).toContain("puckConfig");
+    expect(registry).toContain("Section: section");
+    cleanupGeneratedSectionLibraryFiles(result.generatedFiles);
+    expect(fs.existsSync(catalogPath)).toBe(false);
+    expect(fs.existsSync(registryPath)).toBe(false);
+  });
+
+  it.each(["catalog", "registry"])(
+    "does not overwrite a hand-authored %s",
+    (name) => {
+      const rootDir = createLibrary();
+      const filePath = path.join(
+        rootDir,
+        "src",
+        "library",
+        ".generated",
+        `${name}.js`
+      );
+      fs.outputFileSync(filePath, "// hand-authored");
+      expect(() => generateSectionLibraryFiles(rootDir, "revision")).toThrow(
+        /Refusing to overwrite json-render/
+      );
+      expect(fs.readFileSync(filePath, "utf8")).toBe("// hand-authored");
+    }
+  );
+
   it("maps all layouts to current Platform templates", () => {
     const rootDir = createLibrary();
 
@@ -24,7 +231,7 @@ describe("generateSectionLibraryFiles", () => {
       "123e4567-e89b-12d3-a456-426614174000"
     );
 
-    expect(result.generatedFiles).toHaveLength(60);
+    expect(result.generatedFiles).toHaveLength(62);
     const config = fs.readFileSync(
       path.join(
         rootDir,
@@ -350,7 +557,7 @@ describe("generateSectionLibraryFiles", () => {
       "directory-layout",
       "locator-layout",
     ]);
-    expect(result.generatedFiles).toHaveLength(63);
+    expect(result.generatedFiles).toHaveLength(65);
     expect(
       fs.existsSync(
         path.join(
@@ -521,7 +728,7 @@ describe("generateSectionLibraryFiles", () => {
     expect(fs.readFileSync(handwrittenMainPath, "utf8")).toBe(
       "export default null;"
     );
-    expect(generatedFiles).toHaveLength(60);
+    expect(generatedFiles).toHaveLength(62);
     for (const filePath of generatedFiles) {
       expect(fs.existsSync(filePath)).toBe(false);
     }

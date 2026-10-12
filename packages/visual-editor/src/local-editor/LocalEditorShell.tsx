@@ -4,6 +4,7 @@ import { Editor } from "../editor/Editor.tsx";
 import type { LocalDevOptions } from "../editor/types.ts";
 import { SectionLibraryVisualEditorProvider } from "../utils/SectionLibraryVisualEditorProvider.tsx";
 import { LocalEditorControls } from "./LocalEditorControls.tsx";
+import { LocalEditorJsonRender } from "./LocalEditorJsonRender.tsx";
 import { LocalEditorNotice } from "./LocalEditorNotice.tsx";
 import {
   buildEditorLocalDevOptions,
@@ -78,7 +79,9 @@ export const LocalEditorShell = ({
   themeConfig,
   sectionLibraryMigrationRegistry,
   translationLoaders,
+  jsonRenderRegistry,
 }: LocalEditorShellProps) => {
+  const [useJsonRender, setUseJsonRender] = React.useState(false);
   const [previewContext, setPreviewContext] = React.useState<{
     config: Config;
     defaultLayoutData?: unknown;
@@ -483,6 +486,15 @@ export const LocalEditorShell = ({
             justifyContent: "flex-end",
           }}
         >
+          {jsonRenderRegistry && (
+            <EditorShellButton
+              onClick={() => setUseJsonRender((value) => !value)}
+            >
+              {useJsonRender
+                ? "Switch to Visual Editor"
+                : "Switch to json-render"}
+            </EditorShellButton>
+          )}
           {manifest?.pageSetTypeByLayout[selectedLayoutId] === "DIRECTORY" &&
             manifest.dataSourceByLayout[selectedLayoutId] === "fixture" && (
               <EditorShellButton onClick={handleDirectoryChildCountUpdate}>
@@ -611,7 +623,23 @@ export const LocalEditorShell = ({
         />
       )}
 
-      {shouldRenderEditorFrame && (
+      {useJsonRender && jsonRenderRegistry && (
+        <SectionLibraryVisualEditorProvider
+          templateProps={{
+            document: streamDocument ?? { locale: selectedLocale },
+          }}
+          entityFields={documentResponse?.entityFields}
+          tailwindConfig={tailwindConfig}
+          translationLoaders={translationLoaders}
+        >
+          <LocalEditorJsonRender
+            api={`${apiBasePath}/generate`}
+            registry={jsonRenderRegistry}
+          />
+        </SectionLibraryVisualEditorProvider>
+      )}
+
+      {!useJsonRender && shouldRenderEditorFrame && (
         <div
           style={{
             position: "relative",

@@ -73,6 +73,8 @@
     "i18n:update": "pnpm run i18n:extract:platform && pnpm run i18n:extract:page && pnpm run i18n:translate:platform && pnpm run i18n:propagate:page && pnpm run i18n:lint"
   },
   "dependencies": {
+    "@json-render/core": "^0.21.0",
+    "@json-render/react": "^0.21.0",
     "@mapbox/maki": "^8.2.0",
     "@puckeditor/core": "0.24.0-canary.c1ec9773",
     "@radix-ui/react-accordion": "^1.2.3",
@@ -88,6 +90,7 @@
     "@radix-ui/react-switch": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@tanstack/react-query": "^5.71.5",
+    "ai": "^7.0.137",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -110,7 +113,8 @@
     "ts-morph": "22.0.0",
     "tsx": "^4.22.4",
     "typescript": "^5.5.4",
-    "uuid": "11.0.3"
+    "uuid": "11.0.3",
+    "zod": "^4.6.5"
   },
   "engines": {
     "node": "^20.6.0 || ^22 || ^24"
@@ -169,8 +173,8 @@
     "@yext/search-ui-react": "^3.0.1",
     "i18next": "^26.4.2",
     "mapbox-gl": "^3.20.0",
-    "react": "^17.0.2 || ^18.2.0",
-    "react-dom": "^17.0.2 || ^18.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-i18next": "^17.0.13"
   }
 }

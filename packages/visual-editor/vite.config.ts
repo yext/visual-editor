@@ -30,6 +30,8 @@ export default defineConfig(() => ({
     },
     rollupOptions: {
       external: [
+        "@json-render/core",
+        "@json-render/react",
         "react",
         "react-dom",
         "@puckeditor/core",

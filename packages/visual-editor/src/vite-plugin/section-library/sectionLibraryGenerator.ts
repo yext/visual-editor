@@ -90,6 +90,20 @@ export const generateSectionLibraryFiles = (
   );
   const i18nPath = path.join(generatedDirectory, "i18n.ts");
   const generatedFiles = [...generatedTranslations.generatedFiles];
+  for (const name of ["catalog", "registry"] as const) {
+    const filePath = path.join(generatedDirectory, `${name}.js`);
+    if (
+      !writeGeneratedFile(
+        filePath,
+        buildJsonRenderSource(rootDir, filePath, structure.sections, name)
+      )
+    ) {
+      throw new Error(
+        `Refusing to overwrite json-render ${name} at ${filePath}.`
+      );
+    }
+    generatedFiles.push(filePath);
+  }
   if (
     writeGeneratedFile(
       i18nPath,
@@ -342,6 +356,96 @@ const writeTemplateManifest = (rootDir: string, layouts: Layout[]): void => {
   ) {
     fs.writeFileSync(manifestPath, source);
   }
+};
+
+/** Imports runtime schemas rather than evaluating section source during generation. */
+const buildJsonRenderSource = (
+  rootDir: string,
+  generatedPath: string,
+  sections: ResolvedSection[],
+  kind: "catalog" | "registry"
+): string => {
+  if (sections.some((section) => section.id === "MainContent")) {
+    throw new Error("MainContent is reserved for json-render composition.");
+  }
+  const imports = sections.map((section, index) => {
+    const relativePath = path
+      .relative(
+        path.dirname(generatedPath),
+        path.join(rootDir, section.sourcePath)
+      )
+      .replace(/\.(tsx|jsx)$/, "")
+      .split(path.sep)
+      .join("/");
+    const specifier = relativePath.startsWith(".")
+      ? relativePath
+      : `./${relativePath}`;
+    return kind === "catalog"
+      ? `import { config as sectionConfig${index} } from ${JSON.stringify(specifier)};`
+      : `import { ${section.componentName} as Section${index} } from ${JSON.stringify(specifier)};`;
+  });
+  const sharedRegistryPath = path.join(
+    rootDir,
+    "src/library/shared/componentRegistry.ts"
+  );
+  const entries = sections.map((section, index) =>
+    kind === "catalog"
+      ? `    ...(sectionConfig${index}.formalProps ? { ${JSON.stringify(section.id)}: { props: sectionConfig${index}.formalProps, slots: [], description: sectionConfig${index}.description } } : {}),`
+      : `    ...(catalog.data.components[${JSON.stringify(section.id)}] ? { ${JSON.stringify(section.id)}: adaptSection(Section${index}, catalog.data.components[${JSON.stringify(section.id)}].props) } : {}),`
+  );
+  return [
+    GENERATED_FILE_PREFIX,
+    ...(kind === "catalog"
+      ? [
+          'import { defineCatalog } from "@json-render/core";',
+          'import { schema } from "@json-render/react/schema";',
+          'import { z } from "zod";',
+        ]
+      : [
+          'import { createElement } from "react";',
+          'import { JsonRenderSection, JsonRenderMainContent } from "@yext/visual-editor/section-library-support";',
+          'import { defineRegistry } from "@json-render/react";',
+          'import { catalog } from "./catalog.js";',
+          ...(fs.existsSync(sharedRegistryPath)
+            ? [
+                'import { sharedComponentConfigs } from "../shared/componentRegistry";',
+              ]
+            : ["const sharedComponentConfigs = {};"]),
+        ]),
+    ...imports,
+    "",
+    ...(kind === "registry"
+      ? [
+          "/**",
+          " * @param {import('react').ComponentType<any> | { render: import('react').ComponentType<any> }} section",
+          " * @param {import('zod').ZodType} schema",
+          " * @returns {import('@json-render/react').ComponentFn<typeof catalog, keyof typeof catalog.data.components>}",
+          " */",
+          "const adaptSection = (section, schema) => {",
+          '  const Render = typeof section === "function" ? section : section.render;',
+          '  const puckConfig = typeof section === "function" ? undefined : { components: { ...sharedComponentConfigs, Section: section } };',
+          "  return ({ props, children }) => createElement(JsonRenderSection, { render: Render, schema, props, puckConfig }, children);",
+          "};",
+          "",
+        ]
+      : []),
+    kind === "catalog"
+      ? "export const catalog = defineCatalog(schema, {"
+      : "export const { registry } = defineRegistry(catalog, {",
+    "  components: {",
+    ...(kind === "catalog"
+      ? [
+          '    "MainContent": { props: z.object({}), slots: ["default"], description: "The main content area of the page. Use as the root for multiple sections and place the sections in its children in display order; section components are leaves." },',
+        ]
+      : [
+          '    "MainContent": ({ children }) => createElement(JsonRenderMainContent, null, children),',
+        ]),
+    ...entries,
+    "  },",
+    ...(kind === "catalog" ? ["  actions: {},"] : []),
+    "});",
+    "",
+  ].join("\n");
 };
 
 const buildConfigSource = (

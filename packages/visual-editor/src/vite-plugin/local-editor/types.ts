@@ -3,6 +3,8 @@ import type { PageSetType } from "../../types/sectionLibrary.ts";
 
 export type LocalEditorOptions = {
   enabled?: boolean;
+  /** Model used by the local json-render generation endpoint. */
+  generationModel?: string;
 };
 
 export type LocalEditorDefaults = {

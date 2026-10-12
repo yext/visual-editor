@@ -1,3 +1,5 @@
+import type { z } from "zod";
+
 export const supportedPageSetTypes = [
   "ENTITY",
   "DIRECTORY",
@@ -45,6 +47,8 @@ export type SectionConfig = {
   pageSetTypes: PageSetType[];
   /** The category in the left sidebar in which the section will be listed. */
   category?: string;
+  /** Zod object schema describing props available to json-render generation. */
+  formalProps?: z.ZodObject;
 };
 
 /**
