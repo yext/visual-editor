@@ -20,6 +20,10 @@ const hours = (
 ${indent}"openingHoursSpecification": {{json openingHoursSpecification}}{{/if}}{{/with}}{{/if}}`;
 const description = `{{#if description}},
   "description": {{json description}}{{/if}}`;
+const breadcrumbs = `{{#if (breadcrumbsSchema @root)}}
+<script type="application/ld+json">
+  {{{json (breadcrumbsSchema @root)}}}
+</script>{{/if}}`;
 
 const localBusiness = `<script type="application/ld+json">
 {
@@ -40,7 +44,7 @@ ${pageHeader("{{businessType}}", "{{businessType}}")}${address()}${hours()}{{#if
     ]
   }{{/if}}
 }
-</script>`;
+</script>${breadcrumbs}`;
 
 const directory = `<script type="application/ld+json">
 {
@@ -57,7 +61,7 @@ ${pageHeader("CollectionPage", "collectionpage")}{{#if dm_directoryChildren}},
     ]
   }{{/if}}
 }
-</script>`;
+</script>${breadcrumbs}`;
 
 const locator = `<script type="application/ld+json">
 {
@@ -69,7 +73,7 @@ const fallback = `<script type="application/ld+json">
 {
 ${pageHeader("Thing", "thing")}${description}
 }
-</script>`;
+</script>${breadcrumbs}`;
 
 /** Complete editable markup, selected using the same entity types as Recommended. */
 export const getCustomSchemaTemplate = (
