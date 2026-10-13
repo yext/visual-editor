@@ -1,6 +1,6 @@
 import { StreamDocument } from "../types/StreamDocument.ts";
+import { resolveBreadcrumbs } from "../urls/resolveBreadcrumbs.ts";
 import { TemplateRenderProps } from "./getSchema.ts";
-import { getDirectoryParents } from "./helpers.ts";
 
 export const getBreadcrumbsSchema = (
   data: TemplateRenderProps,
@@ -18,9 +18,9 @@ export const getBreadcrumbsSchema = (
     item: url,
   });
 
-  const directoryParents = getDirectoryParents(data.document);
+  const breadcrumbs = resolveBreadcrumbs(data.document);
 
-  if (!directoryParents?.length) {
+  if (!breadcrumbs.length) {
     // If dm_root, return a single breadcrumb item for the current page
     if (data.document.meta?.entityType?.id === "dm_root") {
       return {
@@ -38,27 +38,17 @@ export const getBreadcrumbsSchema = (
     return undefined;
   }
 
-  // Create the breadcrumbs for the directory parents
-  const breadcrumbItems = directoryParents.map((parent, index) =>
-    fillBreadcrumbsItem(
-      index + 1,
-      parent.name,
-      data.document.siteDomain
-        ? `https://${data.document.siteDomain}/${parent.slug}`
-        : `/${parent.slug}`
-    )
-  );
+  const breadcrumbItems = breadcrumbs
+    .filter((breadcrumb) => breadcrumb.name)
+    .map((breadcrumb, index) => {
+      const url = breadcrumb.slug
+        ? data.document.siteDomain
+          ? `https://${data.document.siteDomain}/${breadcrumb.slug.replace(/^\/+/, "")}`
+          : `/${breadcrumb.slug.replace(/^\/+/, "")}`
+        : currentPageUrl;
 
-  // Add the current page as the last breadcrumb item
-  if (data.document?.name) {
-    breadcrumbItems.push(
-      fillBreadcrumbsItem(
-        breadcrumbItems.length + 1,
-        data.document.name,
-        currentPageUrl
-      )
-    );
-  }
+      return fillBreadcrumbsItem(index + 1, breadcrumb.name, url);
+    });
 
   return {
     "@type": "BreadcrumbList",
