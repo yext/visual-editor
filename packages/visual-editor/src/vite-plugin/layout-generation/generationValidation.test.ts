@@ -1,6 +1,8 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
+import { createFlatPatchStream } from "./flatPatchStream.ts";
+import { flatSpecToPuckData, puckDataToFlatSpec } from "./puckFlatAdapter.ts";
 import { createPuckGenerationCatalog } from "./puckGenerationCatalog.ts";
 import {
   buildGenerationPrompt,
@@ -54,6 +56,168 @@ const layout = (content: unknown[] = [banner()]) => ({
 const output = (spec: unknown) => JSON.stringify({ text: "Created", spec });
 
 describe("Puck generation validation", () => {
+  it("preserves reconstructed native schema requiredness, nullable slots, constraints, and defaults", () => {
+    const custom = createPuckGenerationCatalog({
+      Promo: {
+        props: z.object({
+          data: z.object({
+            backgroundImage: z.object({ url: z.string().url() }),
+          }),
+          slots: z.object({
+            HeadingSlot: z.array(z.unknown()),
+            VideoSlot: z.array(z.unknown()),
+            OptionalSlot: z.array(z.unknown()).optional(),
+            NullableSlot: z.array(z.unknown()).nullable(),
+          }),
+          caption: z.string().min(2).default("Welcome").describe("Caption"),
+        }),
+        fields: {
+          data: {
+            type: "object",
+            objectFields: {
+              backgroundImage: {
+                type: "object",
+                objectFields: { url: { type: "text" } },
+              },
+            },
+          },
+          slots: {
+            type: "object",
+            objectFields: {
+              HeadingSlot: { type: "slot" },
+              VideoSlot: { type: "slot" },
+              OptionalSlot: { type: "slot" },
+              NullableSlot: { type: "slot" },
+            },
+          },
+        },
+        defaultProps: { obsoleteDefault: "Never show this" },
+      },
+    });
+    const prompt = buildGenerationPrompt(custom);
+    const guidance = JSON.parse(
+      prompt.split(
+        "Reconstructed native props schemas and declared slot paths:\n"
+      )[1]
+    );
+    const schema = guidance.Promo.nativePropsSchema;
+    expect(schema.required).toEqual(
+      expect.arrayContaining(["data", "slots", "id"])
+    );
+    expect(schema.properties.data.required).toEqual(["backgroundImage"]);
+    expect(schema.properties.slots.required).toEqual([
+      "HeadingSlot",
+      "VideoSlot",
+      "NullableSlot",
+    ]);
+    expect(
+      schema.properties.slots.properties.NullableSlot.anyOf
+    ).toContainEqual({ type: "null" });
+    const caption = schema.properties.caption;
+    const referencedCaption = caption.$ref
+      ? caption.$ref
+          .slice(2)
+          .split("/")
+          .reduce((node: any, key: string) => node[key], schema)
+      : {};
+    expect({ ...referencedCaption, ...caption }).toMatchObject({
+      default: "Welcome",
+      minLength: 2,
+      description: "Caption",
+    });
+    expect(prompt).not.toContain("obsoleteDefault");
+    expect(prompt).toContain("additional component");
+  });
+
+  it("supplies complete flat and JSONL examples that reconstruct with a required unused slot", async () => {
+    const exampleCatalog = createPuckGenerationCatalog({
+      ExampleSection: {
+        props: z.object({
+          title: z.string(),
+          slots: z.object({
+            HeadingSlot: z.array(z.unknown()),
+            VideoSlot: z.array(z.unknown()),
+          }),
+        }),
+        fields: {
+          slots: {
+            type: "object",
+            objectFields: {
+              HeadingSlot: { type: "slot", allow: ["ExampleText"] },
+              VideoSlot: { type: "slot", allow: ["ExampleText"] },
+            },
+          },
+        },
+      },
+      ExampleText: { props: z.object({ text: z.string() }), nestedOnly: true },
+    });
+    const prompt = buildGenerationPrompt(exampleCatalog);
+    const example = JSON.parse(prompt.match(/```json\n([\s\S]*?)\n```/)![1]);
+    const native = flatSpecToPuckData(exampleCatalog, example, {
+      root: { props: {} },
+      content: [],
+    });
+    expect(
+      validateGeneratedContent(exampleCatalog, { content: native.content })
+    ).toEqual([]);
+    expect(native.content[0].props.content[0].props.slots.VideoSlot).toEqual(
+      []
+    );
+    expect(
+      flatSpecToPuckData(
+        exampleCatalog,
+        puckDataToFlatSpec(exampleCatalog, native),
+        native
+      )
+    ).toEqual(native);
+    const starting = {
+      root: "example-root",
+      elements: {
+        "example-root": {
+          type: "__PuckContentRoot",
+          props: {},
+          children: ["example-main"],
+        },
+        "example-main": { type: "MainContent", props: {}, children: [] },
+      },
+    };
+    const operations = prompt.match(
+      /Illustrative JSONL syntax[^\n]*\n([\s\S]*?)\nThe catalog schemas/
+    )![1];
+    const stream = createFlatPatchStream(
+      starting,
+      () => {},
+      () => {}
+    );
+    try {
+      await stream.push(operations);
+      const result = await stream.finish();
+      expect(
+        flatSpecToPuckData(exampleCatalog, result.spec, {
+          root: { props: {} },
+          content: [],
+        })
+      ).toEqual(native);
+    } finally {
+      await stream.cancel();
+    }
+  });
+
+  it("identifies the component and native property path when a required prop is missing", () => {
+    const custom = createPuckGenerationCatalog({
+      Promo: {
+        props: z.object({
+          data: z.object({ backgroundImage: z.object({ url: z.string() }) }),
+        }),
+      },
+    });
+    const errors = validateGeneratedContent(custom, {
+      content: [{ type: "Promo", props: { id: "new-promo", data: {} } }],
+    });
+    expect(errors.join("\n")).toContain("new-promo");
+    expect(errors.join("\n")).toContain("backgroundImage");
+  });
+
   it("requests and accepts only content, rejecting model-owned root or zones", () => {
     const schema = catalog.jsonSchema() as {
       required: string[];
@@ -73,14 +237,16 @@ describe("Puck generation validation", () => {
     ).not.toEqual([]);
     expect(parseGenerationResponse(output(null)).spec).toBeNull();
   });
-  it("uses a custom Puck prompt without duplicating property schemas", () => {
+  it("derives flat component prop constraints and slot guidance from Puck schemas", () => {
     const prompt = buildGenerationPrompt(catalog);
     expect(prompt).toContain("A banner");
-    expect(prompt).not.toContain("bracketed hex");
-    expect(prompt).not.toContain('"pattern"');
+    expect(prompt).toContain("bracketed hex");
+    expect(prompt).toContain('"pattern"');
+    expect(prompt).toContain("/slots/body");
+    expect(prompt).toContain('"allow":["Text"]');
     expect(prompt).toContain("props.content");
     expect(prompt).not.toContain('"puck": {');
-    expect(prompt).not.toContain("/elements");
+    expect(prompt).toContain("flat { root, elements }");
     expect(
       catalog.data.components.Banner.props.safeParse(banner().props).success
     ).toBe(true);

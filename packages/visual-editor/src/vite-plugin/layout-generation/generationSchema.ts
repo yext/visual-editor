@@ -406,6 +406,9 @@ export const compileGenerationSchema = (
         contentCodec.decode(parsed)
       ) as GeneratedContent;
     },
+    validateContent: (data: unknown): void => {
+      contentCodec.wire.parse(contentCodec.encode(data));
+    },
     parseResponse: (
       text: string
     ): { text: string; spec: GeneratedContent | null } => {

@@ -13,7 +13,19 @@ const catalog = createPuckGenerationCatalog({
 const spec = {
   content: [{ type: "Heading", props: { id: "heading", text: "Café" } }],
 };
-const generated = JSON.stringify({ text: "Created", spec });
+const generated = [
+  JSON.stringify({
+    op: "add",
+    path: "/elements/heading",
+    value: { type: "Heading", props: { text: "Café" } },
+  }),
+  JSON.stringify({
+    op: "add",
+    path: "/elements/__puck_content_root__/children/-",
+    value: "heading",
+  }),
+].join("\n");
+const accepted = { text: "Updated the layout.", spec };
 const prose = JSON.stringify({ text: "Answer", spec: null });
 const conversation = {
   layoutId: "location",
@@ -56,6 +68,515 @@ afterEach(() => {
 });
 
 describe("native Puck generation", () => {
+  it.each([
+    "missing_props",
+    "misplaced_slots",
+    "disconnected",
+    "malformed_prefix",
+  ])(
+    "repairs the rejected %s draft while adding a separate promo and preserving the original",
+    async (failure) => {
+      const custom = createPuckGenerationCatalog({
+        Promo: {
+          props: z.object({
+            title: z.string(),
+            data: z.object({ backgroundImage: z.object({ url: z.string() }) }),
+            slots: z.object({
+              HeadingSlot: z.array(z.unknown()),
+              VideoSlot: z.array(z.unknown()),
+            }),
+          }),
+          fields: {
+            slots: {
+              type: "object",
+              objectFields: {
+                HeadingSlot: { type: "slot" },
+                VideoSlot: { type: "slot" },
+              },
+            },
+          },
+        },
+        Heading: { props: z.object({ text: z.string() }), nestedOnly: true },
+      });
+      const existing = {
+        type: "Promo",
+        props: {
+          id: "existing",
+          title: "Original",
+          data: { backgroundImage: { url: "original" } },
+          slots: { HeadingSlot: [], VideoSlot: [] },
+        },
+        readOnly: { title: true },
+      };
+      const currentData = { content: [existing] };
+      const draft: any = {
+        type: "Promo",
+        props: { title: "Added", data: { backgroundImage: { url: "new" } } },
+        slots: { "/slots/HeadingSlot": ["heading"], "/slots/VideoSlot": [] },
+      };
+      const repair: any[] = [];
+      if (failure === "missing_props") {
+        delete draft.props.data.backgroundImage;
+        delete draft.slots["/slots/VideoSlot"];
+        repair.push(
+          {
+            op: "add",
+            path: "/elements/new/props/data/backgroundImage",
+            value: { url: "new" },
+          },
+          {
+            op: "add",
+            path: "/elements/new/slots/~1slots~1VideoSlot",
+            value: [],
+          }
+        );
+      } else if (failure === "misplaced_slots") {
+        draft.props["/slots/HeadingSlot"] = ["heading"];
+        delete draft.slots;
+        repair.push(
+          { op: "remove", path: "/elements/new/props/~1slots~1HeadingSlot" },
+          {
+            op: "add",
+            path: "/elements/new/slots",
+            value: {
+              "/slots/HeadingSlot": ["heading"],
+              "/slots/VideoSlot": [],
+            },
+          }
+        );
+      }
+      const prefix: any[] = [
+        {
+          op: "add",
+          path: "/elements/heading",
+          value: { type: "Heading", props: { text: "New heading" } },
+        },
+      ];
+      if (failure !== "malformed_prefix")
+        prefix.push({ op: "add", path: "/elements/new", value: draft });
+      else repair.push({ op: "add", path: "/elements/new", value: draft });
+      if (failure !== "disconnected" && failure !== "malformed_prefix")
+        prefix.push({
+          op: "add",
+          path: "/elements/__puck_content_root__/children/-",
+          value: "new",
+        });
+      else
+        repair.push({
+          op: "add",
+          path: "/elements/__puck_content_root__/children/-",
+          value: "new",
+        });
+      const first =
+        prefix.map((op) => JSON.stringify(op)).join("\n") +
+        (failure === "malformed_prefix"
+          ? '\n{"op":"add","path":"/elements/new","value":{}\n'
+          : "");
+      const fetchMock = vi
+        .fn()
+        .mockResolvedValueOnce(gatewayJson(first))
+        .mockResolvedValueOnce(
+          gatewayJson(repair.map((op) => JSON.stringify(op)).join("\n"))
+        );
+      vi.stubGlobal("fetch", fetchMock);
+      const target = setup(
+        JSON.stringify({
+          ...conversation,
+          currentData,
+          messages: [{ role: "user", content: "Add an immersive promo" }],
+        })
+      );
+      target.options.loadContext.mockResolvedValue({
+        catalog: custom,
+        locales: [],
+      });
+      await target.run();
+      const prompt = JSON.parse(fetchMock.mock.calls[1][1].body).input.at(
+        -1
+      ).content;
+      expect(prompt).toContain('"heading":');
+      expect(prompt).toContain("rejected draft");
+      const accepted = target.events().at(-1);
+      expect(accepted).toMatchObject({ type: "accepted" });
+      expect(accepted.spec.content[0]).toEqual(existing);
+      expect(accepted.spec.content[1].props).toMatchObject({
+        id: "new",
+        title: "Added",
+        slots: {
+          HeadingSlot: [{ props: { id: "heading", text: "New heading" } }],
+          VideoSlot: [],
+        },
+      });
+      expect(
+        target.events().filter((event) => event.type === "preview-spec")
+      ).toHaveLength(1);
+      expect(currentData.content).toEqual([existing]);
+    }
+  );
+
+  it("repairs malformed streaming output into a new component with previously absent nested slot props", async () => {
+    const custom = createPuckGenerationCatalog({
+      Heading: { props: z.object({ text: z.string() }), nestedOnly: true },
+      Promo: {
+        props: z.object({
+          slots: z.object({ HeadingSlot: z.array(z.unknown()) }),
+        }),
+        fields: {
+          slots: {
+            type: "object",
+            objectFields: { HeadingSlot: { type: "slot", allow: ["Heading"] } },
+          },
+        },
+      },
+    });
+    const valid = [
+      {
+        op: "add",
+        path: "/elements/heading",
+        value: { type: "Heading", props: { text: "Welcome" } },
+      },
+      {
+        op: "add",
+        path: "/elements/promo",
+        value: {
+          type: "Promo",
+          props: {},
+          slots: { "/slots/HeadingSlot": ["heading"] },
+        },
+      },
+      {
+        op: "add",
+        path: "/elements/__puck_content_root__/children/-",
+        value: "promo",
+      },
+    ]
+      .map((operation) => JSON.stringify(operation))
+      .join("\n");
+    const cancelled = vi.fn();
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(
+          new ReadableStream({
+            start(controller) {
+              controller.enqueue(
+                new TextEncoder().encode(
+                  sse({
+                    type: "response.output_text.delta",
+                    delta: '{"op":"add","path":"/elements/promo","value":{}\n',
+                  })
+                )
+              );
+            },
+            cancel: cancelled,
+          }),
+          { headers: { "Content-Type": "text/event-stream" } }
+        )
+      )
+      .mockResolvedValueOnce(gatewayJson(valid));
+    vi.stubGlobal("fetch", fetchMock);
+    const target = setup();
+    target.options.loadContext.mockResolvedValue({
+      catalog: custom,
+      locales: [],
+    });
+    await target.run();
+    expect(cancelled).toHaveBeenCalled();
+    expect(target.events().at(-1)).toMatchObject({
+      type: "accepted",
+      spec: {
+        content: [
+          {
+            type: "Promo",
+            props: {
+              id: "promo",
+              slots: {
+                HeadingSlot: [
+                  {
+                    type: "Heading",
+                    props: { id: "heading", text: "Welcome" },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    });
+    expect(
+      target.events().filter((event) => event.type === "preview-text")
+    ).toEqual([]);
+    const repairPrompt = JSON.parse(fetchMock.mock.calls[1][1].body).input.at(
+      -1
+    ).content;
+    expect(repairPrompt).toContain("line 1, operation 1");
+    expect(repairPrompt).toContain("actual newline");
+    const outcomes = target.options.log.mock.calls
+      .filter(([message]) => message.endsWith("Attempt outcome"))
+      .map(([, details]) => details);
+    expect(outcomes).toMatchObject([
+      {
+        attempt: 1,
+        validationOutcome: "rejected",
+        failureCategory: "malformed_json",
+        repair: true,
+        parsedOperationCount: 0,
+        validPreviewCount: 0,
+      },
+      {
+        attempt: 2,
+        validationOutcome: "accepted",
+        parsedOperationCount: 3,
+        validPreviewCount: 1,
+      },
+    ]);
+  });
+
+  it("repairs a patch application failure from the last validated candidate and preserves editor flags", async () => {
+    const currentData = {
+      content: [
+        {
+          type: "Heading",
+          props: { id: "heading", text: "Before" },
+          readOnly: { text: true },
+        },
+      ],
+    };
+    const initialOutput =
+      [
+        { op: "replace", path: "/elements/heading/props/text", value: "Safe" },
+        { op: "test", path: "/root", value: "wrong" },
+      ]
+        .map((operation) => JSON.stringify(operation))
+        .join("\n") + "\n";
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(gatewayJson(initialOutput))
+      .mockResolvedValueOnce(
+        gatewayJson(
+          '{"op":"replace","path":"/elements/heading/props/text","value":"After"}'
+        )
+      );
+    vi.stubGlobal("fetch", fetchMock);
+    const target = setup(JSON.stringify({ ...conversation, currentData }));
+    await target.run();
+    const repair = JSON.parse(fetchMock.mock.calls[1][1].body).input.at(
+      -1
+    ).content;
+    expect(repair).toContain('"text": "Safe"');
+    expect(repair).not.toContain('"text": "Before"');
+    expect(target.events().at(-1)).toMatchObject({
+      type: "accepted",
+      spec: {
+        content: [
+          { props: { id: "heading", text: "After" }, readOnly: { text: true } },
+        ],
+      },
+    });
+    const firstOutcome = target.options.log.mock.calls.find(([message]) =>
+      message.endsWith("Attempt outcome")
+    )![1];
+    expect(firstOutcome).toMatchObject({
+      failureCategory: "patch_application",
+      parsedOperationCount: 2,
+      patchCount: 1,
+      validPreviewCount: 1,
+    });
+    expect(currentData.content[0].props.text).toBe("Before");
+  });
+
+  it("applies a flat JSON Patch property edit and accepts reconstructed Puck content", async () => {
+    const currentData = {
+      content: [
+        {
+          type: "MainContent",
+          props: {
+            id: "main",
+            content: [
+              { type: "Heading", props: { id: "heading", text: "Before" } },
+            ],
+          },
+        },
+      ],
+    };
+    const patch = JSON.stringify({
+      op: "replace",
+      path: "/elements/heading/props/text",
+      value: "After",
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => gatewayJson(patch))
+    );
+    const target = setup(JSON.stringify({ ...conversation, currentData }));
+    await target.run();
+    expect(target.events().at(-1)).toEqual({
+      type: "accepted",
+      text: "Updated the layout.",
+      spec: {
+        content: [
+          {
+            type: "MainContent",
+            props: {
+              id: "main",
+              content: [
+                { type: "Heading", props: { id: "heading", text: "After" } },
+              ],
+            },
+          },
+        ],
+      },
+    });
+  });
+
+  it("creates an initial layout through the same flat patch stream", async () => {
+    const output = [
+      JSON.stringify({
+        op: "add",
+        path: "/elements/heading",
+        value: { type: "Heading", props: { text: "New" } },
+      }),
+      JSON.stringify({
+        op: "add",
+        path: "/elements/__puck_content_root__/children/-",
+        value: "heading",
+      }),
+    ].join("\n");
+    const fetchMock = vi.fn(async (_url: string, _init?: RequestInit) =>
+      gatewayJson(output)
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    const target = setup();
+    await target.run();
+    expect(target.events().at(-1)).toEqual({
+      type: "accepted",
+      text: "Updated the layout.",
+      spec: {
+        content: [{ type: "Heading", props: { id: "heading", text: "New" } }],
+      },
+    });
+    const request = JSON.parse(fetchMock.mock.calls[0][1]!.body as string);
+    expect(request.text).toBeUndefined();
+    expect(request.input.at(-1).content).toContain(
+      "Output ONLY the JSON Patch lines"
+    );
+  });
+
+  it("handles insertion, deletion, and reordering through the flat graph", async () => {
+    const currentData = {
+      content: [
+        {
+          type: "MainContent",
+          props: {
+            id: "main",
+            content: [
+              { type: "Heading", props: { id: "a", text: "A" } },
+              { type: "Heading", props: { id: "b", text: "B" } },
+              { type: "Heading", props: { id: "c", text: "C" } },
+            ],
+          },
+        },
+      ],
+    };
+    const patch = [
+      { op: "remove", path: "/elements/b" },
+      { op: "remove", path: "/elements/main/children/1" },
+      {
+        op: "add",
+        path: "/elements/d",
+        value: { type: "Heading", props: { text: "D" } },
+      },
+      { op: "add", path: "/elements/main/children/1", value: "d" },
+      {
+        op: "move",
+        from: "/elements/main/children/1",
+        path: "/elements/main/children/2",
+      },
+    ]
+      .map((operation) => JSON.stringify(operation))
+      .join("\n");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (_url: string, _init?: RequestInit) => gatewayJson(patch))
+    );
+    const target = setup(JSON.stringify({ ...conversation, currentData }));
+    await target.run();
+    expect(target.events().at(-1)).toMatchObject({
+      type: "accepted",
+      spec: {
+        content: [
+          {
+            type: "MainContent",
+            props: {
+              content: [
+                { props: { id: "a", text: "A" } },
+                { props: { id: "c", text: "C" } },
+                { props: { id: "d", text: "D" } },
+              ],
+            },
+          },
+        ],
+      },
+    });
+  });
+
+  it("rejects malformed or prototype-sensitive patch paths", async () => {
+    const patch = JSON.stringify({
+      op: "add",
+      path: "/elements/__proto__/props/x",
+      value: "bad",
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => gatewayJson(patch))
+    );
+    const target = setup();
+    await target.run();
+    expect(
+      target.events().findLast((event) => event.type === "error")
+    ).toMatchObject({
+      type: "error",
+      error: expect.stringContaining("Reserved prototype property"),
+    });
+    expect(target.events().some((event) => event.type === "accepted")).toBe(
+      false
+    );
+  });
+
+  it("rejects component props outside the formal Puck schema", async () => {
+    const patch = [
+      JSON.stringify({
+        op: "add",
+        path: "/elements/heading",
+        value: { type: "Heading", props: { text: "ok", invented: true } },
+      }),
+      JSON.stringify({
+        op: "add",
+        path: "/elements/__puck_content_root__/children/-",
+        value: "heading",
+      }),
+    ].join("\n");
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(gatewayJson(patch))
+      .mockImplementation(async () =>
+        gatewayJson(
+          '{"op":"test","path":"/root","value":"__puck_content_root__"}'
+        )
+      );
+    vi.stubGlobal("fetch", fetchMock);
+    const target = setup();
+    await target.run();
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(target.events().at(-1)).toMatchObject({
+      type: "error",
+      error: expect.stringContaining("invented"),
+    });
+    expect(target.events().some((event) => event.type === "accepted")).toBe(
+      false
+    );
+  });
+
   it("aborts runaway repetition after a preview without repairing or accepting", async () => {
     let signal: AbortSignal;
     const fetchMock = vi.fn(async (_url: string, init: RequestInit) => {
@@ -76,7 +597,9 @@ describe("native Puck generation", () => {
     vi.stubGlobal("fetch", fetchMock);
     const target = setup();
     await target.run();
-    expect(target.events().at(-1)).toMatchObject({
+    expect(
+      target.events().findLast((event) => event.type === "error")
+    ).toMatchObject({
       type: "error",
       error: expect.stringContaining("repeated text excessively"),
     });
@@ -98,7 +621,7 @@ describe("native Puck generation", () => {
             encoder.encode(
               sse({
                 type: "response.output_text.delta",
-                delta: '{"text":"Working","spec":{"content":[',
+                delta: "Working ",
               })
             )
           );
@@ -160,7 +683,13 @@ describe("native Puck generation", () => {
 
   it("increases the request budget for large current layouts", async () => {
     const fetchMock = vi.fn(async (_url: string, _init?: RequestInit) =>
-      gatewayJson()
+      gatewayJson(
+        JSON.stringify({
+          op: "replace",
+          path: "/elements/heading/props/text",
+          value: "Large",
+        })
+      )
     );
     vi.stubGlobal("fetch", fetchMock);
     const target = setup(
@@ -202,27 +731,35 @@ describe("native Puck generation", () => {
       );
       vi.stubGlobal("fetch", fetchMock);
       const target = setup();
-      await expect(target.run()).rejects.toThrow("output token budget");
+      await target.run();
       expect(fetchMock).toHaveBeenCalledOnce();
+      expect(target.events().at(-1)).toMatchObject({
+        type: "error",
+        error: expect.stringContaining("output token budget"),
+      });
       expect(target.events().some((event) => event.type === "accepted")).toBe(
         false
       );
     }
   );
 
-  it("requires strict output and does not duplicate property schemas in the prompt", async () => {
+  it("uses JSONL patches and does not duplicate property schemas in the prompt", async () => {
     const fetchMock = vi.fn(async (_url: string, _init?: RequestInit) =>
       gatewayJson()
     );
     vi.stubGlobal("fetch", fetchMock);
     await setup().run();
     const body = JSON.parse(fetchMock.mock.calls[0][1]!.body as string);
-    expect(body.text.format.strict).toBe(true);
+    expect(body.text).toBeUndefined();
     expect(body.max_output_tokens).toBe(16_384);
-    expect(JSON.stringify(body.text.format.schema)).toContain(
-      '"const":"Heading"'
+    expect(body.input.at(-1).content).toContain(
+      "Output ONLY the JSON Patch lines"
     );
-    expect(body.instructions).not.toContain('"properties"');
+    expect(
+      body.instructions.split(
+        "Reconstructed native props schemas and declared slot paths:"
+      )
+    ).toHaveLength(2);
     expect(body.instructions).not.toContain('"fields"');
   });
 
@@ -261,15 +798,9 @@ describe("native Puck generation", () => {
     const fetchMock = vi.fn(async (_url: string, _init?: RequestInit) =>
       gatewayJson(
         JSON.stringify({
-          text: "Created",
-          spec: {
-            content: [
-              {
-                ...spec.content[0],
-                props: { ...spec.content[0].props, optional: null },
-              },
-            ],
-          },
+          op: "replace",
+          path: "/elements/heading/props/text",
+          value: "New",
         })
       )
     );
@@ -303,8 +834,16 @@ describe("native Puck generation", () => {
     expect(JSON.stringify(body.input)).not.toContain("readOnly");
     expect(target.events().at(-1)).toEqual({
       type: "accepted",
-      text: "Created",
-      spec: currentData,
+      text: "Updated the layout.",
+      spec: {
+        content: [
+          {
+            ...spec.content[0],
+            props: { id: "heading", text: "New" },
+            readOnly: { text: true },
+          },
+        ],
+      },
     });
   });
 
@@ -323,7 +862,11 @@ describe("native Puck generation", () => {
       );
       vi.stubGlobal("fetch", fetchMock);
       const target = setup();
-      await expect(target.run()).rejects.toThrow("refused");
+      await target.run();
+      expect(target.events().at(-1)).toMatchObject({
+        type: "error",
+        error: expect.stringContaining("refused"),
+      });
       expect(fetchMock).toHaveBeenCalledOnce();
       expect(target.events().some((event) => event.type === "accepted")).toBe(
         false
@@ -337,7 +880,7 @@ describe("native Puck generation", () => {
         new Response(
           sse({
             type: "response.output_text.delta",
-            delta: '{"text":"Preparing',
+            delta: "Preparing",
           }) + sse({ type: "response.refusal.done" }),
           { headers: { "Content-Type": "text/event-stream" } }
         )
@@ -345,10 +888,12 @@ describe("native Puck generation", () => {
     vi.stubGlobal("fetch", fetchMock);
     const target = setup();
     await target.run();
-    expect(target.events().at(-1)).toEqual({
-      type: "error",
-      error: "The AI gateway refused generation.",
-    });
+    expect(target.events().findLast((event) => event.type === "error")).toEqual(
+      {
+        type: "error",
+        error: "The AI gateway refused generation.",
+      }
+    );
     expect(fetchMock).toHaveBeenCalledOnce();
     expect(target.events().some((event) => event.type === "accepted")).toBe(
       false
@@ -373,12 +918,12 @@ describe("native Puck generation", () => {
     );
     await run();
     const body = JSON.parse(fetchMock.mock.calls[0][1]!.body as string);
-    expect(body.input).toHaveLength(4);
-    expect(body.input[2].content).toContain("authoritative starting point");
-    const current = JSON.parse(body.input[2].content.split("\n")[1]);
-    expect(current.spec.content).toEqual(spec.content);
-    expect(Object.keys(current.spec)).toEqual(["content"]);
-    expect(body.input[3].content).toBe("Revise my manual edits");
+    expect(body.input).toHaveLength(2);
+    expect(body.input[1].content).toContain("CURRENT UI STATE");
+    expect(body.input[1].content).toContain('"heading"');
+    expect(body.input[1].content).toContain(
+      "USER REQUEST: Revise my manual edits"
+    );
   });
 
   it("rejects malformed current editor data before contacting the gateway", async () => {
@@ -402,9 +947,7 @@ describe("native Puck generation", () => {
     expect(events().at(-1).spec).toEqual(spec);
     const request = JSON.parse(fetchMock.mock.calls[0][1]!.body as string);
     expect(request.instructions).not.toContain("ROOT FIELD DEFINITIONS");
-    expect(
-      request.text.format.schema.properties.spec.anyOf[0].required
-    ).toEqual(["content"]);
+    expect(request.text).toBeUndefined();
   });
   it.each(["object", "string", "buffer"])(
     "accepts middleware-parsed %s bodies",
@@ -432,7 +975,13 @@ describe("native Puck generation", () => {
           (fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1]
             .body as string
         ).input
-      ).toEqual(conversation.messages);
+      ).toHaveLength(1);
+      expect(
+        JSON.parse(
+          (fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1]
+            .body as string
+        ).input[0].content
+      ).toContain("USER REQUEST: Create a heading");
     }
   );
   it.each([
@@ -511,7 +1060,7 @@ describe("native Puck generation", () => {
     expect(unknown.response.statusCode).toBe(400);
     expect(fetchMock).not.toHaveBeenCalled();
   });
-  it("forwards accepted Puck JSON in revision history and requests a Puck JSON schema", async () => {
+  it("keeps layouts out of conversational history and requests flat JSONL patches", async () => {
     const messages = [
       ...conversation.messages,
       { role: "assistant", content: generated },
@@ -530,14 +1079,14 @@ describe("native Puck generation", () => {
       RequestInit,
     ];
     const request = JSON.parse(init.body as string);
-    expect(request.input).toEqual(messages);
+    expect(request.input).toHaveLength(2);
+    expect(request.input[0]).toEqual(messages[0]);
+    expect(request.input[1].content).toContain("USER REQUEST: Make it larger");
     expect(request.model).toBe("gpt-6-luna");
     expect(request.stream).toBe(true);
-    expect(
-      request.text.format.schema.properties.spec.anyOf[0].required
-    ).toEqual(["content"]);
-    expect(request.instructions).toContain("native Puck");
-    expect(request.instructions).not.toContain("/elements");
+    expect(request.text).toBeUndefined();
+    expect(request.instructions).toContain("flat { root, elements }");
+    expect(request.input[1].content).toContain('"elements"');
     expect(options.loadContext).toHaveBeenCalledWith("location");
     expect(url).toContain("/openai/responses");
     expect(init.headers).toMatchObject({
@@ -549,7 +1098,7 @@ describe("native Puck generation", () => {
       "X-Visual-Editor-Generation",
       "validated-puck-content-v1"
     );
-    expect(events()).toEqual([{ type: "accepted", ...JSON.parse(generated) }]);
+    expect(events().at(-1)).toEqual({ type: "accepted", ...accepted });
   });
   it("decodes request prompts split across UTF-8 bytes", async () => {
     const payload = {
@@ -575,7 +1124,13 @@ describe("native Puck generation", () => {
         (fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1]
           .body as string
       ).input
-    ).toEqual(payload.messages);
+    ).toHaveLength(1);
+    expect(
+      JSON.parse(
+        (fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1]
+          .body as string
+      ).input[0].content
+    ).toContain("Café 👋");
   });
   it("streams decoded text and validated data across UTF-8 and SSE boundaries", async () => {
     const bytes = new TextEncoder().encode(
@@ -605,7 +1160,7 @@ describe("native Puck generation", () => {
         .filter((event) => event.type === "preview-text")
         .map((event) => event.delta)
         .join("")
-    ).toBe("Created");
+    ).toBe("");
     expect(
       events()
         .filter((event) => event.type === "preview-spec")
@@ -613,8 +1168,7 @@ describe("native Puck generation", () => {
     ).toEqual(spec);
     expect(events().at(-1)).toEqual({
       type: "accepted",
-      text: "Created",
-      spec,
+      ...accepted,
     });
     expect(events().some((event) => event.type === "preview")).toBe(false);
   });
@@ -637,11 +1191,16 @@ describe("native Puck generation", () => {
     await vi.waitFor(() => expect(stream).toBeDefined());
     stream.enqueue(
       new TextEncoder().encode(
-        sse({ type: "response.output_text.delta", delta: '{"text":"Hello' })
+        sse({ type: "response.output_text.delta", delta: "Hello" })
       )
     );
     await vi.waitFor(() =>
-      expect(events()).toContainEqual({ type: "preview-text", delta: "Hello" })
+      expect(
+        events()
+          .filter((event) => event.type === "preview-text")
+          .map((event) => event.delta)
+          .join("")
+      ).toBe("Hello")
     );
     response.emit("close");
     expect(
@@ -676,7 +1235,7 @@ describe("native Puck generation", () => {
     await run();
     expect(events().at(-1)).toEqual({
       type: "accepted",
-      ...JSON.parse(generated),
+      ...accepted,
     });
     expect(options.log).toHaveBeenCalledWith(
       "[local-editor generation] Completed response",
@@ -708,7 +1267,12 @@ describe("native Puck generation", () => {
             })
         )
       );
-      await expect(setup().run()).rejects.toThrow("streaming error");
+      const target = setup();
+      await target.run();
+      expect(target.events().at(-1)).toMatchObject({
+        type: "error",
+        error: expect.stringContaining("streaming error"),
+      });
     }
   );
   it("rejects streams without gateway completion", async () => {
@@ -724,10 +1288,12 @@ describe("native Puck generation", () => {
     );
     const target = setup();
     await target.run();
-    expect(target.events().at(-1)).toEqual({
-      type: "error",
-      error: expect.stringContaining("ended before completion"),
-    });
+    expect(target.events().findLast((event) => event.type === "error")).toEqual(
+      {
+        type: "error",
+        error: expect.stringContaining("ended before completion"),
+      }
+    );
     expect(target.events().some((event) => event.type === "accepted")).toBe(
       false
     );
@@ -739,9 +1305,12 @@ describe("native Puck generation", () => {
         "fetch",
         vi.fn(async () => new Response(JSON.stringify(result)))
       );
-      await expect(setup().run()).rejects.toThrow(
-        /did not complete|no generated text/
-      );
+      const target = setup();
+      await target.run();
+      expect(target.events().at(-1)).toMatchObject({
+        type: "error",
+        error: expect.stringMatching(/did not complete|no generated text/),
+      });
     }
   );
   it("repairs invalid field props and preserves descriptions and refinements", async () => {
@@ -752,16 +1321,26 @@ describe("native Puck generation", () => {
         }),
       },
     });
+    const invalid = [
+      JSON.stringify({
+        op: "add",
+        path: "/elements/heading",
+        value: { type: "Heading", props: { text: "No emoji" } },
+      }),
+      JSON.stringify({
+        op: "add",
+        path: "/elements/__puck_content_root__/children/-",
+        value: "heading",
+      }),
+    ].join("\n");
     const valid = JSON.stringify({
-      text: "Repaired",
-      spec: {
-        ...spec,
-        content: [{ type: "Heading", props: { id: "heading", text: "Hi 👋" } }],
-      },
+      op: "replace",
+      path: "/elements/heading/props/text",
+      value: "Hi 👋",
     });
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce(gatewayJson())
+      .mockResolvedValueOnce(gatewayJson(invalid))
       .mockResolvedValueOnce(gatewayJson(valid));
     vi.stubGlobal("fetch", fetchMock);
     const { run, options, events } = setup();
@@ -770,27 +1349,39 @@ describe("native Puck generation", () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(
       JSON.stringify(
-        JSON.parse(fetchMock.mock.calls[0][1]!.body as string).text.format
-          .schema
+        JSON.parse(fetchMock.mock.calls[0][1]!.body as string).instructions
       )
     ).toContain("Always use an emoji.");
     expect(
       JSON.parse(fetchMock.mock.calls[1][1].body).input.at(-1).content
     ).toContain("text");
-    expect(events()).toEqual([
-      { type: "reset" },
-      { type: "accepted", ...JSON.parse(valid) },
+    expect(events().map((event) => event.type)).toEqual([
+      "reset",
+      "preview-spec",
+      "accepted",
     ]);
+    expect(events().at(-1)).toEqual({
+      type: "accepted",
+      text: "Updated the layout.",
+      spec: {
+        content: [{ type: "Heading", props: { id: "heading", text: "Hi 👋" } }],
+      },
+    });
   });
   it.each([
-    "not JSON",
-    JSON.stringify({
-      text: "Invalid",
-      spec: {
-        ...spec,
-        content: [{ type: "Missing", props: { id: "missing" } }],
-      },
-    }),
+    JSON.stringify({ op: "bad", path: "/elements/x" }),
+    [
+      JSON.stringify({
+        op: "add",
+        path: "/elements/missing",
+        value: { type: "Missing", props: {} },
+      }),
+      JSON.stringify({
+        op: "add",
+        path: "/elements/__puck_content_root__/children/-",
+        value: "missing",
+      }),
+    ].join("\n"),
   ])("bounds repairs and never accepts invalid output %#", async (invalid) => {
     const fetchMock = vi.fn(async () => gatewayJson(invalid));
     vi.stubGlobal("fetch", fetchMock);
@@ -816,7 +1407,9 @@ describe("native Puck generation", () => {
       };
       const fetchMock = vi.fn(async () => {
         const output_text =
-          fetchMock.mock.calls.length === 1 ? "invalid" : prose;
+          fetchMock.mock.calls.length === 1
+            ? JSON.stringify({ op: "bad", path: "/" })
+            : prose;
         return format === "json"
           ? gatewayJson(output_text, { usage })
           : new Response(

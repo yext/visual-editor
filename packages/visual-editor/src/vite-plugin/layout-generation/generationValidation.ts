@@ -32,7 +32,7 @@ export const generationResponseShape = z
 export const buildGenerationPrompt = (
   catalog: PuckGenerationCatalog,
   componentNames = catalog.componentNames,
-  stripMetadata: (data: GeneratedContent) => GeneratedContent = (data) => data
+  _stripMetadata: (data: GeneratedContent) => GeneratedContent = (data) => data
 ): string => {
   const components = Object.fromEntries(
     componentNames.map((name) => [name, catalog.data.components[name]])
@@ -42,18 +42,17 @@ export const buildGenerationPrompt = (
       name,
       {
         description: component.description,
+        nativePropsSchema: z.toJSONSchema(component.props, {
+          io: "input",
+          reused: "ref",
+        }),
+        declaredSlotPaths:
+          name === "MainContent" ? [] : describeSlots(component.fields),
+        children:
+          name === "MainContent"
+            ? describeSlots(component.fields)[0]
+            : undefined,
         nestedOnly: component.nestedOnly ?? false,
-        defaults: component.defaultProps
-          ? stripMetadata({
-              content: [
-                {
-                  type: name,
-                  props:
-                    component.defaultProps as GeneratedContent["content"][number]["props"],
-                },
-              ],
-            }).content[0].props
-          : undefined,
       },
     ])
   );
@@ -65,9 +64,34 @@ export const buildGenerationPrompt = (
           ]
         : [],
     }) +
-    "\n\nCOMPONENT GUIDANCE (property constraints are in the response schema):\n" +
-    JSON.stringify(guidance, null, 2)
+    "\n\nReconstructed native props schemas and declared slot paths:\n" +
+    JSON.stringify(guidance)
   );
+};
+
+const describeSlots = (
+  fields: Fields | undefined
+): Array<Record<string, unknown>> => {
+  const slots: Array<Record<string, unknown>> = [];
+  const visit = (definitions: Fields | undefined, path: string[]) => {
+    for (const [name, field] of Object.entries(definitions ?? {})) {
+      const current = [...path, name];
+      if (field.type === "slot") {
+        const pointer = current
+          .map((segment) => segment.replace(/~/g, "~0").replace(/\//g, "~1"))
+          .join("/");
+        slots.push({
+          path: `/${pointer}`,
+          allow: field.allow,
+          disallow: field.disallow,
+        });
+      } else if (field.type === "object") visit(field.objectFields, current);
+      else if (field.type === "array")
+        visit(field.arrayFields, [...current, "*"]);
+    }
+  };
+  visit(fields, []);
+  return slots;
 };
 
 /** Traverses only declared slots, not arbitrary data arrays or entity references. */
@@ -116,6 +140,15 @@ export const validateGeneratedContent = (
         propertyPath: [...context.propertyPath, key],
       };
       if (field.type === "slot") {
+        if (
+          value === null &&
+          resolvePropsSchema(
+            catalog,
+            context.componentType,
+            childContext.propertyPath
+          )?.safeParse(null).success
+        )
+          continue;
         if (!Array.isArray(value))
           errors.push(`${fieldPath}: slot must be a component array`);
         else {
@@ -224,7 +257,9 @@ export const validateGeneratedContent = (
         errors.push(`${itemPath}: puck runtime context must not be saved`);
       const parsedProps = component.props.safeParse(props);
       if (!parsedProps.success)
-        errors.push(`${itemPath}: ${parsedProps.error.message}`);
+        errors.push(
+          `${itemPath} (${type}, id ${String(id)}): ${parsedProps.error.message}`
+        );
       fields(
         props,
         component.fields,
@@ -240,6 +275,29 @@ export const validateGeneratedContent = (
   if (!result.success)
     errors.push(result.error?.message ?? "Invalid Puck data");
   return errors;
+};
+
+const resolvePropsSchema = (
+  catalog: PuckGenerationCatalog,
+  componentType: string,
+  path: string[]
+): z.ZodType | undefined => {
+  let schema: z.ZodType | undefined =
+    catalog.data.components[componentType]?.props;
+  for (const segment of path) {
+    if (!schema) return undefined;
+    let def = schema.def as any;
+    while (["optional", "nullable", "default", "prefault"].includes(def.type)) {
+      schema = def.innerType as z.ZodType;
+      def = schema.def as any;
+    }
+    if (def.type === "object")
+      schema = (schema as z.ZodObject).shape[segment] as z.ZodType | undefined;
+    else if (def.type === "array" && /^\d+$/.test(segment))
+      schema = def.element as z.ZodType;
+    else return undefined;
+  }
+  return schema;
 };
 
 export const validateGeneratedText = (

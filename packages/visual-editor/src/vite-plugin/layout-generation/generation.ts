@@ -1,16 +1,22 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { randomUUID } from "node:crypto";
 import { StringDecoder } from "node:string_decoder";
+import { buildUserPrompt, type Spec } from "@json-render/core";
 import type { PuckGenerationCatalog } from "./puckGenerationCatalog.ts";
 import type { GeneratedContent } from "../../local-editor/types.ts";
 import { compileGenerationSchema } from "./generationSchema.ts";
-import { createPuckGenerationPreview } from "./generationPreview.ts";
 import {
   buildGenerationPrompt,
   generatedContentShape,
   validateGeneratedContent,
 } from "./generationValidation.ts";
-import { createStructuredGenerationParser } from "./structuredGenerationStream.ts";
+import { createFlatPatchStream, FlatPatchError } from "./flatPatchStream.ts";
+import {
+  copyPuckFlatSidecar,
+  flatSpecToPuckData,
+  puckDataToFlatSpec,
+  type FlatLayoutSpec,
+} from "./puckFlatAdapter.ts";
 import {
   createGenerationRepetitionGuard,
   GENERATION_ATTEMPT_DEADLINE_MS,
@@ -219,9 +225,23 @@ export const handleLocalEditorGenerationRequest = async (
     return;
   }
 
+  const baselineData = {
+    root: { props: {} },
+    content: (currentData as GeneratedContent | undefined)?.content ?? [],
+    zones: {},
+  } as any;
+  let flatBaseline: FlatLayoutSpec;
+  try {
+    flatBaseline = puckDataToFlatSpec(catalog, baselineData);
+  } catch (error) {
+    rejectRequest(error instanceof Error ? error.message : String(error), 422);
+    return;
+  }
+
   const abortController = new AbortController();
   let generatedText = "";
   let started = false;
+  let gatewayStarted = false;
   let disconnected = false;
   let deadline: ReturnType<typeof setTimeout> | undefined;
   const abort = () => {
@@ -230,32 +250,38 @@ export const handleLocalEditorGenerationRequest = async (
   };
   response.once("close", abort);
   try {
-    const input = messages.map(({ role, content }) => {
+    const history = messages.slice(0, -1).flatMap(({ role, content }) => {
       if (role === "assistant") {
         try {
-          const historical = JSON.parse(content);
-          if (generatedContentShape.safeParse(historical.spec).success)
-            content = JSON.stringify({
-              ...historical,
-              spec: compiled.stripMetadata(historical.spec),
-            });
+          const parsed = JSON.parse(content);
+          if (parsed && typeof parsed === "object" && "spec" in parsed) {
+            content = typeof parsed.text === "string" ? parsed.text : "";
+            if (!content) return [];
+          }
         } catch {
-          /* Plain assistant prose has no structured metadata. */
+          // Plain assistant prose remains useful conversational context.
         }
+        const lines = content.split(/\r?\n/);
+        const proseLines = lines.filter((rawLine: string) => {
+          const line = rawLine.trim();
+          if (!line || line === "```" || line === "```json") return false;
+          try {
+            const operation = JSON.parse(line);
+            return !(
+              operation &&
+              typeof operation === "object" &&
+              typeof operation.op === "string" &&
+              typeof operation.path === "string"
+            );
+          } catch {
+            return true;
+          }
+        });
+        content = proseLines.join("\n").trim();
+        if (!content) return [];
       }
-      return { role, content };
+      return [{ role, content }];
     });
-    if (currentData !== undefined) {
-      input.splice(input.length - 1, 0, {
-        role: "user",
-        content:
-          "CURRENT EDITOR CONTENT (authoritative starting point; overrides content in earlier messages):\n" +
-          JSON.stringify({
-            text: "",
-            spec: compiled.stripMetadata(currentData as GeneratedContent),
-          }),
-      });
-    }
     const instructions = buildGenerationPrompt(
       catalog,
       compiled.availableComponentNames,
@@ -291,6 +317,7 @@ export const handleLocalEditorGenerationRequest = async (
         },
       });
     };
+    let repairErrors: string[] | undefined;
     for (let attempt = 0; attempt < 3; attempt++) {
       clearTimeout(deadline);
       deadline = setTimeout(
@@ -303,16 +330,81 @@ export const handleLocalEditorGenerationRequest = async (
         GENERATION_ATTEMPT_DEADLINE_MS
       );
       generatedText = "";
+      let attemptUsage: GatewayResponse["usage"];
       const guardRepetition = createGenerationRepetitionGuard();
-      const structuredParser = createStructuredGenerationParser({
-        onText: (delta) => writeEvent({ type: "preview-text", delta }),
-        onValue: createPuckGenerationPreview(
-          catalog,
-          (spec) => writeEvent({ type: "preview-spec", spec }),
-          compiled.normalizeContent
-        ),
-      });
-      const previewDelta = (delta: string) => structuredParser.push(delta);
+      const attemptBaseline: FlatLayoutSpec = structuredClone(flatBaseline);
+      copyPuckFlatSidecar(flatBaseline, attemptBaseline);
+      let latestCandidate: FlatLayoutSpec = attemptBaseline;
+      let validPreviewCount = 0;
+      const patchStream = createFlatPatchStream(
+        attemptBaseline,
+        (delta) => {
+          generatedText += delta;
+          writeEvent({ type: "preview-text", delta });
+        },
+        (candidate) => {
+          copyPuckFlatSidecar(flatBaseline, candidate);
+          latestCandidate = candidate;
+          try {
+            const preview = flatSpecToPuckData(
+              catalog,
+              candidate,
+              baselineData,
+              undefined,
+              flatBaseline
+            );
+            compiled.validateContent({ content: preview.content });
+            validPreviewCount++;
+            writeEvent({
+              type: "preview-spec",
+              spec: { content: preview.content },
+            });
+          } catch {
+            // Incomplete or invalid intermediate graphs do not replace the last valid preview.
+          }
+        }
+      );
+      const checkRepetition = (delta: string) => {
+        try {
+          guardRepetition(delta);
+        } catch (error) {
+          patchStream.cancel();
+          throw error;
+        }
+      };
+      const promptText = [
+        messages.at(-1).content,
+        ...(repairErrors
+          ? [
+              "The supplied starting graph is your rejected draft, not the editor layout. Correct this proposal using the validation errors below. Some checks report the first failure; inspect the whole draft against the catalog and flat mapping and fix all similar issues in the same response. This draft may be only a partial prefix because generation stopped early. Complete the original request in full, including content that has not yet been generated; do not stop merely because the current draft validates. Preserve requested additions and existing components. Do not replace an add request with a change to an existing component.\n" +
+                repairErrors.join("\n") +
+                "\nEach operation must be a complete JSON object on its own line, separated by an actual newline. Do not concatenate objects or print literal \\n separators.\nSyntax example only (generate operations for the requested changes):\n" +
+                JSON.stringify({
+                  op: "test",
+                  path: "/root",
+                  value: flatBaseline.root,
+                }) +
+                "\n" +
+                JSON.stringify({
+                  op: "test",
+                  path: `/elements/${flatBaseline.root}/type`,
+                  value: "__PuckContentRoot",
+                }),
+            ]
+          : []),
+      ].join("\n\n");
+      const input = [
+        ...history,
+        {
+          role: "user",
+          content: buildUserPrompt({
+            prompt: promptText,
+            currentSpec: flatBaseline as Spec,
+            editModes: ["patch"],
+            format: "json",
+          }),
+        },
+      ];
       const gatewayRequest = {
         method: "POST",
         headers: {
@@ -329,14 +421,6 @@ export const handleLocalEditorGenerationRequest = async (
               ? undefined
               : compiled.stripMetadata(currentData as GeneratedContent)
           ),
-          text: {
-            format: {
-              type: "json_schema",
-              name: "visual_editor_response",
-              strict: true,
-              schema: compiled.jsonSchema,
-            },
-          },
           instructions,
           input,
         }),
@@ -348,165 +432,236 @@ export const handleLocalEditorGenerationRequest = async (
         url: GENERATION_GATEWAY_URL,
         body: JSON.parse(gatewayRequest.body),
       });
-      const upstream = await fetch(GENERATION_GATEWAY_URL, gatewayRequest);
-      log("[local-editor generation] Gateway response", {
-        correlationId,
-        model,
-        status: upstream.status,
-        contentType: upstream.headers.get("Content-Type"),
-      });
-      if (!upstream.ok || !upstream.body) {
-        log("[local-editor generation] Gateway error response", {
+      let accepted: { text: string; spec: GeneratedContent | null } | undefined;
+      let errors: string[] = [];
+      let phase: "upstream" | "reconstruction" | "schema" = "upstream";
+      let failureCategory: string | undefined;
+      let diagnostic: Record<string, unknown> | undefined;
+      let attemptReader: ReadableStreamDefaultReader<Uint8Array> | undefined;
+      const logOutcome = (
+        validationOutcome: string,
+        details: Record<string, unknown> = {}
+      ) =>
+        log("[local-editor generation] Attempt outcome", {
+          correlationId,
+          attempt: attempt + 1,
+          attemptCount: attempt + 1,
+          validationOutcome,
+          ...patchStream.stats,
+          validPreviewCount,
+          usage: attemptUsage,
+          ...details,
+        });
+      try {
+        const upstream = await fetch(GENERATION_GATEWAY_URL, gatewayRequest);
+        log("[local-editor generation] Gateway response", {
           correlationId,
           model,
           status: upstream.status,
-          body: await upstream.text(),
+          contentType: upstream.headers.get("Content-Type"),
         });
-        if (started) {
-          writeEvent({
-            type: "error",
-            error: `AI gateway HTTP ${upstream.status} during repair`,
+        if (!upstream.ok || !upstream.body) {
+          logOutcome("error", { failureCategory: "upstream", repair: false });
+          log("[local-editor generation] Gateway error response", {
+            correlationId,
+            model,
+            status: upstream.status,
+            body: await upstream.text(),
           });
-          response.end();
+          if (started) {
+            writeEvent({
+              type: "error",
+              error: `AI gateway HTTP ${upstream.status} during repair`,
+            });
+            response.end();
+            return;
+          }
+          sendJsonResponse(
+            response,
+            {
+              error: `Generation failed (AI gateway HTTP ${upstream.status}, correlation ${correlationId}). Check gateway access and model ${model}.`,
+            },
+            502
+          );
           return;
         }
-        sendJsonResponse(
-          response,
-          {
-            error: `Generation failed (AI gateway HTTP ${upstream.status}, correlation ${correlationId}). Check gateway access and model ${model}.`,
-          },
-          502
-        );
-        return;
-      }
+        gatewayStarted = true;
 
-      // Some gateway wrappers return a complete Responses object even when streaming is requested.
-      if (
-        !upstream.headers.get("Content-Type")?.includes("text/event-stream")
-      ) {
-        const result = (await upstream.json()) as GatewayResponse;
-        log("[local-editor generation] Gateway response body", {
-          correlationId,
-          result,
-        });
-        writeUsage(result.usage);
-        generatedText = readOutputText(result);
-        guardRepetition(generatedText);
-        log("[local-editor generation] Completed response", {
-          correlationId,
-          model: result.model ?? model,
-          responseId: result.id,
-          status: result.status,
-          usage: result.usage,
-          text: generatedText,
-        });
-      } else {
-        const reader = upstream.body.getReader();
-        const decoder = new TextDecoder();
-        let pending = "";
-        let completed = false;
-        let receivedText = false;
-        let completedResponse: GatewayResponse | undefined;
-        while (true) {
-          const { done, value } = await reader.read();
-          pending += decoder.decode(value, { stream: !done });
-          const lines = pending.split("\n");
-          pending = done ? "" : lines.pop()!;
-          for (const line of lines) {
-            if (!line.startsWith("data:")) continue;
-            const data = line.slice(5).trim();
-            if (!data || data === "[DONE]") continue;
-            const event = JSON.parse(data);
-            if (
-              event.type === "response.refusal.delta" ||
-              event.type === "response.refusal.done" ||
-              (event.type === "response.completed" &&
-                event.response?.output?.some(
-                  (item: NonNullable<GatewayResponse["output"]>[number]) =>
-                    item.content?.some((content) => content.type === "refusal")
-                ))
-            )
-              throw new Error("The AI gateway refused generation.");
-            log("[local-editor generation] Gateway stream event", {
-              correlationId,
-              event,
-            });
-            if (
-              event.response?.usage &&
-              (event.type === "response.completed" ||
-                event.type === "response.failed" ||
-                event.type === "response.incomplete")
-            )
-              writeUsage(event.response.usage);
-            if (
-              event.type === "error" ||
-              event.type === "response.failed" ||
-              event.type === "response.incomplete" ||
-              event.error
-            ) {
-              log("[local-editor generation] Gateway stream error", {
+        // Some gateway wrappers return a complete Responses object even when streaming is requested.
+        if (
+          !upstream.headers.get("Content-Type")?.includes("text/event-stream")
+        ) {
+          const result = (await upstream.json()) as GatewayResponse;
+          log("[local-editor generation] Gateway response body", {
+            correlationId,
+            result,
+          });
+          writeUsage(result.usage);
+          attemptUsage = result.usage;
+          const outputText = readOutputText(result);
+          checkRepetition(outputText);
+          await patchStream.push(outputText);
+          log("[local-editor generation] Completed response", {
+            correlationId,
+            model: result.model ?? model,
+            responseId: result.id,
+            status: result.status,
+            usage: result.usage,
+            text: outputText,
+          });
+        } else {
+          attemptReader = upstream.body.getReader();
+          const reader = attemptReader;
+          const decoder = new TextDecoder();
+          let pending = "";
+          let completed = false;
+          let receivedText = false;
+          let completedResponse: GatewayResponse | undefined;
+          while (true) {
+            const { done, value } = await reader.read();
+            pending += decoder.decode(value, { stream: !done });
+            const lines = pending.split("\n");
+            pending = done ? "" : lines.pop()!;
+            for (const line of lines) {
+              if (!line.startsWith("data:")) continue;
+              const data = line.slice(5).trim();
+              if (!data || data === "[DONE]") continue;
+              const event = JSON.parse(data);
+              if (
+                event.type === "response.refusal.delta" ||
+                event.type === "response.refusal.done" ||
+                (event.type === "response.completed" &&
+                  event.response?.output?.some(
+                    (item: NonNullable<GatewayResponse["output"]>[number]) =>
+                      item.content?.some(
+                        (content) => content.type === "refusal"
+                      )
+                  ))
+              )
+                throw new Error("The AI gateway refused generation.");
+              log("[local-editor generation] Gateway stream event", {
                 correlationId,
-                model,
-                eventType: event.type,
-                error: event.error ?? event.response?.error ?? event.message,
-                incompleteDetails: event.response?.incomplete_details,
+                event,
               });
               if (
-                event.response?.incomplete_details?.reason ===
-                "max_output_tokens"
+                event.response?.usage &&
+                (event.type === "response.completed" ||
+                  event.type === "response.failed" ||
+                  event.type === "response.incomplete")
               )
+                writeUsage(event.response.usage);
+              if (event.response?.usage) attemptUsage = event.response.usage;
+              if (
+                event.type === "error" ||
+                event.type === "response.failed" ||
+                event.type === "response.incomplete" ||
+                event.error
+              ) {
+                log("[local-editor generation] Gateway stream error", {
+                  correlationId,
+                  model,
+                  eventType: event.type,
+                  error: event.error ?? event.response?.error ?? event.message,
+                  incompleteDetails: event.response?.incomplete_details,
+                });
+                if (
+                  event.response?.incomplete_details?.reason ===
+                  "max_output_tokens"
+                )
+                  throw new Error(
+                    "Generation exceeded its output token budget. Try a smaller request."
+                  );
                 throw new Error(
-                  "Generation exceeded its output token budget. Try a smaller request."
+                  `The AI gateway returned a streaming error (correlation ${correlationId}).`
                 );
-              throw new Error(
-                `The AI gateway returned a streaming error (correlation ${correlationId}).`
-              );
-            }
-            if (
-              event.type === "response.output_text.delta" &&
-              typeof event.delta === "string"
-            ) {
-              receivedText = true;
-              generatedText += event.delta;
-              guardRepetition(event.delta);
-              previewDelta(event.delta);
-            }
-            if (event.type === "response.completed") {
-              completed = true;
-              completedResponse = event.response;
-              if (!receivedText) {
-                generatedText = readOutputText(event.response);
-                guardRepetition(generatedText);
-                previewDelta(generatedText);
+              }
+              if (
+                event.type === "response.output_text.delta" &&
+                typeof event.delta === "string"
+              ) {
+                receivedText = true;
+                checkRepetition(event.delta);
+                await patchStream.push(event.delta);
+              }
+              if (event.type === "response.completed") {
+                completed = true;
+                completedResponse = event.response;
+                if (!receivedText) {
+                  const outputText = readOutputText(event.response);
+                  checkRepetition(outputText);
+                  await patchStream.push(outputText);
+                }
               }
             }
+            if (done) break;
           }
-          if (done) break;
+          if (!completed)
+            throw new Error(
+              `The AI gateway stream ended before completion (correlation ${correlationId}).`
+            );
+          log("[local-editor generation] Completed response", {
+            correlationId,
+            model: completedResponse?.model ?? model,
+            responseId: completedResponse?.id,
+            status: completedResponse?.status,
+            usage: completedResponse?.usage,
+            text: generatedText,
+          });
         }
-        if (!completed)
-          throw new Error(
-            `The AI gateway stream ended before completion (correlation ${correlationId}).`
-          );
-        log("[local-editor generation] Completed response", {
-          correlationId,
-          model: completedResponse?.model ?? model,
-          responseId: completedResponse?.id,
-          status: completedResponse?.status,
-          usage: completedResponse?.usage,
-          text: generatedText,
-        });
-      }
-      let accepted: { text: string; spec: GeneratedContent | null } | undefined;
-      let errors: string[];
-      try {
-        accepted = compiled.parseResponse(generatedText);
-        errors =
-          accepted.spec === null
-            ? []
-            : validateGeneratedContent(catalog, accepted.spec);
+        const result = await patchStream.finish();
+        phase = "reconstruction";
+        const finalData = result.patchCount
+          ? flatSpecToPuckData(
+              catalog,
+              result.spec,
+              baselineData,
+              undefined,
+              flatBaseline
+            )
+          : undefined;
+        phase = "schema";
+        accepted = {
+          text:
+            generatedText.trim() ||
+            (result.patchCount ? "Updated the layout." : ""),
+          spec: finalData ? { content: finalData.content } : null,
+        };
+        errors = finalData
+          ? validateGeneratedContent(catalog, accepted.spec)
+          : [];
+        if (finalData) compiled.validateContent(accepted.spec);
+        if (errors.length) failureCategory = "schema";
       } catch (error) {
+        if (error instanceof FlatPatchError) {
+          failureCategory = error.category;
+          diagnostic = {
+            lineNumber: error.lineNumber,
+            operationNumber: error.operationNumber,
+            path: error.path,
+            excerpt: error.excerpt,
+          };
+        } else if (phase !== "upstream") failureCategory = phase;
+        else {
+          logOutcome("error", {
+            failureCategory: "upstream",
+            repair: false,
+            validationErrors: [
+              error instanceof Error ? error.message : String(error),
+            ],
+          });
+          throw error;
+        }
         errors = [error instanceof Error ? error.message : String(error)];
+      } finally {
+        await patchStream.cancel();
+        await attemptReader?.cancel().catch(() => {});
       }
+      logOutcome(errors.length ? "rejected" : "accepted", {
+        failureCategory,
+        diagnostic,
+        validationErrors: errors.length ? errors : undefined,
+        repair: errors.length > 0 && attempt < 2,
+      });
       if (!errors.length) {
         writeEvent({
           type: "accepted",
@@ -524,15 +679,8 @@ export const handleLocalEditorGenerationRequest = async (
         return;
       }
       writeEvent({ type: "reset" });
-      input.push(
-        { role: "assistant", content: generatedText },
-        {
-          role: "user",
-          content:
-            "Repair the complete spec using these validation errors. Preserve the requested content.\n" +
-            errors.join("\n"),
-        }
-      );
+      flatBaseline = latestCandidate;
+      repairErrors = errors;
     }
   } catch (error) {
     const failure =
@@ -544,8 +692,24 @@ export const handleLocalEditorGenerationRequest = async (
       model,
       error: failure instanceof Error ? failure.message : String(failure),
       text: generatedText,
+      validationOutcome: "error",
     });
-    if (started && !disconnected) {
+    if (gatewayStarted && !disconnected) {
+      if (!started) {
+        started = true;
+        response.statusCode = 200;
+        response.setHeader(
+          "Content-Type",
+          "application/x-ndjson; charset=utf-8"
+        );
+        response.setHeader(
+          "X-Visual-Editor-Generation",
+          "validated-puck-content-v1"
+        );
+        response.setHeader("Cache-Control", "no-cache, no-transform");
+        response.setHeader("X-Accel-Buffering", "no");
+        response.flushHeaders();
+      }
       response.write(
         JSON.stringify({
           type: "error",
