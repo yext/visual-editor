@@ -144,11 +144,15 @@ export const normalizeComprehensiveCTAValue = (
   },
 });
 
-export const ComprehensiveCTAFieldOverride = ({
+/**
+ * ComprehensiveCTAField imports YextAutoField, which uses the field override registry.
+ * A function declaration lets the registry reference this override during module initialization.
+ */
+export function ComprehensiveCTAFieldOverride({
   field,
   value,
   onChange,
-}: ComprehensiveCTAFieldProps) => {
+}: ComprehensiveCTAFieldProps) {
   const currentValue = normalizeComprehensiveCTAValue(value);
 
   const actionType = currentValue.data.actionType;
@@ -261,7 +265,7 @@ export const ComprehensiveCTAFieldOverride = ({
           visible: showPresetImageField,
         },
         color: {
-          type: "basicSelector",
+          type: "themeColor",
           label: pt("fields.color", "Color"),
           options: "SITE_COLOR",
           visible: showColorField,
@@ -327,4 +331,4 @@ export const ComprehensiveCTAFieldOverride = ({
       </div>
     </div>
   );
-};
+}

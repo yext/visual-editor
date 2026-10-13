@@ -51,6 +51,7 @@ export {
 
 const YEXT_FIELD_OVERRIDE_TYPES = new Set([
   "basicSelector",
+  "themeColor",
   "ctaSelector",
   "code",
   "dateTimeSelector",
@@ -72,6 +73,8 @@ export type EntityFieldSelectorField<
   type: "entityField";
   /** Resolves this field before rendering. Repeated sources are not supported. */
   transform?: boolean;
+  /** Formats a resolved structured price as localized currency when transformed. */
+  format?: "price";
   label?: string | MsgString;
   visible?: boolean;
   filter: MappedSourceFieldFilter<T>;
@@ -325,11 +328,15 @@ const RepeatedEntityFieldSelector = ({
   );
 };
 
-export const EntityFieldSelectorFieldOverride = ({
+/**
+ * Renders entity field controls. Its declaration is available when the field
+ * registry initializes.
+ */
+export function EntityFieldSelectorFieldOverride({
   field,
   value,
   onChange,
-}: EntityFieldSelectorFieldProps) => {
+}: EntityFieldSelectorFieldProps) {
   if (field.repeated) {
     return (
       <RepeatedEntityFieldSelector
@@ -397,7 +404,7 @@ export const EntityFieldSelectorFieldOverride = ({
       )}
     </>
   );
-};
+}
 
 export const ConstantValueModeToggler = ({
   fieldTypeFilter,

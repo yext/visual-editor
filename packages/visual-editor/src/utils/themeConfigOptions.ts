@@ -164,7 +164,7 @@ export const backgroundColors: Record<
   },
 };
 
-// When used in the basicSelector field, the color is displayed in the dropdown.
+// When used in themeColor or existing basicSelector fields, the color is displayed in the dropdown.
 const backgroundColorOptions: ComboboxOptionGroup[] = [
   {
     title: msg("recommendedColors", "Recommended Colors"),

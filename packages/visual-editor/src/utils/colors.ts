@@ -2,6 +2,12 @@ import { getThemeValue } from "./getThemeValue.ts";
 import { type ThemeColor } from "./themeConfigOptions.ts";
 import { type StreamDocument } from "./types/StreamDocument.ts";
 
+/** An authored theme color with render-ready CSS for both selected and contrasting colors. */
+export type ResolvedThemeColor = ThemeColor & {
+  selectedColorCss: string;
+  contrastingColorCss: string;
+};
+
 /**
  * hexToRGB converts a hex color to rgb
  * @param H hex string beginning with '#'
@@ -573,19 +579,23 @@ export const getBackgroundColorClasses = (color?: ThemeColor): string => {
 };
 
 /**
- * Resolves inline styles for bracketed custom colors in background contexts.
- * @param color a ThemeColor object
+ * Resolves inline styles for resolved colors and bracketed custom colors in background contexts.
+ * @param color a ThemeColor or ResolvedThemeColor object
  * @returns inline background/text color styles, e.g. `{ backgroundColor: "#FF6D66" }`
  */
 export const getBackgroundColorStyle = (
-  color?: ThemeColor
+  color?: ThemeColor | ResolvedThemeColor
 ): { backgroundColor?: string; color?: string } | undefined => {
-  const backgroundColor = isCustomThemeColorToken(color?.selectedColor)
-    ? getThemeColorCssValue(color?.selectedColor)
-    : undefined;
-  const textColor = isCustomThemeColorToken(color?.contrastingColor)
-    ? getThemeColorCssValue(color?.contrastingColor)
-    : undefined;
+  const backgroundColor =
+    (color && "selectedColorCss" in color && color.selectedColorCss) ||
+    (isCustomThemeColorToken(color?.selectedColor)
+      ? getThemeColorCssValue(color?.selectedColor)
+      : undefined);
+  const textColor =
+    (color && "contrastingColorCss" in color && color.contrastingColorCss) ||
+    (isCustomThemeColorToken(color?.contrastingColor)
+      ? getThemeColorCssValue(color?.contrastingColor)
+      : undefined);
 
   if (!backgroundColor && !textColor) {
     return undefined;
