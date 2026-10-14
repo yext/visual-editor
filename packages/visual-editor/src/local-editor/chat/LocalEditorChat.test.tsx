@@ -9,7 +9,18 @@ import {
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ChatHarness, layout, generatedContent } from "./chatTestUtils.tsx";
 
-const wire = (event: object) => JSON.stringify(event) + "\n";
+const wire = (event: any) =>
+  JSON.stringify(
+    event.type === "accepted"
+      ? {
+          type: "step-completed",
+          stepId: "full-page",
+          scope: "full-page",
+          progress: { completed: 1, total: 1 },
+          ...event,
+        }
+      : event
+  ) + "\n";
 const response = (body: object | ReadableStream<Uint8Array>) =>
   new Response(
     body instanceof ReadableStream ? body : wire({ type: "accepted", ...body }),
@@ -125,7 +136,41 @@ describe("chat in the Puck editor", () => {
     await screen.findByText("Manual", { selector: "h2" });
   });
 
-  it("streams without recording history, rolls back a repair, and survives hide/show", async () => {
+  it("keeps a completed step and reports it when later generation is cancelled", async () => {
+    const stream = openStream();
+    const fetchMock = vi.fn(async () => response(stream.body));
+    vi.stubGlobal("fetch", fetchMock);
+    let chat:
+      | ReturnType<typeof import("./useLocalEditorChat.ts").useLocalEditorChat>
+      | undefined;
+    render(
+      <ChatHarness
+        onChat={(value) => {
+          chat = value;
+        }}
+      />
+    );
+    openChat();
+    await submit("Change the heading");
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
+    stream.emit({
+      type: "step-completed",
+      stepId: "operation-1",
+      scope: "component:heading",
+      progress: { completed: 1, total: 2 },
+      text: "Updated the heading",
+      spec: generatedContent("Step one"),
+    });
+    await screen.findByText("Step one", { selector: "h2" });
+    act(() => chat?.cancel());
+    stream.fail();
+    expect(
+      await screen.findByText(/1 step applied\. Remaining work was cancelled\./)
+    ).toBeTruthy();
+    expect(screen.getByText("Step one", { selector: "h2" })).toBeTruthy();
+  });
+
+  it("keeps the canvas unchanged during streaming and repair and survives hide/show", async () => {
     const stream = openStream();
     vi.stubGlobal(
       "fetch",
@@ -135,9 +180,9 @@ describe("chat in the Puck editor", () => {
     openChat();
     await submit();
     await act(async () =>
-      stream.emit({ type: "preview-spec", spec: generatedContent("Partial") })
+      stream.emit({ type: "preview-text", delta: "Working…" })
     );
-    await screen.findByText("Partial", { selector: "h2" });
+    expect(screen.queryByText("Partial", { selector: "h2" })).toBeNull();
     expect(screen.getByLabelText("History index").textContent).toBe("0");
     fireEvent.click(screen.getByRole("button", { name: "Hide chat" }));
     expect(screen.queryByRole("textbox")).toBeNull();
@@ -170,9 +215,9 @@ describe("chat in the Puck editor", () => {
       openChat();
       await submit();
       await act(async () =>
-        stream.emit({ type: "preview-spec", spec: generatedContent("Partial") })
+        stream.emit({ type: "preview-text", delta: "Working…" })
       );
-      await screen.findByText("Partial", { selector: "h2" });
+      expect(screen.queryByText("Partial", { selector: "h2" })).toBeNull();
       await act(async () => {
         if (kind === "disconnect") {
           stream.emit({
@@ -250,11 +295,11 @@ describe("chat in the Puck editor", () => {
     openChat();
     await submit();
     await act(async () =>
-      stream.emit({ type: "preview-spec", spec: generatedContent("Partial") })
+      stream.emit({ type: "preview-text", delta: "Working…" })
     );
-    await screen.findByText("Partial", { selector: "h2" });
+    expect(screen.queryByText("Partial", { selector: "h2" })).toBeNull();
     view.rerender(<ChatHarness locale="fr" initialData={layout("French")} />);
-    await screen.findByText("Partial", { selector: "h2" });
+    expect(screen.queryByText("Partial", { selector: "h2" })).toBeNull();
     await act(async () => {
       stream.emit({
         type: "accepted",
@@ -278,14 +323,15 @@ describe("chat in the Puck editor", () => {
     render(<ChatHarness />);
     openChat();
     await submit();
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
     await act(async () => {
       stream.emit({
         type: "usage",
         usage: { cachedInput: 3, uncachedInput: 4, output: 5 },
       });
-      stream.emit({ type: "preview-spec", spec: generatedContent("Partial") });
+      stream.emit({ type: "preview-text", delta: "Working…" });
     });
-    await screen.findByText("Partial", { selector: "h2" });
+    expect(screen.queryByText("Partial", { selector: "h2" })).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "New conversation" }));
     await screen.findByText("Original", { selector: "h2" });
     expect(fetchMock.mock.calls[0][1]!.signal!.aborted).toBe(true);
