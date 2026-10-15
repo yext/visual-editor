@@ -77,6 +77,10 @@ describe("convertTemplatesToSectionLibrary", () => {
       },
     });
     fs.outputJsonSync(path.join(rootDirectory, "package-lock.json"), {});
+    fs.outputJsonSync(
+      path.join(rootDirectory, "node_modules/@yext/visual-editor/package.json"),
+      { dependencies: { "@puckeditor/core": "0.22.4" } }
+    );
 
     convertTemplatesToSectionLibrary({
       apply: true,
@@ -207,6 +211,10 @@ const createConversionFixture = () => {
     },
   });
   fs.outputJsonSync(path.join(rootDirectory, "package-lock.json"), {});
+  fs.outputJsonSync(
+    path.join(rootDirectory, "node_modules/@yext/visual-editor/package.json"),
+    { dependencies: { "@puckeditor/core": "0.22.4" } }
+  );
   const convert = () =>
     convertTemplatesToSectionLibrary({
       apply: true,
@@ -434,8 +442,8 @@ describe("project setup conversion", () => {
     expect(config).toContain("entityTypes: ['restaurant']");
     expect(config).toContain("$id: 'restaurant'");
     expect(fs.readJsonSync(fixture.packagePath).dependencies).toEqual({
-      "@yext/visual-editor": "2.0.0-beta.5",
-      "@puckeditor/core": "0.24.0-canary.c1ec9773",
+      "@yext/visual-editor": "2.0.0-beta.4",
+      "@puckeditor/core": "0.22.4",
     });
     expect(fs.readFileSync(fixture.lockPath, "utf8")).toBe(
       "refreshed lockfile\n"
@@ -480,9 +488,7 @@ describe("project setup conversion", () => {
     expect(
       fs.existsSync(path.join(fixture.rootDirectory, ".template-manifest.json"))
     ).toBe(true);
-    expect(messages.join("\n")).toContain(
-      "@yext/visual-editor 2.0.0-beta.4 -> 2.0.0-beta.5"
-    );
+    expect(messages.join("\n")).toContain("@puckeditor/core 0.22.2 -> 0.22.4");
     expect(messages.join("\n")).toContain(
       "remove " + path.join(fixture.rootDirectory, ".template-manifest.json")
     );
@@ -502,6 +508,14 @@ describe("project setup conversion", () => {
       change: "unsupported manager",
       error: "Unsupported or ambiguous package manager lockfile",
     },
+    {
+      change: "missing installed Visual Editor",
+      error: "Install target dependencies before converting",
+    },
+    {
+      change: "missing installed Puck dependency",
+      error: "Installed Visual Editor must declare @puckeditor/core",
+    },
   ])("rejects $change before cleanup", ({ change, error }) => {
     const fixture = setup();
     if (change === "config") {
@@ -518,6 +532,21 @@ describe("project setup conversion", () => {
       fs.outputFileSync(
         path.join(fixture.rootDirectory, "pnpm-lock.yaml"),
         "lockfileVersion: '9.0'\n"
+      );
+    } else if (change === "missing installed Visual Editor") {
+      fs.removeSync(
+        path.join(
+          fixture.rootDirectory,
+          "node_modules/@yext/visual-editor/package.json"
+        )
+      );
+    } else if (change === "missing installed Puck dependency") {
+      fs.outputJsonSync(
+        path.join(
+          fixture.rootDirectory,
+          "node_modules/@yext/visual-editor/package.json"
+        ),
+        { dependencies: {} }
       );
     } else {
       fs.outputFileSync(path.join(fixture.rootDirectory, "yarn.lock"), "");
@@ -569,7 +598,7 @@ describe("project setup conversion", () => {
     ).toBe(true);
   });
 
-  it("uses pnpm and updates dependencies in their existing sections", () => {
+  it("uses pnpm and updates Puck in its existing dependency section", () => {
     const fixture = setup();
     fs.removeSync(fixture.lockPath);
     fs.outputFileSync(
@@ -578,9 +607,16 @@ describe("project setup conversion", () => {
     );
     fs.outputJsonSync(fixture.packagePath, {
       packageManager: "pnpm@10.0.0",
-      dependencies: { "@yext/visual-editor": "2.0.0-beta.4" },
+      dependencies: { "@yext/visual-editor": "2.0.0-beta.3" },
       devDependencies: { "@puckeditor/core": "0.22.2" },
     });
+    fs.outputJsonSync(
+      path.join(
+        fixture.rootDirectory,
+        "node_modules/@yext/visual-editor/package.json"
+      ),
+      { dependencies: { "@puckeditor/core": "0.22.3" } }
+    );
     let installedWith: string | undefined;
     convertTemplatesToSectionLibrary({
       apply: true,
@@ -594,11 +630,9 @@ describe("project setup conversion", () => {
     expect(installedWith).toBe("pnpm");
     const targetPackage = fs.readJsonSync(fixture.packagePath);
     expect(targetPackage.dependencies["@yext/visual-editor"]).toBe(
-      "2.0.0-beta.5"
+      "2.0.0-beta.3"
     );
-    expect(targetPackage.devDependencies["@puckeditor/core"]).toBe(
-      "0.24.0-canary.c1ec9773"
-    );
+    expect(targetPackage.devDependencies["@puckeditor/core"]).toBe("0.22.3");
     expect(fs.existsSync(fixture.templateDirectory)).toBe(true);
   });
 });
