@@ -14,6 +14,13 @@ import {
   type SavedComponent,
 } from "../../internal/generation/authored.ts";
 
+import {
+  generationFields,
+  preflightSlottedItemSource,
+  prepareSlottedSource,
+  finalizeSlottedSource,
+} from "../../internal/generation/slottedItemSource.ts";
+
 type Node = {
   wire: z.ZodType;
   apply: (value: any, defaults: any) => any;
@@ -42,12 +49,22 @@ export const compileGenerationSchema = (
       "Generation requires a blank page. Clear the layout before generating a new page."
     );
   const components = catalog.data.components;
+  const explicitCardLists = new WeakSet<SavedComponent>();
+  for (const [name, config] of Object.entries(components))
+    preflightSlottedItemSource(name, config, catalog);
   const fail = (path: string, message: string): never => {
     throw new Error(`Generation schema at ${path}: ${message}`);
   };
   const defaultMarker = z.strictObject({ $default: z.literal(true) });
   const unsetMarker = z.strictObject({ $unset: z.literal(true) });
   const nodes = new Map<string, Node>();
+  // Component boundaries must remain references even when a child occurs once.
+  // Otherwise valid nested cards can exceed the provider's inline depth limit.
+  const schemaMetadata = z.registry<Record<string, any>>();
+  const getMetadata = schemaMetadata.get.bind(schemaMetadata);
+  schemaMetadata.get = (schema) =>
+    getMetadata(schema) ?? z.globalRegistry.get(schema);
+  let componentSchemaId = 0;
   const union = (schemas: z.ZodType[]): z.ZodType =>
     schemas.length === 1 ? schemas[0] : z.union(schemas);
   const describe = (wire: z.ZodType, original: z.ZodType) =>
@@ -268,7 +285,7 @@ export const compileGenerationSchema = (
     const props = value(
       config.generation!.props,
       name,
-      { type: "object", objectFields: config.fields ?? {} },
+      { type: "object", objectFields: generationFields(config) },
       config.defaultProps
     );
     // Props themselves are always an authored object; markers apply to its fields.
@@ -283,13 +300,12 @@ export const compileGenerationSchema = (
           ? clone(template)
           : { type: name, props: clone(config.defaultProps ?? {}) };
         base.props = props.apply(input.props, base.props);
-        // Refresh identities in default subtrees as well as explicitly authored children.
-        walkAuthored(catalog, { content: [base] }, ({ component }) => {
-          component.props.id = `generated-${globalThis.crypto.randomUUID()}`;
-        });
+        if (Array.isArray(input.props.slots?.CardSlot))
+          explicitCardLists.add(base);
         return base;
       },
     };
+    schemaMetadata.add(node.wire, { id: `component${componentSchemaId++}` });
     return lazy;
   };
   const rootNodes = Object.keys(components)
@@ -322,7 +338,11 @@ export const compileGenerationSchema = (
   const exportSchema = (schema: z.ZodType) => {
     let jsonSchema: Record<string, any>;
     try {
-      jsonSchema = z.toJSONSchema(schema, { io: "input", reused: "ref" });
+      jsonSchema = z.toJSONSchema(schema, {
+        io: "input",
+        reused: "ref",
+        metadata: schemaMetadata,
+      });
     } catch (error) {
       return fail("response", String(error));
     }
@@ -354,6 +374,26 @@ export const compileGenerationSchema = (
         element(input.type).apply(input, undefined)
       ),
     };
+    // Prepare defaults while descending so every newly created card is visited.
+    walkAuthored(catalog, candidate, ({ component }) => {
+      prepareSlottedSource(
+        component,
+        components[component.type],
+        explicitCardLists.has(component)
+      );
+      component.props.id = `generated-${globalThis.crypto.randomUUID()}`;
+    });
+    // Parent-first finalization applies the helper's child identity convention.
+    // Mirror copies must be taken after descendants have also finalized their references.
+    const sources: SavedComponent[] = [];
+    walkAuthored(catalog, candidate, ({ component }) => {
+      if (components[component.type]?.generation?.slottedItemSource) {
+        finalizeSlottedSource(component, components[component.type]);
+        sources.push(component);
+      }
+    });
+    for (const component of sources.reverse())
+      finalizeSlottedSource(component, components[component.type]);
     validateAuthored(catalog, candidate);
     return { text: parsed.text, spec: candidate };
   };

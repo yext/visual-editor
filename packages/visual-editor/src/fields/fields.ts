@@ -1,3 +1,4 @@
+import type { SlottedItemSourceGenerationMetadata } from "../utils/itemSource/itemSourceTypes.ts";
 import type { z } from "zod";
 import { createElement, type ReactElement } from "react";
 import type { LinkType } from "@yext/pages-components";
@@ -176,6 +177,7 @@ export type YextFieldDefinition<ValueType = any> =
 /** Complete authored props; omit inherited values, callbacks, identities and editor metadata. */
 export type ComponentGenerationMetadata = {
   props: z.ZodObject;
+  slottedItemSource?: SlottedItemSourceGenerationMetadata;
 };
 
 export type YextComponentConfig<

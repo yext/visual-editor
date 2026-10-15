@@ -1,6 +1,6 @@
 import type { GeneratedContent } from "../../local-editor/types.ts";
 
-export const GENERATION_ATTEMPT_DEADLINE_MS = 120_000;
+export const GENERATION_ATTEMPT_DEADLINE_MS = 5 * 60_000;
 export const FRESH_PAGE_OUTPUT_TOKEN_BUDGET = 128_000;
 export const EDIT_PAGE_OUTPUT_TOKEN_BUDGET = 65_536;
 

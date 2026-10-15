@@ -1,7 +1,17 @@
+import { isDeepEqual } from "../../utils/deepEqual.ts";
 import type { Fields } from "@puckeditor/core";
 import { z } from "zod";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import type { PuckGenerationCatalog } from "../../vite-plugin/layout-generation/puckGenerationCatalog.ts";
+
+import {
+  generationFields,
+  isLinkedSource,
+  manualBackup,
+  slottedAuthoredProps,
+  validateSlottedSource,
+  validateLinkedCardStructure,
+} from "./slottedItemSource.ts";
 
 export type SavedComponent = {
   type: string;
@@ -120,7 +130,7 @@ const authoredValue = (
         : Object.keys(node.shape);
     return Object.fromEntries(
       keys
-        .filter((key) => Object.hasOwn(input, key))
+        .filter((key) => Object.hasOwn(input, key) && input[key] !== undefined)
         .map((key) => [
           key,
           authoredValue(
@@ -173,9 +183,9 @@ export const walkAuthored = (
       const config = catalog.data.components[component.type];
       if (config?.generation)
         authoredValue(
-          component.props,
+          slottedAuthoredProps(component, config),
           config.generation.props,
-          { type: "object", objectFields: config.fields ?? {} },
+          { type: "object", objectFields: generationFields(config) },
           `${collection.path}/${index}/props`,
           (items, path, field) => {
             visitCollection(
@@ -184,6 +194,19 @@ export const walkAuthored = (
             );
             return items;
           }
+        );
+      if (
+        config?.generation?.slottedItemSource &&
+        isLinkedSource(component.props)
+      )
+        visitCollection(
+          {
+            items: manualBackup(component),
+            ownerId: component.props.id,
+            path: `${collection.path}/${index}/props/manualSlots/CardSlot`,
+            field: { allow: [config.generation.slottedItemSource.cardType] },
+          },
+          [...ancestors, component.props.id]
         );
     });
   };
@@ -228,12 +251,17 @@ export const extractAuthored = (
         ...(options.includeIds === false ? {} : { id: input.props.id }),
         ...(config?.generation
           ? authoredValue(
-              input.props,
+              slottedAuthoredProps(input, config),
               config.generation.props,
-              { type: "object", objectFields: config.fields ?? {} },
+              { type: "object", objectFields: generationFields(config) },
               "props",
               (items) => items.map(component)
             )
+          : {}),
+        ...(config?.generation?.slottedItemSource &&
+        isLinkedSource(input.props) &&
+        options.includeIds !== false
+          ? { manualSlots: { CardSlot: manualBackup(input).map(component) } }
           : {}),
       },
     };
@@ -245,7 +273,7 @@ export const validateAuthored = (
   catalog: PuckGenerationCatalog,
   data: Content
 ) => {
-  indexAuthored(catalog, data);
+  const seenIds = new Set(indexAuthored(catalog, data).items.keys());
   walkAuthored(catalog, data, ({ component, collection }) => {
     const config = Object.hasOwn(catalog.data.components, component.type)
       ? catalog.data.components[component.type]
@@ -264,6 +292,19 @@ export const validateAuthored = (
             ))))
     )
       throw new Error(`${collection.path}: ${component.type} is not allowed`);
+    validateSlottedSource(component, config);
+    validateLinkedCardStructure(component, config, catalog, seenIds);
+    if (
+      config.generation?.slottedItemSource &&
+      !isLinkedSource(component.props) &&
+      !isDeepEqual(
+        extractAuthored(catalog, { content: component.props.slots.CardSlot }),
+        extractAuthored(catalog, { content: manualBackup(component) })
+      )
+    )
+      throw new Error(
+        `${component.type} (${component.props.id}): invalid props/manualSlots/CardSlot`
+      );
     if (config.generation) {
       const projected = extractAuthored(catalog, { content: [component] })
         .content[0].props;
@@ -271,8 +312,55 @@ export const validateAuthored = (
       const result = config.generation.props.safeParse(projected);
       if (!result.success)
         throw new Error(
-          `${collection.path} (${component.type}, ${component.props.id}): ${result.error.message}`
+          `${collection.path} (${component.type}, ${component.props.id}): ${result.error.issues.map((issue) => `props/${issue.path.join("/")}: ${issue.code}`).join(", ")}`
         );
     }
   });
+};
+
+/** Report a bounded location, never authored values, when resolution changes content. */
+export const assertAuthoredPreserved = (
+  catalog: PuckGenerationCatalog,
+  resolved: Content,
+  candidate: Content
+) => {
+  validateAuthored(catalog, resolved);
+  const compare = (
+    expected: any,
+    actual: any,
+    path: string,
+    owner?: SavedComponent
+  ): void => {
+    if (Object.is(expected, actual)) return;
+    const context =
+      expected && typeof expected.type === "string" && expected.props
+        ? expected
+        : owner;
+    if (
+      expected &&
+      actual &&
+      typeof expected === "object" &&
+      typeof actual === "object" &&
+      Array.isArray(expected) === Array.isArray(actual)
+    ) {
+      const keys = new Set([...Object.keys(expected), ...Object.keys(actual)]);
+      for (const key of keys) {
+        if (Object.hasOwn(expected, key) !== Object.hasOwn(actual, key)) {
+          throw new Error(
+            `Resolution changed authored state at ${context?.type ?? "page"} (${context?.props.id ?? "root"}): ${path}/${key}`
+          );
+        }
+        compare(expected[key], actual[key], `${path}/${key}`, context);
+      }
+      if (!Array.isArray(expected) || expected.length === actual.length) return;
+    }
+    throw new Error(
+      `Resolution changed authored state at ${context?.type ?? "page"} (${context?.props.id ?? "root"}): ${path}`
+    );
+  };
+  compare(
+    extractAuthored(catalog, candidate),
+    extractAuthored(catalog, resolved),
+    ""
+  );
 };

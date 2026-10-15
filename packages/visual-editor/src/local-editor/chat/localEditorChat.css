@@ -125,6 +125,26 @@
   overflow-wrap: anywhere;
 }
 
+.local-editor-chat-spinner {
+  display: inline-block;
+  flex: none;
+  vertical-align: -2px;
+  margin-right: 6px;
+  animation: local-editor-chat-spin 900ms linear infinite;
+}
+
+@keyframes local-editor-chat-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .local-editor-chat-spinner {
+    animation-duration: 2s;
+  }
+}
+
 .local-editor-chat-composer {
   margin: 0 16px;
   padding: 10px;

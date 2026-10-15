@@ -92,10 +92,17 @@ export type CreateSlottedItemSourceOptions<
   defaultItems?: number;
 };
 
+/** Opt-in generation ownership for the helper's fixed data and CardSlot locations. */
+export type SlottedItemSourceGenerationMetadata = {
+  cardType: string;
+  defaultItemProps?: Record<string, unknown> | (() => Record<string, unknown>);
+};
+
 export type SlottedItemSourceInstance<
   TMappings extends Record<string, unknown>,
 > = {
   field: YextFieldDefinition<SlotMappedCardsData<TMappings>>;
+  generation: SlottedItemSourceGenerationMetadata;
   defaultValue: SlotMappedCardsData<TMappings>;
   defaultWrapperProps: {
     data: SlotMappedCardsData<TMappings>;

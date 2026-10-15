@@ -1,4 +1,5 @@
 import React from "react";
+import { slottedFixture } from "../../internal/generation/slottedGenerationTestUtils.ts";
 import {
   act,
   fireEvent,
@@ -8,7 +9,7 @@ import {
 } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { LocalEditorChatCanvas } from "./LocalEditorChatCanvas.ts";
-import { ChatHarness, generatedContent } from "./chatTestUtils.tsx";
+import { ChatHarness, chatConfig, generatedContent } from "./chatTestUtils.tsx";
 
 const wire = (event: any) => JSON.stringify(event) + "\n";
 const headers = { "X-Visual-Editor-Generation": "strict-puck-overrides-v2" };
@@ -28,6 +29,59 @@ const submit = async () => {
 afterEach(() => vi.unstubAllGlobals());
 
 describe("strict generation in the editor", () => {
+  it("reports browser resolver errors with the candidate and generation correlation", async () => {
+    const fetchMock = vi.fn(async (url: string, _init?: RequestInit) =>
+      url.endsWith("/error")
+        ? new Response(JSON.stringify({ recorded: true }))
+        : new Response(
+            wire({
+              type: "accepted",
+              text: "Updated",
+              spec: generatedContent("Generated"),
+            }),
+            { headers }
+          )
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    render(
+      <ChatHarness
+        config={{
+          components: {
+            ...chatConfig.components,
+            Heading: {
+              ...chatConfig.components.Heading,
+              resolveData: (data) => {
+                if (data.props.text === "Generated") {
+                  const missing: any = undefined;
+                  return missing.entityField;
+                }
+                return data;
+              },
+            },
+          },
+        }}
+      />
+    );
+    await submit();
+    const alert = await screen.findByRole("alert");
+    expect(alert.textContent).toContain("Heading (heading) resolveData failed");
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    const request = fetchMock.mock.calls[0][1]!;
+    const report = JSON.parse(fetchMock.mock.calls[1][1]!.body as string);
+    expect(fetchMock.mock.calls[1][0]).toBe("/local/generate/error");
+    expect(report).toMatchObject({
+      correlationId: (request.headers as Record<string, string>)[
+        "X-Visual-Editor-Correlation-Id"
+      ],
+      layoutId: "location",
+      phase: "resolve-and-commit",
+      candidate: generatedContent("Generated"),
+    });
+    expect(report.stack).toContain("entityField");
+    expect(report.stack).toContain("Caused by:");
+    expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
+    expect(screen.getByLabelText("History index").textContent).toBe("0");
+  });
   it("includes manual edits and creates one undoable transaction", async () => {
     const fetchMock = vi.fn(
       async (_url: string, _init?: RequestInit) =>
@@ -75,6 +129,8 @@ describe("strict generation in the editor", () => {
     vi.stubGlobal("fetch", fetchMock);
     const editor = render(<ChatHarness />);
     await submit();
+    expect(screen.getByText("Generating layout…")).toBeTruthy();
+    expect(document.querySelector(".local-editor-chat-spinner")).toBeTruthy();
     await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
     const attachmentCount = attach.mock.calls.length;
     editor.rerender(<ChatHarness />);
@@ -85,7 +141,8 @@ describe("strict generation in the editor", () => {
         )
       )
     );
-    await screen.findByText("Working…");
+    expect(screen.queryByText("Working…")).toBeNull();
+    expect(screen.getByText("Generating layout…")).toBeTruthy();
     expect(attach).toHaveBeenCalledTimes(attachmentCount);
     expect(screen.queryByRole("alert")).toBeNull();
     expect(fetchMock.mock.calls.length).toBe(1);
@@ -110,6 +167,8 @@ describe("strict generation in the editor", () => {
       let stream!: ReadableStreamDefaultController<Uint8Array>;
       let signal!: AbortSignal;
       const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
+        if (_url.endsWith("/error"))
+          return new Response(JSON.stringify({ recorded: true }));
         signal = init!.signal!;
         return new Response(
           new ReadableStream({
@@ -147,7 +206,7 @@ describe("strict generation in the editor", () => {
       expect(screen.queryByText("Late", { selector: "h2" })).toBeNull();
     }
   );
-  it("streams commentary while the canvas remains unchanged until transport completes", async () => {
+  it("keeps progress visible until the layout commits, then shows the final response", async () => {
     let stream!: ReadableStreamDefaultController<Uint8Array>;
     const fetchMock = vi.fn(
       async () =>
@@ -171,7 +230,8 @@ describe("strict generation in the editor", () => {
         )
       )
     );
-    await screen.findByText("Working…");
+    expect(screen.getByText("Generating layout…")).toBeTruthy();
+    expect(screen.queryByText("Working…")).toBeNull();
     expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
     act(() =>
       stream.enqueue(
@@ -184,9 +244,11 @@ describe("strict generation in the editor", () => {
         )
       )
     );
-    expect(screen.queryByText("Final", { selector: "h2" })).toBeNull();
+    expect(screen.queryByText("Updated")).toBeNull();
+    expect(screen.getByText("Generating layout…")).toBeTruthy();
     act(() => stream.close());
     await screen.findByText("Final", { selector: "h2" });
+    await screen.findByText("Updated");
   });
   it.each(["clarification", "transport", "invalid"])(
     "preserves layout and history for %s",
@@ -216,6 +278,67 @@ describe("strict generation in the editor", () => {
       else await screen.findByRole("alert");
       expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
       expect(screen.getByLabelText("History index").textContent).toBe("0");
+    }
+  );
+});
+
+describe("slotted source generation in the editor", () => {
+  it.each([false, true])(
+    "commits one undoable transaction or preserves history on resolver rejection (%s)",
+    async (reject) => {
+      const f = slottedFixture();
+      f.components.Section.render = ({ slots }: any) => <slots.CardSlot />;
+      f.components.FAQCard.render = ({ data }: any) => (
+        <p>{data.question.defaultValue}</p>
+      );
+      if (reject)
+        f.components.FAQCard.resolveData = (component: any) => ({
+          ...component,
+          props: {
+            ...component.props,
+            data: { ...component.props.data, answer: "Resolver replacement" },
+          },
+        });
+      const candidate = f.materialize([f.section([f.card("Generated FAQ")])]);
+      vi.stubGlobal(
+        "fetch",
+        vi.fn(
+          async () =>
+            new Response(
+              wire({
+                type: "accepted",
+                text: "Created",
+                spec: candidate,
+              }),
+              { headers }
+            )
+        )
+      );
+      render(
+        <ChatHarness
+          config={{ components: f.components }}
+          initialData={{ root: { props: {} }, content: [], zones: {} }}
+        />
+      );
+      await submit();
+      if (reject) {
+        await screen.findByRole("alert");
+        expect(
+          screen.queryByText("Generated FAQ", { selector: "p" })
+        ).toBeNull();
+        expect(screen.getByLabelText("History index").textContent).toBe("0");
+      } else {
+        await screen.findByText("Generated FAQ", { selector: "p" });
+        expect(screen.getByLabelText("History index").textContent).toBe("1");
+        fireEvent.click(screen.getByText("Undo", { selector: "button" }));
+        await waitFor(() =>
+          expect(
+            screen.queryByText("Generated FAQ", { selector: "p" })
+          ).toBeNull()
+        );
+        fireEvent.click(screen.getByText("Redo", { selector: "button" }));
+        await screen.findByText("Generated FAQ", { selector: "p" });
+      }
     }
   );
 });

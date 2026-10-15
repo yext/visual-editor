@@ -4,10 +4,7 @@ import { resolveAllData, useGetPuck, type Data } from "@puckeditor/core";
 import { clonePuckResolveData } from "../../internal/utils/clonePuckResolveData.ts";
 import { buildPuckHistoryState } from "../../internal/utils/buildPuckHistoryState.ts";
 import { createPuckGenerationCatalog } from "../../vite-plugin/layout-generation/puckGenerationCatalog.ts";
-import {
-  extractAuthored,
-  validateAuthored,
-} from "../../internal/generation/authored.ts";
+import { assertAuthoredPreserved } from "../../internal/generation/authored.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import type { LocalEditorChatCanvas } from "./LocalEditorChatCanvas.ts";
 import { LocalEditorChatContext } from "./LocalEditorChatContext.tsx";
@@ -33,24 +30,51 @@ const LocalEditorChatCanvasBridge = ({
     () =>
       canvas.attach({
         read: () => clonePuckResolveData(getPuck().appState.data),
-        resolve: (data) =>
-          resolveAllData(clonePuckResolveData(data), getPuck().config, {
-            streamDocument,
-          }),
+        resolve: (data) => {
+          const config = getPuck().config;
+          const components = Object.fromEntries(
+            Object.entries(config.components).map(([type, component]) => [
+              type,
+              {
+                ...component,
+                resolveData: component.resolveData
+                  ? async (
+                      ...args: Parameters<
+                        NonNullable<typeof component.resolveData>
+                      >
+                    ) => {
+                      try {
+                        return await component.resolveData!(...args);
+                      } catch (cause) {
+                        const error = new Error(
+                          `${type} (${args[0].props.id}) resolveData failed: ${
+                            cause instanceof Error
+                              ? cause.message
+                              : String(cause)
+                          }`
+                        );
+                        if (cause instanceof Error)
+                          error.stack += `\nCaused by: ${cause.stack}`;
+                        throw error;
+                      }
+                    }
+                  : undefined,
+              },
+            ])
+          );
+          return resolveAllData(
+            clonePuckResolveData(data),
+            { ...config, components },
+            {
+              streamDocument,
+            }
+          );
+        },
         validate: (data, candidate) => {
           const catalog = createPuckGenerationCatalog(
             getPuck().config.components
           );
-          validateAuthored(catalog, data as any);
-          if (
-            !isDeepEqual(
-              extractAuthored(catalog, data as any),
-              extractAuthored(catalog, candidate as any)
-            )
-          )
-            throw new Error(
-              "Resolution changed the candidate's authored state."
-            );
+          assertAuthoredPreserved(catalog, data as any, candidate as any);
         },
         commit: (data: Data, baseline: Data) => {
           const { history, appState } = getPuck();

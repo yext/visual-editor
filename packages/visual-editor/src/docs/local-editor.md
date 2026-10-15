@@ -102,6 +102,38 @@ describe slots as arrays of `z.unknown()` with cardinality constraints; native
 child schemas inline. Undeclared copied slots remain system-owned and are excluded
 from authored traversal, model context, and targeting.
 
+### Slotted item sources
+
+Opt slot-backed repeated sections into the helper's generation contract:
+
+```ts
+generation: {
+  props: sectionSchema,
+  slottedItemSource: cardsSource.generation,
+},
+```
+
+Declare `data.field`, `data.constantValueEnabled`, mappings, and
+`slots.CardSlot: z.array(z.unknown())` in `sectionSchema`. Omit
+`data.constantValue`, `manualSlots`, and `conditionalRender`; these are managed
+by the helper. Register a generation contract for the helper's card type.
+Generation restricts CardSlot to that type without changing editor fields.
+
+In manual mode, explicit CardSlot arrays determine content and order, including
+an empty list. Selecting `$default` retains default cards or creates cards from
+the default reference count and helper card defaults. Generation assigns fresh
+component Ids, normalizes direct child-slot Ids, and derives matching references
+before the editor runs resolvers. Authored card content, styling, translations,
+and identities must survive resolution; the manual backup must mirror them.
+
+In linked mode, generate bindings and mappings and leave CardSlot empty or select
+its default. Visible cards are derived from entity data using library defaults.
+Any inactive manual backup remains protected authored content. References and
+linked output are checked structurally without comparing entity-driven content
+against the empty candidate slot. Shared linked-card templates are not supported.
+These rules apply to any section using `createSlottedItemSource`, including FAQ,
+Events, and Team sections. Saved layout shapes do not change.
+
 `createPuckGenerationCatalog` uses json-render's custom schema/catalog approach
 with native nested Puck data. Only the metadata type and catalog entrypoint are
 public; compilation, traversal, and materialization remain implementation details.

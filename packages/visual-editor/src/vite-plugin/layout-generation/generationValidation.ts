@@ -36,6 +36,18 @@ export const buildGenerationPrompt = (
               },
               { includeIds: false }
             ).content[0].props,
+            ...(component.generation?.slottedItemSource
+              ? {
+                  slottedItemSource: {
+                    cardType: component.generation.slottedItemSource.cardType,
+                    defaultManualItems:
+                      (component.defaultProps?.data as any)?.constantValue
+                        ?.length ?? 0,
+                    instructions:
+                      "In manual mode author CardSlot children or select its default. References are assigned automatically. In linked mode author bindings and mappings, and leave CardSlot empty or select its default; cards use library defaults.",
+                  },
+                }
+              : {}),
             nestedOnly: component.nestedOnly ?? false,
           },
         ])

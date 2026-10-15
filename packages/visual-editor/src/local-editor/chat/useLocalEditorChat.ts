@@ -6,6 +6,7 @@ type ConversationMessage = { role: "user" | "assistant"; content: string };
 type ChatMessage = {
   role: "user" | "assistant";
   text: string;
+  pending?: boolean;
 };
 
 /** Accepted structured responses retain saved data for follow-up revisions. */
@@ -28,6 +29,35 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
   const previousMessagesRef = React.useRef<ChatMessage[]>([]);
   const history = React.useRef<ConversationMessage[]>([]);
   const activeRequest = React.useRef<AbortController | null>(null);
+  const diagnostics = React.useRef<Record<string, unknown>>({});
+  const reportError = (cause: unknown) => {
+    const error = cause instanceof Error ? cause : new Error(String(cause));
+    const details: Record<string, unknown> = {
+      ...diagnostics.current,
+      layoutId,
+      error: error.message.slice(0, 32_768),
+      stack: error.stack?.slice(0, 65_536),
+    };
+    // Preserve the error even when an unusually large candidate exceeds the report limit.
+    const candidateJson = JSON.stringify(details.candidate);
+    if (candidateJson && candidateJson.length > 500_000)
+      details.candidate = { omitted: true, characters: candidateJson.length };
+    console.error("[local-editor generation] Chat failed", details);
+    setError(error);
+    // Reporting must survive cancellation and must never mask the chat error.
+    void (async () => {
+      try {
+        const response = await fetch(`${api}/error`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(details),
+        });
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+      } catch (reportFailure) {
+        console.error("Unable to report chat error:", reportFailure);
+      }
+    })();
+  };
   const cancel = React.useCallback(() => {
     activeRequest.current?.abort();
     activeRequest.current = null;
@@ -38,7 +68,7 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
   }, [canvas]);
   canvas.onError = (cause) => {
     cancel();
-    setError(cause instanceof Error ? cause : new Error(String(cause)));
+    reportError(cause);
   };
   const clear = React.useCallback(() => {
     cancel();
@@ -59,6 +89,11 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
 
   const send = async (prompt: string) => {
     if (!prompt.trim() || activeRequest.current || !canvas.ready) return;
+    diagnostics.current = {
+      correlationId: crypto.randomUUID(),
+      phase: "read-layout",
+      historyMessageCount: history.current.length,
+    };
     const controller = new AbortController();
     activeRequest.current = controller;
     const user: ConversationMessage = { role: "user", content: prompt.trim() };
@@ -71,17 +106,21 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
     let text = "";
     let spec: GeneratedContent | null = null;
     let accepted = false;
-    const update = () => {
+    const update = (pending = false) => {
       if (activeRequest.current !== controller) return;
       setMessages([
         ...nextMessages,
         {
           role: "assistant",
-          text,
+          text: pending ? "Generating layout…" : text,
+          pending,
         },
       ]);
     };
-    setMessages(nextMessages);
+    setMessages([
+      ...nextMessages,
+      { role: "assistant", text: "Generating layout…", pending: true },
+    ]);
     setIsStreaming(true);
     setProgress("Generating…");
     setError(null);
@@ -91,9 +130,15 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
       // settle before a fast final commit.
       await new Promise<void>((resolve) => setTimeout(resolve, 260));
       if (activeRequest.current !== controller) return;
+      diagnostics.current.phase = "request";
       const response = await fetch(api, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-Visual-Editor-Correlation-Id": String(
+            diagnostics.current.correlationId
+          ),
+        },
         body: JSON.stringify({
           layoutId,
           currentData,
@@ -101,6 +146,8 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
         }),
         signal: controller.signal,
       });
+      diagnostics.current.status = response.status;
+      diagnostics.current.phase = "read-response";
       if (!response.ok) {
         const result = await response.json().catch(() => null);
         throw new Error(result?.error ?? `HTTP error: ${response.status}`);
@@ -126,8 +173,7 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
           }));
         } else if (event.type === "error") throw new Error(event.error);
         else if (event.type === "commentary") {
-          text += event.delta;
-          update();
+          // Keep intermediate model commentary hidden until the layout is ready.
         } else if (event.type === "progress") {
           if (typeof event.text === "string") setProgress(event.text);
         } else if (event.type === "accepted") {
@@ -165,6 +211,8 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
         reader.releaseLock();
       }
       if (activeRequest.current === controller) {
+        diagnostics.current.phase = "resolve-and-commit";
+        diagnostics.current.candidate = spec;
         await canvas.commit(spec);
         if (activeRequest.current !== controller) return;
         update();
@@ -183,7 +231,7 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
         return;
       canvas.finish();
       setMessages(previousMessages);
-      setError(cause instanceof Error ? cause : new Error(String(cause)));
+      reportError(cause);
     } finally {
       if (activeRequest.current === controller) {
         canvas.finish();

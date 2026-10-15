@@ -1,5 +1,11 @@
 import React from "react";
-import { ChevronDown, MessageSquare, RotateCcw, Send } from "lucide-react";
+import {
+  ChevronDown,
+  LoaderCircle,
+  MessageSquare,
+  RotateCcw,
+  Send,
+} from "lucide-react";
 import "./localEditorChat.css";
 import type { useLocalEditorChat } from "./useLocalEditorChat.ts";
 
@@ -48,7 +54,15 @@ export const LocalEditorChat = ({
             </>
           ) : (
             <>
-              <MessageSquare size={16} aria-hidden="true" />
+              {chat.isStreaming ? (
+                <LoaderCircle
+                  className="local-editor-chat-spinner"
+                  size={16}
+                  aria-hidden="true"
+                />
+              ) : (
+                <MessageSquare size={16} aria-hidden="true" />
+              )}
               {chat.isStreaming ? "Show chat · Generating…" : "Show chat"}
             </>
           )}
@@ -82,14 +96,27 @@ export const LocalEditorChat = ({
                   <span className="local-editor-chat-role">
                     {message.role === "user" ? "You" : "Assistant"}
                   </span>
-                  <p>{message.text}</p>
+                  <p>
+                    {message.pending && (
+                      <LoaderCircle
+                        className="local-editor-chat-spinner"
+                        size={15}
+                        aria-hidden="true"
+                      />
+                    )}
+                    {message.text}
+                  </p>
                 </div>
               )
           )}
         </div>
         {chat.isStreaming && (
           <p className="local-editor-chat-status" role="status">
-            <span className="local-editor-chat-status-dot" />
+            <LoaderCircle
+              className="local-editor-chat-spinner"
+              size={14}
+              aria-hidden="true"
+            />
             {chat.progress || "Generating…"}
           </p>
         )}

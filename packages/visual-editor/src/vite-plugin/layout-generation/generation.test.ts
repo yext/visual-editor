@@ -312,7 +312,7 @@ describe("strict request execution", () => {
     const h = harness();
     const run = h.run();
     await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
-    await vi.advanceTimersByTimeAsync(120_000);
+    await vi.advanceTimersByTimeAsync(5 * 60_000);
     await run;
     expect(fetchMock).toHaveBeenCalledOnce();
     expect(h.events().at(-1)).toMatchObject({

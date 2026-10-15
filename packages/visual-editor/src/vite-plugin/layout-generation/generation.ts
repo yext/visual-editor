@@ -144,7 +144,13 @@ export const handleLocalEditorGenerationRequest = async (
   response: ServerResponse,
   { model, loadContext, log }: GenerationOptions
 ): Promise<void> => {
-  const correlationId = randomUUID();
+  const clientCorrelationId =
+    request.headers?.["x-visual-editor-correlation-id"];
+  const correlationId =
+    typeof clientCorrelationId === "string" &&
+    /^[0-9a-f-]{36}$/i.test(clientCorrelationId)
+      ? clientCorrelationId
+      : randomUUID();
   const requestDetails = {
     correlationId,
     method: request.method,
@@ -318,7 +324,7 @@ export const handleLocalEditorGenerationRequest = async (
     () =>
       controller.abort(
         new Error(
-          "Generation exceeded the two-minute deadline. Try a smaller request."
+          "Generation exceeded the five-minute deadline. Try a smaller request."
         )
       ),
     GENERATION_ATTEMPT_DEADLINE_MS
@@ -634,6 +640,7 @@ export const handleLocalEditorGenerationRequest = async (
       outputBytes,
       aborted: controller.signal.aborted,
       error: message,
+      stack: failure instanceof Error ? failure.stack : undefined,
     });
     if (!response.destroyed) {
       if (started) {

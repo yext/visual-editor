@@ -1,3 +1,4 @@
+import { handleGenerationErrorReport } from "./layout-generation/generationErrorReport.ts";
 import type { Plugin } from "vite";
 import path from "node:path";
 import { createGenerationLogger } from "./layout-generation/generationLogger.ts";
@@ -159,6 +160,29 @@ export const yextVisualEditorPlugin = (
         }
         if (
           new URL(request.url, "http://localhost").pathname ===
+          "/__yext_visual_editor/local-editor/generate/error"
+        ) {
+          void handleGenerationErrorReport(
+            request,
+            response,
+            logGeneration
+          ).catch((error: unknown) => {
+            logGeneration("[local-editor generation] Error report failed", {
+              error: error instanceof Error ? error.message : String(error),
+              stack: error instanceof Error ? error.stack : undefined,
+            });
+            if (!response.headersSent)
+              sendJsonResponse(
+                response,
+                { error: "Unable to record chat error" },
+                500
+              );
+            else response.destroy();
+          });
+          return;
+        }
+        if (
+          new URL(request.url, "http://localhost").pathname ===
           "/__yext_visual_editor/local-editor/generate"
         ) {
           void handleLocalEditorGenerationRequest(request, response, {
@@ -180,6 +204,14 @@ export const yextVisualEditorPlugin = (
                 : undefined;
             },
           }).catch((error: unknown) => {
+            logGeneration("[local-editor generation] Request failed", {
+              correlationId: request.headers["x-visual-editor-correlation-id"],
+              method: request.method,
+              url: request.url,
+              error: error instanceof Error ? error.message : String(error),
+              stack: error instanceof Error ? error.stack : undefined,
+            });
+            void logGeneration.flush();
             if (response.headersSent) {
               response.destroy(
                 error instanceof Error ? error : new Error(String(error))
