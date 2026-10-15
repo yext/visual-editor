@@ -22,7 +22,6 @@ export type CodeLanguageOptions =
   | "typescript";
 
 export type CodeField = BaseField & {
-  /** Processes HTML templates and JavaScript embedded fields; other code stays authored. */
   type: "code";
   label?: string | MsgString;
   visible?: boolean;
@@ -78,19 +77,11 @@ export const CodeFieldOverride = ({
     });
   };
 
-  const codeField =
-    window.parent === window.self ? (
-      <textarea
-        aria-label={translatedLabel || undefined}
-        className="ve-w-full ve-min-h-40 ve-rounded ve-border ve-p-3 ve-font-mono ve-text-sm"
-        value={value ?? ""}
-        onChange={(event) => onChange(event.target.value)}
-      />
-    ) : (
-      <button type="button" className="CodeField" onClick={handleClick}>
-        <div className="ve-line-clamp-3">{value}</div>
-      </button>
-    );
+  const codeField = (
+    <button type="button" className="CodeField" onClick={handleClick}>
+      <div className="ve-line-clamp-3">{value}</div>
+    </button>
+  );
 
   return translatedLabel ? (
     <FieldLabel label={translatedLabel}>{codeField}</FieldLabel>

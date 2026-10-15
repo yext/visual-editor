@@ -60,8 +60,6 @@ export type ComprehensiveCTAValue = {
 
 export type ComprehensiveCTAField = BaseField & {
   type: "comprehensiveCTA";
-  /** Resolves CTA bindings and translated text before rendering. */
-  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   disableConstantValueToggle?: boolean;
@@ -144,15 +142,11 @@ export const normalizeComprehensiveCTAValue = (
   },
 });
 
-/**
- * ComprehensiveCTAField imports YextAutoField, which uses the field override registry.
- * A function declaration lets the registry reference this override during module initialization.
- */
-export function ComprehensiveCTAFieldOverride({
+export const ComprehensiveCTAFieldOverride = ({
   field,
   value,
   onChange,
-}: ComprehensiveCTAFieldProps) {
+}: ComprehensiveCTAFieldProps) => {
   const currentValue = normalizeComprehensiveCTAValue(value);
 
   const actionType = currentValue.data.actionType;
@@ -265,7 +259,7 @@ export function ComprehensiveCTAFieldOverride({
           visible: showPresetImageField,
         },
         color: {
-          type: "themeColor",
+          type: "basicSelector",
           label: pt("fields.color", "Color"),
           options: "SITE_COLOR",
           visible: showColorField,
@@ -331,4 +325,4 @@ export function ComprehensiveCTAFieldOverride({
       </div>
     </div>
   );
-}
+};

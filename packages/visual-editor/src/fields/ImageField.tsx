@@ -39,8 +39,6 @@ let pendingImageSession:
 
 export type ImageField = BaseField & {
   type: "image";
-  /** Localizes the asset image and resolves its alt text before rendering. */
-  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   hideAltTextField?: boolean;
@@ -67,15 +65,11 @@ export const buildLocatorDisplayOptions = (
     }));
 };
 
-/**
- * Renders image field controls. Its declaration is available when the field
- * registry initializes.
- */
-export function ImageFieldOverride({
+export const ImageFieldOverride = ({
   field,
   onChange,
   value,
-}: ImageFieldOverrideProps) {
+}: ImageFieldOverrideProps) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const templateMetadata: TemplateMetadata = useTemplateMetadata();
@@ -296,4 +290,4 @@ export function ImageFieldOverride({
       )}
     </>
   );
-}
+};

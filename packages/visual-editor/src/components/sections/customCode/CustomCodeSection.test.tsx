@@ -9,8 +9,7 @@ import { CustomCodeSection } from "./CustomCodeSection.tsx";
 import { migrate } from "../../../utils/migrate.ts";
 import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
-import { Config } from "@puckeditor/core";
-import { VisualEditorRender } from "../../../editor/VisualEditorRender.tsx";
+import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { MainContent } from "../../helpers/MainContent.tsx";
 
@@ -190,7 +189,7 @@ describe("CustomCodeSection", async () => {
 
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
-          <VisualEditorRender config={puckConfig} data={data} />
+          <Render config={puckConfig} data={data} />
         </VisualEditorProvider>
       );
 
