@@ -3,7 +3,7 @@ import fs from "fs-extra";
 import { describe, expect, it } from "vitest";
 import { createTempRoot } from "../../../../internal/sectionLibraryValidation/testUtils.ts";
 import { purposes, verticals } from "../../../../types/sectionLibrary.ts";
-import { convertTemplatesToSectionLibrary } from "./index.ts";
+import { convertTemplatesToSectionLibrary } from "./main.ts";
 
 describe("convertTemplatesToSectionLibrary", () => {
   it("removes yext- prefixes and creates library metadata without a library.json", () => {
