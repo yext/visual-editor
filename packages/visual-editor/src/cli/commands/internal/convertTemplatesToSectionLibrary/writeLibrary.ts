@@ -1,3 +1,7 @@
+/**
+ * Writes the converted Section Library into a staged directory, swaps it into
+ * place, and removes legacy registry source when requested.
+ */
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
@@ -17,6 +21,7 @@ import type {
   TemplateHeaderFooter,
 } from "./types.ts";
 
+/** Replaces the library only after the staged converted copy is complete. */
 export const replaceLibrary = (
   libraryDirectory: string,
   baseLibraryDirectory: string,
@@ -57,6 +62,7 @@ export const replaceLibrary = (
   }
 };
 
+/** Writes converted layouts and sections into the staged library directory. */
 const writeConvertedLibrary = (
   libraryDirectory: string,
   conversion: Conversion
@@ -124,6 +130,7 @@ const writeConvertedLibrary = (
   }
 };
 
+/** Renames a base layout and inserts the selected header and footer. */
 const renameBaseLayout = (
   libraryDirectory: string,
   layout: BaseLayout,
@@ -174,6 +181,7 @@ const renameBaseLayout = (
   );
 };
 
+/** Combines a legacy component with its new SectionConfig export. */
 const buildSectionSource = (
   component: CopiedComponent,
   templateHeaderFooter: TemplateHeaderFooter
@@ -198,6 +206,7 @@ const buildSectionSource = (
   ].join("\n");
 };
 
+/** Removes converted source directories from the legacy registry. */
 export const deleteLegacyTemplates = (
   templates: LegacyTemplate[],
   write: (message: string) => void

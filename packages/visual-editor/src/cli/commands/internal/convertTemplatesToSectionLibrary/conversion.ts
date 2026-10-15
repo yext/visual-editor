@@ -1,3 +1,7 @@
+/**
+ * Combines legacy templates with the base library, selects shared components,
+ * and builds metadata for the converted layouts.
+ */
 import path from "node:path";
 import {
   purposes,
@@ -20,6 +24,7 @@ const VERTICALS = new Set(verticals);
 const PURPOSES = new Set(purposes);
 const RESERVED_COMPONENT_IDS = new Set(["Directory", "Locator", "MainContent"]);
 
+/** Plans the converted library and validates section references and ID collisions. */
 export const buildConversion = (
   templates: LegacyTemplate[],
   baseLibrary: BaseLibrary
@@ -93,6 +98,7 @@ export const buildConversion = (
 
 // Finds the existing header or footer by looking at the default layout
 // and finding a "type" that includes "header" or "footer"
+/** Selects a unique top-level header or footer for the converted layouts. */
 const selectTemplateHeaderFooter = (
   template: LegacyTemplate,
   kind: "header" | "footer"
@@ -110,6 +116,7 @@ const selectTemplateHeaderFooter = (
   };
 };
 
+/** Builds library metadata from the first converted legacy template. */
 const buildLibraryMetadata = (template: LegacyTemplate): LibraryMetadata => {
   const displayName = requireString(
     template.metadata.displayName,
@@ -128,6 +135,7 @@ const buildLibraryMetadata = (template: LegacyTemplate): LibraryMetadata => {
   };
 };
 
+/** Converts legacy template metadata into Entity layout metadata. */
 export const buildEntityLayoutMetadata = (
   template: LegacyTemplate
 ): EntityLayoutMetadata => {
@@ -157,6 +165,7 @@ export const buildEntityLayoutMetadata = (
   };
 };
 
+/** Validates a metadata list against its supported values. */
 const readMetadataList = <T extends string>(
   value: unknown,
   allowedValues: Set<T>,
@@ -182,6 +191,7 @@ const readMetadataList = <T extends string>(
   return value as T[];
 };
 
+/** Recursively checks that default layout components have converted sections. */
 const validateLayoutReferences = (
   value: unknown,
   componentIds: Set<string>,
@@ -211,6 +221,7 @@ const validateLayoutReferences = (
   );
 };
 
+/** Requires a metadata field to contain a string. */
 const requireString = (
   value: unknown,
   sourcePath: string,

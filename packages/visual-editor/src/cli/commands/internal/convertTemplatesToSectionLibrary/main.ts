@@ -1,3 +1,7 @@
+/**
+ * Coordinates conversion preflight, dry-run reporting, dependency installation,
+ * library replacement, and optional legacy source cleanup.
+ */
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
@@ -88,6 +92,7 @@ export const convertTemplatesToSectionLibrary = ({
     );
     const originalPackage = fs.readFileSync(packagePath, "utf8");
     const originalLock = fs.readFileSync(lockPath);
+    /** Finds exactly one dependency declaration and records its original version. */
     const dependency = (
       name: string
     ): { bucket: JsonRecord; previous: string } => {
@@ -181,6 +186,7 @@ export const convertTemplatesToSectionLibrary = ({
   }
 };
 
+/** Reports converted layouts, shared sections, conflicts, and cleanup choices. */
 const writeReport = ({
   apply,
   conversion,

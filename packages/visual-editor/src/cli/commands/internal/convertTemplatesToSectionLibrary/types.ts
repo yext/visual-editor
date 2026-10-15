@@ -1,3 +1,7 @@
+/**
+ * Defines the legacy template, base library, and conversion data shared by
+ * the migration stages.
+ */
 import type {
   LibraryMetadata,
   PageSetType,

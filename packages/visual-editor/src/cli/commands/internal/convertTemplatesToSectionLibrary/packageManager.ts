@@ -1,3 +1,7 @@
+/**
+ * Identifies the target project's supported package manager from its lockfile
+ * and checks that the package manifest agrees with that choice.
+ */
 import fs from "node:fs";
 import path from "node:path";
 import type { JsonRecord } from "./types.ts";

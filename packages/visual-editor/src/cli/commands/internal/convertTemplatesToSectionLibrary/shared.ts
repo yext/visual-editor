@@ -1,3 +1,7 @@
+/**
+ * Holds the file and data validation helpers shared across the conversion
+ * stages, including JSON parsing and default layout checks.
+ */
 import fs from "node:fs";
 import type { JsonRecord } from "./types.ts";
 
@@ -6,6 +10,7 @@ export const ID_REQUIREMENTS =
   "must start with a letter or number and contain only letters, numbers, underscores, and hyphens";
 export const REQUIRED_BASE_SECTIONS = new Set(["Directory", "Locator"]);
 
+/** Checks the root, zones, and content fields required by a default layout. */
 export function validateDefaultLayout(
   defaultLayout: unknown,
   sourcePath: string,
@@ -35,6 +40,7 @@ export function validateDefaultLayout(
   }
 }
 
+/** Reads a JSON file and includes its path and purpose in parse errors. */
 export const readJson = (filePath: string, description: string): unknown => {
   try {
     return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -45,11 +51,14 @@ export const readJson = (filePath: string, description: string): unknown => {
   }
 };
 
+/** Formats generated JSON with a trailing newline. */
 export const formatJson = (value: unknown): string =>
   `${JSON.stringify(value, null, 2)}\n`;
 
+/** Narrows an unknown value to a non-array object. */
 export const isRecord = (value: unknown): value is JsonRecord =>
   Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
+/** Turns an unknown thrown value into diagnostic text. */
 const getErrorMessage = (error: unknown): string =>
   error instanceof Error ? error.message : String(error);

@@ -1,3 +1,7 @@
+/**
+ * Exercises legacy template conversion, project setup migration, dry runs,
+ * cleanup safeguards, and dependency rollback with temporary repositories.
+ */
 import path from "node:path";
 import fs from "fs-extra";
 import { describe, expect, it } from "vitest";
@@ -157,6 +161,7 @@ describe("convertTemplatesToSectionLibrary", () => {
   });
 });
 
+/** Creates a minimal legacy registry and base library for conversion cases. */
 const createConversionFixture = () => {
   const rootDirectory = createTempRoot("convert-template-errors-");
   const templateDirectory = path.join(rootDirectory, "src/registry/example");
@@ -350,6 +355,7 @@ describe("conversion error diagnostics", () => {
 });
 
 describe("project setup conversion", () => {
+  /** Adds package, stream, manifest, and generated-template migration inputs. */
   const setup = () => {
     const fixture = createConversionFixture();
     const packagePath = path.join(fixture.rootDirectory, "package.json");

@@ -1,3 +1,7 @@
+/**
+ * Locates or stages the Directory and Locator base library, then validates its
+ * required layouts, sections, and metadata before conversion.
+ */
 import fs from "node:fs";
 import path from "node:path";
 import { exportDirectoryLocatorSectionLibrary } from "../exportDirectoryLocatorSectionLibrary.ts";
@@ -46,6 +50,7 @@ export const prepareBaseLibrary = (
   };
 };
 
+/** Checks whether an existing library already contains a complete base. */
 const hasDirectoryLocatorBase = (libraryDirectory: string): boolean => {
   const sectionsDirectory = path.join(libraryDirectory, "sections");
   if (
@@ -86,6 +91,7 @@ const hasDirectoryLocatorBase = (libraryDirectory: string): boolean => {
   );
 };
 
+/** Reads the base layouts and rejects missing or inconsistent layout source. */
 export const readBaseLibrary = (libraryDirectory: string): BaseLibrary => {
   const layoutsDirectory = path.join(libraryDirectory, "layouts");
   const sectionsDirectory = path.join(libraryDirectory, "sections");

@@ -1,3 +1,7 @@
+/**
+ * Rewrites statically identifiable legacy stream configuration keys and IDs
+ * using source ranges so streams, settings, and comments remain intact.
+ */
 import path from "node:path";
 import ts from "typescript";
 import type { Conversion } from "./types.ts";
@@ -28,6 +32,7 @@ export const convertStreamConfig = (
       `Cannot safely map stream config without a config object literal: ${sourcePath}`
     );
   }
+  /** Returns a static object property name when it can be mapped safely. */
   const nameOf = (
     property: ts.ObjectLiteralElementLike
   ): string | undefined => {

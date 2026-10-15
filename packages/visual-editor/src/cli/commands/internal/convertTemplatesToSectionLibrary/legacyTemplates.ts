@@ -1,3 +1,7 @@
+/**
+ * Reads legacy registry templates, normalizes Yext-prefixed identifiers, and
+ * validates component source before it can be copied into a Section Library.
+ */
 import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
@@ -12,6 +16,7 @@ import type { LegacyTemplate } from "./types.ts";
 
 const RESERVED_LAYOUT_IDS = new Set(["main", "directory", "locator", "edit"]);
 
+/** Reads every registry template and rejects IDs that cannot become layout IDs. */
 export const readLegacyTemplates = (
   rootDirectory: string
 ): LegacyTemplate[] => {
@@ -58,6 +63,7 @@ export const readLegacyTemplates = (
   });
 };
 
+/** Reads one template's metadata, default layout, and component source. */
 const readLegacyTemplate = (
   directory: string,
   templateId: string
@@ -146,8 +152,10 @@ const readLegacyTemplate = (
   return { templateId, directory, metadata, defaultLayout, components };
 };
 
+/** Removes the legacy Yext prefix from a local identifier. */
 const removeYextPrefix = (id: string): string => id.replace(/^yext-?/i, "");
 
+/** Normalizes component IDs throughout nested default layout data. */
 const normalizeLayoutComponentIds = (value: unknown): unknown => {
   if (Array.isArray(value)) {
     return value.map(normalizeLayoutComponentIds);
@@ -223,6 +231,7 @@ const renameComponentIdentifiers = (content: string): string => {
     end: number;
     nextName: string;
   }[] = [];
+  /** Collects source ranges for local identifiers and analytics names to rename. */
   const visit = (node: ts.Node): void => {
     if (ts.isJsxAttribute(node) && node.name.getText(sourceFile) === "name") {
       const openingElement = node.parent.parent;
