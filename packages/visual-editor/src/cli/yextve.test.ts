@@ -26,9 +26,12 @@ const {
 vi.mock("./commands/internal/exportDirectoryLocatorSectionLibrary.ts", () => ({
   exportDirectoryLocatorSectionLibrary,
 }));
-vi.mock("./commands/internal/convertTemplatesToSectionLibrary.ts", () => ({
-  convertTemplatesToSectionLibrary,
-}));
+vi.mock(
+  "./commands/internal/convertTemplatesToSectionLibrary/index.ts",
+  () => ({
+    convertTemplatesToSectionLibrary,
+  })
+);
 vi.mock("./commands/internal/deploy/config.ts", () => ({ resolveConfig }));
 vi.mock("./commands/internal/deploy/deploy.ts", () => ({ deploy }));
 vi.mock("./commands/internal/deploy/pollRevision.ts", () => ({ pollRevision }));
