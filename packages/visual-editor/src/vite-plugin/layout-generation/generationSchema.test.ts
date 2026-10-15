@@ -86,6 +86,89 @@ const section = (child: any = heading()) => ({
 });
 
 describe("fresh page creation schema", () => {
+  it("adds reachable generation defaults to the prompt without requiring them", () => {
+    const components = catalog().data.components;
+    const c = createPuckGenerationCatalog(
+      {
+        Heading: components.Heading,
+        Section: components.Section,
+        Unreachable: {
+          generation: { props: z.object({}) },
+          nestedOnly: true,
+        },
+        Disabled: {},
+      },
+      {
+        defaultGenerationComponentIds: [
+          "Section",
+          "Unreachable",
+          "Missing",
+          "Disabled",
+          "Section",
+        ],
+      }
+    );
+    const compiled = compileGenerationSchema(c, ["en"]);
+    const prompt = buildGenerationPrompt(c, compiled.availableComponentNames);
+    expect(prompt).toContain(
+      'Default components for fresh generation: ["Section"]'
+    );
+    expect(prompt).toContain("explicit user requests take precedence");
+    expect(prompt).not.toContain("Unreachable");
+    expect(prompt).not.toContain("Missing");
+    expect(prompt).not.toContain("Disabled");
+    expect(
+      compiled.materialize(
+        create([{ type: "MainContent", props: { content: [] } }])
+      ).spec
+    ).toBeTruthy();
+    expect(buildGenerationPrompt(catalog())).not.toContain(
+      "Default components for fresh generation:"
+    );
+    c.puckOptions.defaultGenerationComponentIds = [];
+    expect(buildGenerationPrompt(c)).not.toContain(
+      "Default components for fresh generation:"
+    );
+  });
+
+  it.each([
+    ["Header", "Footer"],
+    ["ExpandedHeader", "ExpandedFooter"],
+  ])("keeps %s and %s outside MainContent", (headerType, footerType) => {
+    const c = createPuckGenerationCatalog({
+      ...catalog().data.components,
+      [headerType]: { generation: { props: z.object({}) } },
+      [footerType]: { generation: { props: z.object({}) } },
+    });
+    const compiled = compileGenerationSchema(c, ["en"]);
+    const header = { type: headerType, props: {} };
+    const footer = { type: footerType, props: {} };
+    const main = {
+      type: "MainContent",
+      props: { content: [section(), section()] },
+    };
+    const result = compiled.materialize(create([header, main, footer])).spec!;
+    expect(result.content.map(({ type }) => type)).toEqual([
+      headerType,
+      "MainContent",
+      footerType,
+    ]);
+    expect(
+      result.content[1].props.content.map((item: any) => item.type)
+    ).toEqual(["Section", "Section"]);
+    for (const chrome of [header, footer]) {
+      expect(() =>
+        compiled.materialize(
+          create([{ ...main, props: { content: [chrome, section()] } }])
+        )
+      ).toThrow();
+    }
+    const prompt = buildGenerationPrompt(c, compiled.availableComponentNames);
+    expect(prompt).toContain("before MainContent");
+    expect(prompt).toContain("after MainContent");
+    expect(prompt).toContain("single MainContent.props.content list");
+  });
+
   it("accepts only empty content or a single empty MainContent scaffold", () => {
     for (const data of [
       { content: [] },

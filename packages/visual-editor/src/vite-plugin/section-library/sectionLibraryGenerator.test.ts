@@ -27,6 +27,11 @@ afterEach(() => {
 describe("generateSectionLibraryFiles", () => {
   it("loads generated schemas and renders both section export formats", async () => {
     const rootDir = createLibrary();
+    const metadataPath = path.join(rootDir, "src/library/library.json");
+    fs.writeJsonSync(metadataPath, {
+      ...fs.readJsonSync(metadataPath),
+      defaultGenerationComponentIds: ["hero", "Directory"],
+    });
     fs.ensureSymlinkSync(
       path.join(process.cwd(), "node_modules"),
       path.join(rootDir, "node_modules"),
@@ -86,6 +91,12 @@ describe("generateSectionLibraryFiles", () => {
       expect(directoryCatalog.componentNames).not.toContain("hero");
       expect(catalog.componentNames).not.toContain("Locator");
       expect(buildGenerationPrompt(catalog)).not.toContain("Locator");
+      expect(buildGenerationPrompt(catalog)).toContain(
+        'Default components for fresh generation: ["hero"]'
+      );
+      expect(buildGenerationPrompt(directoryCatalog)).toContain(
+        'Default components for fresh generation: ["Directory"]'
+      );
       expect(
         catalog.data.components.hero.props.safeParse({
           id: "hero",

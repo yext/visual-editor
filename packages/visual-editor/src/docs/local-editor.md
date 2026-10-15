@@ -28,6 +28,29 @@ for each Entity and Directory layout. Pages uses these templates to create
 local snapshots. The plug-in removes them when development stops and before
 production builds.
 
+## Default generation components
+
+Register components to include by default in a fresh generation using the optional
+`defaultGenerationComponentIds` list in `src/library/library.json`:
+
+```json
+{
+  "schemaVersion": 1,
+  "id": "my-library",
+  "displayName": "My Library",
+  "description": "A section library.",
+  "defaultGenerationComponentIds": ["Header", "hero", "Footer"]
+}
+```
+
+Use registered component IDs, such as a section's `config.id`. The plugin passes
+this list to each layout's generation catalog. Prompts include only components
+available for that layout and reachable through its root and slot permissions.
+The list provides prompt guidance; explicit user requests can omit or replace
+these components. It does not enforce their presence in the generated layout.
+Omitting the list or setting it to `[]` adds no default-component instructions.
+Hand-authored catalogs can pass the same option to `createPuckGenerationCatalog`.
+
 ## Layout chat
 
 Use **Show chat** to open the floating conversation over the layout editor.

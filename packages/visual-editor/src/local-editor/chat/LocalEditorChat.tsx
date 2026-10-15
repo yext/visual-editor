@@ -110,16 +110,6 @@ export const LocalEditorChat = ({
               )
           )}
         </div>
-        {chat.isStreaming && (
-          <p className="local-editor-chat-status" role="status">
-            <LoaderCircle
-              className="local-editor-chat-spinner"
-              size={14}
-              aria-hidden="true"
-            />
-            {chat.progress || "Generating…"}
-          </p>
-        )}
         {chat.error && (
           <p className="local-editor-chat-error" role="alert">
             {chat.error.message}

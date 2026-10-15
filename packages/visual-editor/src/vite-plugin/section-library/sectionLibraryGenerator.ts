@@ -98,7 +98,8 @@ export const generateSectionLibraryFiles = (
         rootDir,
         catalogPath,
         structure.sections,
-        structure.layouts
+        structure.layouts,
+        metadata.defaultGenerationComponentIds
       )
     )
   ) {
@@ -366,7 +367,8 @@ const buildJsonRenderSource = (
   rootDir: string,
   generatedPath: string,
   sections: ResolvedSection[],
-  layouts: Layout[]
+  layouts: Layout[],
+  defaultGenerationComponentIds?: string[]
 ): string => {
   if (sections.some((section) => section.id === "MainContent")) {
     throw new Error("MainContent is reserved for json-render composition.");
@@ -415,9 +417,18 @@ const buildJsonRenderSource = (
               `    ...Object.fromEntries(sharedComponentMetadata.filter((component) => component.pageSetTypes.includes(${pageSetType})).map((component) => [component.id, { generation: sharedComponentConfigs[component.id]?.generation, fields: sharedComponentConfigs[component.id]?.fields, defaultProps: sharedComponentConfigs[component.id]?.defaultProps, nestedOnly: true }])),`,
             ]
           : []),
-        hasSharedRegistry
-          ? `  }, { rootAllowedComponentIds: sharedRootAllowedComponentIds[${pageSetType}] }),`
-          : "  }),",
+        `  }, { ${[
+          ...(hasSharedRegistry
+            ? [
+                `rootAllowedComponentIds: sharedRootAllowedComponentIds[${pageSetType}]`,
+              ]
+            : []),
+          ...(defaultGenerationComponentIds !== undefined
+            ? [
+                `defaultGenerationComponentIds: ${JSON.stringify(defaultGenerationComponentIds)}`,
+              ]
+            : []),
+        ].join(", ")} }),`,
       ].join("\n");
     }),
     "};",

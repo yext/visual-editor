@@ -54,6 +54,8 @@ export type SectionConfig = {
 export type LibraryMetadata = {
   /** The version of the library.json metadata schema used in this repo. */
   schemaVersion: 1;
+  /** Components to include in fresh generation unless the user requests otherwise. */
+  defaultGenerationComponentIds?: string[];
   /** The internal id of the library. */
   id: string;
   /** The user-facing display name of the library. */

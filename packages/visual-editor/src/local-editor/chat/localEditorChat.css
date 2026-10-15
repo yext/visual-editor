@@ -292,14 +292,9 @@
   font-size: 12px;
 }
 
-.local-editor-chat-status,
 .local-editor-chat-error {
   margin: 0 16px 12px;
   font-size: 12px;
-}
-
-.local-editor-chat-status {
-  color: #737d8f;
 }
 
 .local-editor-chat-status-dot {
