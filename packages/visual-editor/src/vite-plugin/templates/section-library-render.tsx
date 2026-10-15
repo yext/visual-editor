@@ -1,7 +1,7 @@
 /* SECTION_LIBRARY_GENERATED_FILE */
 import "@yext/visual-editor/style.css";
 import "../index.css";
-import { type Data, resolveAllData } from "@puckeditor/core";
+import { type Data, Render, resolveAllData } from "@puckeditor/core";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import {
   type GetHeadConfig,
@@ -27,7 +27,6 @@ import {
   migrationRegistry,
   type MigrationRegistry,
   resolveUrlTemplate,
-  VisualEditorRender,
 } from "@yext/visual-editor";
 import {
   loadTranslationDictionary,
@@ -168,7 +167,7 @@ const SectionLibraryLayout: Template<TemplateRenderProps> = (props) => {
           translationLoaders={translationLoaders}
         >
           <GTMBody>
-            <VisualEditorRender
+            <Render
               config={sectionLibraryConfig}
               data={data}
               metadata={{ streamDocument: props.document }}
