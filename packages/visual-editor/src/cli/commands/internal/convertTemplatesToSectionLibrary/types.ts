@@ -3,6 +3,7 @@
  * the migration stages.
  */
 import type {
+  EntityLayoutMetadata,
   LibraryMetadata,
   PageSetType,
 } from "../../../../types/sectionLibrary.ts";
@@ -63,6 +64,7 @@ export type Conversion = {
     ignoredTemplateId: string;
     differs: boolean;
   }[];
+  entityLayoutMetadata: Map<string, EntityLayoutMetadata>;
   libraryMetadata: LibraryMetadata;
   locatorLayoutId: string;
   templates: LegacyTemplate[];

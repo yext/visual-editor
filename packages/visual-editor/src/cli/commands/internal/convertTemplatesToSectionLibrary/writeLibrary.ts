@@ -5,7 +5,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
-import { buildEntityLayoutMetadata } from "./conversion.ts";
 import {
   REQUIRED_BASE_SECTIONS,
   formatJson,
@@ -101,7 +100,7 @@ const writeConvertedLibrary = (
     fs.mkdirSync(layoutDirectory, { recursive: true });
     fs.writeFileSync(
       path.join(layoutDirectory, "metadata.json"),
-      formatJson(buildEntityLayoutMetadata(template))
+      formatJson(conversion.entityLayoutMetadata.get(template.templateId)!)
     );
     fs.writeFileSync(
       path.join(layoutDirectory, "defaultLayout.json"),

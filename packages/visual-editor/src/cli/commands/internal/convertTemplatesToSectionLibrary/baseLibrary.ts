@@ -35,15 +35,24 @@ export const prepareBaseLibrary = (
     "src",
     "library"
   );
-  if (fs.existsSync(libraryDirectory)) {
-    fs.cpSync(libraryDirectory, temporaryLibraryDirectory, {
-      recursive: true,
+  try {
+    if (fs.existsSync(libraryDirectory)) {
+      fs.cpSync(libraryDirectory, temporaryLibraryDirectory, {
+        recursive: true,
+      });
+    }
+    exportDirectoryLocatorSectionLibrary({
+      targetDirectory: temporaryDirectory,
+      overwrite: fs.existsSync(path.join(temporaryLibraryDirectory, "shared")),
     });
+  } catch (error) {
+    try {
+      fs.rmSync(temporaryDirectory, { recursive: true, force: true });
+    } catch {
+      // Preserve the staging error if cleanup also fails.
+    }
+    throw error;
   }
-  exportDirectoryLocatorSectionLibrary({
-    targetDirectory: temporaryDirectory,
-    overwrite: fs.existsSync(path.join(temporaryLibraryDirectory, "shared")),
-  });
   return {
     directory: temporaryLibraryDirectory,
     temporaryDirectory,

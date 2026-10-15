@@ -145,14 +145,18 @@ export const planPackageUpgrades = (
   return { manager, lockPath, packagePath, targetPackage, upgrades };
 };
 
-/** Installs planned upgrades and restores package files if installation fails. */
+/** Installs planned upgrades and returns a way to restore package files if library writing fails. */
 export const installPackageUpgrades = (
   rootDirectory: string,
   plan: ReturnType<typeof planPackageUpgrades>,
   installDependencies?: (manager: "npm" | "pnpm", directory: string) => void
-): void => {
+): (() => void) => {
   const originalPackage = fs.readFileSync(plan.packagePath, "utf8");
   const originalLock = fs.readFileSync(plan.lockPath);
+  const restorePackageFiles = (): void => {
+    fs.writeFileSync(plan.packagePath, originalPackage);
+    fs.writeFileSync(plan.lockPath, originalLock);
+  };
   for (const { name, bucket, next } of plan.upgrades) bucket[name] = next;
   fs.writeFileSync(plan.packagePath, formatJson(plan.targetPackage));
   try {
@@ -170,8 +174,8 @@ export const installPackageUpgrades = (
       }
     }
   } catch (error) {
-    fs.writeFileSync(plan.packagePath, originalPackage);
-    fs.writeFileSync(plan.lockPath, originalLock);
+    restorePackageFiles();
     throw error;
   }
+  return restorePackageFiles;
 };

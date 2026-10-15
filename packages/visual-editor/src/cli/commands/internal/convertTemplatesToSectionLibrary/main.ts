@@ -79,8 +79,21 @@ export const convertTemplatesToSectionLibrary = ({
       return;
     }
 
-    installPackageUpgrades(rootDirectory, packagePlan, installDependencies);
-    replaceLibrary(libraryDirectory, preparedBaseLibrary.directory, conversion);
+    const restorePackageFiles = installPackageUpgrades(
+      rootDirectory,
+      packagePlan,
+      installDependencies
+    );
+    try {
+      replaceLibrary(
+        libraryDirectory,
+        preparedBaseLibrary.directory,
+        conversion
+      );
+    } catch (error) {
+      restorePackageFiles();
+      throw error;
+    }
     if (streamConfig !== undefined)
       fs.writeFileSync(streamConfigPath, streamConfig);
     removeGeneratedFiles(generatedFiles, deleteSource, write);

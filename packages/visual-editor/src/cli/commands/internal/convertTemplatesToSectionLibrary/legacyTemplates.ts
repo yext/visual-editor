@@ -127,7 +127,11 @@ const readLegacyTemplate = (
       return [
         {
           id,
-          content: renameComponentIdentifiers(content),
+          content: renameComponentIdentifiers(
+            content,
+            sourcePath,
+            componentsDirectory
+          ),
           displayName: readComponentLabel(content, sourcePath),
         },
       ];
@@ -188,13 +192,20 @@ const normalizeLayoutComponentIds = (value: unknown): unknown => {
  *
  * The converter renames declarations and references for local variables,
  * functions, types, and components. It also removes the prefix from a
- * hardcoded `AnalyticsScopeProvider` `name` value. Other strings, comments,
- * and names imported from external packages remain unchanged.
+ * hardcoded `AnalyticsScopeProvider` `name` value and relative specifiers for
+ * renamed component files. Other strings, comments, and names imported from
+ * external packages remain unchanged.
  *
  * @param content The legacy component source.
+ * @param sourcePath The source file whose relative imports may be rewritten.
+ * @param componentsDirectory The directory containing legacy component files.
  * @returns The source with local Yext-prefixed identifiers normalized.
  */
-const renameComponentIdentifiers = (content: string): string => {
+const renameComponentIdentifiers = (
+  content: string,
+  sourcePath: string,
+  componentsDirectory: string
+): string => {
   const sourceFile = ts.createSourceFile(
     "component.tsx",
     content,
@@ -231,8 +242,38 @@ const renameComponentIdentifiers = (content: string): string => {
     end: number;
     nextName: string;
   }[] = [];
-  /** Collects source ranges for local identifiers and analytics names to rename. */
+  /** Collects source ranges for local identifiers, component paths, and analytics names to rename. */
   const visit = (node: ts.Node): void => {
+    if (
+      (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) &&
+      node.moduleSpecifier &&
+      ts.isStringLiteral(node.moduleSpecifier)
+    ) {
+      const specifier = node.moduleSpecifier.text;
+      const extension = path.extname(specifier);
+      const filename = path.basename(specifier, extension);
+      const nextName = removeYextPrefix(filename);
+      if (
+        specifier.startsWith(".") &&
+        (!extension || extension === ".tsx") &&
+        nextName !== filename &&
+        path.dirname(path.resolve(path.dirname(sourcePath), specifier)) ===
+          componentsDirectory &&
+        fs.existsSync(path.join(componentsDirectory, `${filename}.tsx`))
+      ) {
+        const start =
+          node.moduleSpecifier.getStart(sourceFile) +
+          1 +
+          specifier.length -
+          extension.length -
+          filename.length;
+        identifierRanges.push({
+          start,
+          end: start + filename.length,
+          nextName,
+        });
+      }
+    }
     if (ts.isJsxAttribute(node) && node.name.getText(sourceFile) === "name") {
       const openingElement = node.parent.parent;
       if (

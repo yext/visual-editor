@@ -444,6 +444,7 @@ describe("project setup conversion", () => {
     expect(fs.readJsonSync(fixture.packagePath).dependencies).toEqual({
       "@yext/visual-editor": "2.0.0-beta.4",
       "@puckeditor/core": "0.22.4",
+      "react-i18next": "^17.0.13",
     });
     expect(fs.readFileSync(fixture.lockPath, "utf8")).toBe(
       "refreshed lockfile\n"
@@ -633,6 +634,101 @@ describe("project setup conversion", () => {
       "2.0.0-beta.3"
     );
     expect(targetPackage.devDependencies["@puckeditor/core"]).toBe("0.22.3");
+    expect(fs.existsSync(fixture.templateDirectory)).toBe(true);
+  });
+
+  it("removes temporary base source when staging fails", () => {
+    const fixture = createConversionFixture();
+    fs.removeSync(fixture.libraryDirectory);
+    fs.outputFileSync(fixture.libraryDirectory, "not a library");
+
+    expect(fixture.convert).toThrow();
+    expect(
+      fs
+        .readdirSync(path.join(fixture.rootDirectory, "src"))
+        .filter((name) => name.startsWith(".section-library-base-"))
+    ).toEqual([]);
+  });
+
+  it("rewrites relative component file names in imports and exports", () => {
+    const fixture = createConversionFixture();
+    const componentsDirectory = path.join(
+      fixture.templateDirectory,
+      "components"
+    );
+    fs.outputFileSync(
+      path.join(componentsDirectory, "Hero.tsx"),
+      [
+        'import { Banner } from "./yext-Banner";',
+        'import { Other } from "./Other";',
+        'import { External } from "@example/yext-Banner";',
+        'export { Banner as ReexportedBanner } from "./yext-Banner.tsx";',
+        'export const Hero: YextComponentConfig = { label: "Hero", render: () => null };',
+      ].join("\n")
+    );
+    fs.outputFileSync(
+      path.join(componentsDirectory, "yext-Banner.tsx"),
+      'export const Banner: YextComponentConfig = { label: "Banner", render: () => null };'
+    );
+    fs.outputFileSync(
+      path.join(componentsDirectory, "Other.tsx"),
+      'export const Other: YextComponentConfig = { label: "Other", render: () => null };'
+    );
+
+    fixture.convert();
+
+    const source = fs.readFileSync(
+      path.join(fixture.libraryDirectory, "sections/Hero.tsx"),
+      "utf8"
+    );
+    expect(source).toContain('from "./Banner"');
+    expect(source).toContain('from "./Banner.tsx"');
+    expect(source).toContain('from "./Other"');
+    expect(source).toContain('from "@example/yext-Banner"');
+  });
+
+  it("validates Entity metadata during a dry run", () => {
+    const fixture = createConversionFixture();
+    const packagePath = path.join(fixture.rootDirectory, "package.json");
+    const originalPackage = fs.readFileSync(packagePath, "utf8");
+    fs.outputJsonSync(path.join(fixture.templateDirectory, "template.json"), {
+      displayName: "Example",
+      purposes: ["INVALID"],
+    });
+
+    expect(() =>
+      convertTemplatesToSectionLibrary({
+        apply: false,
+        deleteSource: false,
+        targetDirectory: fixture.rootDirectory,
+        write: () => undefined,
+      })
+    ).toThrow("purposes contains unsupported values");
+    expect(fs.readFileSync(packagePath, "utf8")).toBe(originalPackage);
+    expect(fs.existsSync(fixture.templateDirectory)).toBe(true);
+  });
+
+  it("restores package files when library replacement fails", () => {
+    const fixture = createConversionFixture();
+    const packagePath = path.join(fixture.rootDirectory, "package.json");
+    const lockPath = path.join(fixture.rootDirectory, "package-lock.json");
+    const originalPackage = fs.readFileSync(packagePath, "utf8");
+    const originalLock = fs.readFileSync(lockPath, "utf8");
+
+    expect(() =>
+      convertTemplatesToSectionLibrary({
+        apply: true,
+        deleteSource: false,
+        targetDirectory: fixture.rootDirectory,
+        write: () => undefined,
+        installDependencies: () => {
+          fs.writeFileSync(lockPath, "updated lockfile");
+          fs.removeSync(fixture.libraryDirectory);
+        },
+      })
+    ).toThrow();
+    expect(fs.readFileSync(packagePath, "utf8")).toBe(originalPackage);
+    expect(fs.readFileSync(lockPath, "utf8")).toBe(originalLock);
     expect(fs.existsSync(fixture.templateDirectory)).toBe(true);
   });
 });

@@ -24,7 +24,7 @@ const VERTICALS = new Set(verticals);
 const PURPOSES = new Set(purposes);
 const RESERVED_COMPONENT_IDS = new Set(["Directory", "Locator", "MainContent"]);
 
-/** Plans the converted library and validates section references and ID collisions. */
+/** Plans the converted library and validates metadata, section references, and ID collisions. */
 export const buildConversion = (
   templates: LegacyTemplate[],
   baseLibrary: BaseLibrary
@@ -72,7 +72,12 @@ export const buildConversion = (
       `Legacy template ${conflictingTemplate.directory} conflicts with generated layout ID ${JSON.stringify(conflictingTemplate.templateId)} from ${firstTemplate.directory}. Rename the conflicting template directory.`
     );
   }
+  const entityLayoutMetadata = new Map<string, EntityLayoutMetadata>();
   for (const template of templates) {
+    entityLayoutMetadata.set(
+      template.templateId,
+      buildEntityLayoutMetadata(template)
+    );
     validateLayoutReferences(
       template.defaultLayout.content,
       componentIds,
@@ -90,6 +95,7 @@ export const buildConversion = (
     components,
     directoryLayoutId,
     duplicates,
+    entityLayoutMetadata,
     libraryMetadata: buildLibraryMetadata(firstTemplate),
     locatorLayoutId,
     templates,
@@ -136,7 +142,7 @@ const buildLibraryMetadata = (template: LegacyTemplate): LibraryMetadata => {
 };
 
 /** Converts legacy template metadata into Entity layout metadata. */
-export const buildEntityLayoutMetadata = (
+const buildEntityLayoutMetadata = (
   template: LegacyTemplate
 ): EntityLayoutMetadata => {
   const metadataPath = path.join(template.directory, "template.json");
