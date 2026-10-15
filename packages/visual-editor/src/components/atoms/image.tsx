@@ -47,7 +47,7 @@ export const getImageAltText = (
 
   let altTextField: string | TranslatableString | undefined = undefined;
   if (isComplexImageType(image)) {
-    altTextField = image.image?.alternateText;
+    altTextField = image.image.alternateText;
   } else if (image?.alternateText) {
     altTextField = image.alternateText;
   }
@@ -78,18 +78,8 @@ export const Image: React.FC<ImageProps> = ({
     }
     return rawImage as ImageType | ComplexImageType | AssetImageType;
   }, [rawImage, i18n.language]);
-  const [failedImageUrl, setFailedImageUrl] = React.useState<string>();
 
   if (!image) {
-    return null;
-  }
-
-  const imageUrl = isComplexImageType(image) ? image.image?.url : image.url;
-  if (
-    typeof imageUrl !== "string" ||
-    !imageUrl ||
-    failedImageUrl === imageUrl
-  ) {
     return null;
   }
 
@@ -122,7 +112,7 @@ export const Image: React.FC<ImageProps> = ({
           layout={"aspect"}
           aspectRatio={aspectRatio}
           className="object-cover w-full h-full"
-          imgOverrides={{ sizes, onError: () => setFailedImageUrl(imageUrl) }}
+          imgOverrides={{ sizes }}
           imageTransformations={imageTransformations}
           loading={loading}
           style={imageStyle}
@@ -134,19 +124,18 @@ export const Image: React.FC<ImageProps> = ({
           width={width}
           height={calculatedHeight}
           className="object-cover"
-          imgOverrides={{ sizes, onError: () => setFailedImageUrl(imageUrl) }}
+          imgOverrides={{ sizes }}
           imageTransformations={imageTransformations}
           loading={loading}
           style={imageStyle}
         />
       ) : (
         <img
-          src={imageUrl}
+          src={isComplexImageType(image) ? image.image.url : image.url}
           alt={altText}
           className="object-cover w-full h-full"
           loading={loading}
           style={imageStyle}
-          onError={() => setFailedImageUrl(imageUrl)}
         />
       )}
     </div>
@@ -156,7 +145,7 @@ export const Image: React.FC<ImageProps> = ({
 function isComplexImageType(
   image: ImageType | ComplexImageType | AssetImageType
 ): image is ComplexImageType {
-  return typeof image === "object" && image !== null && "image" in image;
+  return "image" in image;
 }
 
 export type ImgSizesByBreakpoint = {

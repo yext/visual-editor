@@ -34,15 +34,11 @@ const CTA_FIELD_FILTER: RenderEntityFieldFilter<Record<string, any>> = {
   types: ["type.cta"],
 };
 
-/**
- * Renders CTA source controls. Its declaration is available when the field
- * registry initializes.
- */
-export function CTASelectorFieldOverride({
+export const CTASelectorFieldOverride = ({
   field,
   value,
   onChange,
-}: CTASelectorFieldProps) {
+}: CTASelectorFieldProps) => {
   const selectedType: CTASelectionType = value?.selectedType ?? "textAndLink";
   const showEntityFieldSelector = selectedType !== "getDirections";
   const translatedLabel = field.label
@@ -110,4 +106,4 @@ export function CTASelectorFieldOverride({
       )}
     </>
   );
-}
+};

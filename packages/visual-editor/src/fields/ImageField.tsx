@@ -67,15 +67,11 @@ export const buildLocatorDisplayOptions = (
     }));
 };
 
-/**
- * Renders image field controls. Its declaration is available when the field
- * registry initializes.
- */
-export function ImageFieldOverride({
+export const ImageFieldOverride = ({
   field,
   onChange,
   value,
-}: ImageFieldOverrideProps) {
+}: ImageFieldOverrideProps) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const templateMetadata: TemplateMetadata = useTemplateMetadata();
@@ -296,4 +292,4 @@ export function ImageFieldOverride({
       )}
     </>
   );
-}
+};

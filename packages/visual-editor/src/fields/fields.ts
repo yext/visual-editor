@@ -1,6 +1,5 @@
-import { createElement, type CSSProperties, type ReactElement } from "react";
+import { createElement, type ReactElement } from "react";
 import type { LinkType } from "@yext/pages-components";
-import type { ResolvedThemeColor } from "../utils/colors.ts";
 import type {
   ArrayField,
   CustomField,
@@ -12,7 +11,6 @@ import type {
   ObjectField,
 } from "@puckeditor/core";
 import type { BasicSelectorField } from "./BasicSelectorField.tsx";
-import type { ThemeColorField } from "./ThemeColorField.tsx";
 import type { CodeField } from "./CodeField.tsx";
 import type { DateTimeSelectorField } from "./DateTimeSelectorField.tsx";
 import type { EntityFieldSelectorField } from "./EntityFieldSelectorField.tsx";
@@ -33,8 +31,6 @@ import type {
   ComprehensiveCTAValue,
 } from "./styledFields/ComprehensiveCTAField.tsx";
 import type { EnhancedTranslatableCTA } from "../types/types.ts";
-import type { alwaysTransformedFieldTypes } from "./fieldTransforms/fieldToTransform.ts";
-import type { entityFieldFormatters } from "./fieldTransforms/entityFieldFormats.ts";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { adaptYextFieldMap } from "./yextFieldAdapter.ts";
 
@@ -87,13 +83,6 @@ type ResolvedRepeatedItem<Value> = Value extends {
           : Value;
 
 type TransformedFieldValues<Value, Definition> = {
-  themeColor: ResolvedThemeColor | undefined;
-  code: string;
-  styledText: CSSProperties;
-  styledButton: CSSProperties;
-  styledLink: CSSProperties;
-  styledImage: CSSProperties;
-  styledPageSection: CSSProperties;
   translatableString: string;
   image: LocalizedRenderValue<Value>;
   video: LocalizedRenderValue<Value>;
@@ -103,41 +92,31 @@ type TransformedFieldValues<Value, Definition> = {
     : never;
   optionalNumber: number | undefined;
   ctaSelector: LocalizedRenderValue<EnhancedTranslatableCTA> | undefined;
-  entityField: Definition extends { format: infer Format }
-    ? Format extends keyof typeof entityFieldFormatters
-      ? ReturnType<(typeof entityFieldFormatters)[Format]>
+  entityField: Definition extends { repeated: object }
+    ? Value extends { constantValue: infer Constant }
+      ? LocalizedRenderValue<ResolvedRepeatedItem<Constant>>
       : never
-    : Definition extends { repeated: object }
-      ? Value extends { constantValue: infer Constant }
-        ? LocalizedRenderValue<ResolvedRepeatedItem<Constant>>
-        : never
-      : Value extends { constantValue: infer Constant }
-        ? LocalizedRenderValue<Constant> | undefined
-        : never;
+    : Value extends { constantValue: infer Constant }
+      ? LocalizedRenderValue<Constant> | undefined
+      : never;
 };
 
-/** Derives render prop types for nested object fields and array items; leaves other values unchanged. */
-type NestedFieldValue<Value, Definition> = Definition extends {
-  type: "object";
-  objectFields: object;
+type TransformedFieldValue<Value, Definition> = Definition extends {
+  transform: true;
+  type: infer FieldType;
 }
-  ? YextTransformedProps<Value, Definition["objectFields"]>
-  : Definition extends { type: "array"; arrayFields: object }
-    ? Value extends unknown[]
-      ? YextTransformedProps<Value[number], Definition["arrayFields"]>[]
-      : Value
-    : Value;
-
-type TransformedFieldValue<Value, Definition> = Definition extends
-  { transform: true } | { type: (typeof alwaysTransformedFieldTypes)[number] }
-  ? Definition extends { type: infer FieldType }
-    ? FieldType extends keyof TransformedFieldValues<Value, Definition>
-      ? TransformedFieldValues<Value, Definition>[FieldType]
-      : Value
+  ? FieldType extends keyof TransformedFieldValues<Value, Definition>
+    ? TransformedFieldValues<Value, Definition>[FieldType]
     : Value
-  : NestedFieldValue<Value, Definition>;
+  : Definition extends { type: "object"; objectFields: infer Nested }
+    ? YextTransformedProps<Value, Nested>
+    : Definition extends { type: "array"; arrayFields: infer Nested }
+      ? Value extends (infer Item)[]
+        ? YextTransformedProps<Item, Nested>[]
+        : Value
+      : Value;
 
-/** Derives render values from authored props and supported field definitions. */
+/** Derives render values from authored props and explicitly opted-in field definitions. */
 export type YextTransformedProps<Props, Definitions> = {
   [Key in keyof Props]: Key extends keyof Definitions
     ? TransformedFieldValue<Props[Key], Definitions[Key]>
@@ -146,7 +125,6 @@ export type YextTransformedProps<Props, Definitions> = {
 
 export type YextPuckFields = {
   basicSelector: BasicSelectorField;
-  themeColor: ThemeColorField;
   ctaSelector: CTASelectorField;
   code: CodeField;
   comprehensiveCTA: ComprehensiveCTAField;
