@@ -3,739 +3,714 @@ import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { createPuckGenerationCatalog } from "./puckGenerationCatalog.ts";
 import { compileGenerationSchema } from "./generationSchema.ts";
-import { validateGeneratedContent } from "./generationValidation.ts";
+import {
+  extractAuthored,
+  indexAuthored,
+  type Content,
+} from "../../internal/generation/authored.ts";
 
-const component = (type: string, props: Record<string, unknown> = {}) => ({
-  type,
-  props: { id: type.toLowerCase(), ...props },
-});
-const output = (content: unknown[]) =>
-  JSON.stringify({ text: "Created", spec: { content } });
-const localized = z.union([
-  z.string(),
-  z
-    .object({
-      defaultValue: z.string().optional(),
-      hasLocalizedValue: z.literal("true").optional(),
-    })
-    .catchall(z.string().optional()),
-]);
-const richText = z.object({ html: z.string(), json: z.string() });
-const richTextValue = z.union([z.string(), richText]);
-const localizedRichText = z
-  .object({
-    defaultValue: richTextValue.optional(),
-    hasLocalizedValue: z.literal("true").optional(),
-  })
-  .catchall(richTextValue.optional());
-const translatableRichText = z.union([z.string(), richText, localizedRichText]);
-const optionalRichText = z.strictObject({
-  html: z.string().optional(),
-  json: z.string().optional(),
-});
-const optionalRichTextValue = z.union([z.string(), optionalRichText]);
-const translatableOptionalRichText = z.union([
-  z.string(),
-  optionalRichText,
-  z
-    .object({
-      hasLocalizedValue: z.literal("true").optional(),
-      defaultValue: optionalRichTextValue.optional(),
-    })
-    .catchall(optionalRichTextValue.optional()),
-]);
-
-describe("strict Puck generation schemas", () => {
-  it("preserves descriptions on reused schemas without reference siblings", () => {
-    const variant = z.enum(["blue", "green"]);
-    const catalog = createPuckGenerationCatalog({
-      First: { props: z.object({ variant }) },
-      Second: {
+const keep = { mode: "keep" };
+const unset = { mode: "unset" };
+const set = (value: any) => ({ mode: "set", value });
+const catalog = () =>
+  createPuckGenerationCatalog({
+    Heading: {
+      generation: {
         props: z.object({
-          variant: variant.describe("The visual variant of the hero"),
+          text: z.string().min(1),
+          optional: z.string().nullable().optional(),
+          style: z.object({
+            color: z.enum(["red", "blue"]),
+            width: z.number().min(1),
+          }),
+          links: z
+            .array(z.object({ label: z.string(), url: z.string() }))
+            .max(3),
         }),
       },
+      defaultProps: {
+        text: "Default",
+        style: { color: "red", width: 10 },
+        links: [],
+        hidden: { preserve: true },
+      },
+      fields: { text: { type: "text" } },
+      nestedOnly: true,
+    },
+    Section: {
+      generation: {
+        props: z.object({
+          title: z.string(),
+          slots: z.object({ heading: z.array(z.unknown()).length(1) }),
+        }),
+      },
+      fields: {
+        slots: {
+          type: "object",
+          objectFields: { heading: { type: "slot", allow: ["Heading"] } },
+        },
+        copied: { type: "slot" },
+      },
+      defaultProps: {
+        title: "Default section",
+        slots: {
+          heading: [
+            {
+              type: "Heading",
+              props: {
+                id: "template",
+                text: "Contextual",
+                style: { color: "blue", width: 25 },
+                links: [],
+              },
+            },
+          ],
+        },
+      },
+    },
+  });
+const baseline = (): Content => ({
+  content: [
+    {
+      type: "Section",
+      props: {
+        id: "section",
+        title: "Original",
+        extra: { keep: true },
+        slots: {
+          heading: [
+            {
+              type: "Heading",
+              props: {
+                id: "heading",
+                text: "Authored",
+                optional: null,
+                style: { color: "red", width: 15, inherited: 99 },
+                links: [],
+                hidden: true,
+              },
+              readOnly: { text: true },
+            },
+          ],
+        },
+        copied: [{ type: "Heading", props: { id: "heading", text: "Copy" } }],
+      },
+      readOnly: { title: true },
+    },
+  ],
+});
+const headingProps = (text = keep) => ({
+  text,
+  optional: keep,
+  style: keep,
+  links: keep,
+});
+const edit = (operations: any[]) => ({
+  text: "Updated",
+  result: { action: "edit", operations },
+});
+const create = (content: any[]) => ({
+  text: "Created",
+  result: { action: "create", content },
+});
+const heading = (id: string | null = null, props = headingProps()) => ({
+  type: "Heading",
+  id,
+  props,
+});
+
+describe("strict authored overrides", () => {
+  it("shares override modes and Id enums for a large catalog and starting inventory", () => {
+    const components = Object.fromEntries(
+      Array.from({ length: 20 }, (_, componentIndex) => [
+        `Section${componentIndex}`,
+        {
+          generation: {
+            props: z.object(
+              Object.fromEntries(
+                Array.from({ length: 75 }, (_, index) => [
+                  `property${index}`,
+                  z.string(),
+                ])
+              )
+            ),
+          },
+        },
+      ])
+    );
+    const content = Array.from({ length: 100 }, (_, index) => ({
+      type: `Section${index % 20}`,
+      props: {
+        id: `existing-component-${index}`,
+        ...Object.fromEntries(
+          Array.from({ length: 75 }, (_, prop) => [
+            `property${prop}`,
+            "Authored",
+          ])
+        ),
+      },
+    }));
+    const compiled = compileGenerationSchema(
+      createPuckGenerationCatalog(components),
+      ["en"],
+      { content }
+    );
+    expect(JSON.stringify(compiled.jsonSchema)).toContain("$ref");
+    expect(compiled.inventory.targets).toHaveLength(100);
+    const overrides = Object.fromEntries(
+      Array.from({ length: 75 }, (_, index) => [
+        `property${index}`,
+        index === 0 ? set("Updated") : keep,
+      ])
+    );
+    const result = compiled.materialize(
+      edit([{ action: "update", id: "existing-component-0", props: overrides }])
+    ).spec!;
+    expect(result.content[0].props.property0).toBe("Updated");
+    expect(result.content[0].props.property1).toBe("Authored");
+    expect(() =>
+      compiled.materialize(
+        edit([{ action: "update", id: "unknown", props: overrides }])
+      )
+    ).toThrow();
+  });
+  it("treats an empty MainContent scaffold as blank but counts its authored descendants", () => {
+    const c = createPuckGenerationCatalog({
+      Heading: { generation: { props: z.object({ text: z.string() }) } },
     });
-    const compiled = compileGenerationSchema(catalog, []);
-    const nodes: Record<string, any>[] = [];
-    const visit = (value: unknown) => {
-      if (!value || typeof value !== "object") return;
-      if (!Array.isArray(value)) nodes.push(value);
-      Object.values(value).forEach(visit);
+    const scaffold = {
+      content: [{ type: "MainContent", props: { id: "main", content: [] } }],
+    };
+    const compiled = compileGenerationSchema(c, ["en"], scaffold);
+    expect(compiled.isBlankPage).toBe(true);
+    const created = compiled.materialize(
+      create([
+        {
+          type: "MainContent",
+          id: "main",
+          props: {
+            content: set([
+              { type: "Heading", id: null, props: { text: set("New page") } },
+            ]),
+          },
+        },
+      ])
+    ).spec!;
+    expect(created.content[0].props.id).toBe("main");
+    expect(compileGenerationSchema(c, ["en"], created).isBlankPage).toBe(false);
+  });
+  it("keeps every wire property required and closes every object", () => {
+    const compiled = compileGenerationSchema(catalog(), ["en"], baseline());
+    const visit = (node: any) => {
+      if (node.type === "object") {
+        expect(node.additionalProperties).toBe(false);
+        expect(node.required?.sort()).toEqual(
+          Object.keys(node.properties).sort()
+        );
+      }
+      for (const child of Object.values(node.properties ?? {})) visit(child);
+      for (const child of Object.values(node.$defs ?? {})) visit(child);
+      for (const child of node.anyOf ?? []) visit(child);
+      if (node.items) visit(node.items);
     };
     visit(compiled.jsonSchema);
-    expect(nodes.some((node) => node.$ref)).toBe(true);
-    expect(
-      nodes.find(
-        (node) => node.description === "The visual variant of the hero"
-      )
-    ).toMatchObject({ anyOf: [{ $ref: expect.any(String) }] });
-    for (const node of nodes.filter((node) => node.$ref))
-      expect(Object.keys(node)).toEqual(["$ref"]);
     expect(() =>
-      compiled.parseResponse(output([component("Second", { variant: "red" })]))
+      compiled.materialize(
+        edit([{ action: "update", id: "heading", props: { text: set("New") } }])
+      )
     ).toThrow();
+  });
+  it("merges nested objects and preserves metadata, copied slots, and unexposed configuration", () => {
+    const start = baseline();
+    const compiled = compileGenerationSchema(catalog(), ["en"], start);
+    const result = compiled.materialize(
+      edit([
+        {
+          action: "update",
+          id: "heading",
+          props: {
+            ...headingProps(set("New")),
+            style: set({ color: set("blue"), width: keep }),
+          },
+        },
+      ])
+    ).spec!;
+    const child = result.content[0].props.slots.heading[0];
+    expect(child.props).toMatchObject({
+      id: "heading",
+      text: "New",
+      style: { color: "blue", width: 15, inherited: 99 },
+      optional: null,
+      hidden: true,
+    });
+    expect(child.readOnly).toEqual({ text: true });
+    expect(result.content[0].props.copied).toEqual(
+      start.content[0].props.copied
+    );
+    expect(start).toEqual(baseline());
+    expect(compiled.inventory.targets).toEqual(["section", "heading"]);
+    expect(JSON.stringify(compiled.context)).not.toContain("copied");
+    expect(JSON.stringify(compiled.context)).not.toContain("inherited");
+  });
+  it("distinguishes absence from explicit null and replaces arrays completely", () => {
+    const compiled = compileGenerationSchema(catalog(), ["en"], baseline());
+    const result = compiled.materialize(
+      edit([
+        {
+          action: "update",
+          id: "heading",
+          props: {
+            ...headingProps(),
+            optional: unset,
+            links: set([{ label: "Home", url: "/" }]),
+          },
+        },
+      ])
+    ).spec!;
     expect(
-      compiled.parseResponse(output([component("Second", { variant: "blue" })]))
-        .spec?.content
-    ).toEqual([component("Second", { variant: "blue" })]);
-  });
-
-  it("retains string bounds in reused entity-reference schemas", () => {
-    const reference = z.strictObject({
-      field: z.string().min(1).max(40),
-      constantValue: z.strictObject({}),
-      constantValueEnabled: z.literal(false),
-    });
-    const catalog = createPuckGenerationCatalog({
-      Address: { props: z.object({ reference }) },
-      Hours: { props: z.object({ reference }) },
-    });
-    const compiled = compileGenerationSchema(catalog, []);
-    const json = JSON.stringify(compiled.jsonSchema);
-    expect(json).toContain('"minLength":1');
-    expect(json).toContain('"maxLength":40');
-    expect(json).toContain('"$ref"');
-    const item = component("Address", {
-      reference: {
-        field: "address",
-        constantValue: {},
-        constantValueEnabled: false,
-      },
-    });
-    expect(compiled.parseResponse(output([item])).spec?.content).toEqual([
-      item,
+      Object.hasOwn(result.content[0].props.slots.heading[0].props, "optional")
+    ).toBe(false);
+    expect(
+      compiled.materialize(
+        edit([
+          {
+            action: "update",
+            id: "heading",
+            props: { ...headingProps(), optional: set(null) },
+          },
+        ])
+      ).spec!.content[0].props.slots.heading[0].props.optional
+    ).toBe(null);
+    expect(result.content[0].props.slots.heading[0].props.links).toEqual([
+      { label: "Home", url: "/" },
     ]);
-    for (const field of ["", "x".repeat(41)]) {
-      expect(() =>
-        compiled.parseResponse(
-          output([
-            component("Address", {
-              reference: {
-                field,
-                constantValue: {},
-                constantValueEnabled: false,
-              },
-            }),
-          ])
-        )
-      ).toThrow();
-    }
+    expect(() =>
+      compiled.materialize(
+        edit([
+          {
+            action: "update",
+            id: "heading",
+            props: { ...headingProps(), text: unset },
+          },
+        ])
+      )
+    ).toThrow();
   });
-
-  it("supports recursive component slots through local references", () => {
-    const catalog = createPuckGenerationCatalog({
-      Tree: {
-        props: z.object({ branches: z.array(z.unknown()) }),
-        fields: {
-          branches: { type: "slot", allow: ["Tree"] },
+  it("uses defaults and contextual fixed-slot templates with fresh subtree identities", () => {
+    const compiled = compileGenerationSchema(catalog(), ["en"]);
+    const response = create([
+      {
+        type: "Section",
+        id: null,
+        props: { title: keep, slots: set({ heading: set([heading()]) }) },
+      },
+    ]);
+    const result = compiled.materialize(response).spec!;
+    const child = result.content[0].props.slots.heading[0];
+    expect(child.props.text).toBe("Contextual");
+    expect(child.props.style.width).toBe(25);
+    expect(child.props.id).not.toBe("template");
+    expect(result.content[0].props.id).not.toBe(child.props.id);
+    expect(indexAuthored(catalog(), result).items.size).toBe(2);
+  });
+  it("preserves unexposed values in strict objects and object-valued unions", () => {
+    const c = createPuckGenerationCatalog({
+      Box: {
+        generation: {
+          props: z.strictObject({
+            choice: z.union([
+              z.strictObject({ kind: z.literal("a"), text: z.string() }),
+              z.strictObject({ kind: z.literal("b"), count: z.number() }),
+            ]),
+          }),
         },
       },
     });
-    const compiled = compileGenerationSchema(catalog, []);
-    expect(JSON.stringify(compiled.jsonSchema)).toContain('"$ref"');
-    const tree = component("Tree", {
-      branches: [component("Tree", { id: "child", branches: [] })],
+    const start = {
+      content: [
+        {
+          type: "Box",
+          props: {
+            id: "box",
+            choice: { kind: "a", text: "Old", inherited: "Keep" },
+            hidden: true,
+          },
+        },
+      ],
+    };
+    const compiled = compileGenerationSchema(c, ["en"], start);
+    expect(compiled.context.content[0].props.choice).toEqual({
+      kind: "a",
+      text: "Old",
     });
-    expect(compiled.parseResponse(output([tree])).spec?.content).toEqual([
-      tree,
-    ]);
+    const result = compiled.materialize(
+      edit([
+        {
+          action: "update",
+          id: "box",
+          props: { choice: set({ kind: keep, text: set("New") }) },
+        },
+      ])
+    ).spec!;
+    expect(result.content[0].props.choice).toEqual({
+      kind: "a",
+      text: "New",
+      inherited: "Keep",
+    });
+    expect(result.content[0].props.hidden).toBe(true);
   });
-
-  it("allows a deep native Puck layout when its schema uses bounded definitions", () => {
-    const headingProps = z.object({
-      data: z.object({
-        text: z.object({
-          field: z.string(),
-          constantValue: localized,
-          constantValueEnabled: z.boolean(),
-        }),
-      }),
-      id: z.string().optional(),
+  it("projects incomplete object-union defaults before applying explicit overrides", () => {
+    const c = createPuckGenerationCatalog({
+      Box: {
+        generation: {
+          props: z.object({
+            choice: z.union([
+              z.object({ kind: z.literal("a"), text: z.string() }),
+              z.object({ kind: z.literal("b"), count: z.number() }),
+            ]),
+          }),
+        },
+        defaultProps: { choice: { kind: "b", internal: "Preserve" } },
+      },
     });
-    const catalog = createPuckGenerationCatalog({
-      CoreInfoSection: {
-        props: z.object({
-          slots: z.object({
-            CoreInfoHeadingSlot: z.array(
+    expect(
+      extractAuthored(
+        c,
+        {
+          content: [
+            { type: "Box", props: c.data.components.Box.defaultProps! },
+          ],
+        },
+        { includeIds: false }
+      ).content[0].props.choice
+    ).toEqual({ kind: "b" });
+    const result = compileGenerationSchema(c, ["en"]).materialize(
+      create([
+        {
+          type: "Box",
+          id: null,
+          props: { choice: set({ kind: keep, count: set(3) }) },
+        },
+      ])
+    ).spec!;
+    expect(result.content[0].props.choice).toEqual({
+      kind: "b",
+      count: 3,
+      internal: "Preserve",
+    });
+  });
+  it("handles complete arrays with optional values and nested authored slots", () => {
+    const c = createPuckGenerationCatalog({
+      Child: {
+        generation: { props: z.object({ text: z.string() }) },
+        defaultProps: { text: "Child" },
+        nestedOnly: true,
+      },
+      List: {
+        generation: {
+          props: z.object({
+            rows: z.array(
               z.object({
-                type: z.literal("HeadingTextSlot"),
-                props: headingProps,
+                label: z.string().optional(),
+                children: z.array(z.unknown()),
               })
             ),
           }),
-        }),
+        },
         fields: {
-          slots: {
-            type: "object",
-            objectFields: {
-              CoreInfoHeadingSlot: { type: "slot", allow: ["HeadingTextSlot"] },
+          rows: {
+            type: "array",
+            arrayFields: { children: { type: "slot", allow: ["Child"] } },
+          },
+        },
+        defaultProps: { rows: [] },
+      },
+    });
+    const compiled = compileGenerationSchema(c, ["en"]);
+    const result = compiled.materialize(
+      create([
+        {
+          type: "List",
+          id: null,
+          props: {
+            rows: set([
+              {
+                label: unset,
+                children: set([
+                  { type: "Child", id: null, props: { text: keep } },
+                ]),
+              },
+            ]),
+          },
+        },
+      ])
+    ).spec!;
+    expect(result.content[0].props.rows[0].children[0].props.text).toBe(
+      "Child"
+    );
+    expect(Object.hasOwn(result.content[0].props.rows[0], "label")).toBe(false);
+    expect(indexAuthored(c, result).items.size).toBe(2);
+  });
+  it("reuses existing subtree identities during an explicitly authorized redesign", () => {
+    const compiled = compileGenerationSchema(catalog(), ["en"], baseline(), {
+      allowRedesign: true,
+    });
+    const result = compiled.materialize({
+      text: "Redesigned",
+      result: {
+        action: "redesign",
+        content: [
+          {
+            type: "Section",
+            id: "section",
+            props: { title: set("Redesign"), slots: keep },
+          },
+        ],
+      },
+    }).spec!;
+    expect(result.content[0].props.id).toBe("section");
+    expect(result.content[0].props.slots.heading[0].props.id).toBe("heading");
+  });
+  it("uses the enclosing default template for new slot children during an edit", () => {
+    const compiled = compileGenerationSchema(catalog(), ["en"], baseline());
+    const result = compiled.materialize(
+      edit([
+        {
+          action: "update",
+          id: "section",
+          props: { title: keep, slots: set({ heading: set([heading()]) }) },
+        },
+      ])
+    ).spec!;
+    expect(result.content[0].props.slots.heading[0].props.text).toBe(
+      "Contextual"
+    );
+    expect(result.content[0].props.slots.heading[0].props.id).not.toBe(
+      "heading"
+    );
+  });
+  it("reports missing values and never fills invalid explicit values from defaults", () => {
+    const c = createPuckGenerationCatalog({
+      Required: {
+        generation: { props: z.object({ title: z.string().min(1) }) },
+      },
+    });
+    const compiled = compileGenerationSchema(c, ["en"]);
+    expect(() =>
+      compiled.materialize(
+        create([{ type: "Required", id: null, props: { title: keep } }])
+      )
+    ).toThrow(/title/);
+    expect(() =>
+      compileGenerationSchema(catalog(), ["en"]).materialize(
+        create([
+          { type: "Section", id: null, props: { title: set(42), slots: keep } },
+        ])
+      )
+    ).toThrow();
+  });
+  it("rejects duplicate, unknown, and incorrectly reused references and slot types", () => {
+    const compiled = compileGenerationSchema(catalog(), ["en"], baseline());
+    expect(() =>
+      compiled.materialize(
+        edit([
+          {
+            action: "update",
+            id: "section",
+            props: {
+              title: keep,
+              slots: set({ heading: set([heading("unknown")]) }),
             },
           },
-        },
-      },
-      HeadingTextSlot: { nestedOnly: true },
-    });
-    const heading = component("HeadingTextSlot", {
-      data: {
-        text: {
-          field: "name",
-          constantValue: {
-            defaultValue: "Information",
-            hasLocalizedValue: null,
-            en: null,
-            fr: "Informations",
-          },
-          constantValueEnabled: true,
-        },
-      },
-    });
-    const main = component("MainContent", {
-      content: [
-        component("CoreInfoSection", {
-          slots: { CoreInfoHeadingSlot: [heading] },
-        }),
-      ],
-    });
-    const compiled = compileGenerationSchema(catalog, ["en", "fr"]);
-    expect(JSON.stringify(compiled.jsonSchema)).toContain('"$defs"');
-    const native = compiled.parseResponse(output([main])).spec!;
-    expect(
-      native.content[0].props.content[0].props.slots.CoreInfoHeadingSlot[0]
-        .props.data.text.constantValue
-    ).toEqual({
-      defaultValue: "Information",
-      fr: "Informations",
-    });
-    expect(validateGeneratedContent(catalog, native)).toEqual([]);
-    Object.assign(heading.props, {
-      data: {
-        text: { field: "name", constantValue: 42, constantValueEnabled: true },
-      },
-    });
-    expect(() => compiled.parseResponse(output([main]))).toThrow();
-  });
-
-  it("rejects excessive nesting and unsupported formats before generation", () => {
-    let deep: z.ZodType = z.string();
-    for (let i = 0; i < 11; i++) deep = z.object({ child: deep });
-    expect(() =>
-      compileGenerationSchema(
-        createPuckGenerationCatalog({
-          Section: { props: z.object({ deep }) },
-        }),
-        []
+        ])
       )
-    ).toThrow(/nesting exceeds/);
+    ).toThrow();
     expect(() =>
-      compileGenerationSchema(
-        createPuckGenerationCatalog({
-          Section: { props: z.object({ url: z.url() }) },
-        }),
-        []
-      )
-    ).toThrow(/unsupported format uri/);
-  });
-
-  it("couples component types with props, exports checks, and closes every object", () => {
-    const catalog = createPuckGenerationCatalog({
-      Banner: {
-        props: z.object({
-          text: z
-            .string()
-            .regex(/^Hello/)
-            .describe("A greeting"),
-        }),
-      },
-      Heading: {
-        props: z.object({
-          level: z.enum(["h1", "h2"]),
-          numbers: z.array(z.number()).min(1).max(2),
-        }),
-      },
-    });
-    const compiled = compileGenerationSchema(catalog, []);
-    const json = JSON.stringify(compiled.jsonSchema);
-    expect(json).toContain('"pattern":"^Hello"');
-    expect(json).toContain('"description":"A greeting"');
-    expect(json).toContain('"enum":["h1","h2"]');
-    expect(json).toContain('"minItems":1');
-    expect(json).toContain('"maxItems":2');
-    expect(
-      compiled.parseResponse(output([component("Banner", { text: "Hello" })]))
-        .spec
-    ).toBeDefined();
-    for (const item of [
-      component("Banner", { level: "h1" }),
-      component("Banner", { text: "Wrong" }),
-      component("Banner", { text: "Hello", extra: true }),
-      component("Heading", { level: "h3", numbers: [1] }),
-      component("Heading", { level: "h1", numbers: [] }),
-      component("Banner", { id: " ", text: "Hello" }),
-      component("Unknown"),
-    ])
-      expect(() => compiled.parseResponse(output([item]))).toThrow();
-  });
-
-  it("specializes localized objects while preserving strings, nullability, and omission", () => {
-    const catalog = createPuckGenerationCatalog({
-      Heading: {
-        props: z.object({
-          text: localized,
-          optional: z.string().optional(),
-          nullable: z.string().nullable(),
-          both: z.string().nullable().optional(),
-        }),
-      },
-    });
-    const compiled = compileGenerationSchema(catalog, ["fr", "en", "fr"]);
-    const item = component("Heading", {
-      text: {
-        defaultValue: "Welcome",
-        hasLocalizedValue: null,
-        en: null,
-        fr: "Bienvenue",
-      },
-      optional: null,
-      nullable: null,
-      both: null,
-    });
-    expect(
-      compiled.parseResponse(output([item])).spec?.content[0].props
-    ).toEqual({
-      id: "heading",
-      text: { defaultValue: "Welcome", fr: "Bienvenue" },
-      nullable: null,
-      both: null,
-    });
-    expect(
-      compiled.parseResponse(
-        output([{ ...item, props: { ...item.props, text: "Welcome" } }])
-      ).spec
-    ).toBeDefined();
-    expect(() =>
-      compiled.parseResponse(
-        output([
+      compiled.materialize(
+        edit([
           {
-            ...item,
+            action: "update",
+            id: "section",
             props: {
-              ...item.props,
-              text: {
-                defaultValue: "Welcome",
-                hasLocalizedValue: null,
-                en: null,
-                fr: null,
-                es: "Hola",
+              title: keep,
+              slots: set({ heading: set([heading("section")]) }),
+            },
+          },
+        ])
+      )
+    ).toThrow(/reused/);
+    expect(() =>
+      compiled.materialize(
+        edit([
+          {
+            action: "update",
+            id: "section",
+            props: {
+              title: keep,
+              slots: set({
+                heading: set([heading("heading"), heading("heading")]),
+              }),
+            },
+          },
+        ])
+      )
+    ).toThrow();
+    const duplicate = baseline();
+    duplicate.content.push(duplicate.content[0]);
+    expect(() => compileGenerationSchema(catalog(), ["en"], duplicate)).toThrow(
+      /duplicate/
+    );
+  });
+  it("applies multiple bounded operations atomically and rejects conflicts, cycles and invalid destinations", () => {
+    const start = baseline();
+    start.content.push({
+      ...baseline().content[0],
+      props: {
+        ...baseline().content[0].props,
+        id: "other",
+        slots: {
+          heading: [
+            {
+              type: "Heading",
+              props: {
+                id: "other-heading",
+                text: "Other",
+                optional: null,
+                hidden: true,
+                style: { color: "red", width: 10, inherited: 99 },
+                links: [],
               },
             },
+          ],
+        },
+      },
+    });
+    const compiled = compileGenerationSchema(catalog(), ["en"], start);
+    const result = compiled.materialize(
+      edit([
+        { action: "update", id: "heading", props: headingProps(set("Edited")) },
+        { action: "move", id: "other", destination: "content", index: 0 },
+      ])
+    ).spec!;
+    expect(result.content.map((item) => item.props.id)).toEqual([
+      "other",
+      "section",
+    ]);
+    expect(result.content[1].props.slots.heading[0].props.text).toBe("Edited");
+    expect(() =>
+      compiled.materialize(
+        edit([
+          { action: "remove", id: "section" },
+          { action: "update", id: "heading", props: headingProps() },
+        ])
+      )
+    ).toThrow(/ancestor/);
+    expect(() =>
+      compiled.materialize(
+        edit([
+          {
+            action: "move",
+            id: "section",
+            destination: "content/0/props/slots/heading",
+            index: 0,
+          },
+        ])
+      )
+    ).toThrow(/cycle/);
+    expect(() =>
+      compiled.materialize(
+        edit([
+          {
+            action: "insert",
+            destination: "future",
+            index: 0,
+            component: heading(),
           },
         ])
       )
     ).toThrow();
-    expect(() => compileGenerationSchema(catalog, [])).toThrow(
-      /localized values require/
-    );
     expect(() =>
-      compileGenerationSchema(catalog, ["en"], {
-        content: [
-          component("Heading", {
-            text: { defaultValue: "Welcome", fr: "Bienvenue" },
-            nullable: null,
-          }),
-        ],
-      })
-    ).toThrow(/currentData/);
-  });
-
-  it.each([
-    "Welcome",
-    { html: "<p>Welcome</p>", json: '{"text":"Welcome"}' },
-    {
-      defaultValue: { html: "<p>Welcome</p>", json: '{"text":"Welcome"}' },
-      hasLocalizedValue: "true",
-      en: "Welcome",
-      fr: { html: "<p>Bienvenue</p>", json: '{"text":"Bienvenue"}' },
-    },
-    { defaultValue: "Welcome", fr: "Bienvenue" },
-    { fr: { html: "<p>Bienvenue</p>", json: '{"text":"Bienvenue"}' } },
-    {},
-  ])("round-trips rich text and omitted optional values %#", (text) => {
-    const catalog = createPuckGenerationCatalog({
-      Heading: {
-        props: z.object({
-          text: translatableRichText,
-          optional: translatableRichText.optional(),
-        }),
-      },
-    });
-    const saved = component("Heading", { text });
-    // Compiling currentData exercises encoding omitted props and locale values.
-    const compiled = compileGenerationSchema(catalog, ["en", "fr"], {
-      content: [saved],
-    });
-    const wireText =
-      typeof text === "object" && !("html" in text)
-        ? {
-            defaultValue: null,
-            hasLocalizedValue: null,
-            en: null,
-            fr: null,
-            ...text,
-          }
-        : text;
-    const wire = component("Heading", { text: wireText, optional: null });
-    const decoded = compiled.parseResponse(output([wire])).spec!;
-    expect(decoded.content).toEqual([saved]);
-    expect(compiled.normalizeContent({ content: [wire] })).toEqual(decoded);
-    expect(validateGeneratedContent(catalog, decoded)).toEqual([]);
-  });
-
-  it.each([
-    {
-      saved: { html: "<p>Welcome</p>", json: "{}" },
-      wire: { html: "<p>Welcome</p>", json: "{}" },
-    },
-    {
-      saved: { html: "<p>Welcome</p>" },
-      wire: { html: "<p>Welcome</p>", json: null },
-    },
-    {
-      saved: { json: "{}" },
-      wire: { html: null, json: "{}" },
-    },
-    { saved: {}, wire: { html: null, json: null } },
-  ])("round-trips optional rich text properties %#", ({ saved, wire }) => {
-    const catalog = createPuckGenerationCatalog({
-      Heading: {
-        props: z.object({
-          text: translatableOptionalRichText,
-          optional: translatableOptionalRichText.optional(),
-        }),
-      },
-    });
-    const content = [
-      component("Heading", { text: saved }),
-      component("Heading", {
-        id: "localized",
-        text: { defaultValue: saved, fr: saved },
-      }),
-    ];
-    // Current-data compilation validates encoding with omitted html/json keys.
-    const compiled = compileGenerationSchema(catalog, ["en", "fr"], {
-      content,
-    });
-    const wireContent = [
-      component("Heading", { text: wire, optional: null }),
-      component("Heading", {
-        id: "localized",
-        text: {
-          defaultValue: wire,
-          hasLocalizedValue: null,
-          en: null,
-          fr: wire,
-        },
-        optional: null,
-      }),
-    ];
-    const decoded = compiled.parseResponse(output(wireContent)).spec!;
-    expect(decoded.content).toEqual(content);
-    expect(compiled.normalizeContent({ content: wireContent })).toEqual(
-      decoded
-    );
-    expect(validateGeneratedContent(catalog, decoded)).toEqual([]);
-  });
-
-  it("expands only selected locales and closes localized rich text objects", () => {
-    const catalog = createPuckGenerationCatalog({
-      Heading: { props: z.object({ text: translatableOptionalRichText }) },
-    });
-    const compiled = compileGenerationSchema(catalog, ["fr", "en", "fr"]);
-    const objects: Record<string, any>[] = [];
-    const visit = (node: any) => {
-      if (!node || typeof node !== "object") return;
-      if (node.type === "object") objects.push(node);
-      Object.values(node).forEach(visit);
-    };
-    visit(compiled.jsonSchema);
-    const localizedObject = objects.find(
-      (node) => node.properties.defaultValue
-    )!;
-    expect(Object.keys(localizedObject.properties).sort()).toEqual([
-      "defaultValue",
-      "en",
-      "fr",
-      "hasLocalizedValue",
-    ]);
-    expect(localizedObject.required.sort()).toEqual(
-      Object.keys(localizedObject.properties).sort()
-    );
-    expect(
-      objects.some((node) => node.properties.html && node.properties.json)
-    ).toBe(true);
-    for (const node of objects) expect(node.additionalProperties).toBe(false);
-    const text = {
-      defaultValue: null,
-      hasLocalizedValue: null,
-      en: null,
-      fr: null,
-      es: { html: "<p>Hola</p>", json: "{}" },
-    };
-    expect(() =>
-      compiled.parseResponse(output([component("Heading", { text })]))
-    ).toThrow();
-    expect(() =>
-      compileGenerationSchema(catalog, ["en", "fr"], {
-        content: [component("Heading", { text: { es: text.es } })],
-      })
-    ).toThrow(/currentData/);
-    expect(() => compileGenerationSchema(catalog, [])).toThrow(
-      /localized values require/
-    );
-  });
-
-  it("accepts localized rich text without a localization flag", () => {
-    const catalog = createPuckGenerationCatalog({
-      Heading: {
-        props: z.object({
-          text: z
-            .object({ defaultValue: richTextValue.optional() })
-            .catchall(richTextValue.optional()),
-        }),
-      },
-    });
-    const text = { html: "<p>Welcome</p>", json: "{}" };
-    const saved = component("Heading", { text: { defaultValue: text } });
-    const compiled = compileGenerationSchema(catalog, ["en"], {
-      content: [saved],
-    });
-    expect(
-      compiled.parseResponse(
-        output([
-          component("Heading", { text: { defaultValue: text, en: null } }),
+      compiled.materialize(
+        edit([
+          { action: "move", id: "other", destination: "content", index: 99 },
         ])
-      ).spec?.content
-    ).toEqual([saved]);
+      )
+    ).toThrow(/bounds/);
+    expect(start.content[0].props.slots.heading[0].props.text).toBe("Authored");
   });
-
-  it.each([
-    "",
-    "__proto__",
-    "prototype",
-    "constructor",
-    "defaultValue",
-    "hasLocalizedValue",
-  ])("rejects invalid or colliding rich text locale keys %s", (locale) => {
-    const catalog = createPuckGenerationCatalog({
-      Heading: { props: z.object({ text: localizedRichText }) },
+  it("permits full-page redesign only with explicit authorization and clarifies without mutation", () => {
+    const compiled = compileGenerationSchema(catalog(), ["en"], baseline());
+    const response = {
+      text: "Need details",
+      result: { action: "clarification", question: "Which image?" },
+    };
+    expect(compiled.materialize(response)).toEqual({
+      text: "Need details\n\nWhich image?",
+      spec: null,
     });
-    expect(() => compileGenerationSchema(catalog, [locale])).toThrow(
-      /invalid locale key|locale collides/
-    );
+    expect(() =>
+      compiled.materialize({
+        text: "Redesign",
+        result: { action: "redesign", content: [] },
+      })
+    ).toThrow();
   });
-
-  it.each([
-    z.object({ html: z.string() }),
-    richText.extend({ extra: z.string() }),
-    richText.extend({ html: z.number() }),
-    richText.extend({ json: z.number().optional() }),
-    richText.catchall(z.string()),
-    z.union([richTextValue, z.number()]),
-  ])("rejects unrelated localized catchall values %#", (schema) => {
-    for (const [defaultValue, catchall] of [
-      [schema, richTextValue],
-      [richTextValue, schema],
+  it("preserves entity bindings and locale values and rejects unsupported schemas before execution", () => {
+    const c = createPuckGenerationCatalog({
+      Text: {
+        generation: {
+          props: z.object({
+            binding: z.object({ field: z.string(), constantValue: z.string() }),
+            text: z.object({ defaultValue: z.string() }).catchall(z.string()),
+          }),
+        },
+        defaultProps: {
+          binding: { field: "name", constantValue: "" },
+          text: { defaultValue: "Hello", es: "Hola" },
+        },
+      },
+    });
+    const compiled = compileGenerationSchema(c, ["en", "es"]);
+    const result = compiled.materialize(
+      create([
+        {
+          type: "Text",
+          id: null,
+          props: {
+            binding: keep,
+            text: set({ defaultValue: keep, en: unset, es: set("Nuevo") }),
+          },
+        },
+      ])
+    ).spec!;
+    expect(result.content[0].props).toMatchObject({
+      binding: { field: "name", constantValue: "" },
+      text: { defaultValue: "Hello", es: "Nuevo" },
+    });
+    expect(extractAuthored(c, result).content[0].props.text).toEqual({
+      defaultValue: "Hello",
+      es: "Nuevo",
+    });
+    for (const schema of [
+      z.any(),
+      z.record(z.string(), z.string()),
+      z.string().transform((s) => s.length),
+      z.string().refine((s) => !!s),
     ]) {
-      const catalog = createPuckGenerationCatalog({
-        Heading: {
-          props: z.object({
-            text: z
-              .object({ defaultValue: defaultValue.optional() })
-              .catchall(catchall.optional()),
+      expect(() =>
+        compileGenerationSchema(
+          createPuckGenerationCatalog({
+            Invalid: { generation: { props: z.object({ value: schema }) } },
           }),
-        },
-      });
-      expect(() => compileGenerationSchema(catalog, ["en"])).toThrow(
-        /open-ended objects are unsupported/
-      );
+          ["en"]
+        )
+      ).toThrow();
     }
-  });
-
-  it.each([z.literal("false"), z.boolean(), z.enum(["true", "false"])])(
-    "rejects other localized rich text flags %#",
-    (hasLocalizedValue) => {
-      const catalog = createPuckGenerationCatalog({
-        Heading: {
-          props: z.object({
-            text: localizedRichText.extend({ hasLocalizedValue }),
-          }),
-        },
-      });
-      expect(() => compileGenerationSchema(catalog, ["en"])).toThrow(
-        /open-ended objects are unsupported/
-      );
-    }
-  );
-
-  it("constrains slots in objects and arrays and accepts complete inline shared schemas", () => {
-    const inline = z.array(
-      z.object({
-        type: z.literal("Text"),
-        props: z.object({ text: z.string(), id: z.string().optional() }),
-        readOnly: z.record(z.string(), z.boolean()).optional(),
+    expect(() =>
+      compileGenerationSchema(catalog(), ["en"], {
+        ...baseline(),
+        zones: { old: baseline().content },
       })
-    );
-    const catalog = createPuckGenerationCatalog(
-      {
-        Section: {
-          props: z.object({
-            slots: z.object({ body: inline }),
-            cards: z.array(z.object({ body: inline })),
-          }),
-          fields: {
-            slots: {
-              type: "object",
-              objectFields: { body: { type: "slot", allow: ["Text"] } },
-            },
-            cards: {
-              type: "array",
-              arrayFields: { body: { type: "slot", allow: ["Text"] } },
-            },
-          },
-        },
-        Text: { nestedOnly: true },
-      },
-      { rootAllowedComponentIds: ["MainContent"] }
-    );
-    const child = component("Text", { text: "Nested" });
-    const section = component("Section", {
-      slots: { body: [child] },
-      cards: [{ body: [component("Text", { id: "card", text: "Card" })] }],
-    });
-    const main = component("MainContent", { content: [section] });
-    const compiled = compileGenerationSchema(catalog, []);
-    expect(compiled.parseResponse(output([main])).spec?.content).toEqual([
-      main,
-    ]);
-    expect(() => compiled.parseResponse(output([section]))).toThrow();
-    expect(() =>
-      compiled.parseResponse(
-        output([component("MainContent", { content: [child] })])
-      )
-    ).toThrow();
-    expect(() =>
-      compiled.parseResponse(
-        output([
-          component("MainContent", {
-            content: [
-              component("Section", {
-                slots: { body: [component("Text")] },
-                cards: [],
-              }),
-            ],
-          }),
-        ])
-      )
-    ).toThrow();
-  });
-
-  it("replaces declared generic slots and rejects missing reachable schemas", () => {
-    const entries = {
-      Section: {
-        props: z.object({ body: z.array(z.unknown()) }),
-        fields: { body: { type: "slot" as const, allow: ["Text"] } },
-      },
-      Text: { props: z.object({ text: z.string() }), nestedOnly: true },
-    };
-    const compiled = compileGenerationSchema(
-      createPuckGenerationCatalog(entries),
-      []
-    );
-    expect(
-      compiled.parseResponse(
-        output([
-          component("Section", {
-            body: [component("Text", { text: "Nested" })],
-          }),
-        ])
-      ).spec
-    ).toBeDefined();
-    expect(() =>
-      compileGenerationSchema(
-        createPuckGenerationCatalog({ ...entries, Text: { nestedOnly: true } }),
-        []
-      )
-    ).toThrow(/body.*Text needs formalProps/);
-  });
-
-  it.each([
-    z.unknown(),
-    z.any(),
-    z.record(z.string(), z.string()),
-    z.object({ label: z.string() }).catchall(z.string()),
-    z.string().transform((text) => text.length),
-  ])("fails explicitly for unsupported schemas %#", (schema) => {
-    expect(() =>
-      compileGenerationSchema(
-        createPuckGenerationCatalog({
-          Section: { props: z.object({ unsupported: schema }) },
-        }),
-        []
-      )
-    ).toThrow(/Generation schema/);
-  });
-
-  it("preserves custom refinements in authoritative native validation", () => {
-    const catalog = createPuckGenerationCatalog({
-      Section: {
-        props: z
-          .object({ text: z.string() })
-          .refine((props) => props.text !== "Forbidden", "Forbidden title"),
-      },
-    });
-    const compiled = compileGenerationSchema(catalog, []);
-    const native = compiled.parseResponse(
-      output([component("Section", { text: "Forbidden" })])
-    ).spec;
-    expect(validateGeneratedContent(catalog, native).join()).toContain(
-      "Forbidden title"
-    );
-  });
-
-  it("restores readOnly only for matching IDs and types, including nested components", () => {
-    const catalog = createPuckGenerationCatalog({
-      Section: {
-        props: z.object({ body: z.array(z.unknown()), readOnly: z.boolean() }),
-        fields: { body: { type: "slot", allow: ["Text"] } },
-      },
-      Text: { props: z.object({ text: z.string() }), nestedOnly: true },
-      Other: { props: z.object({ text: z.string() }) },
-    });
-    const child = {
-      ...component("Text", { text: "Nested" }),
-      readOnly: { text: true },
-    };
-    const section = {
-      ...component("Section", { body: [child], readOnly: true }),
-      readOnly: { body: true },
-    };
-    const compiled = compileGenerationSchema(catalog, [], {
-      content: [section],
-    });
-    const context = compiled.stripMetadata({ content: [section] });
-    expect(context.content[0]).not.toHaveProperty("readOnly");
-    expect(context.content[0].props.readOnly).toBe(true);
-    expect(context.content[0].props.body[0]).not.toHaveProperty("readOnly");
-    const native = compiled.parseResponse(output(context.content)).spec!;
-    expect(native.content).toEqual([section]);
-    expect(
-      compiled.parseResponse(
-        output([component("Other", { id: "section", text: "Replacement" })])
-      ).spec?.content[0]
-    ).not.toHaveProperty("readOnly");
-    expect(
-      compiled.parseResponse(output([component("Other", { text: "New" })])).spec
-        ?.content[0]
-    ).not.toHaveProperty("readOnly");
-    expect(() => compiled.parseResponse(output([section]))).toThrow();
+    ).toThrow(/legacy zones/);
   });
 });

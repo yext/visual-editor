@@ -95,10 +95,9 @@ const submit = async () => {
   });
   fireEvent.click(screen.getByRole("button", { name: "Send" }));
   await waitFor(() => expect(upstream).toBeDefined());
-  await act(async () =>
-    emit({ type: "preview-spec", spec: generatedContent("Partial") })
-  );
-  await screen.findByText("Partial", { selector: "h2" });
+  await act(async () => emit({ type: "commentary", delta: "Working…" }));
+  await screen.findByText("Working…");
+  expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
 };
 beforeEach(() => {
   window.history.replaceState({}, "", "/local-editor");
@@ -133,7 +132,7 @@ beforeEach(() => {
         }),
         {
           headers: {
-            "X-Visual-Editor-Generation": "validated-puck-content-v1",
+            "X-Visual-Editor-Generation": "strict-puck-overrides-v2",
           },
         }
       );
@@ -159,7 +158,7 @@ it("blocks editor actions during generation, then restores them on cancellation"
   setup();
   await submit();
   const frame = document.querySelector("[inert]");
-  expect(frame?.textContent).toContain("Partial");
+  expect(frame?.textContent).toContain("Original");
   const shortcut = new KeyboardEvent("keydown", {
     key: "z",
     ctrlKey: true,
@@ -173,15 +172,15 @@ it("blocks editor actions during generation, then restores them on cancellation"
   expect(generationSignal?.aborted).toBe(true);
 });
 
-it("continues when entity changes but cancels and clears chat when layout changes", async () => {
+it("cancels when entity changes and clears chat when layout changes", async () => {
   setup();
   await submit();
   fireEvent.change(screen.getByLabelText("Entity"), {
     target: { value: "two" },
   });
   await screen.findByText("Entity: two");
-  await screen.findByText("Partial", { selector: "h2" });
-  expect(generationSignal?.aborted).toBe(false);
+  await waitFor(() => expect(generationSignal?.aborted).toBe(true));
+  expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
   fireEvent.change(screen.getByLabelText("Layout"), {
     target: { value: "other" },
   });

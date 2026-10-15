@@ -1,463 +1,577 @@
 import type { Fields } from "@puckeditor/core";
 import { z } from "zod";
 import type { PuckGenerationCatalog } from "./puckGenerationCatalog.ts";
-import type { GeneratedContent } from "../../local-editor/types.ts";
-import { generatedContentShape } from "./generationValidation.ts";
+import {
+  clone,
+  extractAuthored,
+  indexAuthored,
+  permitted,
+  unwrap,
+  validateAuthored,
+  walkAuthored,
+  type Content,
+  type SavedComponent,
+} from "../../internal/generation/authored.ts";
 
-type ObjectValue = Record<string, any>;
-type Codec = {
+type Node = {
   wire: z.ZodType;
-  encode: (value: any) => any;
-  decode: (value: any) => any;
+  apply: (override: any, baseline: any, allowedIds: Set<string>) => any;
 };
-type SlotField = { allow?: string[]; disallow?: string[] };
 
-/** Compile native saved props into a closed, component-aware gateway response. */
+/** Compile complete authored contracts into required, closed keep/set/unset overrides. */
 export const compileGenerationSchema = (
   catalog: PuckGenerationCatalog,
   locales: string[],
-  currentData?: GeneratedContent
+  currentData: Content = { content: [] },
+  options: { allowRedesign?: boolean } = {}
 ) => {
+  const baseline = clone(currentData);
+  const inventory = indexAuthored(catalog, baseline);
   const components = catalog.data.components;
-  const localeKeys = [...new Set(locales)].sort();
   const fail = (path: string, message: string): never => {
     throw new Error(`Generation schema at ${path}: ${message}`);
   };
-  const kind = (schema: z.ZodType): string => schema.def.type;
-  const structuralChecks = (schema: z.ZodType) =>
-    ((schema.def as any).checks ?? []).filter(
-      (check: any) => check._zod.def.check !== "custom"
-    );
-  const unwrap = (schema: z.ZodType): z.ZodType => {
-    const def = schema.def as any;
-    return ["optional", "nullable", "default", "prefault"].includes(def.type)
-      ? unwrap(def.innerType)
-      : schema;
+  // Reuse the same Zod instances so native export emits shared $defs, rather
+  // than multiplying mode properties and inventory enums by every prop/type.
+  const keepMode = z.strictObject({ mode: z.literal("keep") });
+  const unsetMode = z.strictObject({ mode: z.literal("unset") });
+  const existingIds = [...inventory.items.keys()];
+  const componentId = existingIds.length
+    ? z.enum(existingIds as [string, ...string[]]).nullable()
+    : z.null();
+  const nodes = new Map<string, Node>();
+  const propsNodes = new Map<string, Node>();
+  const idsUsed = new Set<string>();
+  const newId = () => {
+    let id: string;
+    do {
+      id = `generated-${globalThis.crypto.randomUUID()}`;
+    } while (inventory.items.has(id) || idsUsed.has(id));
+    idsUsed.add(id);
+    return id;
   };
-  const isLocalizedValue = (schema: z.ZodType): boolean => {
-    const unwrapped = unwrap(schema);
-    if (kind(unwrapped) === "string") return true;
-    if (unwrapped instanceof z.ZodUnion)
-      return unwrapped.def.options.every((option) =>
-        isLocalizedValue(option as z.ZodType)
-      );
-    if (!(unwrapped instanceof z.ZodObject)) return false;
-    const keys = Object.keys(unwrapped.shape);
-    const catchall = unwrapped.def.catchall as z.ZodType | undefined;
-    return (
-      keys.length === 2 &&
-      keys.includes("html") &&
-      keys.includes("json") &&
-      kind(unwrap(unwrapped.shape.html)) === "string" &&
-      kind(unwrap(unwrapped.shape.json)) === "string" &&
-      (!catchall || kind(catchall) === "never")
-    );
-  };
+  const union = (schemas: z.ZodType[]): z.ZodType =>
+    schemas.length === 1 ? schemas[0] : z.union(schemas);
   const describe = (wire: z.ZodType, original: z.ZodType) =>
     original.description ? wire.describe(original.description) : wire;
-  const union = (nodes: Codec[], path: string): Codec => {
-    if (!nodes.length) return fail(path, "no allowed component alternatives");
-    return {
-      wire:
-        nodes.length === 1 ? nodes[0].wire : z.union(nodes.map((n) => n.wire)),
-      encode: (value) => {
-        for (const node of nodes) {
-          const encoded = node.encode(value);
-          if (node.wire.safeParse(encoded).success) return encoded;
-        }
-        return value;
-      },
-      decode: (value) => {
-        const node = nodes.find((node) => node.wire.safeParse(value).success);
-        return node ? node.decode(value) : value;
-      },
-    };
+  const checks = (schema: z.ZodType, path: string) => {
+    if (
+      ((schema.def as any).checks ?? []).some(
+        (check: any) => check._zod.def.check === "custom"
+      )
+    )
+      fail(
+        path,
+        "custom refinements cannot be represented by strict JSON Schema"
+      );
   };
-  const permitted = (name: string, field?: SlotField) =>
-    !field?.disallow?.includes(name) &&
-    (!field?.allow?.length || field.allow.includes(name));
-  const rootNames = Object.keys(components).filter(
-    (name) =>
-      !components[name].nestedOnly &&
-      (!catalog.puckOptions.rootAllowedComponentIds ||
-        catalog.puckOptions.rootAllowedComponentIds.includes(name))
-  );
-  const elementNodes = new Map<string, Codec>();
-  const availableComponentNames = new Set<string>();
-  const metadata = new Map<string, Map<string, ObjectValue>>();
-
-  const object = (
+  const shapeFor = (
     schema: z.ZodObject,
-    path: string,
-    fields?: Fields
-  ): Codec => {
-    const shape: Record<string, Codec> = {};
-    for (const [key, child] of Object.entries(schema.shape)) {
-      if (["__proto__", "prototype", "constructor"].includes(key))
-        fail(`${path}.${key}`, "reserved property name");
-      shape[key] = value(child as z.ZodType, `${path}.${key}`, fields?.[key]);
-    }
+    path: string
+  ): Record<string, z.ZodType> => {
+    checks(schema, path);
+    const shape: Record<string, z.ZodType> = { ...schema.shape };
     const catchall = schema.def.catchall as z.ZodType | undefined;
-    if (catchall && kind(catchall) !== "never") {
-      const localized =
-        schema.shape.defaultValue &&
-        isLocalizedValue(schema.shape.defaultValue) &&
-        isLocalizedValue(catchall) &&
-        (!schema.shape.hasLocalizedValue ||
-          (kind(unwrap(schema.shape.hasLocalizedValue)) === "literal" &&
-            (unwrap(schema.shape.hasLocalizedValue).def as any).values
-              .length === 1 &&
-            (unwrap(schema.shape.hasLocalizedValue).def as any).values[0] ===
-              "true"));
-      if (!localized)
-        fail(path, "open-ended objects are unsupported; declare fixed keys");
-      if (!localeKeys.length)
-        fail(path, "localized values require selected-layout locales");
-      for (const locale of localeKeys) {
+    if (catchall && catchall.def.type !== "never") {
+      if (!shape.defaultValue || !locales.length)
+        fail(
+          path,
+          "open-ended objects require a localized defaultValue and layout locales"
+        );
+      const localized = (s: z.ZodType): boolean => {
+        const n = unwrap(s);
+        return (
+          n instanceof z.ZodString ||
+          (n instanceof z.ZodUnion &&
+            n.options.every((o) => localized(o as z.ZodType))) ||
+          (n instanceof z.ZodObject &&
+            Object.keys(n.shape).sort().join(",") === "html,json" &&
+            unwrap(n.shape.html) instanceof z.ZodString &&
+            unwrap(n.shape.json) instanceof z.ZodString)
+        );
+      };
+      if (!localized(shape.defaultValue) || !localized(catchall))
+        fail(path, "only localized catchalls are supported");
+      for (const locale of new Set(locales)) {
         if (
           !locale.trim() ||
-          ["__proto__", "prototype", "constructor"].includes(locale)
+          Object.hasOwn(shape, locale) ||
+          ["__proto__", "constructor", "prototype"].includes(locale)
         )
-          fail(path, `invalid locale key ${locale}`);
-        if (Object.hasOwn(shape, locale))
-          fail(path, `locale collides with property ${locale}`);
-        shape[locale] = value(catchall.optional(), `${path}.${locale}`);
+          fail(path, `invalid locale ${locale}`);
+        shape[locale] = catchall.optional();
       }
     }
-    const map = (input: any, direction: "encode" | "decode") => {
-      if (!input || typeof input !== "object" || Array.isArray(input))
-        return input;
-      // Retain unknown keys so strict parsing rejects them instead of losing saved data.
-      const output: ObjectValue = { ...input };
-      for (const [key, node] of Object.entries(shape)) {
-        const converted = node[direction](input[key]);
-        if (converted === undefined) delete output[key];
-        else
-          Object.defineProperty(output, key, {
-            value: converted,
-            enumerable: true,
-            configurable: true,
-            writable: true,
-          });
-      }
-      return output;
-    };
-    return {
-      wire: describe(
-        z.strictObject(
-          Object.fromEntries(
-            Object.entries(shape).map(([key, node]) => [key, node.wire])
-          )
-        ),
-        schema
-      ),
-      encode: (input) => map(input, "encode"),
-      decode: (input) => map(input, "decode"),
-    };
+    for (const key of Object.keys(shape))
+      if (["__proto__", "constructor", "prototype"].includes(key))
+        fail(path, `reserved property ${key}`);
+    return shape;
   };
-
-  const element = (name: string, path: string, inline?: z.ZodObject): Codec => {
-    if (!Object.hasOwn(components, name))
-      return fail(path, `unknown component ${name}`);
-    const component = components[name];
-    availableComponentNames.add(name);
-    if (!inline && name !== "MainContent" && !component.hasFormalProps)
-      return fail(
-        path,
-        `${name} needs formalProps or a complete inline slot schema`
-      );
-    if (!inline && elementNodes.has(name)) return elementNodes.get(name)!;
-    let node: Codec;
-    const lazy: Codec = {
-      wire: z.lazy(() => node.wire),
-      encode: (input) => node.encode(input),
-      decode: (input) => node.decode(input),
-    };
-    if (!inline) elementNodes.set(name, lazy);
-    const props = object(
-      (inline ?? component.props).safeExtend({
-        id: z.string().regex(/\S/, "Component ID must not be empty"),
-      }),
-      `${path}.${name}.props`,
-      component.fields
-    );
-    const shape = z.strictObject({ type: z.literal(name), props: props.wire });
-    node = {
-      wire: component.description
-        ? shape.describe(component.description)
-        : shape,
-      encode: (input) => {
-        if (!input || typeof input !== "object") return input;
-        const { readOnly: _readOnly, ...saved } = input;
-        return { ...saved, props: props.encode(input.props) };
-      },
-      decode: (input) => {
-        const saved = { ...input, props: props.decode(input.props) };
-        const flags = metadata.get(name)?.get(saved.props?.id);
-        return flags ? { ...saved, readOnly: structuredClone(flags) } : saved;
-      },
-    };
-    return lazy;
-  };
-
-  const slot = (schema: z.ZodType, field: SlotField, path: string): Codec => {
-    if (kind(schema) !== "array")
-      return fail(path, "slot schema must be an array");
-    const item = unwrap((schema.def as any).element);
-    const alternatives: z.ZodType[] =
-      kind(item) === "union" ? (item.def as any).options : [item];
-    const nodes: Codec[] = [];
-    for (const alternative of alternatives) {
-      if (["any", "unknown"].includes(kind(alternative))) {
-        for (const name of Object.keys(components).filter((name) =>
-          permitted(name, field)
-        ))
-          nodes.push(element(name, path));
-      } else {
-        if (
-          !(alternative instanceof z.ZodObject) ||
-          !alternative.shape.type ||
-          !alternative.shape.props ||
-          kind(alternative.shape.type) !== "literal" ||
-          !(unwrap(alternative.shape.props) instanceof z.ZodObject)
-        )
-          return fail(
-            path,
-            "inline slots require literal component types and object props"
-          );
-        const extra = Object.keys(alternative.shape).find(
-          (key) => !["type", "props", "readOnly"].includes(key)
-        );
-        if (extra)
-          return fail(
-            `${path}.${extra}`,
-            "unsupported component envelope property"
-          );
-        if (
-          alternative.shape.readOnly &&
-          !alternative.shape.readOnly.safeParse(undefined).success
-        )
-          return fail(
-            `${path}.readOnly`,
-            "editor-owned metadata must be optional"
-          );
-        for (const name of (alternative.shape.type.def as any).values) {
-          if (typeof name !== "string")
-            fail(path, "component type must be a string");
-          if (permitted(name, field))
-            nodes.push(
-              element(
-                name,
-                path,
-                unwrap(alternative.shape.props) as z.ZodObject
-              )
-            );
-        }
-      }
-    }
-    if (!nodes.length && !schema.safeParse([]).success)
-      return fail(
-        path,
-        "slot has no allowed components and its schema rejects an empty array"
-      );
-    if (!nodes.length)
-      return {
-        wire: z.array(z.string()).max(0).describe("This slot must be empty."),
-        encode: (input) => input,
-        decode: (input) => input,
-      };
-    const child = union(nodes, path);
-    return {
-      wire: describe(
-        (schema as z.ZodArray).clone({
-          ...(schema as z.ZodArray).def,
-          checks: structuralChecks(schema),
-          element: child.wire,
-        }),
-        schema
-      ),
-      encode: (input) =>
-        Array.isArray(input) ? input.map(child.encode) : input,
-      decode: (input) => input.map(child.decode),
-    };
-  };
-
-  const value = (
+  // Ordinary arrays are complete replacements. Optional members use explicit absence
+  // envelopes because strict gateway objects cannot have optional properties.
+  const completeValue = (
     schema: z.ZodType,
     path: string,
-    field?: Fields[string]
-  ): Codec => {
+    field?: Fields[string],
+    defaults?: any
+  ): Node => {
+    if (field?.type === "slot") return override(schema, path, field, defaults);
+    checks(schema, path);
     const def = schema.def as any;
     if (["optional", "default", "prefault"].includes(def.type)) {
-      const inner = value(def.innerType, path, field);
-      const nullable = def.innerType.safeParse(null).success;
+      const child = completeValue(def.innerType, path, field, defaults);
       return {
-        wire: describe(inner.wire.nullable(), schema),
-        encode: (input) => (input === undefined ? null : inner.encode(input)),
-        decode: (input) =>
-          input === null && !nullable ? undefined : inner.decode(input),
+        wire: union([
+          unsetMode,
+          z.strictObject({ mode: z.literal("set"), value: child.wire }),
+        ]),
+        apply: (o, b, ids) =>
+          o.mode === "unset" ? undefined : child.apply(o.value, b, ids),
       };
     }
     if (def.type === "nullable") {
-      const inner = value(def.innerType, path, field);
+      const child = completeValue(def.innerType, path, field, defaults);
       return {
-        wire: describe(inner.wire.nullable(), schema),
-        encode: (input) => (input === null ? null : inner.encode(input)),
-        decode: (input) => (input === null ? null : inner.decode(input)),
+        wire: child.wire.nullable(),
+        apply: (o, b, ids) => (o === null ? null : child.apply(o, b, ids)),
       };
     }
-    if (field?.type === "slot") return slot(schema, field, path);
-    if (schema instanceof z.ZodObject)
-      return object(
-        schema,
-        path,
-        field?.type === "object" ? field.objectFields : undefined
+    if (schema instanceof z.ZodObject) {
+      const children = Object.fromEntries(
+        Object.entries(shapeFor(schema, path)).map(([k, s]) => [
+          k,
+          completeValue(
+            s,
+            `${path}.${k}`,
+            field?.type === "object" ? field.objectFields[k] : undefined,
+            defaults?.[k]
+          ),
+        ])
       );
-    if (def.type === "array") {
-      const child = value(
-        def.element,
+      return {
+        wire: describe(
+          z.strictObject(
+            Object.fromEntries(
+              Object.entries(children).map(([k, n]) => [k, n.wire])
+            )
+          ),
+          schema
+        ),
+        apply: (o, b, ids) =>
+          Object.fromEntries(
+            Object.entries(children)
+              .map(([k, n]) => [k, n.apply(o[k], b?.[k], ids)])
+              .filter(([, v]) => v !== undefined)
+          ),
+      };
+    }
+    if (schema instanceof z.ZodArray) {
+      const child = completeValue(
+        schema.element as z.ZodType,
         `${path}[]`,
         field?.type === "array"
           ? { type: "object", objectFields: field.arrayFields }
           : undefined
       );
       return {
-        wire: describe(
-          schema.clone({
-            ...def,
-            checks: structuralChecks(schema),
-            element: child.wire,
-          }),
-          schema
-        ),
-        encode: (input) =>
-          Array.isArray(input) ? input.map(child.encode) : input,
-        decode: (input) => input.map(child.decode),
+        wire: schema.clone({ ...schema.def, element: child.wire } as any),
+        apply: (o, b, ids) =>
+          o.map((v: any, index: number) => child.apply(v, b?.[index], ids)),
       };
     }
-    if (def.type === "union") {
-      const node = union(
-        def.options.map((option: z.ZodType) => value(option, path, field)),
-        path
+    if (schema instanceof z.ZodUnion) {
+      const children = schema.options.map((s) =>
+        completeValue(s as z.ZodType, path, field, defaults)
       );
-      return { ...node, wire: describe(node.wire, schema) };
+      return {
+        wire: union(children.map((n) => n.wire)),
+        apply: (o, b, ids) =>
+          children.find((n) => n.wire.safeParse(o).success)!.apply(o, b, ids),
+      };
     }
     if (
       !["string", "number", "boolean", "literal", "enum", "null"].includes(
         def.type
       )
     )
-      return fail(
-        path,
-        `unsupported ${def.type} schema; provide serializable, constrained props`
+      fail(path, `unsupported ${def.type} schema`);
+    return { wire: schema, apply: (o) => clone(o) };
+  };
+  const override = (
+    schema: z.ZodType,
+    path: string,
+    field?: Fields[string],
+    defaults?: any
+  ): Node => {
+    checks(schema, path);
+    const native = unwrap(schema);
+    let child: Node;
+    if (field?.type === "slot") {
+      if (!(native instanceof z.ZodArray))
+        fail(path, "slot must have an array schema");
+      const array = native as z.ZodArray;
+      if (
+        !["unknown", "any"].includes(
+          unwrap(array.element as z.ZodType).def.type
+        )
+      )
+        fail(
+          path,
+          "slot items must defer to registered component contracts (use z.unknown())"
+        );
+      const alternatives = Object.keys(components)
+        .filter((name) => components[name].generation && permitted(name, field))
+        .map(element);
+      child = alternatives.length
+        ? {
+            wire: array.clone({
+              ...array.def,
+              element: union(alternatives.map((n) => n.wire)),
+            } as any),
+            apply: (o, b, ids) =>
+              o.map((v: any) => {
+                const templates = Array.isArray(defaults)
+                  ? defaults.filter(
+                      (item: SavedComponent) => item.type === v.type
+                    )
+                  : [];
+                return element(v.type).apply(
+                  v,
+                  templates.length === 1 ? templates[0] : undefined,
+                  ids
+                );
+              }),
+          }
+        : { wire: z.array(z.string()).max(0), apply: () => [] };
+      if (!alternatives.length && !array.safeParse([]).success)
+        fail(path, "required slot has no allowed component contracts");
+    } else if (native instanceof z.ZodObject) {
+      const children = Object.fromEntries(
+        Object.entries(shapeFor(native, path)).map(([key, s]) => [
+          key,
+          override(
+            s,
+            `${path}.${key}`,
+            field?.type === "object" ? field.objectFields[key] : undefined,
+            defaults?.[key]
+          ),
+        ])
       );
-    return { wire: schema, encode: (input) => input, decode: (input) => input };
+      child = {
+        wire: z.strictObject(
+          Object.fromEntries(
+            Object.entries(children).map(([key, node]) => [key, node.wire])
+          )
+        ),
+        apply: (o, b, ids) => {
+          const result =
+            b && typeof b === "object" && !Array.isArray(b) ? clone(b) : {};
+          for (const [key, node] of Object.entries(children)) {
+            const v = node.apply(o[key], result[key], ids);
+            if (v === undefined) delete result[key];
+            else result[key] = v;
+          }
+          return result;
+        },
+      };
+    } else if (native instanceof z.ZodUnion) {
+      const alternatives = native.options.map((option) =>
+        override(option as z.ZodType, path, field, defaults)
+      );
+      const payloads = alternatives.map((node) => {
+        const setMode = (node.wire as z.ZodUnion).options.find(
+          (option) => (option as z.ZodObject).shape?.value
+        ) as z.ZodObject;
+        return setMode.shape.value;
+      });
+      child = {
+        wire: union(payloads),
+        apply: (o, b, ids) =>
+          alternatives[
+            payloads.findIndex((wire) => wire.safeParse(o).success)
+          ].apply({ mode: "set", value: o }, b, ids),
+      };
+    } else child = completeValue(native, path, field, defaults);
+    if (schema.safeParse(null).success)
+      child = {
+        ...child,
+        wire: child.wire.nullable(),
+        apply: ((apply) => (o, b, ids) =>
+          o === null ? null : apply(o, b, ids))(child.apply),
+      };
+    child.wire = describe(child.wire, schema);
+    const modes = [
+      keepMode,
+      z.strictObject({ mode: z.literal("set"), value: child.wire }),
+    ];
+    if (schema.safeParse(undefined).success) modes.push(unsetMode as any);
+    return {
+      wire: describe(union(modes), schema),
+      apply: (o, b, ids) =>
+        o.mode === "keep"
+          ? clone(b)
+          : o.mode === "unset"
+            ? undefined
+            : child.apply(o.value, b, ids),
+    };
   };
-
-  const root = union(
-    rootNames.map((name) => element(name, "content")),
-    "content"
+  const element = (name: string): Node => {
+    if (nodes.has(name)) return nodes.get(name)!;
+    const config = components[name];
+    if (!config?.generation) fail(name, "missing generation.props contract");
+    let node: Node;
+    const lazy: Node = {
+      wire: z.lazy(() => node.wire),
+      apply: (o, b, ids) => node.apply(o, b, ids),
+    };
+    nodes.set(name, lazy);
+    if (
+      Object.keys(config.generation!.props.shape).some((key) =>
+        ["id", "puck", "readOnly"].includes(key)
+      )
+    )
+      fail(name, "contract declares editor-owned metadata");
+    const props = override(
+      config.generation!.props,
+      name,
+      { type: "object", objectFields: config.fields ?? {} },
+      config.defaultProps
+    );
+    // Component props are the required member overrides, without an enclosing mode.
+    const members = (props.wire as z.ZodUnion).options.find(
+      (o) => (o as z.ZodObject).shape?.value
+    ) as z.ZodObject;
+    propsNodes.set(name, {
+      wire: members.shape.value,
+      apply: (o, b, ids) => props.apply({ mode: "set", value: o }, b, ids),
+    });
+    node = {
+      wire: z
+        .strictObject({
+          type: z.literal(name),
+          id: componentId,
+          props: members.shape.value,
+        })
+        .describe(config.description ?? name),
+      apply: (o, template, allowedIds) => {
+        let base: SavedComponent;
+        if (o.id !== null) {
+          const item = inventory.items.get(o.id);
+          if (!item || !allowedIds.has(o.id) || item.component.type !== name)
+            fail(name, `incorrectly reused component Id ${o.id}`);
+          if (idsUsed.has(o.id))
+            fail(name, `duplicate component reference ${o.id}`);
+          idsUsed.add(o.id);
+          base = clone(item!.component);
+        } else {
+          base = template
+            ? clone(template)
+            : { type: name, props: clone(config.defaultProps ?? {}) };
+          base.type = name;
+          // Default slot subtrees receive fresh identities, including hidden children.
+          walkAuthored(catalog, { content: [base] }, ({ component }) => {
+            component.props.id = newId();
+          });
+        }
+        base.props = propsNodes
+          .get(name)!
+          .apply(o.props, base.props, allowedIds);
+        return base;
+      },
+    };
+    return lazy;
+  };
+  const rootNames = Object.keys(components).filter(
+    (name) =>
+      components[name].generation &&
+      !components[name].nestedOnly &&
+      (!catalog.puckOptions.rootAllowedComponentIds ||
+        catalog.puckOptions.rootAllowedComponentIds.includes(name))
   );
-  const contentCodec: Codec = {
-    wire: z.strictObject({ content: z.array(root.wire) }),
-    encode: (data) => ({ ...data, content: data.content.map(root.encode) }),
-    decode: (data) => ({ content: data.content.map(root.decode) }),
-  };
+  const rootNodes = rootNames.map(element);
+  // Preflight every enabled registered contract, including hidden shared components.
+  for (const name of Object.keys(components).filter(
+    (name) => components[name].generation
+  ))
+    element(name);
+  const targets = [...inventory.items.entries()]
+    .filter(([, item]) => components[item.component.type]?.generation)
+    .map(([id]) => id);
+  const destinations = [...inventory.collections.keys()];
+  const targetSchema = targets.length
+    ? z.enum(targets as [string, ...string[]])
+    : z.never();
+  const destinationSchema = z.enum(destinations as [string, ...string[]]);
+  const targetsByType = new Map<string, string[]>();
+  for (const id of targets) {
+    const type = inventory.items.get(id)!.component.type;
+    const ids = targetsByType.get(type) ?? [];
+    ids.push(id);
+    targetsByType.set(type, ids);
+  }
+  const edits: z.ZodType[] = [...targetsByType.entries()].map(([type, ids]) =>
+    z.strictObject({
+      action: z.literal("update"),
+      id: z.enum(ids as [string, ...string[]]),
+      props: propsNodes.get(type)!.wire,
+    })
+  );
+  if (targets.length)
+    edits.push(
+      z.strictObject({ action: z.literal("remove"), id: targetSchema }),
+      z.strictObject({
+        action: z.literal("move"),
+        id: targetSchema,
+        destination: destinationSchema,
+        index: z.number().int().min(0),
+      })
+    );
+  if (rootNodes.length)
+    edits.push(
+      z.strictObject({
+        action: z.literal("insert"),
+        destination: destinationSchema,
+        index: z.number().int().min(0),
+        component: union([...nodes.values()].map((node) => node.wire)),
+      })
+    );
+  const outcomes: z.ZodType[] = [
+    z.strictObject({
+      action: z.literal("clarification"),
+      question: z.string().min(1),
+    }),
+  ];
+  if (edits.length)
+    outcomes.push(
+      z.strictObject({
+        action: z.literal("edit"),
+        operations: z.array(union(edits)).min(1).max(100),
+      })
+    );
+  const emptyPage = [...inventory.items.values()].every(
+    (item) => item.component.type === "MainContent"
+  );
+  if ((emptyPage || options.allowRedesign) && rootNodes.length)
+    outcomes.push(
+      z.strictObject({
+        action: z.literal(emptyPage ? "create" : "redesign"),
+        content: z.array(union(rootNodes.map((node) => node.wire))).min(1),
+      })
+    );
   const responseSchema = z.strictObject({
     text: z.string(),
-    spec: contentCodec.wire.nullable(),
+    result: union(outcomes),
   });
   let jsonSchema: Record<string, any>;
   try {
     jsonSchema = z.toJSONSchema(responseSchema, { io: "input", reused: "ref" });
   } catch (error) {
-    return fail(
-      "response",
-      error instanceof Error ? error.message : String(error)
-    );
+    return fail("response", String(error));
   }
   normalizeReferenceAnnotations(jsonSchema);
   assertStrictSchema(jsonSchema);
-
-  if (currentData) {
-    const result = contentCodec.wire.safeParse(
-      contentCodec.encode(currentData)
-    );
-    if (!result.success)
-      fail(
-        "currentData",
-        `saved content cannot be represented: ${result.error.message}`
-      );
-    stripGenerationMetadata(catalog, currentData, (input) => {
-      if (!input.readOnly) return;
-      const byId = metadata.get(input.type) ?? new Map();
-      byId.set(input.props.id, input.readOnly);
-      metadata.set(input.type, byId);
-    });
+  // Hidden contracts may not be reachable from a currently populated collection;
+  // still reject any unsupported JSON Schema before calling the gateway.
+  for (const node of nodes.values()) {
+    const schema = z.toJSONSchema(z.strictObject({ component: node.wire }), {
+      io: "input",
+      reused: "ref",
+    }) as Record<string, any>;
+    normalizeReferenceAnnotations(schema);
+    assertStrictSchema(schema);
   }
+  const materialize = (
+    response: any
+  ): { text: string; spec: Content | null } => {
+    const parsed = responseSchema.parse(response) as any;
+    idsUsed.clear();
+    const result = parsed.result;
+    if (result.action === "clarification")
+      return {
+        text: [parsed.text, result.question].filter(Boolean).join("\n\n"),
+        spec: null,
+      };
+    let candidate = clone(baseline);
+    if (result.action === "create" || result.action === "redesign") {
+      candidate.content = result.content.map((o: any) =>
+        element(o.type).apply(o, undefined, new Set(inventory.items.keys()))
+      );
+    } else {
+      const operations: any[] = result.operations;
+      const touched = new Set<string>();
+      const changing = operations.filter((o) => o.id);
+      for (const op of changing) {
+        const item = inventory.items.get(op.id)!;
+        if (touched.has(op.id))
+          fail("operations", `conflicting target ${op.id}`);
+        touched.add(op.id);
+        if (changing.some((other) => item.ancestors.includes(other.id)))
+          fail("operations", "conflicting ancestor/descendant operations");
+      }
+      for (const op of operations.filter((o) => o.destination)) {
+        const dest = inventory.collections.get(op.destination)!;
+        const owner = dest.ownerId
+          ? inventory.items.get(dest.ownerId)
+          : undefined;
+        const lineage = owner ? [...owner.ancestors, dest.ownerId!] : [];
+        if (changing.some((other) => lineage.includes(other.id)))
+          fail(
+            "operations",
+            "destination is inside a changed target or creates a cycle"
+          );
+      }
+      const work = indexAuthored(catalog, candidate);
+      for (const op of changing.filter(
+        (o) => o.action === "remove" || o.action === "move"
+      )) {
+        const item = work.items.get(op.id)!;
+        item.collection.items.splice(
+          item.collection.items.indexOf(item.component),
+          1
+        );
+      }
+      for (const op of operations) {
+        if (op.action === "update") {
+          const item = work.items.get(op.id)!;
+          const allowed = new Set(
+            [...inventory.items.entries()]
+              .filter(([id, i]) => id === op.id || i.ancestors.includes(op.id))
+              .map(([id]) => id)
+          );
+          // The enclosing update owns the existing reference; only descendants may be reused in slots.
+          idsUsed.add(op.id);
+          item.component.props = propsNodes
+            .get(item.component.type)!
+            .apply(op.props, item.component.props, allowed);
+        } else if (op.action === "insert" || op.action === "move") {
+          const dest = work.collections.get(op.destination)!;
+          if (op.index > dest.items.length)
+            fail("operations", "destination index is out of bounds");
+          const component =
+            op.action === "move"
+              ? work.items.get(op.id)!.component
+              : element(op.component.type).apply(
+                  op.component,
+                  undefined,
+                  new Set()
+                );
+          dest.items.splice(op.index, 0, component);
+        }
+      }
+    }
+    validateAuthored(catalog, candidate);
+    return { text: parsed.text, spec: { content: candidate.content } };
+  };
   return {
     jsonSchema,
-    availableComponentNames: [...availableComponentNames].sort(),
-    stripMetadata: (data: GeneratedContent) =>
-      stripGenerationMetadata(catalog, data),
-    normalizeContent: (data: unknown): GeneratedContent => {
-      const parsed = contentCodec.wire.parse(data);
-      return generatedContentShape.parse(
-        contentCodec.decode(parsed)
-      ) as GeneratedContent;
-    },
-    validateContent: (data: unknown): void => {
-      contentCodec.wire.parse(contentCodec.encode(data));
-    },
-    parseResponse: (
-      text: string
-    ): { text: string; spec: GeneratedContent | null } => {
-      const response = responseSchema.parse(JSON.parse(text));
-      return {
-        text: response.text,
-        spec:
-          response.spec === null
-            ? null
-            : (contentCodec.decode(response.spec) as GeneratedContent),
-      };
-    },
+    isBlankPage: emptyPage,
+    availableComponentNames: [...nodes.keys()].sort(),
+    context: extractAuthored(catalog, baseline),
+    inventory: { targets, destinations },
+    materialize,
+    parseResponse: (text: string) => materialize(JSON.parse(text)),
   };
 };
-
-/** Only component envelopes in declared slots contain editor-owned metadata. */
-export const stripGenerationMetadata = (
-  catalog: PuckGenerationCatalog,
-  data: GeneratedContent,
-  visit: (component: ObjectValue) => void = () => {}
-): GeneratedContent => {
-  const props = (input: ObjectValue, fields?: Fields): ObjectValue => {
-    const output = { ...input };
-    for (const [key, field] of Object.entries(fields ?? {})) {
-      const child = input[key];
-      if (field.type === "slot" && Array.isArray(child))
-        output[key] = child.map(component);
-      else if (field.type === "object" && child && typeof child === "object")
-        output[key] = props(child, field.objectFields);
-      else if (field.type === "array" && Array.isArray(child))
-        output[key] = child.map((item) =>
-          item && typeof item === "object"
-            ? props(item, field.arrayFields)
-            : item
-        );
-    }
-    return output;
-  };
-  const component = (input: ObjectValue) => {
-    visit(input);
-    const { readOnly: _readOnly, ...saved } = input;
-    return {
-      ...saved,
-      props: props(input.props, catalog.data.components[input.type]?.fields),
-    };
-  };
-  return { content: data.content.map(component) } as GeneratedContent;
-};
-
 /** The gateway forbids reference siblings, including Zod's contextual descriptions. */
 const normalizeReferenceAnnotations = (schema: Record<string, any>) => {
   const visit = (node: Record<string, any>) => {
@@ -579,7 +693,7 @@ const assertStrictSchema = (schema: Record<string, any>) => {
   visit(schema, "response");
   if (propertyCount > 5_000 || enumCount > 1_000 || nameLength > 120_000)
     throw new Error(
-      "Generation schema exceeds strict-output property, enum, or name-size limits"
+      `Generation schema exceeds strict-output limits: ${propertyCount}/5000 properties, ${enumCount}/1000 enum values, ${nameLength}/120000 name characters`
     );
   // The provider limits inline schema nesting, not the expanded output tree.
   // Check the root and each definition separately; expanding refs rejects valid

@@ -1,3 +1,4 @@
+import type { z } from "zod";
 import { createElement, type ReactElement } from "react";
 import type { LinkType } from "@yext/pages-components";
 import type {
@@ -172,6 +173,11 @@ export type YextFieldDefinition<ValueType = any> =
       ? YextObjectField<ValueType>
       : never);
 
+/** Complete authored props; omit inherited values, callbacks, identities and editor metadata. */
+export type ComponentGenerationMetadata = {
+  props: z.ZodObject;
+};
+
 export type YextComponentConfig<
   Props extends DefaultComponentProps = DefaultComponentProps,
   TransformFields = {},
@@ -187,10 +193,7 @@ export type YextComponentConfig<
     fields: YextPuckFields;
   }>["render"];
   fields?: YextFields<Props>;
-  /** Paths relative to props identifying slots copied from authored content.
-   * For example: [["parentValues", "SecondaryHeaderSlot"]]. Generation validation
-   * skips ID uniqueness checks in these subtrees, retaining all other checks. */
-  derivedSlotPaths?: readonly (readonly string[])[];
+  generation?: ComponentGenerationMetadata;
   resolveFields?: ComponentConfig<{
     props: Props;
     fields: YextPuckFields;

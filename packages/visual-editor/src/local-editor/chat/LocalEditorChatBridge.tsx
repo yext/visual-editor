@@ -1,7 +1,13 @@
+import { isDeepEqual } from "../../utils/deepEqual.ts";
 import React from "react";
 import { resolveAllData, useGetPuck, type Data } from "@puckeditor/core";
 import { clonePuckResolveData } from "../../internal/utils/clonePuckResolveData.ts";
 import { buildPuckHistoryState } from "../../internal/utils/buildPuckHistoryState.ts";
+import { createPuckGenerationCatalog } from "../../vite-plugin/layout-generation/puckGenerationCatalog.ts";
+import {
+  extractAuthored,
+  validateAuthored,
+} from "../../internal/generation/authored.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import type { LocalEditorChatCanvas } from "./LocalEditorChatCanvas.ts";
 import { LocalEditorChatContext } from "./LocalEditorChatContext.tsx";
@@ -18,7 +24,11 @@ const LocalEditorChatCanvasBridge = ({
   canvas: LocalEditorChatCanvas;
 }) => {
   const getPuck = useGetPuck();
-  const streamDocument = useDocument();
+  const document = useDocument();
+  const documentRef = React.useRef(document);
+  if (!isDeepEqual(documentRef.current, document))
+    documentRef.current = document;
+  const streamDocument = documentRef.current;
   React.useEffect(
     () =>
       canvas.attach({
@@ -27,18 +37,20 @@ const LocalEditorChatCanvasBridge = ({
           resolveAllData(clonePuckResolveData(data), getPuck().config, {
             streamDocument,
           }),
-        replace: (data) => {
-          const { dispatch } = getPuck();
-          dispatch({
-            type: "setUi",
-            ui: { itemSelector: null },
-            recordHistory: false,
-          });
-          dispatch({
-            type: "setData",
-            data: { ...data, zones: data.zones ?? {} },
-            recordHistory: false,
-          });
+        validate: (data, candidate) => {
+          const catalog = createPuckGenerationCatalog(
+            getPuck().config.components
+          );
+          validateAuthored(catalog, data as any);
+          if (
+            !isDeepEqual(
+              extractAuthored(catalog, data as any),
+              extractAuthored(catalog, candidate as any)
+            )
+          )
+            throw new Error(
+              "Resolution changed the candidate's authored state."
+            );
         },
         commit: (data: Data, baseline: Data) => {
           const { history, appState } = getPuck();

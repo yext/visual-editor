@@ -6,175 +6,112 @@ import {
   type ChatCanvasAdapter,
 } from "./LocalEditorChatCanvas.ts";
 
-const data = (title: string): Data => ({
-  root: { props: { title } },
-  content: [{ type: "Heading", props: { id: "heading", text: title } }],
+const data = (text: string): Data => ({
+  root: { props: { title: "Keep" } },
+  content: [{ type: "Heading", props: { id: "heading", text } }],
   zones: {},
 });
-const adapter = (title: string): ChatCanvasAdapter => ({
-  read: () => data(title),
+const adapter = (): ChatCanvasAdapter => ({
+  read: () => data("Original"),
   resolve: vi.fn(async (value) => value),
-  replace: vi.fn(),
+  validate: vi.fn(),
   commit: vi.fn(),
 });
 const deferred = () => {
   let resolve!: (data: Data) => void;
-  let reject!: (error: Error) => void;
-  const promise = new Promise<Data>((yes, no) => {
+  const promise = new Promise<Data>((yes) => {
     resolve = yes;
-    reject = no;
   });
-  return { promise, resolve, reject };
+  return { promise, resolve };
 };
 
-describe("provisional canvas transactions", () => {
-  it("ignores old preview resolutions and resolutions after rollback", async () => {
+describe("atomic chat canvas", () => {
+  it("resolves in isolation, preserves root, and commits once", async () => {
     const canvas = new LocalEditorChatCanvas();
-    const target = adapter("Original");
-    const old = deferred();
-    vi.mocked(target.resolve).mockImplementationOnce(() => old.promise);
-    canvas.attach(target);
-    canvas.begin();
-    const pending = canvas.preview({ content: data("Old").content });
-    await canvas.preview({ content: data("New").content });
-    old.resolve(data("Old"));
-    await pending;
-    expect(target.replace).toHaveBeenCalledExactlyOnceWith({
-      ...data("New"),
-      root: data("Original").root,
-    });
-    const later = deferred();
-    vi.mocked(target.resolve).mockImplementationOnce(() => later.promise);
-    const cancelled = canvas.preview({ content: data("Cancelled").content });
-    canvas.finish();
-    later.resolve(data("Cancelled"));
-    await cancelled;
-    expect(target.replace).toHaveBeenLastCalledWith(data("Original"));
-  });
-
-  it("waits for a remounted editor and commits against its baseline", async () => {
-    const canvas = new LocalEditorChatCanvas();
-    const first = adapter("English");
-    const detach = canvas.attach(first);
-    canvas.begin();
-    await canvas.preview({ content: data("Partial").content });
-    detach();
-    const commit = canvas.commit({ content: data("Final").content });
-    const second = adapter("French");
-    canvas.attach(second);
-    await commit;
-    expect(first.commit).not.toHaveBeenCalled();
-    expect(second.commit).toHaveBeenCalledExactlyOnceWith(
-      { ...data("Final"), root: data("French").root },
-      data("French")
-    );
-    canvas.finish();
-    expect(second.replace).not.toHaveBeenCalled();
-  });
-
-  it("does not let a cancelled commit affect a subsequent turn", async () => {
-    const canvas = new LocalEditorChatCanvas();
-    const target = adapter("Original");
-    const detach = canvas.attach(target);
-    canvas.begin();
-    detach();
-    const commit = canvas.commit({ content: data("Old").content });
-    const rejected = expect(commit).rejects.toThrow("cancelled");
-    canvas.finish();
-    const next = adapter("Next");
-    canvas.attach(next);
-    canvas.begin();
-    await rejected;
-    expect(next.commit).not.toHaveBeenCalled();
-  });
-
-  it("retries final resolution for the active document and ignores stale failures", async () => {
-    const canvas = new LocalEditorChatCanvas();
-    const first = adapter("English");
+    const target = adapter();
     const pending = deferred();
-    vi.mocked(first.resolve).mockImplementation(() => pending.promise);
-    const detach = canvas.attach(first);
+    target.resolve = vi.fn(() => pending.promise);
+    canvas.attach(target);
     canvas.begin();
     const commit = canvas.commit({ content: data("Final").content });
-    detach();
-    const second = adapter("French");
-    canvas.attach(second);
-    pending.reject(new Error("Old document"));
+    expect(target.commit).not.toHaveBeenCalled();
+    pending.resolve({
+      ...data("Final"),
+      root: { props: { title: "Resolver" } },
+    });
     await commit;
-    expect(second.commit).toHaveBeenCalledWith(
-      { ...data("Final"), root: data("French").root },
-      data("French")
+    expect(target.commit).toHaveBeenCalledExactlyOnceWith(
+      data("Final"),
+      data("Original")
     );
+    expect(target.validate).toHaveBeenCalledTimes(2);
   });
-
-  it("rolls back resolution failures without committing", async () => {
+  it.each(["cancel", "context", "layout"])(
+    "rejects stale resolution after %s changes",
+    async (change) => {
+      const canvas = new LocalEditorChatCanvas();
+      const target = adapter();
+      const pending = deferred();
+      target.resolve = vi.fn(() => pending.promise);
+      canvas.attach(target);
+      canvas.begin();
+      const commit = canvas.commit({ content: data("Late").content });
+      const rejection = expect(commit).rejects.toThrow(/changed|cancelled/);
+      if (change === "cancel") canvas.finish();
+      if (change === "context") canvas.attach(adapter());
+      if (change === "layout") target.read = () => data("Manual");
+      pending.resolve(data("Late"));
+      await rejection;
+      expect(target.commit).not.toHaveBeenCalled();
+    }
+  );
+  it.each(["resolution", "validation"])(
+    "leaves the starting layout unchanged on %s failure",
+    async (failure) => {
+      const canvas = new LocalEditorChatCanvas();
+      const target = adapter();
+      if (failure === "resolution")
+        target.resolve = vi.fn(async () => {
+          throw new Error("Failed");
+        });
+      else
+        target.validate = vi.fn(() => {
+          throw new Error("Failed");
+        });
+      canvas.attach(target);
+      canvas.begin();
+      await expect(
+        canvas.commit({ content: data("Invalid").content })
+      ).rejects.toThrow("Failed");
+      canvas.finish();
+      expect(target.commit).not.toHaveBeenCalled();
+      expect(target.read()).toEqual(data("Original"));
+    }
+  );
+  it("clarifies without resolving or committing", async () => {
     const canvas = new LocalEditorChatCanvas();
-    const target = adapter("Original");
+    const target = adapter();
     canvas.attach(target);
     canvas.begin();
-    vi.mocked(target.resolve).mockRejectedValue(new Error("Resolution failed"));
-    await expect(
-      canvas.commit({ content: data("Final").content })
-    ).rejects.toThrow("Resolution failed");
-    canvas.finish();
+    await canvas.commit(null);
+    expect(target.resolve).not.toHaveBeenCalled();
     expect(target.commit).not.toHaveBeenCalled();
-    expect(target.replace).toHaveBeenLastCalledWith(data("Original"));
   });
-
-  it("preserves the existing root and clears zones on preview and acceptance", async () => {
-    const canvas = new LocalEditorChatCanvas();
-    const original = {
-      ...data("Original"),
-      root: {
-        props: { title: "Keep", description: "Keep too", version: 99 },
-        readOnly: { title: true },
-      },
-      zones: { "heading:legacy": [] },
-    };
-    const target = adapter("Original");
-    target.read = () => original;
-    // Even a resolver that changes root must not overwrite editor-owned data.
-    target.resolve = vi.fn(async (value) => ({
-      ...value,
-      root: { props: { title: "Changed" } },
-      zones: { "new:zone": [] },
-    }));
-    canvas.attach(target);
-    expect(canvas.begin()).toEqual({ content: original.content });
-    await canvas.preview({ content: data("Partial").content });
-    expect(target.replace).toHaveBeenLastCalledWith({
-      root: original.root,
-      content: data("Partial").content,
-      zones: {},
+  it("rejects populated zones and preserves unexposed serializable configuration", () => {
+    expect(() =>
+      serializeChatLayout({
+        ...data("Original"),
+        zones: { legacy: data("Legacy").content },
+      })
+    ).toThrow("legacy zones");
+    const value = data("Original");
+    value.content[0].props.parentData = { authored: true };
+    value.content[0].props.callback = () => {};
+    expect(serializeChatLayout(value).content[0].props.parentData).toEqual({
+      authored: true,
     });
-    canvas.reset();
-    expect(target.replace).toHaveBeenLastCalledWith(original);
-    await canvas.commit({ content: [] });
-    expect(target.commit).toHaveBeenLastCalledWith(
-      { root: original.root, content: [], zones: {} },
-      original
-    );
-  });
-
-  it("serializes saved data without runtime context and callbacks", () => {
-    const original = {
-      ...data("Original"),
-      content: [
-        {
-          type: "Heading",
-          props: {
-            id: "heading",
-            text: "Keep",
-            puck: { render: () => {} },
-            parentData: { runtime: true },
-            callback: () => {},
-          },
-        },
-      ],
-    };
-    const saved = serializeChatLayout(original);
-    expect(Object.keys(saved)).toEqual(["content"]);
-    expect(saved.content[0].props).toEqual({ id: "heading", text: "Keep" });
-    expect(original.content[0].props.puck).toBeDefined();
+    expect(
+      serializeChatLayout(value).content[0].props.callback
+    ).toBeUndefined();
   });
 });

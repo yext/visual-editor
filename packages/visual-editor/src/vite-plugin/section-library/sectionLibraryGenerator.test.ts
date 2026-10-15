@@ -1,3 +1,4 @@
+import { validateAuthored } from "../../internal/generation/authored.ts";
 // @vitest-environment node
 import os from "node:os";
 import path from "node:path";
@@ -8,10 +9,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Render } from "@puckeditor/core";
 import { MainContent } from "../../components/helpers/MainContent.tsx";
-import {
-  buildGenerationPrompt,
-  validateGeneratedText,
-} from "../layout-generation/generationValidation.ts";
+import { buildGenerationPrompt } from "../layout-generation/generationValidation.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   cleanupGeneratedSectionLibraryFiles,
@@ -46,17 +44,12 @@ describe("generateSectionLibraryFiles", () => {
       fs.writeFileSync(
         filePath,
         'import { createElement } from "react";\nimport { z } from "zod";\n' +
-          source
-            .replace(
-              `export const ${name} = {};`,
-              name === "Hero"
-                ? 'export const Hero = ({ title, children }) => createElement("h2", null, title, children);'
-                : `export const ${name} = { render: ({ title }) => createElement("p", null, title), derivedSlotPaths: [["parentValues", "copiedSlot"]] };`
-            )
-            .replace(
-              "pageSetTypes:",
-              "formalProps: z.object({ title: z.string() }), pageSetTypes:"
-            )
+          source.replace(
+            `export const ${name} = {};`,
+            name === "Hero"
+              ? 'export const Hero = Object.assign(({ title, children }) => createElement("h2", null, title, children), { generation: { props: z.object({ title: z.string() }) } });'
+              : `export const ${name} = { render: ({ title }) => createElement("p", null, title), generation: { props: z.object({ title: z.string() }) } };`
+          )
       );
     }
     generateSectionLibraryFiles(rootDir, "revision");
@@ -86,8 +79,10 @@ describe("generateSectionLibraryFiles", () => {
       expect(catalog.componentNames).not.toContain("Directory");
       expect(directoryCatalog.componentNames).toContain("Directory");
       expect(
-        directoryCatalog.data.components.Directory.derivedSlotPaths
-      ).toEqual([["parentValues", "copiedSlot"]]);
+        directoryCatalog.data.components.Directory.generation.props.safeParse({
+          title: "Directory",
+        }).success
+      ).toBe(true);
       expect(directoryCatalog.componentNames).not.toContain("hero");
       expect(catalog.componentNames).not.toContain("Locator");
       expect(buildGenerationPrompt(catalog)).not.toContain("Locator");
@@ -123,18 +118,10 @@ describe("generateSectionLibraryFiles", () => {
         ],
         zones: {},
       };
-      expect(
-        validateGeneratedText(
-          catalog,
-          JSON.stringify({ text: "Created", spec: { content: data.content } })
-        )
-      ).toEqual([]);
-      expect(
-        validateGeneratedText(
-          directoryCatalog,
-          JSON.stringify({ text: "Created", spec: { content: data.content } })
-        ).join()
-      ).toContain("Unknown component hero");
+      expect(() => validateAuthored(catalog, data)).not.toThrow();
+      expect(() => validateAuthored(directoryCatalog, data)).toThrow(
+        "unknown component hero"
+      );
       expect(
         renderToStaticMarkup(
           createElement(Render, {
@@ -179,14 +166,14 @@ describe("generateSectionLibraryFiles", () => {
       'import { createPuckGenerationCatalog } from "@yext/visual-editor/section-library-support"'
     );
     expect(source).toContain("config as sectionConfig1, Hero as Section1");
-    expect(source).toContain('"hero": { props: sectionConfig1.formalProps');
+    expect(source).toContain('"hero": { generation: Section1.generation');
     expect(source).toContain("fields: Section1.fields");
-    expect(source).toContain("derivedSlotPaths: Section1.derivedSlotPaths");
+    expect(source).toContain("defaultProps: Section1.defaultProps");
     expect(source).toContain(
-      "derivedSlotPaths: sharedComponentConfigs[component.id]?.derivedSlotPaths"
+      "generation: sharedComponentConfigs[component.id]?.generation"
     );
     expect(source).toContain('"location": createPuckGenerationCatalog');
-    expect(source).toContain("sectionConfig1.formalProps ?");
+    expect(source).not.toContain("formalProps");
     cleanupGeneratedSectionLibraryFiles(result.generatedFiles);
     expect(fs.existsSync(catalogPath)).toBe(false);
   });

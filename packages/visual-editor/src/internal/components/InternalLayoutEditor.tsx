@@ -1,4 +1,4 @@
-import { LocalEditorChatBridge } from "../../local-editor/chat/LocalEditorChatBridge.tsx";
+import { LayoutPuckOverride } from "./LayoutPuckOverride.tsx";
 import {
   Puck,
   Data,
@@ -12,7 +12,6 @@ import {
   ComponentDataOptionalId,
   FieldLabel,
   createUsePuck,
-  resolveAllData,
   blocksPlugin,
   outlinePlugin,
 } from "@puckeditor/core";
@@ -22,7 +21,6 @@ import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { MetaTitleField } from "../puck/components/meta-title/MetaTitleField.tsx";
-import { ValidationReporters } from "../puck/components/ValidationReporters.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import * as lzstring from "lz-string";
@@ -35,9 +33,7 @@ import { cn } from "../../utils/cn.ts";
 import { removeDuplicateActionBars } from "../utils/removeDuplicateActionBars.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
-import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
-import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
 import type { MigrationRegistry } from "../../utils/migrate.ts";
 import { useTranslation } from "react-i18next";
@@ -279,64 +275,6 @@ export const InternalLayoutEditor = ({
       },
     };
   }, [puckConfig, i18n.language]);
-
-  // Resolve all data and slots when the document changes
-  // Implemented as an override so that the getPuck hook is available
-  const reloadDataOnDocumentChange = React.useCallback(
-    (props: { children: React.ReactNode }): React.ReactElement => {
-      const getPuck = useGetPuck();
-
-      React.useEffect(() => {
-        let active = true;
-        const resolveData = async () => {
-          devLogger.logFunc("reloadDataOnDocumentChange");
-          const { appState, config, dispatch } = getPuck();
-
-          // Clone Puck data to ensure entity fields get updated on entity selection
-          const dataToResolve = clonePuckResolveData(appState.data);
-
-          const resolvedData = await resolveAllData(dataToResolve, config, {
-            streamDocument,
-          });
-
-          // A newer document or canvas update supersedes this resolution.
-          if (!active || getPuck().appState.data !== appState.data) {
-            return;
-          }
-
-          devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
-
-          if (isDeepEqual(appState.data, resolvedData)) {
-            devLogger.log(
-              "reloadDataOnDocumentChange - no layout changes detected"
-            );
-            return;
-          }
-
-          dispatch({ type: "setData", data: resolvedData });
-        };
-
-        resolveData();
-        return () => {
-          active = false;
-        };
-      }, [streamDocument]);
-
-      return <>{props.children}</>;
-    },
-    [streamDocument]
-  );
-
-  const puckOverride = React.useCallback(
-    (props: { children: React.ReactNode }) => (
-      <>
-        <ValidationReporters />
-        <LocalEditorChatBridge />
-        {reloadDataOnDocumentChange(props)}
-      </>
-    ),
-    [reloadDataOnDocumentChange]
-  );
 
   // Prevent setPointerCapture errors by wrapping the native method, this is a workaround for a bug in the Puck library where the pointer gets stuck in a drag state when it is no longer active.
   React.useEffect(() => {
@@ -630,7 +568,7 @@ export const InternalLayoutEditor = ({
             );
           },
           fieldLabel: LayoutFieldLabel,
-          puck: puckOverride,
+          puck: LayoutPuckOverride,
         }}
         metadata={metadata}
       />

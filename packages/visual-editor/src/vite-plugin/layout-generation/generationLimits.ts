@@ -1,13 +1,24 @@
 import type { GeneratedContent } from "../../local-editor/types.ts";
 
 export const GENERATION_ATTEMPT_DEADLINE_MS = 120_000;
+export const FRESH_PAGE_OUTPUT_TOKEN_BUDGET = 128_000;
+export const EDIT_PAGE_OUTPUT_TOKEN_BUDGET = 65_536;
 
 /** Conservative UTF-8 estimate, without adding a model-specific tokenizer. */
-export const generationTokenBudget = (content?: GeneratedContent) => {
+export const generationTokenBudget = (
+  content?: GeneratedContent,
+  options: { isBlankPage?: boolean } = {}
+) => {
   const estimatedTokens = content
     ? Math.ceil(Buffer.byteLength(JSON.stringify(content), "utf8") / 3)
     : 0;
-  return Math.max(16_384, estimatedTokens * 2 + 4_096);
+  // Empty scaffolding says nothing about the size of a complete page response.
+  // max_output_tokens also covers reasoning, so reserve a larger creation budget.
+  const minimum =
+    options.isBlankPage || !content?.content.length
+      ? FRESH_PAGE_OUTPUT_TOKEN_BUDGET
+      : EDIT_PAGE_OUTPUT_TOKEN_BUDGET;
+  return Math.max(minimum, estimatedTokens * 2 + 4_096);
 };
 
 /** Look only within JSON strings, so repeated component structures are safe. */

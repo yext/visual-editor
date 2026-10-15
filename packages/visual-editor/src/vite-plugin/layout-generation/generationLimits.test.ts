@@ -3,11 +3,34 @@ import { describe, expect, it } from "vitest";
 import {
   createGenerationRepetitionGuard,
   generationTokenBudget,
+  FRESH_PAGE_OUTPUT_TOKEN_BUDGET,
+  EDIT_PAGE_OUTPUT_TOKEN_BUDGET,
 } from "./generationLimits.ts";
 
 describe("generation limits", () => {
-  it("budgets small layouts at 16,384 and scales for larger UTF-8 content", () => {
-    expect(generationTokenBudget()).toBe(16_384);
+  it("budgets full page generations at 131,072 and edits at 65,536", () => {
+    expect(generationTokenBudget()).toBe(FRESH_PAGE_OUTPUT_TOKEN_BUDGET);
+    expect(generationTokenBudget({ content: [] })).toBe(
+      FRESH_PAGE_OUTPUT_TOKEN_BUDGET
+    );
+    const scaffold = {
+      content: [{ type: "MainContent", props: { id: "main", content: [] } }],
+    };
+    expect(generationTokenBudget(scaffold, { isBlankPage: true })).toBe(
+      FRESH_PAGE_OUTPUT_TOKEN_BUDGET
+    );
+    expect(
+      generationTokenBudget(
+        {
+          content: [
+            { type: "Text", props: { id: "text", text: "Small edit" } },
+          ],
+        },
+        { isBlankPage: false }
+      )
+    ).toBe(EDIT_PAGE_OUTPUT_TOKEN_BUDGET);
+  });
+  it("scales for larger UTF-8 content", () => {
     const content = {
       content: [
         { type: "Text", props: { id: "text", text: "😀".repeat(10_000) } },

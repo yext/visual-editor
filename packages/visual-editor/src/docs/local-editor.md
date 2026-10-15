@@ -31,18 +31,17 @@ production builds.
 ## Layout chat
 
 Use **Show chat** to open the floating conversation over the layout editor.
-Complete sections appear directly on the canvas as generation streams. Manual
-editing and undo/redo pause during generation. Successful turns become one
-undoable edit and persist through the editor's existing local storage. Failed
-turns and repair resets restore the starting layout. Prose-only replies leave
-that layout unchanged.
+Commentary and progress stream into chat. Complete layouts appear on the canvas
+only after validation and resolution. Manual editing and undo/redo pause during
+generation. Successful turns become one undoable edit and persist through the
+editor's existing local storage. Failed turns and clarifications leave the
+starting layout unchanged.
 
 Each prompt includes the current editor content, including manual edits. Hiding
-chat keeps the conversation and active request. **New conversation** cancels
-provisional changes and clears messages and token usage, preserving committed
-layout data. Layout changes abort generation and clear chat. Entity and locale
-changes keep the conversation and active request; output follows the active
-editor, with that selection's starting layout used for rollback and undo.
+chat keeps the conversation and active request. **New conversation** cancels the
+turn and clears messages and token usage, preserving committed layout data.
+Layout changes abort generation and clear chat. Entity and locale changes abort
+the active turn while preserving the previous conversation.
 **Enter** sends a prompt; **Shift+Enter** inserts a new line. Token counts are
 available under **Token usage** in the panel footer.
 
@@ -69,170 +68,99 @@ Generation authors only the `content` array in Puck's saved-data format:
 }
 ```
 
-The editor preserves its existing `root`, including page settings and migration
-metadata, and sets `zones` to `{}` when applying generated content. Neither root
-nor zones are requested from the model or included in revision context. Failed
-turns restore the full starting layout, including any prior zones.
-
-`content` is ordered component data. Nested slot fields contain component arrays
-inside props, including slots within object/array fields. Every component needs
-a unique nonempty `props.id`. Runtime `puck` context and callbacks are never saved.
+The editor preserves its existing `root`, page settings, migration metadata,
+and unexposed serializable configuration. Populated legacy `zones` are rejected
+before generation; they are never silently converted or discarded.
 
 The generator creates `src/library/.generated/catalog.js`, exporting `catalogs`
-keyed by layout ID. Each catalog includes compatible sections with `formalProps`,
-MainContent, and compatible hidden shared components for nested slots. Generation
-uses the editor's regular Puck config.
+keyed by layout Id. Contracts belong to the registered Puck component, including
+hidden shared slot children. Sections without a contract remain available in
+the editor and can be preserved in existing layouts.
 
 ```ts
 import { z } from "zod";
-import type { SectionConfig } from "@yext/visual-editor";
+import type { YextComponentConfig } from "@yext/visual-editor";
 
-export const config: SectionConfig = {
-  id: "hero",
-  displayName: "Hero",
-  description: "A hero with a title and optional description.",
-  pageSetTypes: ["ENTITY"],
-  formalProps: z.object({
-    title: z.string().describe("Use a concise welcoming title."),
-    description: z.string().nullable(),
-  }),
+export const Hero: YextComponentConfig = {
+  generation: {
+    props: z.object({
+      title: z.string().describe("Use a concise welcoming title."),
+      description: z.string().nullable().optional(),
+      heading: z.array(z.unknown()).length(1),
+    }),
+  },
+  fields: { heading: { type: "slot", allow: ["Heading"] } },
+  defaultProps: { title: "Welcome", heading: [] },
+  render: ({ title }) => <h1>{title}</h1>,
 };
 ```
 
-Sections without formal schemas remain available in the regular Visual Editor.
-Descriptions, regex constraints, enums, nested schemas, and optional fields guide
-AI generation. Formal schemas describe serializable component props without
-runtime Puck context. The catalog adds the common saved component ID and
-preserves schema refinements for validation.
+`generation.props` describes complete authored configuration. Omit inherited
+and computed values, callbacks, identities, and editor metadata. Parent contracts
+describe slots as arrays of `z.unknown()` with cardinality constraints; native
+`allow`/`disallow` restrictions select registered child contracts. Do not duplicate
+child schemas inline. Undeclared copied slots remain system-owned and are excluded
+from authored traversal, model context, and targeting.
 
-`createPuckGenerationCatalog` from the section-library-support entrypoint uses
-json-render's `defineSchema` and `defineCatalog` with a custom prompt template.
-The schema defines only Puck content rather than an elements graph. The
-custom template avoids default flat-tree instructions. An internal compiler
-derives the gateway's complete response schema from component Zod schemas,
-pairing each component type with its own props and constraining nested slots.
-Generation requires `strict: true`; it never falls back to an unrestricted
-schema. Zod's native JSON Schema export retains descriptions, enums, patterns,
-and other supported constraints. The prompt supplies concise component and
-default-value guidance rather than duplicating property schemas or Puck fields.
+`createPuckGenerationCatalog` uses json-render's custom schema/catalog approach
+with native nested Puck data. Only the metadata type and catalog entrypoint are
+public; compilation, traversal, and materialization remain implementation details.
+Zod's JSON Schema export supplies the strict gateway response schema. Unsupported
+constructs, including transformations, custom refinements, unrestricted maps,
+and unrepresentable gateway keywords, fail before any model call.
 
-Formal schemas must describe constrained, serializable props. Every reachable
-component needs `formalProps` or a complete inline schema in its parent slot.
-Declared Puck slots can use generic component arrays: the compiler replaces
-them with allowed component alternatives. Other `any`, `unknown`, open-ended
-records, transformations, and unsupported schema keywords fail explicitly.
-For example, `Heading.props.options` with an unrestricted record produces a
-schema error naming that path before any gateway request.
+Each declared wire property is required and uses `{ mode: "keep" }` or
+`{ mode: "set", value: ... }`. `{ mode: "unset" }` is available only when the
+authored schema allows absence. Null is an explicit set value. Objects apply these
+rules recursively; ordinary arrays replace their complete values. Optional members
+inside complete array values use set/unset envelopes to express absence without
+nullable placeholders. Localized catchalls expand to the selected layout's locales;
+keep preserves existing translations and entity bindings.
 
-The nesting limit applies independently to inline schema objects in the root
-and each `$defs` entry. `$ref` boundaries preserve fully constrained, deeply
-nested Puck layouts without flattening their saved-data shape. References are
-validated without expanding them into a single output-depth count.
-Contextual descriptions on reused schemas are retained in an `anyOf` wrapper,
-because the gateway requires `$ref` nodes to have no sibling keywords.
+Existing instances use their native authored subtree as the baseline; new instances
+clone component defaults. A new fixed-slot child uses the enclosing default slot
+template when exactly one template matches its type. New authored subtrees receive
+fresh Ids. Explicit invalid values are never repaired by defaults, and missing
+required values produce a path-specific validation error.
 
-Localized-string objects retain their native shape. String-valued catchalls on
-objects with `defaultValue` and optional `hasLocalizedValue` become fixed locale
-properties for generation. The selected layout's stream locale list, snapshot
-locales, and effective default locale determine those properties; global UI
-translation locales are not used. Existing content with unconfigured locale
-keys fails preflight rather than losing translations. Other dynamic maps must
-declare fixed keys.
+The strict model envelope is `{ text, result }`. The result is a clarification,
+initial page creation, explicitly authorized full-page redesign, or bounded edit
+operations. Update/remove/move targets and destination collections are enumerated
+from the starting inventory. Conflicting ancestor/descendant operations, cycles,
+illegal destinations, and targets created during the same response are rejected.
+The complete candidate is materialized and validated against an isolated baseline.
+At most one schema or validation repair uses that unchanged baseline. Refusals,
+transport failures, deadlines, and output exhaustion terminate the turn. A page
+containing only an empty MainContent scaffold counts as blank. Blank-page creation
+uses a minimum output budget of 65,536 tokens; small edits retain the 16,384-token
+minimum, with larger existing layouts receiving a scaled allowance. The gateway
+request log records the selected budget and blank-page classification.
 
-Strict output represents optional properties with nullable placeholders. The
-server removes those placeholders when the original schema allows omission
-but not null, preserving genuinely nullable values. Completed streaming
-components use the same normalization as accepted responses. Original Zod
-refinements and semantic checks, including unique component IDs, still run
-before acceptance.
-
-Component `readOnly` flags are editor-owned: they are excluded from gateway
-output, current-content context, and structured conversation history. The
-server restores existing flags for matching component IDs and types, including
-nested slots. New components and replacements do not inherit flags.
-
-Schema and current-content incompatibilities return HTTP 422 with an actionable
-path. Unsupported strict output, refusals, and incomplete gateway responses
-fail the turn without a non-strict retry. Other starter schema corrections are
-separate from this pipeline change.
-
-Each gateway attempt has a 16,384-token minimum output budget (including
-reasoning), increased to twice the estimated current-layout token count plus
-4,096 when needed. The estimate uses UTF-8 byte length divided by three.
-Attempts have a two-minute deadline, including time spent actively streaming.
-A guard stops thousands of characters of consecutive repeated text within a
-single JSON string. Budget exhaustion, deadlines, and repetition errors fail
-the turn without automatic repair and roll back provisional previews.
-Generation logs are buffered and written asynchronously every ten seconds,
-with an early flush at 4 MiB and a final flush on graceful server shutdown.
-
-A manual gateway smoke check uses only a synthetic catalog and prompt:
-
-```sh
-pnpm --dir packages/visual-editor exec node --import tsx scripts/strictGenerationSmoke.ts gpt-6-luna
-```
-
-This check is separate from the normal tests and requires company gateway
-access. Pass the configured generation model as the final argument.
-
-Generation supports serializable Puck props and the existing entity reference
-conventions. json-render state bindings, repeat instructions, and action
-expressions are currently unsupported. Schema construction, validation,
-transport, and preview resolution are separate so future expression support can
-be added explicitly without changing the editor integration.
-
-See [json-render custom schemas](https://json-render.dev/docs/custom-schema),
-[Puck Data](https://puckeditor.com/docs/api-reference/data-model/data), and
-[Puck slot fields](https://puckeditor.com/docs/api-reference/fields/slot).
-
-### Generation protocol
-
-The development-only POST endpoint at
-`/__yext_visual_editor/local-editor/generate` accepts:
-
-```ts
-{
-  layoutId: "location",
-  currentData: { content: [] },
-  messages: [{ role: "user", content: "Create a welcoming page" }]
-}
-```
-
-Messages use user/assistant roles, must end with a nonempty user turn, and are
-limited to 1 MiB per request. Unknown layouts are rejected. The endpoint sends
-conversation history and catalog descriptions/prop schemas to the company
-Responses gateway at `http://modelgateway.service.us3dev.consul:8008/openai/responses`.
 No `OPENAI_API_KEY` is required; the development server needs gateway access.
-Requests retain `Yext-Business-Id: 1000152098`, `Yext-Source: blife-vle-ai-poc`, and
-a fresh UUID in `Correlation-Id`. Snapshot documents and section source code are
-not sent.
+Requests use strict JSON Schema output with `strict: true`, retaining the gateway's
+existing business/source headers and a fresh correlation Id. Component source code
+and snapshot documents are not sent. Authored context, defaults, and descriptions
+are used for generation. Image requests can use model-supplied image URLs.
 
-Each response is `{ text, spec }`, where `spec` contains the complete Puck content array or
-`null` for prose-only answers. The NDJSON protocol identifies itself with
-`X-Visual-Editor-Generation: validated-puck-content-v1` and emits `preview-text`,
-`preview-spec`, `reset`, `accepted`, `usage`, and `error` events. Accepted events
-carry `text` and `spec` directly. The previous flat-spec/mixed-patch protocol is
-not supported.
+The NDJSON transport identifies itself with
+`X-Visual-Editor-Generation: strict-puck-overrides-v2`. It emits `commentary`,
+`progress`, `accepted`, `usage`, and `error` events. Only the accepted event contains
+a complete materialized `spec` (or null for clarification). Commentary and progress
+never mutate the canvas. There are no provisional layouts or compatibility events.
 
-The server previews complete, validated sections as they arrive, including
-completed sections inside a still-open MainContent slot. Preview scaffolding
-never enters committed editor history. Completed content undergoes
-structure, ID, component membership, slot, and prop validation. Failures
-trigger up to two repair attempts. Failed turns restore the previous conversation;
-only accepted structured responses become revision history.
+After transport completes, the client validates and resolves the isolated candidate
+through `resolveAllData` in the active editor with its `streamDocument`. It validates
+again and checks that resolution preserved canonical authored state before adding
+one history entry. Failed, cancelled, stale, or invalid turns leave the starting
+layout unchanged. Changes to layout, entity, or locale abort the turn.
 
-The client resolves cloned generation data with `resolveAllData` inside the
-existing Puck editor. Resolution failures roll back the turn and appear in chat.
-Stale resolution results are ignored. Requests add optional `currentData` containing
-serializable Puck content; root, zones, runtime callbacks, and Puck context are excluded. The
-server places this current layout after earlier conversation context so it is
-the authoritative starting point for revisions.
-
-Gateway requests/responses are logged as JSONL in `src/library/.generated/logs`.
-Logs retain request bodies, stream events, HTTP status, correlation IDs, generated
-text, and usage. The conversation displays cumulative cached input, uncached
-input, and output tokens, including repairs and reported usage from failed turns.
-Usage resets with **New conversation** or a layout change.
+Generation outcomes, correlation Ids, and errors are logged locally in
+`src/library/.generated/logs`. Server initialization writes and flushes a startup
+entry immediately; subsequent request entries are buffered for up to ten seconds
+and flushed on shutdown. Requests cancelled in the browser before reaching the
+server produce no request entry. The conversation displays cumulative cached input,
+uncached input, and output tokens, including repairs. Usage resets with
+**New conversation** or a layout change.
 
 The default model remains `gpt-6-luna`:
 

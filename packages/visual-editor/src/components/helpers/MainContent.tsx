@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { PuckComponent, Slot } from "@puckeditor/core";
 import { YextComponentConfig } from "../../fields/fields.ts";
 
@@ -45,6 +46,7 @@ const MainContentComponent: PuckComponent<MainContentProps> = ({
 
 export const MainContent: YextComponentConfig<MainContentProps> = {
   label: "Main Content",
+  generation: { props: z.object({ content: z.array(z.unknown()) }) },
   fields: {
     content: {
       type: "slot",

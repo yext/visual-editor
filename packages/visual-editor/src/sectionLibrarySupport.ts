@@ -248,3 +248,5 @@ export { isVisualEditorTestEnv } from "./components/testing/utils.ts";
 export { fetchLocalesToPathsForEntity } from "./utils/api/fetchLocalesToPathsForEntity.ts";
 export { presetImageIcons } from "./utils/presetImageIcons.tsx";
 export { createPuckGenerationCatalog } from "./vite-plugin/layout-generation/puckGenerationCatalog.ts";
+
+export type { ComponentGenerationMetadata } from "./fields/fields.ts";

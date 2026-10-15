@@ -90,7 +90,7 @@ export const LocalEditorChat = ({
         {chat.isStreaming && (
           <p className="local-editor-chat-status" role="status">
             <span className="local-editor-chat-status-dot" />
-            Generating… Editor updates are provisional.
+            {chat.progress || "Generating…"}
           </p>
         )}
         {chat.error && (

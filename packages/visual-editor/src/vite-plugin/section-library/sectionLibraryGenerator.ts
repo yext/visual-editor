@@ -406,13 +406,13 @@ const buildJsonRenderSource = (
         ...sections.flatMap((section, index) =>
           section.pageSetTypes.includes(layout.metadata.pageSetType)
             ? [
-                `    ...(sectionConfig${index}.formalProps ? { ${JSON.stringify(section.id)}: { props: sectionConfig${index}.formalProps, description: sectionConfig${index}.description, fields: Section${index}.fields, defaultProps: Section${index}.defaultProps, derivedSlotPaths: Section${index}.derivedSlotPaths } } : {}),`,
+                `    ${JSON.stringify(section.id)}: { generation: Section${index}.generation, description: sectionConfig${index}.description, fields: Section${index}.fields, defaultProps: Section${index}.defaultProps },`,
               ]
             : []
         ),
         ...(hasSharedRegistry
           ? [
-              `    ...Object.fromEntries(sharedComponentMetadata.filter((component) => component.pageSetTypes.includes(${pageSetType})).map((component) => [component.id, { props: sharedComponentConfigs[component.id]?.formalProps, fields: sharedComponentConfigs[component.id]?.fields, defaultProps: sharedComponentConfigs[component.id]?.defaultProps, derivedSlotPaths: sharedComponentConfigs[component.id]?.derivedSlotPaths, nestedOnly: true }])),`,
+              `    ...Object.fromEntries(sharedComponentMetadata.filter((component) => component.pageSetTypes.includes(${pageSetType})).map((component) => [component.id, { generation: sharedComponentConfigs[component.id]?.generation, fields: sharedComponentConfigs[component.id]?.fields, defaultProps: sharedComponentConfigs[component.id]?.defaultProps, nestedOnly: true }])),`,
             ]
           : []),
         hasSharedRegistry

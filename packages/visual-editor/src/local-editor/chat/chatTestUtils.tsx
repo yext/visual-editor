@@ -1,3 +1,6 @@
+import { ErrorProvider } from "../../contexts/ErrorContext.tsx";
+import { z } from "zod";
+import type { YextComponentConfig } from "../../fields/fields.ts";
 import { beforeEach, afterEach, vi } from "vitest";
 import React from "react";
 import {
@@ -10,7 +13,7 @@ import {
 import { TemplatePropsContext } from "../../hooks/useDocument.tsx";
 import { LocalEditorChat } from "./LocalEditorChat.tsx";
 import { LocalEditorChatContext } from "./LocalEditorChatContext.tsx";
-import { LocalEditorChatBridge } from "./LocalEditorChatBridge.tsx";
+import { LayoutPuckOverride } from "../../internal/components/LayoutPuckOverride.tsx";
 import { useLocalEditorChat } from "./useLocalEditorChat.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 
@@ -30,9 +33,12 @@ export const layout = (text = "Original"): Data<any, Record<string, any>> => ({
 export const generatedContent = (text = "Original") => ({
   content: layout(text).content,
 });
-export const chatConfig: Config = {
+export const chatConfig: Config & {
+  components: Record<string, YextComponentConfig>;
+} = {
   components: {
     MainContent: {
+      generation: { props: z.object({ content: z.array(z.unknown()) }) },
       fields: { content: { type: "slot" } },
       render: ({ content: Content }) => (
         <main>
@@ -41,6 +47,7 @@ export const chatConfig: Config = {
       ),
     },
     Heading: {
+      generation: { props: z.object({ text: z.string() }) },
       fields: { text: { type: "text" } },
       render: ({ text }) => <h2>{text}</h2>,
     },
@@ -72,31 +79,37 @@ const Controls = () => {
 export const ChatHarness = ({
   layoutId = "location",
   locale = "en",
+  entityId = "one",
   config = chatConfig,
   initialData = layout(),
 }: {
   layoutId?: string;
   locale?: string;
+  entityId?: string;
   config?: Config;
   initialData?: Data;
 }) => {
   const chat = useLocalEditorChat("/local/generate", layoutId);
   return (
-    <TemplatePropsContext.Provider value={{ document: { locale } }}>
-      <LocalEditorChat chat={chat} disabled={!chat.ready} />
-      <LocalEditorChatContext.Provider value={chat.canvas}>
-        <Puck
-          key={`${layoutId}:${locale}`}
-          config={config}
-          data={initialData}
-          iframe={{ enabled: false }}
-        >
-          <Puck.Preview />
-          <Controls />
-          <LocalEditorChatBridge />
-        </Puck>
-      </LocalEditorChatContext.Provider>
-    </TemplatePropsContext.Provider>
+    <ErrorProvider>
+      <TemplatePropsContext.Provider
+        value={{ document: { id: entityId, locale } }}
+      >
+        <LocalEditorChat chat={chat} disabled={!chat.ready} />
+        <LocalEditorChatContext.Provider value={chat.canvas}>
+          <Puck
+            key={`${layoutId}:${locale}`}
+            config={config}
+            data={initialData}
+            iframe={{ enabled: false }}
+            overrides={{ puck: LayoutPuckOverride }}
+          >
+            <Puck.Preview />
+            <Controls />
+          </Puck>
+        </LocalEditorChatContext.Provider>
+      </TemplatePropsContext.Provider>
+    </ErrorProvider>
   );
 };
 
