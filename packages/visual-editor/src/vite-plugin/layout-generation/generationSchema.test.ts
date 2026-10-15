@@ -2,16 +2,22 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { createPuckGenerationCatalog } from "./puckGenerationCatalog.ts";
-import { compileGenerationSchema } from "./generationSchema.ts";
 import {
-  extractAuthored,
+  compileGenerationSchema,
+  isBlankGenerationPage,
+} from "./generationSchema.ts";
+import { buildGenerationPrompt } from "./generationValidation.ts";
+import {
   indexAuthored,
-  type Content,
+  validateAuthored,
 } from "../../internal/generation/authored.ts";
 
-const keep = { mode: "keep" };
-const unset = { mode: "unset" };
-const set = (value: any) => ({ mode: "set", value });
+const defaults = { $default: true };
+const unset = { $unset: true };
+const create = (content: any[]) => ({
+  text: "Created",
+  result: { action: "create", content },
+});
 const catalog = () =>
   createPuckGenerationCatalog({
     Heading: {
@@ -69,58 +75,351 @@ const catalog = () =>
       },
     },
   });
-const baseline = (): Content => ({
-  content: [
-    {
-      type: "Section",
-      props: {
-        id: "section",
-        title: "Original",
-        extra: { keep: true },
-        slots: {
-          heading: [
-            {
-              type: "Heading",
-              props: {
-                id: "heading",
-                text: "Authored",
-                optional: null,
-                style: { color: "red", width: 15, inherited: 99 },
-                links: [],
-                hidden: true,
-              },
-              readOnly: { text: true },
-            },
-          ],
-        },
-        copied: [{ type: "Heading", props: { id: "heading", text: "Copy" } }],
-      },
-      readOnly: { title: true },
-    },
-  ],
-});
-const headingProps = (text = keep) => ({
-  text,
-  optional: keep,
-  style: keep,
-  links: keep,
-});
-const edit = (operations: any[]) => ({
-  text: "Updated",
-  result: { action: "edit", operations },
-});
-const create = (content: any[]) => ({
-  text: "Created",
-  result: { action: "create", content },
-});
-const heading = (id: string | null = null, props = headingProps()) => ({
+
+const heading = (optional: any = unset) => ({
   type: "Heading",
-  id,
-  props,
+  props: { text: defaults, optional, style: defaults, links: [] },
+});
+const section = (child: any = heading()) => ({
+  type: "Section",
+  props: { title: defaults, slots: { heading: [child] } },
 });
 
-describe("strict authored overrides", () => {
-  it("shares override modes and Id enums for a large catalog and starting inventory", () => {
+describe("fresh page creation schema", () => {
+  it("accepts only empty content or a single empty MainContent scaffold", () => {
+    for (const data of [
+      { content: [] },
+      {
+        content: [{ type: "MainContent", props: { id: "main", content: [] } }],
+      },
+    ]) {
+      expect(isBlankGenerationPage(data)).toBe(true);
+      expect(compileGenerationSchema(catalog(), ["en"], data).isBlankPage).toBe(
+        true
+      );
+    }
+    for (const data of [
+      { content: [{ type: "Section", props: { id: "section" } }] },
+      { content: [{ type: "MainContent", props: { content: [section()] } }] },
+      { content: [{ type: "MainContent", props: {} }] },
+      {
+        content: [
+          { type: "MainContent", props: { content: [] } },
+          { type: "MainContent", props: { content: [] } },
+        ],
+      },
+      { content: [], zones: { legacy: [section()] } },
+    ]) {
+      expect(isBlankGenerationPage(data)).toBe(false);
+      expect(() => compileGenerationSchema(catalog(), ["en"], data)).toThrow();
+    }
+  });
+
+  it("uses direct values, contextual defaults and fresh identities without stripping undeclared defaults", () => {
+    const c = catalog();
+    const compiled = compileGenerationSchema(c, ["en"]);
+    const response = create([section(), section()]);
+    const result = compiled.materialize(response).spec!;
+    const child = result.content[0].props.slots.heading[0];
+    expect(child.props.text).toBe("Contextual");
+    expect(child.props.style.width).toBe(25);
+    expect(child.props.id).not.toBe("template");
+    expect(indexAuthored(c, result).items.size).toBe(4);
+    expect(new Set(indexAuthored(c, result).items.keys())).not.toEqual(
+      new Set(
+        indexAuthored(c, compiled.materialize(response).spec!).items.keys()
+      )
+    );
+    expect(c.data.components.Section.defaultProps!.slots).toMatchObject({
+      heading: [{ props: { id: "template" } }],
+    });
+    const direct = compiled.materialize(
+      create([
+        section({
+          ...heading(null),
+          props: { ...heading(null).props, text: "Authored" },
+        }),
+      ])
+    ).spec!;
+    expect(direct.content[0].props.slots.heading[0].props).toMatchObject({
+      text: "Authored",
+      optional: null,
+    });
+    expect(Object.hasOwn(child.props, "optional")).toBe(false);
+  });
+
+  it("preserves undeclared object and union defaults while validating all authored constraints", () => {
+    const c = createPuckGenerationCatalog({
+      Box: {
+        generation: {
+          props: z.strictObject({
+            style: z.strictObject({
+              width: z.number().min(1).describe("Width in pixels"),
+            }),
+            choice: z.union([
+              z.strictObject({ kind: z.literal("a"), text: z.string() }),
+              z.strictObject({ kind: z.literal("b"), count: z.number() }),
+            ]),
+            nullable: z.string().nullable(),
+            fallback: z.string().default("Schema default"),
+          }),
+        },
+        defaultProps: {
+          hidden: true,
+          style: { width: 2, internal: 99 },
+          choice: { kind: "b", internal: "Preserve" },
+          nullable: null,
+        },
+      },
+    });
+    const compiled = compileGenerationSchema(c, ["en"]);
+    const response = create([
+      {
+        type: "Box",
+        props: {
+          style: { width: 3 },
+          choice: { kind: "b", count: 4 },
+          nullable: null,
+          fallback: defaults,
+        },
+      },
+    ]);
+    const result = compiled.materialize(response).spec!;
+    expect(result.content[0].props).toMatchObject({
+      hidden: true,
+      style: { width: 3, internal: 99 },
+      choice: { kind: "b", count: 4, internal: "Preserve" },
+      nullable: null,
+      fallback: "Schema default",
+    });
+    expect(() => validateAuthored(c, result)).not.toThrow();
+    response.result.content[0].props.style.width = 0;
+    expect(() => compiled.materialize(response)).toThrow();
+    expect(JSON.stringify(compiled.jsonSchema)).toContain("Width in pixels");
+  });
+
+  it("emits only reachable components and enforces root and slot permissions in final validation", () => {
+    const c = createPuckGenerationCatalog(
+      {
+        Root: {
+          generation: { props: z.object({ children: z.array(z.unknown()) }) },
+          fields: {
+            children: {
+              type: "slot",
+              allow: ["Child", "Blocked"],
+              disallow: ["Blocked"],
+            },
+          },
+          defaultProps: { children: [] },
+          description: "Unique root description",
+        },
+        Child: {
+          generation: { props: z.object({ text: z.string() }) },
+          nestedOnly: true,
+        },
+        Blocked: {
+          generation: { props: z.object({ secret: z.string() }) },
+          nestedOnly: true,
+        },
+        Unreachable: {
+          generation: { props: z.object({ unused: z.string() }) },
+          nestedOnly: true,
+        },
+      },
+      { rootAllowedComponentIds: ["Root", "Child"] }
+    );
+    const compiled = compileGenerationSchema(c, ["en"]);
+    expect(compiled.availableComponentNames).toEqual(["Child", "Root"]);
+    const serialized = JSON.stringify(compiled.jsonSchema);
+    for (const name of [
+      "Blocked",
+      "Unreachable",
+      "MainContent",
+      "Unique root description",
+    ])
+      expect(serialized).not.toContain(name);
+    const prompt = buildGenerationPrompt(c, compiled.availableComponentNames);
+    expect(prompt.split("Unique root description")).toHaveLength(2);
+    expect(prompt).not.toContain("Unreachable");
+    const valid = {
+      type: "Root",
+      props: { children: [{ type: "Child", props: { text: "Hello" } }] },
+    };
+    expect(compiled.materialize(create([valid])).spec).toBeTruthy();
+    for (const name of ["Blocked", "Unreachable", "Root"]) {
+      const invalid = {
+        type: "Root",
+        props: {
+          id: "root",
+          children: [{ type: name, props: { id: "child", text: "Hello" } }],
+        },
+      };
+      expect(() => validateAuthored(c, { content: [invalid] })).toThrow(
+        /not allowed/
+      );
+      expect(() => compiled.materialize(create([invalid]))).toThrow();
+    }
+    expect(() =>
+      compiled.materialize(
+        create([{ type: "Child", props: { text: "Root child" } }])
+      )
+    ).toThrow();
+    expect(() =>
+      validateAuthored(c, {
+        content: [
+          { type: "Child", props: { id: "child", text: "Root child" } },
+        ],
+      })
+    ).toThrow(/not allowed/);
+    expect(() =>
+      validateAuthored(c, {
+        content: [{ type: "MainContent", props: { id: "main", content: [] } }],
+      })
+    ).toThrow(/not allowed/);
+    // Even defaults must obey the final slot permissions.
+    c.data.components.Root.defaultProps!.children = [
+      { type: "Blocked", props: { secret: "x" } },
+    ];
+    expect(() =>
+      compileGenerationSchema(c, ["en"]).materialize(
+        create([{ type: "Root", props: { children: defaults } }])
+      )
+    ).toThrow(/not allowed/);
+  });
+
+  it("preflights unreachable contracts independently", () => {
+    for (const value of [
+      z.any(),
+      z.record(z.string(), z.string()),
+      z.string().transform((s) => s.length),
+      z.string().refine((s) => !!s),
+      z
+        .string()
+        .refine((s) => !!s)
+        .optional(),
+    ]) {
+      expect(() =>
+        compileGenerationSchema(
+          createPuckGenerationCatalog(
+            {
+              Invalid: {
+                generation: { props: z.object({ value }) },
+                nestedOnly: true,
+              },
+            },
+            { rootAllowedComponentIds: ["MainContent"] }
+          ),
+          ["en"]
+        )
+      ).toThrow();
+    }
+  });
+
+  it("supports localized values, arrays with optional members, and nested slots", () => {
+    const c = createPuckGenerationCatalog({
+      Child: {
+        generation: { props: z.object({ text: z.string() }) },
+        defaultProps: { text: "Child" },
+        nestedOnly: true,
+      },
+      List: {
+        generation: {
+          props: z.object({
+            text: z.object({ defaultValue: z.string() }).catchall(z.string()),
+            rows: z
+              .array(
+                z.object({
+                  label: z.string().optional(),
+                  children: z.array(z.unknown()),
+                })
+              )
+              .max(2),
+          }),
+        },
+        fields: {
+          rows: {
+            type: "array",
+            arrayFields: { children: { type: "slot", allow: ["Child"] } },
+          },
+        },
+        defaultProps: { text: { defaultValue: "Hello", es: "Hola" }, rows: [] },
+      },
+    });
+    const compiled = compileGenerationSchema(c, ["en", "es"]);
+    const result = compiled.materialize(
+      create([
+        {
+          type: "List",
+          props: {
+            text: { defaultValue: defaults, en: unset, es: "Nuevo" },
+            rows: [
+              {
+                label: unset,
+                children: [{ type: "Child", props: { text: defaults } }],
+              },
+            ],
+          },
+        },
+      ])
+    ).spec!;
+    expect(result.content[0].props.text).toEqual({
+      defaultValue: "Hello",
+      es: "Nuevo",
+    });
+    expect(result.content[0].props.rows[0].children[0].props.text).toBe(
+      "Child"
+    );
+    expect(Object.hasOwn(result.content[0].props.rows[0], "label")).toBe(false);
+  });
+
+  it("rejects incomplete output, model Ids, invalid values, unavailable defaults and removed outcomes", () => {
+    const c = createPuckGenerationCatalog({
+      Required: {
+        generation: { props: z.object({ title: z.string().min(1) }) },
+      },
+    });
+    const compiled = compileGenerationSchema(c, ["en"]);
+    for (const props of [
+      {},
+      { title: defaults },
+      { title: unset },
+      { title: null },
+      { title: "" },
+      { title: 42 },
+      { title: "Valid", id: "invented" },
+    ]) {
+      expect(() =>
+        compiled.materialize(create([{ type: "Required", props }]))
+      ).toThrow();
+    }
+    expect(() =>
+      compiled.materialize(
+        create([{ type: "Required", id: null, props: { title: "Valid" } }])
+      )
+    ).toThrow();
+    for (const action of [
+      "edit",
+      "insert",
+      "update",
+      "remove",
+      "move",
+      "redesign",
+    ])
+      expect(() =>
+        compiled.materialize({ text: "", result: { action, content: [] } })
+      ).toThrow();
+    expect(() => compiled.materialize(create([]))).toThrow();
+    expect(
+      compiled.materialize({
+        text: "Need details",
+        result: { action: "clarification", question: "Which page?" },
+      })
+    ).toEqual({ text: "Need details\n\nWhich page?", spec: null });
+  });
+
+  it("reduces a large catalog against the previous override schema baseline", () => {
+    // Measured with the previous compiler: 20 sections, 75 defaulted string props each.
+    const previousSchemaBytes = 344_080;
     const components = Object.fromEntries(
       Array.from({ length: 20 }, (_, componentIndex) => [
         `Section${componentIndex}`,
@@ -135,72 +434,25 @@ describe("strict authored overrides", () => {
               )
             ),
           },
+          defaultProps: Object.fromEntries(
+            Array.from({ length: 75 }, (_, index) => [
+              `property${index}`,
+              "Default",
+            ])
+          ),
         },
       ])
     );
-    const content = Array.from({ length: 100 }, (_, index) => ({
-      type: `Section${index % 20}`,
-      props: {
-        id: `existing-component-${index}`,
-        ...Object.fromEntries(
-          Array.from({ length: 75 }, (_, prop) => [
-            `property${prop}`,
-            "Authored",
-          ])
-        ),
-      },
-    }));
     const compiled = compileGenerationSchema(
       createPuckGenerationCatalog(components),
-      ["en"],
-      { content }
+      ["en"]
     );
-    expect(JSON.stringify(compiled.jsonSchema)).toContain("$ref");
-    expect(compiled.inventory.targets).toHaveLength(100);
-    const overrides = Object.fromEntries(
-      Array.from({ length: 75 }, (_, index) => [
-        `property${index}`,
-        index === 0 ? set("Updated") : keep,
-      ])
+    expect(Buffer.byteLength(JSON.stringify(compiled.jsonSchema))).toBeLessThan(
+      previousSchemaBytes * 0.6
     );
-    const result = compiled.materialize(
-      edit([{ action: "update", id: "existing-component-0", props: overrides }])
-    ).spec!;
-    expect(result.content[0].props.property0).toBe("Updated");
-    expect(result.content[0].props.property1).toBe("Authored");
-    expect(() =>
-      compiled.materialize(
-        edit([{ action: "update", id: "unknown", props: overrides }])
-      )
-    ).toThrow();
   });
-  it("treats an empty MainContent scaffold as blank but counts its authored descendants", () => {
-    const c = createPuckGenerationCatalog({
-      Heading: { generation: { props: z.object({ text: z.string() }) } },
-    });
-    const scaffold = {
-      content: [{ type: "MainContent", props: { id: "main", content: [] } }],
-    };
-    const compiled = compileGenerationSchema(c, ["en"], scaffold);
-    expect(compiled.isBlankPage).toBe(true);
-    const created = compiled.materialize(
-      create([
-        {
-          type: "MainContent",
-          id: "main",
-          props: {
-            content: set([
-              { type: "Heading", id: null, props: { text: set("New page") } },
-            ]),
-          },
-        },
-      ])
-    ).spec!;
-    expect(created.content[0].props.id).toBe("main");
-    expect(compileGenerationSchema(c, ["en"], created).isBlankPage).toBe(false);
-  });
-  it("keeps every wire property required and closes every object", () => {
-    const compiled = compileGenerationSchema(catalog(), ["en"], baseline());
+
+  it("keeps all wire objects closed and required", () => {
     const visit = (node: any) => {
       if (node.type === "object") {
         expect(node.additionalProperties).toBe(false);
@@ -213,504 +465,6 @@ describe("strict authored overrides", () => {
       for (const child of node.anyOf ?? []) visit(child);
       if (node.items) visit(node.items);
     };
-    visit(compiled.jsonSchema);
-    expect(() =>
-      compiled.materialize(
-        edit([{ action: "update", id: "heading", props: { text: set("New") } }])
-      )
-    ).toThrow();
-  });
-  it("merges nested objects and preserves metadata, copied slots, and unexposed configuration", () => {
-    const start = baseline();
-    const compiled = compileGenerationSchema(catalog(), ["en"], start);
-    const result = compiled.materialize(
-      edit([
-        {
-          action: "update",
-          id: "heading",
-          props: {
-            ...headingProps(set("New")),
-            style: set({ color: set("blue"), width: keep }),
-          },
-        },
-      ])
-    ).spec!;
-    const child = result.content[0].props.slots.heading[0];
-    expect(child.props).toMatchObject({
-      id: "heading",
-      text: "New",
-      style: { color: "blue", width: 15, inherited: 99 },
-      optional: null,
-      hidden: true,
-    });
-    expect(child.readOnly).toEqual({ text: true });
-    expect(result.content[0].props.copied).toEqual(
-      start.content[0].props.copied
-    );
-    expect(start).toEqual(baseline());
-    expect(compiled.inventory.targets).toEqual(["section", "heading"]);
-    expect(JSON.stringify(compiled.context)).not.toContain("copied");
-    expect(JSON.stringify(compiled.context)).not.toContain("inherited");
-  });
-  it("distinguishes absence from explicit null and replaces arrays completely", () => {
-    const compiled = compileGenerationSchema(catalog(), ["en"], baseline());
-    const result = compiled.materialize(
-      edit([
-        {
-          action: "update",
-          id: "heading",
-          props: {
-            ...headingProps(),
-            optional: unset,
-            links: set([{ label: "Home", url: "/" }]),
-          },
-        },
-      ])
-    ).spec!;
-    expect(
-      Object.hasOwn(result.content[0].props.slots.heading[0].props, "optional")
-    ).toBe(false);
-    expect(
-      compiled.materialize(
-        edit([
-          {
-            action: "update",
-            id: "heading",
-            props: { ...headingProps(), optional: set(null) },
-          },
-        ])
-      ).spec!.content[0].props.slots.heading[0].props.optional
-    ).toBe(null);
-    expect(result.content[0].props.slots.heading[0].props.links).toEqual([
-      { label: "Home", url: "/" },
-    ]);
-    expect(() =>
-      compiled.materialize(
-        edit([
-          {
-            action: "update",
-            id: "heading",
-            props: { ...headingProps(), text: unset },
-          },
-        ])
-      )
-    ).toThrow();
-  });
-  it("uses defaults and contextual fixed-slot templates with fresh subtree identities", () => {
-    const compiled = compileGenerationSchema(catalog(), ["en"]);
-    const response = create([
-      {
-        type: "Section",
-        id: null,
-        props: { title: keep, slots: set({ heading: set([heading()]) }) },
-      },
-    ]);
-    const result = compiled.materialize(response).spec!;
-    const child = result.content[0].props.slots.heading[0];
-    expect(child.props.text).toBe("Contextual");
-    expect(child.props.style.width).toBe(25);
-    expect(child.props.id).not.toBe("template");
-    expect(result.content[0].props.id).not.toBe(child.props.id);
-    expect(indexAuthored(catalog(), result).items.size).toBe(2);
-  });
-  it("preserves unexposed values in strict objects and object-valued unions", () => {
-    const c = createPuckGenerationCatalog({
-      Box: {
-        generation: {
-          props: z.strictObject({
-            choice: z.union([
-              z.strictObject({ kind: z.literal("a"), text: z.string() }),
-              z.strictObject({ kind: z.literal("b"), count: z.number() }),
-            ]),
-          }),
-        },
-      },
-    });
-    const start = {
-      content: [
-        {
-          type: "Box",
-          props: {
-            id: "box",
-            choice: { kind: "a", text: "Old", inherited: "Keep" },
-            hidden: true,
-          },
-        },
-      ],
-    };
-    const compiled = compileGenerationSchema(c, ["en"], start);
-    expect(compiled.context.content[0].props.choice).toEqual({
-      kind: "a",
-      text: "Old",
-    });
-    const result = compiled.materialize(
-      edit([
-        {
-          action: "update",
-          id: "box",
-          props: { choice: set({ kind: keep, text: set("New") }) },
-        },
-      ])
-    ).spec!;
-    expect(result.content[0].props.choice).toEqual({
-      kind: "a",
-      text: "New",
-      inherited: "Keep",
-    });
-    expect(result.content[0].props.hidden).toBe(true);
-  });
-  it("projects incomplete object-union defaults before applying explicit overrides", () => {
-    const c = createPuckGenerationCatalog({
-      Box: {
-        generation: {
-          props: z.object({
-            choice: z.union([
-              z.object({ kind: z.literal("a"), text: z.string() }),
-              z.object({ kind: z.literal("b"), count: z.number() }),
-            ]),
-          }),
-        },
-        defaultProps: { choice: { kind: "b", internal: "Preserve" } },
-      },
-    });
-    expect(
-      extractAuthored(
-        c,
-        {
-          content: [
-            { type: "Box", props: c.data.components.Box.defaultProps! },
-          ],
-        },
-        { includeIds: false }
-      ).content[0].props.choice
-    ).toEqual({ kind: "b" });
-    const result = compileGenerationSchema(c, ["en"]).materialize(
-      create([
-        {
-          type: "Box",
-          id: null,
-          props: { choice: set({ kind: keep, count: set(3) }) },
-        },
-      ])
-    ).spec!;
-    expect(result.content[0].props.choice).toEqual({
-      kind: "b",
-      count: 3,
-      internal: "Preserve",
-    });
-  });
-  it("handles complete arrays with optional values and nested authored slots", () => {
-    const c = createPuckGenerationCatalog({
-      Child: {
-        generation: { props: z.object({ text: z.string() }) },
-        defaultProps: { text: "Child" },
-        nestedOnly: true,
-      },
-      List: {
-        generation: {
-          props: z.object({
-            rows: z.array(
-              z.object({
-                label: z.string().optional(),
-                children: z.array(z.unknown()),
-              })
-            ),
-          }),
-        },
-        fields: {
-          rows: {
-            type: "array",
-            arrayFields: { children: { type: "slot", allow: ["Child"] } },
-          },
-        },
-        defaultProps: { rows: [] },
-      },
-    });
-    const compiled = compileGenerationSchema(c, ["en"]);
-    const result = compiled.materialize(
-      create([
-        {
-          type: "List",
-          id: null,
-          props: {
-            rows: set([
-              {
-                label: unset,
-                children: set([
-                  { type: "Child", id: null, props: { text: keep } },
-                ]),
-              },
-            ]),
-          },
-        },
-      ])
-    ).spec!;
-    expect(result.content[0].props.rows[0].children[0].props.text).toBe(
-      "Child"
-    );
-    expect(Object.hasOwn(result.content[0].props.rows[0], "label")).toBe(false);
-    expect(indexAuthored(c, result).items.size).toBe(2);
-  });
-  it("reuses existing subtree identities during an explicitly authorized redesign", () => {
-    const compiled = compileGenerationSchema(catalog(), ["en"], baseline(), {
-      allowRedesign: true,
-    });
-    const result = compiled.materialize({
-      text: "Redesigned",
-      result: {
-        action: "redesign",
-        content: [
-          {
-            type: "Section",
-            id: "section",
-            props: { title: set("Redesign"), slots: keep },
-          },
-        ],
-      },
-    }).spec!;
-    expect(result.content[0].props.id).toBe("section");
-    expect(result.content[0].props.slots.heading[0].props.id).toBe("heading");
-  });
-  it("uses the enclosing default template for new slot children during an edit", () => {
-    const compiled = compileGenerationSchema(catalog(), ["en"], baseline());
-    const result = compiled.materialize(
-      edit([
-        {
-          action: "update",
-          id: "section",
-          props: { title: keep, slots: set({ heading: set([heading()]) }) },
-        },
-      ])
-    ).spec!;
-    expect(result.content[0].props.slots.heading[0].props.text).toBe(
-      "Contextual"
-    );
-    expect(result.content[0].props.slots.heading[0].props.id).not.toBe(
-      "heading"
-    );
-  });
-  it("reports missing values and never fills invalid explicit values from defaults", () => {
-    const c = createPuckGenerationCatalog({
-      Required: {
-        generation: { props: z.object({ title: z.string().min(1) }) },
-      },
-    });
-    const compiled = compileGenerationSchema(c, ["en"]);
-    expect(() =>
-      compiled.materialize(
-        create([{ type: "Required", id: null, props: { title: keep } }])
-      )
-    ).toThrow(/title/);
-    expect(() =>
-      compileGenerationSchema(catalog(), ["en"]).materialize(
-        create([
-          { type: "Section", id: null, props: { title: set(42), slots: keep } },
-        ])
-      )
-    ).toThrow();
-  });
-  it("rejects duplicate, unknown, and incorrectly reused references and slot types", () => {
-    const compiled = compileGenerationSchema(catalog(), ["en"], baseline());
-    expect(() =>
-      compiled.materialize(
-        edit([
-          {
-            action: "update",
-            id: "section",
-            props: {
-              title: keep,
-              slots: set({ heading: set([heading("unknown")]) }),
-            },
-          },
-        ])
-      )
-    ).toThrow();
-    expect(() =>
-      compiled.materialize(
-        edit([
-          {
-            action: "update",
-            id: "section",
-            props: {
-              title: keep,
-              slots: set({ heading: set([heading("section")]) }),
-            },
-          },
-        ])
-      )
-    ).toThrow(/reused/);
-    expect(() =>
-      compiled.materialize(
-        edit([
-          {
-            action: "update",
-            id: "section",
-            props: {
-              title: keep,
-              slots: set({
-                heading: set([heading("heading"), heading("heading")]),
-              }),
-            },
-          },
-        ])
-      )
-    ).toThrow();
-    const duplicate = baseline();
-    duplicate.content.push(duplicate.content[0]);
-    expect(() => compileGenerationSchema(catalog(), ["en"], duplicate)).toThrow(
-      /duplicate/
-    );
-  });
-  it("applies multiple bounded operations atomically and rejects conflicts, cycles and invalid destinations", () => {
-    const start = baseline();
-    start.content.push({
-      ...baseline().content[0],
-      props: {
-        ...baseline().content[0].props,
-        id: "other",
-        slots: {
-          heading: [
-            {
-              type: "Heading",
-              props: {
-                id: "other-heading",
-                text: "Other",
-                optional: null,
-                hidden: true,
-                style: { color: "red", width: 10, inherited: 99 },
-                links: [],
-              },
-            },
-          ],
-        },
-      },
-    });
-    const compiled = compileGenerationSchema(catalog(), ["en"], start);
-    const result = compiled.materialize(
-      edit([
-        { action: "update", id: "heading", props: headingProps(set("Edited")) },
-        { action: "move", id: "other", destination: "content", index: 0 },
-      ])
-    ).spec!;
-    expect(result.content.map((item) => item.props.id)).toEqual([
-      "other",
-      "section",
-    ]);
-    expect(result.content[1].props.slots.heading[0].props.text).toBe("Edited");
-    expect(() =>
-      compiled.materialize(
-        edit([
-          { action: "remove", id: "section" },
-          { action: "update", id: "heading", props: headingProps() },
-        ])
-      )
-    ).toThrow(/ancestor/);
-    expect(() =>
-      compiled.materialize(
-        edit([
-          {
-            action: "move",
-            id: "section",
-            destination: "content/0/props/slots/heading",
-            index: 0,
-          },
-        ])
-      )
-    ).toThrow(/cycle/);
-    expect(() =>
-      compiled.materialize(
-        edit([
-          {
-            action: "insert",
-            destination: "future",
-            index: 0,
-            component: heading(),
-          },
-        ])
-      )
-    ).toThrow();
-    expect(() =>
-      compiled.materialize(
-        edit([
-          { action: "move", id: "other", destination: "content", index: 99 },
-        ])
-      )
-    ).toThrow(/bounds/);
-    expect(start.content[0].props.slots.heading[0].props.text).toBe("Authored");
-  });
-  it("permits full-page redesign only with explicit authorization and clarifies without mutation", () => {
-    const compiled = compileGenerationSchema(catalog(), ["en"], baseline());
-    const response = {
-      text: "Need details",
-      result: { action: "clarification", question: "Which image?" },
-    };
-    expect(compiled.materialize(response)).toEqual({
-      text: "Need details\n\nWhich image?",
-      spec: null,
-    });
-    expect(() =>
-      compiled.materialize({
-        text: "Redesign",
-        result: { action: "redesign", content: [] },
-      })
-    ).toThrow();
-  });
-  it("preserves entity bindings and locale values and rejects unsupported schemas before execution", () => {
-    const c = createPuckGenerationCatalog({
-      Text: {
-        generation: {
-          props: z.object({
-            binding: z.object({ field: z.string(), constantValue: z.string() }),
-            text: z.object({ defaultValue: z.string() }).catchall(z.string()),
-          }),
-        },
-        defaultProps: {
-          binding: { field: "name", constantValue: "" },
-          text: { defaultValue: "Hello", es: "Hola" },
-        },
-      },
-    });
-    const compiled = compileGenerationSchema(c, ["en", "es"]);
-    const result = compiled.materialize(
-      create([
-        {
-          type: "Text",
-          id: null,
-          props: {
-            binding: keep,
-            text: set({ defaultValue: keep, en: unset, es: set("Nuevo") }),
-          },
-        },
-      ])
-    ).spec!;
-    expect(result.content[0].props).toMatchObject({
-      binding: { field: "name", constantValue: "" },
-      text: { defaultValue: "Hello", es: "Nuevo" },
-    });
-    expect(extractAuthored(c, result).content[0].props.text).toEqual({
-      defaultValue: "Hello",
-      es: "Nuevo",
-    });
-    for (const schema of [
-      z.any(),
-      z.record(z.string(), z.string()),
-      z.string().transform((s) => s.length),
-      z.string().refine((s) => !!s),
-    ]) {
-      expect(() =>
-        compileGenerationSchema(
-          createPuckGenerationCatalog({
-            Invalid: { generation: { props: z.object({ value: schema }) } },
-          }),
-          ["en"]
-        )
-      ).toThrow();
-    }
-    expect(() =>
-      compileGenerationSchema(catalog(), ["en"], {
-        ...baseline(),
-        zones: { old: baseline().content },
-      })
-    ).toThrow(/legacy zones/);
+    visit(compileGenerationSchema(catalog(), ["en"]).jsonSchema);
   });
 });

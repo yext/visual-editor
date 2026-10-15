@@ -1,8 +1,12 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { randomUUID } from "node:crypto";
 import { StringDecoder } from "node:string_decoder";
+import { z } from "zod";
 import type { PuckGenerationCatalog } from "./puckGenerationCatalog.ts";
-import { compileGenerationSchema } from "./generationSchema.ts";
+import {
+  compileGenerationSchema,
+  isBlankGenerationPage,
+} from "./generationSchema.ts";
 import { buildGenerationPrompt } from "./generationValidation.ts";
 import { createStructuredGenerationParser } from "./structuredGenerationStream.ts";
 import {
@@ -27,6 +31,60 @@ type GenerationOptions = {
 
 const GENERATION_GATEWAY_URL =
   "http://modelgateway.service.us3dev.consul:8008/openai/responses";
+const MAX_LOGGED_GATEWAY_ERROR_BYTES = 8 * 1024;
+
+const jsonBytes = (value: unknown): number =>
+  Buffer.byteLength(JSON.stringify(value), "utf8");
+
+const summarizeSchema = (schema: Record<string, any>) => {
+  const summary = {
+    bytes: jsonBytes(schema),
+    definitions: Object.keys(schema.$defs ?? {}).length,
+    references: 0,
+    properties: 0,
+    unionBranches: 0,
+    maximumDepth: 0,
+    keywords: {} as Record<string, number>,
+  };
+  const visit = (value: unknown, depth: number) => {
+    if (!value || typeof value !== "object" || Array.isArray(value)) return;
+    summary.maximumDepth = Math.max(summary.maximumDepth, depth);
+    for (const [key, child] of Object.entries(value)) {
+      summary.keywords[key] = (summary.keywords[key] ?? 0) + 1;
+      if (key === "$ref") summary.references++;
+      if (key === "properties" && child && typeof child === "object")
+        summary.properties += Object.keys(child).length;
+      if (["anyOf", "oneOf", "allOf"].includes(key) && Array.isArray(child))
+        summary.unionBranches += child.length;
+      if (Array.isArray(child)) child.forEach((item) => visit(item, depth + 1));
+      else visit(child, depth + 1);
+    }
+  };
+  visit(schema, 0);
+  return summary;
+};
+
+const componentDiagnostics = (catalog: PuckGenerationCatalog) =>
+  Object.entries(catalog.data.components)
+    .filter(([, component]) => component.generation)
+    .map(([name, component]) => {
+      let authoredSchemaBytes: number | undefined;
+      try {
+        authoredSchemaBytes = jsonBytes(
+          z.toJSONSchema(component.props, { io: "input" })
+        );
+      } catch {
+        // The compiled strict schema diagnostics below still capture total size.
+      }
+      return {
+        name,
+        nestedOnly: component.nestedOnly ?? false,
+        authoredSchemaBytes,
+        descriptionBytes: Buffer.byteLength(component.description ?? ""),
+        defaultPropsBytes: jsonBytes(component.defaultProps ?? {}),
+        authoredPropCount: Object.keys(component.props.shape ?? {}).length,
+      };
+    });
 
 type GatewayResponse = {
   id?: string;
@@ -201,23 +259,56 @@ export const handleLocalEditorGenerationRequest = async (
     rejectRequest("currentData must contain native Puck content.", 400);
     return;
   }
+  if (
+    !isBlankGenerationPage(
+      (currentData as Content | undefined) ?? { content: [] }
+    )
+  ) {
+    rejectRequest(
+      "Generation requires a blank page. Clear the layout before generating a new page.",
+      409
+    );
+    return;
+  }
+  const conversationHistory = messages.slice(0, -1);
+  log("[local-editor generation] Request payload measured", {
+    ...requestDetails,
+    layoutId,
+    bodyBytes,
+    messageCount: messages.length,
+    historyMessageCount: conversationHistory.length,
+    historyContentBytes: conversationHistory.reduce(
+      (total, message) => total + Buffer.byteLength(message.content, "utf8"),
+      0
+    ),
+    latestPromptBytes: Buffer.byteLength(messages.at(-1).content, "utf8"),
+    currentDataBytes: currentData === undefined ? 0 : jsonBytes(currentData),
+    locales,
+  });
 
   let compiled: ReturnType<typeof compileGenerationSchema>;
+  const compileStartedAt = Date.now();
   try {
-    const prompt = messages.at(-1).content;
-    // Full-page replacement requires explicit intent in the current user turn.
-    const allowRedesign =
-      /\b(redesign|replace|rebuild)\s+(?:(?:the|this|my|our)\s+)?(?:(?:entire|whole|full)\s+)?(?:landing\s+)?page(?:\s+layout)?(?=\s*(?:[.!?,;]|$|with\b|from\b|using\b|for\b|to\b|so\b))|\b(full-page|full page|entire page|whole page)\b[\s\S]*\b(redesign|replacement|rebuild)\b/i.test(
-        prompt
-      );
     compiled = compileGenerationSchema(
       catalog,
       locales,
-      currentData as Content | undefined,
-      { allowRedesign }
+      currentData as Content | undefined
     );
+    log("[local-editor generation] Schema compiled", {
+      correlationId,
+      layoutId,
+      compilationDurationMs: Date.now() - compileStartedAt,
+      isBlankPage: compiled.isBlankPage,
+      availableComponentCount: compiled.availableComponentNames.length,
+      availableComponentNames: compiled.availableComponentNames,
+      schema: summarizeSchema(compiled.jsonSchema),
+    });
   } catch (error) {
-    rejectRequest(error instanceof Error ? error.message : String(error), 422);
+    rejectRequest(error instanceof Error ? error.message : String(error), 422, {
+      schemaCompilationDurationMs: Date.now() - compileStartedAt,
+      componentCount: Object.keys(catalog.data.components).length,
+      locales,
+    });
     return;
   }
   const controller = new AbortController();
@@ -251,7 +342,11 @@ export const handleLocalEditorGenerationRequest = async (
   };
   const writeUsage = (usage: GatewayResponse["usage"]) => {
     if (!usage) return;
-    log("[local-editor generation] Usage", { correlationId, usage });
+    log("[local-editor generation] Usage", {
+      correlationId,
+      usage,
+      reasoningTokens: usage.output_tokens_details?.reasoning_tokens ?? 0,
+    });
     const cachedInput = usage.input_tokens_details?.cached_tokens ?? 0;
     writeEvent({
       type: "usage",
@@ -262,8 +357,15 @@ export const handleLocalEditorGenerationRequest = async (
       },
     });
   };
+  let phase = "prepare";
+  let attemptNumber = 0;
+  let outputBytes = 0;
   try {
-    const instructions = buildGenerationPrompt(catalog);
+    phase = "build-prompt";
+    const instructions = buildGenerationPrompt(
+      catalog,
+      compiled.availableComponentNames
+    );
     const history = messages.slice(0, -1).map(({ role, content }) => {
       if (role === "assistant") {
         try {
@@ -275,229 +377,247 @@ export const handleLocalEditorGenerationRequest = async (
       }
       return { role, content };
     });
-    let repair: { draft: string; error: string } | undefined;
-    for (let attempt = 0; attempt < 2; attempt++) {
-      writeEvent({
-        type: "progress",
-        text: attempt
-          ? "Repairing the candidate layout…"
-          : "Generating a candidate layout…",
-      });
-      let outputText = "";
-      const guard = createGenerationRepetitionGuard();
-      const parser = createStructuredGenerationParser({
-        onText: (delta) => writeEvent({ type: "commentary", delta }),
-        onValue: () => {},
-      });
-      const consume = (delta: string) => {
-        guard(delta);
-        outputText += delta;
-        parser.push(delta);
-      };
-      const requestBody = {
-        model,
-        stream: true,
-        max_output_tokens: generationTokenBudget(compiled.context as any, {
-          isBlankPage: compiled.isBlankPage,
-        }),
-        instructions,
-        input: [
-          ...history,
-          {
-            role: "user",
-            content: JSON.stringify({
-              request: messages.at(-1).content,
-              currentLayout: compiled.context,
-              inventory: compiled.inventory,
-              ...(repair
-                ? {
-                    repair: {
-                      ...repair,
-                      instruction:
-                        "Correct the rejected proposal against the unchanged starting layout. Return the complete response.",
-                    },
-                  }
-                : {}),
-            }),
-          },
-        ],
-        text: {
-          format: {
-            type: "json_schema",
-            name: "puck_generation",
-            strict: true,
-            schema: compiled.jsonSchema,
-          },
-        },
-      };
-      log("[local-editor generation] Gateway request", {
-        correlationId,
-        attempt: attempt + 1,
-        model,
-        maxOutputTokens: requestBody.max_output_tokens,
+    const componentStats = componentDiagnostics(catalog);
+    const schemaStats = summarizeSchema(compiled.jsonSchema);
+    attemptNumber = 1;
+    phase = "build-request";
+    writeEvent({
+      type: "progress",
+      text: "Generating a candidate layout…",
+    });
+    let outputText = "";
+    outputBytes = 0;
+    const guard = createGenerationRepetitionGuard();
+    const parser = createStructuredGenerationParser({
+      onText: (delta) => writeEvent({ type: "commentary", delta }),
+      onValue: () => {},
+    });
+    const consume = (delta: string) => {
+      guard(delta);
+      outputText += delta;
+      outputBytes = Buffer.byteLength(outputText, "utf8");
+      parser.push(delta);
+    };
+    const latestUserContent = JSON.stringify({
+      request: messages.at(-1).content,
+    });
+    const input = [
+      ...history,
+      { role: "user" as const, content: latestUserContent },
+    ];
+    const requestBody = {
+      model,
+      stream: true,
+      max_output_tokens: generationTokenBudget(compiled.context as any, {
         isBlankPage: compiled.isBlankPage,
-      });
-      const upstream = await fetch(GENERATION_GATEWAY_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Yext-Business-Id": "1000152098",
-          "Yext-Source": "blife-vle-ai-poc",
-          "Correlation-Id": correlationId,
+      }),
+      instructions,
+      input,
+      text: {
+        format: {
+          type: "json_schema",
+          name: "puck_generation",
+          strict: true,
+          schema: compiled.jsonSchema,
         },
-        body: JSON.stringify(requestBody),
-        signal: controller.signal,
-      });
-      log("[local-editor generation] Gateway response", {
+      },
+    };
+    const serializedRequestBody = JSON.stringify(requestBody);
+    const historyBytes = jsonBytes(history);
+    log("[local-editor generation] Gateway request", {
+      correlationId,
+      attempt: attemptNumber,
+      model,
+      gatewayUrl: GENERATION_GATEWAY_URL,
+      requestBodyBytes: Buffer.byteLength(serializedRequestBody, "utf8"),
+      requestBodyCharacters: serializedRequestBody.length,
+      instructionsBytes: Buffer.byteLength(instructions, "utf8"),
+      historyMessageCount: history.length,
+      historyBytes,
+      latestUserContentBytes: Buffer.byteLength(latestUserContent, "utf8"),
+      currentLayoutBytes: jsonBytes(compiled.context),
+      inputBytes: jsonBytes(input),
+      schema: schemaStats,
+      componentCount: componentStats.length,
+      components: componentStats,
+      maxOutputTokens: requestBody.max_output_tokens,
+      isBlankPage: compiled.isBlankPage,
+    });
+    phase = "gateway-fetch";
+    const upstream = await fetch(GENERATION_GATEWAY_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Yext-Business-Id": "1000152098",
+        "Yext-Source": "blife-vle-ai-poc",
+        "Correlation-Id": correlationId,
+      },
+      body: serializedRequestBody,
+      signal: controller.signal,
+    });
+    log("[local-editor generation] Gateway response", {
+      correlationId,
+      attempt: attemptNumber,
+      status: upstream.status,
+      contentType: upstream.headers.get("Content-Type"),
+      contentLength: upstream.headers.get("Content-Length"),
+      requestId:
+        upstream.headers.get("x-request-id") ??
+        upstream.headers.get("request-id"),
+      retryAfter: upstream.headers.get("retry-after"),
+    });
+    if (!upstream.ok) {
+      const errorBody = await upstream.text();
+      log("[local-editor generation] Gateway error response", {
         correlationId,
-        attempt: attempt + 1,
+        attempt: attemptNumber,
         status: upstream.status,
-        contentType: upstream.headers.get("Content-Type"),
+        responseBodyBytes: Buffer.byteLength(errorBody, "utf8"),
+        responseBodyTruncated:
+          Buffer.byteLength(errorBody, "utf8") > MAX_LOGGED_GATEWAY_ERROR_BYTES,
+        responseBody: Buffer.from(errorBody, "utf8")
+          .subarray(0, MAX_LOGGED_GATEWAY_ERROR_BYTES)
+          .toString("utf8"),
       });
-      if (!upstream.ok)
-        throw new Error(
-          `AI gateway HTTP ${upstream.status} (correlation ${correlationId}).`
-        );
-      if (
-        !upstream.headers.get("Content-Type")?.includes("text/event-stream")
-      ) {
-        const result = (await upstream.json()) as GatewayResponse;
-        if (result.status === "incomplete" || result.incomplete_details) {
-          const responseText = extractOutputText(result);
-          log("[local-editor generation] Gateway incomplete response", {
-            correlationId,
-            attempt: attempt + 1,
-            responseId: result.id,
-            model: result.model ?? model,
-            status: result.status,
-            maxOutputTokens: requestBody.max_output_tokens,
-            incompleteDetails: result.incomplete_details,
-            usage: result.usage,
-            responseOutputCharacters: responseText.length,
-            responseOutputBytes: Buffer.byteLength(responseText, "utf8"),
-          });
-        }
-        const text = readOutputText(result);
-        log("[local-editor generation] Gateway completed", {
+      throw new Error(
+        `AI gateway HTTP ${upstream.status} (correlation ${correlationId}).`
+      );
+    }
+    phase = "read-gateway-response";
+    if (!upstream.headers.get("Content-Type")?.includes("text/event-stream")) {
+      const result = (await upstream.json()) as GatewayResponse;
+      if (result.status === "incomplete" || result.incomplete_details) {
+        const responseText = extractOutputText(result);
+        log("[local-editor generation] Gateway incomplete response", {
           correlationId,
-          attempt: attempt + 1,
+          attempt: attemptNumber,
           responseId: result.id,
           model: result.model ?? model,
           status: result.status,
-          outputCharacters: text.length,
+          maxOutputTokens: requestBody.max_output_tokens,
           incompleteDetails: result.incomplete_details,
+          usage: result.usage,
+          responseOutputCharacters: responseText.length,
+          responseOutputBytes: Buffer.byteLength(responseText, "utf8"),
         });
-        writeUsage(result.usage);
-        consume(text);
-      } else {
-        const reader = upstream.body?.getReader();
-        if (!reader) throw new Error("The gateway returned no response body.");
-        const decoder = new TextDecoder();
-        let pending = "";
-        let completed = false;
-        const eventCounts: Record<string, number> = {};
-        const streamStartedAt = Date.now();
-        const processLine = (line: string) => {
-          if (!line.startsWith("data:")) return;
-          const raw = line.slice(5).trim();
-          if (!raw || raw === "[DONE]") return;
-          const event = JSON.parse(raw);
-          eventCounts[event.type ?? "unknown"] =
-            (eventCounts[event.type ?? "unknown"] ?? 0) + 1;
-          if (event.type?.startsWith("response.refusal"))
-            throw new Error("The AI gateway refused generation.");
-          if (
-            ["error", "response.failed", "response.incomplete"].includes(
-              event.type
-            ) ||
-            event.error
-          ) {
-            const responseText = event.response
-              ? extractOutputText(event.response)
-              : "";
-            log("[local-editor generation] Gateway stream error", {
-              correlationId,
-              attempt: attempt + 1,
-              eventType: event.type,
-              error: event.error ?? event.response?.error ?? event.message,
-              maxOutputTokens: requestBody.max_output_tokens,
-              incompleteDetails: event.response?.incomplete_details,
-              usage: event.response?.usage,
-              streamedOutputCharacters: outputText.length,
-              streamedOutputBytes: Buffer.byteLength(outputText, "utf8"),
-              responseOutputCharacters: responseText.length,
-              responseOutputBytes: Buffer.byteLength(responseText, "utf8"),
-              streamDurationMs: Date.now() - streamStartedAt,
-              eventCounts,
-            });
-            writeUsage(event.response?.usage);
-            if (event.response) readOutputText(event.response);
-            throw new Error("The AI gateway did not complete generation.");
-          }
-          if (
-            event.type === "response.output_text.delta" &&
-            typeof event.delta === "string"
-          )
-            consume(event.delta);
-          if (event.type === "response.completed") {
-            const text = readOutputText(event.response);
-            if (!outputText) consume(text);
-            log("[local-editor generation] Gateway completed", {
-              correlationId,
-              attempt: attempt + 1,
-              responseId: event.response?.id,
-              model: event.response?.model ?? model,
-              status: event.response?.status,
-              outputCharacters: outputText.length,
-              streamDurationMs: Date.now() - streamStartedAt,
-              eventCounts,
-            });
-            writeUsage(event.response.usage);
-            completed = true;
-          }
-        };
-        try {
-          while (true) {
-            const { done, value } = await reader.read();
-            pending += decoder.decode(value, { stream: !done });
-            const lines = pending.split("\n");
-            pending = lines.pop()!;
-            lines.forEach(processLine);
-            if (done) break;
-          }
-          if (pending) processLine(pending);
-          if (!completed)
-            throw new Error("The gateway stream ended before completion.");
-        } finally {
-          await reader.cancel().catch(() => {});
+      }
+      const text = readOutputText(result);
+      log("[local-editor generation] Gateway completed", {
+        correlationId,
+        attempt: attemptNumber,
+        responseId: result.id,
+        model: result.model ?? model,
+        status: result.status,
+        outputCharacters: text.length,
+        incompleteDetails: result.incomplete_details,
+      });
+      writeUsage(result.usage);
+      consume(text);
+    } else {
+      const reader = upstream.body?.getReader();
+      if (!reader) throw new Error("The gateway returned no response body.");
+      const decoder = new TextDecoder();
+      let pending = "";
+      let completed = false;
+      const eventCounts: Record<string, number> = {};
+      const streamStartedAt = Date.now();
+      const processLine = (line: string) => {
+        if (!line.startsWith("data:")) return;
+        const raw = line.slice(5).trim();
+        if (!raw || raw === "[DONE]") return;
+        const event = JSON.parse(raw);
+        eventCounts[event.type ?? "unknown"] =
+          (eventCounts[event.type ?? "unknown"] ?? 0) + 1;
+        if (event.type?.startsWith("response.refusal"))
+          throw new Error("The AI gateway refused generation.");
+        if (
+          ["error", "response.failed", "response.incomplete"].includes(
+            event.type
+          ) ||
+          event.error
+        ) {
+          const responseText = event.response
+            ? extractOutputText(event.response)
+            : "";
+          log("[local-editor generation] Gateway stream error", {
+            correlationId,
+            attempt: attemptNumber,
+            eventType: event.type,
+            error: event.error ?? event.response?.error ?? event.message,
+            maxOutputTokens: requestBody.max_output_tokens,
+            incompleteDetails: event.response?.incomplete_details,
+            usage: event.response?.usage,
+            streamedOutputCharacters: outputText.length,
+            streamedOutputBytes: Buffer.byteLength(outputText, "utf8"),
+            responseOutputCharacters: responseText.length,
+            responseOutputBytes: Buffer.byteLength(responseText, "utf8"),
+            streamDurationMs: Date.now() - streamStartedAt,
+            eventCounts,
+          });
+          writeUsage(event.response?.usage);
+          if (event.response) readOutputText(event.response);
+          throw new Error("The AI gateway did not complete generation.");
         }
-      }
-      // Transport errors, refusals and exhaustion never reach the repair path.
+        if (
+          event.type === "response.output_text.delta" &&
+          typeof event.delta === "string"
+        )
+          consume(event.delta);
+        if (event.type === "response.completed") {
+          const text = readOutputText(event.response);
+          if (!outputText) consume(text);
+          log("[local-editor generation] Gateway completed", {
+            correlationId,
+            attempt: attemptNumber,
+            responseId: event.response?.id,
+            model: event.response?.model ?? model,
+            status: event.response?.status,
+            outputCharacters: outputText.length,
+            streamDurationMs: Date.now() - streamStartedAt,
+            eventCounts,
+          });
+          writeUsage(event.response.usage);
+          completed = true;
+        }
+      };
       try {
-        const accepted = compiled.parseResponse(outputText);
-        log("[local-editor generation] Attempt outcome", {
-          correlationId,
-          attempt: attempt + 1,
-          validationOutcome: "accepted",
-          outputCharacters: outputText.length,
-          repairAttempt: Boolean(repair),
-        });
-        writeEvent({ type: "accepted", ...accepted });
-        response.end();
-        return;
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        log("[local-editor generation] Attempt outcome", {
-          correlationId,
-          attempt: attempt + 1,
-          validationOutcome: "rejected",
-          error: message,
-          repair: attempt === 0,
-        });
-        if (attempt)
-          throw new Error(`Generated layout failed validation: ${message}`);
-        repair = { draft: outputText, error: message };
+        while (true) {
+          const { done, value } = await reader.read();
+          pending += decoder.decode(value, { stream: !done });
+          const lines = pending.split("\n");
+          pending = lines.pop()!;
+          lines.forEach(processLine);
+          if (done) break;
+        }
+        if (pending) processLine(pending);
+        if (!completed)
+          throw new Error("The gateway stream ended before completion.");
+      } finally {
+        await reader.cancel().catch(() => {});
       }
+    }
+    // Only the complete, validated candidate reaches the editor bridge.
+    try {
+      phase = "parse-and-validate";
+      const accepted = compiled.parseResponse(outputText);
+      log("[local-editor generation] Attempt outcome", {
+        correlationId,
+        attempt: attemptNumber,
+        validationOutcome: "accepted",
+        outputCharacters: outputText.length,
+      });
+      writeEvent({ type: "accepted", ...accepted });
+      response.end();
+      return;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      log("[local-editor generation] Attempt outcome", {
+        correlationId,
+        attempt: attemptNumber,
+        validationOutcome: "rejected",
+        error: message,
+      });
+      throw new Error(`Generated layout failed validation: ${message}`);
     }
   } catch (error) {
     const failure = controller.signal.aborted
@@ -507,6 +627,12 @@ export const handleLocalEditorGenerationRequest = async (
       failure instanceof Error ? failure.message : String(failure);
     log("[local-editor generation] Generation failed", {
       correlationId,
+      model,
+      attempt: attemptNumber,
+      phase,
+      isBlankPage: compiled.isBlankPage,
+      outputBytes,
+      aborted: controller.signal.aborted,
       error: message,
     });
     if (!response.destroyed) {

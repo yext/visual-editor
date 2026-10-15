@@ -32,13 +32,11 @@ const puckSchema = defineSchema(
   {
     promptTemplate: ({ componentNames }) =>
       [
-        "Generate native nested Puck component overrides using the strict response schema.",
-        "Every declared prop must have a mode: keep preserves the baseline, set supplies an explicit value, unset removes an optional property. Null is an explicit set value.",
-        "New instances use component defaults. Existing instances use their authored values. Use an existing Id only for the same component inside its original subtree. Use null for new instances.",
-        "Slots contain ordered native component lists; ordinary arrays are replaced in full. Preserve entity bindings, translations, and configuration unrelated to the request.",
-        "Use bounded edit operations for updates, additions, moves and removals. Destination indexes apply after removals, in operation order. Target only the starting inventory. Do not combine ancestor and descendant edits.",
+        "Create a fresh native nested Puck page using the strict response schema. Complete creation in one response.",
+        "Emit component types and authored props only. The server assigns all component identities.",
+        'Use direct prop values. Use {"$default":true} only where available to select the component or enclosing slot template default; use {"$unset":true} to remove an optional value. Null is an explicit value only where the schema permits it.',
+        "Slots contain ordered native component lists; ordinary arrays are supplied in full. Preserve entity bindings and translations in defaults.",
         "Return clarification when required facts or configuration are missing. Never invent business facts or asset URLs to fill defaults. For an image request you may supply an image URL.",
-        "Replace a page only when the user explicitly requests a full-page redesign. Complete an initial page creation in one response.",
         `Generation-enabled components: ${componentNames.join(", ")}`,
       ].join("\n"),
   }

@@ -3,11 +3,9 @@ import { EventEmitter } from "node:events";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
+import { compileGenerationSchema } from "./generationSchema.ts";
 import { handleLocalEditorGenerationRequest } from "./generation.ts";
-import {
-  EDIT_PAGE_OUTPUT_TOKEN_BUDGET,
-  FRESH_PAGE_OUTPUT_TOKEN_BUDGET,
-} from "./generationLimits.ts";
+import { FRESH_PAGE_OUTPUT_TOKEN_BUDGET } from "./generationLimits.ts";
 import { createPuckGenerationCatalog } from "./puckGenerationCatalog.ts";
 
 vi.mock("../local-editor/data.ts", () => ({
@@ -29,16 +27,10 @@ const baseline = {
   ],
 };
 const proposal = {
-  text: "Updated",
+  text: "Created",
   result: {
-    action: "edit",
-    operations: [
-      {
-        action: "update",
-        id: "heading",
-        props: { text: { mode: "set", value: "New" } },
-      },
-    ],
+    action: "create",
+    content: [{ type: "Heading", props: { text: "New" } }],
   },
 };
 const completed = (value: any) =>
@@ -53,8 +45,8 @@ const completed = (value: any) =>
 const harness = (
   body: object = {
     layoutId: "location",
-    currentData: baseline,
-    messages: [{ role: "user", content: "Change heading" }],
+    currentData: { content: [] },
+    messages: [{ role: "user", content: "Create page" }],
   },
   c = catalog
 ) => {
@@ -103,22 +95,35 @@ describe("strict request execution", () => {
       type: "json_schema",
       strict: true,
     });
+    const localSchema = compileGenerationSchema(catalog, ["en"]).jsonSchema;
+    expect(body.text.format.schema).toEqual(localSchema);
+    expect(Buffer.byteLength(JSON.stringify(body.text.format.schema))).toBe(
+      Buffer.byteLength(JSON.stringify(localSchema))
+    );
     expect(body.instructions).not.toContain("JSONL");
     expect(body.input.at(-1).content).not.toContain('"extra"');
     expect(h.events().find((e) => e.type === "accepted").spec).toEqual({
       content: [
         {
           type: "Heading",
-          props: { id: "heading", text: "New", extra: "Keep" },
+          props: { id: expect.stringMatching(/^generated-/), text: "New" },
         },
       ],
     });
     expect(
       h.events().some((e) => ["preview-spec", "reset"].includes(e.type))
     ).toBe(false);
+    const subsequent = harness({
+      layoutId: "location",
+      currentData: h.events().find((event) => event.type === "accepted").spec,
+      messages: [{ role: "user", content: "Create another page" }],
+    });
+    await subsequent.run();
+    expect(subsequent.response.statusCode).toBe(409);
+    expect(fetchMock).toHaveBeenCalledOnce();
   });
-  it.each(["empty", "MainContent only", "populated MainContent"])(
-    "budgets %s from the authored inventory",
+  it.each(["empty", "MainContent only"])(
+    "uses the creation budget and accepts clarification for %s",
     async (startingPage) => {
       const currentData =
         startingPage === "empty"
@@ -129,10 +134,7 @@ describe("strict request execution", () => {
                   type: "MainContent",
                   props: {
                     id: "main",
-                    content:
-                      startingPage === "MainContent only"
-                        ? []
-                        : baseline.content,
+                    content: [],
                   },
                 },
               ],
@@ -153,51 +155,66 @@ describe("strict request execution", () => {
       expect(fetchMock).toHaveBeenCalledOnce();
       const requestBody = JSON.parse((fetchMock.mock.calls[0] as any)[1].body);
       expect(requestBody.max_output_tokens).toBe(
-        startingPage === "populated MainContent"
-          ? EDIT_PAGE_OUTPUT_TOKEN_BUDGET
-          : FRESH_PAGE_OUTPUT_TOKEN_BUDGET
+        FRESH_PAGE_OUTPUT_TOKEN_BUDGET
       );
-      expect(h.events().at(-1).type).toBe("accepted");
+      expect(h.events().at(-1)).toMatchObject({
+        type: "accepted",
+        text: "Need details\n\nWhich content?",
+        spec: null,
+      });
     }
   );
-  it("repairs at most once against the unchanged starting inventory", async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValueOnce(
-        completed({
-          ...proposal,
-          result: {
-            action: "edit",
-            operations: [
-              {
-                action: "update",
-                id: "heading",
-                props: { text: { mode: "set", value: "" } },
-              },
-            ],
-          },
-        })
-      )
-      .mockResolvedValueOnce(completed(proposal));
+  it.each([
+    "populated MainContent",
+    "nonblank",
+    "redesign",
+    "new conversation",
+  ])("rejects %s with 409 before the gateway", async (kind) => {
+    const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
-    const h = harness();
+    const h = harness({
+      layoutId: "location",
+      currentData:
+        kind === "populated MainContent"
+          ? {
+              content: [
+                {
+                  type: "MainContent",
+                  props: { id: "main", content: baseline.content },
+                },
+              ],
+            }
+          : baseline,
+      messages: [
+        {
+          role: "user",
+          content:
+            kind === "redesign" ? "Redesign the entire page" : "Create a page",
+        },
+      ],
+    });
     await h.run();
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-    const inputs = fetchMock.mock.calls.map(([, init]) =>
-      JSON.parse(JSON.parse(init.body).input.at(-1).content)
-    );
-    expect(inputs[0].currentLayout).toEqual(inputs[1].currentLayout);
-    expect(inputs[0].inventory).toEqual(inputs[1].inventory);
-    expect(inputs[1].repair).toBeTruthy();
-    expect(h.events().at(-1).type).toBe("accepted");
+    expect(h.response.statusCode).toBe(409);
+    expect(h.response.end.mock.calls[0][0]).toContain("blank page");
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(h.events()).toEqual([]);
   });
-  it("stops after a failed repair", async () => {
-    const fetchMock = vi.fn(async () => completed({ invalid: true }));
+  it("rejects invalid output after one call without publishing a candidate", async () => {
+    const fetchMock = vi.fn(async () =>
+      completed({
+        ...proposal,
+        result: {
+          action: "create",
+          content: [{ type: "Heading", props: { text: "" } }],
+        },
+      })
+    );
     vi.stubGlobal("fetch", fetchMock);
     const h = harness();
     await h.run();
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledOnce();
     expect(h.events().at(-1).type).toBe("error");
+    expect(h.events().some((e) => e.type === "accepted")).toBe(false);
   });
   it.each(["refusal", "exhaustion", "transport", "incomplete"])(
     "does not repair %s failures",
@@ -240,10 +257,10 @@ describe("strict request execution", () => {
     const zones = harness({
       layoutId: "location",
       currentData: { ...baseline, zones: { legacy: baseline.content } },
-      messages: [{ role: "user", content: "Change heading" }],
+      messages: [{ role: "user", content: "Create page" }],
     });
     await zones.run();
-    expect(zones.response.statusCode).toBe(422);
+    expect(zones.response.statusCode).toBe(409);
     expect(fetchMock).not.toHaveBeenCalled();
   });
   it("streams commentary without publishing component candidates", async () => {
@@ -277,7 +294,7 @@ describe("strict request execution", () => {
         .filter((e) => e.type === "commentary")
         .map((e) => e.delta)
         .join("")
-    ).toBe("Updated");
+    ).toBe("Created");
     expect(h.events().at(-1).type).toBe("accepted");
     expect(h.events().every((e) => !e.type.startsWith("preview"))).toBe(true);
   });

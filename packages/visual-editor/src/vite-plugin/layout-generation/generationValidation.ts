@@ -1,12 +1,18 @@
 import { extractAuthored } from "../../internal/generation/authored.ts";
 import type { PuckGenerationCatalog } from "./puckGenerationCatalog.ts";
 
-export const buildGenerationPrompt = (catalog: PuckGenerationCatalog): string =>
+export const buildGenerationPrompt = (
+  catalog: PuckGenerationCatalog,
+  availableComponentNames = Object.keys(catalog.data.components).filter(
+    (name) => catalog.data.components[name].generation
+  )
+): string =>
   catalog.schema
     .createCatalog({
       components: Object.fromEntries(
         Object.entries(catalog.data.components).filter(
-          ([, component]) => component.generation
+          ([name, component]) =>
+            component.generation && availableComponentNames.includes(name)
         )
       ),
     })
@@ -15,7 +21,10 @@ export const buildGenerationPrompt = (catalog: PuckGenerationCatalog): string =>
   JSON.stringify(
     Object.fromEntries(
       Object.entries(catalog.data.components)
-        .filter(([, component]) => component.generation)
+        .filter(
+          ([name, component]) =>
+            component.generation && availableComponentNames.includes(name)
+        )
         .map(([name, component]) => [
           name,
           {
