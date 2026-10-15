@@ -54,8 +54,8 @@ Hand-authored catalogs can pass the same option to `createPuckGenerationCatalog`
 ## Layout chat
 
 Use **Show chat** to open the floating conversation over the layout editor.
-Commentary and progress stream into chat. Complete layouts appear on the canvas
-only after validation and resolution. Manual editing and undo/redo pause during
+Chat shows a loading message during generation. Complete layouts appear on the
+canvas only after validation and resolution. Manual editing and undo/redo pause during
 generation. Successful turns become one undoable edit and persist through the
 editor's existing local storage. Failed turns and clarifications leave the
 starting layout unchanged.
@@ -164,32 +164,25 @@ Zod's JSON Schema export supplies the strict gateway response schema. Unsupporte
 constructs, including transformations, custom refinements, unrestricted maps,
 and unrepresentable gateway keywords, fail before any model call.
 
-Each declared wire property is required and uses `{ mode: "keep" }` or
-`{ mode: "set", value: ... }`. `{ mode: "unset" }` is available only when the
-authored schema allows absence. Null is an explicit set value. Objects apply these
-rules recursively; ordinary arrays replace their complete values. Optional members
-inside complete array values use set/unset envelopes to express absence without
-nullable placeholders. Localized catchalls expand to the selected layout's locales;
-keep preserves existing translations and entity bindings.
+Each declared wire property is required and uses direct values. `{ "$default": true }`
+selects a component or enclosing slot template default where available, and
+`{ "$unset": true }` removes a value only when the authored schema permits absence.
+Null is an explicit value where permitted. These rules apply recursively to objects;
+ordinary arrays replace their complete values. Localized catchalls expand to the
+selected layout's locales. Defaults preserve translations and entity bindings.
 
-Existing instances use their native authored subtree as the baseline; new instances
-clone component defaults. A new fixed-slot child uses the enclosing default slot
-template when exactly one template matches its type. New authored subtrees receive
-fresh Ids. Explicit invalid values are never repaired by defaults, and missing
-required values produce a path-specific validation error.
+New instances clone component defaults. A new fixed-slot child uses the enclosing
+default slot template when exactly one template matches its type. New authored
+subtrees receive fresh Ids. Explicit invalid values are never repaired by defaults,
+and missing required values produce a path-specific validation error.
 
-The strict model envelope is `{ text, result }`. The result is a clarification,
-initial page creation, explicitly authorized full-page redesign, or bounded edit
-operations. Update/remove/move targets and destination collections are enumerated
-from the starting inventory. Conflicting ancestor/descendant operations, cycles,
-illegal destinations, and targets created during the same response are rejected.
-The complete candidate is materialized and validated against an isolated baseline.
-At most one schema or validation repair uses that unchanged baseline. Refusals,
-transport failures, deadlines, and output exhaustion terminate the turn. A page
-containing only an empty MainContent scaffold counts as blank. Blank-page creation
-uses a minimum output budget of 65,536 tokens; small edits retain the 16,384-token
-minimum, with larger existing layouts receiving a scaled allowance. The gateway
-request log records the selected budget and blank-page classification.
+The strict model envelope is `{ text, result }`. The result is a clarification or
+initial page creation. Generation requires an empty page or a single empty
+MainContent scaffold. Clear an existing layout before generating a new page.
+The complete candidate is materialized and validated in one attempt; validation
+failures, refusals, transport failures, deadlines, and output exhaustion terminate
+the turn without repair. Creation uses an output budget of 128,000 tokens. The
+gateway request log records the budget and blank-page classification.
 
 No `OPENAI_API_KEY` is required; the development server needs gateway access.
 Requests use strict JSON Schema output with `strict: true`, retaining the gateway's
@@ -198,10 +191,10 @@ and snapshot documents are not sent. Authored context, defaults, and description
 are used for generation. Image requests can use model-supplied image URLs.
 
 The NDJSON transport identifies itself with
-`X-Visual-Editor-Generation: strict-puck-overrides-v2`. It emits `commentary`,
-`progress`, `accepted`, `usage`, and `error` events. Only the accepted event contains
-a complete materialized `spec` (or null for clarification). Commentary and progress
-never mutate the canvas. There are no provisional layouts or compatibility events.
+`X-Visual-Editor-Generation: strict-puck-overrides-v2`. It emits `accepted`,
+`usage`, and `error` events. Only the accepted event contains a complete materialized
+`spec` (or null for clarification). There are no provisional layouts or compatibility
+events. Conversation history retains assistant prose, without generated layout data.
 
 After transport completes, the client validates and resolves the isolated candidate
 through `resolveAllData` in the active editor with its `streamDocument`. It validates

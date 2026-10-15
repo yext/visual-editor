@@ -1,6 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { randomUUID } from "node:crypto";
-import { StringDecoder } from "node:string_decoder";
 import { z } from "zod";
 import type { PuckGenerationCatalog } from "./puckGenerationCatalog.ts";
 import {
@@ -8,13 +7,15 @@ import {
   isBlankGenerationPage,
 } from "./generationSchema.ts";
 import { buildGenerationPrompt } from "./generationValidation.ts";
-import { createStructuredGenerationParser } from "./structuredGenerationStream.ts";
 import {
   createGenerationRepetitionGuard,
   GENERATION_ATTEMPT_DEADLINE_MS,
-  generationTokenBudget,
+  FRESH_PAGE_OUTPUT_TOKEN_BUDGET,
 } from "./generationLimits.ts";
-import { sendJsonResponse } from "../local-editor/server.ts";
+import {
+  readJsonRequestBody,
+  sendJsonResponse,
+} from "../local-editor/server.ts";
 import type { Content } from "../../internal/generation/authored.ts";
 
 type GenerationOptions = {
@@ -175,42 +176,18 @@ export const handleLocalEditorGenerationRequest = async (
     return;
   }
 
-  let body = "";
-  const bodyDecoder = new StringDecoder("utf8");
-  let bodyBytes = 0;
-  // Pages middleware can consume the stream and attach its parsed JSON to req.body.
-  if (request.body !== undefined) {
-    body = Buffer.isBuffer(request.body)
-      ? request.body.toString("utf8")
-      : typeof request.body === "string"
-        ? request.body
-        : JSON.stringify(request.body);
-    bodyBytes = Buffer.byteLength(body);
-    if (bodyBytes > 1024 * 1024) {
-      rejectRequest("Conversation request is too large.", 413, { bodyBytes });
-      return;
-    }
-  } else {
-    for await (const chunk of request) {
-      bodyBytes += chunk.length;
-      if (bodyBytes > 1024 * 1024) {
-        rejectRequest("Conversation request is too large.", 413, { bodyBytes });
-        return;
-      }
-      body += bodyDecoder.write(chunk);
-    }
-    body += bodyDecoder.end();
-  }
-  let payload: unknown;
-  try {
-    payload = JSON.parse(body);
-  } catch (error) {
-    rejectRequest("Request must contain valid JSON.", 400, {
-      bodyBytes,
-      parseError: error instanceof Error ? error.message : String(error),
-    });
+  const body = await readJsonRequestBody(request, 1024 * 1024);
+  if (!body.ok) {
+    rejectRequest(
+      body.status === 413
+        ? "Conversation request is too large."
+        : "Request must contain valid JSON.",
+      body.status,
+      { bodyBytes: body.bodyBytes, parseError: body.parseError }
+    );
     return;
   }
+  const { payload, bodyBytes } = body;
   const messages =
     payload && typeof payload === "object" && "messages" in payload
       ? payload.messages
@@ -330,20 +307,22 @@ export const handleLocalEditorGenerationRequest = async (
     GENERATION_ATTEMPT_DEADLINE_MS
   );
   let started = false;
-  const writeEvent = (event: object) => {
+  const startStream = () => {
     if (controller.signal.aborted) throw controller.signal.reason;
-    if (!started) {
-      started = true;
-      response.statusCode = 200;
-      response.setHeader("Content-Type", "application/x-ndjson; charset=utf-8");
-      response.setHeader(
-        "X-Visual-Editor-Generation",
-        "strict-puck-overrides-v2"
-      );
-      response.setHeader("Cache-Control", "no-cache, no-transform");
-      response.setHeader("X-Accel-Buffering", "no");
-      response.flushHeaders();
-    }
+    if (started) return;
+    started = true;
+    response.statusCode = 200;
+    response.setHeader("Content-Type", "application/x-ndjson; charset=utf-8");
+    response.setHeader(
+      "X-Visual-Editor-Generation",
+      "strict-puck-overrides-v2"
+    );
+    response.setHeader("Cache-Control", "no-cache, no-transform");
+    response.setHeader("X-Accel-Buffering", "no");
+    response.flushHeaders();
+  };
+  const writeEvent = (event: object) => {
+    startStream();
     response.write(JSON.stringify(event) + "\n");
   };
   const writeUsage = (usage: GatewayResponse["usage"]) => {
@@ -372,37 +351,19 @@ export const handleLocalEditorGenerationRequest = async (
       catalog,
       compiled.availableComponentNames
     );
-    const history = messages.slice(0, -1).map(({ role, content }) => {
-      if (role === "assistant") {
-        try {
-          const parsed = JSON.parse(content);
-          content = parsed.text ?? content;
-        } catch {
-          /* Preserve prose. */
-        }
-      }
-      return { role, content };
-    });
+    const history = conversationHistory;
     const componentStats = componentDiagnostics(catalog);
     const schemaStats = summarizeSchema(compiled.jsonSchema);
     attemptNumber = 1;
     phase = "build-request";
-    writeEvent({
-      type: "progress",
-      text: "Generating a candidate layout…",
-    });
+    startStream();
     let outputText = "";
     outputBytes = 0;
     const guard = createGenerationRepetitionGuard();
-    const parser = createStructuredGenerationParser({
-      onText: (delta) => writeEvent({ type: "commentary", delta }),
-      onValue: () => {},
-    });
     const consume = (delta: string) => {
       guard(delta);
       outputText += delta;
       outputBytes = Buffer.byteLength(outputText, "utf8");
-      parser.push(delta);
     };
     const latestUserContent = JSON.stringify({
       request: messages.at(-1).content,
@@ -414,9 +375,7 @@ export const handleLocalEditorGenerationRequest = async (
     const requestBody = {
       model,
       stream: true,
-      max_output_tokens: generationTokenBudget(compiled.context as any, {
-        isBlankPage: compiled.isBlankPage,
-      }),
+      max_output_tokens: FRESH_PAGE_OUTPUT_TOKEN_BUDGET,
       instructions,
       input,
       text: {

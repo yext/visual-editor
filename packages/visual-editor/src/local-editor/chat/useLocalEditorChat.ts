@@ -9,11 +9,10 @@ type ChatMessage = {
   pending?: boolean;
 };
 
-/** Accepted structured responses retain saved data for follow-up revisions. */
+/** Keep conversation prose separate from the generated canvas data. */
 export const useLocalEditorChat = (api: string, layoutId: string) => {
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = React.useState(false);
-  const [progress, setProgress] = React.useState("");
   const [error, setError] = React.useState<Error | null>(null);
   const [usage, setUsage] = React.useState<GenerationTokenUsage>({
     cachedInput: 0,
@@ -64,7 +63,6 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
     canvas.finish();
     setMessages(previousMessagesRef.current);
     setIsStreaming(false);
-    setProgress("");
   }, [canvas]);
   canvas.onError = (cause) => {
     cancel();
@@ -78,7 +76,6 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
     setUsage({ cachedInput: 0, uncachedInput: 0, output: 0 });
     setError(null);
     setIsStreaming(false);
-    setProgress("");
   }, [cancel]);
   React.useEffect(() => {
     clear();
@@ -106,23 +103,11 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
     let text = "";
     let spec: GeneratedContent | null = null;
     let accepted = false;
-    const update = (pending = false) => {
-      if (activeRequest.current !== controller) return;
-      setMessages([
-        ...nextMessages,
-        {
-          role: "assistant",
-          text: pending ? "Generating layout…" : text,
-          pending,
-        },
-      ]);
-    };
     setMessages([
       ...nextMessages,
       { role: "assistant", text: "Generating layout…", pending: true },
     ]);
     setIsStreaming(true);
-    setProgress("Generating…");
     setError(null);
     try {
       const currentData = canvas.begin();
@@ -172,11 +157,7 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
             output: current.output + event.usage.output,
           }));
         } else if (event.type === "error") throw new Error(event.error);
-        else if (event.type === "commentary") {
-          // Keep intermediate model commentary hidden until the layout is ready.
-        } else if (event.type === "progress") {
-          if (typeof event.text === "string") setProgress(event.text);
-        } else if (event.type === "accepted") {
+        else if (event.type === "accepted") {
           if (
             typeof event.text !== "string" ||
             !(
@@ -215,15 +196,16 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
         diagnostics.current.candidate = spec;
         await canvas.commit(spec);
         if (activeRequest.current !== controller) return;
-        update();
-        previousMessagesRef.current = [
+        const completedMessages: ChatMessage[] = [
           ...nextMessages,
           { role: "assistant", text },
         ];
+        setMessages(completedMessages);
+        previousMessagesRef.current = completedMessages;
         history.current = [
           ...history.current,
           user,
-          { role: "assistant", content: JSON.stringify({ text, spec }) },
+          { role: "assistant", content: text },
         ];
       }
     } catch (cause) {
@@ -237,14 +219,12 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
         canvas.finish();
         activeRequest.current = null;
         setIsStreaming(false);
-        setProgress("");
       }
     }
   };
   return {
     messages,
     isStreaming,
-    progress,
     send,
     clear,
     error,

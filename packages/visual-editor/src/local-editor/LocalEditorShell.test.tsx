@@ -26,7 +26,7 @@ vi.mock("../editor/Editor.tsx", () => ({
     ) : (
       <Puck config={chatConfig} data={layout()} iframe={{ enabled: false }}>
         <Puck.Preview />
-        <LocalEditorChatBridge />
+        <LocalEditorChatBridge streamDocument={document} />
         <span>Entity: {String(document.name)}</span>
       </Puck>
     ),
@@ -95,8 +95,7 @@ const submit = async () => {
   });
   fireEvent.click(screen.getByRole("button", { name: "Send" }));
   await waitFor(() => expect(upstream).toBeDefined());
-  await act(async () => emit({ type: "commentary", delta: "Working…" }));
-  await screen.findByText("Working…");
+  await screen.findByText("Generating layout…");
   expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
 };
 beforeEach(() => {
@@ -123,6 +122,8 @@ beforeEach(() => {
           })
         );
       }
+      if (url.endsWith("/generate/error"))
+        return new Response(JSON.stringify({ recorded: true }));
       generationSignal = init?.signal;
       return new Response(
         new ReadableStream({

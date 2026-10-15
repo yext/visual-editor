@@ -19,7 +19,11 @@ import {
   type SlottedItemSourceInstance,
   type SlotMappedCardsData,
 } from "./itemSourceTypes.ts";
-import { createSlottedCard, setChildSlotIds } from "./slottedCardDefaults.ts";
+import {
+  cloneValue,
+  createSlottedCard,
+  setChildSlotIds,
+} from "./slottedCardDefaults.ts";
 import { pt } from "../i18n/platform.ts";
 
 /**
@@ -31,14 +35,6 @@ import { pt } from "../i18n/platform.ts";
  * 4. Reconciles visible `slots.CardSlot` between linked and manual mode.
  * 5. Supports either static or lazily generated default card props.
  */
-
-/**
- * Deep-clones helper-owned values before reconciliation mutates card data.
- */
-const cloneValue = <T>(value: T): T =>
-  typeof structuredClone === "function"
-    ? structuredClone(value)
-    : (JSON.parse(JSON.stringify(value)) as T);
 
 /**
  * Creates the helper API for one slot-backed repeated-item wrapper.

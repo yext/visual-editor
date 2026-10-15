@@ -1,31 +1,36 @@
-import { isDeepEqual } from "../../utils/deepEqual.ts";
 import React from "react";
 import { resolveAllData, useGetPuck, type Data } from "@puckeditor/core";
 import { clonePuckResolveData } from "../../internal/utils/clonePuckResolveData.ts";
 import { buildPuckHistoryState } from "../../internal/utils/buildPuckHistoryState.ts";
 import { createPuckGenerationCatalog } from "../../vite-plugin/layout-generation/puckGenerationCatalog.ts";
 import { assertAuthoredPreserved } from "../../internal/generation/authored.ts";
-import { useDocument } from "../../hooks/useDocument.tsx";
+import type { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import type { LocalEditorChatCanvas } from "./LocalEditorChatCanvas.ts";
 import { LocalEditorChatContext } from "./LocalEditorChatContext.tsx";
 
 /** This component is mounted inside the existing editor's Puck provider. */
-export const LocalEditorChatBridge = () => {
+export const LocalEditorChatBridge = ({
+  streamDocument,
+}: {
+  streamDocument: StreamDocument;
+}) => {
   const canvas = React.useContext(LocalEditorChatContext);
-  return canvas ? <LocalEditorChatCanvasBridge canvas={canvas} /> : null;
+  return canvas ? (
+    <LocalEditorChatCanvasBridge
+      canvas={canvas}
+      streamDocument={streamDocument}
+    />
+  ) : null;
 };
 
 const LocalEditorChatCanvasBridge = ({
   canvas,
+  streamDocument,
 }: {
   canvas: LocalEditorChatCanvas;
+  streamDocument: StreamDocument;
 }) => {
   const getPuck = useGetPuck();
-  const document = useDocument();
-  const documentRef = React.useRef(document);
-  if (!isDeepEqual(documentRef.current, document))
-    documentRef.current = document;
-  const streamDocument = documentRef.current;
   React.useEffect(
     () =>
       canvas.attach({

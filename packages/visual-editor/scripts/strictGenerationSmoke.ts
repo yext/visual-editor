@@ -1,4 +1,6 @@
 /** Manual gateway check: sends only the synthetic catalog and prompt below. */
+import assert from "node:assert/strict";
+import type { Content } from "../src/internal/generation/authored.ts";
 import { EventEmitter } from "node:events";
 import { Readable } from "node:stream";
 import type { IncomingMessage, ServerResponse } from "node:http";
@@ -15,24 +17,19 @@ const greetingProps = z.object({
       hasLocalizedValue: z.literal("true").optional(),
     })
     .catchall(z.string().optional()),
-  color: color.describe("The visual color of the greeting"),
+  color: z.enum(["blue", "green"]).describe("The visual color of the greeting"),
   emphasized: z.boolean().optional(),
 });
 const catalog = createPuckGenerationCatalog({
   SyntheticSection: {
     description:
       "A synthetic section containing a greeting in its heading slot.",
-    props: z.object({
-      color,
-      slots: z.object({
-        heading: z.array(
-          z.object({
-            type: z.literal("GreetingSlot"),
-            props: z.object({ data: greetingProps }),
-          })
-        ),
+    generation: {
+      props: z.object({
+        color,
+        slots: z.object({ heading: z.array(z.unknown()) }),
       }),
-    }),
+    },
     fields: {
       slots: {
         type: "object",
@@ -42,7 +39,10 @@ const catalog = createPuckGenerationCatalog({
       },
     },
   },
-  GreetingSlot: { nestedOnly: true },
+  GreetingSlot: {
+    nestedOnly: true,
+    generation: { props: z.object({ data: greetingProps }) },
+  },
 });
 const request = Readable.from([
   Buffer.from(
@@ -61,7 +61,7 @@ const request = Readable.from([
 request.method = "POST";
 const events: {
   type: string;
-  spec?: { content: unknown[] };
+  spec?: Content;
   error?: string;
 }[] = [];
 let errorBody = "";
@@ -91,6 +91,20 @@ try {
       events.find((event) => event.type === "error")?.error ??
         (errorBody || "No accepted content")
     );
+  const content = accepted.spec.content;
+  assert.equal(content.length, 1);
+  assert.equal(content[0].type, "MainContent");
+  const sections = content[0].props.content;
+  assert.equal(sections.length, 1);
+  assert.equal(sections[0].type, "SyntheticSection");
+  assert.equal(sections[0].props.color, "blue");
+  const headings = sections[0].props.slots.heading;
+  assert.equal(headings.length, 1);
+  assert.equal(headings[0].type, "GreetingSlot");
+  assert.equal(headings[0].props.data.greeting.defaultValue, "Hello");
+  assert.equal(headings[0].props.data.greeting.fr, "Bonjour");
+  assert.equal(headings[0].props.data.color, "blue");
+  assert.ok(!headings[0].props.data.emphasized);
   console.log(
     `Strict generation smoke check passed for ${model}. Synthetic data only.`
   );

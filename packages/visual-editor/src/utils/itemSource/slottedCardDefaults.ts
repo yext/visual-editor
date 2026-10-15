@@ -4,7 +4,7 @@ import type { SlottedItemSourceGenerationMetadata } from "./itemSourceTypes.ts";
 /**
  * Deep-clones helper-owned values before reconciliation mutates card data.
  */
-const cloneValue = <T>(value: T): T =>
+export const cloneValue = <T>(value: T): T =>
   typeof structuredClone === "function"
     ? structuredClone(value)
     : (JSON.parse(JSON.stringify(value)) as T);

@@ -7,7 +7,7 @@ import {
   assertAuthoredPreserved,
   clone,
   extractAuthored,
-  indexAuthored,
+  collectAuthoredIds,
   validateAuthored,
 } from "./authored.ts";
 
@@ -98,7 +98,7 @@ describe("slotted source generation", () => {
     const saved = f.materialize().content[0].props;
     f.components.Section.defaultProps = saved;
     const candidate = f.materialize([f.section(), f.section()]);
-    expect(indexAuthored(f.catalog, candidate).items.size).toBe(14);
+    expect(collectAuthoredIds(f.catalog, candidate).size).toBe(14);
     const resolved = await f.resolve(candidate);
     expect(() =>
       assertAuthoredPreserved(f.catalog, resolved, candidate)

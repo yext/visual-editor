@@ -1,3 +1,4 @@
+import { unwrapZodSchema as unwrap } from "../utils/unwrapZodSchema.ts";
 import type { Fields } from "@puckeditor/core";
 import { z } from "zod";
 import type {
@@ -43,13 +44,6 @@ export const preflightSlottedItemSource = (
   const source = config.generation?.slottedItemSource;
   if (!source) return;
   const shape = config.generation!.props.shape;
-  const unwrap = (schema: z.ZodType | undefined): any => {
-    if (!schema) return undefined;
-    const def = schema.def as any;
-    return ["optional", "nullable", "default", "prefault"].includes(def.type)
-      ? unwrap(def.innerType)
-      : schema;
-  };
   const data = unwrap(shape.data);
   const slots = unwrap(shape.slots);
   const fields = config.fields?.slots;

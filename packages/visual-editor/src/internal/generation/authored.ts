@@ -1,3 +1,4 @@
+import { unwrapZodSchema as unwrap } from "../utils/unwrapZodSchema.ts";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import type { Fields } from "@puckeditor/core";
 import { z } from "zod";
@@ -22,22 +23,15 @@ export type Content = {
   content: SavedComponent[];
   zones?: Record<string, unknown[]>;
 };
-export type Collection = {
+type Collection = {
   items: SavedComponent[];
   ownerId?: string;
   path: string;
   field?: { allow?: string[]; disallow?: string[] };
 };
-export type InventoryItem = {
+type InventoryItem = {
   component: SavedComponent;
   collection: Collection;
-  ancestors: string[];
-};
-export const unwrap = (schema: z.ZodType): z.ZodType => {
-  const def = schema.def as any;
-  return ["optional", "nullable", "default", "prefault"].includes(def.type)
-    ? unwrap(def.innerType)
-    : schema;
 };
 export const permitted = (name: string, field?: Collection["field"]) =>
   !field?.disallow?.includes(name) &&
@@ -164,12 +158,10 @@ const authoredValue = (
 export const walkAuthored = (
   catalog: PuckGenerationCatalog,
   data: Content,
-  onComponent: (item: InventoryItem) => void,
-  onCollection: (collection: Collection) => void = () => {}
+  onComponent: (item: InventoryItem) => void
 ) => {
   rejectZones(data);
-  const visitCollection = (collection: Collection, ancestors: string[]) => {
-    onCollection(collection);
+  const visitCollection = (collection: Collection) => {
     collection.items.forEach((component, index) => {
       if (
         !component ||
@@ -179,7 +171,7 @@ export const walkAuthored = (
         Array.isArray(component.props)
       )
         throw new Error(`${collection.path}/${index}: invalid component`);
-      onComponent({ component, collection, ancestors });
+      onComponent({ component, collection });
       const config = catalog.data.components[component.type];
       if (config?.generation)
         authoredValue(
@@ -188,10 +180,12 @@ export const walkAuthored = (
           { type: "object", objectFields: generationFields(config) },
           `${collection.path}/${index}/props`,
           (items, path, field) => {
-            visitCollection(
-              { items, ownerId: component.props.id, path, field },
-              [...ancestors, component.props.id]
-            );
+            visitCollection({
+              items,
+              ownerId: component.props.id,
+              path,
+              field,
+            });
             return items;
           }
         );
@@ -199,42 +193,32 @@ export const walkAuthored = (
         config?.generation?.slottedItemSource &&
         isLinkedSource(component.props)
       )
-        visitCollection(
-          {
-            items: manualBackup(component),
-            ownerId: component.props.id,
-            path: `${collection.path}/${index}/props/manualSlots/CardSlot`,
-            field: { allow: [config.generation.slottedItemSource.cardType] },
-          },
-          [...ancestors, component.props.id]
-        );
+        visitCollection({
+          items: manualBackup(component),
+          ownerId: component.props.id,
+          path: `${collection.path}/${index}/props/manualSlots/CardSlot`,
+          field: { allow: [config.generation.slottedItemSource.cardType] },
+        });
     });
   };
-  visitCollection({ items: data.content, path: "content" }, []);
+  visitCollection({ items: data.content, path: "content" });
 };
 
-export const indexAuthored = (
+/** Collect authored identities and reject missing or duplicate Ids. */
+export const collectAuthoredIds = (
   catalog: PuckGenerationCatalog,
   data: Content
 ) => {
-  const items = new Map<string, InventoryItem>();
-  const collections = new Map<string, Collection>();
-  walkAuthored(
-    catalog,
-    data,
-    (item) => {
-      const id = item.component.props.id;
-      if (typeof id !== "string" || !id.trim())
-        throw new Error(`${item.collection.path}: missing component Id`);
-      if (items.has(id))
-        throw new Error(
-          `${item.collection.path}: duplicate component Id ${id}`
-        );
-      items.set(id, item);
-    },
-    (collection) => collections.set(collection.path, collection)
-  );
-  return { items, collections };
+  const ids = new Set<string>();
+  walkAuthored(catalog, data, ({ component, collection }) => {
+    const id = component.props.id;
+    if (typeof id !== "string" || !id.trim())
+      throw new Error(`${collection.path}: missing component Id`);
+    if (ids.has(id))
+      throw new Error(`${collection.path}: duplicate component Id ${id}`);
+    ids.add(id);
+  });
+  return ids;
 };
 
 /** Project only declared authored values; never strip data by property name. */
@@ -273,7 +257,7 @@ export const validateAuthored = (
   catalog: PuckGenerationCatalog,
   data: Content
 ) => {
-  const seenIds = new Set(indexAuthored(catalog, data).items.keys());
+  const seenIds = collectAuthoredIds(catalog, data);
   walkAuthored(catalog, data, ({ component, collection }) => {
     const config = Object.hasOwn(catalog.data.components, component.type)
       ? catalog.data.components[component.type]

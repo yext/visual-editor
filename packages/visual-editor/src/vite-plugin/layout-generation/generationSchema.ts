@@ -1,3 +1,4 @@
+import { unwrapZodSchema as unwrap } from "../../internal/utils/unwrapZodSchema.ts";
 import type { Fields } from "@puckeditor/core";
 import { z } from "zod";
 import { compactGenerationSchema } from "./compactGenerationSchema.ts";
@@ -7,7 +8,6 @@ import {
   extractAuthored,
   permitted,
   rejectZones,
-  unwrap,
   validateAuthored,
   walkAuthored,
   type Content,

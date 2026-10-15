@@ -51,7 +51,7 @@ export const LayoutPuckOverride = ({
   return (
     <>
       <ValidationReporters />
-      <LocalEditorChatBridge />
+      <LocalEditorChatBridge streamDocument={streamDocument} />
       {children}
     </>
   );

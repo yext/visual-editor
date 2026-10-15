@@ -8,10 +8,6 @@ import { handleLocalEditorGenerationRequest } from "./generation.ts";
 import { FRESH_PAGE_OUTPUT_TOKEN_BUDGET } from "./generationLimits.ts";
 import { createPuckGenerationCatalog } from "./puckGenerationCatalog.ts";
 
-vi.mock("../local-editor/data.ts", () => ({
-  getLocalEditorDocument: vi.fn(),
-  getLocalEditorManifest: vi.fn(),
-}));
 const catalog = createPuckGenerationCatalog({
   Heading: {
     generation: { props: z.object({ text: z.string().min(1) }) },
@@ -97,9 +93,6 @@ describe("strict request execution", () => {
     });
     const localSchema = compileGenerationSchema(catalog, ["en"]).jsonSchema;
     expect(body.text.format.schema).toEqual(localSchema);
-    expect(Buffer.byteLength(JSON.stringify(body.text.format.schema))).toBe(
-      Buffer.byteLength(JSON.stringify(localSchema))
-    );
     expect(body.instructions).not.toContain("JSONL");
     expect(body.input.at(-1).content).not.toContain('"extra"');
     expect(h.events().find((e) => e.type === "accepted").spec).toEqual({
@@ -263,7 +256,7 @@ describe("strict request execution", () => {
     expect(zones.response.statusCode).toBe(409);
     expect(fetchMock).not.toHaveBeenCalled();
   });
-  it("streams commentary without publishing component candidates", async () => {
+  it("accepts the complete gateway stream without publishing partial output", async () => {
     const text = JSON.stringify(proposal);
     const events = [
       ...text
@@ -288,15 +281,17 @@ describe("strict request execution", () => {
     );
     const h = harness();
     await h.run();
-    expect(
-      h
-        .events()
-        .filter((e) => e.type === "commentary")
-        .map((e) => e.delta)
-        .join("")
-    ).toBe("Created");
-    expect(h.events().at(-1).type).toBe("accepted");
-    expect(h.events().every((e) => !e.type.startsWith("preview"))).toBe(true);
+    expect(h.events()).toEqual([
+      {
+        type: "accepted",
+        text: "Created",
+        spec: {
+          content: [
+            { type: "Heading", props: { id: expect.any(String), text: "New" } },
+          ],
+        },
+      },
+    ]);
   });
   it("terminates deadline failures without attempting repair", async () => {
     vi.useFakeTimers();

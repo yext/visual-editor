@@ -112,6 +112,40 @@ describe("strict generation in the editor", () => {
     fireEvent.click(screen.getByText("Redo", { selector: "button" }));
     await screen.findByText("Generated", { selector: "h2" });
   });
+  it("sends assistant prose in subsequent turns after undoing generation", async () => {
+    const fetchMock = vi.fn(
+      async (_url: string, _init?: RequestInit) =>
+        new Response(
+          wire({
+            type: "accepted",
+            text: "Created",
+            spec: generatedContent("Generated"),
+          }),
+          { headers }
+        )
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    render(<ChatHarness initialData={{ root: {}, content: [] }} />);
+    await submit();
+    await screen.findByText("Generated", { selector: "h2" });
+    fireEvent.click(screen.getByText("Undo", { selector: "button" }));
+    await waitFor(() =>
+      expect(screen.queryByText("Generated", { selector: "h2" })).toBeNull()
+    );
+    fireEvent.change(screen.getByRole("textbox"), {
+      target: { value: "Create a different page" },
+    });
+    fireEvent.keyDown(screen.getByRole("textbox"), { key: "Enter" });
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    const body = JSON.parse(fetchMock.mock.calls[1][1]!.body as string);
+    expect(body.currentData).toEqual({ content: [] });
+    expect(body.messages).toEqual([
+      { role: "user", content: "Change the heading" },
+      { role: "assistant", content: "Created" },
+      { role: "user", content: "Create a different page" },
+    ]);
+    await screen.findByText("Generated", { selector: "h2" });
+  });
   it("keeps the production Puck override and bridge mounted when a request updates chat state", async () => {
     let stream!: ReadableStreamDefaultController<Uint8Array>;
     const attach = vi.spyOn(LocalEditorChatCanvas.prototype, "attach");
@@ -134,15 +168,6 @@ describe("strict generation in the editor", () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
     const attachmentCount = attach.mock.calls.length;
     editor.rerender(<ChatHarness />);
-    act(() =>
-      stream.enqueue(
-        new TextEncoder().encode(
-          wire({ type: "commentary", delta: "Working…" })
-        )
-      )
-    );
-    expect(screen.queryByText("Working…")).toBeNull();
-    expect(screen.getByText("Generating layout…")).toBeTruthy();
     expect(attach).toHaveBeenCalledTimes(attachmentCount);
     expect(screen.queryByRole("alert")).toBeNull();
     expect(fetchMock.mock.calls.length).toBe(1);
@@ -206,7 +231,7 @@ describe("strict generation in the editor", () => {
       expect(screen.queryByText("Late", { selector: "h2" })).toBeNull();
     }
   );
-  it("keeps progress visible until the layout commits, then shows the final response", async () => {
+  it("keeps the loading message until transport completes, then shows the final response", async () => {
     let stream!: ReadableStreamDefaultController<Uint8Array>;
     const fetchMock = vi.fn(
       async () =>
@@ -223,15 +248,7 @@ describe("strict generation in the editor", () => {
     render(<ChatHarness />);
     await submit();
     await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
-    act(() =>
-      stream.enqueue(
-        new TextEncoder().encode(
-          wire({ type: "commentary", delta: "Working…" })
-        )
-      )
-    );
     expect(screen.getByText("Generating layout…")).toBeTruthy();
-    expect(screen.queryByText("Working…")).toBeNull();
     expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
     act(() =>
       stream.enqueue(
@@ -255,7 +272,7 @@ describe("strict generation in the editor", () => {
     async (mode) => {
       const body =
         mode === "transport"
-          ? wire({ type: "commentary", delta: "Working…" })
+          ? ""
           : wire({
               type: "accepted",
               text: "Which image?",

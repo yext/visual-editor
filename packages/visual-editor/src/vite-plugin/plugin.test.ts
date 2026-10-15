@@ -41,7 +41,7 @@ afterEach(() => {
 });
 
 describe("yextVisualEditorPlugin", () => {
-  it("writes and flushes a startup log when the local editor server initializes", () => {
+  it("initializes the generation log and closes it with the local editor server", () => {
     const existingSignals = new Map(
       (["SIGINT", "SIGTERM"] as const).map((event) => [
         event,
@@ -65,11 +65,19 @@ describe("yextVisualEditorPlugin", () => {
       expect(loggerMocks.createGenerationLogger).toHaveBeenCalledWith(
         "/test/library/src/library/.generated/logs"
       );
-      expect(loggerMocks.log).toHaveBeenCalledWith(
-        "[local-editor generation] Server initialized",
-        { root: "/test/library", model: "gpt-6-luna" }
+      expect(server.httpServer.once).toHaveBeenCalledWith(
+        "close",
+        expect.any(Function)
       );
-      expect(loggerMocks.log.flush).toHaveBeenCalledOnce();
+      const [, closeServer] = server.httpServer.once.mock.calls[0];
+      closeServer();
+      expect(loggerMocks.log.close).toHaveBeenCalledOnce();
+      expect(
+        localEditorMocks.cleanupGeneratedLocalEditorArtifacts
+      ).toHaveBeenCalledOnce();
+      expect(
+        sectionLibraryMocks.cleanupGeneratedSectionLibraryFiles
+      ).toHaveBeenCalledOnce();
     } finally {
       for (const [event, original] of existingSignals)
         for (const listener of process.listeners(event))

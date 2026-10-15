@@ -8,7 +8,7 @@ import {
 } from "./generationSchema.ts";
 import { buildGenerationPrompt } from "./generationValidation.ts";
 import {
-  indexAuthored,
+  collectAuthoredIds,
   validateAuthored,
 } from "../../internal/generation/authored.ts";
 
@@ -207,11 +207,9 @@ describe("fresh page creation schema", () => {
     expect(child.props.text).toBe("Contextual");
     expect(child.props.style.width).toBe(25);
     expect(child.props.id).not.toBe("template");
-    expect(indexAuthored(c, result).items.size).toBe(4);
-    expect(new Set(indexAuthored(c, result).items.keys())).not.toEqual(
-      new Set(
-        indexAuthored(c, compiled.materialize(response).spec!).items.keys()
-      )
+    expect(collectAuthoredIds(c, result).size).toBe(4);
+    expect(collectAuthoredIds(c, result)).not.toEqual(
+      collectAuthoredIds(c, compiled.materialize(response).spec!)
     );
     expect(c.data.components.Section.defaultProps!.slots).toMatchObject({
       heading: [{ props: { id: "template" } }],

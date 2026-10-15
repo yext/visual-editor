@@ -1,6 +1,9 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { z } from "zod";
-import { sendJsonResponse } from "../local-editor/server.ts";
+import {
+  readJsonRequestBody,
+  sendJsonResponse,
+} from "../local-editor/server.ts";
 
 const reportSchema = z.object({
   layoutId: z.string().max(1024),
@@ -30,52 +33,21 @@ export const handleGenerationErrorReport = async (
     );
     return;
   }
-  const maxBytes = 4 * 1024 * 1024;
-  let body: string;
-  if (request.body !== undefined) {
-    body = Buffer.isBuffer(request.body)
-      ? request.body.toString("utf8")
-      : typeof request.body === "string"
-        ? request.body
-        : JSON.stringify(request.body);
-  } else {
-    const chunks: Buffer[] = [];
-    let bytes = 0;
-    for await (const chunk of request) {
-      const buffer = Buffer.from(chunk);
-      bytes += buffer.length;
-      if (bytes > maxBytes) {
-        sendJsonResponse(
-          response,
-          { error: "Chat error report is too large." },
-          413
-        );
-        return;
-      }
-      chunks.push(buffer);
-    }
-    body = Buffer.concat(chunks).toString("utf8");
-  }
-  if (Buffer.byteLength(body) > maxBytes) {
+  const body = await readJsonRequestBody(request, 4 * 1024 * 1024);
+  if (!body.ok) {
     sendJsonResponse(
       response,
-      { error: "Chat error report is too large." },
-      413
+      {
+        error:
+          body.status === 413
+            ? "Chat error report is too large."
+            : "Invalid chat error report JSON.",
+      },
+      body.status
     );
     return;
   }
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(body);
-  } catch {
-    sendJsonResponse(
-      response,
-      { error: "Invalid chat error report JSON." },
-      400
-    );
-    return;
-  }
-  const result = reportSchema.safeParse(parsed);
+  const result = reportSchema.safeParse(body.payload);
   if (!result.success) {
     sendJsonResponse(response, { error: "Invalid chat error report." }, 400);
     return;
