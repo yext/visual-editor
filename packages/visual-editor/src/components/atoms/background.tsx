@@ -10,11 +10,10 @@ import { getThemeValue } from "../../utils/getThemeValue.ts";
 import {
   getBackgroundColorClasses,
   getBackgroundColorStyle,
-  type ResolvedThemeColor,
 } from "../../utils/colors.ts";
 
 export interface BackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
-  background?: ThemeColor | ResolvedThemeColor;
+  background?: ThemeColor;
   as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
 }
 

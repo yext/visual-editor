@@ -3,7 +3,10 @@ import { CodeXml } from "lucide-react";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 import { WithId, WithPuckProps } from "@puckeditor/core";
+import { resolveEmbeddedFieldsInString } from "../../../utils/resolveYextEntityField.ts";
+import { processHandlebarsTemplate } from "./customCodeHandlebars.ts";
 import { YextComponentConfig, YextFields } from "../../../fields/fields.ts";
 
 export interface CustomCodeSectionProps {
@@ -92,9 +95,19 @@ const CustomCodeSectionWrapper = ({
   javascript,
   puck,
 }: WithId<WithPuckProps<CustomCodeSectionProps>>) => {
+  const streamDocument = useDocument();
+  const locale = streamDocument?.locale;
+
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scriptIdRef = React.useRef<number>(Math.floor(Math.random() * 1e9));
   const scriptTagId = `custom-code-section-script-${scriptIdRef.current}`;
+
+  const processedHtml = processHandlebarsTemplate(html, streamDocument);
+  const processedJavascript = resolveEmbeddedFieldsInString(
+    javascript,
+    streamDocument,
+    locale
+  );
 
   React.useEffect(() => {
     if (!containerRef.current) {
@@ -106,23 +119,26 @@ const CustomCodeSectionWrapper = ({
       prevScript.remove();
     }
 
-    if (javascript) {
+    if (processedJavascript) {
       const script = document.createElement("script");
       script.id = scriptTagId;
       script.type = "text/javascript";
-      script.text = javascript;
+      script.text = processedJavascript;
       containerRef.current.appendChild(script);
     }
-  }, [javascript]);
+  }, [processedJavascript]);
 
-  if (!html) {
+  if (!processedHtml) {
     return puck.isEditing ? <EmptyCustomCodeSection /> : null;
   }
 
   return (
     <div>
       {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
-      <div ref={containerRef} dangerouslySetInnerHTML={{ __html: html }} />
+      <div
+        ref={containerRef}
+        dangerouslySetInnerHTML={{ __html: processedHtml }}
+      />
     </div>
   );
 };

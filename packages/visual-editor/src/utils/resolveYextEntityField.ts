@@ -87,12 +87,16 @@ export const resolveEmbeddedFieldsInString = (
       return "";
     }
 
+    if (typeof resolvedValue === "number") {
+      return resolvedValue.toString();
+    }
+
     // If the resolved value is an object, stringify it.
-    const resolvedString =
-      typeof resolvedValue === "object"
-        ? JSON.stringify(resolvedValue)
-        : String(resolvedValue);
-    return resolvedString;
+    if (typeof resolvedValue === "object") {
+      return JSON.stringify(resolvedValue);
+    }
+
+    return String(resolvedValue);
   });
 };
 

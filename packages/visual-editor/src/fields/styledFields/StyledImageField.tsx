@@ -14,8 +14,6 @@ export type StyledImageValue = {
 
 export type StyledImageField = BaseField & {
   type: "styledImage";
-  /** Converts the authored border radius into CSS styles. */
-  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
 };
