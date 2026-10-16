@@ -1765,7 +1765,7 @@ describe("getSchema - custom markup", () => {
 
   it("does not modify entity fields or leak custom escaping into Custom Code", async () => {
     const { processHandlebarsTemplate } =
-      await import("../../components/sections/customCode/customCodeHandlebars.ts");
+      await import("../customCodeHandlebars.ts");
     const document = {
       name: "<Shop>",
       path: "original",

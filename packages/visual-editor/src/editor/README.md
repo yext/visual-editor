@@ -125,6 +125,115 @@ const Example = ({ myField }: ExampleProps) => {
 };
 ```
 
+## Field transforms
+
+Add `transform: true` to a supported field type to receive resolved props in the render function. The behavior is disabled by default except for `code` and `themeColor`, which always transform.
+
+| Field definition                             | Render value                                                                                      |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `translatableString`                         | Localized, interpolated string                                                                    |
+| Ordinary `entityField`                       | Resolved entity or constant value with nested localization and interpolation                      |
+| `entityField` with `format: "price"`         | Localized currency string from a structured price, or `undefined` when incomplete                 |
+| `entityField` including `type.rich_text_v2`  | Resolved rich-text object or plain string                                                         |
+| Rich-text list with `includeListsOnly: true` | Array of resolved rich-text objects or strings                                                    |
+| `image`                                      | Localized asset image with resolved alt text and preserved asset metadata                         |
+| `multiSelector`                              | Array of selected values, preserving zero, false, and empty strings                               |
+| `optionalNumber`                             | Number or `undefined` when hidden or unset                                                        |
+| `ctaSelector`                                | Resolved CTA object with localized label and link; Get Directions includes a generated URL        |
+| `comprehensiveCTA`                           | Resolved nested CTA, button text, and aria label; styles and interaction settings are preserved   |
+| Repeated `entityField`                       | Array of item props resolved against each selected item or manual item                            |
+| `video`                                      | Asset video data with interpolated text and preserved metadata                                    |
+| `themeColor`                                 | Authored tokens plus `selectedColorCss` and `contrastingColorCss`, or `undefined`                 |
+| `styledText`, `styledButton`, `styledLink`   | CSS style object with inherited `"default"` choices omitted                                       |
+| `styledImage`, `styledPageSection`           | CSS style object for border radius, width, or vertical padding                                    |
+| `code`                                       | HTML processes Handlebars; JavaScript interpolates embedded fields; other languages stay authored |
+
+The shared `Image` component passes data URLs directly to a native image,
+including formats the browser can display without base64 encoding. It does not
+optimize those URLs or create a `srcset`; HTTP images retain their optimized
+path. Missing URLs and images that fail to load render nothing. Hosts must
+allow `data:` in the `img-src` Content Security Policy for editor previews and
+published pages to load inline images.
+
+````
+
+Title, description, and image still allow entity bindings and constant values.
+The transform returns resolved data, including translated and interpolated rich-text
+HTML and JSON. `MaybeRTF` renders that data, with optional `className`, `style`,
+`bodyVariant`, and `richTextStyleOverrides`. CTAs keep their existing field and
+renderer API.
+
+Opted-in fields appear in the editor's component-level entity tooltip when
+entity tooltips are enabled. The tooltip reads authored bindings and does not
+add source metadata to rendered props or require `EntityField` wrappers. Fields
+without `transform: true` retain their existing tooltip behavior.
+
+### Adding field transforms
+
+`fields/fieldTransforms/createYextFieldTransforms.ts` registers the transforms,
+while `fields/fieldTransforms/fieldToTransform.ts` dispatches by authored field
+type. Puck registration and adapted `custom` fields use that same map.
+Each handler receives the authored definition, its value, and the page document
+and locale. `resolveValue.ts` handles localization and interpolation across
+objects and arrays while retaining rich-text and asset structures. `cta.ts`
+contains CTA-specific resolution, `themeColor.ts` resolves theme colors, and
+`styles.ts` converts styled fields to CSS objects through field-specific functions. `code.ts` processes
+HTML templates through the shared `utils/customCodeHandlebars.ts` utility and
+interpolates embedded fields in JavaScript. Price formatting is an explicit `entityField` option rather
+than the default behavior for all entity fields.
+
+Use `themeColor` with `SITE_COLOR` or `BACKGROUND_COLOR` for color selections.
+Existing `basicSelector` color fields remain editable, but their values are not
+transformed. `themeColor` returns the authored `selectedColor`,
+`contrastingColor`, and optional `isDarkColor` together with
+`selectedColorCss` and `contrastingColorCss`. The same value can be passed to
+`Background` or `PageSection` as the `background` prop. A price field uses
+`{ type: "entityField", filter: { types: ["type.price"] }, format: "price", transform: true }`
+and renders a localized string. Styled fields render CSS style objects that can
+be passed to React's `style` prop. Code fields always transform: HTML uses
+Handlebars, JavaScript resolves embedded fields, and CSS remains authored.
+The built-in `CustomCodeSection` uses those render values. Renderers using the
+component directly through Puck must pass `createYextFieldTransforms`, as
+`VisualEditorRender` does.
+
+To support another opt-in field, add its `transform?: boolean` option, a handler in
+`fieldToTransform`, and its output type in `TransformedFieldValues` in `fields.ts`.
+An always-transformed field uses its field type directly in the registration and
+`YextTransformedProps` mapping instead of an opt-in option.
+The handler map requires an entry for each transformable field definition.
+Keep field-specific source selection in its handler and return resolved data.
+For composite bindings, also describe their authored sources in the component
+tooltip. Defaults, editor fields, and saved data keep their authored shapes.
+
+Ordinary entity lists, repeated item sources, and nested Puck arrays support
+transforms. For repeated sources, opt in on the parent field; its mappings are
+resolved against each selected linked item, including translations and embedded
+fields. Manual items resolve against the page document. Missing lists return `[]`.
+
+```tsx
+const fields = {
+  cards: { ...cardSource.field, transform: true },
+  primaryCta: { type: "comprehensiveCTA", transform: true },
+  video: { type: "video", transform: true },
+} satisfies YextFieldMap<AuthoredProps>;
+
+// In the component's render function:
+<ComprehensiveCTA value={primaryCta} />
+<VideoAtom
+  youTubeEmbedUrl={video.video.embeddedUrl}
+  title={video.video.title}
+/>
+{cards.map((card, index) => (
+  <article key={index}>
+    <h2>{card.title}</h2>
+    <MaybeRTF data={card.description} />
+  </article>
+))}
+````
+
+The library no longer calls `resolveItems` or performs text resolution in its
+render function. Video asset structure and comprehensive CTA styles are retained.
+
 ## Linked Entity Item Sources
 
 Use `createItemSource(...)` when a component needs to render repeated content
@@ -486,6 +595,19 @@ const ToneField = ({
 ```
 
 When the field definition is part of a normal component `fields` config, Puck renders it through the registered Yext field override automatically. Use `YextAutoField` only when you are manually rendering a field definition inside a custom render path.
+
+## themeColor Field Type
+
+Use `themeColor` for site and background palette choices, including custom colors. It authors the same `ThemeColor` value as existing color `basicSelector` fields. The render prop always contains the authored tokens plus CSS values for the selected and contrasting colors:
+
+```tsx
+const backgroundField = {
+  type: "themeColor" as const,
+  options: "BACKGROUND_COLOR" as const,
+};
+```
+
+For a palette color, the render value has the shape `{ selectedColor: "palette-primary", contrastingColor: "palette-primary-contrast", selectedColorCss: "var(--colors-palette-primary)", contrastingColorCss: "var(--colors-palette-primary-contrast)" }`. An empty selection returns `undefined`. The value can be passed to `Background` or `PageSection`. Existing color `basicSelector` definitions remain editable; use `themeColor` for resolved color values.
 
 ## image Field
 

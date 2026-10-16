@@ -20,6 +20,10 @@ import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
 import * as lzstring from "lz-string";
 import { Metadata } from "../../editor/Editor.tsx";
 import { createPreviewFrameLinkBlocker } from "../utils/previewFrameLinkBlocker.ts";
+import { useTranslation } from "react-i18next";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { createYextFieldTransforms } from "../../fields/fieldTransforms/index.ts";
+import { TransformedFieldTooltip } from "../puck/components/TransformedFieldTooltip.tsx";
 
 const devLogger = new DevLogger();
 // Used because we want the sidebar to be hidden
@@ -59,6 +63,12 @@ export const InternalThemeEditor = ({
   localDev,
   metadata,
 }: InternalThemeEditorProps) => {
+  const streamDocument = useDocument();
+  const { i18n } = useTranslation();
+  const fieldTransforms = React.useMemo(
+    () => createYextFieldTransforms(streamDocument, i18n.language),
+    [streamDocument, i18n.language]
+  );
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
     useState<boolean>(false);
@@ -183,6 +193,7 @@ export const InternalThemeEditor = ({
     <EntityTooltipsProvider>
       <Puck
         config={puckConfig}
+        fieldTransforms={fieldTransforms}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
         onChange={change}
@@ -195,6 +206,7 @@ export const InternalThemeEditor = ({
         }}
         plugins={[legacySidebar]}
         overrides={{
+          componentOverlay: TransformedFieldTooltip,
           header: () => (
             <ThemeHeader
               themeConfig={themeConfig}

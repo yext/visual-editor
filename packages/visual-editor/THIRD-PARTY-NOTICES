@@ -491,7 +491,11 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 The following npm packages may be included in this product:
 
+<<<<<<< HEAD
  - @puckeditor/core@0.22.4
+=======
+ - @puckeditor/core@0.24.0-canary.c1ec9773
+>>>>>>> parent of 2051df9a3 (fix: revert fieldTransforms (#1364))
  - next-themes@0.3.0
 
 These packages each contain the following license:
