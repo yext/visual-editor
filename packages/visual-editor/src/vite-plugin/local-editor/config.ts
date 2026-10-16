@@ -24,7 +24,8 @@ let cachedStreamConfig:
 export const readResolvedLayoutConfigs = async (
   rootDir: string,
   layouts: SectionLibraryLayout[],
-  diagnostics: string[]
+  diagnostics: string[],
+  forceReload = false
 ): Promise<ResolvedLocalEditorConfig> => {
   const streamConfigPath = toAbsoluteLocalEditorPath(
     rootDir,
@@ -40,7 +41,7 @@ export const readResolvedLayoutConfigs = async (
   try {
     return resolveLocalEditorConfigs(
       layouts,
-      await loadLocalEditorConfig(streamConfigPath)
+      await loadLocalEditorConfig(streamConfigPath, forceReload)
     );
   } catch (error) {
     diagnostics.push(toErrorMessage(error));
@@ -49,7 +50,8 @@ export const readResolvedLayoutConfigs = async (
 };
 
 const loadLocalEditorConfig = async (
-  streamConfigPath: string
+  streamConfigPath: string,
+  forceReload: boolean
 ): Promise<LocalEditorConfig> => {
   if (path.extname(streamConfigPath) === ".json") {
     throw new Error(
@@ -57,7 +59,7 @@ const loadLocalEditorConfig = async (
     );
   }
 
-  if (cachedStreamConfig?.filePath === streamConfigPath) {
+  if (!forceReload && cachedStreamConfig?.filePath === streamConfigPath) {
     return cachedStreamConfig.config;
   }
 

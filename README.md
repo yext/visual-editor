@@ -105,3 +105,22 @@ npx --package=@yext/visual-editor@latest yextve add-directory-locator
 The command stops before overwriting existing shared, Directory, or Locator
 source. Pass `--overwrite` to replace those files after reviewing the generated
 output.
+
+## Local Editor regeneration
+
+When `pages dev` runs with `yextVisualEditorPlugin({ localEditor: { enabled: true } })`,
+the plugin accepts `POST /__yext_visual_editor/local-editor/regenerate` on the Pages
+dev server. Call it after a script adds or updates a Section Library component:
+
+```sh
+curl -X POST -H "X-Yext-Section-Library-Root: $PWD" \
+  http://localhost:5173/__yext_visual_editor/local-editor/regenerate
+```
+
+The endpoint returns HTTP 202 with `{ "status": "queued" }` once it accepts the
+request. It regenerates in the background and reports validation failures in
+the Pages dev server log. A later request can retry after the source is fixed.
+The request must name the checkout used by the running Pages server. On success,
+Vite reloads open browser pages automatically. The endpoint is available only
+while the Local Editor Vite plugin is serving; it does not run a full build or
+restart Pages.

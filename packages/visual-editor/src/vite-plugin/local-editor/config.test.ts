@@ -1,7 +1,13 @@
 // @vitest-environment node
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import type { SectionLibraryLayout } from "../../types/sectionLibrary.ts";
-import { resolveLocalEditorConfigs } from "./config.ts";
+import {
+  readResolvedLayoutConfigs,
+  resolveLocalEditorConfigs,
+} from "./config.ts";
 
 const layout = (
   id: string,
@@ -90,5 +96,39 @@ describe("readResolvedLayoutConfigs", () => {
       },
       { layoutId: "locator", dataSource: "fixture", pageSetType: "LOCATOR" },
     ]);
+  });
+
+  it("reloads stream configuration when regeneration requests it", async () => {
+    const rootDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "local-editor-config-")
+    );
+    const configPath = path.join(rootDir, "stream.config.ts");
+    try {
+      fs.writeFileSync(
+        configPath,
+        'export default { defaults: { locale: "en" } };'
+      );
+      const first = await readResolvedLayoutConfigs(
+        rootDir,
+        [layout("location", "ENTITY")],
+        [],
+        true
+      );
+      fs.writeFileSync(
+        configPath,
+        'export default { defaults: { locale: "fr" } };'
+      );
+      const second = await readResolvedLayoutConfigs(
+        rootDir,
+        [layout("location", "ENTITY")],
+        [],
+        true
+      );
+
+      expect(first.defaults.locale).toBe("en");
+      expect(second.defaults.locale).toBe("fr");
+    } finally {
+      fs.rmSync(rootDir, { recursive: true, force: true });
+    }
   });
 });
