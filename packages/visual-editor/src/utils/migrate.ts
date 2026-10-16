@@ -15,6 +15,10 @@ export type MigrationAction =
       action: "removed";
     }
   | {
+      action: "renamed";
+      newType: string;
+    }
+  | {
       action: "updated";
       propTransformation: (
         oldProps: { id: string } & Record<string, any>,
@@ -87,7 +91,7 @@ export const migrate = (
     data.root.props = {};
   }
 
-  const migrationConfig = withRemovedComponentConfigs(config, [
+  const migrationConfig = withMigrationComponentConfigs(config, [
     migrationRegistry,
     sectionLibraryMigrationRegistry,
   ]);
@@ -111,39 +115,40 @@ export const migrate = (
   return data;
 };
 
-/** Create an empty component config for any removed components so the config can pass validation in `walkTree`. */
-const withRemovedComponentConfigs = (
+/** Supply historical component schemas during migration so `walkTree` can traverse removed or renamed slot children. */
+const withMigrationComponentConfigs = (
   config: Config,
   registries: MigrationRegistry[]
 ): Config => {
-  const removedComponentNames = new Set<string>();
-  registries.forEach((registry) => {
-    registry.forEach((migration) => {
-      Object.entries(migration).forEach(([componentName, migrationAction]) => {
-        if (
-          componentName !== "*" &&
-          "action" in migrationAction &&
-          migrationAction.action === "removed"
-        ) {
-          removedComponentNames.add(componentName);
-        }
-      });
-    });
-  });
-
-  const missingComponentNames = [...removedComponentNames].filter(
-    (componentName) => !config.components[componentName]
-  );
-  if (missingComponentNames.length === 0) {
-    return config;
-  }
-
   const components = { ...config.components };
-  missingComponentNames.forEach((componentName) => {
-    // walkTree requires every slot child to have a config before its callback
-    // can remove the child. This placeholder is used only during migration.
-    components[componentName] = {} as Config["components"][string];
-  });
+  // Work backwards so a chain of renames can use the final component's schema.
+  registries
+    .flat()
+    .reverse()
+    .forEach((migration) => {
+      Object.entries(migration)
+        .reverse()
+        .forEach(([componentName, migrationAction]) => {
+          if (
+            componentName === "*" ||
+            !("action" in migrationAction) ||
+            components[componentName]
+          ) {
+            return;
+          }
+          if (migrationAction.action === "removed") {
+            // walkTree requires every slot child to have a config before its callback
+            // can remove the child. This placeholder is used only during migration.
+            components[componentName] = {} as Config["components"][string];
+          } else if (
+            migrationAction.action === "renamed" &&
+            components[migrationAction.newType]
+          ) {
+            // The old name is available only to migrations, never to the renderer.
+            components[componentName] = components[migrationAction.newType];
+          }
+        });
+    });
   return { ...config, components };
 };
 
@@ -204,7 +209,7 @@ const applyRegistry = (
       }
 
       const appliesToAllComponents = componentName === "*";
-      data = walkTree(data, config, (content) => {
+      const transformContent = (content: Data["content"]): Data["content"] => {
         switch (migrationAction.action) {
           case "removed":
             if (appliesToAllComponents) {
@@ -213,6 +218,23 @@ const applyRegistry = (
               );
             }
             return content.filter((c) => c.type !== componentName);
+          case "renamed":
+            if (appliesToAllComponents) {
+              throw new Error(
+                "Cannot apply rename migration to all components."
+              );
+            }
+            return content.map((c) => {
+              if (c.type !== componentName) {
+                return c;
+              }
+              if (!config.components[migrationAction.newType]) {
+                throw new Error(
+                  `Cannot rename ${componentName} to unregistered component ${migrationAction.newType}.`
+                );
+              }
+              return { ...c, type: migrationAction.newType };
+            });
           case "updated":
             return content.map((c) => {
               if (!appliesToAllComponents && c.type !== componentName) {
@@ -226,8 +248,20 @@ const applyRegistry = (
                 ),
               };
             });
+          default:
+            throw new Error("Unsupported component migration action.");
         }
-      });
+      };
+      data = walkTree(data, config, transformContent);
+      // Puck visits children inside legacy zones, but does not transform the zone's own content list.
+      if (data.zones) {
+        data.zones = Object.fromEntries(
+          Object.entries(data.zones).map(([zone, content]) => [
+            zone,
+            transformContent(content),
+          ])
+        );
+      }
     });
   });
 

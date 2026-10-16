@@ -37,6 +37,82 @@ beforeEach(() => {
 });
 
 describe("resolveBreadcrumbs", () => {
+  it.each([
+    {
+      locale: "en-GB",
+      primaryLocale: "en_gb",
+      includeLocalePrefixForPrimaryLocale: undefined,
+      prefix: "",
+    },
+    {
+      locale: "en_gb",
+      primaryLocale: "en-GB",
+      includeLocalePrefixForPrimaryLocale: false,
+      prefix: "",
+    },
+    {
+      locale: "EN-gb",
+      primaryLocale: "en-GB",
+      includeLocalePrefixForPrimaryLocale: false,
+      prefix: "",
+    },
+    {
+      locale: "en-GB",
+      primaryLocale: "en_gb",
+      includeLocalePrefixForPrimaryLocale: true,
+      prefix: "en-gb/",
+    },
+    {
+      locale: "en-US",
+      primaryLocale: "en_gb",
+      includeLocalePrefixForPrimaryLocale: false,
+      prefix: "en-us/",
+    },
+    {
+      locale: undefined,
+      primaryLocale: "en_gb",
+      includeLocalePrefixForPrimaryLocale: false,
+      prefix: "",
+    },
+  ])(
+    "normalizes breadcrumb locales: $locale and $primaryLocale with explicit prefix=$includeLocalePrefixForPrimaryLocale",
+    ({
+      locale,
+      primaryLocale,
+      includeLocalePrefixForPrimaryLocale,
+      prefix,
+    }) => {
+      const document: StreamDocument = {
+        ...baseDocument,
+        locale,
+        meta: { locale: "en-GB" },
+        __: {
+          pathInfo: {
+            primaryLocale,
+            breadcrumbPrefix: "locations",
+            includeLocalePrefixForPrimaryLocale,
+          },
+        },
+      };
+      const originalDocument = structuredClone(document);
+      mockedGetDirectoryParents.mockReturnValue([
+        {
+          name: "Directory Root",
+          slug: "index.html",
+          meta: { entityType: { id: "dm_root" } },
+        },
+        { name: "Region", slug: "region" },
+      ]);
+
+      expect(resolveBreadcrumbs(document)).toEqual([
+        { name: "Directory Root", slug: `${prefix}locations` },
+        { name: "Region", slug: `${prefix}locations/region` },
+        { name: "123 Test Rd", slug: "" },
+      ]);
+      expect(document).toEqual(originalDocument);
+    }
+  );
+
   it("uses pathInfo resolver when available", () => {
     const documentWithBreadcrumbs: StreamDocument = baseDocument;
 

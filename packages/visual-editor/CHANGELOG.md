@@ -1,3 +1,22 @@
+#### 2.0.0-beta.5 (2026-10-15)
+
+##### Chores
+
+- upgrade puck to 0.22.4 ([#1365](https://github.com/yext/visual-editor/pull/1365)) ([621b7ab3](https://github.com/yext/visual-editor/commit/621b7ab3b7d61cd640990e98b80bdc9c7ff98aa5))
+
+##### New Features
+
+- add new rename migration ([#1366](https://github.com/yext/visual-editor/pull/1366)) ([808ffc17](https://github.com/yext/visual-editor/commit/808ffc17718353dd4759697bf06aafd44f82f558))
+- add fieldTransforms support for basicSelector, styled* fields, price, and code field types ([#1359](https://github.com/yext/visual-editor/pull/1359)) ([56e75a9e](https://github.com/yext/visual-editor/commit/56e75a9e3ca28fcab22e723de8d847cdfb87587a))
+- add support for fieldTransforms ([#1355](https://github.com/yext/visual-editor/pull/1355)) ([5f262a4c](https://github.com/yext/visual-editor/commit/5f262a4c64db8e6d602af59e1b3f58c88022defc))
+
+##### Bug Fixes
+
+- revert fieldTransforms ([#1364](https://github.com/yext/visual-editor/pull/1364)) ([2051df9a](https://github.com/yext/visual-editor/commit/2051df9a3349e6c9f379e1cc7b1042ac769097c6))
+- normalize locales in breadcrumbs schema ([#1362](https://github.com/yext/visual-editor/pull/1362)) ([92092199](https://github.com/yext/visual-editor/commit/92092199f6ca6aff35f507a48b3478253d4ef57d))
+- breadcrumbs schema ([#1361](https://github.com/yext/visual-editor/pull/1361)) ([e52a972f](https://github.com/yext/visual-editor/commit/e52a972fd14fb64019eedfff872897f02b3db28e))
+- restore local-dev RTF editor ([#1357](https://github.com/yext/visual-editor/pull/1357)) ([c7caa1a3](https://github.com/yext/visual-editor/commit/c7caa1a3dcf30cd0581dbfa9de327bc9831dcebf))
+
 #### 2.0.0-beta.4 (2026-10-07)
 
 ##### Chores
