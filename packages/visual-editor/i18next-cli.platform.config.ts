@@ -11,7 +11,7 @@ export default defineConfig({
       "src/internal/**/*.{ts,tsx}",
       "src/utils/*.ts",
     ],
-    ignore: ["**/__screenshots__/**"],
+    ignore: ["**/__screenshots__/**", "**/*.test.{ts,tsx}"],
     output: "locales/platform/{{language}}/{{namespace}}.json",
     defaultNS: "visual-editor",
     contextSeparator: "_",
