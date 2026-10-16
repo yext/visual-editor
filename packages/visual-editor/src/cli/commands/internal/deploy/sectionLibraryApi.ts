@@ -203,7 +203,7 @@ export async function getSectionLibraryRevision(
   const result = await yextApiRequest(
     omitLog ? "" : "Fetching Section Library Revision...",
     "GET",
-    revisionName,
+    revisionName.replace(/^accounts\/\d+\//, "accounts/me/"),
     config,
     verbose
   );
