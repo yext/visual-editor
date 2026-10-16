@@ -20,7 +20,8 @@ Props for the Address component
 
 ## BreadcrumbsSection
 
-The Breadcrumbs component automatically generates and displays a navigational hierarchy based on a page's position within a Yext directory structure. It renders a list of links showing the path from the main directory root to the current page, helping users understand their location on the site. Available on Location templates.
+The Breadcrumbs component automatically generates and displays a navigational hierarchy based on a page's position within a Yext directory structure. It renders a list of links showing the path from the main directory root to the current page, helping users understand their location on the site.
+Available on Location templates.
 
 ![Preview of the BreadcrumbsSection component](../components/testing/screenshots/BreadcrumbsSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
@@ -59,7 +60,8 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## CustomCodeSection
 
-The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page. It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
+The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page.
+It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
 
 ![Preview of the CustomCodeSection component](../components/testing/screenshots/CustomCodeSection/%5Bdesktop%5D%20default%20props%20with%20empty%20document.png)
 
@@ -69,18 +71,24 @@ The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScri
 
 The CSS styles to be applied to the component.
 
-| Prop             | Type      | Description                                                                                                                                                                                                                | Default |
-| :--------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ |
-| `css`            | `string`  | The CSS styles to be applied to the component.                                                                                                                                                                             |         |
-| `html`           | `string`  | The HTML content to be rendered. Must be present for the component to display. If not provided, the component will display a message prompting the user to add HTML. This data is expected to have already been sanitized. |         |
-| `javascript`     | `string`  | The JavaScript code to be added as a script tag in the component.                                                                                                                                                          |         |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden.                                                                                                                                             | `true`  |
+| Prop                                                                                  | Type      | Description                                                                    | Default |
+| :------------------------------------------------------------------------------------ | :-------- | :----------------------------------------------------------------------------- | :------ |
+| `css`                                                                                 | `string`  | The CSS styles to be applied to the component.                                 |         |
+| `html`                                                                                | `string`  | The HTML content to be rendered. Must be present for the component to display. |
+| If not provided, the component will display a message prompting the user to add HTML. |
+| This data is expected to have already been sanitized.                                 |           |
+| `javascript`                                                                          | `string`  | The JavaScript code to be added as a script tag in the component.              |         |
+| `liveVisibility`                                                                      | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
 
 ---
 
 ## Directory
 
-The Directory Page component serves as a navigational hub, displaying a list of child entities within a hierarchical structure (e.g., a list of states in a country, or cities in a state). It includes breadcrumbs for easy navigation and renders each child item as a distinct card. Available on Directory templates.
+The Directory Page component serves as a navigational hub,
+displaying a list of child entities within a hierarchical structure
+(e.g., a list of states in a country, or cities in a state).
+It includes breadcrumbs for easy navigation and renders each child item as a distinct card.
+Available on Directory templates.
 
 ![Preview of the Directory component](../components/testing/screenshots/Directory/%5Bdesktop%5D%20default%20props%20-%20city%20list%20-%20document%20data.png)
 
@@ -154,15 +162,20 @@ Available on Locator templates.
 
 Controls which distance value to display on each locator result card.
 
-| Prop                  | Type                                                                                                                                                                                                                | Description                                                                                                                                                                                                                      | Default                                |
-| :-------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------- |
-| `distanceDisplay`     | `DistanceDisplayOption`                                                                                                                                                                                             | Controls which distance value to display on each locator result card.                                                                                                                                                            |                                        |
-| `filters`             | `{ openNowButton: boolean; showDistanceOptions: boolean; accentColor?: ThemeColor; facetFields?: MultiSelectorValue<string>; keywordsDisplayName?: TranslatableString; }`                                           | Configuration for the filters available in the locator search experience.                                                                                                                                                        |                                        |
-| `locationStyles`      | `Array<{ entityType: LocatorEntityType; pinIcon?: { type: "none" \| "icon" \| "customImage"; iconName?: string; image?: TranslatableAssetImage; width?: number; aspectRatio?: number; }; pinColor?: ThemeColor; }>` | Props to customize the locator map pin styles. Controls map pin appearance depending on the result's entity type. The number of entries is locked to the locator entity types for the page set.                                  |                                        |
-| `mapStartingLocation` | `{ latitude: string; longitude: string; }`                                                                                                                                                                          | The starting location for the map.                                                                                                                                                                                               |                                        |
-| `mapStyle`            | `string`                                                                                                                                                                                                            | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.                                                                                                                                              | `'mapbox://styles/mapbox/streets-v12'` |
-| `pageHeading`         | `{ title: TranslatableString; color?: ThemeColor; }`                                                                                                                                                                | Configuration for the locator page heading. Allows customizing the title text and its color.                                                                                                                                     |                                        |
-| `resultCard`          | `Array<{ props: LocatorResultCardProps; }>`                                                                                                                                                                         | Props to customize the locator result card component. Controls which fields are displayed and their styling depending on the result's entity type. The number of entries is locked to the locator entity types for the page set. |                                        |
+| Prop                                                                                         | Type                                                                                                                                                                                                                | Description                                                                         | Default                                |
+| :------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------- | :------------------------------------- |
+| `distanceDisplay`                                                                            | `DistanceDisplayOption`                                                                                                                                                                                             | Controls which distance value to display on each locator result card.               |                                        |
+| `filters`                                                                                    | `{ openNowButton: boolean; showDistanceOptions: boolean; accentColor?: ThemeColor; facetFields?: MultiSelectorValue<string>; keywordsDisplayName?: TranslatableString; }`                                           | Configuration for the filters available in the locator search experience.           |                                        |
+| `locationStyles`                                                                             | `Array<{ entityType: LocatorEntityType; pinIcon?: { type: "none" \| "icon" \| "customImage"; iconName?: string; image?: TranslatableAssetImage; width?: number; aspectRatio?: number; }; pinColor?: ThemeColor; }>` | Props to customize the locator map pin styles.                                      |
+| Controls map pin appearance depending on the result's entity type.                           |
+| The number of entries is locked to the locator entity types for the page set.                |                                                                                                                                                                                                                     |
+| `mapStartingLocation`                                                                        | `{ latitude: string; longitude: string; }`                                                                                                                                                                          | The starting location for the map.                                                  |                                        |
+| `mapStyle`                                                                                   | `string`                                                                                                                                                                                                            | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles. | `'mapbox://styles/mapbox/streets-v12'` |
+| `pageHeading`                                                                                | `{ title: TranslatableString; color?: ThemeColor; }`                                                                                                                                                                | Configuration for the locator page heading.                                         |
+| Allows customizing the title text and its color.                                             |                                                                                                                                                                                                                     |
+| `resultCard`                                                                                 | `Array<{ props: LocatorResultCardProps; }>`                                                                                                                                                                         | Props to customize the locator result card component.                               |
+| Controls which fields are displayed and their styling depending on the result's entity type. |
+| The number of entries is locked to the locator entity types for the page set.                |                                                                                                                                                                                                                     |
 
 ---
 
