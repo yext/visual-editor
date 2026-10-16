@@ -408,13 +408,13 @@ const buildJsonRenderSource = (
         ...sections.flatMap((section, index) =>
           section.pageSetTypes.includes(layout.metadata.pageSetType)
             ? [
-                `    ${JSON.stringify(section.id)}: { generation: Section${index}.generation, description: sectionConfig${index}.description, fields: Section${index}.fields, defaultProps: Section${index}.defaultProps },`,
+                `    ${JSON.stringify(section.id)}: { generation: Section${index}.generation, description: sectionConfig${index}.description, fields: Section${index}.fields, defaultProps: Section${index}.defaultProps, permissions: Section${index}.permissions },`,
               ]
             : []
         ),
         ...(hasSharedRegistry
           ? [
-              `    ...Object.fromEntries(sharedComponentMetadata.filter((component) => component.pageSetTypes.includes(${pageSetType})).map((component) => [component.id, { generation: sharedComponentConfigs[component.id]?.generation, fields: sharedComponentConfigs[component.id]?.fields, defaultProps: sharedComponentConfigs[component.id]?.defaultProps, nestedOnly: true }])),`,
+              `    ...Object.fromEntries(sharedComponentMetadata.filter((component) => component.pageSetTypes.includes(${pageSetType})).map((component) => [component.id, { generation: sharedComponentConfigs[component.id]?.generation, fields: sharedComponentConfigs[component.id]?.fields, defaultProps: sharedComponentConfigs[component.id]?.defaultProps, permissions: sharedComponentConfigs[component.id]?.permissions, nestedOnly: true }])),`,
             ]
           : []),
         `  }, { ${[

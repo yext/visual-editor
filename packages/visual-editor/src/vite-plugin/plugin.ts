@@ -1,4 +1,7 @@
-import { handleGenerationErrorReport } from "./layout-generation/generationErrorReport.ts";
+import {
+  handleGenerationDiagnostics,
+  handleGenerationErrorReport,
+} from "./layout-generation/generationReports.ts";
 import type { Plugin } from "vite";
 import path from "node:path";
 import { createGenerationLogger } from "./layout-generation/generationLogger.ts";
@@ -158,27 +161,32 @@ export const yextVisualEditorPlugin = (
           next();
           return;
         }
+        const reportPath = new URL(request.url, "http://localhost").pathname;
         if (
-          new URL(request.url, "http://localhost").pathname ===
-          "/__yext_visual_editor/local-editor/generate/error"
+          reportPath === "/__yext_visual_editor/local-editor/generate/error" ||
+          reportPath ===
+            "/__yext_visual_editor/local-editor/generate/diagnostics"
         ) {
-          void handleGenerationErrorReport(
-            request,
-            response,
-            logGeneration
-          ).catch((error: unknown) => {
-            logGeneration("[local-editor generation] Error report failed", {
-              error: error instanceof Error ? error.message : String(error),
-              stack: error instanceof Error ? error.stack : undefined,
-            });
-            if (!response.headersSent)
-              sendJsonResponse(
-                response,
-                { error: "Unable to record chat error" },
-                500
-              );
-            else response.destroy();
-          });
+          const handleReport = reportPath.endsWith("/diagnostics")
+            ? handleGenerationDiagnostics
+            : handleGenerationErrorReport;
+          void handleReport(request, response, logGeneration).catch(
+            (error: unknown) => {
+              logGeneration("[local-editor generation] Error report failed", {
+                error: error instanceof Error ? error.message : String(error),
+                stack: error instanceof Error ? error.stack : undefined,
+              });
+              if (!response.headersSent) {
+                sendJsonResponse(
+                  response,
+                  { error: "Unable to record chat error" },
+                  500
+                );
+              } else {
+                response.destroy();
+              }
+            }
+          );
           return;
         }
         if (

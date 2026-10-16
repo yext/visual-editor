@@ -1,5 +1,5 @@
 import { defineCatalog, defineSchema } from "@json-render/core";
-import type { Fields } from "@puckeditor/core";
+import type { Fields, Permissions } from "@puckeditor/core";
 import { z } from "zod";
 import type { ComponentGenerationMetadata } from "../../fields/fields.ts";
 
@@ -9,6 +9,8 @@ export type GenerationComponent = {
   fields?: Fields;
   defaultProps?: Record<string, unknown>;
   nestedOnly?: boolean;
+  /** Static editor permissions checked before planning component changes. */
+  permissions?: Partial<Permissions>;
 };
 
 const puckSchema = defineSchema(

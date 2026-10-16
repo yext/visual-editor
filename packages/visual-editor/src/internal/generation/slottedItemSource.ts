@@ -21,7 +21,9 @@ export const generationFields = (config: GenerationComponent): Fields => {
   const fields = config.fields ?? {};
   const source = config.generation?.slottedItemSource;
   const slots = fields.slots;
-  if (!source || slots?.type !== "object") return fields;
+  if (!source || slots?.type !== "object") {
+    return fields;
+  }
   const cardSlot = slots.objectFields.CardSlot;
   return {
     ...fields,
@@ -42,7 +44,9 @@ export const preflightSlottedItemSource = (
   catalog: PuckGenerationCatalog
 ) => {
   const source = config.generation?.slottedItemSource;
-  if (!source) return;
+  if (!source) {
+    return;
+  }
   const shape = config.generation!.props.shape;
   const data = unwrap(shape.data);
   const slots = unwrap(shape.slots);
@@ -59,42 +63,49 @@ export const preflightSlottedItemSource = (
     !source.cardType.trim() ||
     !Object.hasOwn(catalog.data.components, source.cardType) ||
     !catalog.data.components[source.cardType].generation
-  )
+  ) {
     error("requires a registered card generation contract");
+  }
   if (
     source.defaultItemProps !== undefined &&
     typeof source.defaultItemProps !== "function" &&
     (typeof source.defaultItemProps !== "object" ||
       source.defaultItemProps === null ||
       Array.isArray(source.defaultItemProps))
-  )
+  ) {
     error("has invalid defaultItemProps");
+  }
   if (
     !(data instanceof z.ZodObject) ||
     !(unwrap(data.shape.field) instanceof z.ZodString) ||
     !(unwrap(data.shape.constantValueEnabled) instanceof z.ZodBoolean) ||
     data.shape.constantValue ||
     (data.def.catchall && (data.def.catchall as z.ZodType).def.type !== "never")
-  )
+  ) {
     error(
       "requires data.field and data.constantValueEnabled, without constantValue or open-ended data"
     );
-  if (catalog.data.components[source.cardType].generation?.props.shape.index)
+  }
+  if (catalog.data.components[source.cardType].generation?.props.shape.index) {
     error("card contracts must omit derived indexes");
-  if (shape.manualSlots || shape.conditionalRender)
+  }
+  if (shape.manualSlots || shape.conditionalRender) {
     error("cannot declare manualSlots or conditionalRender as authored");
+  }
   if (
     !(slots instanceof z.ZodObject) ||
     !(unwrap(slots.shape.CardSlot) instanceof z.ZodArray) ||
     cardSlot?.type !== "slot"
-  )
+  ) {
     error("requires slots.CardSlot as an authored native slot");
+  }
   if (
     cardSlot?.type === "slot" &&
     (cardSlot.disallow?.includes(source.cardType) ||
       (cardSlot.allow?.length && !cardSlot.allow.includes(source.cardType)))
-  )
+  ) {
     error("card type conflicts with the native slot restrictions");
+  }
 };
 
 /** Linked visible cards are derived; the inactive manual backup remains authored. */
@@ -116,16 +127,20 @@ export const prepareSlottedSource = (
   explicitCards: boolean
 ) => {
   const source = config.generation?.slottedItemSource;
-  if (!source) return;
+  if (!source) {
+    return;
+  }
   const props = component.props;
   const cards = props.slots?.CardSlot;
-  if (!Array.isArray(cards))
+  if (!Array.isArray(cards)) {
     throw new Error(`${component.type}: props/slots/CardSlot must be an array`);
+  }
   if (isLinkedSource(props)) {
-    if (explicitCards && cards.length)
+    if (explicitCards && cards.length) {
       throw new Error(
         `${component.type}: linked sources cannot author props/slots/CardSlot children`
       );
+    }
     props.slots.CardSlot = [];
     props.manualSlots = { CardSlot: clone(manualBackup(component)) };
   } else {
@@ -146,19 +161,29 @@ export const prepareSlottedSource = (
 /** Finalize helper identities and reference storage after all authored children have fresh Ids. */
 export const finalizeSlottedSource = (
   component: SavedComponent,
-  config: GenerationComponent
+  config: GenerationComponent,
+  preserveExisting = false
 ) => {
-  if (!config.generation?.slottedItemSource) return;
+  if (!config.generation?.slottedItemSource) {
+    return;
+  }
   const props = component.props;
   const cards: SavedComponent[] = isLinkedSource(props)
     ? manualBackup(component)
     : props.slots.CardSlot;
   cards.forEach((card, index) => {
     card.props.index = index;
-    setChildSlotIds(card as any, card.props.id);
+    if (!preserveExisting) {
+      setChildSlotIds(card as any, card.props.id);
+    }
   });
   props.data.constantValue = cards.map((card) => ({ id: card.props.id }));
-  if (!isLinkedSource(props)) props.manualSlots = { CardSlot: clone(cards) };
+  if (!isLinkedSource(props)) {
+    props.manualSlots = {
+      ...(preserveExisting ? props.manualSlots : {}),
+      CardSlot: clone(cards),
+    };
+  }
 };
 
 /** Validate storage independently of projection: omitting references must not hide broken links. */
@@ -167,14 +192,19 @@ export const validateSlottedSource = (
   config: GenerationComponent
 ) => {
   const source = config.generation?.slottedItemSource;
-  if (!source) return;
+  if (!source) {
+    return;
+  }
   const props = component.props;
   const fail = (path: string): never => {
     throw new Error(`${component.type} (${props.id}): invalid ${path}`);
   };
-  if (!Array.isArray(props.slots?.CardSlot)) fail("props/slots/CardSlot");
-  if (!Array.isArray(props.manualSlots?.CardSlot))
+  if (!Array.isArray(props.slots?.CardSlot)) {
+    fail("props/slots/CardSlot");
+  }
+  if (!Array.isArray(props.manualSlots?.CardSlot)) {
     fail("props/manualSlots/CardSlot");
+  }
   const cards: SavedComponent[] = isLinkedSource(props)
     ? manualBackup(component)
     : props.slots.CardSlot;
@@ -182,15 +212,18 @@ export const validateSlottedSource = (
     ...cards,
     ...(isLinkedSource(props) ? props.slots.CardSlot : []),
   ]) {
-    if (card?.type !== source.cardType) fail("props/slots/CardSlot/type");
+    if (card?.type !== source.cardType) {
+      fail("props/slots/CardSlot/type");
+    }
   }
   if (
     !isDeepEqual(
       props.data?.constantValue,
       cards.map((card) => ({ id: card.props.id }))
     )
-  )
+  ) {
     fail("props/data/constantValue");
+  }
 };
 
 /** Check derived visible trees without treating their entity-driven props as authored. */
@@ -201,7 +234,9 @@ export const validateLinkedCardStructure = (
   seenIds: Set<string>
 ) => {
   const source = config.generation?.slottedItemSource;
-  if (!source || !isLinkedSource(component.props)) return;
+  if (!source || !isLinkedSource(component.props)) {
+    return;
+  }
   const fail = (path: string): never => {
     throw new Error(
       `${component.type} (${component.props.id}): invalid ${path}`
@@ -209,17 +244,23 @@ export const validateLinkedCardStructure = (
   };
   const visitFields = (value: any, fields: Fields, path: string) => {
     for (const [key, field] of Object.entries(fields)) {
-      if (value?.[key] === undefined) continue;
+      if (value?.[key] === undefined) {
+        continue;
+      }
       const childPath = `${path}/${key}`;
       if (field.type === "slot") {
-        if (!Array.isArray(value[key])) fail(childPath);
+        if (!Array.isArray(value[key])) {
+          fail(childPath);
+        }
         value[key].forEach((card: SavedComponent, index: number) =>
           visit(card, `${childPath}/${index}`, field)
         );
       } else if (field.type === "object") {
         visitFields(value[key], field.objectFields, childPath);
       } else if (field.type === "array") {
-        if (!Array.isArray(value[key])) fail(childPath);
+        if (!Array.isArray(value[key])) {
+          fail(childPath);
+        }
         value[key].forEach((item: any, index: number) =>
           visitFields(item, field.arrayFields, `${childPath}/${index}`)
         );
@@ -237,17 +278,20 @@ export const validateLinkedCardStructure = (
       !card.props ||
       typeof card.props !== "object" ||
       Array.isArray(card.props)
-    )
+    ) {
       fail(path);
+    }
     if (
       !Object.hasOwn(catalog.data.components, card.type) ||
       field.disallow?.includes(card.type) ||
       (field.allow?.length && !field.allow.includes(card.type))
-    )
+    ) {
       fail(`${path}/type`);
+    }
     const id = card.props.id;
-    if (typeof id !== "string" || !id.trim() || seenIds.has(id))
+    if (typeof id !== "string" || !id.trim() || seenIds.has(id)) {
       fail(`${path}/props/id`);
+    }
     seenIds.add(id);
     visitFields(
       card.props,

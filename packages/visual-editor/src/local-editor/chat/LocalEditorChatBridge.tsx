@@ -1,9 +1,29 @@
+import { changedChatPaths } from "./chatDiagnostics.ts";
+import {
+  isLinkedSource,
+  manualBackup,
+} from "../../internal/generation/slottedItemSource.ts";
 import React from "react";
-import { resolveAllData, useGetPuck, type Data } from "@puckeditor/core";
+import {
+  resolveAllData,
+  useGetPuck,
+  createUsePuck,
+  type Data,
+} from "@puckeditor/core";
 import { clonePuckResolveData } from "../../internal/utils/clonePuckResolveData.ts";
 import { buildPuckHistoryState } from "../../internal/utils/buildPuckHistoryState.ts";
 import { createPuckGenerationCatalog } from "../../vite-plugin/layout-generation/puckGenerationCatalog.ts";
-import { assertAuthoredPreserved } from "../../internal/generation/authored.ts";
+import {
+  assertAuthoredPreserved,
+  buildEditInventory,
+  validateAuthored,
+  walkAuthored,
+  extractAuthored,
+} from "../../internal/generation/authored.ts";
+import {
+  materializeSectionEdit,
+  preserveSectionEditResolution,
+} from "../../internal/generation/editMaterializer.ts";
 import type { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import type { LocalEditorChatCanvas } from "./LocalEditorChatCanvas.ts";
 import { LocalEditorChatContext } from "./LocalEditorChatContext.tsx";
@@ -23,6 +43,8 @@ export const LocalEditorChatBridge = ({
   ) : null;
 };
 
+const useDiagnosticPuck = createUsePuck();
+
 const LocalEditorChatCanvasBridge = ({
   canvas,
   streamDocument,
@@ -31,10 +53,70 @@ const LocalEditorChatCanvasBridge = ({
   streamDocument: StreamDocument;
 }) => {
   const getPuck = useGetPuck();
+  const observedData = useDiagnosticPuck((puck) => puck.appState.data);
+  React.useEffect(() => canvas.observe(observedData), [canvas, observedData]);
   React.useEffect(
     () =>
       canvas.attach({
+        inspect: (data) => {
+          const catalog = createPuckGenerationCatalog(
+            getPuck().config.components
+          );
+          const manualSlotDifferences: {
+            componentId: string;
+            type: string;
+            paths: string[];
+          }[] = [];
+          try {
+            walkAuthored(catalog, data as any, ({ component }) => {
+              if (
+                !catalog.data.components[component.type]?.generation
+                  ?.slottedItemSource ||
+                isLinkedSource(component.props)
+              ) {
+                return;
+              }
+              const paths = changedChatPaths(
+                extractAuthored(catalog, { content: manualBackup(component) }),
+                extractAuthored(catalog, {
+                  content: component.props.slots.CardSlot,
+                })
+              );
+              if (paths.length) {
+                manualSlotDifferences.push({
+                  componentId: component.props.id,
+                  type: component.type,
+                  paths,
+                });
+              }
+            });
+            validateAuthored(catalog, data as any);
+            return { validationError: null, manualSlotDifferences };
+          } catch (error) {
+            return {
+              validationError:
+                error instanceof Error ? error.message : String(error),
+              manualSlotDifferences,
+            };
+          }
+        },
         read: () => clonePuckResolveData(getPuck().appState.data),
+        readSelection: () => getPuck().selectedItem?.props.id ?? null,
+        readSectionLabels: () => {
+          const puck = getPuck();
+          const inventory = buildEditInventory(
+            createPuckGenerationCatalog(puck.config.components),
+            puck.appState.data as any
+          );
+          return Object.fromEntries(
+            inventory.components
+              .filter((item) => item.componentId === item.sectionId)
+              .map((item, index) => [
+                item.componentId,
+                `Section ${index + 1} · ${puck.config.components[item.type]?.label ?? item.type}`,
+              ])
+          );
+        },
         resolve: (data) => {
           const config = getPuck().config;
           const components = Object.fromEntries(
@@ -58,8 +140,9 @@ const LocalEditorChatCanvasBridge = ({
                               : String(cause)
                           }`
                         );
-                        if (cause instanceof Error)
+                        if (cause instanceof Error) {
                           error.stack += `\nCaused by: ${cause.stack}`;
+                        }
                         throw error;
                       }
                     }
@@ -81,6 +164,22 @@ const LocalEditorChatCanvasBridge = ({
           );
           assertAuthoredPreserved(catalog, data as any, candidate as any);
         },
+        materializeSection: (baseline, task, result) => {
+          const puck = getPuck();
+          const catalog = createPuckGenerationCatalog(puck.config.components);
+          return materializeSectionEdit(catalog, baseline, task, result, {
+            can: (permission, component) =>
+              puck.getPermissions(
+                component ? { item: component as any } : { root: true }
+              )[permission] !== false,
+          });
+        },
+        preserveSectionResolution: (resolved, candidate) =>
+          preserveSectionEditResolution(
+            createPuckGenerationCatalog(getPuck().config.components),
+            resolved,
+            candidate
+          ),
         commit: (data: Data, baseline: Data) => {
           const { history, appState } = getPuck();
           const histories = history.histories.slice(0, history.index + 1);

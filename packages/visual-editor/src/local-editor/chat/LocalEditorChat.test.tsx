@@ -1,3 +1,4 @@
+import { reportChatDiagnostic } from "./chatDiagnostics.ts";
 import React from "react";
 import { slottedFixture } from "../../internal/generation/slottedGenerationTestUtils.ts";
 import {
@@ -45,6 +46,7 @@ describe("strict generation in the editor", () => {
     vi.stubGlobal("fetch", fetchMock);
     render(
       <ChatHarness
+        initialData={{ root: {}, content: [] }}
         config={{
           components: {
             ...chatConfig.components,
@@ -79,21 +81,56 @@ describe("strict generation in the editor", () => {
     });
     expect(report.stack).toContain("entityField");
     expect(report.stack).toContain("Caused by:");
-    expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
+    expect(screen.queryByText("Generated", { selector: "h2" })).toBeNull();
     expect(screen.getByLabelText("History index").textContent).toBe("0");
   });
   it("includes manual edits and creates one undoable transaction", async () => {
-    const fetchMock = vi.fn(
-      async (_url: string, _init?: RequestInit) =>
-        new Response(
-          wire({
-            type: "accepted",
-            text: "Updated",
-            spec: generatedContent("Generated"),
-          }),
-          { headers }
-        )
-    );
+    const task = {
+      taskId: "heading-edit",
+      sectionId: "heading",
+      targetComponentIds: ["heading"],
+      instructions: "Set /text on the selected Heading component",
+      description: "Change the heading",
+      structuralOperations: [],
+      dependsOn: [],
+      generateContent: true,
+    };
+    const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
+      const body = JSON.parse(init!.body as string);
+      return new Response(
+        wire(
+          body.mode === "plan"
+            ? {
+                type: "planned",
+                plan: {
+                  intent: "content",
+                  text: "Updated",
+                  clarification: null,
+                  globalStyleGuidance: null,
+                  sharedIntent: "Update",
+                  tasks: [task],
+                },
+              }
+            : {
+                type: "section-result",
+                result: {
+                  taskId: task.taskId,
+                  sectionId: task.sectionId,
+                  operations: [
+                    {
+                      kind: "update",
+                      componentId: "heading",
+                      changes: [
+                        { kind: "set", path: "/text", value: "Generated" },
+                      ],
+                    },
+                  ],
+                },
+              }
+        ),
+        { headers: { "X-Visual-Editor-Generation": "section-edits-v1" } }
+      );
+    });
     vi.stubGlobal("fetch", fetchMock);
     render(<ChatHarness />);
     fireEvent.click(screen.getByText("Manual edit", { selector: "button" }));
@@ -107,8 +144,34 @@ describe("strict generation in the editor", () => {
       JSON.parse(fetchMock.mock.calls[0][1]!.body as string).currentData
     ).toEqual(generatedContent("Manual"));
     expect(screen.getByLabelText("History index").textContent).toBe("2");
+    await waitFor(() =>
+      expect(reportChatDiagnostic).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          correlationId: expect.any(String),
+          sequence: expect.any(Number),
+          phase: "commit-readback",
+          details: expect.objectContaining({
+            taskId: "heading-edit",
+            snapshot: expect.any(Object),
+            validationError: null,
+          }),
+        })
+      )
+    );
     fireEvent.click(screen.getByText("Undo", { selector: "button" }));
     await screen.findByText("Manual", { selector: "h2" });
+    await waitFor(() =>
+      expect(reportChatDiagnostic).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          phase: "canvas-observed",
+          details: expect.objectContaining({
+            snapshot: expect.objectContaining(generatedContent("Manual")),
+          }),
+        })
+      )
+    );
     fireEvent.click(screen.getByText("Redo", { selector: "button" }));
     await screen.findByText("Generated", { selector: "h2" });
   });
@@ -161,13 +224,15 @@ describe("strict generation in the editor", () => {
         )
     );
     vi.stubGlobal("fetch", fetchMock);
-    const editor = render(<ChatHarness />);
+    const editor = render(
+      <ChatHarness initialData={{ root: {}, content: [] }} />
+    );
     await submit();
     expect(screen.getByText("Generating layout…")).toBeTruthy();
     expect(document.querySelector(".local-editor-chat-spinner")).toBeTruthy();
     await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
     const attachmentCount = attach.mock.calls.length;
-    editor.rerender(<ChatHarness />);
+    editor.rerender(<ChatHarness initialData={{ root: {}, content: [] }} />);
     expect(attach).toHaveBeenCalledTimes(attachmentCount);
     expect(screen.queryByRole("alert")).toBeNull();
     expect(fetchMock.mock.calls.length).toBe(1);
@@ -192,8 +257,9 @@ describe("strict generation in the editor", () => {
       let stream!: ReadableStreamDefaultController<Uint8Array>;
       let signal!: AbortSignal;
       const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
-        if (_url.endsWith("/error"))
+        if (_url.endsWith("/error")) {
           return new Response(JSON.stringify({ recorded: true }));
+        }
         signal = init!.signal!;
         return new Response(
           new ReadableStream({
@@ -205,18 +271,21 @@ describe("strict generation in the editor", () => {
         );
       });
       vi.stubGlobal("fetch", fetchMock);
-      const editor = render(<ChatHarness />);
+      const editor = render(
+        <ChatHarness initialData={{ root: {}, content: [] }} />
+      );
       await submit();
       await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
       editor.rerender(
         <ChatHarness
+          initialData={{ root: {}, content: [] }}
           entityId={context === "entity" ? "two" : "one"}
           locale={context === "locale" ? "fr" : "en"}
         />
       );
       await waitFor(() => expect(signal.aborted).toBe(true));
-      expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
-      act(() => {
+      expect(screen.queryByText("Original", { selector: "h2" })).toBeNull();
+      expect(() =>
         stream.enqueue(
           new TextEncoder().encode(
             wire({
@@ -225,9 +294,8 @@ describe("strict generation in the editor", () => {
               spec: generatedContent("Late"),
             })
           )
-        );
-        stream.close();
-      });
+        )
+      ).toThrow();
       expect(screen.queryByText("Late", { selector: "h2" })).toBeNull();
     }
   );
@@ -245,11 +313,11 @@ describe("strict generation in the editor", () => {
         )
     );
     vi.stubGlobal("fetch", fetchMock);
-    render(<ChatHarness />);
+    render(<ChatHarness initialData={{ root: {}, content: [] }} />);
     await submit();
     await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
     expect(screen.getByText("Generating layout…")).toBeTruthy();
-    expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
+    expect(screen.queryByText("Original", { selector: "h2" })).toBeNull();
     act(() =>
       stream.enqueue(
         new TextEncoder().encode(
@@ -289,11 +357,14 @@ describe("strict generation in the editor", () => {
         "fetch",
         vi.fn(async () => new Response(body, { headers }))
       );
-      render(<ChatHarness />);
+      render(<ChatHarness initialData={{ root: {}, content: [] }} />);
       await submit();
-      if (mode === "clarification") await screen.findByText("Which image?");
-      else await screen.findByRole("alert");
-      expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
+      if (mode === "clarification") {
+        await screen.findByText("Which image?");
+      } else {
+        await screen.findByRole("alert");
+      }
+      expect(screen.queryByText("Original", { selector: "h2" })).toBeNull();
       expect(screen.getByLabelText("History index").textContent).toBe("0");
     }
   );
@@ -308,7 +379,7 @@ describe("slotted source generation in the editor", () => {
       f.components.FAQCard.render = ({ data }: any) => (
         <p>{data.question.defaultValue}</p>
       );
-      if (reject)
+      if (reject) {
         f.components.FAQCard.resolveData = (component: any) => ({
           ...component,
           props: {
@@ -316,6 +387,7 @@ describe("slotted source generation in the editor", () => {
             data: { ...component.props.data, answer: "Resolver replacement" },
           },
         });
+      }
       const candidate = f.materialize([f.section([f.card("Generated FAQ")])]);
       vi.stubGlobal(
         "fetch",
@@ -359,3 +431,8 @@ describe("slotted source generation in the editor", () => {
     }
   );
 });
+
+vi.mock("./chatDiagnostics.ts", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("./chatDiagnostics.ts")>()),
+  reportChatDiagnostic: vi.fn(),
+}));

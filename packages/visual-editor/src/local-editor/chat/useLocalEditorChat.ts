@@ -1,12 +1,29 @@
+import { validateTaskGraph } from "../../internal/generation/editUtils.ts";
 import React from "react";
+import { reportChatDiagnostic, reportChatError } from "./chatDiagnostics.ts";
+import type { SectionTaskProgress } from "./chatProgress.ts";
+import { summarizeSectionOutcomes } from "./chatProgress.ts";
 import { LocalEditorChatCanvas } from "./LocalEditorChatCanvas.ts";
-import type { GenerationTokenUsage, GeneratedContent } from "../types.ts";
+import type { GenerationTokenUsage } from "../types.ts";
+import type {
+  LayoutGenerationRequest,
+  SectionEditPlan,
+  SectionEditTask,
+  SectionTaskOutcome,
+} from "../../internal/generation/editProtocol.ts";
+import { isBlankGenerationPage } from "../../internal/generation/isBlankGenerationPage.ts";
+import {
+  ChatGenerationError,
+  requestChatGeneration,
+} from "./chatGenerationRequest.ts";
+import { repairChatOutput, runSectionTasks } from "./sectionTaskRunner.ts";
 
 type ConversationMessage = { role: "user" | "assistant"; content: string };
 type ChatMessage = {
   role: "user" | "assistant";
   text: string;
   pending?: boolean;
+  sections?: SectionTaskProgress[];
 };
 
 /** Keep conversation prose separate from the generated canvas data. */
@@ -28,7 +45,21 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
   const previousMessagesRef = React.useRef<ChatMessage[]>([]);
   const history = React.useRef<ConversationMessage[]>([]);
   const activeRequest = React.useRef<AbortController | null>(null);
+  const finalizeCancelled = React.useRef<(() => void) | null>(null);
   const diagnostics = React.useRef<Record<string, unknown>>({});
+  const diagnosticSequence = React.useRef(0);
+  canvas.onDiagnostic = (phase, details) => {
+    if (typeof diagnostics.current.correlationId !== "string") {
+      return;
+    }
+    reportChatDiagnostic(api, {
+      layoutId,
+      correlationId: diagnostics.current.correlationId,
+      sequence: diagnosticSequence.current++,
+      phase,
+      details,
+    });
+  };
   const reportError = (cause: unknown) => {
     const error = cause instanceof Error ? cause : new Error(String(cause));
     const details: Record<string, unknown> = {
@@ -37,31 +68,24 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
       error: error.message.slice(0, 32_768),
       stack: error.stack?.slice(0, 65_536),
     };
-    // Preserve the error even when an unusually large candidate exceeds the report limit.
     const candidateJson = JSON.stringify(details.candidate);
-    if (candidateJson && candidateJson.length > 500_000)
+    if (candidateJson && candidateJson.length > 500_000) {
       details.candidate = { omitted: true, characters: candidateJson.length };
+    }
     console.error("[local-editor generation] Chat failed", details);
     setError(error);
-    // Reporting must survive cancellation and must never mask the chat error.
-    void (async () => {
-      try {
-        const response = await fetch(`${api}/error`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(details),
-        });
-        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-      } catch (reportFailure) {
-        console.error("Unable to report chat error:", reportFailure);
-      }
-    })();
+    reportChatError(api, details);
   };
   const cancel = React.useCallback(() => {
     activeRequest.current?.abort();
-    activeRequest.current = null;
     canvas.finish();
-    setMessages(previousMessagesRef.current);
+    if (finalizeCancelled.current) {
+      finalizeCancelled.current();
+    } else {
+      setMessages(previousMessagesRef.current);
+    }
+    finalizeCancelled.current = null;
+    activeRequest.current = null;
     setIsStreaming(false);
   }, [canvas]);
   canvas.onError = (cause) => {
@@ -75,149 +99,288 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
     setMessages([]);
     setUsage({ cachedInput: 0, uncachedInput: 0, output: 0 });
     setError(null);
-    setIsStreaming(false);
   }, [cancel]);
   React.useEffect(() => {
     clear();
-    return () => {
-      cancel();
-    };
+    return cancel;
   }, [api, layoutId, clear, cancel]);
 
   const send = async (prompt: string) => {
-    if (!prompt.trim() || activeRequest.current || !canvas.ready) return;
+    if (!prompt.trim() || activeRequest.current || !canvas.ready) {
+      return;
+    }
+    const correlationId = crypto.randomUUID();
     diagnostics.current = {
-      correlationId: crypto.randomUUID(),
+      correlationId,
       phase: "read-layout",
       historyMessageCount: history.current.length,
     };
     const controller = new AbortController();
     activeRequest.current = controller;
+    const active = () =>
+      activeRequest.current === controller && !controller.signal.aborted;
     const user: ConversationMessage = { role: "user", content: prompt.trim() };
-    const previousMessages = messages;
-    previousMessagesRef.current = previousMessages;
+    const previousMessages = previousMessagesRef.current;
     const nextMessages: ChatMessage[] = [
       ...previousMessages,
       { role: "user", text: user.content },
     ];
-    let text = "";
-    let spec: GeneratedContent | null = null;
-    let accepted = false;
+    const requestMessages = [...history.current, user];
+    let plan: SectionEditPlan | undefined;
+    const taskOutcomes = new Map<string, SectionTaskOutcome>();
+    let completed = false;
+    const progress = new Map<string, SectionTaskProgress>();
+    const showProgress = (text: string) => {
+      setMessages([
+        ...nextMessages,
+        {
+          role: "assistant",
+          text,
+          pending: true,
+          sections: [...progress.values()],
+        },
+      ]);
+    };
+    const updateProgress = (
+      task: SectionEditTask,
+      status: SectionTaskProgress["status"],
+      message?: string
+    ) => {
+      if (!active()) {
+        return;
+      }
+      const previous = progress.get(task.taskId);
+      if (!previous) {
+        return;
+      }
+      progress.set(task.taskId, { ...previous, status, message });
+      const applied = [...progress.values()].filter(
+        (item) => item.status === "applied"
+      ).length;
+      showProgress(`${applied} of ${progress.size} sections applied.`);
+    };
+    const complete = (
+      text: string,
+      sections?: SectionTaskProgress[],
+      historyText = text
+    ) => {
+      if (completed) {
+        return;
+      }
+      completed = true;
+      const result: ChatMessage[] = [
+        ...nextMessages,
+        { role: "assistant", text, sections },
+      ];
+      setMessages(result);
+      previousMessagesRef.current = result;
+      history.current = [
+        ...requestMessages,
+        { role: "assistant", content: historyText },
+      ];
+    };
+    const completeEdits = (reason?: string) => {
+      if (!plan) {
+        return;
+      }
+      const actual = plan.tasks.map(
+        (task): SectionTaskOutcome =>
+          taskOutcomes.get(task.taskId) ?? {
+            taskId: task.taskId,
+            sectionId: task.sectionId,
+            status: "cancelled",
+            message: "Stopped before application completed.",
+          }
+      );
+      const sections = actual.map((outcome): SectionTaskProgress => ({
+        ...progress.get(outcome.taskId)!,
+        status: outcome.status,
+        message: outcome.message,
+      }));
+      const text = [
+        actual.length ? summarizeSectionOutcomes(actual) : plan.text,
+        plan.clarification,
+        plan.globalStyleGuidance,
+        reason,
+      ]
+        .filter(Boolean)
+        .join("\n\n");
+      const details = sections
+        .map(
+          (section) =>
+            `${section.label}: ${section.status}. ${section.description} ${section.message}`
+        )
+        .join("\n");
+      complete(text, sections, [text, details].filter(Boolean).join("\n\n"));
+    };
+    finalizeCancelled.current = () => {
+      if (plan) {
+        completeEdits("Request cancelled.");
+      } else {
+        complete("Request cancelled before any changes were applied.");
+      }
+    };
     setMessages([
       ...nextMessages,
       { role: "assistant", text: "Generating layout…", pending: true },
     ]);
     setIsStreaming(true);
     setError(null);
+    const request = (
+      body: LayoutGenerationRequest,
+      signal = controller.signal
+    ) =>
+      requestChatGeneration(api, body, signal, correlationId, (added) => {
+        if (active() && !signal.aborted) {
+          setUsage((current) => ({
+            cachedInput: current.cachedInput + added.cachedInput,
+            uncachedInput: current.uncachedInput + added.uncachedInput,
+            output: current.output + added.output,
+          }));
+        }
+      });
     try {
+      const selectedComponentId = canvas.selectedComponentId;
       const currentData = canvas.begin();
-      // Puck 0.24 records manual changes after 250ms. Let that pending history
-      // settle before a fast final commit.
+      const fresh = isBlankGenerationPage(currentData);
+      const sectionLabels = fresh ? {} : canvas.sectionLabels;
+      showProgress(fresh ? "Generating layout…" : "Planning changes…");
+      // Puck records manual changes after 250ms; let pending history settle.
       await new Promise<void>((resolve) => setTimeout(resolve, 260));
-      if (activeRequest.current !== controller) return;
-      diagnostics.current.phase = "request";
-      const response = await fetch(api, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Visual-Editor-Correlation-Id": String(
-            diagnostics.current.correlationId
-          ),
-        },
-        body: JSON.stringify({
+      if (!active()) {
+        return;
+      }
+      diagnostics.current.phase = fresh ? "request" : "planning";
+      if (fresh) {
+        const event = await request({
+          mode: "create",
           layoutId,
           currentData,
-          messages: [...history.current, user],
-        }),
-        signal: controller.signal,
-      });
-      diagnostics.current.status = response.status;
-      diagnostics.current.phase = "read-response";
-      if (!response.ok) {
-        const result = await response.json().catch(() => null);
-        throw new Error(result?.error ?? `HTTP error: ${response.status}`);
-      }
-      if (
-        response.headers.get("X-Visual-Editor-Generation") !==
-        "strict-puck-overrides-v2"
-      )
-        throw new Error(
-          "Generation endpoint does not support validated Puck output"
-        );
-      const reader = response.body?.getReader();
-      if (!reader) throw new Error("No response body");
-      let pending = "";
-      const processEvent = (line: string) => {
-        if (!line.trim() || activeRequest.current !== controller) return;
-        const event = JSON.parse(line);
-        if (event.type === "usage") {
-          setUsage((current) => ({
-            cachedInput: current.cachedInput + event.usage.cachedInput,
-            uncachedInput: current.uncachedInput + event.usage.uncachedInput,
-            output: current.output + event.usage.output,
-          }));
-        } else if (event.type === "error") throw new Error(event.error);
-        else if (event.type === "accepted") {
-          if (
-            typeof event.text !== "string" ||
-            !(
-              event.spec === null ||
-              (event.spec &&
-                typeof event.spec === "object" &&
-                Array.isArray(event.spec.content) &&
-                Object.keys(event.spec).every((key) => key === "content"))
-            )
-          )
-            throw new Error("Invalid accepted Puck response");
-          text = event.text;
-          spec = event.spec;
-          accepted = true;
-          // Commit history and layout only after the transport finishes successfully.
+          messages: requestMessages,
+        });
+        if (!active()) {
+          return;
         }
-      };
-      const decoder = new TextDecoder();
-      try {
-        while (true) {
-          const { done, value } = await reader.read();
-          pending += decoder.decode(value, { stream: !done });
-          const lines = pending.split("\n");
-          pending = lines.pop()!;
-          lines.forEach(processEvent);
-          if (done) break;
+        if (event.type !== "accepted") {
+          throw new Error("Expected fresh generation output.");
         }
-        if (pending) processEvent(pending);
-        if (!accepted)
-          throw new Error("Generation ended before spec acceptance");
-      } finally {
-        reader.releaseLock();
-      }
-      if (activeRequest.current === controller) {
         diagnostics.current.phase = "resolve-and-commit";
-        diagnostics.current.candidate = spec;
-        await canvas.commit(spec);
-        if (activeRequest.current !== controller) return;
-        const completedMessages: ChatMessage[] = [
-          ...nextMessages,
-          { role: "assistant", text },
-        ];
-        setMessages(completedMessages);
-        previousMessagesRef.current = completedMessages;
-        history.current = [
-          ...history.current,
-          user,
-          { role: "assistant", content: text },
-        ];
+        diagnostics.current.candidate = event.spec;
+        showProgress("Applying layout…");
+        await canvas.commit(event.spec);
+        if (active()) {
+          complete(event.text);
+        }
+      } else {
+        plan = await repairChatOutput(async (validationFeedback) => {
+          if (active()) {
+            showProgress(
+              validationFeedback ? "Retrying plan…" : "Planning changes…"
+            );
+          }
+          const event = await request({
+            mode: "plan",
+            layoutId,
+            currentData,
+            messages: requestMessages,
+            selectedComponentId,
+            validationFeedback,
+          });
+          if (event.type !== "planned") {
+            throw new ChatGenerationError("Expected an edit plan.", true);
+          }
+          try {
+            validateTaskGraph(event.plan.tasks);
+          } catch (cause) {
+            throw new ChatGenerationError(String(cause), true);
+          }
+          return event.plan;
+        });
+        if (!active()) {
+          return;
+        }
+        plan.tasks.forEach((task, index) => {
+          const insertion = task.structuralOperations.find(
+            (operation) => operation.kind === "insert"
+          );
+          progress.set(task.taskId, {
+            taskId: task.taskId,
+            sectionId: task.sectionId,
+            label:
+              sectionLabels[task.sectionId] ??
+              (insertion?.kind === "insert"
+                ? `New section · ${insertion.componentType}`
+                : `Section ${index + 1}`),
+            description: task.description ?? "Update this section.",
+            status: task.dependsOn.length ? "waiting" : "pending",
+          });
+        });
+        showProgress(`0 of ${plan.tasks.length} sections applied.`);
+        diagnostics.current.phase = "section-execution";
+        const result = await runSectionTasks({
+          tasks: plan.tasks,
+          signal: controller.signal,
+          generate: async (task, signal, validationFeedback) => {
+            const event = await request(
+              {
+                mode: "section",
+                layoutId,
+                messages: requestMessages,
+                currentData: canvas.read(task),
+                task,
+                sharedIntent: plan!.sharedIntent,
+                validationFeedback,
+              },
+              signal
+            );
+            if (event.type !== "section-result") {
+              throw new ChatGenerationError("Expected a section result.", true);
+            }
+            return event.result;
+          },
+          commit: async (task, result, signal) => {
+            if (!active()) {
+              throw new Error("Generation cancelled.");
+            }
+            await canvas.commitSection(task, result, signal, () =>
+              updateProgress(task, "applying")
+            );
+          },
+          onProgress: updateProgress,
+          onOutcome: (outcome) => {
+            canvas.onDiagnostic("task-outcome", { ...outcome });
+            if (active()) {
+              taskOutcomes.set(outcome.taskId, outcome);
+              const task = plan!.tasks.find(
+                (task) => task.taskId === outcome.taskId
+              )!;
+              updateProgress(task, outcome.status, outcome.message);
+            }
+          },
+        });
+        if (!active()) {
+          return;
+        }
+        completeEdits();
+        if (result.error) {
+          reportError(result.error);
+        }
       }
     } catch (cause) {
-      if (activeRequest.current !== controller || controller.signal.aborted)
+      if (!active()) {
         return;
-      canvas.finish();
-      setMessages(previousMessages);
+      }
+      if (plan) {
+        completeEdits("Request stopped before completion.");
+      } else {
+        complete("Request failed before any changes were applied.");
+      }
       reportError(cause);
     } finally {
       if (activeRequest.current === controller) {
         canvas.finish();
         activeRequest.current = null;
+        finalizeCancelled.current = null;
         setIsStreaming(false);
       }
     }

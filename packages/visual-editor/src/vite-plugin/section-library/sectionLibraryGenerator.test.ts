@@ -52,7 +52,7 @@ describe("generateSectionLibraryFiles", () => {
           source.replace(
             `export const ${name} = {};`,
             name === "Hero"
-              ? 'export const Hero = Object.assign(({ title, children }) => createElement("h2", null, title, children), { generation: { props: z.object({ title: z.string() }) } });'
+              ? 'export const Hero = Object.assign(({ title, children }) => createElement("h2", null, title, children), { permissions: { edit: false, delete: false }, generation: { props: z.object({ title: z.string() }) } });'
               : `export const ${name} = { render: ({ title }) => createElement("p", null, title), generation: { props: z.object({ title: z.string() }) } };`
           )
       );
@@ -79,6 +79,10 @@ describe("generateSectionLibraryFiles", () => {
       );
       const catalog = catalogs.location;
       const directoryCatalog = catalogs["directory-layout"];
+      expect(catalog.data.components.hero.permissions).toEqual({
+        edit: false,
+        delete: false,
+      });
       expect(catalog.componentNames).toContain("hero");
       expect(catalog.componentNames).toContain("MainContent");
       expect(catalog.componentNames).not.toContain("Directory");
@@ -180,6 +184,10 @@ describe("generateSectionLibraryFiles", () => {
     expect(source).toContain('"hero": { generation: Section1.generation');
     expect(source).toContain("fields: Section1.fields");
     expect(source).toContain("defaultProps: Section1.defaultProps");
+    expect(source).toContain("permissions: Section1.permissions");
+    expect(source).toContain(
+      "permissions: sharedComponentConfigs[component.id]?.permissions"
+    );
     expect(source).toContain(
       "generation: sharedComponentConfigs[component.id]?.generation"
     );

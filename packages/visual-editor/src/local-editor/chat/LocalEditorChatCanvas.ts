@@ -1,14 +1,38 @@
+import { changedChatPaths } from "./chatDiagnostics.ts";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import type { Data } from "@puckeditor/core";
 import type { GeneratedContent } from "../types.ts";
 import { clonePuckResolveData } from "../../internal/utils/clonePuckResolveData.ts";
 import { rejectZones } from "../../internal/generation/authored.ts";
+import type {
+  SectionEditResult,
+  SectionEditTask,
+} from "../../internal/generation/editProtocol.ts";
+import { structuralEditResult } from "../../internal/generation/editMaterializer.ts";
 
 export type ChatCanvasAdapter = {
+  /** Inspect a snapshot without changing editor state. */
+  inspect?: (data: Data) => object;
+  /** Read the latest editor data. */
   read: () => Data;
+  /** Read the selected component before the turn starts. */
+  readSelection?: () => string | null;
+  /** Name existing sections in their current display order. */
+  readSectionLabels?: () => Record<string, string>;
+  /** Resolve an isolated candidate through Puck. */
   resolve: (data: Data) => Promise<Data>;
+  /** Check that fresh generation survived resolution. */
   validate: (data: Data, candidate: Data) => void;
+  /** Apply data and record one undo entry from its baseline. */
   commit: (data: Data, baseline: Data) => void;
+  /** Apply one section's operations to the latest baseline. */
+  materializeSection?: (
+    baseline: Data,
+    task: SectionEditTask,
+    result: SectionEditResult
+  ) => Data;
+  /** Verify resolution and preserve the section candidate's untouched data. */
+  preserveSectionResolution?: (resolved: Data, candidate: Data) => Data;
 };
 
 /** An isolated candidate produces exactly one history entry after resolution. */
@@ -16,8 +40,58 @@ export class LocalEditorChatCanvas {
   private adapter?: ChatCanvasAdapter;
   private baseline?: Data;
   private revision = 0;
+  private sectionQueue: Promise<void> = Promise.resolve();
+  private appliedTaskIds = new Set<string>();
   private subscribers = new Set<() => void>();
+  private lastObserved?: Data;
+  private lastApplied?: { taskId: string; sectionId: string };
+  onDiagnostic: (phase: string, details: Record<string, unknown>) => void =
+    () => {};
   onError: (error: unknown) => void = () => {};
+  private diagnose(
+    phase: string,
+    data: Data,
+    details: Record<string, unknown> = {},
+    captured?: { serialized: string; snapshot: Data }
+  ) {
+    try {
+      const serialized = captured?.serialized ?? JSON.stringify(data);
+      const snapshot = captured?.snapshot ?? JSON.parse(serialized);
+      const changedPaths = this.lastObserved
+        ? changedChatPaths(this.lastObserved, snapshot)
+        : [];
+      this.lastObserved = snapshot;
+      this.onDiagnostic(phase, {
+        observedAt: new Date().toISOString(),
+        ...this.lastApplied,
+        ...details,
+        ...this.adapter?.inspect?.(data),
+        changedPaths,
+        changedPathsLimit: 100,
+        snapshot:
+          new Blob([serialized]).size <= 2_000_000
+            ? snapshot
+            : { omitted: true, characters: serialized.length },
+      });
+    } catch (error) {
+      console.error("Unable to capture canvas diagnostics:", error);
+    }
+  }
+  /** Record Puck changes after history commits, including resolution after the turn ends. */
+  observe(data: Data) {
+    if (!this.lastApplied) {
+      return;
+    }
+    try {
+      const serialized = JSON.stringify(data);
+      const snapshot = JSON.parse(serialized);
+      if (!isDeepEqual(snapshot, this.lastObserved)) {
+        this.diagnose("canvas-observed", data, {}, { serialized, snapshot });
+      }
+    } catch (error) {
+      console.error("Unable to observe canvas diagnostics:", error);
+    }
+  }
   subscribe = (listener: () => void) => {
     this.subscribers.add(listener);
     return () => {
@@ -30,25 +104,56 @@ export class LocalEditorChatCanvas {
   }
   attach(adapter: ChatCanvasAdapter) {
     this.finish();
+    this.lastApplied = undefined;
+    this.lastObserved = undefined;
     this.adapter = adapter;
     this.notify();
     return () => {
-      if (this.adapter !== adapter) return;
+      if (this.adapter !== adapter) {
+        return;
+      }
       const active = !!this.baseline;
       this.finish();
       this.adapter = undefined;
       this.notify();
-      if (active)
+      if (active) {
         this.onError(new Error("Editor context changed during generation."));
+      }
     };
   }
   begin() {
-    if (!this.adapter) throw new Error("The editor is not ready.");
+    if (!this.adapter) {
+      throw new Error("The editor is not ready.");
+    }
     const data = this.adapter.read();
     rejectZones(data as any);
+    this.lastApplied = undefined;
+    this.lastObserved = undefined;
+    this.diagnose("turn-start", data);
     this.baseline = clonePuckResolveData(data);
+    this.appliedTaskIds.clear();
+    this.sectionQueue = Promise.resolve();
     this.revision++;
     return serializeChatLayout(this.baseline);
+  }
+  /** Read the latest layout for each section request and repair attempt. */
+  read(task?: SectionEditTask) {
+    if (!this.adapter || !this.baseline) {
+      throw new Error("Generation cancelled or editor context changed.");
+    }
+    const data = this.adapter.read();
+    this.diagnose("request-layout", data, {
+      taskId: task?.taskId,
+      sectionId: task?.sectionId,
+    });
+    return serializeChatLayout(data);
+  }
+  /** Read names for the sections present before planning. */
+  get sectionLabels() {
+    return this.adapter?.readSectionLabels?.() ?? {};
+  }
+  get selectedComponentId() {
+    return this.adapter?.readSelection?.() ?? null;
   }
   async commit(data: GeneratedContent | null) {
     const revision = this.revision;
@@ -60,12 +165,14 @@ export class LocalEditorChatCanvas {
         this.baseline !== baseline ||
         revision !== this.revision ||
         adapter !== this.adapter
-      )
+      ) {
         throw new Error("Generation cancelled or editor context changed.");
-      if (!isDeepEqual(adapter!.read(), baseline))
+      }
+      if (!isDeepEqual(adapter!.read(), baseline)) {
         throw new Error(
           "Layout changed during generation. Try the request again."
         );
+      }
     };
     assertCurrent();
     if (!data) {
@@ -86,9 +193,118 @@ export class LocalEditorChatCanvas {
     );
     this.finish();
   }
+  /** Serialize section commits while keeping the current turn open. */
+  async commitSection(
+    taskInput: SectionEditTask,
+    resultInput?: SectionEditResult,
+    signal?: AbortSignal,
+    onApplying?: () => void
+  ): Promise<boolean> {
+    const revision = this.revision;
+    const adapter = this.adapter;
+    const task = clonePuckResolveData(taskInput);
+    const result = clonePuckResolveData(
+      resultInput ?? structuralEditResult(task)
+    );
+    const assertActive = () => {
+      signal?.throwIfAborted();
+      if (
+        !this.baseline ||
+        revision !== this.revision ||
+        adapter !== this.adapter
+      ) {
+        throw new Error("Generation cancelled or editor context changed.");
+      }
+    };
+    const queued = this.sectionQueue.then(async () => {
+      assertActive();
+      if (!adapter?.materializeSection || !adapter.preserveSectionResolution) {
+        throw new Error("The editor does not support section edits.");
+      }
+      if (
+        task.taskId !== result.taskId ||
+        task.sectionId !== result.sectionId
+      ) {
+        throw new Error("Section result does not match its task.");
+      }
+      if (this.appliedTaskIds.has(task.taskId)) {
+        return false;
+      }
+      let stage = "baseline";
+      try {
+        onApplying?.();
+        const baseline = clonePuckResolveData(adapter.read());
+        this.diagnose(stage, baseline, {
+          taskId: task.taskId,
+          sectionId: task.sectionId,
+          task,
+          result,
+        });
+        rejectZones(baseline as any);
+        stage = "materialize";
+        const candidate = adapter.materializeSection(baseline, task, result);
+        this.diagnose("materialized", candidate, {
+          taskId: task.taskId,
+          sectionId: task.sectionId,
+        });
+        stage = "resolve";
+        const resolved = await adapter.resolve(clonePuckResolveData(candidate));
+        this.diagnose("resolved", resolved, {
+          taskId: task.taskId,
+          sectionId: task.sectionId,
+        });
+        assertActive();
+        if (!isDeepEqual(adapter.read(), baseline)) {
+          this.finish();
+          throw new Error(
+            "Layout changed during generation. Try the request again."
+          );
+        }
+        stage = "preserve";
+        const data = adapter.preserveSectionResolution(resolved, candidate);
+        this.diagnose("preserved", data, {
+          taskId: task.taskId,
+          sectionId: task.sectionId,
+        });
+        stage = "commit";
+        this.lastApplied = { taskId: task.taskId, sectionId: task.sectionId };
+        adapter.commit(
+          { ...data, root: baseline.root, zones: baseline.zones },
+          baseline
+        );
+        this.diagnose("commit-readback", adapter.read());
+        this.appliedTaskIds.add(task.taskId);
+        return true;
+      } catch (error) {
+        try {
+          this.diagnose("section-failed", adapter.read(), {
+            taskId: task.taskId,
+            sectionId: task.sectionId,
+            stage,
+            error: error instanceof Error ? error.message : String(error),
+            stack: error instanceof Error ? error.stack : undefined,
+          });
+        } catch (diagnosticError) {
+          console.error(
+            "Unable to read failed section diagnostics:",
+            diagnosticError
+          );
+        }
+        throw error;
+      }
+    });
+    // Rejections belong to their task; later independent tasks may still apply.
+    this.sectionQueue = queued.then(
+      () => {},
+      () => {}
+    );
+    return queued;
+  }
   finish() {
     this.revision++;
     this.baseline = undefined;
+    this.appliedTaskIds.clear();
+    this.sectionQueue = Promise.resolve();
   }
   private notify() {
     this.subscribers.forEach((listener) => listener());

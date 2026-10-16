@@ -5,9 +5,24 @@ import {
   MessageSquare,
   RotateCcw,
   Send,
+  Square,
 } from "lucide-react";
 import "./localEditorChat.css";
+import type { SectionTaskProgress } from "./chatProgress.ts";
 import type { useLocalEditorChat } from "./useLocalEditorChat.ts";
+
+const statusLabels: Record<SectionTaskProgress["status"], string> = {
+  pending: "Queued",
+  waiting: "Waiting for prerequisites",
+  generating: "Generating changes",
+  retrying: "Retrying changes",
+  queued: "Waiting to apply",
+  applying: "Applying changes",
+  applied: "Applied",
+  failed: "Failed",
+  skipped: "Skipped",
+  cancelled: "Cancelled",
+};
 
 export const LocalEditorChat = ({
   chat,
@@ -39,6 +54,17 @@ export const LocalEditorChat = ({
               <span>Build and refine your page</span>
             </div>
           </div>
+        )}
+        {chat.isStreaming && (
+          <button
+            type="button"
+            className="local-editor-chat-stop"
+            aria-label="Stop generating"
+            onClick={chat.cancel}
+          >
+            <Square size={13} aria-hidden="true" />
+            Stop
+          </button>
         )}
         <button
           type="button"
@@ -106,6 +132,28 @@ export const LocalEditorChat = ({
                     )}
                     {message.text}
                   </p>
+                  {!!message.sections?.length && (
+                    <ul
+                      className="local-editor-chat-sections"
+                      aria-label="Section progress"
+                    >
+                      {message.sections.map((section) => (
+                        <li key={section.taskId} data-status={section.status}>
+                          <strong>{section.label}</strong>
+                          <span>{section.description}</span>
+                          <span className="local-editor-chat-section-status">
+                            {statusLabels[section.status]}
+                          </span>
+                          {section.message && section.status !== "applied" && (
+                            <details>
+                              <summary>Details</summary>
+                              <p>{section.message}</p>
+                            </details>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               )
           )}
@@ -140,7 +188,9 @@ export const LocalEditorChat = ({
                 !event.nativeEvent.isComposing
               ) {
                 event.preventDefault();
-                if (!busy) event.currentTarget.form?.requestSubmit();
+                if (!busy) {
+                  event.currentTarget.form?.requestSubmit();
+                }
               }
             }}
           />
@@ -161,6 +211,7 @@ export const LocalEditorChat = ({
             type="button"
             className="local-editor-chat-reset"
             onClick={chat.clear}
+            disabled={chat.isStreaming}
           >
             <RotateCcw size={13} aria-hidden="true" />
             New conversation

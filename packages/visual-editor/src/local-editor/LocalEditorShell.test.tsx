@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { Puck } from "@puckeditor/core";
 import { chatConfig, layout, generatedContent } from "./chat/chatTestUtils.tsx";
@@ -95,7 +89,7 @@ const submit = async () => {
   });
   fireEvent.click(screen.getByRole("button", { name: "Send" }));
   await waitFor(() => expect(upstream).toBeDefined());
-  await screen.findByText("Generating layout…");
+  await screen.findByText("Planning changes…");
   expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
 };
 beforeEach(() => {
@@ -133,7 +127,7 @@ beforeEach(() => {
         }),
         {
           headers: {
-            "X-Visual-Editor-Generation": "strict-puck-overrides-v2",
+            "X-Visual-Editor-Generation": "section-edits-v1",
           },
         }
       );
@@ -158,7 +152,7 @@ it("keeps the normal editor available when chat is disabled", async () => {
 it("blocks editor actions during generation, then restores them on cancellation", async () => {
   setup();
   await submit();
-  const frame = document.querySelector("[inert]");
+  const frame = document.querySelector("[data-chat-busy]");
   expect(frame?.textContent).toContain("Original");
   const shortcut = new KeyboardEvent("keydown", {
     key: "z",
@@ -167,7 +161,7 @@ it("blocks editor actions during generation, then restores them on cancellation"
   });
   window.dispatchEvent(shortcut);
   expect(shortcut.defaultPrevented).toBe(true);
-  fireEvent.click(screen.getByRole("button", { name: "New conversation" }));
+  fireEvent.click(screen.getByRole("button", { name: "Stop generating" }));
   await screen.findByText("Original", { selector: "h2" });
   expect(document.querySelector("[inert]")).toBeNull();
   expect(generationSignal?.aborted).toBe(true);
@@ -189,10 +183,9 @@ it("cancels when entity changes and clears chat when layout changes", async () =
   await screen.findByText("Original", { selector: "h2" });
   fireEvent.click(screen.getByRole("button", { name: "Show chat" }));
   expect(screen.queryByText("Change heading")).toBeNull();
-  await act(async () => {
-    emit({ type: "accepted", text: "Late", spec: generatedContent("Late") });
-    upstream.close();
-  });
+  expect(() =>
+    emit({ type: "accepted", text: "Late", spec: generatedContent("Late") })
+  ).toThrow();
   expect(screen.queryByText("Late", { selector: "h2" })).toBeNull();
 });
 
@@ -218,3 +211,8 @@ it.each(["theme", "preview"])(
     await screen.findByText("Original", { selector: "h2" });
   }
 );
+
+vi.mock("./chat/chatDiagnostics.ts", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("./chat/chatDiagnostics.ts")>()),
+  reportChatDiagnostic: vi.fn(),
+}));

@@ -4,6 +4,7 @@ import { Editor } from "../editor/Editor.tsx";
 import type { LocalDevOptions } from "../editor/types.ts";
 import { SectionLibraryVisualEditorProvider } from "../utils/SectionLibraryVisualEditorProvider.tsx";
 import { LocalEditorControls } from "./LocalEditorControls.tsx";
+import { lockEditorInteraction } from "./lockEditorInteraction.ts";
 import { LocalEditorChat } from "./chat/LocalEditorChat.tsx";
 import { LocalEditorChatContext } from "./chat/LocalEditorChatContext.tsx";
 import { useLocalEditorChat } from "./chat/useLocalEditorChat.ts";
@@ -338,24 +339,12 @@ export const LocalEditorShell = ({
     showReviewsData,
   ]);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const frame = editorFrameRef.current;
-    if (!chat.isStreaming || !frame) return;
-    frame.setAttribute("inert", "");
-    const blockHistoryShortcut = (event: KeyboardEvent) => {
-      if (
-        (event.ctrlKey || event.metaKey) &&
-        ["z", "y"].includes(event.key.toLowerCase())
-      ) {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-      }
-    };
-    window.addEventListener("keydown", blockHistoryShortcut, true);
-    return () => {
-      frame.removeAttribute("inert");
-      window.removeEventListener("keydown", blockHistoryShortcut, true);
-    };
+    if (!chat.isStreaming || !frame) {
+      return;
+    }
+    return lockEditorInteraction(frame);
   }, [chat.isStreaming, streamDocument]);
 
   React.useEffect(() => {
@@ -659,6 +648,11 @@ export const LocalEditorShell = ({
       {shouldRenderEditorFrame && (
         <div
           ref={editorFrameRef}
+          tabIndex={0}
+          role="region"
+          aria-label="Page editor"
+          aria-busy={chat.isStreaming}
+          data-chat-busy={chat.isStreaming || undefined}
           style={{
             position: "relative",
             background: "#fff",

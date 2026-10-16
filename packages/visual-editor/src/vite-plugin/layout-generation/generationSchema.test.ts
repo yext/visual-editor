@@ -2,10 +2,8 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { createPuckGenerationCatalog } from "./puckGenerationCatalog.ts";
-import {
-  compileGenerationSchema,
-  isBlankGenerationPage,
-} from "./generationSchema.ts";
+import { compileGenerationSchema } from "./generationSchema.ts";
+import { isBlankGenerationPage } from "../../internal/generation/isBlankGenerationPage.ts";
 import { buildGenerationPrompt } from "./generationValidation.ts";
 import {
   collectAuthoredIds,
