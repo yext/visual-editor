@@ -20,6 +20,7 @@ import {
 import { normalizeSlug } from "../slugifier.ts";
 import { getLocalBusinessSubtype } from "./helpers.ts";
 import { getDirectoryChildUrl } from "./resolveSchema.ts";
+import { getBreadcrumbsSchema } from "./schemaBlocks.ts";
 import type { StreamDocument } from "../types/StreamDocument.ts";
 import type { TemplateRenderProps } from "./getSchema.ts";
 
@@ -29,6 +30,27 @@ const serializeSchemaJson = (value: unknown): string | undefined =>
 
 const handlebars = Handlebars.create();
 handlebars.registerHelper("directoryChildUrl", getDirectoryChildUrl);
+handlebars.registerHelper(
+  "breadcrumbsSchema",
+  (
+    document: StreamDocument & {
+      path?: string;
+      relativePrefixToRoot?: string;
+    }
+  ) => {
+    const path = document.path ?? "";
+    const baseUrl = document.siteDomain ? `https://${document.siteDomain}` : "";
+    const currentPageUrl = `${baseUrl}/${path}`;
+    return getBreadcrumbsSchema(
+      {
+        document,
+        path,
+        relativePrefixToRoot: document.relativePrefixToRoot ?? "",
+      },
+      currentPageUrl
+    );
+  }
+);
 handlebars.registerHelper("json", (...args: unknown[]) => {
   const [value] = args.slice(0, -1);
   return serializeSchemaJson(value) ?? "null";

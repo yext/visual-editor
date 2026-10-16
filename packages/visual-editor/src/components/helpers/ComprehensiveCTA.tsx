@@ -1,21 +1,25 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveComprehensiveCTAValue } from "../../fields/fieldTransforms/index.ts";
 import { type CTAProps, CTA } from "../atoms/cta.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { getCTAType } from "../../internal/utils/ctaFieldUtils.ts";
 import {
   type ComprehensiveCTAValue,
   defaultButtonStyleValue,
   defaultLinkStyleValue,
+  normalizeComprehensiveCTAValue,
 } from "../../fields/styledFields/ComprehensiveCTAField.tsx";
-import { FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
-import type { ResolvedComprehensiveCTAValue } from "../../fields/fields.ts";
+import {
+  FOOD_DELIVERY_SERVICES,
+  type EnhancedTranslatableCTA,
+} from "../../types/types.ts";
 import { type StyledButtonValue } from "../../fields/styledFields/StyledButtonField.tsx";
 import { type StyledLinkValue } from "../../fields/styledFields/StyledLinkField.tsx";
 
 export type ComprehensiveCTARenderProps = {
-  value?: Partial<ComprehensiveCTAValue> | ResolvedComprehensiveCTAValue;
+  value?: Partial<ComprehensiveCTAValue>;
   label?: React.ReactNode;
   ariaLabel?: string;
   className?: string;
@@ -30,12 +34,12 @@ const resolveTextStyleValue = (value: string | undefined) =>
   value && value !== "default" ? value : undefined;
 
 const getComprehensiveCTAStyle = (
-  value: ResolvedComprehensiveCTAValue
+  value: ComprehensiveCTAValue
 ): React.CSSProperties | undefined => {
   const ctaType =
     value.data.actionType === "button"
       ? "textAndLink"
-      : value.data.cta?.ctaType;
+      : getCTAType(value.data.cta).ctaType;
 
   if (ctaType === "presetImage") {
     return value.sx;
@@ -119,18 +123,6 @@ const toDataAttributes = (
   );
 };
 
-/**
- * Supports both authored props from fields without `transform: true` and resolved
- * props from fields with transforms enabled. Both paths retain styles,
- * accessibility, and interaction behavior.
- *
- * 1. Temporarily resolve authored bindings and translated text through the same
- *    resolver used by field transforms, including defaults for partial values.
- * 2. Use transformed values directly without resolving or interpolating them again.
- * 3. Render the resolved data using the shared CTA presentation.
- *
- * Remove the authored-value compatibility path once all libraries use transforms.
- */
 export const ComprehensiveCTA = ({
   value,
   label,
@@ -143,29 +135,39 @@ export const ComprehensiveCTA = ({
   onClick,
 }: ComprehensiveCTARenderProps) => {
   const streamDocument = useDocument();
-  const { i18n } = useTranslation();
-  // Authored values retain field/constant bindings or localized text objects.
-  // Partial authored values also need defaults before they can be rendered.
-  const currentValue =
-    !value?.data ||
-    !value.styles ||
-    (value.data.cta &&
-      ("field" in value.data.cta || "constantValue" in value.data.cta)) ||
-    typeof value.data.buttonText === "object" ||
-    typeof value.data.ariaLabel === "object"
-      ? // Without transforms, resolve the authored value using the page and locale.
-        resolveComprehensiveCTAValue(value as Partial<ComprehensiveCTAValue>, {
-          streamDocument,
-          locale: i18n.language,
-        })
-      : // With transforms, the value already contains resolved data; keep it as is.
-        (value as ResolvedComprehensiveCTAValue);
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
+  const currentValue = normalizeComprehensiveCTAValue(value);
+
   const actionType = currentValue.data.actionType;
-  const ctaType =
-    actionType === "button" ? "textAndLink" : currentValue.data.cta?.ctaType;
-  const resolvedCta = currentValue.data.cta;
-  const resolvedButtonLabel = currentValue.data.buttonText;
-  const resolvedLinkLabel = resolvedCta?.label;
+  const { ctaType } =
+    actionType === "link"
+      ? getCTAType(currentValue.data.cta)
+      : { ctaType: "textAndLink" as const };
+  const resolvedCta =
+    actionType === "link"
+      ? (resolveComponentData(currentValue.data.cta, locale, streamDocument) as
+          EnhancedTranslatableCTA | undefined)
+      : undefined;
+
+  const resolvedButtonLabel = currentValue.data.buttonText
+    ? resolveComponentData(currentValue.data.buttonText, locale, streamDocument)
+    : "";
+  const resolvedFieldAriaLabel = currentValue.data.ariaLabel
+    ? resolveComponentData(currentValue.data.ariaLabel, locale, streamDocument)
+    : "";
+
+  let resolvedLinkLabel =
+    resolvedCta &&
+    resolveComponentData(resolvedCta.label, locale, streamDocument);
+
+  if (
+    actionType === "link" &&
+    !currentValue.data.cta.constantValueEnabled &&
+    ctaType === "getDirections"
+  ) {
+    resolvedLinkLabel = t("getDirections", "Get Directions");
+  }
 
   const effectiveLabel =
     label !== undefined
@@ -209,7 +211,7 @@ export const ComprehensiveCTA = ({
   const resolvedAriaLabel =
     ariaLabel ??
     (actionType === "button"
-      ? currentValue.data.ariaLabel || undefined
+      ? resolvedFieldAriaLabel || undefined
       : typeof effectiveLabel === "string"
         ? effectiveLabel
         : undefined);
@@ -221,8 +223,7 @@ export const ComprehensiveCTA = ({
       alwaysHideCaret={alwaysHideCaret}
       className={resolvedClassName}
       color={currentValue.styles.color}
-      // Directions are already resolved and use the ordinary link presentation.
-      ctaType={ctaType === "presetImage" ? "presetImage" : "textAndLink"}
+      ctaType={ctaType}
       dataAttributes={
         actionType === "button"
           ? toDataAttributes(currentValue.data.dataAttributes)
@@ -231,7 +232,11 @@ export const ComprehensiveCTA = ({
       eventName={eventName ?? currentValue.eventName}
       id={actionType === "button" ? currentValue.data.customId : undefined}
       label={effectiveLabel}
-      link={actionType === "link" && resolvedCta ? resolvedCta.link : undefined}
+      link={
+        actionType === "link" && ctaType !== "getDirections" && resolvedCta
+          ? resolveComponentData(resolvedCta.link, locale, streamDocument)
+          : undefined
+      }
       linkType={
         actionType === "link" && resolvedCta ? resolvedCta.linkType : undefined
       }

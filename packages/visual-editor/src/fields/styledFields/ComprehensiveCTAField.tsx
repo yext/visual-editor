@@ -60,8 +60,6 @@ export type ComprehensiveCTAValue = {
 
 export type ComprehensiveCTAField = BaseField & {
   type: "comprehensiveCTA";
-  /** Resolves CTA bindings and translated text before rendering. */
-  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   disableConstantValueToggle?: boolean;
