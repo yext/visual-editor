@@ -1,4 +1,4 @@
-import { translationDecisionGuidance } from "./translationPolicy.ts";
+import { generationPreparationPrompt } from "./prompts.ts";
 import { z } from "zod";
 import { generationPreparationSchema } from "../../internal/generation/editProtocolSchema.ts";
 import type { PuckGenerationCatalog } from "./puckGenerationCatalog.ts";
@@ -35,12 +35,7 @@ export const compileGenerationPreparation = (
     context: { locales, cardSources },
     availableComponentNames: names,
     isBlankPage: true,
-    instructions: [
-      "Prepare a fresh page request. Do not generate page content, copy, props or layouts. Return only the small decision schema.",
-      translationDecisionGuidance,
-      "When asking, set question to the user-facing question and translationMode to null. Otherwise set question null and the resolved translationMode.",
-      "Record explicitly requested card counts for the supplied cardSources. 'Three cards in each card section' means count 3 for each applicable manual card collection, not three copies of each section. Use the collection's componentType, not the child cardType. Set instanceIndex to the zero-based occurrence of that componentType in depth-first page order, including entity-linked instances. Use null only when the requested count applies to every manual instance of that type; an explicit index overrides that general count. Record separate entries when instances need different counts. Do not invent counts when none were requested. Do not constrain lists explicitly requested to stay entity-linked; their visible records come from entity data.",
-    ].join("\n"),
+    instructions: generationPreparationPrompt,
     parseResponse: (text: string) => {
       const preparation = generationPreparationSchema.parse(
         schema.parse(JSON.parse(text))

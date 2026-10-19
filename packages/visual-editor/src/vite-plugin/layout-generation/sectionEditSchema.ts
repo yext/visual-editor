@@ -1,7 +1,3 @@
-import {
-  translationModeGuidance,
-  newTextGuidance,
-} from "./translationPolicy.ts";
 import type { Fields } from "@puckeditor/core";
 import { z } from "zod";
 import {
@@ -407,16 +403,3 @@ export const compileSectionEditSchema = (
     parseResponse,
   };
 };
-
-/** Keep section execution focused on already validated targets and shared copy intent. */
-export const buildSectionEditPrompt = () =>
-  [
-    "Execute exactly one validated section task against the supplied current authored values and section context. Return only the strict response schema.",
-    "Only emit updates for the requested targets and explicitly requested fields. Omitted paths are preserved. Use kind unset to remove an optional field; null is a real value only where allowed. Do not emit default or unset markers as the value of a top-level set operation.",
-    translationModeGuidance,
-    newTextGuidance,
-    "The sharedIntent coordinates copy across sections; it does not widen this task's scope. Preserve entity bindings. Prefer [[name]] for business identity unless the user supplies a name or requests fiction. Whole-array replacements must preserve complete saved override bundles, including duplicates; reordering is allowed.",
-    "Ordinary arrays are supplied in full, with no inheritance from existing rows or cards by index or type. Use the offered markers only within new component props or optional members of replacement arrays.",
-    'Generate every planned insertion once. New component props may select library defaults with {"$default":true} or remove optional defaults with {"$unset":true}. Never generate component Ids. Native child slots contain new component descriptions, never references to existing components.',
-    "Structural removal and reordering are supplied by the application from the plan. Do not emit them, invent other insertions, move cards between sections, replace whole sections, change root settings or touch opaque components.",
-  ].join("\n");

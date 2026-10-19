@@ -10,10 +10,8 @@ import {
 import { slottedFixture } from "../../internal/generation/slottedGenerationTestUtils.ts";
 import { createPuckGenerationCatalog } from "./puckGenerationCatalog.ts";
 import { compileEditPlanningSchema } from "./editPlanning.ts";
-import {
-  compileSectionEditSchema,
-  buildSectionEditPrompt,
-} from "./sectionEditSchema.ts";
+import { compileSectionEditSchema } from "./sectionEditSchema.ts";
+import { sectionEditPrompt } from "./prompts.ts";
 import {
   editGenerationFixture,
   editTask,
@@ -367,8 +365,8 @@ describe("narrow section edit schemas", () => {
       "Updated";
     expect(candidate).toEqual(expected);
     expect(fixture.data).toEqual(before);
-    expect(buildSectionEditPrompt()).toContain(
-      "does not widen this task's scope"
+    expect(sectionEditPrompt).toContain(
+      "sharedIntent coordinates copy within this task's scope"
     );
   });
 

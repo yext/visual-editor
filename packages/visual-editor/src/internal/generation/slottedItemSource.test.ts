@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { compileGenerationSchema } from "../../vite-plugin/layout-generation/generationSchema.ts";
 import { buildGenerationPrompt } from "../../vite-plugin/layout-generation/generationValidation.ts";
+import { slottedItemSourceGuidance } from "../../vite-plugin/layout-generation/prompts.ts";
 import {
   assertAuthoredPreserved,
   clone,
@@ -243,6 +244,20 @@ describe("slotted source generation", () => {
     } catch (error) {
       expect(String(error)).not.toContain("PRIVATE GENERATED CONTENT");
     }
+  });
+
+  it("includes card authoring guidance once and only for available slotted sources", () => {
+    const catalog = slottedFixture().catalog;
+    catalog.data.components.OtherSection = catalog.data.components.Section;
+    const prompt = buildGenerationPrompt(catalog);
+    expect(prompt.split(slottedItemSourceGuidance)).toHaveLength(2);
+    expect(prompt).toContain('"cardType":"FAQCard"');
+    expect(
+      prompt.slice(prompt.indexOf("Component descriptions and defaults:"))
+    ).not.toContain(slottedItemSourceGuidance);
+    expect(buildGenerationPrompt(catalog, ["MainContent"])).not.toContain(
+      slottedItemSourceGuidance
+    );
   });
 
   it("keeps references and backup storage out of model context", () => {

@@ -1,4 +1,4 @@
-import { translationModeGuidance } from "./translationPolicy.ts";
+import { translationModeGuidance } from "./prompts.ts";
 import { z } from "zod";
 import { createGenerationSchemaCompiler } from "./generationSchemaCompiler.ts";
 import type { PuckGenerationCatalog } from "./puckGenerationCatalog.ts";

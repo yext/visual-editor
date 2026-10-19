@@ -5,6 +5,7 @@ import type { PuckGenerationCatalog } from "./puckGenerationCatalog.ts";
 import { compileGenerationSchema } from "./generationSchema.ts";
 import { isBlankGenerationPage } from "../../internal/generation/isBlankGenerationPage.ts";
 import { buildGenerationPrompt } from "./generationValidation.ts";
+import { editPlanningPrompt, sectionEditPrompt } from "./prompts.ts";
 import {
   GENERATION_ATTEMPT_DEADLINE_MS,
   FRESH_PAGE_OUTPUT_TOKEN_BUDGET,
@@ -22,14 +23,8 @@ import {
   generationPreparationSchema,
 } from "../../internal/generation/editProtocolSchema.ts";
 import { compileGenerationPreparation } from "./generationPreparation.ts";
-import {
-  compileEditPlanningSchema,
-  buildEditPlanningPrompt,
-} from "./editPlanning.ts";
-import {
-  compileSectionEditSchema,
-  buildSectionEditPrompt,
-} from "./sectionEditSchema.ts";
+import { compileEditPlanningSchema } from "./editPlanning.ts";
+import { compileSectionEditSchema } from "./sectionEditSchema.ts";
 import {
   GENERATION_GATEWAY_URL,
   GenerationGatewayError,
@@ -341,7 +336,7 @@ export const handleLocalEditorGenerationRequest = async (
       compiled = {
         ...planner,
         isBlankPage: false,
-        instructions: buildEditPlanningPrompt(),
+        instructions: editPlanningPrompt,
         parseResponse: (text) => ({ plan: planner.parseResponse(text) }),
       };
     } else if (mode === "section") {
@@ -355,7 +350,7 @@ export const handleLocalEditorGenerationRequest = async (
       compiled = {
         ...section,
         isBlankPage: false,
-        instructions: buildSectionEditPrompt(),
+        instructions: sectionEditPrompt,
         localResult: section.localResult
           ? { result: section.localResult }
           : undefined,

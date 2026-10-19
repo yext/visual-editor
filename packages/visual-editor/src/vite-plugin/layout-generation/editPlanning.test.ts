@@ -6,9 +6,9 @@ import { slottedFixture } from "../../internal/generation/slottedGenerationTestU
 import type { SectionEditTask } from "../../internal/generation/editProtocol.ts";
 import {
   compileEditPlanningSchema,
-  buildEditPlanningPrompt,
   validateSectionEditTask,
 } from "./editPlanning.ts";
+import { editPlanningPrompt } from "./prompts.ts";
 import {
   editGenerationFixture,
   editPlan,
@@ -124,11 +124,13 @@ describe("follow-up planning", () => {
     expect(context).not.toContain("editorMetadata");
     expect(context).not.toContain("Private root setting");
     expect(context).not.toContain('"zones"');
-    const prompt = buildEditPlanningPrompt();
-    expect(prompt).toContain("Explicit user references override selection");
+    const prompt = editPlanningPrompt;
+    expect(prompt).toContain("explicit user references override selection");
     expect(prompt).toContain("User ordinals are one-based");
     expect(prompt).toContain("materially plausible");
-    expect(prompt).toContain("Do not simulate such a move");
+    expect(prompt).toContain(
+      "Cross-section moves are unsupported, including removal followed by insertion"
+    );
     // An explicit reference to the second section can override the first section's selection.
     const plan = compiled.parseResponse(
       JSON.stringify(editPlan([editTask("second", ["second-b"])]))
