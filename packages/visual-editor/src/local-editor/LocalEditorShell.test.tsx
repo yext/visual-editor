@@ -1,30 +1,56 @@
+import { openChat } from "./chat/chatTestUtils.tsx";
 import React from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
-import { Puck } from "@puckeditor/core";
+import { Puck, blocksPlugin, outlinePlugin } from "@puckeditor/core";
+import { LocalEditorChatUiContext } from "./chat/LocalEditorChatUiContext.tsx";
+import { localEditorChatPlugin } from "./chat/localEditorChatPlugin.tsx";
+import { useDocument } from "../hooks/useDocument.tsx";
 import { chatConfig, layout, generatedContent } from "./chat/chatTestUtils.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { LocalEditorChatBridge } from "./chat/LocalEditorChatBridge.tsx";
 import { LocalEditorShell } from "./LocalEditorShell.tsx";
 
-vi.mock("../editor/Editor.tsx", () => ({
-  Editor: ({
-    forceThemeMode,
-    document,
-  }: {
-    forceThemeMode: boolean;
-    document: Record<string, unknown>;
-  }) =>
-    forceThemeMode ? (
-      <p>Theme canvas</p>
-    ) : (
-      <Puck config={chatConfig} data={layout()} iframe={{ enabled: false }}>
-        <Puck.Preview />
+vi.mock("../editor/Editor.tsx", () => {
+  const ShellPuckOverride = ({ children }: { children: React.ReactNode }) => {
+    const document = useDocument();
+    return (
+      <>
         <LocalEditorChatBridge streamDocument={document} />
         <span>Entity: {String(document.name)}</span>
-      </Puck>
-    ),
-}));
+        {children}
+      </>
+    );
+  };
+  const sections = { ...blocksPlugin(), label: "Sections" };
+  const outline = outlinePlugin();
+  return {
+    Editor: ({ forceThemeMode }: { forceThemeMode: boolean }) => {
+      const chatUi = React.useContext(LocalEditorChatUiContext);
+      return forceThemeMode ? (
+        <p>Theme canvas</p>
+      ) : (
+        <Puck
+          config={chatConfig}
+          data={layout()}
+          iframe={{ enabled: false }}
+          plugins={[
+            sections,
+            outline,
+            ...(chatUi ? [localEditorChatPlugin] : []),
+          ]}
+          overrides={{ puck: ShellPuckOverride }}
+        />
+      );
+    },
+  };
+});
 vi.mock("../utils/SectionLibraryVisualEditorProvider.tsx", () => ({
   SectionLibraryVisualEditorProvider: ({
     children,
@@ -77,16 +103,19 @@ const setup = (enabled = true) =>
   );
 const submit = async () => {
   await screen.findByText("Original", { selector: "h2" });
-  fireEvent.click(screen.getByRole("button", { name: "Show chat" }));
+  openChat();
   await waitFor(() =>
     expect(
       (screen.getByRole("button", { name: "Send" }) as HTMLButtonElement)
         .disabled
     ).toBe(false)
   );
-  fireEvent.change(screen.getByRole("textbox"), {
-    target: { value: "Change heading" },
-  });
+  fireEvent.change(
+    screen.getByRole("textbox", { name: "Describe what you want" }),
+    {
+      target: { value: "Change heading" },
+    }
+  );
   fireEvent.click(screen.getByRole("button", { name: "Send" }));
   await waitFor(() => expect(upstream).toBeDefined());
   await screen.findByText("Planning changes…");
@@ -142,7 +171,7 @@ afterEach(() => {
 it("keeps the normal editor available when chat is disabled", async () => {
   setup(false);
   await screen.findByText("Original", { selector: "h2" });
-  expect(screen.queryByRole("button", { name: /chat/i })).toBeNull();
+  expect(screen.queryByText("Layout assistant")).toBeNull();
   expect(
     screen.getByText("Layout Editor", { selector: "button" })
   ).toBeDefined();
@@ -181,7 +210,7 @@ it("cancels when entity changes and clears chat when layout changes", async () =
   });
   await waitFor(() => expect(generationSignal?.aborted).toBe(true));
   await screen.findByText("Original", { selector: "h2" });
-  fireEvent.click(screen.getByRole("button", { name: "Show chat" }));
+  openChat();
   expect(screen.queryByText("Change heading")).toBeNull();
   expect(() =>
     emit({ type: "accepted", text: "Late", spec: generatedContent("Late") })
@@ -203,6 +232,7 @@ it.each(["theme", "preview"])(
     expect(
       screen.queryByRole("complementary", { name: "Layout chat" })
     ).toBeNull();
+    expect(document.querySelector("[data-local-editor-chat-rail]")).toBeNull();
     fireEvent.click(
       screen.getByText(mode === "theme" ? "Theme Editor" : "Close Preview", {
         selector: "button",
@@ -216,3 +246,52 @@ vi.mock("./chat/chatDiagnostics.ts", async (importOriginal) => ({
   ...(await importOriginal<typeof import("./chat/chatDiagnostics.ts")>()),
   reportChatDiagnostic: vi.fn(),
 }));
+
+it("allows plugin navigation and cancellation while generation keeps the canvas locked", async () => {
+  setup();
+  await submit();
+  const requestCount = () =>
+    vi
+      .mocked(fetch)
+      .mock.calls.filter(([url]) => String(url).endsWith("/generate")).length;
+  const beforeSwitch = requestCount();
+  const prompt = screen.getByRole("textbox", {
+    name: "Describe what you want",
+  });
+  expect((prompt as HTMLTextAreaElement).disabled).toBe(false);
+  expect(
+    (screen.getByRole("button", { name: "Send" }) as HTMLButtonElement).disabled
+  ).toBe(true);
+  expect(
+    screen.getByRole("button", { name: "Stop generating" }).closest("form")
+  ).toBe(prompt.closest("form"));
+  fireEvent.input(prompt, { target: { value: "Refine the footer next" } });
+  fireEvent.keyDown(prompt, { key: "Enter" });
+  fireEvent.submit(prompt.closest("form")!);
+  expect((prompt as HTMLTextAreaElement).value).toBe("Refine the footer next");
+  expect(requestCount()).toBe(beforeSwitch);
+  fireEvent.click(within(screen.getByRole("navigation")).getByText("Outline"));
+  expect(screen.queryByRole("button", { name: "Stop generating" })).toBeNull();
+  expect(generationSignal?.aborted).toBe(false);
+  openChat();
+  expect(screen.getByRole("textbox", { name: "Describe what you want" })).toBe(
+    prompt
+  );
+  expect((prompt as HTMLTextAreaElement).value).toBe("Refine the footer next");
+  expect(screen.getByText("Planning changes…")).toBeTruthy();
+  expect(requestCount()).toBe(beforeSwitch);
+  const input = screen.getByText("Original", { selector: "h2" });
+  const click = new MouseEvent("click", { bubbles: true, cancelable: true });
+  input.dispatchEvent(click);
+  expect(click.defaultPrevented).toBe(true);
+  fireEvent.click(screen.getByRole("button", { name: "Stop generating" }));
+  await waitFor(() => expect(generationSignal?.aborted).toBe(true));
+  expect(
+    (screen.getByRole("button", { name: "Send" }) as HTMLButtonElement).disabled
+  ).toBe(false);
+  expect((prompt as HTMLTextAreaElement).value).toBe("Refine the footer next");
+  expect(requestCount()).toBe(beforeSwitch);
+  const restored = new MouseEvent("click", { bubbles: true, cancelable: true });
+  input.dispatchEvent(restored);
+  expect(restored.defaultPrevented).toBe(false);
+});

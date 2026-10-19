@@ -1,3 +1,4 @@
+import { openChat } from "./chatTestUtils.tsx";
 import React from "react";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Config } from "@puckeditor/core";
@@ -139,12 +140,15 @@ const setup = (
       config={{ components } as Config}
     />
   );
-  fireEvent.click(screen.getByRole("button", { name: "Show chat" }));
+  openChat();
   const adapter = attachment.mock.calls.at(-1)![0];
   return { adapter, browserRequests, gatewayRequests };
 };
 const send = async (prompt: string) => {
-  fireEvent.change(screen.getByRole("textbox"), { target: { value: prompt } });
+  fireEvent.change(
+    screen.getByRole("textbox", { name: "Describe what you want" }),
+    { target: { value: prompt } }
+  );
   fireEvent.click(screen.getByRole("button", { name: "Send" }));
 };
 const context = (body: any) => JSON.parse(body.input.at(-1).content).context;

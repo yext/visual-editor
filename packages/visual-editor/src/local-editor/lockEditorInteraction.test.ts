@@ -151,3 +151,48 @@ it("allows wheel scrolling without changing a focused number field", () => {
   expect(wheel.defaultPrevented).toBe(false);
   expect(document.activeElement).not.toBe(input);
 });
+
+it("permits marked chat controls and its rail, but keeps fields, history and iframe content locked", () => {
+  const frame = setup();
+  frame.insertAdjacentHTML(
+    "beforeend",
+    `
+    <aside data-local-editor-chat><button id="cancel">Stop</button><details><summary>Usage</summary></details></aside>
+    <nav><span data-local-editor-chat-rail></span><button id="outline">Outline</button></nav>
+    <nav><button id="other-nav">Canvas navigation</button></nav>
+  `
+  );
+  for (const selector of ["#cancel", "summary", "#outline"]) {
+    const target = frame.querySelector(selector)!;
+    const clicked = vi.fn();
+    target.addEventListener("click", clicked);
+    const click = event("click");
+    target.dispatchEvent(click);
+    expect(click.defaultPrevented).toBe(false);
+    expect(clicked).toHaveBeenCalledOnce();
+    const enter = new KeyboardEvent("keydown", {
+      key: "Enter",
+      bubbles: true,
+      cancelable: true,
+    });
+    target.dispatchEvent(enter);
+    expect(enter.defaultPrevented).toBe(false);
+    const undo = new KeyboardEvent("keydown", {
+      key: "z",
+      ctrlKey: true,
+      bubbles: true,
+      cancelable: true,
+    });
+    target.dispatchEvent(undo);
+    expect(undo.defaultPrevented).toBe(true);
+  }
+  const blocked = event("click");
+  frame.querySelector("#other-nav")!.dispatchEvent(blocked);
+  expect(blocked.defaultPrevented).toBe(true);
+  const doc = frame.querySelector("iframe")!.contentDocument!;
+  doc.body.innerHTML =
+    "<aside data-local-editor-chat><button>Not the assistant</button></aside>";
+  const embedded = event("click");
+  doc.querySelector("button")!.dispatchEvent(embedded);
+  expect(embedded.defaultPrevented).toBe(true);
+});

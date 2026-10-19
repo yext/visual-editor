@@ -1,3 +1,5 @@
+import { LocalEditorChatUiContext } from "../../local-editor/chat/LocalEditorChatUiContext.tsx";
+import { localEditorChatPlugin } from "../../local-editor/chat/localEditorChatPlugin.tsx";
 import { LayoutPuckOverride } from "./LayoutPuckOverride.tsx";
 import {
   Puck,
@@ -124,10 +126,16 @@ export const InternalLayoutEditor = ({
     [streamDocument, pageI18n.language]
   );
   const { errorCount, errorSources, errorDetails } = useErrorContext();
+  const chatUi = React.useContext(LocalEditorChatUiContext);
+  const chatEnabled = localDev && !!chatUi;
   // Keep plugin sidebar fields mounted when saved state changes.
   const plugins = React.useMemo(
-    () => [{ ...blocks, label: pt("sections", "Sections") }, outline],
-    [i18n.language]
+    () => [
+      { ...blocks, label: pt("sections", "Sections") },
+      outline,
+      ...(chatEnabled ? [localEditorChatPlugin] : []),
+    ],
+    [i18n.language, chatEnabled]
   );
 
   /**

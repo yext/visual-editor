@@ -5,7 +5,7 @@ import type { LocalDevOptions } from "../editor/types.ts";
 import { SectionLibraryVisualEditorProvider } from "../utils/SectionLibraryVisualEditorProvider.tsx";
 import { LocalEditorControls } from "./LocalEditorControls.tsx";
 import { lockEditorInteraction } from "./lockEditorInteraction.ts";
-import { LocalEditorChat } from "./chat/LocalEditorChat.tsx";
+import { LocalEditorChatUiProvider } from "./chat/LocalEditorChatUiContext.tsx";
 import { LocalEditorChatContext } from "./chat/LocalEditorChatContext.tsx";
 import { useLocalEditorChat } from "./chat/useLocalEditorChat.ts";
 import { LocalEditorNotice } from "./LocalEditorNotice.tsx";
@@ -635,16 +635,6 @@ export const LocalEditorShell = ({
         />
       )}
 
-      {chatEnabled && selectedMode === "layout" && (
-        <LocalEditorChat
-          key={selectedLayoutId}
-          chat={chat}
-          disabled={
-            isDocumentLoading || !streamDocument || !activeConfig || !chat.ready
-          }
-        />
-      )}
-
       {shouldRenderEditorFrame && (
         <div
           ref={editorFrameRef}
@@ -690,18 +680,29 @@ export const LocalEditorShell = ({
               <LocalEditorChatContext.Provider
                 value={chatEnabled ? chat.canvas : null}
               >
-                <Editor
-                  key={editorKey}
-                  document={streamDocument}
-                  componentRegistry={componentRegistry}
-                  themeConfig={themeConfig}
-                  localDev={true}
-                  localDevOptions={editorLocalDevOptions}
-                  forceThemeMode={selectedMode === "theme"}
-                  sectionLibraryMigrationRegistry={
-                    sectionLibraryMigrationRegistry
+                <LocalEditorChatUiProvider
+                  key={selectedLayoutId}
+                  chat={chatEnabled && selectedMode === "layout" ? chat : null}
+                  disabled={
+                    isDocumentLoading ||
+                    !streamDocument ||
+                    !activeConfig ||
+                    !chat.ready
                   }
-                />
+                >
+                  <Editor
+                    key={editorKey}
+                    document={streamDocument}
+                    componentRegistry={componentRegistry}
+                    themeConfig={themeConfig}
+                    localDev={true}
+                    localDevOptions={editorLocalDevOptions}
+                    forceThemeMode={selectedMode === "theme"}
+                    sectionLibraryMigrationRegistry={
+                      sectionLibraryMigrationRegistry
+                    }
+                  />
+                </LocalEditorChatUiProvider>
               </LocalEditorChatContext.Provider>
             </SectionLibraryVisualEditorProvider>
           )}

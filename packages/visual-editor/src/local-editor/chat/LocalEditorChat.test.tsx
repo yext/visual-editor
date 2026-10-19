@@ -1,3 +1,4 @@
+import { openChat } from "./chatTestUtils.tsx";
 import { reportChatDiagnostic } from "./chatDiagnostics.ts";
 import React from "react";
 import { slottedFixture } from "../../internal/generation/slottedGenerationTestUtils.ts";
@@ -7,8 +8,10 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { LocalEditorChatUiContext } from "./LocalEditorChatUiContext.tsx";
 import { LocalEditorChatCanvas } from "./LocalEditorChatCanvas.ts";
 import { ChatHarness, chatConfig, generatedContent } from "./chatTestUtils.tsx";
 
@@ -38,17 +41,23 @@ vi.mock("./chatGenerationRequest.ts", async (importOriginal) => {
 const wire = (event: any) => JSON.stringify(event) + "\n";
 const headers = { "X-Visual-Editor-Generation": "strict-puck-overrides-v2" };
 const submit = async () => {
-  fireEvent.click(screen.getByRole("button", { name: "Show chat" }));
+  openChat();
   await waitFor(() =>
     expect(
       (screen.getByRole("button", { name: "Send" }) as HTMLButtonElement)
         .disabled
     ).toBe(false)
   );
-  fireEvent.change(screen.getByRole("textbox"), {
-    target: { value: "Change the heading" },
-  });
-  fireEvent.keyDown(screen.getByRole("textbox"), { key: "Enter" });
+  fireEvent.change(
+    screen.getByRole("textbox", { name: "Describe what you want" }),
+    {
+      target: { value: "Change the heading" },
+    }
+  );
+  fireEvent.keyDown(
+    screen.getByRole("textbox", { name: "Describe what you want" }),
+    { key: "Enter" }
+  );
 };
 afterEach(() => vi.unstubAllGlobals());
 
@@ -219,10 +228,16 @@ describe("strict generation in the editor", () => {
     await waitFor(() =>
       expect(screen.queryByText("Generated", { selector: "h2" })).toBeNull()
     );
-    fireEvent.change(screen.getByRole("textbox"), {
-      target: { value: "Create a different page" },
-    });
-    fireEvent.keyDown(screen.getByRole("textbox"), { key: "Enter" });
+    fireEvent.change(
+      screen.getByRole("textbox", { name: "Describe what you want" }),
+      {
+        target: { value: "Create a different page" },
+      }
+    );
+    fireEvent.keyDown(
+      screen.getByRole("textbox", { name: "Describe what you want" }),
+      { key: "Enter" }
+    );
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
     const body = JSON.parse(fetchMock.mock.calls[1][1]!.body as string);
     expect(body.currentData).toEqual({ content: [] });
@@ -460,3 +475,108 @@ vi.mock("./chatDiagnostics.ts", async (importOriginal) => ({
   ...(await importOriginal<typeof import("./chatDiagnostics.ts")>()),
   reportChatDiagnostic: vi.fn(),
 }));
+
+it("keeps Sections first and preserves drafts across panel switches and editor remounts", async () => {
+  const { rerender } = render(<ChatHarness />);
+  await waitFor(() =>
+    expect(screen.getByLabelText("Current plugin").textContent).toBe("blocks")
+  );
+  const navigation = screen.getByRole("navigation", { hidden: true });
+  const labels = within(navigation).getAllByText(
+    /^(Sections|Outline|Layout assistant)$/
+  );
+  expect(labels.map((label) => label.textContent)).toEqual([
+    "Sections",
+    "Outline",
+    "Layout assistant",
+  ]);
+  openChat();
+  const prompt = screen.getByRole("textbox", {
+    name: "Describe what you want",
+  });
+  fireEvent.change(prompt, { target: { value: "A draft to keep" } });
+  fireEvent.click(within(navigation).getByText("Outline"));
+  expect(
+    screen.queryByRole("textbox", { name: "Describe what you want" })
+  ).toBeNull();
+  openChat();
+  expect(screen.getByRole("textbox", { name: "Describe what you want" })).toBe(
+    prompt
+  );
+  expect((prompt as HTMLTextAreaElement).value).toBe("A draft to keep");
+
+  rerender(<ChatHarness locale="fr" />);
+  openChat();
+  expect(
+    (
+      screen.getByRole("textbox", {
+        name: "Describe what you want",
+      }) as HTMLTextAreaElement
+    ).value
+  ).toBe("A draft to keep");
+  rerender(<ChatHarness layoutId="other" />);
+  openChat();
+  expect(
+    (
+      screen.getByRole("textbox", {
+        name: "Describe what you want",
+      }) as HTMLTextAreaElement
+    ).value
+  ).toBe("");
+});
+
+it("shows token usage in a dismissible popover and closes it when switching panels", async () => {
+  render(<ChatHarness />);
+  openChat();
+  const trigger = screen.getByRole("button", { name: "Token usage" });
+  expect(
+    screen.queryByRole("dialog", { name: "Conversation token usage" })
+  ).toBeNull();
+  fireEvent.click(trigger);
+  const usage = await screen.findByRole("dialog", {
+    name: "Conversation token usage",
+  });
+  expect(usage.textContent).toContain("Cached input: 0");
+  expect(usage.textContent).toContain("Uncached input: 0");
+  expect(usage.textContent).toContain("Output: 0");
+  expect(trigger.getAttribute("aria-expanded")).toBe("true");
+  fireEvent.keyDown(usage, { key: "Escape" });
+  await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+  fireEvent.click(trigger);
+  await screen.findByRole("dialog", { name: "Conversation token usage" });
+  fireEvent.click(within(screen.getByRole("navigation")).getByText("Outline"));
+  await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+  openChat();
+  expect(trigger.getAttribute("aria-expanded")).toBe("false");
+});
+
+it("does not rerender editor context consumers when typing a draft", async () => {
+  const editorRender = vi.fn();
+  const EditorSubscriber = () => {
+    // InternalLayoutEditor subscribes to this context to register the plugin.
+    React.useContext(LocalEditorChatUiContext);
+    editorRender();
+    return null;
+  };
+  render(
+    <ChatHarness>
+      <EditorSubscriber />
+    </ChatHarness>
+  );
+  openChat();
+  await waitFor(() =>
+    expect(
+      (screen.getByRole("button", { name: "Send" }) as HTMLButtonElement)
+        .disabled
+    ).toBe(false)
+  );
+  editorRender.mockClear();
+  const prompt = screen.getByRole("textbox", {
+    name: "Describe what you want",
+  });
+  for (const value of ["N", "Ne", "Nex", "Next message"]) {
+    fireEvent.input(prompt, { target: { value } });
+  }
+  expect((prompt as HTMLTextAreaElement).value).toBe("Next message");
+  expect(editorRender).not.toHaveBeenCalled();
+});

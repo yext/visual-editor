@@ -47,13 +47,22 @@ export const lockEditorInteraction = (frame: HTMLElement) => {
     }
     documents.add(doc);
     const view = doc.defaultView;
+    const isChatInteraction = (event: Event) => {
+      if (embedded) return false;
+      const target = event.target as Element | null;
+      if (!target?.closest || !frame.contains(target)) return false;
+      return (
+        !!target.closest("[data-local-editor-chat]") ||
+        !!target.closest("nav")?.querySelector("[data-local-editor-chat-rail]")
+      );
+    };
     const inside = (event: Event) =>
       embedded ||
       (!!event.target &&
         "nodeType" in event.target &&
         frame.contains(event.target as Node));
     const stop = (event: Event) => {
-      if (!inside(event)) {
+      if (!inside(event) || isChatInteraction(event)) {
         return;
       }
       // Preserve native panning while blocking editor gesture handlers.
@@ -99,7 +108,7 @@ export const lockEditorInteraction = (frame: HTMLElement) => {
       if (history) {
         event.preventDefault();
         event.stopImmediatePropagation();
-      } else if (inside(event)) {
+      } else if (inside(event) && !isChatInteraction(event)) {
         const target = event.target as HTMLElement;
         const editable = target.closest?.(
           "input, textarea, select, [contenteditable]:not([contenteditable='false']), [role='spinbutton'], [role='slider']"

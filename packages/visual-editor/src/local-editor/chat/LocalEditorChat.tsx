@@ -1,12 +1,16 @@
 import React from "react";
 import {
-  ChevronDown,
+  ChevronUp,
   LoaderCircle,
   MessageSquare,
   RotateCcw,
-  Send,
-  Square,
 } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../internal/puck/ui/Popover.tsx";
+import { LocalEditorChatComposer } from "./LocalEditorChatComposer.tsx";
 import "./localEditorChat.css";
 import type { SectionTaskProgress } from "./chatProgress.ts";
 import type { useLocalEditorChat } from "./useLocalEditorChat.ts";
@@ -27,78 +31,38 @@ const statusLabels: Record<SectionTaskProgress["status"], string> = {
 export const LocalEditorChat = ({
   chat,
   disabled,
+  active,
 }: {
   chat: ReturnType<typeof useLocalEditorChat>;
   disabled: boolean;
+  active: boolean;
 }) => {
-  const [open, setOpen] = React.useState(false);
   const logRef = React.useRef<HTMLDivElement>(null);
+  const [usageOpen, setUsageOpen] = React.useState(false);
+  React.useEffect(() => {
+    if (!active) setUsageOpen(false);
+  }, [active]);
   React.useEffect(() => {
     logRef.current?.scrollTo?.({ top: logRef.current.scrollHeight });
-  }, [chat.messages, open]);
-  const busy = disabled || chat.isStreaming;
+  }, [chat.messages, active]);
   return (
     <aside
       className="local-editor-chat"
-      data-open={open}
+      data-local-editor-chat
       aria-label="Layout chat"
     >
       <header className="local-editor-chat-header">
-        {open && (
-          <div className="local-editor-chat-title">
-            <span className="local-editor-chat-icon">
-              <MessageSquare size={18} aria-hidden="true" />
-            </span>
-            <div>
-              <strong>Layout assistant</strong>
-              <span>Build and refine your page</span>
-            </div>
+        <div className="local-editor-chat-title">
+          <span className="local-editor-chat-icon">
+            <MessageSquare size={18} aria-hidden="true" />
+          </span>
+          <div>
+            <strong>Layout assistant</strong>
+            <span>Build and refine your page</span>
           </div>
-        )}
-        {chat.isStreaming && (
-          <button
-            type="button"
-            className="local-editor-chat-stop"
-            aria-label="Stop generating"
-            onClick={chat.cancel}
-          >
-            <Square size={13} aria-hidden="true" />
-            Stop
-          </button>
-        )}
-        <button
-          type="button"
-          className="local-editor-chat-toggle"
-          aria-expanded={open}
-          aria-controls="local-editor-chat"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? (
-            <>
-              <ChevronDown size={16} aria-hidden="true" />
-              Hide chat
-            </>
-          ) : (
-            <>
-              {chat.isStreaming ? (
-                <LoaderCircle
-                  className="local-editor-chat-spinner"
-                  size={16}
-                  aria-hidden="true"
-                />
-              ) : (
-                <MessageSquare size={16} aria-hidden="true" />
-              )}
-              {chat.isStreaming ? "Show chat · Generating…" : "Show chat"}
-            </>
-          )}
-        </button>
+        </div>
       </header>
-      <div
-        id="local-editor-chat"
-        className="local-editor-chat-body"
-        hidden={!open}
-      >
+      <div className="local-editor-chat-body">
         <div
           ref={logRef}
           className="local-editor-chat-log"
@@ -163,49 +127,11 @@ export const LocalEditorChat = ({
             {chat.error.message}
           </p>
         )}
-        <form
-          className="local-editor-chat-composer"
-          onSubmit={(event) => {
-            event.preventDefault();
-            const prompt = new FormData(event.currentTarget).get("prompt");
-            if (typeof prompt === "string" && prompt.trim() && !busy) {
-              void chat.send(prompt.trim());
-              event.currentTarget.reset();
-            }
-          }}
-        >
-          <textarea
-            rows={3}
-            name="prompt"
-            aria-label="Describe what you want"
-            placeholder="Describe what you want to change…"
-            required
-            disabled={busy}
-            onKeyDown={(event) => {
-              if (
-                event.key === "Enter" &&
-                !event.shiftKey &&
-                !event.nativeEvent.isComposing
-              ) {
-                event.preventDefault();
-                if (!busy) {
-                  event.currentTarget.form?.requestSubmit();
-                }
-              }
-            }}
-          />
-          <div className="local-editor-chat-composer-actions">
-            <span>Enter to send · Shift+Enter for a new line</span>
-            <button
-              type="submit"
-              className="local-editor-chat-send"
-              disabled={busy}
-            >
-              <Send size={14} aria-hidden="true" />
-              Send
-            </button>
-          </div>
-        </form>
+        <LocalEditorChatComposer
+          chat={chat}
+          disabled={disabled}
+          active={active}
+        />
         <footer className="local-editor-chat-footer">
           <button
             type="button"
@@ -216,16 +142,28 @@ export const LocalEditorChat = ({
             <RotateCcw size={13} aria-hidden="true" />
             New conversation
           </button>
-          <details className="local-editor-chat-usage">
-            <summary>Token usage</summary>
-            <p aria-label="Conversation token usage">
+          <Popover open={usageOpen} onOpenChange={setUsageOpen}>
+            <PopoverTrigger asChild>
+              <button type="button" className="local-editor-chat-usage">
+                <ChevronUp size={13} aria-hidden="true" />
+                Token usage
+              </button>
+            </PopoverTrigger>
+            <PopoverContent
+              side="top"
+              align="end"
+              sideOffset={8}
+              className="local-editor-chat-usage-popover ve-w-auto"
+              aria-label="Conversation token usage"
+              data-local-editor-chat
+            >
               Cached input: {chat.usage.cachedInput.toLocaleString()}
               <br />
               Uncached input: {chat.usage.uncachedInput.toLocaleString()}
               <br />
               Output: {chat.usage.output.toLocaleString()}
-            </p>
-          </details>
+            </PopoverContent>
+          </Popover>
         </footer>
       </div>
     </aside>

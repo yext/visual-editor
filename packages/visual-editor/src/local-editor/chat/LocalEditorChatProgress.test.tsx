@@ -1,3 +1,4 @@
+import { openChat } from "./chatTestUtils.tsx";
 import React from "react";
 import {
   act,
@@ -54,7 +55,10 @@ const section = (taskId: string) =>
     },
   });
 const submit = async (text = "Improve the page") => {
-  fireEvent.change(screen.getByRole("textbox"), { target: { value: text } });
+  fireEvent.change(
+    screen.getByRole("textbox", { name: "Describe what you want" }),
+    { target: { value: text } }
+  );
   fireEvent.click(screen.getByRole("button", { name: "Send" }));
 };
 const editor = (ids = ["heading", "second"]) => {
@@ -64,7 +68,7 @@ const editor = (ids = ["heading", "second"]) => {
     props: { id, text: id },
   }));
   render(<ChatHarness initialData={data} />);
-  fireEvent.click(screen.getByRole("button", { name: "Show chat" }));
+  openChat();
 };
 
 it("shows named section progress and preserves applied work when stopped from collapsed chat", async () => {
@@ -111,9 +115,9 @@ it("shows named section progress and preserves applied work when stopped from co
       }) as HTMLButtonElement
     ).disabled
   ).toBe(true);
-  fireEvent.click(screen.getByRole("button", { name: "Hide chat" }));
+  fireEvent.click(within(screen.getByRole("navigation")).getByText("Outline"));
+  openChat();
   fireEvent.click(screen.getByRole("button", { name: "Stop generating" }));
-  fireEvent.click(screen.getByRole("button", { name: "Show chat" }));
   await screen.findByText(/Section changes: 1 applied, 1 cancelled/);
   expect(screen.getByText("Cancelled")).toBeTruthy();
   expect(screen.getByText("heading updated", { selector: "h2" })).toBeTruthy();
@@ -224,7 +228,7 @@ it("distinguishes a resolving section from another result waiting in the applica
       }}
     />
   );
-  fireEvent.click(screen.getByRole("button", { name: "Show chat" }));
+  openChat();
   await submit();
   await screen.findByText("Applying changes");
   await screen.findByText("Waiting to apply");
