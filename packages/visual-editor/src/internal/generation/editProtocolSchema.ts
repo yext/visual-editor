@@ -2,6 +2,17 @@ import { z } from "zod";
 import type { NewEditComponent } from "./editProtocol.ts";
 
 const id = z.string().trim().min(1);
+export const generationPreparationSchema = z.strictObject({
+  question: z.string().trim().min(1).nullable(),
+  translationMode: z.enum(["defaultOnly", "translate"]).nullable(),
+  cardCounts: z.array(
+    z.strictObject({
+      componentType: id,
+      instanceIndex: z.number().int().min(0).nullable(),
+      count: z.number().int().min(0),
+    })
+  ),
+});
 const collectionSchema = z.strictObject({
   ownerId: id.nullable(),
   slotPath: z.string().nullable(),
@@ -32,6 +43,7 @@ export const sectionEditTaskSchema = z.strictObject({
   targetComponentIds: z.array(id),
   instructions: z.string(),
   description: z.string().trim().min(1).optional(),
+  translationMode: z.enum(["defaultOnly", "translate"]).optional(),
   structuralOperations: z.array(
     z.union([insertPlanSchema, removeSchema, reorderSchema])
   ),
@@ -98,6 +110,7 @@ export const sectionEditPlanSchema = z
     text: z.string(),
     clarification: z.string().trim().min(1).nullable(),
     globalStyleGuidance: z.string().trim().min(1).nullable(),
+    limitations: z.string().trim().min(1).nullable(),
     sharedIntent: z.string(),
     tasks: z.array(sectionEditTaskSchema),
   })

@@ -1,3 +1,4 @@
+import { translationModeGuidance } from "./translationPolicy.ts";
 import { z } from "zod";
 import { createGenerationSchemaCompiler } from "./generationSchemaCompiler.ts";
 import type { PuckGenerationCatalog } from "./puckGenerationCatalog.ts";
@@ -13,15 +14,20 @@ import {
 import {
   prepareSlottedSource,
   finalizeSlottedSource,
+  generationFields,
 } from "../../internal/generation/slottedItemSource.ts";
 
 import { isBlankGenerationPage } from "../../internal/generation/isBlankGenerationPage.ts";
+import { normalizeGeneratedText } from "./localizedText.ts";
+import type { GenerationPreparation } from "../../internal/generation/editProtocol.ts";
+import { isLinkedSource } from "../../internal/generation/slottedItemSource.ts";
 
 /** Compile creation contracts without editing operations or model-authored identities. */
 export const compileGenerationSchema = (
   catalog: PuckGenerationCatalog,
   locales: string[],
-  currentData: Content = { content: [] }
+  currentData: Content = { content: [] },
+  preparation?: GenerationPreparation
 ) => {
   rejectZones(currentData);
   if (!isBlankGenerationPage(currentData)) {
@@ -30,6 +36,28 @@ export const compileGenerationSchema = (
     );
   }
   const components = catalog.data.components;
+  if (
+    preparation?.question ||
+    (preparation && preparation.translationMode === null)
+  ) {
+    throw new Error(
+      "Resolve the preparation question before generating page content."
+    );
+  }
+  const cardCounts = new Map<string, Map<number | null, number>>();
+  for (const requirement of preparation?.cardCounts ?? []) {
+    const counts =
+      cardCounts.get(requirement.componentType) ??
+      new Map<number | null, number>();
+    if (
+      !components[requirement.componentType]?.generation?.slottedItemSource ||
+      counts.has(requirement.instanceIndex)
+    ) {
+      throw new Error("Invalid prepared card collection requirement.");
+    }
+    counts.set(requirement.instanceIndex, requirement.count);
+    cardCounts.set(requirement.componentType, counts);
+  }
   const { element, union, exportSchema, nodes, explicitCardLists } =
     createGenerationSchemaCompiler(catalog, locales);
   const rootNodes = Object.keys(components)
@@ -58,13 +86,17 @@ export const compileGenerationSchema = (
   }
   const responseSchema = z.strictObject({
     text: z.string(),
+    translationMode: z
+      .enum(["defaultOnly", "translate"])
+      .describe(translationModeGuidance),
     result: union(outcomes),
   });
   const jsonSchema = exportSchema(responseSchema);
-  // Preflight all registered contracts separately: unreachable components must
-  // remain valid without inflating the request schema or prompt inventory.
+  // The root schema already validates reachable contracts. Export only the
+  // unreachable contracts separately, avoiding repeated exports of the graph.
+  const reachable = new Set(availableComponentNames);
   for (const [name, config] of Object.entries(components)) {
-    if (config.generation) {
+    if (config.generation && !reachable.has(name)) {
       exportSchema(z.strictObject({ component: element(name).wire }));
     }
   }
@@ -72,11 +104,14 @@ export const compileGenerationSchema = (
     response: any
   ): { text: string; spec: Content | null } => {
     const parsed = responseSchema.parse(response) as any;
+    if (preparation && parsed.translationMode !== preparation.translationMode) {
+      throw new Error(
+        "Generated translation mode differs from the prepared choice."
+      );
+    }
     if (parsed.result.action === "clarification") {
       return {
-        text: [parsed.text, parsed.result.question]
-          .filter(Boolean)
-          .join("\n\n"),
+        text: parsed.result.question,
         spec: null,
       };
     }
@@ -85,6 +120,8 @@ export const compileGenerationSchema = (
         element(input.type).apply(input, undefined)
       ),
     };
+    const instanceCounts = new Map<string, number>();
+    const matchedCounts = new Set<number>();
     // Prepare defaults while descending so every newly created card is visited.
     walkAuthored(catalog, candidate, ({ component }) => {
       prepareSlottedSource(
@@ -92,8 +129,45 @@ export const compileGenerationSchema = (
         components[component.type],
         explicitCardLists.has(component)
       );
+      const counts = cardCounts.get(component.type);
+      if (counts) {
+        const instanceIndex = instanceCounts.get(component.type) ?? 0;
+        instanceCounts.set(component.type, instanceIndex + 1);
+        const linked = isLinkedSource(component.props);
+        const count =
+          counts.get(instanceIndex) ?? (!linked ? counts.get(null) : undefined);
+        if (count !== undefined) {
+          if (linked || component.props.slots.CardSlot.length !== count) {
+            throw new Error(
+              `${component.type} instance ${instanceIndex}: expected ${count} manual CardSlot children. Author cards inside slots.CardSlot, not data.mappings or repeated sections.`
+            );
+          }
+          preparation!.cardCounts.forEach((requirement, index) => {
+            if (
+              requirement.componentType === component.type &&
+              (requirement.instanceIndex === null ||
+                requirement.instanceIndex === instanceIndex)
+            ) {
+              matchedCounts.add(index);
+            }
+          });
+        }
+      }
+      const config = components[component.type];
+      component.props = normalizeGeneratedText(
+        component.props,
+        config.generation!.props,
+        { type: "object", objectFields: generationFields(config) },
+        parsed.translationMode === "translate",
+        locales
+      );
       component.props.id = `generated-${globalThis.crypto.randomUUID()}`;
     });
+    if (matchedCounts.size !== (preparation?.cardCounts.length ?? 0)) {
+      throw new Error(
+        "Generated page omitted a prepared manual card collection."
+      );
+    }
     // Parent-first finalization applies the helper's child identity convention.
     // Mirror copies must be taken after descendants have also finalized their references.
     const sources: SavedComponent[] = [];
@@ -112,7 +186,7 @@ export const compileGenerationSchema = (
     jsonSchema,
     isBlankPage: true,
     availableComponentNames,
-    context: extractAuthored(catalog, currentData),
+    context: { locales, layout: extractAuthored(catalog, currentData) },
     materialize,
     parseResponse: (text: string) => materialize(JSON.parse(text)),
   };

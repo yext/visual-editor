@@ -4,12 +4,13 @@ import { compactGenerationSchema } from "./compactGenerationSchema.ts";
 /** Export only schemas supported by the gateway's strict-output contract. */
 export const exportGenerationSchema = (
   schema: z.ZodType,
-  metadata?: z.core.$ZodRegistry<Record<string, any>>
+  metadata?: z.core.$ZodRegistry<Record<string, any>>,
+  io: "input" | "output" = "input"
 ): Record<string, any> => {
   let jsonSchema: Record<string, any>;
   try {
     jsonSchema = z.toJSONSchema(schema, {
-      io: "input",
+      io,
       reused: "ref",
       metadata,
     });

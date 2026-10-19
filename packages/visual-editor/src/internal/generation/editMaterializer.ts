@@ -22,7 +22,7 @@ import type {
   SectionEditResult,
   SectionEditTask,
 } from "./editProtocol.ts";
-import { applyAuthoredValueEdits, editSlot } from "./editValues.ts";
+import { applyAuthoredValueEdits, editPath, editSlot } from "./editValues.ts";
 import {
   finalizeSlottedSource,
   isLinkedSource,
@@ -263,7 +263,7 @@ export const materializeSectionEdit = <T extends Content>(
       if (!sectionCollection && !byId.get(owner!.props.id)?.editable) {
         throw new Error("Cannot insert into a protected component.");
       }
-      if (owner?.readOnly?.[operation.collection.slotPath!.split("/")[1]]) {
+      if (owner?.readOnly?.[editPath(operation.collection.slotPath!)[0]]) {
         throw new Error("Cannot insert into a read-only slot.");
       }
       if (
@@ -326,7 +326,7 @@ export const materializeSectionEdit = <T extends Content>(
         throw new Error("Structural operation would change protected content.");
       }
       const { owner, items } = collectionItems(target.collection);
-      if (owner?.readOnly?.[target.collection.slotPath!.split("/")[1]]) {
+      if (owner?.readOnly?.[editPath(target.collection.slotPath!)[0]]) {
         throw new Error("Cannot change a read-only slot.");
       }
       requirePermission(

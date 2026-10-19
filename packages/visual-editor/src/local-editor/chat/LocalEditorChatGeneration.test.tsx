@@ -33,9 +33,17 @@ vi.mock("../../vite-plugin/local-editor/data.ts", () => ({
 
 const setup = (
   gateway: (body: any) => Promise<Response>,
-  rejectCopy = false
+  rejectCopy = false,
+  extraDefaultLocales = false
 ) => {
   const fixture = editGenerationFixture();
+  if (extraDefaultLocales) {
+    const text = fixture.components.Card.defaultProps!.text as Record<
+      string,
+      unknown
+    >;
+    text.de = "German library default";
+  }
   (fixture.data.root as any).type = "root";
   fixture.data.zones = {};
   fixture.data.root.props = {
@@ -140,6 +148,75 @@ const send = async (prompt: string) => {
   fireEvent.click(screen.getByRole("button", { name: "Send" }));
 };
 const context = (body: any) => JSON.parse(body.input.at(-1).content).context;
+
+it.each(["defaultOnly", "translate"] as const)(
+  "keeps normalized insertion values through gateway, transport, Puck, undo and redo (%s)",
+  async (translationMode) => {
+    const task = {
+      ...editTask(
+        "first",
+        [],
+        [
+          {
+            kind: "insert",
+            insertionKey: "new-card",
+            componentType: "Card",
+            collection: { ownerId: "first", slotPath: "/cards" },
+            anchor: { position: "end" },
+          },
+        ]
+      ),
+      translationMode,
+    };
+    const h = setup(
+      async (body) => {
+        if (body.text.format.name === "puck_edit_plan") {
+          return completed(editPlan([task]));
+        }
+        return completed({
+          taskId: task.taskId,
+          sectionId: task.sectionId,
+          updates: [],
+          insertions: [
+            {
+              insertionKey: "new-card",
+              component: {
+                type: "Card",
+                props: {
+                  text: { $default: true },
+                  binding: { $default: true },
+                  optional: { $unset: true },
+                  rows: [],
+                  style: { $default: true },
+                },
+              },
+            },
+          ],
+        });
+      },
+      false,
+      true
+    );
+    const before = clone(h.adapter.read());
+    await send("Add a card with the default copy");
+    await screen.findByText("Section changes: 1 applied.");
+    expect(h.gatewayRequests).toHaveLength(2);
+    const after = clone(h.adapter.read());
+    const cards = after.content[1].props.content[0].props.cards;
+    expect(cards).toHaveLength(3);
+    expect(cards[2].props.text).toEqual({
+      defaultValue: "Default",
+      ...(translationMode === "translate" ? { fr: "Défaut" } : {}),
+    });
+    expect(cards.slice(0, 2)).toEqual(
+      before.content[1].props.content[0].props.cards
+    );
+    fireEvent.click(screen.getByText("Undo", { selector: "button" }));
+    await waitFor(() => expect(h.adapter.read()).toEqual(before));
+    fireEvent.click(screen.getByText("Redo", { selector: "button" }));
+    await waitFor(() => expect(h.adapter.read()).toEqual(after));
+  }
+);
 
 it("runs planning, server validation, repair and Puck application while preserving repeated cards and opaque data", async () => {
   const target = editTask("first", ["first-b"]);

@@ -6,9 +6,9 @@ import { compileGenerationSchema } from "./generationSchema.ts";
 import { isBlankGenerationPage } from "../../internal/generation/isBlankGenerationPage.ts";
 import { buildGenerationPrompt } from "./generationValidation.ts";
 import {
-  createGenerationRepetitionGuard,
   GENERATION_ATTEMPT_DEADLINE_MS,
   FRESH_PAGE_OUTPUT_TOKEN_BUDGET,
+  GENERATION_PREPARATION_OUTPUT_TOKEN_BUDGET,
   EDIT_PLANNING_OUTPUT_TOKEN_BUDGET,
   SECTION_EDIT_OUTPUT_TOKEN_BUDGET,
 } from "./generationLimits.ts";
@@ -17,7 +17,11 @@ import {
   sendJsonResponse,
 } from "../local-editor/server.ts";
 import type { Content } from "../../internal/generation/authored.ts";
-import { sectionEditTaskSchema } from "../../internal/generation/editProtocolSchema.ts";
+import {
+  sectionEditTaskSchema,
+  generationPreparationSchema,
+} from "../../internal/generation/editProtocolSchema.ts";
+import { compileGenerationPreparation } from "./generationPreparation.ts";
 import {
   compileEditPlanningSchema,
   buildEditPlanningPrompt,
@@ -26,6 +30,11 @@ import {
   compileSectionEditSchema,
   buildSectionEditPrompt,
 } from "./sectionEditSchema.ts";
+import {
+  GENERATION_GATEWAY_URL,
+  GenerationGatewayError,
+  requestGenerationOutput,
+} from "./generationGateway.ts";
 
 type GenerationOptions = {
   model: string;
@@ -39,9 +48,40 @@ type GenerationOptions = {
   log: (message: string, details: object) => void;
 };
 
-const GENERATION_GATEWAY_URL =
-  "http://modelgateway.service.us3dev.consul:8008/openai/responses";
-const MAX_LOGGED_GATEWAY_ERROR_BYTES = 8 * 1024;
+const GENERATION_MODES = {
+  prepare: {
+    maxOutputTokens: GENERATION_PREPARATION_OUTPUT_TOKEN_BUDGET,
+    schemaName: "puck_generation_preparation",
+    protocol: "section-edits-v1",
+    eventType: "prepared",
+    responseLabel: "Preparation",
+    resultLabel: "preparation",
+  },
+  create: {
+    maxOutputTokens: FRESH_PAGE_OUTPUT_TOKEN_BUDGET,
+    schemaName: "puck_generation",
+    protocol: "strict-puck-overrides-v2",
+    eventType: "accepted",
+    responseLabel: "Creation",
+    resultLabel: "layout",
+  },
+  plan: {
+    maxOutputTokens: EDIT_PLANNING_OUTPUT_TOKEN_BUDGET,
+    schemaName: "puck_edit_plan",
+    protocol: "section-edits-v1",
+    eventType: "planned",
+    responseLabel: "Planning",
+    resultLabel: "edit",
+  },
+  section: {
+    maxOutputTokens: SECTION_EDIT_OUTPUT_TOKEN_BUDGET,
+    schemaName: "puck_section_edit",
+    protocol: "section-edits-v1",
+    eventType: "section-result",
+    responseLabel: "Section",
+    resultLabel: "edit",
+  },
+};
 
 const jsonBytes = (value: unknown): number =>
   Buffer.byteLength(JSON.stringify(value), "utf8");
@@ -104,62 +144,6 @@ const componentDiagnostics = (catalog: PuckGenerationCatalog) =>
         authoredPropCount: Object.keys(component.props.shape ?? {}).length,
       };
     });
-
-type GatewayResponse = {
-  id?: string;
-  model?: string;
-  usage?: {
-    input_tokens?: number;
-    input_tokens_details?: { cached_tokens?: number };
-    output_tokens?: number;
-    output_tokens_details?: { reasoning_tokens?: number };
-  };
-  status?: string;
-  incomplete_details?: { reason?: string };
-  error?: unknown;
-  output_text?: string;
-  output?: {
-    type: string;
-    content?: { type: string; text?: string }[];
-  }[];
-};
-
-const readOutputText = (result: GatewayResponse): string => {
-  if (
-    result.output?.some((item) =>
-      item.content?.some((content) => content.type === "refusal")
-    )
-  ) {
-    throw new Error("The AI gateway refused generation.");
-  }
-  if (result.incomplete_details?.reason === "max_output_tokens") {
-    throw new Error(
-      "Generation exceeded its output token budget. Try a smaller request."
-    );
-  }
-  if (
-    result.error ||
-    result.status === "failed" ||
-    result.status === "incomplete"
-  ) {
-    throw new Error("The AI gateway did not complete generation.");
-  }
-  const text = extractOutputText(result);
-  if (!text) {
-    throw new Error("The AI gateway returned no generated text.");
-  }
-  return text;
-};
-
-const extractOutputText = (result: GatewayResponse): string =>
-  result.output_text ??
-  result.output
-    ?.filter((item) => item.type === "message")
-    .flatMap((item) => item.content ?? [])
-    .filter((content) => content.type === "output_text")
-    .map((content) => content.text ?? "")
-    .join("") ??
-  "";
 
 /** Streams the company gateway output as validated native Puck data. */
 export const handleLocalEditorGenerationRequest = async (
@@ -266,7 +250,8 @@ export const handleLocalEditorGenerationRequest = async (
   }
   const modeRequest = z
     .object({
-      mode: z.enum(["create", "plan", "section"]).optional(),
+      mode: z.enum(["prepare", "create", "plan", "section"]).optional(),
+      preparation: generationPreparationSchema.optional(),
       selectedComponentId: z.string().min(1).nullable().optional(),
       task: sectionEditTaskSchema.optional(),
       sharedIntent: z.string().optional(),
@@ -279,12 +264,13 @@ export const handleLocalEditorGenerationRequest = async (
     return;
   }
   const mode = modeRequest.data.mode ?? "create";
+  const modeConfig = GENERATION_MODES[mode];
   Object.assign(requestDetails, {
     mode,
     taskId: modeRequest.data.task?.taskId,
     sectionId: modeRequest.data.task?.sectionId,
   });
-  if (mode !== "create" && currentData === undefined) {
+  if ((mode === "plan" || mode === "section") && currentData === undefined) {
     rejectRequest("Follow-up requests require the latest currentData.", 400);
     return;
   }
@@ -293,7 +279,7 @@ export const handleLocalEditorGenerationRequest = async (
     return;
   }
   if (
-    mode === "create" &&
+    (mode === "create" || mode === "prepare") &&
     !isBlankGenerationPage(
       (currentData as Content | undefined) ?? { content: [] }
     )
@@ -322,7 +308,7 @@ export const handleLocalEditorGenerationRequest = async (
     locales,
   });
 
-  if (mode !== "create") {
+  if (mode === "plan" || mode === "section") {
     log("[local-editor generation] Submitted layout", {
       correlationId,
       mode,
@@ -337,14 +323,15 @@ export const handleLocalEditorGenerationRequest = async (
     context: unknown;
     availableComponentNames: string[];
     isBlankPage: boolean;
-    eventType?: string;
     instructions?: string;
     localResult?: object;
     parseResponse: (text: string) => object;
   };
   const compileStartedAt = Date.now();
   try {
-    if (mode === "plan") {
+    if (mode === "prepare") {
+      compiled = compileGenerationPreparation(catalog, locales);
+    } else if (mode === "plan") {
       const planner = compileEditPlanningSchema(
         catalog,
         locales,
@@ -354,7 +341,6 @@ export const handleLocalEditorGenerationRequest = async (
       compiled = {
         ...planner,
         isBlankPage: false,
-        eventType: "planned",
         instructions: buildEditPlanningPrompt(),
         parseResponse: (text) => ({ plan: planner.parseResponse(text) }),
       };
@@ -369,7 +355,6 @@ export const handleLocalEditorGenerationRequest = async (
       compiled = {
         ...section,
         isBlankPage: false,
-        eventType: "section-result",
         instructions: buildSectionEditPrompt(),
         localResult: section.localResult
           ? { result: section.localResult }
@@ -380,7 +365,8 @@ export const handleLocalEditorGenerationRequest = async (
       compiled = compileGenerationSchema(
         catalog,
         locales,
-        currentData as Content | undefined
+        currentData as Content | undefined,
+        modeRequest.data.preparation
       );
     }
     log("[local-editor generation] Schema compiled", {
@@ -425,10 +411,7 @@ export const handleLocalEditorGenerationRequest = async (
     started = true;
     response.statusCode = 200;
     response.setHeader("Content-Type", "application/x-ndjson; charset=utf-8");
-    response.setHeader(
-      "X-Visual-Editor-Generation",
-      mode === "create" ? "strict-puck-overrides-v2" : "section-edits-v1"
-    );
+    response.setHeader("X-Visual-Editor-Generation", modeConfig.protocol);
     response.setHeader("Cache-Control", "no-cache, no-transform");
     response.setHeader("X-Accel-Buffering", "no");
     response.flushHeaders();
@@ -437,7 +420,9 @@ export const handleLocalEditorGenerationRequest = async (
     startStream();
     response.write(JSON.stringify(event) + "\n");
   };
-  const writeUsage = (usage: GatewayResponse["usage"]) => {
+  const writeUsage: Parameters<typeof requestGenerationOutput>[0]["onUsage"] = (
+    usage
+  ) => {
     if (!usage) {
       return;
     }
@@ -457,64 +442,46 @@ export const handleLocalEditorGenerationRequest = async (
     });
   };
   let phase = "prepare";
-  let attemptNumber = 0;
   let outputBytes = 0;
-  let transportFailure = false;
   try {
     if (compiled.localResult) {
-      writeEvent({ type: compiled.eventType, ...compiled.localResult });
+      writeEvent({ type: modeConfig.eventType, ...compiled.localResult });
       response.end();
       return;
     }
     phase = "build-prompt";
     const instructions =
       compiled.instructions ??
-      buildGenerationPrompt(catalog, compiled.availableComponentNames);
-    const history = conversationHistory;
-    const componentStats = componentDiagnostics(catalog);
+      buildGenerationPrompt(catalog, compiled.availableComponentNames, locales);
+    const componentStats =
+      mode === "prepare" ? [] : componentDiagnostics(catalog);
     const schemaStats = summarizeSchema(compiled.jsonSchema);
-    attemptNumber = 1;
     phase = "build-request";
     startStream();
-    let outputText = "";
-    outputBytes = 0;
-    const guard = createGenerationRepetitionGuard();
-    const consume = (delta: string) => {
-      guard(delta);
-      outputText += delta;
-      outputBytes = Buffer.byteLength(outputText, "utf8");
-    };
     const latestUserContent = JSON.stringify({
       request: messages.at(-1).content,
-      ...(mode === "create" ? {} : { context: compiled.context }),
+      context: compiled.context,
+      ...(mode === "create" && modeRequest.data.preparation
+        ? { preparation: modeRequest.data.preparation }
+        : {}),
       ...(modeRequest.data.validationFeedback
         ? { validationFeedback: modeRequest.data.validationFeedback }
         : {}),
     });
     const input = [
-      ...history,
+      ...conversationHistory,
       { role: "user" as const, content: latestUserContent },
     ];
     const requestBody = {
       model,
       stream: true,
-      max_output_tokens:
-        mode === "plan"
-          ? EDIT_PLANNING_OUTPUT_TOKEN_BUDGET
-          : mode === "section"
-            ? SECTION_EDIT_OUTPUT_TOKEN_BUDGET
-            : FRESH_PAGE_OUTPUT_TOKEN_BUDGET,
+      max_output_tokens: modeConfig.maxOutputTokens,
       instructions,
       input,
       text: {
         format: {
           type: "json_schema",
-          name:
-            mode === "create"
-              ? "puck_generation"
-              : mode === "plan"
-                ? "puck_edit_plan"
-                : "puck_section_edit",
+          name: modeConfig.schemaName,
           strict: true,
           schema: compiled.jsonSchema,
         },
@@ -526,7 +493,6 @@ export const handleLocalEditorGenerationRequest = async (
         mode,
         taskId: modeRequest.data.task?.taskId,
         sectionId: modeRequest.data.task?.sectionId,
-        attempt: attemptNumber,
         instructions,
         userPrompt: messages.at(-1).content,
         task: modeRequest.data.task,
@@ -535,18 +501,17 @@ export const handleLocalEditorGenerationRequest = async (
       });
     }
     const serializedRequestBody = JSON.stringify(requestBody);
-    const historyBytes = jsonBytes(history);
+    const historyBytes = jsonBytes(conversationHistory);
     log("[local-editor generation] Gateway request", {
       correlationId,
       mode,
       taskId: modeRequest.data.task?.taskId,
-      attempt: attemptNumber,
       model,
       gatewayUrl: GENERATION_GATEWAY_URL,
       requestBodyBytes: Buffer.byteLength(serializedRequestBody, "utf8"),
       requestBodyCharacters: serializedRequestBody.length,
       instructionsBytes: Buffer.byteLength(instructions, "utf8"),
-      historyMessageCount: history.length,
+      historyMessageCount: conversationHistory.length,
       historyBytes,
       latestUserContentBytes: Buffer.byteLength(latestUserContent, "utf8"),
       currentLayoutBytes: jsonBytes(compiled.context),
@@ -558,231 +523,43 @@ export const handleLocalEditorGenerationRequest = async (
       isBlankPage: compiled.isBlankPage,
     });
     phase = "gateway-fetch";
-    const upstream = await fetch(GENERATION_GATEWAY_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Yext-Business-Id": "1000152098", // blife test account
-        "Yext-Source": "vle-ai-layout-generation-poc",
-        "Correlation-Id": correlationId,
-      },
-      body: serializedRequestBody,
+    const outputText = await requestGenerationOutput({
+      serializedRequestBody,
+      model,
+      maxOutputTokens: modeConfig.maxOutputTokens,
       signal: controller.signal,
-    }).catch((cause) => {
-      transportFailure = true;
-      throw cause;
-    });
-    log("[local-editor generation] Gateway response", {
       correlationId,
-      attempt: attemptNumber,
-      status: upstream.status,
-      contentType: upstream.headers.get("Content-Type"),
-      contentLength: upstream.headers.get("Content-Length"),
-      requestId:
-        upstream.headers.get("x-request-id") ??
-        upstream.headers.get("request-id"),
-      retryAfter: upstream.headers.get("retry-after"),
-    });
-    if (!upstream.ok) {
-      transportFailure =
-        upstream.status >= 500 ||
-        upstream.status === 408 ||
-        upstream.status === 429;
-      const errorBody = await upstream.text();
-      log("[local-editor generation] Gateway error response", {
-        correlationId,
-        mode,
-        taskId: modeRequest.data.task?.taskId,
-        sectionId: modeRequest.data.task?.sectionId,
-        attempt: attemptNumber,
-        status: upstream.status,
-        responseBodyBytes: Buffer.byteLength(errorBody, "utf8"),
-        responseBodyTruncated:
-          Buffer.byteLength(errorBody, "utf8") > MAX_LOGGED_GATEWAY_ERROR_BYTES,
-        responseBody: Buffer.from(errorBody, "utf8")
-          .subarray(0, MAX_LOGGED_GATEWAY_ERROR_BYTES)
-          .toString("utf8"),
-      });
-      throw new Error(
-        `AI gateway HTTP ${upstream.status} (correlation ${correlationId}).`
-      );
-    }
-    phase = "read-gateway-response";
-    if (!upstream.headers.get("Content-Type")?.includes("text/event-stream")) {
-      const result = (await upstream.json().catch((cause) => {
-        transportFailure = true;
-        throw cause;
-      })) as GatewayResponse;
-      if (result.status === "incomplete" || result.incomplete_details) {
-        const responseText = extractOutputText(result);
-        log("[local-editor generation] Gateway incomplete response", {
-          correlationId,
-          attempt: attemptNumber,
-          responseId: result.id,
-          model: result.model ?? model,
-          status: result.status,
-          maxOutputTokens: requestBody.max_output_tokens,
-          incompleteDetails: result.incomplete_details,
-          usage: result.usage,
-          responseOutputCharacters: responseText.length,
-          responseOutputBytes: Buffer.byteLength(responseText, "utf8"),
-        });
-      }
-      writeUsage(result.usage);
-      const text = readOutputText(result);
-      log("[local-editor generation] Gateway completed", {
-        correlationId,
-        mode,
-        taskId: modeRequest.data.task?.taskId,
-        sectionId: modeRequest.data.task?.sectionId,
-        attempt: attemptNumber,
-        responseId: result.id,
-        model: result.model ?? model,
-        status: result.status,
-        outputCharacters: text.length,
-        incompleteDetails: result.incomplete_details,
-      });
-      consume(text);
-    } else {
-      const reader = upstream.body?.getReader();
-      if (!reader) {
-        transportFailure = true;
-        throw new Error("The gateway returned no response body.");
-      }
-      const decoder = new TextDecoder();
-      let pending = "";
-      let completed = false;
-      const eventCounts: Record<string, number> = {};
-      const streamStartedAt = Date.now();
-      const processLine = (line: string) => {
-        if (!line.startsWith("data:")) {
-          return;
-        }
-        const raw = line.slice(5).trim();
-        if (!raw || raw === "[DONE]") {
-          return;
-        }
-        let event;
-        try {
-          event = JSON.parse(raw);
-        } catch (cause) {
-          transportFailure = true;
-          throw cause;
-        }
-        eventCounts[event.type ?? "unknown"] =
-          (eventCounts[event.type ?? "unknown"] ?? 0) + 1;
-        if (event.type?.startsWith("response.refusal")) {
-          throw new Error("The AI gateway refused generation.");
-        }
-        if (
-          ["error", "response.failed", "response.incomplete"].includes(
-            event.type
-          ) ||
-          event.error
-        ) {
-          const responseText = event.response
-            ? extractOutputText(event.response)
-            : "";
-          log("[local-editor generation] Gateway stream error", {
-            correlationId,
-            attempt: attemptNumber,
-            eventType: event.type,
-            error: event.error ?? event.response?.error ?? event.message,
-            maxOutputTokens: requestBody.max_output_tokens,
-            incompleteDetails: event.response?.incomplete_details,
-            usage: event.response?.usage,
-            streamedOutputCharacters: outputText.length,
-            streamedOutputBytes: Buffer.byteLength(outputText, "utf8"),
-            responseOutputCharacters: responseText.length,
-            responseOutputBytes: Buffer.byteLength(responseText, "utf8"),
-            streamDurationMs: Date.now() - streamStartedAt,
-            eventCounts,
-          });
-          writeUsage(event.response?.usage);
-          if (event.response) {
-            readOutputText(event.response);
-          }
-          throw new Error("The AI gateway did not complete generation.");
-        }
-        if (
-          event.type === "response.output_text.delta" &&
-          typeof event.delta === "string"
-        ) {
-          consume(event.delta);
-        }
-        if (event.type === "response.completed") {
-          writeUsage(event.response.usage);
-          const text = readOutputText(event.response);
-          if (!outputText) {
-            consume(text);
-          }
-          log("[local-editor generation] Gateway completed", {
-            correlationId,
-            attempt: attemptNumber,
-            responseId: event.response?.id,
-            model: event.response?.model ?? model,
-            status: event.response?.status,
-            outputCharacters: outputText.length,
-            streamDurationMs: Date.now() - streamStartedAt,
-            eventCounts,
-          });
-          completed = true;
-        }
-      };
-      try {
-        while (true) {
-          const { done, value } = await reader.read().catch((cause) => {
-            transportFailure = true;
-            throw cause;
-          });
-          pending += decoder.decode(value, { stream: !done });
-          const lines = pending.split("\n");
-          pending = lines.pop()!;
-          lines.forEach(processLine);
-          if (done) {
-            break;
-          }
-        }
-        if (pending) {
-          processLine(pending);
-        }
-        if (!completed) {
-          transportFailure = true;
-          throw new Error("The gateway stream ended before completion.");
-        }
-      } finally {
-        await reader.cancel().catch(() => {});
-      }
-    }
-    if (mode === "plan" || mode === "section") {
-      log(
-        mode === "plan"
-          ? "[local-editor generation] Planning response"
-          : "[local-editor generation] Section response",
-        {
+      log: (message, details) =>
+        log(message, {
           correlationId,
           mode,
           taskId: modeRequest.data.task?.taskId,
           sectionId: modeRequest.data.task?.sectionId,
-          attempt: attemptNumber,
-          outputText,
-        }
-      );
-    }
+          ...details,
+        }),
+      onUsage: writeUsage,
+    });
+    outputBytes = Buffer.byteLength(outputText, "utf8");
+    log(`[local-editor generation] ${modeConfig.responseLabel} response`, {
+      correlationId,
+      mode,
+      taskId: modeRequest.data.task?.taskId,
+      sectionId: modeRequest.data.task?.sectionId,
+      outputText,
+    });
     // Only the complete, validated candidate reaches the editor bridge.
     try {
       phase = "parse-and-validate";
       const accepted = compiled.parseResponse(outputText);
-      log("[local-editor generation] Attempt outcome", {
+      log("[local-editor generation] Validation outcome", {
         correlationId,
         mode,
         taskId: modeRequest.data.task?.taskId,
         sectionId: modeRequest.data.task?.sectionId,
-        attempt: attemptNumber,
         validationOutcome: "accepted",
         outputCharacters: outputText.length,
       });
-      writeEvent({ type: compiled.eventType ?? "accepted", ...accepted });
+      writeEvent({ type: modeConfig.eventType, ...accepted });
       response.end();
       return;
     } catch (error) {
@@ -795,20 +572,23 @@ export const handleLocalEditorGenerationRequest = async (
           : error instanceof Error
             ? error.message
             : String(error);
-      log("[local-editor generation] Attempt outcome", {
+      log("[local-editor generation] Validation outcome", {
         correlationId,
         mode,
         taskId: modeRequest.data.task?.taskId,
         sectionId: modeRequest.data.task?.sectionId,
-        attempt: attemptNumber,
         validationOutcome: "rejected",
         error: message,
       });
       throw new Error(
-        `Generated ${mode === "create" ? "layout" : "edit"} failed validation: ${message}`
+        `Generated ${modeConfig.resultLabel} failed validation: ${message}`
       );
     }
   } catch (error) {
+    if (error instanceof GenerationGatewayError) {
+      phase = error.phase;
+      outputBytes = error.outputBytes;
+    }
     const failure = controller.signal.aborted
       ? controller.signal.reason
       : error;
@@ -817,7 +597,6 @@ export const handleLocalEditorGenerationRequest = async (
     log("[local-editor generation] Generation failed", {
       correlationId,
       model,
-      attempt: attemptNumber,
       phase,
       isBlankPage: compiled.isBlankPage,
       outputBytes,
@@ -831,16 +610,13 @@ export const handleLocalEditorGenerationRequest = async (
           JSON.stringify({
             type: "error",
             error: message,
-            ...(mode !== "create"
-              ? {
-                  transport: transportFailure || controller.signal.aborted,
-                  retryable:
-                    phase === "parse-and-validate" &&
-                    !controller.signal.aborted,
-                  ...(phase === "parse-and-validate"
-                    ? { validationFeedback: message.slice(0, 4_000) }
-                    : {}),
-                }
+            transport:
+              (error instanceof GenerationGatewayError && error.transport) ||
+              controller.signal.aborted,
+            retryable:
+              phase === "parse-and-validate" && !controller.signal.aborted,
+            ...(phase === "parse-and-validate"
+              ? { validationFeedback: message.slice(0, 4_000) }
               : {}),
           }) + "\n"
         );

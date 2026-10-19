@@ -198,8 +198,12 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
         message: outcome.message,
       }));
       const text = [
-        actual.length ? summarizeSectionOutcomes(actual) : plan.text,
-        plan.clarification,
+        actual.length
+          ? summarizeSectionOutcomes(actual)
+          : plan.intent === "clarification"
+            ? plan.clarification
+            : plan.text,
+        actual.length ? plan.limitations : null,
         plan.globalStyleGuidance,
         reason,
       ]
@@ -252,12 +256,35 @@ export const useLocalEditorChat = (api: string, layoutId: string) => {
       }
       diagnostics.current.phase = fresh ? "request" : "planning";
       if (fresh) {
-        const event = await request({
-          mode: "create",
-          layoutId,
-          currentData,
-          messages: requestMessages,
-        });
+        showProgress("Checking page requirements…");
+        const prepared = await repairChatOutput((validationFeedback) =>
+          request({
+            mode: "prepare",
+            layoutId,
+            currentData,
+            messages: requestMessages,
+            validationFeedback,
+          })
+        );
+        if (!active()) return;
+        if (prepared.type !== "prepared") {
+          throw new Error("Expected page preparation output.");
+        }
+        if (prepared.preparation.question) {
+          complete(prepared.preparation.question);
+          return;
+        }
+        showProgress("Generating layout…");
+        const event = await repairChatOutput((validationFeedback) =>
+          request({
+            mode: "create",
+            layoutId,
+            currentData,
+            messages: requestMessages,
+            preparation: prepared.preparation,
+            validationFeedback,
+          })
+        );
         if (!active()) {
           return;
         }

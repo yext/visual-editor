@@ -1,5 +1,6 @@
 export const GENERATION_ATTEMPT_DEADLINE_MS = 5 * 60_000;
 export const FRESH_PAGE_OUTPUT_TOKEN_BUDGET = 128_000;
+export const GENERATION_PREPARATION_OUTPUT_TOKEN_BUDGET = 2_048;
 export const EDIT_PLANNING_OUTPUT_TOKEN_BUDGET = 16_384;
 export const SECTION_EDIT_OUTPUT_TOKEN_BUDGET = 32_768;
 /** Look only within JSON strings, so repeated component structures are safe. */

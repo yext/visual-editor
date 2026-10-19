@@ -9,8 +9,10 @@ import {
 import {
   generationFields,
   preflightSlottedItemSource,
+  isLinkedSource,
 } from "../../internal/generation/slottedItemSource.ts";
 import type { PuckGenerationCatalog } from "./puckGenerationCatalog.ts";
+import { localizedTextSchema } from "./localizedText.ts";
 import { exportGenerationSchema } from "./strictGenerationSchema.ts";
 
 type Node = {
@@ -77,30 +79,23 @@ export const createGenerationSchemaCompiler = (
           "open-ended objects require a localized defaultValue and layout locales"
         );
       }
-      const localized = (s: z.ZodType): boolean => {
-        const n = unwrap(s);
-        return (
-          n instanceof z.ZodString ||
-          (n instanceof z.ZodUnion &&
-            n.options.every((o) => localized(o as z.ZodType))) ||
-          (n instanceof z.ZodObject &&
-            Object.keys(n.shape).sort().join(",") === "html,json" &&
-            unwrap(n.shape.html) instanceof z.ZodString &&
-            unwrap(n.shape.json) instanceof z.ZodString)
-        );
-      };
-      if (!localized(shape.defaultValue) || !localized(catchall)) {
+      if (!localizedTextSchema(schema, locales)) {
         fail(path, "only localized catchalls are supported");
       }
       for (const locale of new Set(locales)) {
         if (
           !locale.trim() ||
-          Object.hasOwn(shape, locale) ||
-          ["__proto__", "constructor", "prototype"].includes(locale)
+          [
+            "__proto__",
+            "constructor",
+            "prototype",
+            "defaultValue",
+            "hasLocalizedValue",
+          ].includes(locale)
         ) {
           fail(path, `invalid locale ${locale}`);
         }
-        shape[locale] = catchall.optional();
+        shape[locale] ??= catchall.optional();
       }
     }
     for (const key of Object.keys(shape))
@@ -232,6 +227,9 @@ export const createGenerationSchemaCompiler = (
             .apply(input, baseline),
       };
     } else {
+      if ((native.def as any).coerce) {
+        fail(path, "coercion cannot be represented by a strict wire schema");
+      }
       if (
         !["string", "number", "boolean", "literal", "enum", "null"].includes(
           native.def.type
@@ -318,6 +316,18 @@ export const createGenerationSchemaCompiler = (
           ? clone(template)
           : { type: name, props: clone(config.defaultProps ?? {}) };
         base.props = props.apply(input.props, base.props);
+        if (
+          config.generation?.slottedItemSource &&
+          !isLinkedSource(base.props) &&
+          Object.values(input.props.data?.mappings ?? {}).some(
+            (mapping: any) => mapping?.constantValueEnabled === true
+          )
+        ) {
+          fail(
+            name,
+            "Manual card content belongs in slots.CardSlot child components, not data.mappings. Mappings configure entity-linked cards and do not create manual cards."
+          );
+        }
         if (Array.isArray(input.props.slots?.CardSlot)) {
           explicitCardLists.add(base);
         }
@@ -328,7 +338,11 @@ export const createGenerationSchemaCompiler = (
     return lazy;
   };
   const exportSchema = (schema: z.ZodType) =>
-    exportGenerationSchema(schema, schemaMetadata);
+    // Wire schemas contain closed objects and explicit required values, with
+    // defaults/optionals replaced by markers and transforms/coercion rejected.
+    // Input and output contracts are identical. Output export avoids Zod's
+    // repeated transform scans over the entire nested component graph.
+    exportGenerationSchema(schema, schemaMetadata, "output");
   return {
     element,
     value,

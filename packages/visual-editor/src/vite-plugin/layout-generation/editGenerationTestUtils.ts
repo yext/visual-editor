@@ -138,6 +138,7 @@ export const editTask = (
   description: "Improve the wording.",
   dependsOn: [],
   generateContent: true,
+  translationMode: "defaultOnly",
 });
 
 /** Build a planning response without generated component values. */
@@ -146,6 +147,7 @@ export const editPlan = (tasks = [editTask()]) => ({
   text: "Planned",
   clarification: null,
   globalStyleGuidance: null,
+  limitations: null,
   sharedIntent: "Consistent copy",
   tasks,
 });
@@ -166,6 +168,22 @@ export const editResponse = (
     },
   ],
   insertions: [],
+});
+
+/** Model-facing fresh-page responses include every required wire field. */
+export const creationResponse = (
+  content: any[],
+  translationMode: "defaultOnly" | "translate" = "defaultOnly"
+) => ({
+  text: "Created",
+  translationMode,
+  result: { action: "create", content },
+});
+
+export const clarificationResponse = (question: string) => ({
+  text: question,
+  translationMode: "defaultOnly" as const,
+  result: { action: "clarification", question },
 });
 
 /** Complete a gateway request with the token counts used by integration tests. */

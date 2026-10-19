@@ -169,14 +169,45 @@ selects a component or enclosing slot template default where available, and
 `{ "$unset": true }` removes a value only when the authored schema permits absence.
 Null is an explicit value where permitted. These rules apply recursively to objects;
 ordinary arrays replace their complete values. Localized catchalls expand to the
-selected layout's locales. Defaults preserve translations and entity bindings.
+selected layout's locales, plus older saved locales when editing so replacements
+can preserve them. Entity bindings are preserved.
+
+Translation policy is shared by preparation, planning, and execution. New text always
+has a fallback (`defaultValue`). `defaultOnly` strips inherited locale overrides from
+new content and preserves every saved override when editing, including values equal
+to the old fallback. There is no automatic copy synchronization. `translate` requires
+an explicit request or approval and may change only the current layout locales;
+older saved locale overrides remain protected. A refusal leaves the previous locale
+text visible. Planning asks once when a copy edit affects saved layout-locale overrides.
+
+Edit validation compares complete protected override bundles at their schema paths.
+Ordinary array indexes are excluded from that comparison, allowing reordering while
+preserving duplicate bundles and associations between locales within each text value.
+Arrays have no row identities, so this check guarantees preservation of the bundles,
+not their semantic association with other fields in a row. Native component slots
+retain their separate component identities. New or changed localized text introduced
+by value edits, including replacement arrays, requires a fallback. Existing locale-only
+bundles may remain unchanged or reorder without a fallback; this exception cannot
+increase the number of copies of a locale-only bundle.
+
+Prepared card counts target a component type and its zero-based `instanceIndex` in
+depth-first page order, including linked instances. A null index applies to every
+manual instance of that type; an explicit index overrides that general count.
+Linked collections are exempt from general manual counts. Counts are checked after
+materialization, including default selection, so repeated sections can have different
+counts without constraining their shared component schema. Missing targeted collections
+fail validation.
 
 New instances clone component defaults. A new fixed-slot child uses the enclosing
 default slot template when exactly one template matches its type. New authored
 subtrees receive fresh Ids. Explicit invalid values are never repaired by defaults,
 and missing required values produce a path-specific validation error.
+Insertion projection records removed catchall keys against the library defaults,
+including locales outside the current layout, so applying the generated insertion
+cannot restore them. Required locale fields incompatible with the selected translation
+policy fail validation rather than silently restoring their defaults.
 
-The strict model envelope is `{ text, result }`. The result is a clarification or
+The strict model envelope is `{ text, translationMode, result }`. The result is a clarification or
 initial page creation. Generation requires an empty page or a single empty
 MainContent scaffold. Clear an existing layout before generating a new page.
 The complete candidate is materialized and validated in one attempt; validation

@@ -109,6 +109,7 @@ export const slottedFixture = (cardType = "FAQCard") => {
   const materialize = (content = [section()]): Content =>
     compileGenerationSchema(catalog(), ["en", "fr"]).materialize({
       text: "Created",
+      translationMode: "translate",
       result: { action: "create", content },
     }).spec!;
   const linked = {

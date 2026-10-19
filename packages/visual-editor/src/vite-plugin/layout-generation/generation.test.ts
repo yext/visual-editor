@@ -1,5 +1,4 @@
 // @vitest-environment node
-import { EventEmitter } from "node:events";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
@@ -7,6 +6,14 @@ import { compileGenerationSchema } from "./generationSchema.ts";
 import { handleLocalEditorGenerationRequest } from "./generation.ts";
 import { FRESH_PAGE_OUTPUT_TOKEN_BUDGET } from "./generationLimits.ts";
 import { createPuckGenerationCatalog } from "./puckGenerationCatalog.ts";
+
+import {
+  completed,
+  creationResponse,
+  clarificationResponse,
+  generationRequest,
+  generationResponse,
+} from "./editGenerationTestUtils.ts";
 
 const catalog = createPuckGenerationCatalog({
   Heading: {
@@ -22,43 +29,20 @@ const baseline = {
     },
   ],
 };
-const proposal = {
-  text: "Created",
-  result: {
-    action: "create",
-    content: [{ type: "Heading", props: { text: "New" } }],
-  },
-};
-const completed = (value: any) =>
-  new Response(
-    JSON.stringify({
-      status: "completed",
-      output_text: JSON.stringify(value),
-      usage: { input_tokens: 20, output_tokens: 10 },
-    }),
-    { headers: { "Content-Type": "application/json" } }
-  );
+const proposal = creationResponse([
+  { type: "Heading", props: { text: "New" } },
+]);
 const harness = (
   body: object = {
     layoutId: "location",
     currentData: { content: [] },
     messages: [{ role: "user", content: "Create page" }],
   },
-  c = catalog
+  c = catalog,
+  locales = ["en"]
 ) => {
-  const request = Object.assign(new EventEmitter(), {
-    method: "POST",
-    headers: {},
-    body,
-  });
-  const response = Object.assign(new EventEmitter(), {
-    statusCode: 0,
-    destroyed: false,
-    setHeader: vi.fn(),
-    flushHeaders: vi.fn(),
-    write: vi.fn(),
-    end: vi.fn(),
-  });
+  const request = generationRequest(body);
+  const response = generationResponse();
   return {
     response,
     run: () =>
@@ -67,7 +51,7 @@ const harness = (
         response as unknown as ServerResponse,
         {
           model: "test",
-          loadContext: async () => ({ catalog: c, locales: ["en"] }),
+          loadContext: async () => ({ catalog: c, locales }),
           log: vi.fn(),
         }
       ),
@@ -80,6 +64,92 @@ afterEach(() => {
 });
 
 describe("strict request execution", () => {
+  it("asks preparation questions using a small schema before loading component contracts", async () => {
+    const c = createPuckGenerationCatalog({
+      Uncompilable: {
+        generation: { props: z.object({ unsupported: z.custom() }) },
+      },
+    });
+    const preparation = {
+      question: "Translate into Spanish?",
+      translationMode: null,
+      cardCounts: [],
+    };
+    const fetchMock = vi.fn(async () => completed(preparation));
+    vi.stubGlobal("fetch", fetchMock);
+    const h = harness(
+      {
+        mode: "prepare",
+        layoutId: "location",
+        currentData: { content: [] },
+        messages: [{ role: "user", content: "Create a page" }],
+      },
+      c,
+      ["en", "es"]
+    );
+    await h.run();
+    const body = JSON.parse((fetchMock.mock.calls[0] as any)[1].body);
+    expect(body.text.format.name).toBe("puck_generation_preparation");
+    expect(JSON.stringify(body.text.format.schema).length).toBeLessThan(6000);
+    expect(body.instructions.length).toBeLessThan(4000);
+    expect(h.events().at(-1)).toEqual({ type: "prepared", preparation });
+    expect(body.instructions).not.toContain(
+      "Component descriptions and defaults"
+    );
+  });
+
+  it("passes page-set locales and prior translation decisions to generation and pauses on a translation question", async () => {
+    const fetchMock = vi.fn(async () =>
+      completed(
+        clarificationResponse("Would you like French translations too?")
+      )
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    const messages = [{ role: "user", content: "Create a location page" }];
+    const h = harness(
+      { layoutId: "location", currentData: { content: [] }, messages },
+      catalog,
+      ["en", "fr"]
+    );
+    await h.run();
+    const body = JSON.parse((fetchMock.mock.calls[0] as any)[1].body);
+    expect(JSON.parse(body.input.at(-1).content).context.locales).toEqual([
+      "en",
+      "fr",
+    ]);
+    expect(h.events().at(-1)).toMatchObject({
+      type: "accepted",
+      text: "Would you like French translations too?",
+      spec: null,
+    });
+
+    const confirmed = harness(
+      {
+        layoutId: "location",
+        currentData: { content: [] },
+        messages: [
+          ...messages,
+          {
+            role: "assistant",
+            content: "Would you like French translations too?",
+          },
+          { role: "user", content: "Yes, translate to French" },
+        ],
+      },
+      catalog,
+      ["en", "fr"]
+    );
+    await confirmed.run();
+    const confirmedBody = JSON.parse((fetchMock.mock.calls[1] as any)[1].body);
+    expect(confirmedBody.input.slice(0, -1)).toEqual([
+      ...messages,
+      { role: "assistant", content: "Would you like French translations too?" },
+    ]);
+    expect(JSON.parse(confirmedBody.input.at(-1).content).request).toBe(
+      "Yes, translate to French"
+    );
+  });
+
   it("sends a gateway-enforced schema and accepts only a complete materialized candidate", async () => {
     const fetchMock = vi.fn(async () => completed(proposal));
     vi.stubGlobal("fetch", fetchMock);
@@ -133,10 +203,7 @@ describe("strict request execution", () => {
               ],
             };
       const fetchMock = vi.fn(async () =>
-        completed({
-          text: "Need details",
-          result: { action: "clarification", question: "Which content?" },
-        })
+        completed(clarificationResponse("Which content?"))
       );
       vi.stubGlobal("fetch", fetchMock);
       const h = harness({
@@ -152,46 +219,46 @@ describe("strict request execution", () => {
       );
       expect(h.events().at(-1)).toMatchObject({
         type: "accepted",
-        text: "Need details\n\nWhich content?",
+        text: "Which content?",
         spec: null,
       });
     }
   );
-  it.each([
-    "populated MainContent",
-    "nonblank",
-    "redesign",
-    "new conversation",
-  ])("rejects %s with 409 before the gateway", async (kind) => {
-    const fetchMock = vi.fn();
-    vi.stubGlobal("fetch", fetchMock);
-    const h = harness({
-      layoutId: "location",
-      currentData:
-        kind === "populated MainContent"
-          ? {
-              content: [
-                {
-                  type: "MainContent",
-                  props: { id: "main", content: baseline.content },
-                },
-              ],
-            }
-          : baseline,
-      messages: [
-        {
-          role: "user",
-          content:
-            kind === "redesign" ? "Redesign the entire page" : "Create a page",
-        },
-      ],
-    });
-    await h.run();
-    expect(h.response.statusCode).toBe(409);
-    expect(h.response.end.mock.calls[0][0]).toContain("blank page");
-    expect(fetchMock).not.toHaveBeenCalled();
-    expect(h.events()).toEqual([]);
-  });
+  it.each(["populated MainContent", "nonblank", "redesign"])(
+    "rejects %s with 409 before the gateway",
+    async (kind) => {
+      const fetchMock = vi.fn();
+      vi.stubGlobal("fetch", fetchMock);
+      const h = harness({
+        layoutId: "location",
+        currentData:
+          kind === "populated MainContent"
+            ? {
+                content: [
+                  {
+                    type: "MainContent",
+                    props: { id: "main", content: baseline.content },
+                  },
+                ],
+              }
+            : baseline,
+        messages: [
+          {
+            role: "user",
+            content:
+              kind === "redesign"
+                ? "Redesign the entire page"
+                : "Create a page",
+          },
+        ],
+      });
+      await h.run();
+      expect(h.response.statusCode).toBe(409);
+      expect(h.response.end.mock.calls[0][0]).toContain("blank page");
+      expect(fetchMock).not.toHaveBeenCalled();
+      expect(h.events()).toEqual([]);
+    }
+  );
   it("rejects invalid output after one call without publishing a candidate", async () => {
     const fetchMock = vi.fn(async () =>
       completed({

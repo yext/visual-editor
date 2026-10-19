@@ -5,17 +5,19 @@ import { createPuckGenerationCatalog } from "./puckGenerationCatalog.ts";
 import { compileGenerationSchema } from "./generationSchema.ts";
 import { isBlankGenerationPage } from "../../internal/generation/isBlankGenerationPage.ts";
 import { buildGenerationPrompt } from "./generationValidation.ts";
+import { slottedFixture } from "../../internal/generation/slottedGenerationTestUtils.ts";
 import {
   collectAuthoredIds,
   validateAuthored,
 } from "../../internal/generation/authored.ts";
 
+import {
+  creationResponse as create,
+  clarificationResponse,
+} from "./editGenerationTestUtils.ts";
+
 const defaults = { $default: true };
 const unset = { $unset: true };
-const create = (content: any[]) => ({
-  text: "Created",
-  result: { action: "create", content },
-});
 const catalog = () =>
   createPuckGenerationCatalog({
     Heading: {
@@ -84,6 +86,170 @@ const section = (child: any = heading()) => ({
 });
 
 describe("fresh page creation schema", () => {
+  it("enforces prepared card counts after materialization and default selection", () => {
+    const fixture = slottedFixture();
+    const preparation = {
+      question: null,
+      translationMode: "translate" as const,
+      cardCounts: [{ componentType: "Section", instanceIndex: null, count: 3 }],
+    };
+    const compiled = compileGenerationSchema(
+      fixture.catalog,
+      ["en", "fr"],
+      undefined,
+      preparation
+    );
+    const wire = z.fromJSONSchema(compiled.jsonSchema);
+    const output = create(
+      [
+        fixture.section([
+          fixture.card("One"),
+          fixture.card("Two"),
+          fixture.card("Three"),
+        ]),
+      ],
+      "translate"
+    );
+    expect(wire.safeParse(output).success).toBe(true);
+    const spec = compiled.materialize(output).spec!;
+    expect(spec.content[0].props.slots.CardSlot).toHaveLength(3);
+    expect(spec.content[0].props.data.constantValue).toHaveLength(3);
+    expect(
+      spec.content[0].props.slots.CardSlot[2].props.data.question.defaultValue
+    ).toBe("Three");
+    const empty = create([fixture.section([])], "translate");
+    expect(wire.safeParse(empty).success).toBe(true);
+    expect(() => compiled.materialize(empty)).toThrow();
+    const two = compileGenerationSchema(
+      fixture.catalog,
+      ["en", "fr"],
+      undefined,
+      {
+        ...preparation,
+        cardCounts: [
+          { componentType: "Section", instanceIndex: null, count: 2 },
+        ],
+      }
+    );
+    expect(() =>
+      two.materialize(create([fixture.section()], "translate"))
+    ).toThrow("expected 2 manual CardSlot children");
+  });
+
+  it.each([false, true])(
+    "allows different counts per instance alongside a linked collection (general count %s)",
+    (general) => {
+      const fixture = slottedFixture();
+      const cardCounts = [
+        {
+          componentType: "Section",
+          instanceIndex: general ? null : 1,
+          count: 3,
+        },
+        { componentType: "Section", instanceIndex: 2, count: 5 },
+      ];
+      const compiled = compileGenerationSchema(
+        fixture.catalog,
+        ["en", "fr"],
+        undefined,
+        { question: null, translationMode: "translate", cardCounts }
+      );
+      const manual = (count: number) =>
+        fixture.section(
+          Array.from({ length: count }, (_, index) =>
+            fixture.card(`Card ${index}`)
+          )
+        );
+      const main = {
+        type: "MainContent",
+        props: { content: [manual(3), manual(5)] },
+      };
+      const content = [fixture.section([], fixture.linked), main];
+      const output = create(content, "translate");
+      expect(
+        z.fromJSONSchema(compiled.jsonSchema).safeParse(output).success
+      ).toBe(true);
+      const spec = compiled.materialize(output).spec!;
+      expect(spec.content[0].props.data.field).toBe("c_items");
+      expect(spec.content[0].props.slots.CardSlot).toHaveLength(0);
+      expect(
+        spec.content[1].props.content.map(
+          (item: any) => item.props.slots.CardSlot.length
+        )
+      ).toEqual([3, 5]);
+      // A repair can reuse the compiler without retaining occurrence counters.
+      expect(() => compiled.materialize(output)).not.toThrow();
+      main.props.content = [manual(3), manual(3)];
+      expect(() => compiled.materialize(create(content, "translate"))).toThrow(
+        "Section instance 2: expected 5 manual CardSlot children"
+      );
+      main.props.content = [manual(3)];
+      expect(() => compiled.materialize(create(content, "translate"))).toThrow(
+        "omitted a prepared manual card collection"
+      );
+    }
+  );
+
+  it.each([0, null])(
+    "does not satisfy a manual count with a linked instance (index %s)",
+    (instanceIndex) => {
+      const fixture = slottedFixture();
+      const compiled = compileGenerationSchema(
+        fixture.catalog,
+        ["en", "fr"],
+        undefined,
+        {
+          question: null,
+          translationMode: "translate",
+          cardCounts: [{ componentType: "Section", instanceIndex, count: 0 }],
+        }
+      );
+      expect(() =>
+        compiled.materialize(
+          create([fixture.section([], fixture.linked)], "translate")
+        )
+      ).toThrow(
+        instanceIndex === null
+          ? "omitted a prepared manual card collection"
+          : "expected 0 manual CardSlot children"
+      );
+      if (instanceIndex === null) {
+        expect(() =>
+          compiled.materialize(
+            create(
+              [fixture.section([], fixture.linked), fixture.section([])],
+              "translate"
+            )
+          )
+        ).not.toThrow();
+      }
+    }
+  );
+
+  it("rejects manual card content authored in inactive entity mappings", () => {
+    const fixture = slottedFixture();
+    const compiled = compileGenerationSchema(fixture.catalog, ["en", "fr"]);
+    const output = create(
+      [
+        fixture.section([], {
+          field: "",
+          constantValueEnabled: true,
+          mappings: {
+            question: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: "Wrong place",
+            },
+          },
+        }),
+      ],
+      "translate"
+    );
+    expect(() => compiled.materialize(output)).toThrow(
+      "Manual card content belongs in slots.CardSlot"
+    );
+  });
+
   it("adds reachable generation defaults to the prompt without requiring them", () => {
     const components = catalog().data.components;
     const c = createPuckGenerationCatalog(
@@ -394,62 +560,127 @@ describe("fresh page creation schema", () => {
     }
   });
 
-  it("supports localized values, arrays with optional members, and nested slots", () => {
-    const c = createPuckGenerationCatalog({
-      Child: {
-        generation: { props: z.object({ text: z.string() }) },
-        defaultProps: { text: "Child" },
-        nestedOnly: true,
-      },
-      List: {
-        generation: {
-          props: z.object({
-            text: z.object({ defaultValue: z.string() }).catchall(z.string()),
-            rows: z
-              .array(
-                z.object({
-                  label: z.string().optional(),
-                  children: z.array(z.unknown()),
-                })
-              )
-              .max(2),
-          }),
-        },
-        fields: {
-          rows: {
-            type: "array",
-            arrayFields: { children: { type: "slot", allow: ["Child"] } },
+  it.each(["fixed", "catchall"] as const)(
+    "normalizes inherited and authored locale values with a %s schema",
+    (kind) => {
+      const fixed = z.object({
+        defaultValue: z.string(),
+        fr: z.string().optional(),
+        de: z.string().optional(),
+        hasLocalizedValue: z.literal("true").optional(),
+      });
+      const c = createPuckGenerationCatalog({
+        Heading: {
+          generation: {
+            props: z.object({
+              text: kind === "fixed" ? fixed : fixed.catchall(z.string()),
+            }),
+          },
+          defaultProps: {
+            text: {
+              defaultValue: "Hello",
+              fr: "Bonjour",
+              de: "Hallo",
+              hasLocalizedValue: "true",
+            },
           },
         },
-        defaultProps: { text: { defaultValue: "Hello", es: "Hola" }, rows: [] },
-      },
-    });
-    const compiled = compileGenerationSchema(c, ["en", "es"]);
-    const result = compiled.materialize(
-      create([
-        {
-          type: "List",
-          props: {
-            text: { defaultValue: defaults, en: unset, es: "Nuevo" },
-            rows: [
-              {
-                label: unset,
-                children: [{ type: "Child", props: { text: defaults } }],
+      });
+      const compiled = compileGenerationSchema(c, ["en", "fr"]);
+      for (const translationMode of ["defaultOnly", "translate"] as const) {
+        for (const text of [
+          defaults,
+          {
+            defaultValue: "Updated",
+            fr: "Nouveau",
+            de: "Neu",
+            hasLocalizedValue: defaults,
+            ...(kind === "catchall" ? { en: unset } : {}),
+          },
+        ]) {
+          const result = compiled.materialize(
+            create([{ type: "Heading", props: { text } }], translationMode)
+          ).spec!;
+          const inherited = text === defaults;
+          expect(result.content[0].props.text).toEqual({
+            defaultValue: inherited ? "Hello" : "Updated",
+            hasLocalizedValue: "true",
+            ...(translationMode === "translate"
+              ? { fr: inherited ? "Bonjour" : "Nouveau" }
+              : {}),
+          });
+        }
+      }
+    }
+  );
+
+  it.each(["defaultOnly", "translate"] as const)(
+    "materializes localized text in %s mode with nested slots",
+    (translationMode) => {
+      const c = createPuckGenerationCatalog({
+        Child: {
+          generation: { props: z.object({ text: z.string() }) },
+          defaultProps: { text: "Child" },
+          nestedOnly: true,
+        },
+        List: {
+          generation: {
+            props: z.object({
+              text: z.object({ defaultValue: z.string() }).catchall(z.string()),
+              rows: z
+                .array(
+                  z.object({
+                    label: z.string().optional(),
+                    children: z.array(z.unknown()),
+                  })
+                )
+                .max(2),
+            }),
+          },
+          fields: {
+            rows: {
+              type: "array",
+              arrayFields: { children: { type: "slot", allow: ["Child"] } },
+            },
+          },
+          defaultProps: {
+            text: { defaultValue: "Hello", es: "Hola" },
+            rows: [],
+          },
+        },
+      });
+      const compiled = compileGenerationSchema(c, ["en", "es"]);
+      const result = compiled.materialize(
+        create(
+          [
+            {
+              type: "List",
+              props: {
+                text: { defaultValue: defaults, en: unset, es: "Nuevo" },
+                rows: [
+                  {
+                    label: unset,
+                    children: [{ type: "Child", props: { text: defaults } }],
+                  },
+                ],
               },
-            ],
-          },
-        },
-      ])
-    ).spec!;
-    expect(result.content[0].props.text).toEqual({
-      defaultValue: "Hello",
-      es: "Nuevo",
-    });
-    expect(result.content[0].props.rows[0].children[0].props.text).toBe(
-      "Child"
-    );
-    expect(Object.hasOwn(result.content[0].props.rows[0], "label")).toBe(false);
-  });
+            },
+          ],
+          translationMode
+        )
+      ).spec!;
+      expect(result.content[0].props.text).toEqual({
+        defaultValue: "Hello",
+        ...(translationMode === "translate" ? { es: "Nuevo" } : {}),
+      });
+      expect(result.content[0].props.rows[0].children[0].props.text).toBe(
+        "Child"
+      );
+      expect(Object.hasOwn(result.content[0].props.rows[0], "label")).toBe(
+        false
+      );
+    }
+  );
 
   it("rejects incomplete output, model Ids, invalid values, unavailable defaults and removed outcomes", () => {
     const c = createPuckGenerationCatalog({
@@ -485,15 +716,17 @@ describe("fresh page creation schema", () => {
       "redesign",
     ])
       expect(() =>
-        compiled.materialize({ text: "", result: { action, content: [] } })
+        compiled.materialize({ ...create([]), result: { action, content: [] } })
       ).toThrow();
+    const { translationMode: _translationMode, ...missingMode } = create([
+      { type: "Required", props: { title: "Valid" } },
+    ]);
+    expect(() => compiled.materialize(missingMode)).toThrow("translationMode");
     expect(() => compiled.materialize(create([]))).toThrow();
-    expect(
-      compiled.materialize({
-        text: "Need details",
-        result: { action: "clarification", question: "Which page?" },
-      })
-    ).toEqual({ text: "Need details\n\nWhich page?", spec: null });
+    expect(compiled.materialize(clarificationResponse("Which page?"))).toEqual({
+      text: "Which page?",
+      spec: null,
+    });
   });
 
   it("reduces a large catalog against the previous override schema baseline", () => {

@@ -70,7 +70,6 @@ describe("planning and section execution requests", () => {
     expect(h.log).toHaveBeenCalledWith(
       "[local-editor generation] Planning response",
       expect.objectContaining({
-        attempt: 1,
         outputText: JSON.stringify(editPlan([editTask("first", ["first-b"])])),
       })
     );
@@ -326,11 +325,13 @@ describe("planning and section execution requests", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("marks transport failures as non-repairable", async () => {
+  it("marks transport failures as non-repairable and logs the original cause chain", async () => {
+    const socketError = new Error("Socket reset at the original failure site");
+    const upstreamError = new Error("Disconnected", { cause: socketError });
     vi.stubGlobal(
       "fetch",
       vi.fn(async () => {
-        throw new Error("Disconnected");
+        throw upstreamError;
       })
     );
     const h = harness();
@@ -341,6 +342,11 @@ describe("planning and section execution requests", () => {
       error: "Disconnected",
       transport: true,
     });
+    const failure = h.log.mock.calls.find(
+      ([message]) => message === "[local-editor generation] Generation failed"
+    )![1];
+    expect(failure.stack).toContain(upstreamError.stack);
+    expect(failure.stack).toContain(socketError.stack);
   });
 
   it.each([

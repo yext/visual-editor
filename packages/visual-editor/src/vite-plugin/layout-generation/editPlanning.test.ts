@@ -1,6 +1,8 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
+import { z } from "zod";
 import { clone } from "../../internal/generation/authored.ts";
+import { slottedFixture } from "../../internal/generation/slottedGenerationTestUtils.ts";
 import type { SectionEditTask } from "../../internal/generation/editProtocol.ts";
 import {
   compileEditPlanningSchema,
@@ -14,6 +16,79 @@ import {
 } from "./editGenerationTestUtils.ts";
 
 describe("follow-up planning", () => {
+  it("pauses a translated text edit before application and retains the approved translation mode", () => {
+    const fixture = editGenerationFixture();
+    const before = clone(fixture.data);
+    const compiled = compileEditPlanningSchema(
+      fixture.catalog,
+      ["en", "fr"],
+      fixture.data
+    );
+    const question = {
+      ...editPlan([]),
+      intent: "clarification",
+      text: "The heading has a French translation.",
+      clarification:
+        "Would you like the new heading translated into French, or should I leave the French text unchanged?",
+    };
+    expect(compiled.parseResponse(JSON.stringify(question)).tasks).toEqual([]);
+    expect(fixture.data).toEqual(before);
+    const approved = editPlan([
+      { ...editTask(), translationMode: "translate" },
+    ]);
+    expect(
+      compiled.parseResponse(JSON.stringify(approved)).tasks[0].translationMode
+    ).toBe("translate");
+  });
+
+  it("retains batch limitations separately from planner prose", () => {
+    const fixture = editGenerationFixture();
+    const compiled = compileEditPlanningSchema(
+      fixture.catalog,
+      ["en", "fr"],
+      fixture.data
+    );
+    const output = {
+      ...editPlan(),
+      limitations: "The card grid cannot be changed.",
+    };
+    expect(
+      z.fromJSONSchema(compiled.jsonSchema).safeParse(output).success
+    ).toBe(true);
+    expect(compiled.parseResponse(JSON.stringify(output)).limitations).toBe(
+      output.limitations
+    );
+    const { limitations: _limitations, ...incomplete } = output;
+    expect(() => compiled.parseResponse(JSON.stringify(incomplete))).toThrow(
+      "limitations"
+    );
+  });
+
+  it("requires the same task fields in model output and response parsing", () => {
+    const fixture = editGenerationFixture();
+    const compiled = compileEditPlanningSchema(
+      fixture.catalog,
+      ["en", "fr"],
+      fixture.data
+    );
+    const response = editPlan();
+    const wire = z.fromJSONSchema(compiled.jsonSchema);
+    expect(wire.safeParse(response).success).toBe(true);
+    for (const field of [
+      "translationMode",
+      "description",
+      "generateContent",
+    ] as const) {
+      const task: Record<string, unknown> = { ...response.tasks[0] };
+      delete task[field];
+      const incomplete = { ...response, tasks: [task] };
+      expect(wire.safeParse(incomplete).success).toBe(false);
+      expect(() => compiled.parseResponse(JSON.stringify(incomplete))).toThrow(
+        field
+      );
+    }
+  });
+
   it("supplies distinct repeated targets, ancestry, selection and insertion capabilities", () => {
     const fixture = editGenerationFixture();
     const compiled = compileEditPlanningSchema(
@@ -40,6 +115,10 @@ describe("follow-up planning", () => {
       path: "/text/defaultValue",
       set: true,
       unset: false,
+    });
+    expect(compiled.context.localizedText["first-a"]).toContainEqual({
+      path: "/text",
+      overrideLocales: ["fr"],
     });
     const context = JSON.stringify(compiled.context);
     expect(context).not.toContain("editorMetadata");
@@ -107,9 +186,14 @@ describe("follow-up planning", () => {
     expect(compiled.parseResponse(JSON.stringify(response)).tasks).toHaveLength(
       1
     );
-    expect(() =>
+    expect(
       compiled.parseResponse(
         JSON.stringify({ ...response, globalStyleGuidance: null })
+      )
+    ).toEqual({ ...response, intent: "content", globalStyleGuidance: null });
+    expect(() =>
+      compiled.parseResponse(
+        JSON.stringify({ ...response, globalStyleGuidance: " " })
       )
     ).toThrow("Styling requests require");
     expect(() =>
@@ -117,6 +201,75 @@ describe("follow-up planning", () => {
         JSON.stringify({ ...response, clarification: "Question?" })
       )
     ).toThrow("Clarification must match");
+  });
+
+  it.each([false, true])(
+    "offers FAQ insertions in the model schema only for manual lists (linked %s)",
+    (linked) => {
+      const fixture = slottedFixture();
+      const data = linked
+        ? fixture.materialize([fixture.section([], fixture.linked)])
+        : fixture.materialize();
+      const sectionId = data.content[0].props.id;
+      const compiled = compileEditPlanningSchema(
+        fixture.catalog,
+        ["en", "fr"],
+        data
+      );
+      const wire = z.fromJSONSchema(compiled.jsonSchema);
+      const response = editPlan([
+        editTask(
+          sectionId,
+          [sectionId],
+          [
+            {
+              kind: "insert",
+              insertionKey: "new-faq",
+              componentType: "FAQCard",
+              collection: { ownerId: sectionId, slotPath: "/slots/CardSlot" },
+              anchor: { position: "end" },
+            },
+          ]
+        ),
+      ]);
+      response.tasks[0].translationMode = "defaultOnly";
+      expect(wire.safeParse(response).success).toBe(!linked);
+      if (linked) {
+        expect(() => compiled.parseResponse(JSON.stringify(response))).toThrow(
+          "Insertion violates component or slot permissions"
+        );
+      } else {
+        expect(
+          compiled.parseResponse(JSON.stringify(response)).tasks
+        ).toHaveLength(1);
+      }
+      response.tasks[0].structuralOperations[0] = {
+        kind: "insert",
+        insertionKey: "wrong-card-type",
+        componentType: "Section",
+        collection: { ownerId: sectionId, slotPath: "/slots/CardSlot" },
+        anchor: { position: "end" },
+      };
+      expect(wire.safeParse(response).success).toBe(false);
+    }
+  );
+
+  it("retains a batch of local edits when mixed was used without theme guidance", () => {
+    const fixture = editGenerationFixture();
+    const before = clone(fixture.data);
+    const compiled = compileEditPlanningSchema(
+      fixture.catalog,
+      ["en", "fr"],
+      fixture.data
+    );
+    const response = {
+      ...editPlan([editTask(), editTask("second", ["second-a"])]),
+      intent: "mixed",
+      text: "Update both sections. Linked FAQ items cannot be added here.",
+    };
+    const result = compiled.parseResponse(JSON.stringify(response));
+    expect(result).toEqual({ ...response, intent: "content" });
+    expect(fixture.data).toEqual(before);
   });
 
   it.each(["missing", "main", "opaque"])(
@@ -344,6 +497,25 @@ describe("follow-up planning", () => {
     expect(() => compiled.parseResponse(JSON.stringify(editPlan()))).toThrow(
       "no writable authored paths"
     );
+    expect(compiled.context.localizedText["first-a"]).toBeUndefined();
+    expect(compiled.context.localizedText["first-b"]).toContainEqual({
+      path: "/text",
+      overrideLocales: ["fr"],
+    });
+    expect(
+      compiled.parseResponse(
+        JSON.stringify(editPlan([editTask("first", ["first-b"])]))
+      ).tasks
+    ).toHaveLength(1);
+    // A later compilation must observe new permissions rather than a cached contract.
+    fixture.data.content[1].props.content[0].props.cards[0].readOnly = {};
+    expect(
+      compileEditPlanningSchema(
+        fixture.catalog,
+        ["en", "fr"],
+        fixture.data
+      ).parseResponse(JSON.stringify(editPlan())).tasks
+    ).toHaveLength(1);
   });
 
   it("supports clarification on an empty canvas without inventing a selected target", () => {

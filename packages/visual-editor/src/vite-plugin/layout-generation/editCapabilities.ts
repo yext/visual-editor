@@ -36,7 +36,16 @@ export const getEditValueContracts = (
     }
     compiler.checks(schema, path);
     const node = unwrap(schema);
-    if (node instanceof z.ZodUnion) {
+    // Object union branches can correlate siblings (for example, a custom
+    // color requires a contrast and darkness flag). Expose the complete value
+    // so the wire schema enforces those constraints before materialization.
+    const objectUnion =
+      node instanceof z.ZodUnion &&
+      node.options.every(
+        (option) => unwrap(option as z.ZodType) instanceof z.ZodObject
+      ) &&
+      !hasSlots(field);
+    if (node instanceof z.ZodUnion && !objectUnion) {
       for (const option of node.options) {
         visit(option as z.ZodType, field, path);
       }
@@ -55,7 +64,7 @@ export const getEditValueContracts = (
     const unset = !hasSlots(field) && schema.safeParse(undefined).success;
     let set: EditValueContract["set"];
     if (
-      !(node instanceof z.ZodUnion) &&
+      (objectUnion || !(node instanceof z.ZodUnion)) &&
       !(node instanceof z.ZodObject) &&
       !hasSlots(field)
     ) {

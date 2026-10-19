@@ -3,6 +3,7 @@ import type { LayoutGenerationRequest } from "../../internal/generation/editProt
 import {
   sectionEditPlanSchema,
   sectionEditResultSchema,
+  generationPreparationSchema,
 } from "../../internal/generation/editProtocolSchema.ts";
 import type { GenerationTokenUsage } from "../types.ts";
 
@@ -25,6 +26,10 @@ const acceptedSchema = z.strictObject({
   type: z.literal("accepted"),
   text: z.string(),
   spec: z.strictObject({ content: z.array(z.any()) }).nullable(),
+});
+const preparedSchema = z.strictObject({
+  type: z.literal("prepared"),
+  preparation: generationPreparationSchema,
 });
 const planSchema = z.strictObject({
   type: z.literal("planned"),
@@ -91,6 +96,7 @@ export const requestChatGeneration = async (
     throw new ChatGenerationError("No response body", false, true);
   }
   let accepted:
+    | z.infer<typeof preparedSchema>
     | z.infer<typeof acceptedSchema>
     | z.infer<typeof planSchema>
     | z.infer<typeof resultSchema>
@@ -141,11 +147,13 @@ export const requestChatGeneration = async (
         );
       }
       const expectedType =
-        request.mode === "create"
-          ? "accepted"
-          : request.mode === "plan"
-            ? "planned"
-            : "section-result";
+        request.mode === "prepare"
+          ? "prepared"
+          : request.mode === "create"
+            ? "accepted"
+            : request.mode === "plan"
+              ? "planned"
+              : "section-result";
       if (event.type !== expectedType) {
         throw new ChatGenerationError(
           "Unexpected generation event",
@@ -155,11 +163,13 @@ export const requestChatGeneration = async (
       }
       try {
         accepted =
-          request.mode === "create"
-            ? acceptedSchema.parse(event)
-            : request.mode === "plan"
-              ? planSchema.parse(event)
-              : resultSchema.parse(event);
+          request.mode === "prepare"
+            ? preparedSchema.parse(event)
+            : request.mode === "create"
+              ? acceptedSchema.parse(event)
+              : request.mode === "plan"
+                ? planSchema.parse(event)
+                : resultSchema.parse(event);
       } catch (cause) {
         failure = new ChatGenerationError(
           "Invalid generation result",

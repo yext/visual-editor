@@ -1,3 +1,7 @@
+import {
+  translationModeGuidance,
+  newTextGuidance,
+} from "./translationPolicy.ts";
 import type { Fields } from "@puckeditor/core";
 import { z } from "zod";
 import {
@@ -8,6 +12,12 @@ import {
   type SavedComponent,
 } from "../../internal/generation/authored.ts";
 import { unwrapZodSchema as unwrap } from "../../internal/utils/unwrapZodSchema.ts";
+import { isDeepEqual } from "../../utils/deepEqual.ts";
+import {
+  normalizeGeneratedText,
+  localizedTextState,
+  validateLocalizedTextEdits,
+} from "./localizedText.ts";
 import {
   generationFields,
   prepareSlottedSource,
@@ -41,7 +51,21 @@ export const compileSectionEditSchema = (
     data,
     taskInput
   );
-  const compiler = createGenerationSchemaCompiler(catalog, locales, "insert");
+  // Older saved locales remain available for preservation, not for translation.
+  const savedLocales = task.targetComponentIds
+    .map((id) => saved.get(id)!)
+    .flatMap((component) =>
+      localizedTextState(
+        component.props,
+        catalog.data.components[component.type],
+        locales
+      ).flatMap((state) => state.overrideLocales)
+    );
+  const compiler = createGenerationSchemaCompiler(
+    catalog,
+    [...new Set([...locales, ...savedLocales])],
+    "insert"
+  );
   const updateDecoders = new Map<
     string,
     Map<string, (input: any) => AuthoredValueEdit>
@@ -60,11 +84,12 @@ export const compileSectionEditSchema = (
       const component = saved.get(componentId)!;
       const changes: z.ZodType[] = [];
       const decoders = new Map<string, (input: any) => AuthoredValueEdit>();
-      for (const contract of getEditValueContracts(
+      const contracts = getEditValueContracts(
         compiler,
         catalog.data.components[component.type],
         component.readOnly
-      )) {
+      );
+      for (const contract of contracts) {
         if (contract.set) {
           const node = contract.set;
           changes.push(
@@ -136,10 +161,16 @@ export const compileSectionEditSchema = (
       schema: z.ZodType,
       field: Fields[string] | undefined,
       path: string,
-      collectUnset = true
+      collectUnset = true,
+      baseline?: any
     ): any => {
       if (value === undefined) {
-        if (collectUnset && path && schema.safeParse(undefined).success) {
+        if (!schema.safeParse(undefined).success) {
+          throw new Error(
+            `New component value at ${path} is required after normalization.`
+          );
+        }
+        if (collectUnset && path) {
           unsetPaths.push(path);
         }
         return undefined;
@@ -166,7 +197,14 @@ export const compileSectionEditSchema = (
             "No authored union alternative matches the new value."
           );
         }
-        return project(value, option as z.ZodType, field, path, collectUnset);
+        return project(
+          value,
+          option as z.ZodType,
+          field,
+          path,
+          collectUnset,
+          baseline
+        );
       }
       if (node instanceof z.ZodObject) {
         const shape = compiler.shapeFor(node, path);
@@ -174,8 +212,15 @@ export const compileSectionEditSchema = (
           node.def.catchall &&
           (node.def.catchall as z.ZodType).def.type !== "never"
         ) {
-          for (const key of Object.keys(value)) {
-            shape[key] ??= node.def.catchall as z.ZodType;
+          // Materialization patches a fresh clone of library defaults. Carry
+          // removals of dynamic keys too, including locales stripped above.
+          const baselineKeys =
+            baseline && typeof baseline === "object" && !Array.isArray(baseline)
+              ? Object.keys(baseline)
+              : [];
+          for (const key of new Set([...Object.keys(value), ...baselineKeys])) {
+            // Catchall keys are optional even when their values are required.
+            shape[key] ??= (node.def.catchall as z.ZodType).optional();
           }
         }
         const result: Record<string, unknown> = {};
@@ -185,7 +230,8 @@ export const compileSectionEditSchema = (
             child,
             field?.type === "object" ? field.objectFields[key] : undefined,
             `${path}/${key.replaceAll("~", "~0").replaceAll("/", "~1")}`,
-            collectUnset
+            collectUnset,
+            baseline?.[key]
           );
           if (next !== undefined) {
             result[key] = next;
@@ -214,7 +260,9 @@ export const compileSectionEditSchema = (
         projected.props,
         config.generation.props,
         { type: "object", objectFields: generationFields(config) },
-        ""
+        "",
+        true,
+        config.defaultProps
       ),
       slots,
       unsetPaths,
@@ -229,14 +277,19 @@ export const compileSectionEditSchema = (
           throw new Error("A section result may update each target only once.");
         }
         seenTargets.add(update.componentId);
-        return {
-          ...update,
-          changes: update.changes.map((change: any) =>
-            updateDecoders
-              .get(update.componentId)!
-              .get(`${change.kind}:${change.path}`)!(change)
-          ),
-        };
+        const decoders = updateDecoders.get(update.componentId)!;
+        const changes: AuthoredValueEdit[] = update.changes.map((change: any) =>
+          decoders.get(`${change.kind}:${change.path}`)!(change)
+        );
+        const component = saved.get(update.componentId)!;
+        validateLocalizedTextEdits(
+          component,
+          catalog.data.components[component.type],
+          changes,
+          locales,
+          task.translationMode === "translate"
+        );
+        return { ...update, changes };
       }
     );
     const generated = new Map<string, NewEditComponent>();
@@ -260,6 +313,13 @@ export const compileSectionEditSchema = (
           component,
           childConfig,
           compiler.explicitCardLists.has(component)
+        );
+        component.props = normalizeGeneratedText(
+          component.props,
+          childConfig.generation.props,
+          { type: "object", objectFields: generationFields(childConfig) },
+          task.translationMode === "translate",
+          locales
         );
       });
       const projected = extractAuthored(
@@ -289,7 +349,25 @@ export const compileSectionEditSchema = (
       sectionId: task.sectionId,
       operations,
     };
-    materializeSectionEdit(catalog, data, task, result);
+    const materialized = materializeSectionEdit(catalog, data, task, result);
+    // Check the actual application result, not just the normalized intermediate.
+    // A projection omission must never silently restore localized defaults.
+    walkAuthored(catalog, materialized, ({ component }) => {
+      if (saved.has(component.props.id)) return;
+      const config = catalog.data.components[component.type];
+      const normalized = normalizeGeneratedText(
+        component.props,
+        config.generation!.props,
+        { type: "object", objectFields: generationFields(config) },
+        task.translationMode === "translate",
+        locales
+      );
+      if (!isDeepEqual(normalized, component.props)) {
+        throw new Error(
+          `${component.type}: materialization restored localized defaults removed during generation.`
+        );
+      }
+    });
     return result;
   };
   const localResult =
@@ -315,6 +393,7 @@ export const compileSectionEditSchema = (
       ]),
     ],
     context: {
+      locales,
       task,
       sharedIntent,
       section: inventory.components.filter((item) =>
@@ -334,7 +413,9 @@ export const buildSectionEditPrompt = () =>
   [
     "Execute exactly one validated section task against the supplied current authored values and section context. Return only the strict response schema.",
     "Only emit updates for the requested targets and explicitly requested fields. Omitted paths are preserved. Use kind unset to remove an optional field; null is a real value only where allowed. Do not emit default or unset markers as the value of a top-level set operation.",
-    "The sharedIntent coordinates copy across sections; it does not widen this task's scope. Preserve entity bindings and untranslated locale values unless the user explicitly requests changing them. Prefer [[name]] for business identity unless the user supplies a name or requests fiction.",
+    translationModeGuidance,
+    newTextGuidance,
+    "The sharedIntent coordinates copy across sections; it does not widen this task's scope. Preserve entity bindings. Prefer [[name]] for business identity unless the user supplies a name or requests fiction. Whole-array replacements must preserve complete saved override bundles, including duplicates; reordering is allowed.",
     "Ordinary arrays are supplied in full, with no inheritance from existing rows or cards by index or type. Use the offered markers only within new component props or optional members of replacement arrays.",
     'Generate every planned insertion once. New component props may select library defaults with {"$default":true} or remove optional defaults with {"$unset":true}. Never generate component Ids. Native child slots contain new component descriptions, never references to existing components.',
     "Structural removal and reordering are supplied by the application from the plan. Do not emit them, invent other insertions, move cards between sections, replace whole sections, change root settings or touch opaque components.",

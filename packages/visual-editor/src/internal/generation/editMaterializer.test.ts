@@ -618,6 +618,68 @@ describe("deterministic section edits", () => {
     ).toThrow("editable section");
   });
 
+  it.each(["a/b", "a~b"])(
+    "protects escaped read-only slots named %s during structural edits",
+    (field) => {
+      const slotPath = `/${field.replaceAll("~", "~0").replaceAll("/", "~1")}`;
+      const c = createPuckGenerationCatalog({
+        Section: {
+          generation: { props: z.object({ [field]: z.array(z.unknown()) }) },
+          fields: { [field]: { type: "slot", allow: ["Card"] } },
+        },
+        Card: { generation: { props: z.object({ text: z.string() }) } },
+      });
+      const baseline = {
+        content: [
+          {
+            type: "Section",
+            readOnly: { [field]: true },
+            props: {
+              id: "section",
+              [field]: [{ type: "Card", props: { id: "card", text: "Keep" } }],
+            },
+          },
+        ],
+      };
+      const before = clone(baseline);
+      const insert: PlannedStructureEdit = {
+        kind: "insert",
+        insertionKey: "new",
+        componentType: "Card",
+        collection: { ownerId: "section", slotPath },
+        anchor: { position: "end" },
+      };
+      const { componentType: _componentType, ...insertion } = insert;
+      const operations: Exclude<SectionEditOperation, { kind: "update" }>[] = [
+        { kind: "remove", componentId: "card" },
+        { kind: "reorder", componentId: "card", anchor: { position: "end" } },
+        {
+          ...insertion,
+          component: {
+            type: "Card",
+            authoredValues: { text: "New" },
+            slots: [],
+          },
+        },
+      ];
+      for (const operation of operations) {
+        const editTask = task(
+          operation.kind === "insert" ? [] : ["card"],
+          [operation.kind === "insert" ? insert : operation],
+          "section"
+        );
+        expect(() =>
+          materializeSectionEdit(c, baseline, editTask, {
+            taskId: editTask.taskId,
+            sectionId: editTask.sectionId,
+            operations: [operation],
+          })
+        ).toThrow("read-only slot");
+        expect(baseline).toEqual(before);
+      }
+    }
+  );
+
   it("rejects populated zones and mismatched task identities", () => {
     const data = page();
     Object.assign(data.zones, { legacy: [card("legacy")] });

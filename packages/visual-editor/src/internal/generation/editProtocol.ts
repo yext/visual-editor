@@ -22,8 +22,13 @@ type RequestContext = {
 export type LayoutGenerationRequest = RequestContext &
   (
     | {
+        /** Resolve translation choices and card counts without compiling page schemas. */
+        mode: "prepare";
+      }
+    | {
         /** Generate a fresh page. */
         mode: "create";
+        preparation?: GenerationPreparation;
       }
     | {
         /** Plan edits to an existing page. */
@@ -40,6 +45,20 @@ export type LayoutGenerationRequest = RequestContext &
         sharedIntent: string;
       }
   );
+
+export type GenerationPreparation = {
+  question: string | null;
+  translationMode: "defaultOnly" | "translate" | null;
+  cardCounts: {
+    componentType: string;
+    /**
+     * Zero-based occurrence of this type in depth-first page order, including
+     * linked instances; null means every manual instance.
+     */
+    instanceIndex: number | null;
+    count: number;
+  }[];
+};
 
 /** Relative anchors always refer to an existing sibling in the same collection. */
 export type EditAnchor =
@@ -97,6 +116,8 @@ export type SectionEditTask = {
   instructions: string;
   /** A short, plain-language description shown in chat. */
   description?: string;
+  /** Locale overrides may be authored only after translations were requested or approved. */
+  translationMode?: "defaultOnly" | "translate";
   /** Planned insertions, removals, and reorders. */
   structuralOperations: PlannedStructureEdit[];
   /** Task Ids that must commit successfully before this task runs. */
@@ -115,6 +136,8 @@ export type SectionEditPlan = {
   clarification: string | null;
   /** Guidance for changes requiring the global style editor, or null. */
   globalStyleGuidance: string | null;
+  /** Unsupported parts of a batch, kept alongside actual section outcomes. */
+  limitations: string | null;
   /** Shared guidance for coordinating changes across sections. */
   sharedIntent: string;
   /** Section tasks to execute after plan validation. */

@@ -12,6 +12,29 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { LocalEditorChatCanvas } from "./LocalEditorChatCanvas.ts";
 import { ChatHarness, chatConfig, generatedContent } from "./chatTestUtils.tsx";
 
+// These tests exercise rendering and Puck application. The actual preparation
+// exchange is covered separately in useLocalEditorChat and endpoint tests.
+vi.mock("./chatGenerationRequest.ts", async (importOriginal) => {
+  const original =
+    await importOriginal<typeof import("./chatGenerationRequest.ts")>();
+  return {
+    ...original,
+    requestChatGeneration: (
+      ...args: Parameters<typeof original.requestChatGeneration>
+    ) =>
+      args[1].mode === "prepare"
+        ? Promise.resolve({
+            type: "prepared",
+            preparation: {
+              question: null,
+              translationMode: "defaultOnly",
+              cardCounts: [],
+            },
+          })
+        : original.requestChatGeneration(...args),
+  };
+});
+
 const wire = (event: any) => JSON.stringify(event) + "\n";
 const headers = { "X-Visual-Editor-Generation": "strict-puck-overrides-v2" };
 const submit = async () => {
@@ -107,6 +130,7 @@ describe("strict generation in the editor", () => {
                   text: "Updated",
                   clarification: null,
                   globalStyleGuidance: null,
+                  limitations: null,
                   sharedIntent: "Update",
                   tasks: [task],
                 },
