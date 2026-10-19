@@ -1,3 +1,13 @@
+#### 2.0.0-beta.6 (2026-10-19)
+
+##### Chores
+
+- upgrade handlebars ([#1367](https://github.com/yext/visual-editor/pull/1367)) ([fabf297e](https://github.com/yext/visual-editor/commit/fabf297e8de4406a7563ea9cf982c9695816bcfd))
+
+##### Bug Fixes
+
+- use accounts/me for section library revision lookup ([#1368](https://github.com/yext/visual-editor/pull/1368)) ([ad6015b1](https://github.com/yext/visual-editor/commit/ad6015b107fd9402b46b6bc8d18c4646914703cd))
+
 #### 2.0.0-beta.5 (2026-10-15)
 
 ##### Chores
