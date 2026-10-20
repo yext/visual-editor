@@ -268,6 +268,7 @@
     "imageConstrain": "画像の制約",
     "imageFillType": "画像塗りつぶしタイプ",
     "imageHeight": "画像の高さ",
+    "imageOverlayOpacity": "画像オーバーレイの不透明度",
     "images": "画像",
     "includePhoneHyperlink": "電話ハイパーリンクを含めます",
     "includeRange": "範囲を含める",

@@ -268,6 +268,7 @@
     "imageConstrain": "Ograniczenie obrazu",
     "imageFillType": "Typ wypełnienia obrazem",
     "imageHeight": "Wysokość obrazu",
+    "imageOverlayOpacity": "Nieprzezroczystość nakładki obrazu",
     "images": "Obrazy",
     "includePhoneHyperlink": "Dołącz hiperłącze telefonu",
     "includeRange": "Uwzględnij zakres",

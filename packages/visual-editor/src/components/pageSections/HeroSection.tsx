@@ -1,4 +1,11 @@
-import { DefaultComponentProps, Fields, setDeep, Slot } from "@puckeditor/core";
+import {
+  DefaultComponentProps,
+  FieldLabel,
+  Fields,
+  setDeep,
+  Slot,
+} from "@puckeditor/core";
+import { useId } from "react";
 import {
   AnalyticsScopeProvider,
   ComplexImageType,
@@ -11,7 +18,7 @@ import {
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
-import { msg } from "../../utils/i18n/platform.ts";
+import { msg, pt } from "../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
@@ -36,6 +43,7 @@ import { ComponentErrorBoundary } from "../../internal/components/ComponentError
 import {
   toPuckFields,
   YextComponentConfig,
+  YextCustomFieldRenderProps,
   YextFields,
 } from "../../fields/fields.ts";
 
@@ -65,6 +73,12 @@ export interface HeroStyles {
    * @defaultValue 500px
    */
   imageHeight?: number;
+
+  /**
+   * Opacity of the black image overlay in the immersive variant, from 0 to 100.
+   * @defaultValue 60
+   */
+  imageOverlayOpacity?: number;
 
   /**
    * Container position on desktop (spotlight and immersive variants).
@@ -196,6 +210,34 @@ export type HeroImageProps = {
   slots: HeroSectionProps["slots"];
 };
 
+const ImageOverlayOpacityField = ({
+  value,
+  onChange,
+}: YextCustomFieldRenderProps<number | undefined>) => {
+  const id = useId();
+  const label = pt("fields.imageOverlayOpacity", "Image Overlay Opacity");
+
+  return (
+    <div>
+      <FieldLabel label={label} el="div" />
+      <div className="flex items-center gap-3">
+        <input
+          id={id}
+          type="range"
+          min={0}
+          max={100}
+          step={1}
+          value={value ?? 60}
+          aria-label={label}
+          className="w-full"
+          onChange={(event) => onChange(Number(event.target.value))}
+        />
+        <output htmlFor={id}>{value ?? 60}%</output>
+      </div>
+    </div>
+  );
+};
+
 const heroSectionFields: YextFields<HeroSectionProps> = {
   data: {
     type: "object",
@@ -242,6 +284,13 @@ const heroSectionFields: YextFields<HeroSectionProps> = {
         type: "number",
         label: msg("fields.imageHeight", "Image Height"),
         min: 0,
+      },
+      imageOverlayOpacity: {
+        type: "custom",
+        label: msg("fields.imageOverlayOpacity", "Image Overlay Opacity"),
+        render: (props: YextCustomFieldRenderProps<number | undefined>) => (
+          <ImageOverlayOpacityField {...props} />
+        ),
       },
       desktopContainerPosition: {
         label: msg(
@@ -405,6 +454,7 @@ export const HeroSection: YextComponentConfig<HeroSectionProps> = {
       variant: "classic",
       backgroundColor: backgroundColors.background1.value,
       imageHeight: 500,
+      imageOverlayOpacity: 60,
       desktopImagePosition: "right",
       desktopContainerPosition: "left",
       mobileContentAlignment: "left",
@@ -673,6 +723,14 @@ export const HeroSection: YextComponentConfig<HeroSectionProps> = {
   },
   resolveFields: (data) => {
     let fields = heroSectionFields;
+
+    if (data.props.styles.variant !== "immersive") {
+      fields = updateFields(
+        fields,
+        ["styles.objectFields.imageOverlayOpacity"],
+        undefined
+      );
+    }
 
     switch (data.props.styles.variant) {
       case "compact": {

@@ -32,6 +32,11 @@ export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
         ? resolvedBackgroundImage.image
         : resolvedBackgroundImage;
 
+  const overlayOpacity = Math.min(
+    100,
+    Math.max(0, styles.imageOverlayOpacity ?? 60)
+  );
+
   return (
     <div
       style={{
@@ -45,7 +50,7 @@ export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
         background={
           localizedImage?.url
             ? {
-                selectedColor: "[#00000099]", // keep in sync with VisualEditorThemeClassSafelist
+                selectedColor: `[rgba(0, 0, 0, ${overlayOpacity / 100})]`,
                 contrastingColor: "white",
                 isDarkColor: true,
               }

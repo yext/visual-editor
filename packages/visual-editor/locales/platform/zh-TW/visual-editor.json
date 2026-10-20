@@ -268,6 +268,7 @@
     "imageConstrain": "圖像約束",
     "imageFillType": "影像填充類型",
     "imageHeight": "圖像高度",
+    "imageOverlayOpacity": "影像疊加不透明度",
     "images": "圖像",
     "includePhoneHyperlink": "包括電話超鏈接",
     "includeRange": "包括範圍",

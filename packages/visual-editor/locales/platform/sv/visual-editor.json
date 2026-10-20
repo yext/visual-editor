@@ -268,6 +268,7 @@
     "imageConstrain": "Bildbegränsning",
     "imageFillType": "Bildfyllningstyp",
     "imageHeight": "Bildhöjd",
+    "imageOverlayOpacity": "Opacitet för bildöverlagring",
     "images": "Bilder",
     "includePhoneHyperlink": "Inkludera telefonhyperlänk",
     "includeRange": "Inkludera intervall",

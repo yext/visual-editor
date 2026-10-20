@@ -268,6 +268,7 @@
     "imageConstrain": "Restricción de imagen",
     "imageFillType": "Tipo de relleno de imagen",
     "imageHeight": "Altura de la imagen",
+    "imageOverlayOpacity": "Opacidad de superposición de imágenes",
     "images": "Imágenes",
     "includePhoneHyperlink": "Incluir hipervínculo del teléfono",
     "includeRange": "Incluir rango",
