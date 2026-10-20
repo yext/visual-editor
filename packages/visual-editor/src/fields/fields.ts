@@ -71,11 +71,16 @@ export type ResolvedComprehensiveCTAValue = Omit<
   };
 };
 
-/** Repeated-item props retain their structure while authored value wrappers are resolved. */
+/** Repeated-item props retain their structure while authored value wrappers are resolved.
+ * Nested sources carry mappings and resolve their items recursively; ordinary entity values do not.
+ */
 type ResolvedRepeatedItem<Value> = Value extends {
   constantValue: infer Constant;
+  mappings?: infer Mappings;
 }
-  ? LocalizedRenderValue<Constant> | undefined
+  ? [NonNullable<Mappings>] extends [never]
+    ? LocalizedRenderValue<Constant> | undefined
+    : LocalizedRenderValue<ResolvedRepeatedItem<Constant>> | undefined
   : Value extends ComprehensiveCTAValue
     ? ResolvedComprehensiveCTAValue
     : Value extends { selections: { value: infer Selection }[] }

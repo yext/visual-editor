@@ -1,4 +1,5 @@
 import React from "react";
+import type { ImageType } from "@yext/pages-components";
 import { I18nextProvider } from "react-i18next";
 import {
   i18nPageInstance,
@@ -11,6 +12,7 @@ import type { MultiSelectorValue } from "../MultiSelectorField.tsx";
 import type { TranslatableAssetImage } from "../../types/images.ts";
 import type {
   RichText,
+  TranslatableCTA,
   TranslatableRichText,
   TranslatableString,
 } from "../../types/types.ts";
@@ -1382,5 +1384,89 @@ describe("field transforms", () => {
         isReadOnly: false,
       })
     ).toBe(expected);
+  });
+
+  it("when a repeated source contains another repeated source then nested render props are resolved", () => {
+    const actionSource = createItemSource<{
+      image: YextEntityField<ImageType>;
+      cta: YextEntityField<TranslatableCTA>;
+    }>({
+      label: "Actions",
+      mappingFields: {
+        image: { type: "entityField", filter: { types: ["type.image"] } },
+        cta: { type: "entityField", filter: { types: ["type.cta"] } },
+      },
+      defaultValues: [
+        {
+          image: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: { url: "/icon.svg", width: 32, height: 32 },
+          },
+          cta: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: {
+              label: { defaultValue: "Browse" },
+              link: { defaultValue: "/browse" },
+              linkType: "URL",
+            },
+          },
+        },
+      ],
+    });
+    const groupSource = createItemSource<{ items: typeof actionSource.value }>({
+      label: "Groups",
+      mappingFields: {
+        items: { ...actionSource.field, transform: true },
+      },
+      defaultValues: [{ items: actionSource.defaultValue }],
+    });
+    type Groups = YextTransformedProps<
+      { groups: typeof groupSource.value },
+      { groups: typeof groupSource.field & { transform: true } }
+    >["groups"];
+    type Action = NonNullable<Groups[number]["items"]>[number];
+    expectTypeOf<NonNullable<Action["image"]>["url"]>().toEqualTypeOf<string>();
+    expectTypeOf<NonNullable<Action["cta"]>["label"]>().toEqualTypeOf<
+      string | undefined
+    >();
+    expect(
+      createYextFieldTransforms({}, "en").custom({
+        field: toPuckFields({
+          groups: { ...groupSource.field, transform: true },
+        }).groups!,
+        value: groupSource.defaultValue,
+        componentId: "groups",
+        propName: "groups",
+        propPath: "groups",
+        isReadOnly: true,
+      })
+    ).toEqual([
+      {
+        items: [
+          {
+            image: { url: "/icon.svg", width: 32, height: 32 },
+            cta: { label: "Browse", link: "/browse", linkType: "URL" },
+          },
+        ],
+      },
+    ]);
+  });
+
+  it("when a repeated item contains an ordinary entity object then its nested data remains authored", () => {
+    const source = createItemSource<{
+      data: YextEntityField<{ nested: YextEntityField<TranslatableString> }>;
+    }>({
+      label: "Items",
+      mappingFields: { data: { type: "entityField", filter: {} } },
+    });
+    type Items = YextTransformedProps<
+      { items: typeof source.value },
+      { items: typeof source.field & { transform: true } }
+    >["items"];
+    expectTypeOf<NonNullable<Items[number]["data"]>["nested"]>().toHaveProperty(
+      "constantValue"
+    );
   });
 });

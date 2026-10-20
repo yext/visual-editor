@@ -203,7 +203,11 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
 
             return {
               id: history.id,
-              state: buildPuckHistoryState(migratedData, history.state.ui),
+              state: buildPuckHistoryState(
+                migratedData,
+                history.state.ui,
+                puckConfig.categories
+              ),
             };
           });
         const localHistoryIndex = localHistories.length - 1;
