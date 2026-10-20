@@ -1562,6 +1562,19 @@ const tests: ComponentTest[] = [
     version: 59,
   },
   {
+    name: "[immersive] version 59 with imageOverlayOpacity 30",
+    document: testDocument,
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        variant: "immersive",
+        imageOverlayOpacity: 30,
+      },
+    },
+    version: 59,
+  },
+  {
     name: "[compact] version 59 with showImage, showPrimaryCTA, showSecondaryCTA false",
     document: testDocument,
     props: {

@@ -5,7 +5,6 @@ import {
   setDeep,
   Slot,
 } from "@puckeditor/core";
-import { useId } from "react";
 import {
   AnalyticsScopeProvider,
   ComplexImageType,
@@ -211,10 +210,10 @@ export type HeroImageProps = {
 };
 
 const ImageOverlayOpacityField = ({
+  id,
   value,
   onChange,
 }: YextCustomFieldRenderProps<number | undefined>) => {
-  const id = useId();
   const label = pt("fields.imageOverlayOpacity", "Image Overlay Opacity");
 
   return (
