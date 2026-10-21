@@ -53,7 +53,7 @@ export { VideoFieldOverride, type VideoField } from "./VideoField.tsx";
 export {
   toPuckFields,
   type YextComponentConfig,
-  type ComponentGenerationMetadata,
+  type LayoutGenerationMetadata,
   type YextArrayField,
   type YextFields,
   type YextFieldMap,

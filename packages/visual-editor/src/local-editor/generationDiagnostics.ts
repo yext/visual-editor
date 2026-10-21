@@ -1,5 +1,5 @@
-import { GENERATION_PHASE_MAX_CHARACTERS } from "../internal/generation/limits.ts";
-import type { GenerationDiagnostics } from "../internal/generation/shared/contracts.ts";
+import { GENERATION_PHASE_MAX_CHARACTERS } from "../internal/layoutGeneration/limits.ts";
+import type { GenerationDiagnostics } from "../internal/layoutGeneration/shared/contracts.ts";
 
 /** Persist browser reports without affecting generation or chat error state. */
 const postChatReport = (

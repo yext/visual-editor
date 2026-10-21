@@ -530,6 +530,22 @@ const readLayout = (
     } else {
       throw new Error("must set a supported pageSetType");
     }
+    const defaultGenerationSectionIds =
+      metadataValue.defaultGenerationSectionIds;
+    if (defaultGenerationSectionIds !== undefined) {
+      if (
+        !Array.isArray(defaultGenerationSectionIds) ||
+        defaultGenerationSectionIds.some(
+          (sectionId) => typeof sectionId !== "string" || !sectionId.trim()
+        )
+      ) {
+        throw new Error(
+          "defaultGenerationSectionIds must be an array of non-empty section IDs."
+        );
+      }
+      metadata.defaultGenerationSectionIds = defaultGenerationSectionIds;
+    }
+
     if (!safeSectionLibraryIdPattern.test(metadata.id)) {
       throw new Error(`Layout ID is not valid: ${metadata.id}`);
     }

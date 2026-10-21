@@ -38,6 +38,7 @@ vi.mock("./local-editor/artifacts.ts", () => ({
 
 afterEach(() => {
   vi.clearAllMocks();
+  vi.restoreAllMocks();
 });
 
 describe("yextVisualEditorPlugin", () => {
@@ -49,7 +50,9 @@ describe("yextVisualEditorPlugin", () => {
       ])
     );
     try {
-      const plugin = yextVisualEditorPlugin({ localEditor: { enabled: true } });
+      const plugin = yextVisualEditorPlugin({
+        localEditor: { enabled: true, layoutGenerationEnabled: true },
+      });
       const configureServer =
         typeof plugin.configureServer === "object"
           ? plugin.configureServer.handler
@@ -62,6 +65,7 @@ describe("yextVisualEditorPlugin", () => {
       (configureServer as (server: ViteDevServer) => void)(
         server as unknown as ViteDevServer
       );
+      expect(server.middlewares.use).toHaveBeenCalledTimes(2);
       expect(loggerMocks.createGenerationLogger).toHaveBeenCalledWith(
         "/test/library/src/library/.generated/logs"
       );
@@ -85,6 +89,41 @@ describe("yextVisualEditorPlugin", () => {
             process.removeListener(event, listener);
     }
   });
+  it.each([
+    { enabled: true },
+    { enabled: true, layoutGenerationEnabled: false },
+    { enabled: false, layoutGenerationEnabled: true },
+  ])("disables generation and logging with localEditor %j", (localEditor) => {
+    vi.spyOn(process, "once").mockReturnValue(process);
+    const plugin = yextVisualEditorPlugin({ localEditor });
+    const configureServer =
+      typeof plugin.configureServer === "object"
+        ? plugin.configureServer.handler
+        : plugin.configureServer;
+    const server = {
+      config: { root: "/test/library" },
+      httpServer: { once: vi.fn() },
+      middlewares: { use: vi.fn() },
+    };
+
+    (configureServer as (server: ViteDevServer) => void)(
+      server as unknown as ViteDevServer
+    );
+
+    expect(loggerMocks.createGenerationLogger).not.toHaveBeenCalled();
+    expect(server.middlewares.use).toHaveBeenCalledTimes(
+      localEditor.enabled ? 1 : 0
+    );
+    if (localEditor.enabled) {
+      const [, closeServer] = server.httpServer.once.mock.calls[0];
+      closeServer();
+      expect(loggerMocks.log.close).not.toHaveBeenCalled();
+      expect(
+        localEditorMocks.cleanupGeneratedLocalEditorArtifacts
+      ).toHaveBeenCalledOnce();
+    }
+  });
+
   it.each([
     ["omitted", undefined],
     ["true", true],

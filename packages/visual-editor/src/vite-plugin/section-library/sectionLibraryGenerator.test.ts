@@ -9,10 +9,10 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { createServer } from "vite";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { MainContent } from "../../components/helpers/MainContent.tsx";
-import { materializeSectionEdit } from "../../internal/generation/edits/applyEditsToLayout.ts";
-import { compileSectionEditSchema } from "../../internal/generation/edits/compileSectionEditSchema.ts";
-import { buildGenerationPrompt } from "../../internal/generation/prompts.ts";
-import { validateAuthored } from "../../internal/generation/shared/authoredValues.ts";
+import { materializeSectionEdit } from "../../internal/layoutGeneration/workflows/edits/applyEditsToLayout.ts";
+import { compileSectionEditSchema } from "../../internal/layoutGeneration/workflows/edits/compileSectionEditSchema.ts";
+import { buildGenerationPrompt } from "../../internal/layoutGeneration/prompts.ts";
+import { validateAuthored } from "../../internal/layoutGeneration/shared/authoredValues.ts";
 import {
   cleanupGeneratedSectionLibraryFiles,
   generateSectionLibraryFiles,
@@ -29,10 +29,26 @@ afterEach(() => {
 describe("generateSectionLibraryFiles", () => {
   it("loads generated schemas and renders both section export formats", async () => {
     const rootDir = createLibrary();
-    const metadataPath = path.join(rootDir, "src/library/library.json");
-    fs.writeJsonSync(metadataPath, {
-      ...fs.readJsonSync(metadataPath),
-      defaultGenerationComponentIds: ["hero", "Directory"],
+    for (const [layoutId, sectionId] of [
+      ["location", "hero"],
+      ["directory-layout", "Directory"],
+    ]) {
+      const metadataPath = path.join(
+        rootDir,
+        "src/library/layouts",
+        layoutId,
+        "metadata.json"
+      );
+      fs.writeJsonSync(metadataPath, {
+        ...fs.readJsonSync(metadataPath),
+        defaultGenerationSectionIds: [sectionId],
+      });
+    }
+    copyLayout(rootDir, "location", "alternate-location", {
+      id: "alternate-location",
+      displayName: "Alternate location",
+      pageSetType: "ENTITY",
+      defaultGenerationSectionIds: [],
     });
     fs.ensureSymlinkSync(
       path.join(process.cwd(), "node_modules"),
@@ -54,11 +70,25 @@ describe("generateSectionLibraryFiles", () => {
           source.replace(
             `export const ${name} = {};`,
             name === "Hero"
-              ? 'export const Hero = Object.assign(({ title, children }) => createElement("h2", null, title, children), { permissions: { edit: false, delete: false }, generation: { props: z.object({ title: z.string() }) } });'
-              : `export const ${name} = { render: ({ title }) => createElement("p", null, title), generation: { props: z.object({ title: z.string() }) } };`
+              ? 'export const Hero = Object.assign(({ title, children }) => createElement("h2", null, title, children), { permissions: { edit: false, delete: false }, layoutGenerationMetadata: { props: z.object({ title: z.string() }) } });'
+              : `export const ${name} = { render: ({ title }) => createElement("p", null, title), layoutGenerationMetadata: { props: z.object({ title: z.string() }) } };`
           )
       );
     }
+    const registryPath = path.join(
+      rootDir,
+      "src/library/shared/componentRegistry.ts"
+    );
+    fs.writeFileSync(
+      registryPath,
+      'import { z } from "zod";\n' +
+        fs
+          .readFileSync(registryPath, "utf8")
+          .replace(
+            "export const sharedComponentConfigs = {};",
+            'export const sharedComponentConfigs = { "directory-header": { layoutGenerationMetadata: { props: z.object({ title: z.string() }) } } };'
+          )
+    );
     generateSectionLibraryFiles(rootDir, "revision");
     const server = await createServer({
       root: rootDir,
@@ -67,7 +97,7 @@ describe("generateSectionLibraryFiles", () => {
         alias: {
           "@yext/visual-editor/section-library-support": path.join(
             process.cwd(),
-            "src/utils/generationCatalog.ts"
+            "src/utils/createPuckGenerationCatalog.ts"
           ),
         },
       },
@@ -81,6 +111,16 @@ describe("generateSectionLibraryFiles", () => {
       );
       const catalog = catalogs.location;
       const directoryCatalog = catalogs["directory-layout"];
+      expect(catalog.puckOptions.defaultGenerationSectionIds).toEqual(["hero"]);
+      expect(
+        catalogs["alternate-location"].puckOptions.defaultGenerationSectionIds
+      ).toEqual([]);
+      expect(
+        buildGenerationPrompt(catalogs["alternate-location"])
+      ).not.toContain("Default sections for fresh generation:");
+      expect(catalogs["locator-layout"].puckOptions).not.toHaveProperty(
+        "defaultGenerationSectionIds"
+      );
       expect(catalog.data.components.hero.permissions).toEqual({
         edit: false,
         delete: false,
@@ -90,6 +130,20 @@ describe("generateSectionLibraryFiles", () => {
       expect(catalog.componentNames).not.toContain("Directory");
       expect(directoryCatalog.componentNames).toContain("Directory");
       expect(
+        directoryCatalog.data.components["directory-header"].nestedOnly
+      ).toBe(true);
+      expect(
+        directoryCatalog.data.components[
+          "directory-header"
+        ].generation.props.safeParse({ title: "Nested heading" }).success
+      ).toBe(true);
+      expect(
+        directoryCatalog.data.components["directory-header"].props.safeParse({
+          title: 42,
+        }).success
+      ).toBe(false);
+      expect(catalog.componentNames).not.toContain("directory-header");
+      expect(
         directoryCatalog.data.components.Directory.generation.props.safeParse({
           title: "Directory",
         }).success
@@ -98,10 +152,10 @@ describe("generateSectionLibraryFiles", () => {
       expect(catalog.componentNames).not.toContain("Locator");
       expect(buildGenerationPrompt(catalog)).not.toContain("Locator");
       expect(buildGenerationPrompt(catalog)).toContain(
-        'Default components for fresh generation: ["hero"]'
+        'Default sections for fresh generation: ["hero"]'
       );
       expect(buildGenerationPrompt(directoryCatalog)).toContain(
-        'Default components for fresh generation: ["Directory"]'
+        'Default sections for fresh generation: ["Directory"]'
       );
       expect(
         catalog.data.components.hero.props.safeParse({
@@ -240,7 +294,9 @@ describe("generateSectionLibraryFiles", () => {
       'import { createPuckGenerationCatalog } from "@yext/visual-editor/section-library-support"'
     );
     expect(source).toContain("config as sectionConfig1, Hero as Section1");
-    expect(source).toContain('"hero": { generation: Section1.generation');
+    expect(source).toContain(
+      '"hero": { generation: Section1.layoutGenerationMetadata'
+    );
     expect(source).toContain("fields: Section1.fields");
     expect(source).toContain("defaultProps: Section1.defaultProps");
     expect(source).toContain("permissions: Section1.permissions");
@@ -248,7 +304,7 @@ describe("generateSectionLibraryFiles", () => {
       "permissions: sharedComponentConfigs[component.id]?.permissions"
     );
     expect(source).toContain(
-      "generation: sharedComponentConfigs[component.id]?.generation"
+      "generation: sharedComponentConfigs[component.id]?.layoutGenerationMetadata"
     );
     expect(source).toContain('"location": createPuckGenerationCatalog');
     expect(source).not.toContain("formalProps");

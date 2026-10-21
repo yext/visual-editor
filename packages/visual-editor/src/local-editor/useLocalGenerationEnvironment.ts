@@ -1,8 +1,8 @@
 import type { Config } from "@puckeditor/core";
 import React from "react";
-import { getGenerationCatalog } from "../internal/generation/shared/catalogRegistry.ts";
-import type { GenerationEnvironment } from "../internal/generation/shared/contracts.ts";
-import { createLocalMessageTransport } from "../internal/generation/transport/messageTransport.ts";
+import { getGenerationCatalog } from "../internal/layoutGeneration/shared/catalogRegistry.ts";
+import type { GenerationEnvironment } from "../internal/layoutGeneration/shared/contracts.ts";
+import { createLocalMessageTransport } from "../internal/layoutGeneration/transport/messageTransport.ts";
 import { createLocalGenerationDiagnostics } from "./generationDiagnostics.ts";
 import { installLocalGenerationHost } from "./localGenerationHost.ts";
 

@@ -1,9 +1,9 @@
-import type { GenerationResponse } from "../internal/generation/transport/messageTransport.ts";
+import type { GenerationResponse } from "../internal/layoutGeneration/transport/messageTransport.ts";
 import {
   isTransportStatus,
   ModelTransportError,
   type ModelRequestBody,
-} from "../internal/generation/transport/modelTransport.ts";
+} from "../internal/layoutGeneration/transport/modelTransport.ts";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);

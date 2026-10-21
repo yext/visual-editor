@@ -132,38 +132,6 @@ describe("validateLibraryMetadata", () => {
     expect(validateLibraryMetadata(rootDir).issues).toHaveLength(3);
   });
 
-  it.each([
-    { defaultGenerationComponentIds: [] },
-    { defaultGenerationComponentIds: ["Header", "hero", "Footer"] },
-  ])(
-    "preserves default generation component IDs $defaultGenerationComponentIds",
-    ({ defaultGenerationComponentIds }) => {
-      const rootDir = createTempRoot();
-      const metadata = validMetadata({ defaultGenerationComponentIds });
-      writeLibraryJson(rootDir, metadata);
-      expect(validateLibraryMetadata(rootDir)).toEqual({
-        issues: [],
-        metadata,
-      });
-    }
-  );
-
-  it.each([null, "Header", [42], [""], [" "]].map((value) => [value]))(
-    "rejects invalid default generation component IDs %j",
-    (defaultGenerationComponentIds) => {
-      const rootDir = createTempRoot();
-      writeLibraryJson(
-        rootDir,
-        validMetadata({ defaultGenerationComponentIds })
-      );
-      expect(validateLibraryMetadata(rootDir).issues).toContainEqual(
-        expect.objectContaining({
-          rule: "field/defaultGenerationComponentIds/type",
-        })
-      );
-    }
-  );
-
   it("returns valid metadata", () => {
     const rootDir = createTempRoot();
     writeLibraryJson(rootDir, validMetadata({ futureField: true }));

@@ -2,20 +2,20 @@ import { afterEach, expect, it, vi } from "vitest";
 import type {
   GenerationEnvironment,
   LayoutGenerationRequest,
-} from "../internal/generation/shared/contracts.ts";
+} from "../internal/layoutGeneration/shared/contracts.ts";
 import {
   creation,
   creationCatalog,
-} from "../internal/generation/testing/creationFixtures.ts";
+} from "../internal/layoutGeneration/testing/creationFixtures.ts";
 import {
   editGenerationFixture,
   editPlan,
   editResponse,
   editTask,
-} from "../internal/generation/testing/editFixtures.ts";
-import { completed } from "../internal/generation/testing/modelFixtures.ts";
-import { executeGeneration } from "../internal/generation/transport/executeGeneration.ts";
-import { createLocalMessageTransport } from "../internal/generation/transport/messageTransport.ts";
+} from "../internal/layoutGeneration/testing/editFixtures.ts";
+import { completed } from "../internal/layoutGeneration/testing/modelFixtures.ts";
+import { executeGeneration } from "../internal/layoutGeneration/transport/executeGeneration.ts";
+import { createLocalMessageTransport } from "../internal/layoutGeneration/transport/messageTransport.ts";
 import { installLocalGenerationHost } from "./localGenerationHost.ts";
 
 let dispose: (() => void) | undefined;

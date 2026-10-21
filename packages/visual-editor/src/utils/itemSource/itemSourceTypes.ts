@@ -102,7 +102,7 @@ export type SlottedItemSourceInstance<
   TMappings extends Record<string, unknown>,
 > = {
   field: YextFieldDefinition<SlotMappedCardsData<TMappings>>;
-  generation: SlottedItemSourceGenerationMetadata;
+  generationMetadata: SlottedItemSourceGenerationMetadata;
   defaultValue: SlotMappedCardsData<TMappings>;
   defaultWrapperProps: {
     data: SlotMappedCardsData<TMappings>;

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
-import { generationRequestFixture } from "../internal/generation/testing/iframeFixtures.ts";
-import type { GenerationResponse } from "../internal/generation/transport/messageTransport.ts";
+import { generationRequestFixture } from "../internal/layoutGeneration/testing/iframeFixtures.ts";
+import type { GenerationResponse } from "../internal/layoutGeneration/transport/messageTransport.ts";
 import { installLocalGenerationHost } from "./localGenerationHost.ts";
 
 const body = generationRequestFixture.payload.body;

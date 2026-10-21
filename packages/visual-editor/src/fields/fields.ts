@@ -80,8 +80,8 @@ export type YextFieldDefinition<ValueType = any> =
       ? YextObjectField<ValueType>
       : never);
 
-/** Complete authored props; omit inherited values, callbacks, identities and editor metadata. */
-export type ComponentGenerationMetadata = {
+/** Provides a formal zod type describing the props for AI layout generation. */
+export type LayoutGenerationMetadata = {
   props: z.ZodObject;
   slottedItemSource?: SlottedItemSourceGenerationMetadata;
 };
@@ -96,7 +96,7 @@ export type YextComponentConfig<
   "fields" | "resolveFields"
 > & {
   fields?: YextFields<Props>;
-  generation?: ComponentGenerationMetadata;
+  layoutGenerationMetadata?: LayoutGenerationMetadata;
   resolveFields?: ComponentConfig<{
     props: Props;
     fields: YextPuckFields;

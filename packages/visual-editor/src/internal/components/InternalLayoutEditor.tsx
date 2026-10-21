@@ -26,9 +26,9 @@ import { cn } from "../../utils/cn.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
 import type { MigrationRegistry } from "../../utils/migrate.ts";
-import { LayoutGenerationChatUiContext } from "../generation/chat/contexts.tsx";
-import { layoutGenerationChatPlugin } from "../generation/chat/layoutGenerationChatPlugin.tsx";
-import { lockEditorInteraction } from "../generation/chat/lockEditorInteraction.ts";
+import { LayoutGenerationChatUiContext } from "../layoutGeneration/chat/contexts.tsx";
+import { layoutGenerationChatPlugin } from "../layoutGeneration/chat/LayoutGenerationChatPlugin.tsx";
+import { lockEditorInteraction } from "../layoutGeneration/chat/lockEditorInteraction.ts";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { MetaTitleField } from "../puck/components/meta-title/MetaTitleField.tsx";
@@ -118,22 +118,23 @@ export const InternalLayoutEditor = ({
   const { i18n } = usePlatformTranslation();
   const { errorCount, errorSources, errorDetails } = useErrorContext();
   const chatUi = React.useContext(LayoutGenerationChatUiContext);
-  const chatEnabled = !!chatUi;
-  const creating = chatUi?.chat.isCreating ?? false;
   const editorRef = React.useRef<HTMLDivElement>(null);
+
+  const layoutGenerationActive = chatUi?.chat.isCreating ?? false;
   React.useEffect(() => {
-    if (creating && editorRef.current) {
+    if (layoutGenerationActive && editorRef.current) {
       return lockEditorInteraction(editorRef.current);
     }
-  }, [creating]);
+  }, [layoutGenerationActive]);
+
   // Keep plugin sidebar fields mounted when saved state changes.
   const plugins = React.useMemo(
     () => [
       { ...blocks, label: pt("sections", "Sections") },
       outline,
-      ...(chatEnabled ? [layoutGenerationChatPlugin] : []),
+      ...(!!chatUi ? [layoutGenerationChatPlugin] : []),
     ],
-    [i18n.language, chatEnabled]
+    [i18n.language, chatUi]
   );
 
   /**
@@ -142,9 +143,10 @@ export const InternalLayoutEditor = ({
    */
   const handleHistoryChange = useCallback(
     (histories: History<Partial<AppState>>[], index: number) => {
-      if (creating) {
+      if (layoutGenerationActive) {
         return;
       }
+
       if (
         index !== 0 &&
         historyIndex.current !== index &&
@@ -196,7 +198,7 @@ export const InternalLayoutEditor = ({
       }
     },
     [
-      creating,
+      layoutGenerationActive,
       templateMetadata,
       buildVisualConfigLocalStorageKey,
       layoutSaveState,
@@ -375,7 +377,7 @@ export const InternalLayoutEditor = ({
       <div
         ref={editorRef}
         style={{ display: "contents" }}
-        aria-busy={creating || undefined}
+        aria-busy={layoutGenerationActive || undefined}
       >
         <Puck
           config={translatedPuckConfigWithRootFields}

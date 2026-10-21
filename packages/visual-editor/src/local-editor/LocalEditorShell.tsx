@@ -5,9 +5,9 @@ import type { LocalDevOptions } from "../editor/types.ts";
 import {
   LayoutGenerationChatContext,
   LayoutGenerationChatUiProvider,
-} from "../internal/generation/chat/contexts.tsx";
-import { lockEditorInteraction } from "../internal/generation/chat/lockEditorInteraction.ts";
-import { useLayoutGenerationChat } from "../internal/generation/chat/useLayoutGenerationChat.ts";
+} from "../internal/layoutGeneration/chat/contexts.tsx";
+import { lockEditorInteraction } from "../internal/layoutGeneration/chat/lockEditorInteraction.ts";
+import { useLayoutGenerationChat } from "../internal/layoutGeneration/chat/useLayoutGenerationChat.ts";
 import { SectionLibraryVisualEditorProvider } from "../utils/SectionLibraryVisualEditorProvider.tsx";
 import { StreamDocument } from "../utils/types/StreamDocument.ts";
 import { MAX_LOCAL_EDITOR_DIRECTORY_CHILD_COUNT } from "../vite-plugin/local-editor/fixtureData.ts";

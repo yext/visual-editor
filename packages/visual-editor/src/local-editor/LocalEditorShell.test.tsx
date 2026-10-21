@@ -10,24 +10,24 @@ import {
 import React from "react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { TemplatePropsContext, useDocument } from "../hooks/useDocument.tsx";
-import { LayoutGenerationChatBridge } from "../internal/generation/chat/LayoutGenerationChatBridge.tsx";
-import { LayoutGenerationChatUiContext } from "../internal/generation/chat/contexts.tsx";
-import { layoutGenerationChatPlugin } from "../internal/generation/chat/layoutGenerationChatPlugin.tsx";
+import { LayoutGenerationChatBridge } from "../internal/layoutGeneration/chat/LayoutGenerationChatBridge.tsx";
+import { LayoutGenerationChatUiContext } from "../internal/layoutGeneration/chat/contexts.tsx";
+import { layoutGenerationChatPlugin } from "../internal/layoutGeneration/chat/LayoutGenerationChatPlugin.tsx";
 import {
   chatConfig,
   generatedContent,
   layout,
   openChat,
-} from "../internal/generation/testing/chatFixtures.tsx";
+} from "../internal/layoutGeneration/testing/chatFixtures.tsx";
 import {
   deferredGeneration,
   stubGenerationExecutor,
   testGenerationEnvironment,
-} from "../internal/generation/testing/executorFixtures.ts";
-import { executeGeneration } from "../internal/generation/transport/executeGeneration.ts";
+} from "../internal/layoutGeneration/testing/executorFixtures.ts";
+import { executeGeneration } from "../internal/layoutGeneration/transport/executeGeneration.ts";
 import { LocalEditorShell } from "./LocalEditorShell.tsx";
 
-vi.mock("../internal/generation/transport/executeGeneration.ts", () => ({
+vi.mock("../internal/layoutGeneration/transport/executeGeneration.ts", () => ({
   executeGeneration: vi.fn(),
 }));
 vi.mock("./useLocalGenerationEnvironment.ts", () => ({

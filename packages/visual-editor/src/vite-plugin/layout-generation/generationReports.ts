@@ -5,7 +5,7 @@ import {
   GENERATION_PHASE_MAX_CHARACTERS,
   GENERATION_REPORT_MAX_BYTES,
   GENERATION_STACK_MAX_CHARACTERS,
-} from "../../internal/generation/limits.ts";
+} from "../../internal/layoutGeneration/limits.ts";
 import {
   readJsonRequestBody,
   sendJsonResponse,

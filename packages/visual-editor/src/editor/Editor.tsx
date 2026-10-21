@@ -1,7 +1,7 @@
 import React, { ErrorInfo, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import "./index.css";
-import { LayoutGenerationProvider } from "../internal/generation/chat/LayoutGenerationProvider.tsx";
+import { LayoutGenerationProvider } from "../internal/layoutGeneration/chat/LayoutGenerationProvider.tsx";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";

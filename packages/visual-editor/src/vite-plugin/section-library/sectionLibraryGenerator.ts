@@ -98,8 +98,7 @@ export const generateSectionLibraryFiles = (
         rootDir,
         catalogPath,
         structure.sections,
-        structure.layouts,
-        metadata.defaultGenerationComponentIds
+        structure.layouts
       )
     )
   ) {
@@ -367,8 +366,7 @@ const buildJsonRenderSource = (
   rootDir: string,
   generatedPath: string,
   sections: ResolvedSection[],
-  layouts: Layout[],
-  defaultGenerationComponentIds?: string[]
+  layouts: Layout[]
 ): string => {
   if (sections.some((section) => section.id === "MainContent")) {
     throw new Error("MainContent is reserved for json-render composition.");
@@ -409,13 +407,13 @@ const buildJsonRenderSource = (
         ...sections.flatMap((section, index) =>
           section.pageSetTypes.includes(layout.metadata.pageSetType)
             ? [
-                `    ${JSON.stringify(section.id)}: { generation: Section${index}.generation, description: sectionConfig${index}.description, fields: Section${index}.fields, defaultProps: Section${index}.defaultProps, permissions: Section${index}.permissions },`,
+                `    ${JSON.stringify(section.id)}: { generation: Section${index}.layoutGenerationMetadata, description: sectionConfig${index}.description, fields: Section${index}.fields, defaultProps: Section${index}.defaultProps, permissions: Section${index}.permissions },`,
               ]
             : []
         ),
         ...(hasSharedRegistry
           ? [
-              `    ...Object.fromEntries(sharedComponentMetadata.filter((component) => component.pageSetTypes.includes(${pageSetType})).map((component) => [component.id, { generation: sharedComponentConfigs[component.id]?.generation, fields: sharedComponentConfigs[component.id]?.fields, defaultProps: sharedComponentConfigs[component.id]?.defaultProps, permissions: sharedComponentConfigs[component.id]?.permissions, nestedOnly: true }])),`,
+              `    ...Object.fromEntries(sharedComponentMetadata.filter((component) => component.pageSetTypes.includes(${pageSetType})).map((component) => [component.id, { generation: sharedComponentConfigs[component.id]?.layoutGenerationMetadata, fields: sharedComponentConfigs[component.id]?.fields, defaultProps: sharedComponentConfigs[component.id]?.defaultProps, permissions: sharedComponentConfigs[component.id]?.permissions, nestedOnly: true }])),`,
             ]
           : []),
         `  }, { ${[
@@ -424,9 +422,9 @@ const buildJsonRenderSource = (
                 `rootAllowedComponentIds: sharedRootAllowedComponentIds[${pageSetType}]`,
               ]
             : []),
-          ...(defaultGenerationComponentIds !== undefined
+          ...(layout.metadata.defaultGenerationSectionIds !== undefined
             ? [
-                `defaultGenerationComponentIds: ${JSON.stringify(defaultGenerationComponentIds)}`,
+                `defaultGenerationSectionIds: ${JSON.stringify(layout.metadata.defaultGenerationSectionIds)}`,
               ]
             : []),
         ].join(", ")} }),`,

@@ -1,7 +1,7 @@
 import {
   GENERATION_LOG_FLUSH_INTERVAL_MS,
   GENERATION_LOG_BUFFER_MAX_BYTES,
-} from "../../internal/generation/limits.ts";
+} from "../../internal/layoutGeneration/limits.ts";
 import { appendFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 

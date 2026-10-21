@@ -37,6 +37,7 @@ export const yextVisualEditorPlugin = (
   const localEditorArtifacts = createLocalEditorArtifactsManager({
     localEditorTemplateSource: localEditorTemplate,
     localEditorDataTemplateSource: localEditorDataTemplate,
+    layoutGenerationEnabled: options.localEditor?.layoutGenerationEnabled,
   });
 
   const generateSectionLibrary = (): void => {
@@ -142,23 +143,26 @@ export const yextVisualEditorPlugin = (
         return;
       }
 
-      const logGeneration = createGenerationLogger(
-        path.join(server.config.root, "src/library/.generated/logs")
-      );
-      closeGenerationLog = logGeneration.close;
       server.httpServer?.once("close", () => {
-        void logGeneration.close();
+        void closeGenerationLog?.();
         cleanupGeneratedArtifacts();
       });
 
-      server.middlewares.use(
-        createGenerationMiddleware({
-          rootDir: server.config.root,
-          getLayouts: () => sectionLibraryLayouts,
-          getModel: () => options.localEditor?.generationModel ?? "gpt-6-luna",
-          logGeneration,
-        })
-      );
+      if (options.localEditor.layoutGenerationEnabled) {
+        const logGeneration = createGenerationLogger(
+          path.join(server.config.root, "src/library/.generated/logs")
+        );
+        closeGenerationLog = logGeneration.close;
+        server.middlewares.use(
+          createGenerationMiddleware({
+            rootDir: server.config.root,
+            getLayouts: () => sectionLibraryLayouts,
+            getModel: () =>
+              options.localEditor?.generationModel ?? "gpt-6-luna",
+            logGeneration,
+          })
+        );
+      }
 
       server.middlewares.use((request, response, next) => {
         if (!request.url) {

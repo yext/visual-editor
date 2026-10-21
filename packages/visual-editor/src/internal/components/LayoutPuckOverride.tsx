@@ -3,28 +3,30 @@ import React from "react";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
-import { LayoutGenerationChatBridge } from "../generation/chat/LayoutGenerationChatBridge.tsx";
-import { LayoutGenerationChatUiContext } from "../generation/chat/contexts.tsx";
+import { LayoutGenerationChatBridge } from "../layoutGeneration/chat/LayoutGenerationChatBridge.tsx";
+import { LayoutGenerationChatUiContext } from "../layoutGeneration/chat/contexts.tsx";
+import { synchronizeManualCardSlots } from "../layoutGeneration/shared/synchronizeManualCardSlots.ts";
 import { ValidationReporters } from "../puck/components/ValidationReporters.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
-import { synchronizeManualCardSlots } from "../utils/synchronizeManualCardSlots.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
 
-/** A stable component type keeps the chat bridge mounted on ordinary editor renders. */
+/** Wrap the Puck editor in a chat bridge that remains mounted on ordinary editor renders. */
 export const LayoutPuckOverride = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
   const getPuck = useGetPuck();
-  const creating = React.useContext(LayoutGenerationChatUiContext)?.chat
-    .isCreating;
-  const creatingRef = React.useRef(creating);
-  creatingRef.current = creating;
-  const observedData = usePuck((puck) => puck.appState.data);
+  const puckData = usePuck((puck) => puck.appState.data);
   const document = useDocument();
+
+  const isGenerationActive = React.useContext(LayoutGenerationChatUiContext)
+    ?.chat.isCreating;
+  const isGenerationActiveRef = React.useRef(isGenerationActive);
+  isGenerationActiveRef.current = isGenerationActive;
+
   const documentRef = React.useRef(document);
   if (!isDeepEqual(documentRef.current, document)) {
     documentRef.current = document;
@@ -32,7 +34,7 @@ export const LayoutPuckOverride = ({
   const streamDocument = documentRef.current;
 
   React.useEffect(() => {
-    if (creatingRef.current) {
+    if (isGenerationActiveRef.current) {
       return;
     }
     const { appState, config, dispatch } = getPuck();
@@ -40,13 +42,13 @@ export const LayoutPuckOverride = ({
     if (data !== appState.data) {
       dispatch({ type: "setData", data, recordHistory: false });
     }
-  }, [getPuck, observedData]);
+  }, [getPuck, puckData]);
 
   React.useEffect(() => {
     let active = true;
     const resolveData = async () => {
       devLogger.logFunc("reloadDataOnDocumentChange");
-      if (creatingRef.current) {
+      if (isGenerationActiveRef.current) {
         return;
       }
       const { appState, config, dispatch } = getPuck();
@@ -57,7 +59,7 @@ export const LayoutPuckOverride = ({
       );
       if (
         !active ||
-        creatingRef.current ||
+        isGenerationActiveRef.current ||
         getPuck().appState.data !== appState.data
       ) {
         return;

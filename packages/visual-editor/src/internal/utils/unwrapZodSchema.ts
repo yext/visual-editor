@@ -7,8 +7,12 @@ export function unwrapZodSchema(
 export function unwrapZodSchema(
   schema: z.ZodType | undefined
 ): z.ZodType | undefined {
-  if (!schema) return undefined;
+  if (!schema) {
+    return undefined;
+  }
+
   const def = schema.def as { type: string; innerType?: z.ZodType };
+
   return ["optional", "nullable", "default", "prefault"].includes(def.type)
     ? unwrapZodSchema(def.innerType)
     : schema;

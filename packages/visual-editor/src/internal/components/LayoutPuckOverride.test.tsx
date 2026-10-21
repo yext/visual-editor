@@ -3,14 +3,14 @@ import { act, render, waitFor } from "@testing-library/react";
 import React from "react";
 import { expect, it } from "vitest";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
-import { LayoutGenerationChatCanvas } from "../generation/chat/LayoutGenerationChatCanvas.ts";
-import { LayoutGenerationChatContext } from "../generation/chat/contexts.tsx";
+import { LayoutGenerationChatCanvas } from "../layoutGeneration/chat/LayoutGenerationChatCanvas.ts";
+import { LayoutGenerationChatContext } from "../layoutGeneration/chat/contexts.tsx";
 import {
   clone,
   validateAuthored,
-} from "../generation/shared/authoredValues.ts";
-import { ChatHarness } from "../generation/testing/chatFixtures.tsx";
-import { slottedFixture } from "../generation/testing/slottedFixtures.ts";
+} from "../layoutGeneration/shared/authoredValues.ts";
+import { ChatHarness } from "../layoutGeneration/testing/chatFixtures.tsx";
+import { slottedFixture } from "../layoutGeneration/testing/slottedFixtures.ts";
 
 it("keeps generated cards valid after automatic Puck synchronization and allows a follow-up reorder", async () => {
   const f = slottedFixture();

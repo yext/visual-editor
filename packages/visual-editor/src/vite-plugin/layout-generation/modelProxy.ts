@@ -6,7 +6,7 @@ import { z } from "zod";
 import {
   GENERATION_MODEL_REQUEST_MAX_BYTES,
   GENERATION_UPSTREAM_ERROR_MAX_CHARACTERS,
-} from "../../internal/generation/limits.ts";
+} from "../../internal/layoutGeneration/limits.ts";
 import {
   readJsonRequestBody,
   sendJsonResponse,

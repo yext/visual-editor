@@ -78,21 +78,6 @@ export const validateLibraryMetadata = (
     libraryMetadataValues.set("description", description);
   }
 
-  const defaultGenerationComponentIds =
-    metadataJson.defaultGenerationComponentIds;
-  if (
-    defaultGenerationComponentIds !== undefined &&
-    (!Array.isArray(defaultGenerationComponentIds) ||
-      defaultGenerationComponentIds.some(
-        (componentId) => typeof componentId !== "string" || !componentId.trim()
-      ))
-  ) {
-    addIssue(
-      "field/defaultGenerationComponentIds/type",
-      "defaultGenerationComponentIds must be an array of non-empty component IDs."
-    );
-  }
-
   // Validate id
   const id = libraryMetadataValues.get("id");
   if (id) {
@@ -113,12 +98,6 @@ export const validateLibraryMetadata = (
     issues,
     metadata: {
       schemaVersion: 1,
-      ...(defaultGenerationComponentIds !== undefined
-        ? {
-            defaultGenerationComponentIds:
-              defaultGenerationComponentIds as string[],
-          }
-        : {}),
       id: libraryMetadataValues.get("id")!,
       displayName: libraryMetadataValues.get("displayName")!,
       description: libraryMetadataValues.get("description")!,

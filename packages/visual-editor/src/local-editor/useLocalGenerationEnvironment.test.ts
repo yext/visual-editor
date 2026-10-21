@@ -2,8 +2,10 @@ import React from "react";
 import { act, cleanup, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { useLocalGenerationEnvironment } from "./useLocalGenerationEnvironment.ts";
-import { createPuckGenerationCatalog } from "../utils/generationCatalog.ts";
-import { withGenerationCatalog } from "../utils/generationCatalogRegistry.ts";
+import {
+  createPuckGenerationCatalog,
+  withGenerationCatalog,
+} from "../utils/createPuckGenerationCatalog.ts";
 
 const catalog = createPuckGenerationCatalog(
   {},
@@ -106,7 +108,7 @@ it("disposes the host on scope changes and Strict Mode remounts", async () => {
   await waitFor(() => expect(result.current).not.toBeNull());
   expect(listeners.size).toBe(1);
   const { generationRequestFixture } =
-    await import("../internal/generation/testing/iframeFixtures.ts");
+    await import("../internal/layoutGeneration/testing/iframeFixtures.ts");
   const start = () =>
     window.dispatchEvent(
       new MessageEvent("message", {

@@ -64,10 +64,32 @@ describe("createLocalEditorArtifactsManager", () => {
     );
   });
 
-  it("enables native Puck generation without importing a React registry", () => {
-    expect(localEditorTemplate).toContain("chatEnabled");
-    expect(localEditorTemplate).not.toContain("registry.js");
-  });
+  it.each([undefined, false, true])(
+    "gates generation in the generated template when enabled is %s",
+    (layoutGenerationEnabled) => {
+      const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "local-editor-"));
+      rootDirs.push(rootDir);
+      const artifacts = createLocalEditorArtifactsManager({
+        localEditorTemplateSource: localEditorTemplate,
+        localEditorDataTemplateSource: "generated",
+        layoutGenerationEnabled,
+      });
+
+      artifacts.syncLocalEditorTemplate([], rootDir);
+
+      const source = fs.readFileSync(
+        path.join(rootDir, "src/templates/local-editor.tsx"),
+        "utf8"
+      );
+      expect(source).toContain(
+        `chatEnabled={${layoutGenerationEnabled ?? false}}`
+      );
+      expect(source).not.toContain(
+        "__LOCAL_EDITOR_LAYOUT_GENERATION_ENABLED__"
+      );
+      expect(source).not.toContain("registry.js");
+    }
+  );
 
   it("passes repo translation loaders to the local editor runtime", () => {
     expect(localEditorTemplate).toContain('from "../library/.generated/i18n"');

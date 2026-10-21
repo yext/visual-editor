@@ -17,6 +17,7 @@ const LOCAL_EDITOR_STYLESHEET_HREFS_PLACEHOLDER =
 type CreateLocalEditorArtifactsManagerOptions = {
   localEditorTemplateSource: string;
   localEditorDataTemplateSource: string;
+  layoutGenerationEnabled?: boolean;
 };
 
 /**
@@ -29,6 +30,7 @@ type CreateLocalEditorArtifactsManagerOptions = {
 export const createLocalEditorArtifactsManager = ({
   localEditorTemplateSource,
   localEditorDataTemplateSource,
+  layoutGenerationEnabled = false,
 }: CreateLocalEditorArtifactsManagerOptions) => {
   const syncLocalEditorTemplate = (
     layouts: SectionLibraryLayout[],
@@ -43,6 +45,10 @@ export const createLocalEditorArtifactsManager = ({
     writeGeneratedTemplate(
       templatePath,
       localEditorTemplateSource
+        .replace(
+          "__LOCAL_EDITOR_LAYOUT_GENERATION_ENABLED__",
+          JSON.stringify(layoutGenerationEnabled)
+        )
         .replace(
           LOCAL_EDITOR_STYLESHEET_HREFS_PLACEHOLDER,
           JSON.stringify(readLocalEditorFontStylesheetHrefs(rootDir))
