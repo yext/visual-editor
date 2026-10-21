@@ -1,6 +1,6 @@
-import React from "react";
 import { Send, Square } from "lucide-react";
-import { LayoutGenerationChatDraftContext } from "./LayoutGenerationChatUiContext.tsx";
+import React from "react";
+import { LayoutGenerationChatDraftContext } from "./contexts.tsx";
 import type { useLayoutGenerationChat } from "./useLayoutGenerationChat.ts";
 
 /** Keep keystrokes local to the composer, away from the transcript and Puck. */
@@ -14,14 +14,18 @@ export const LayoutGenerationChatComposer = ({
   active: boolean;
 }) => {
   const draftState = React.useContext(LayoutGenerationChatDraftContext);
-  if (!draftState) throw new Error("Layout chat requires a draft provider.");
+  if (!draftState) {
+    throw new Error("Layout chat requires a draft provider.");
+  }
   const { draft, setDraft } = draftState;
   const promptRef = React.useRef<HTMLTextAreaElement>(null);
   const scheduleResizeRef = React.useRef<(() => void) | null>(null);
 
   React.useLayoutEffect(() => {
     const textarea = promptRef.current;
-    if (!textarea || !active) return;
+    if (!textarea || !active) {
+      return;
+    }
     // Native sizing avoids forced layout measurements on every input event.
     if (
       typeof CSS !== "undefined" &&
@@ -33,7 +37,9 @@ export const LayoutGenerationChatComposer = ({
     // one animation frame and keep the observer alive while the panel is open.
     let frame: number | null = null;
     const scheduleResize = () => {
-      if (frame !== null) return;
+      if (frame !== null) {
+        return;
+      }
       frame = requestAnimationFrame(() => {
         frame = null;
         textarea.style.height = "auto";
@@ -52,7 +58,9 @@ export const LayoutGenerationChatComposer = ({
     scheduleResize();
     return () => {
       observer.disconnect();
-      if (frame !== null) cancelAnimationFrame(frame);
+      if (frame !== null) {
+        cancelAnimationFrame(frame);
+      }
       scheduleResizeRef.current = null;
     };
   }, [active]);

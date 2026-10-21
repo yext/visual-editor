@@ -1,24 +1,29 @@
 import React from "react";
-import { executeGeneration as requestChatGeneration } from "../engine.ts";
-import { validateTaskGraph } from "../editUtils.ts";
+import { runEdits } from "../edits/runEdits.ts";
 import type {
-  GenerationEnvironment,
-  GenerationTokenUsage,
-} from "../environment.ts";
-import type { SectionTaskProgress } from "./chatProgress.ts";
-import { summarizeSectionOutcomes } from "./chatProgress.ts";
-import { LayoutGenerationChatCanvas } from "./LayoutGenerationChatCanvas.ts";
-import type {
-  LayoutGenerationRequest,
   SectionEditPlan,
   SectionEditTask,
   SectionTaskOutcome,
-} from "../editProtocol.ts";
-import { isBlankGenerationPage } from "../isBlankGenerationPage.ts";
-import { ChatGenerationError } from "./chatGenerationRequest.ts";
-import { repairChatOutput, runSectionTasks } from "./sectionTaskRunner.ts";
+} from "../edits/types.ts";
+import { isBlankGenerationPage } from "../full-generation/isBlankGenerationPage.ts";
+import { runFullGeneration } from "../full-generation/runFullGeneration.ts";
+import {
+  GENERATION_CANDIDATE_MAX_CHARACTERS,
+  GENERATION_ERROR_MAX_CHARACTERS,
+  GENERATION_STACK_MAX_CHARACTERS,
+  PUCK_HISTORY_SETTLE_DELAY_MS,
+} from "../limits.ts";
+import type {
+  ConversationMessage,
+  GenerationEnvironment,
+  GenerationRequestExecutor,
+  GenerationTokenUsage,
+} from "../shared/contracts.ts";
+import { executeGeneration as requestChatGeneration } from "../transport/executeGeneration.ts";
+import { LayoutGenerationChatCanvas } from "./LayoutGenerationChatCanvas.ts";
+import type { SectionTaskProgress } from "./chatProgress.ts";
+import { summarizeSectionOutcomes } from "./chatProgress.ts";
 
-type ConversationMessage = { role: "user" | "assistant"; content: string };
 type ChatMessage = {
   role: "user" | "assistant";
   text: string;
@@ -70,11 +75,14 @@ export const useLayoutGenerationChat = (
     const details: Record<string, unknown> = {
       ...diagnostics.current,
       layoutId,
-      error: error.message.slice(0, 32_768),
-      stack: error.stack?.slice(0, 65_536),
+      error: error.message.slice(0, GENERATION_ERROR_MAX_CHARACTERS),
+      stack: error.stack?.slice(0, GENERATION_STACK_MAX_CHARACTERS),
     };
     const candidateJson = JSON.stringify(details.candidate);
-    if (candidateJson && candidateJson.length > 500_000) {
+    if (
+      candidateJson &&
+      candidateJson.length > GENERATION_CANDIDATE_MAX_CHARACTERS
+    ) {
       details.candidate = { omitted: true, characters: candidateJson.length };
     }
     console.error("[layout generation] Chat failed", details);
@@ -246,9 +254,10 @@ export const useLayoutGenerationChat = (
     ]);
     setIsStreaming(true);
     setError(null);
-    const request = (
-      body: LayoutGenerationRequest,
-      signal = controller.signal
+    const request: GenerationRequestExecutor = (
+      body,
+      signal = controller.signal,
+      onCreationContent
     ) =>
       requestChatGeneration(
         body,
@@ -264,17 +273,7 @@ export const useLayoutGenerationChat = (
             }));
           }
         },
-        body.mode === "create"
-          ? async (content) => {
-              if (!active()) return;
-              await canvas.revealCreation(content as any, controller.signal);
-              createdSections = canvas.createdSectionCount;
-              diagnostics.current.phase = "streaming-creation";
-              showProgress(
-                `${createdSections} sections applied. Generating layout…`
-              );
-            }
-          : undefined
+        onCreationContent
       );
     try {
       const selectedComponentId = canvas.selectedComponentId;
@@ -284,151 +283,95 @@ export const useLayoutGenerationChat = (
       const sectionLabels = fresh ? {} : canvas.sectionLabels;
       showProgress(fresh ? "Generating layout…" : "Planning changes…");
       // Puck records manual changes after 250ms; let pending history settle.
-      await new Promise<void>((resolve) => setTimeout(resolve, 260));
+      await new Promise<void>((resolve) =>
+        setTimeout(resolve, PUCK_HISTORY_SETTLE_DELAY_MS)
+      );
       if (!active()) {
         return;
       }
       diagnostics.current.phase = fresh ? "request" : "planning";
+      const turn = {
+        layoutId,
+        currentData,
+        messages: requestMessages,
+        signal: controller.signal,
+        active,
+        request,
+      };
       if (fresh) {
-        showProgress("Checking page requirements…");
-        const prepared = await repairChatOutput((validationFeedback) =>
-          request({
-            mode: "prepare",
-            layoutId,
-            currentData,
-            messages: requestMessages,
-            validationFeedback,
-          })
-        );
-        if (!active()) return;
-        if (prepared.type !== "prepared") {
-          throw new Error("Expected page preparation output.");
-        }
-        if (prepared.preparation.question) {
-          complete(prepared.preparation.question);
-          return;
-        }
-        showProgress("Generating layout…");
-        canvas.beginCreation();
-        const event = await repairChatOutput(async (validationFeedback) => {
-          try {
-            return await request({
-              mode: "create",
-              layoutId,
-              currentData,
-              messages: requestMessages,
-              preparation: prepared.preparation,
-              validationFeedback,
-            });
-          } catch (cause) {
-            if (createdSections && cause instanceof ChatGenerationError) {
-              throw new ChatGenerationError(
-                cause.message,
-                false,
-                cause.transport,
-                cause.feedback
-              );
+        const text = await runFullGeneration({
+          ...turn,
+          canvas,
+          onProgress: (event) => {
+            switch (event.phase) {
+              case "preparing":
+                showProgress("Checking page requirements…");
+                break;
+              case "generating":
+                showProgress("Generating layout…");
+                break;
+              case "revealed":
+                createdSections = event.sectionCount;
+                diagnostics.current.phase = "streaming-creation";
+                showProgress(
+                  `${createdSections} sections applied. Generating layout…`
+                );
+                break;
+              case "applying":
+                diagnostics.current.phase = "resolve-and-commit";
+                diagnostics.current.candidate = event.candidate;
+                showProgress("Applying layout…");
+                break;
+              case "resolved":
+                createdSections = event.sectionCount;
+                break;
+              case "complete":
+                createdSections = event.sectionCount;
+                canvas.onDiagnostic("creation-stopped", {
+                  outcome: "complete",
+                  sectionCount: createdSections,
+                });
+                break;
             }
-            throw cause;
-          }
+          },
         });
-        if (!active()) {
-          return;
-        }
-        if (event.type !== "accepted") {
-          throw new Error("Expected fresh generation output.");
-        }
-        diagnostics.current.phase = "resolve-and-commit";
-        diagnostics.current.candidate = event.spec;
-        showProgress("Applying layout…");
-        if (event.spec) {
-          await canvas.revealCreation(event.spec, controller.signal);
-          createdSections = canvas.createdSectionCount;
-        }
-        canvas.finishCreation();
-        if (active()) {
-          canvas.onDiagnostic("creation-stopped", {
-            outcome: "complete",
-            sectionCount: createdSections,
-          });
-          complete(event.text);
+        if (text !== undefined && active()) {
+          complete(text);
         }
       } else {
-        plan = await repairChatOutput(async (validationFeedback) => {
-          if (active()) {
-            showProgress(
-              validationFeedback ? "Retrying plan…" : "Planning changes…"
-            );
-          }
-          const event = await request({
-            mode: "plan",
-            layoutId,
-            currentData,
-            messages: requestMessages,
-            selectedComponentId,
-            validationFeedback,
-          });
-          if (event.type !== "planned") {
-            throw new ChatGenerationError("Expected an edit plan.", true);
-          }
-          try {
-            validateTaskGraph(event.plan.tasks);
-          } catch (cause) {
-            throw new ChatGenerationError(String(cause), true);
-          }
-          return event.plan;
-        });
-        if (!active()) {
-          return;
-        }
-        plan.tasks.forEach((task, index) => {
-          const insertion = task.structuralOperations.find(
-            (operation) => operation.kind === "insert"
-          );
-          progress.set(task.taskId, {
-            taskId: task.taskId,
-            sectionId: task.sectionId,
-            label:
-              sectionLabels[task.sectionId] ??
-              (insertion?.kind === "insert"
-                ? `New section · ${insertion.componentType}`
-                : `Section ${index + 1}`),
-            description: task.description ?? "Update this section.",
-            status: task.dependsOn.length ? "waiting" : "pending",
-          });
-        });
-        showProgress(`0 of ${plan.tasks.length} sections applied.`);
-        diagnostics.current.phase = "section-execution";
-        const result = await runSectionTasks({
-          tasks: plan.tasks,
-          signal: controller.signal,
-          generate: async (task, signal, validationFeedback) => {
-            const event = await request(
-              {
-                mode: "section",
-                layoutId,
-                messages: requestMessages,
-                currentData: canvas.read(task),
-                task,
-                sharedIntent: plan!.sharedIntent,
-                validationFeedback,
-              },
-              signal
-            );
-            if (event.type !== "section-result") {
-              throw new ChatGenerationError("Expected a section result.", true);
+        const result = await runEdits({
+          ...turn,
+          canvas,
+          selectedComponentId,
+          onProgress: (event) => {
+            if (event.phase === "planning") {
+              showProgress(
+                event.retrying ? "Retrying plan…" : "Planning changes…"
+              );
+            } else if (event.phase === "section") {
+              updateProgress(event.task, event.status);
+            } else {
+              plan = event.plan;
+              plan.tasks.forEach((task, index) => {
+                const insertion = task.structuralOperations.find(
+                  (operation) => operation.kind === "insert"
+                );
+                progress.set(task.taskId, {
+                  taskId: task.taskId,
+                  sectionId: task.sectionId,
+                  label:
+                    sectionLabels[task.sectionId] ??
+                    (insertion?.kind === "insert"
+                      ? `New section · ${insertion.componentType}`
+                      : `Section ${index + 1}`),
+                  description: task.description ?? "Update this section.",
+                  status: task.dependsOn.length ? "waiting" : "pending",
+                });
+              });
+              showProgress(`0 of ${plan.tasks.length} sections applied.`);
+              diagnostics.current.phase = "section-execution";
             }
-            return event.result;
           },
-          commit: async (task, result, signal) => {
-            if (!active()) {
-              throw new Error("Generation cancelled.");
-            }
-            await canvas.commitSection(task, result, signal, () =>
-              updateProgress(task, "applying")
-            );
-          },
-          onProgress: updateProgress,
           onOutcome: (outcome) => {
             canvas.onDiagnostic("task-outcome", { ...outcome });
             if (active()) {
@@ -444,7 +387,7 @@ export const useLayoutGenerationChat = (
           return;
         }
         completeEdits();
-        if (result.error) {
+        if (result?.error) {
           reportError(result.error);
         }
       }

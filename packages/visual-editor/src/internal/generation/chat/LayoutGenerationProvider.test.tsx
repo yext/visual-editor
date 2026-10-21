@@ -1,11 +1,13 @@
-import React from "react";
 import { act, cleanup, render, waitFor } from "@testing-library/react";
+import React from "react";
 import { afterEach, expect, it, vi } from "vitest";
 import type { TemplateMetadata } from "../../types/templateMetadata.ts";
-import { LayoutGenerationProvider } from "./LayoutGenerationProvider.tsx";
-import { LayoutGenerationChatUiContext } from "./LayoutGenerationChatUiContext.tsx";
-import { LayoutGenerationChatContext } from "./LayoutGenerationChatContext.tsx";
 import { LayoutGenerationChatCanvas } from "./LayoutGenerationChatCanvas.ts";
+import { LayoutGenerationProvider } from "./LayoutGenerationProvider.tsx";
+import {
+  LayoutGenerationChatContext,
+  LayoutGenerationChatUiContext,
+} from "./contexts.tsx";
 
 let ui: React.ContextType<typeof LayoutGenerationChatUiContext>;
 const config = { components: {} };

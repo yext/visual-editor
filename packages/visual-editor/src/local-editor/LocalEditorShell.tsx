@@ -1,15 +1,20 @@
 import type { Config } from "@puckeditor/core";
 import React from "react";
-import { useLocalGenerationEnvironment } from "./useLocalGenerationEnvironment.ts";
 import { Editor } from "../editor/Editor.tsx";
 import type { LocalDevOptions } from "../editor/types.ts";
-import { SectionLibraryVisualEditorProvider } from "../utils/SectionLibraryVisualEditorProvider.tsx";
-import { LocalEditorControls } from "./LocalEditorControls.tsx";
+import {
+  LayoutGenerationChatContext,
+  LayoutGenerationChatUiProvider,
+} from "../internal/generation/chat/contexts.tsx";
 import { lockEditorInteraction } from "../internal/generation/chat/lockEditorInteraction.ts";
-import { LayoutGenerationChatUiProvider } from "../internal/generation/chat/LayoutGenerationChatUiContext.tsx";
-import { LayoutGenerationChatContext } from "../internal/generation/chat/LayoutGenerationChatContext.tsx";
 import { useLayoutGenerationChat } from "../internal/generation/chat/useLayoutGenerationChat.ts";
+import { SectionLibraryVisualEditorProvider } from "../utils/SectionLibraryVisualEditorProvider.tsx";
+import { StreamDocument } from "../utils/types/StreamDocument.ts";
+import { MAX_LOCAL_EDITOR_DIRECTORY_CHILD_COUNT } from "../vite-plugin/local-editor/fixtureData.ts";
+import { LocalEditorControls } from "./LocalEditorControls.tsx";
 import { LocalEditorNotice } from "./LocalEditorNotice.tsx";
+import { LocalEditorPreview } from "./LocalEditorPreview.tsx";
+import { installLocalEditorLocatorMocks } from "./locatorMocks.ts";
 import {
   buildEditorLocalDevOptions,
   buildLocalEditorDocumentRequestPath,
@@ -21,12 +26,9 @@ import type {
   LocalEditorDocumentResponse,
   LocalEditorShellProps,
 } from "./types.ts";
-import { LocalEditorPreview } from "./LocalEditorPreview.tsx";
-import { installLocalEditorLocatorMocks } from "./locatorMocks.ts";
 import { useLocalEditorDocument } from "./useLocalEditorDocument.ts";
 import { useLocalEditorManifest } from "./useLocalEditorManifest.ts";
-import { StreamDocument } from "../utils/types/StreamDocument.ts";
-import { MAX_LOCAL_EDITOR_DIRECTORY_CHILD_COUNT } from "../vite-plugin/local-editor/fixtureData.ts";
+import { useLocalGenerationEnvironment } from "./useLocalGenerationEnvironment.ts";
 
 const LOCAL_EDITOR_MAPBOX_KEY_STORAGE_KEY =
   "visual-editor.local-editor.mapbox-key";
@@ -158,7 +160,9 @@ export const LocalEditorShell = ({
   );
   const chat = useLayoutGenerationChat(generationEnvironment, selectedLayoutId);
   React.useEffect(() => {
-    if (selectedMode === "theme" || previewContext) chat.cancel();
+    if (selectedMode === "theme" || previewContext) {
+      chat.cancel();
+    }
   }, [selectedMode, previewContext, chat.cancel]);
 
   React.useEffect(() => {
@@ -200,7 +204,9 @@ export const LocalEditorShell = ({
   const { documentError, documentResponse, isDocumentLoading } =
     useLocalEditorDocument(documentRequestPath);
   React.useEffect(() => {
-    if (documentError) chat.cancel();
+    if (documentError) {
+      chat.cancel();
+    }
   }, [documentError, chat.cancel]);
 
   const diagnostics = React.useMemo(() => {

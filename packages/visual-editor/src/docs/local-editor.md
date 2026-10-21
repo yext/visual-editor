@@ -230,7 +230,9 @@ reach the canvas. The platform transport uses the
 After validation, the client resolves isolated candidates through `resolveAllData`
 in the active editor, checks authored-state preservation, and records undoable
 history. Section edits apply progressively after validation; cancelled or failed
-requests preserve changes already applied. Layout changes reset the conversation.
+edit requests preserve sections already committed. Full-page creation displays
+uncommitted previews, records one undo entry on success, and restores its starting
+layout on cancellation or failure. Layout changes reset the conversation.
 Locale/entity switches preserve conversation but abort a turn if the active canvas
 context changes during generation.
 
@@ -253,8 +255,28 @@ yextVisualEditorPlugin({
 The generated local-editor template enables chat by default with the `chatEnabled`
 prop. The shell uses shared generation providers above preview remounts. Platform
 owns those providers at the layout-editor boundary. The existing Puck plugin and
-canvas bridge are shared; chat modules live in `src/internal/generation/chat`,
-and prompt/schema/orchestration modules live in `src/internal/generation`.
+canvas bridge are shared. Generation code is organized under
+`src/internal/generation`:
+
+- `chat`: conversation state, UI, and Puck canvas integration.
+- `full-generation`: preparation, page schemas, streaming, and creation sessions.
+- `edits`: planning, task validation, scheduling, section schemas, and application.
+- `schema`: reusable compilation, strict-schema export, and compaction.
+- `shared`: authored-data and localization rules, execution contracts, and repair policy.
+- `transport`: request validation, mode dispatch, provider parsing, and messages.
+- `testing`: fixtures and synthetic executors/model responses, excluded from production imports.
+- `prompts.ts` and `limits.ts`: authored model text and operational budgets.
+
+Browser-only harness adapters, including the same-window generation host, live in
+`src/local-editor`. Node HTTP forwarding, reports, logging, and generation routes
+live in `src/vite-plugin/layout-generation`; the existing Node harness and raw
+template sources remain under `src/vite-plugin`.
+
+UI tests supply typed executor results. Engine tests inject synthetic model
+responses; message/local-host integration tests exercise real transport behavior.
+The focused Chromium suite verifies streaming creation and preview scrolling.
+Prompt and representative schema fingerprints captured before the refactor are
+checked in `testing/compatibility.test.ts`.
 
 The local `/generate/context?layoutId=…` endpoint supplies the configured model and
 existing local content-locale union. The model and generated catalog are used by

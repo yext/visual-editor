@@ -1,9 +1,6 @@
 import type { PuckGenerationCatalog } from "../../../utils/generationCatalog.ts";
-import {
-  buildEditInventory,
-  validateAuthored,
-  type Content,
-} from "../authored.ts";
+import { buildEditInventory } from "../edits/buildEditInventory.ts";
+import { validateAuthored, type Content } from "../shared/authoredValues.ts";
 
 /** Give existing-layout validation failures an actionable section name. */
 export const validateInitialChatLayout = (

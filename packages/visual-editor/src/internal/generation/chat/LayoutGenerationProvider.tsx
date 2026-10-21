@@ -1,11 +1,13 @@
-import React from "react";
 import type { Config } from "@puckeditor/core";
+import React from "react";
 import type { TemplateMetadata } from "../../types/templateMetadata.ts";
-import { getGenerationCatalog } from "../catalogRegistry.ts";
-import { consoleGenerationDiagnostics } from "../environment.ts";
-import { iframeModelTransport } from "../messageTransport.ts";
-import { LayoutGenerationChatContext } from "./LayoutGenerationChatContext.tsx";
-import { LayoutGenerationChatUiProvider } from "./LayoutGenerationChatUiContext.tsx";
+import { getGenerationCatalog } from "../shared/catalogRegistry.ts";
+import { consoleGenerationDiagnostics } from "../shared/contracts.ts";
+import { iframeModelTransport } from "../transport/messageTransport.ts";
+import {
+  LayoutGenerationChatContext,
+  LayoutGenerationChatUiProvider,
+} from "./contexts.tsx";
 import { useLayoutGenerationChat } from "./useLayoutGenerationChat.ts";
 
 /** Platform owner; the local shell uses the same hook/providers above preview remounts. */
@@ -47,7 +49,9 @@ export const LayoutGenerationProvider = ({
     metadata.layoutId,
   ]);
   const chat = useLayoutGenerationChat(environment, scope);
-  if (localDev) return children;
+  if (localDev) {
+    return children;
+  }
   return (
     <LayoutGenerationChatContext.Provider value={enabled ? chat.canvas : null}>
       <LayoutGenerationChatUiProvider

@@ -1,8 +1,11 @@
 // @vitest-environment node
 import { expect, it } from "vitest";
-import { slottedFixture } from "../generation/slottedGenerationTestUtils.ts";
-import { clone, validateAuthored } from "../generation/authored.ts";
 import { withGenerationCatalog } from "../../utils/generationCatalogRegistry.ts";
+import {
+  clone,
+  validateAuthored,
+} from "../generation/shared/authoredValues.ts";
+import { slottedFixture } from "../generation/testing/slottedFixtures.ts";
 import { synchronizeManualCardSlots } from "./synchronizeManualCardSlots.ts";
 
 it("repairs nested manual backups without changing visible cards, references, or unrelated storage", () => {

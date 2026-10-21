@@ -1,9 +1,9 @@
 /** Manual gateway check: sends only the synthetic catalog and prompt below. */
 import assert from "node:assert/strict";
 import { z } from "zod";
+import { executeGeneration } from "../src/internal/generation/transport/executeGeneration.ts";
 import { createPuckGenerationCatalog } from "../src/utils/generationCatalog.ts";
-import { executeGeneration } from "../src/internal/generation/engine.ts";
-import { GENERATION_GATEWAY_URL } from "../src/vite-plugin/layout-generation/generation.ts";
+import { GENERATION_GATEWAY_URL } from "../src/vite-plugin/layout-generation/modelProxy.ts";
 
 const model = process.argv[2] ?? "gpt-6-luna";
 const color = z.enum(["blue", "green"]);
@@ -77,7 +77,9 @@ try {
           },
           body: JSON.stringify(body),
         });
-        if (!response.ok) throw new Error(`Gateway HTTP ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`Gateway HTTP ${response.status}`);
+        }
         return {
           contentType:
             response.headers.get("Content-Type") ?? "application/json",
@@ -89,8 +91,9 @@ try {
     crypto.randomUUID(),
     () => {}
   );
-  if (accepted.type !== "accepted" || !accepted.spec?.content.length)
+  if (accepted.type !== "accepted" || !accepted.spec?.content.length) {
     throw new Error("No accepted content");
+  }
   const content = accepted.spec.content;
   assert.equal(content.length, 1);
   assert.equal(content[0].type, "MainContent");

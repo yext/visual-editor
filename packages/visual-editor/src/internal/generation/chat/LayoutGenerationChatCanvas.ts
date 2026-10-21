@@ -1,33 +1,23 @@
-import { CreationSession } from "./CreationSession.ts";
 import type { Data } from "@puckeditor/core";
-import type { PuckGenerationCatalog } from "../../../utils/generationCatalog.ts";
-import { changedChatPaths } from "./chatDiagnostics.ts";
 import { isDeepEqual } from "../../../utils/deepEqual.ts";
+import type { PuckGenerationCatalog } from "../../../utils/generationCatalog.ts";
 import { clonePuckResolveData } from "../../utils/clonePuckResolveData.ts";
-import { rejectZones } from "../authored.ts";
-import type { SectionEditResult, SectionEditTask } from "../editProtocol.ts";
-import { structuralEditResult } from "../editMaterializer.ts";
+import { structuralEditResult } from "../edits/applyEditsToLayout.ts";
+import type { SectionEditResult, SectionEditTask } from "../edits/types.ts";
+import { CreationSession } from "../full-generation/CreationSession.ts";
+import {
+  GENERATION_CHANGED_PATHS_LIMIT,
+  GENERATION_SNAPSHOT_MAX_BYTES,
+} from "../limits.ts";
+import { rejectZones } from "../shared/authoredValues.ts";
+import type { GenerationCanvasAdapter } from "../shared/contracts.ts";
+import { changedChatPaths } from "./chatDiagnostics.ts";
 
 type GeneratedContent = Pick<Data, "content">;
-export type ChatCanvasAdapter = {
-  /** Inspect a snapshot without changing editor state. */
-  inspect?: (data: Data) => object;
-  /** Read the latest editor data. */
-  read: () => Data;
-  /** Validate existing content before requesting changes. */
+export type ChatCanvasAdapter = GenerationCanvasAdapter & {
   validateInitial?: (data: Data) => void;
-  /** Read the selected component before the turn starts. */
   readSelection?: () => string | null;
-  /** Name existing sections in their current display order. */
   readSectionLabels?: () => Record<string, string>;
-  /** Resolve an isolated candidate through Puck. */
-  resolve: (data: Data) => Promise<Data>;
-  /** Check that fresh generation survived resolution. */
-  validate: (data: Data, candidate: Data) => void;
-  /** Display validated creation data without history or persistence. */
-  preview?: (data: Data) => void;
-  /** Apply data and record one undo entry from its baseline. */
-  commit: (data: Data, baseline: Data) => void;
   /** Apply one section's operations to the latest baseline. */
   materializeSection?: (
     baseline: Data,
@@ -73,9 +63,9 @@ export class LayoutGenerationChatCanvas {
         ...details,
         ...this.adapter?.inspect?.(data),
         changedPaths,
-        changedPathsLimit: 100,
+        changedPathsLimit: GENERATION_CHANGED_PATHS_LIMIT,
         snapshot:
-          new Blob([serialized]).size <= 2_000_000
+          new Blob([serialized]).size <= GENERATION_SNAPSHOT_MAX_BYTES
             ? snapshot
             : { omitted: true, characters: serialized.length },
       });
@@ -163,8 +153,9 @@ export class LayoutGenerationChatCanvas {
     return this.adapter?.readSelection?.() ?? null;
   }
   beginCreation() {
-    if (!this.adapter || !this.baseline)
+    if (!this.adapter || !this.baseline) {
       throw new Error("The editor is not ready.");
+    }
     this.creation = new CreationSession(this.adapter, this.baseline);
     this.creationStartedAt = performance.now();
   }
@@ -172,7 +163,9 @@ export class LayoutGenerationChatCanvas {
     return this.creation?.sectionCount ?? 0;
   }
   async revealCreation(data: GeneratedContent, signal: AbortSignal) {
-    if (!this.creation) throw new Error("Creation session ended.");
+    if (!this.creation) {
+      throw new Error("Creation session ended.");
+    }
     const session = this.creation;
     const started = performance.now();
     const previousCount = session.sectionCount;

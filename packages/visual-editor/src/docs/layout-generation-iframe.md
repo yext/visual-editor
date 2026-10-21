@@ -200,13 +200,13 @@ Parent: abort upstream A and release its resources
 Synthetic, typed request and Responses API completion fixtures live in
 [`iframeFixtures.ts`](../internal/generation/testing/iframeFixtures.ts).
 The executable parent-window harness is in
-[`messageTransport.test.ts`](../internal/generation/messageTransport.test.ts).
+[`messageTransport.test.ts`](../internal/generation/transport/messageTransport.test.ts).
 It exercises interleaving, origin/source validation, cancellation, errors, and
 one-byte chunks splitting both UTF-8 and SSE boundaries. Its engine integration
 case verifies equivalent results through the parent harness and local message host.
-[`localGenerationHost.test.ts`](../internal/generation/localGenerationHost.test.ts)
+[`localGenerationHost.test.ts`](../local-editor/localGenerationHost.test.ts)
 covers HTTP forwarding and cleanup, and
-[`localGenerationIntegration.test.ts`](../internal/generation/localGenerationIntegration.test.ts)
+[`generationIntegration.test.ts`](../local-editor/generationIntegration.test.ts)
 runs preparation, creation, planning, section execution, and repair through the
 engine, shared message client, local host, and synthetic HTTP responses.
 
@@ -224,12 +224,13 @@ No unfinished component props reach the renderer.
 
 Creation locks layout mutations while permitting scrolling and cancellation.
 Reveals keep component identities and do not create history entries or save drafts.
-On successful completion, cancellation, or failure, the editor records the retained
-page as one undo step and saves through the normal platform path. Failure after a
-reveal retains validated sections and reports an incomplete page; it does not retry
-the whole generation automatically. Before any reveal, one validation repair is
-still permitted. Final page acceptance requires the complete provider response and
-all page-wide requirements, including prepared card collections.
+On successful completion, the editor records the accepted page as one undo step
+and saves through the normal platform path. Cancellation or failure discards
+uncommitted previews and restores the starting layout without a history entry.
+A failed request is not automatically retried after a reveal. Before any reveal,
+one validation repair is still permitted. Final page acceptance requires the
+complete provider response and all page-wide requirements, including prepared card
+collections.
 
 Reloading or changing editor context during generation discards the unsaved
 attempt. Late results cannot apply or save into another layout. The parent must

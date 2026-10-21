@@ -1,18 +1,8 @@
-import type { Plugin } from "vite";
 import path from "node:path";
-import {
-  handleGenerationDiagnostics,
-  handleGenerationErrorReport,
-} from "./layout-generation/generationReports.ts";
+import type { Plugin } from "vite";
+import type { SectionLibraryLayout } from "../types/sectionLibrary.ts";
 import { createGenerationLogger } from "./layout-generation/generationLogger.ts";
-import { handleLocalEditorModelRequest } from "./layout-generation/generation.ts";
-import { getLocalEditorGenerationLocales } from "./local-editor/data.ts";
-import {
-  cleanupGeneratedSectionLibraryFiles,
-  generateSectionLibraryFiles,
-} from "./section-library/sectionLibraryGenerator.ts";
-import localEditorTemplate from "./templates/local-editor.tsx?raw";
-import localEditorDataTemplate from "./templates/local-editor-data.tsx?raw";
+import { createGenerationMiddleware } from "./layout-generation/middleware.ts";
 import { createLocalEditorArtifactsManager } from "./local-editor/artifacts.ts";
 import { readResolvedLayoutConfigs } from "./local-editor/config.ts";
 import { ensureLocalEditorStreamConfig } from "./local-editor/generatedFiles.ts";
@@ -21,7 +11,12 @@ import {
   sendJsonResponse,
 } from "./local-editor/server.ts";
 import type { LocalEditorOptions } from "./local-editor/types.ts";
-import type { SectionLibraryLayout } from "../types/sectionLibrary.ts";
+import {
+  cleanupGeneratedSectionLibraryFiles,
+  generateSectionLibraryFiles,
+} from "./section-library/sectionLibraryGenerator.ts";
+import localEditorDataTemplate from "./templates/local-editor-data.tsx?raw";
+import localEditorTemplate from "./templates/local-editor.tsx?raw";
 
 export type VisualEditorPluginOptions = {
   /** @deprecated This option is ignored because Section Library builds are always enabled. */
@@ -156,99 +151,18 @@ export const yextVisualEditorPlugin = (
         cleanupGeneratedArtifacts();
       });
 
+      server.middlewares.use(
+        createGenerationMiddleware({
+          rootDir: server.config.root,
+          getLayouts: () => sectionLibraryLayouts,
+          getModel: () => options.localEditor?.generationModel ?? "gpt-6-luna",
+          logGeneration,
+        })
+      );
+
       server.middlewares.use((request, response, next) => {
         if (!request.url) {
           next();
-          return;
-        }
-        const reportPath = new URL(request.url, "http://localhost").pathname;
-        if (
-          reportPath === "/__yext_visual_editor/local-editor/generate/context"
-        ) {
-          const layoutId = new URL(
-            request.url,
-            "http://localhost"
-          ).searchParams.get("layoutId");
-          void (async () => {
-            if (!layoutId) {
-              sendJsonResponse(
-                response,
-                { error: "A layoutId is required." },
-                400
-              );
-              return;
-            }
-            sendJsonResponse(response, {
-              model: options.localEditor?.generationModel ?? "gpt-6-luna",
-              locales: await getLocalEditorGenerationLocales(
-                server.config.root,
-                sectionLibraryLayouts,
-                layoutId
-              ),
-            });
-          })().catch((error) =>
-            sendJsonResponse(response, { error: String(error) }, 500)
-          );
-          return;
-        }
-
-        if (
-          reportPath === "/__yext_visual_editor/local-editor/generate/error" ||
-          reportPath ===
-            "/__yext_visual_editor/local-editor/generate/diagnostics"
-        ) {
-          const handleReport = reportPath.endsWith("/diagnostics")
-            ? handleGenerationDiagnostics
-            : handleGenerationErrorReport;
-          void handleReport(request, response, logGeneration).catch(
-            (error: unknown) => {
-              logGeneration("[local-editor generation] Error report failed", {
-                error: error instanceof Error ? error.message : String(error),
-                stack: error instanceof Error ? error.stack : undefined,
-              });
-              if (!response.headersSent) {
-                sendJsonResponse(
-                  response,
-                  { error: "Unable to record chat error" },
-                  500
-                );
-              } else {
-                response.destroy();
-              }
-            }
-          );
-          return;
-        }
-        if (
-          new URL(request.url, "http://localhost").pathname ===
-          "/__yext_visual_editor/local-editor/generate"
-        ) {
-          void handleLocalEditorModelRequest(request, response, {
-            log: logGeneration,
-            model: options.localEditor?.generationModel ?? "gpt-6-luna",
-          }).catch((error: unknown) => {
-            logGeneration("[local-editor generation] Request failed", {
-              correlationId: request.headers["x-visual-editor-correlation-id"],
-              method: request.method,
-              url: request.url,
-              error: error instanceof Error ? error.message : String(error),
-              stack: error instanceof Error ? error.stack : undefined,
-            });
-            void logGeneration.flush();
-            if (response.headersSent) {
-              response.destroy(
-                error instanceof Error ? error : new Error(String(error))
-              );
-            } else {
-              sendJsonResponse(
-                response,
-                {
-                  error: error instanceof Error ? error.message : String(error),
-                },
-                500
-              );
-            }
-          });
           return;
         }
         void handleLocalEditorRequest(

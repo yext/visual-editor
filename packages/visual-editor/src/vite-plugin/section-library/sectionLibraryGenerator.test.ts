@@ -1,18 +1,18 @@
 // @vitest-environment node
+import { Render } from "@puckeditor/core";
+import fs from "fs-extra";
+import { createServer as createHttpServer } from "node:http";
 import os from "node:os";
 import path from "node:path";
-import { createServer as createHttpServer } from "node:http";
-import fs from "fs-extra";
-import { createServer } from "vite";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { Render } from "@puckeditor/core";
+import { createServer } from "vite";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { validateAuthored } from "../../internal/generation/authored.ts";
-import { compileSectionEditSchema } from "../../internal/generation/sectionEditSchema.ts";
-import { materializeSectionEdit } from "../../internal/generation/editMaterializer.ts";
 import { MainContent } from "../../components/helpers/MainContent.tsx";
-import { buildGenerationPrompt } from "../../internal/generation/generationValidation.ts";
+import { materializeSectionEdit } from "../../internal/generation/edits/applyEditsToLayout.ts";
+import { compileSectionEditSchema } from "../../internal/generation/edits/compileSectionEditSchema.ts";
+import { buildGenerationPrompt } from "../../internal/generation/prompts.ts";
+import { validateAuthored } from "../../internal/generation/shared/authoredValues.ts";
 import {
   cleanupGeneratedSectionLibraryFiles,
   generateSectionLibraryFiles,

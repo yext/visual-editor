@@ -1,4 +1,4 @@
-import type { GenerationRequest } from "../messageTransport.ts";
+import type { GenerationRequest } from "../transport/messageTransport.ts";
 
 /** Synthetic protocol examples shared with the platform handoff documentation. */
 export const generationRequestFixture: GenerationRequest = {

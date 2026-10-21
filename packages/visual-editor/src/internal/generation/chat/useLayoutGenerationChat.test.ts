@@ -1,19 +1,28 @@
+import type { Data } from "@puckeditor/core";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
-import type { Data } from "@puckeditor/core";
-import { testGenerationEnvironment } from "./generationTestEnvironment.ts";
-import type { SectionEditPlan, SectionEditTask } from "../editProtocol.ts";
+import { createPuckGenerationCatalog } from "../../../utils/generationCatalog.ts";
 import {
   materializeSectionEdit,
   preserveSectionEditResolution,
-} from "../editMaterializer.ts";
-import { createPuckGenerationCatalog } from "../../../utils/generationCatalog.ts";
+} from "../edits/applyEditsToLayout.ts";
+import type { SectionEditPlan, SectionEditTask } from "../edits/types.ts";
+import type { GenerationResult } from "../shared/contracts.ts";
+import { GenerationError } from "../shared/generationErrors.ts";
+import {
+  chatConfig,
+  generatedContent,
+  layout,
+} from "../testing/chatFixtures.tsx";
+import {
+  stubGenerationExecutor,
+  testGenerationEnvironment,
+  type ExecutorReply,
+} from "../testing/executorFixtures.ts";
 import { useLayoutGenerationChat } from "./useLayoutGenerationChat.ts";
-import { chatConfig, generatedContent, layout } from "./chatTestUtils.tsx";
 
-vi.mock("../engine.ts", async () => ({
-  executeGeneration: (await import("./generationTestClient.ts"))
-    .mockGenerationRequest,
+vi.mock("../transport/executeGeneration.ts", () => ({
+  executeGeneration: vi.fn(),
 }));
 const task = (taskId: string, dependsOn: string[] = []): SectionEditTask => ({
   taskId,
@@ -34,15 +43,8 @@ const plan = (tasks = [task("heading")]): SectionEditPlan => ({
   tasks,
 });
 const usage = { cachedInput: 1, uncachedInput: 2, output: 3 };
-const response = (event: unknown) =>
-  new Response(
-    [JSON.stringify({ type: "usage", usage }), JSON.stringify(event)].join(
-      "\n"
-    ),
-    { headers: { "X-Visual-Editor-Generation": "section-edits-v1" } }
-  );
-const section = (id: string, value = "Updated") =>
-  response({
+const section = (id: string, value = "Updated"): GenerationResult =>
+  ({
     type: "section-result",
     result: {
       taskId: id,
@@ -55,13 +57,15 @@ const section = (id: string, value = "Updated") =>
         },
       ],
     },
-  });
+  }) satisfies GenerationResult;
 const setup = (
   resolve: (candidate: Data) => Promise<Data> = async (candidate) => candidate,
   blank = false
 ) => {
   let data = layout();
-  if (blank) data.content = [];
+  if (blank) {
+    data.content = [];
+  }
   const catalog = createPuckGenerationCatalog(chatConfig.components);
   const hook = renderHook(() =>
     useLayoutGenerationChat(testGenerationEnvironment("/generate"), "layout")
@@ -92,26 +96,25 @@ afterEach(() => vi.unstubAllGlobals());
 
 it("asks the translation question after preparation without generating or committing a page", async () => {
   const current = setup(undefined, true);
-  const fetchMock = vi.fn(async (_url: string, _init?: RequestInit) =>
-    response({
-      type: "prepared",
-      preparation: {
-        question: "Would you like Spanish translations?",
-        translationMode: null,
-        cardCounts: [],
-      },
-    })
+  const executeMock = vi.fn(
+    async (_body: any): Promise<ExecutorReply> =>
+      ({
+        type: "prepared",
+        preparation: {
+          question: "Would you like Spanish translations?",
+          translationMode: null,
+          cardCounts: [],
+        },
+      }) satisfies GenerationResult
   );
-  vi.stubGlobal("fetch", fetchMock);
+  stubGenerationExecutor(executeMock, { usage });
   await act(async () => {
     await current.result.current.send(
       "Create a page with three cards per section"
     );
   });
-  expect(fetchMock).toHaveBeenCalledOnce();
-  expect(JSON.parse(fetchMock.mock.calls[0][1]!.body as string).mode).toBe(
-    "prepare"
-  );
+  expect(executeMock).toHaveBeenCalledOnce();
+  expect(executeMock.mock.calls[0][0].mode).toBe("prepare");
   expect(current.commit).not.toHaveBeenCalled();
   expect(current.result.current.messages.at(-1)?.text).toBe(
     "Would you like Spanish translations?"
@@ -121,7 +124,7 @@ it("asks the translation question after preparation without generating or commit
 it.each([
   { answer: "Yes, translate it", translationMode: "translate" },
   { answer: "No, keep fallback text only", translationMode: "defaultOnly" },
-])(
+] as const)(
   "carries the original card requirements into generation after answering: $answer",
   async ({ answer, translationMode }) => {
     const current = setup(undefined, true);
@@ -132,42 +135,34 @@ it.each([
       translationMode,
       cardCounts: [{ componentType: "Cards", instanceIndex: null, count: 3 }],
     };
-    const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
-      const body = JSON.parse(init!.body as string);
+    const executeMock = vi.fn(async (body: any): Promise<ExecutorReply> => {
       if (body.mode === "prepare") {
-        return response({
+        return {
           type: "prepared",
           preparation:
             body.messages.length === 1
               ? { ...preparation, question, translationMode: null }
               : preparation,
-        });
+        } satisfies GenerationResult;
       }
-      return new Response(
-        JSON.stringify({
-          type: "accepted",
-          text: "Created",
-          spec: generatedContent("Created"),
-        }) + "\n",
-        {
-          headers: { "X-Visual-Editor-Generation": "strict-puck-overrides-v2" },
-        }
-      );
+      return {
+        type: "accepted",
+        text: "Created",
+        spec: generatedContent("Created"),
+      } satisfies GenerationResult;
     });
-    vi.stubGlobal("fetch", fetchMock);
+    stubGenerationExecutor(executeMock, { usage });
     await act(async () => {
       await current.result.current.send(prompt);
     });
-    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(executeMock).toHaveBeenCalledOnce();
     expect(current.commit).not.toHaveBeenCalled();
     expect(current.result.current.messages.at(-1)?.text).toBe(question);
     await act(async () => {
       await current.result.current.send(answer);
     });
-    expect(fetchMock).toHaveBeenCalledTimes(3);
-    const bodies = fetchMock.mock.calls.map(([, init]) =>
-      JSON.parse(init!.body as string)
-    );
+    expect(executeMock).toHaveBeenCalledTimes(3);
+    const bodies = executeMock.mock.calls.map(([body]) => body);
     expect(bodies.map((body) => body.mode)).toEqual([
       "prepare",
       "prepare",
@@ -192,22 +187,19 @@ it("plans with selection and sends latest committed data to dependent sections",
     type: "Heading",
     props: { id: "second", text: "Second" },
   });
-  const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
-    const body = JSON.parse(init!.body as string);
+  const executeMock = vi.fn(async (body: any): Promise<ExecutorReply> => {
     return body.mode === "plan"
-      ? response({
+      ? ({
           type: "planned",
           plan: plan([task("heading"), task("second", ["heading"])]),
-        })
+        } satisfies GenerationResult)
       : section(body.task.taskId);
   });
-  vi.stubGlobal("fetch", fetchMock);
+  stubGenerationExecutor(executeMock, { usage });
   await act(async () => {
     await current.result.current.send("Welcome visitors");
   });
-  const bodies = fetchMock.mock.calls.map(([, init]) =>
-    JSON.parse(init!.body as string)
-  );
+  const bodies = executeMock.mock.calls.map(([body]) => body);
   expect(bodies[0]).toMatchObject({
     mode: "plan",
     selectedComponentId: "heading",
@@ -230,36 +222,25 @@ it("plans with selection and sends latest committed data to dependent sections",
 
 it("retries planning and section output once and aggregates every attempt", async () => {
   const current = setup();
-  const fetchMock = vi
+  const executeMock = vi
     .fn()
     .mockResolvedValueOnce(
-      response({
-        type: "error",
-        error: "Invalid plan",
-        retryable: true,
-        validationFeedback: "Fix plan",
-      })
+      new GenerationError("Invalid plan", true, false, "Fix plan")
     )
-    .mockResolvedValueOnce(response({ type: "planned", plan: plan() }))
+    .mockResolvedValueOnce({
+      type: "planned",
+      plan: plan(),
+    } satisfies GenerationResult)
     .mockResolvedValueOnce(
-      response({
-        type: "error",
-        error: "Invalid copy",
-        retryable: true,
-        validationFeedback: "Fix copy",
-      })
+      new GenerationError("Invalid copy", true, false, "Fix copy")
     )
     .mockResolvedValueOnce(section("heading"));
-  vi.stubGlobal("fetch", fetchMock);
+  stubGenerationExecutor(executeMock, { usage });
   await act(async () => {
     await current.result.current.send("Update");
   });
-  expect(JSON.parse(fetchMock.mock.calls[1][1].body).validationFeedback).toBe(
-    "Fix plan"
-  );
-  expect(JSON.parse(fetchMock.mock.calls[3][1].body).validationFeedback).toBe(
-    "Fix copy"
-  );
+  expect(executeMock.mock.calls[1][0].validationFeedback).toBe("Fix plan");
+  expect(executeMock.mock.calls[3][0].validationFeedback).toBe("Fix copy");
   expect(current.result.current.usage.output).toBe(12);
   expect(current.commit).toHaveBeenCalledOnce();
 });
@@ -276,14 +257,15 @@ it.each(["clarification", "globalStyle", "conversation"] as const)(
       globalStyleGuidance:
         intent === "globalStyle" ? "Use the global style editor." : null,
     };
-    const fetchMock = vi.fn(async () =>
-      response({ type: "planned", plan: noEdits })
+    const executeMock = vi.fn(
+      async () =>
+        ({ type: "planned", plan: noEdits }) satisfies GenerationResult
     );
-    vi.stubGlobal("fetch", fetchMock);
+    stubGenerationExecutor(executeMock, { usage });
     await act(async () => {
       await current.result.current.send("Help");
     });
-    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(executeMock).toHaveBeenCalledOnce();
     expect(current.commit).not.toHaveBeenCalled();
     expect(current.result.current.messages.at(-1)?.text).toBe(
       intent === "clarification"
@@ -299,21 +281,22 @@ it.each([false, true])(
   "retains batch limitations with actual outcomes and in history (failure %s)",
   async (fail) => {
     const current = setup(async (candidate) => {
-      if (fail) throw new Error("Resolver failed");
+      if (fail) {
+        throw new Error("Resolver failed");
+      }
       return candidate;
     });
     const limitations =
       "I cannot change the card grid; that setting is unavailable.";
-    const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
-      const body = JSON.parse(init!.body as string);
+    const executeMock = vi.fn(async (body: any): Promise<ExecutorReply> => {
       return body.mode === "plan"
-        ? response({
+        ? ({
             type: "planned",
             plan: { ...plan(), text: "Everything was updated.", limitations },
-          })
+          } satisfies GenerationResult)
         : section("heading");
     });
-    vi.stubGlobal("fetch", fetchMock);
+    stubGenerationExecutor(executeMock, { usage });
     await act(async () => {
       await current.result.current.send("Update the heading and card grid");
     });
@@ -323,16 +306,17 @@ it.each([false, true])(
     );
     expect(final.text).not.toContain("Everything was updated");
     expect(final.sections?.[0].status).toBe(fail ? "failed" : "applied");
-    fetchMock.mockImplementation(async () =>
-      response({
-        type: "planned",
-        plan: { ...plan([]), intent: "conversation", text: "Done" },
-      })
+    executeMock.mockImplementation(
+      async () =>
+        ({
+          type: "planned",
+          plan: { ...plan([]), intent: "conversation", text: "Done" },
+        }) satisfies GenerationResult
     );
     await act(async () => {
       await current.result.current.send("What could not change?");
     });
-    const next = JSON.parse(fetchMock.mock.calls.at(-1)![1]!.body as string);
+    const next = executeMock.mock.calls.at(-1)![0];
     expect(next.messages[1].content).toContain(limitations);
     expect(next.messages[1].content).not.toContain("Everything was updated");
   }
@@ -344,26 +328,25 @@ it("retains applied work and actual history on cancellation, ignoring late respo
     type: "Heading",
     props: { id: "second", text: "Second" },
   });
-  let late!: (value: Response) => void;
-  const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
-    const body = JSON.parse(init!.body as string);
+  let late!: (value: ExecutorReply) => void;
+  const executeMock = vi.fn(async (body: any): Promise<ExecutorReply> => {
     if (body.mode === "plan") {
-      return response({
+      return {
         type: "planned",
         plan: {
           ...plan([task("heading"), task("second")]),
           limitations: "Moving cards between sections is unavailable.",
         },
-      });
+      } satisfies GenerationResult;
     }
     if (body.task.taskId === "second") {
-      return new Promise<Response>((resolve) => {
+      return new Promise<ExecutorReply>((resolve) => {
         late = resolve;
       });
     }
     return section("heading");
   });
-  vi.stubGlobal("fetch", fetchMock);
+  stubGenerationExecutor(executeMock, { usage });
   let pending!: Promise<void>;
   act(() => {
     pending = current.result.current.send("Update both");
@@ -383,16 +366,17 @@ it("retains applied work and actual history on cancellation, ignoring late respo
     await pending;
   });
   expect(current.commit).toHaveBeenCalledOnce();
-  fetchMock.mockImplementation(async () =>
-    response({
-      type: "planned",
-      plan: { ...plan([]), intent: "conversation", text: "Done" },
-    })
+  executeMock.mockImplementation(
+    async () =>
+      ({
+        type: "planned",
+        plan: { ...plan([]), intent: "conversation", text: "Done" },
+      }) satisfies GenerationResult
   );
   await act(async () => {
     await current.result.current.send("What changed?");
   });
-  const last = JSON.parse(fetchMock.mock.calls.at(-1)![1]!.body as string);
+  const last = executeMock.mock.calls.at(-1)![0];
   expect(last.messages[1].content).toContain("Section 2: cancelled");
   expect(last.messages[1].content).toContain(
     "Moving cards between sections is unavailable."
@@ -414,16 +398,15 @@ it("keeps an earlier application after a later resolver fails twice", async () =
     type: "Heading",
     props: { id: "second", text: "Second" },
   });
-  const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
-    const body = JSON.parse(init!.body as string);
+  const executeMock = vi.fn(async (body: any): Promise<ExecutorReply> => {
     return body.mode === "plan"
-      ? response({
+      ? ({
           type: "planned",
           plan: plan([task("heading"), task("second", ["heading"])]),
-        })
+        } satisfies GenerationResult)
       : section(body.task.taskId);
   });
-  vi.stubGlobal("fetch", fetchMock);
+  stubGenerationExecutor(executeMock, { usage });
   await act(async () => {
     await current.result.current.send("Update both");
   });
@@ -437,7 +420,7 @@ it("keeps an earlier application after a later resolver fails twice", async () =
       (item: any) => item.props.text
     )
   ).toEqual(["Updated", "Second"]);
-  expect(fetchMock).toHaveBeenCalledTimes(4);
+  expect(executeMock).toHaveBeenCalledTimes(4);
 });
 
 vi.mock(

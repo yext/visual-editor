@@ -1,15 +1,15 @@
 import { z } from "zod";
-import type { LayoutGenerationRequest } from "../editProtocol.ts";
+import {
+  sectionEditPlanSchema,
+  sectionEditResultSchema,
+} from "../edits/sectionEditTaskSchema.ts";
+import { generationPreparationSchema } from "../full-generation/preparationContracts.ts";
 import type {
   GenerationEnvironment,
   GenerationTokenUsage,
-} from "../environment.ts";
-import { ChatGenerationError } from "./chatGenerationRequest.ts";
-import {
-  generationPreparationSchema,
-  sectionEditPlanSchema,
-  sectionEditResultSchema,
-} from "../editProtocolSchema.ts";
+  LayoutGenerationRequest,
+} from "../shared/contracts.ts";
+import { GenerationError as ChatGenerationError } from "../shared/generationErrors.ts";
 
 const acceptedSchema = z.strictObject({
   type: z.literal("accepted"),

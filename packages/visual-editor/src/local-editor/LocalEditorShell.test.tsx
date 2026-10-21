@@ -1,31 +1,34 @@
-import React from "react";
+import { Puck, blocksPlugin, outlinePlugin } from "@puckeditor/core";
 import {
+  act,
   fireEvent,
   render,
   screen,
   waitFor,
   within,
 } from "@testing-library/react";
+import React from "react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
-import { Puck, blocksPlugin, outlinePlugin } from "@puckeditor/core";
-import { testGenerationEnvironment } from "../internal/generation/chat/generationTestEnvironment.ts";
-import { openChat } from "../internal/generation/chat/chatTestUtils.tsx";
-import { LayoutGenerationChatUiContext } from "../internal/generation/chat/LayoutGenerationChatUiContext.tsx";
+import { TemplatePropsContext, useDocument } from "../hooks/useDocument.tsx";
+import { LayoutGenerationChatBridge } from "../internal/generation/chat/LayoutGenerationChatBridge.tsx";
+import { LayoutGenerationChatUiContext } from "../internal/generation/chat/contexts.tsx";
 import { layoutGenerationChatPlugin } from "../internal/generation/chat/layoutGenerationChatPlugin.tsx";
-import { useDocument } from "../hooks/useDocument.tsx";
 import {
   chatConfig,
-  layout,
   generatedContent,
-} from "../internal/generation/chat/chatTestUtils.tsx";
-import { TemplatePropsContext } from "../hooks/useDocument.tsx";
-import { LayoutGenerationChatBridge } from "../internal/generation/chat/LayoutGenerationChatBridge.tsx";
+  layout,
+  openChat,
+} from "../internal/generation/testing/chatFixtures.tsx";
+import {
+  deferredGeneration,
+  stubGenerationExecutor,
+  testGenerationEnvironment,
+} from "../internal/generation/testing/executorFixtures.ts";
+import { executeGeneration } from "../internal/generation/transport/executeGeneration.ts";
 import { LocalEditorShell } from "./LocalEditorShell.tsx";
 
-vi.mock("../internal/generation/engine.ts", async () => ({
-  executeGeneration: (
-    await import("../internal/generation/chat/generationTestClient.ts")
-  ).mockGenerationRequest,
+vi.mock("../internal/generation/transport/executeGeneration.ts", () => ({
+  executeGeneration: vi.fn(),
 }));
 vi.mock("./useLocalGenerationEnvironment.ts", () => ({
   useLocalGenerationEnvironment: (
@@ -104,10 +107,8 @@ const manifest = {
   defaults: {},
   diagnostics: [],
 };
-let upstream: ReadableStreamDefaultController<Uint8Array>;
-let generationSignal: AbortSignal | null | undefined;
-const emit = (event: object) =>
-  upstream.enqueue(new TextEncoder().encode(JSON.stringify(event) + "\n"));
+let pending: ReturnType<typeof deferredGeneration>;
+let generationSignal: AbortSignal | undefined;
 const setup = (enabled = true) =>
   render(
     <LocalEditorShell
@@ -134,7 +135,7 @@ const submit = async () => {
     }
   );
   fireEvent.click(screen.getByRole("button", { name: "Send" }));
-  await waitFor(() => expect(upstream).toBeDefined());
+  await waitFor(() => expect(pending).toBeDefined());
   await screen.findByText("Planning changes…");
   expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
 };
@@ -142,13 +143,19 @@ beforeEach(() => {
   window.history.replaceState({}, "", "/local-editor");
   window.localStorage.clear();
   window.sessionStorage.clear();
-  upstream = undefined!;
+  pending = undefined!;
   generationSignal = undefined;
+  stubGenerationExecutor(async (_request, signal) => {
+    generationSignal = signal;
+    pending = deferredGeneration();
+    return pending.promise;
+  });
   vi.stubGlobal(
     "fetch",
-    vi.fn(async (url: string, init?: RequestInit) => {
-      if (url.endsWith("/manifest"))
+    vi.fn(async (url: string, _init?: RequestInit) => {
+      if (url.endsWith("/manifest")) {
         return new Response(JSON.stringify(manifest));
+      }
       if (url.includes("/document?")) {
         const params = new URL(url, "http://localhost").searchParams;
         return new Response(
@@ -162,21 +169,10 @@ beforeEach(() => {
           })
         );
       }
-      if (url.endsWith("/generate/error"))
+      if (url.endsWith("/generate/error")) {
         return new Response(JSON.stringify({ recorded: true }));
-      generationSignal = init?.signal;
-      return new Response(
-        new ReadableStream({
-          start(controller) {
-            upstream = controller;
-          },
-        }),
-        {
-          headers: {
-            "X-Visual-Editor-Generation": "section-edits-v1",
-          },
-        }
-      );
+      }
+      throw new Error(`Unexpected local editor request: ${url}`);
     })
   );
 });
@@ -229,9 +225,13 @@ it("cancels when entity changes and clears chat when layout changes", async () =
   await screen.findByText("Original", { selector: "h2" });
   openChat();
   expect(screen.queryByText("Change heading")).toBeNull();
-  expect(() =>
-    emit({ type: "accepted", text: "Late", spec: generatedContent("Late") })
-  ).toThrow();
+  await act(async () =>
+    pending.resolve({
+      type: "accepted",
+      text: "Late",
+      spec: generatedContent("Late"),
+    })
+  );
   expect(screen.queryByText("Late", { selector: "h2" })).toBeNull();
 });
 
@@ -267,10 +267,7 @@ vi.mock("./generationDiagnostics.ts", async (importOriginal) => ({
 it("allows plugin navigation and cancellation while generation keeps the canvas locked", async () => {
   setup();
   await submit();
-  const requestCount = () =>
-    vi
-      .mocked(fetch)
-      .mock.calls.filter(([url]) => String(url).endsWith("/generate")).length;
+  const requestCount = () => vi.mocked(executeGeneration).mock.calls.length;
   const beforeSwitch = requestCount();
   const prompt = screen.getByRole("textbox", {
     name: "Describe what you want",

@@ -1,11 +1,12 @@
 import { defineCatalog, defineSchema } from "@json-render/core";
 import type { Fields, Permissions } from "@puckeditor/core";
 import { z } from "zod";
-import {
-  puckCatalogPrompt,
-  generationComponentNamesLabel,
-} from "../internal/generation/prompts.ts";
 import type { ComponentGenerationMetadata } from "../fields/fields.ts";
+import {
+  generationComponentNamesLabel,
+  mainContentDescription,
+  puckCatalogPrompt,
+} from "../internal/generation/prompts.ts";
 
 export type GenerationComponent = {
   generation?: ComponentGenerationMetadata;
@@ -72,8 +73,7 @@ export const createPuckGenerationCatalog = (
         },
       },
       defaultProps: { content: [] },
-      description:
-        "The main content area, containing page sections in display order, with headers before it and footers after it as page-root siblings.",
+      description: mainContentDescription,
     },
     ...components,
   };

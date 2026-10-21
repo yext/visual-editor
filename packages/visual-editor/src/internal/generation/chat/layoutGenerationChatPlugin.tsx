@@ -1,8 +1,8 @@
-import React from "react";
 import { createUsePuck, type Plugin } from "@puckeditor/core";
 import { MessageSquare } from "lucide-react";
+import React from "react";
 import { LayoutGenerationChat } from "./LayoutGenerationChat.tsx";
-import { LayoutGenerationChatUiContext } from "./LayoutGenerationChatUiContext.tsx";
+import { LayoutGenerationChatUiContext } from "./contexts.tsx";
 
 const usePuck = createUsePuck();
 const pluginName = "local-editor-layout-assistant";

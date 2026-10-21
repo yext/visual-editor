@@ -1,4 +1,5 @@
-import type { GenerationDiagnostics } from "../internal/generation/environment.ts";
+import { GENERATION_PHASE_MAX_CHARACTERS } from "../internal/generation/limits.ts";
+import type { GenerationDiagnostics } from "../internal/generation/shared/contracts.ts";
 
 /** Persist browser reports without affecting generation or chat error state. */
 const postChatReport = (
@@ -50,7 +51,7 @@ export const createLocalGenerationDiagnostics = (
         correlationId:
           (details as { correlationId?: string }).correlationId ?? diagnosticId,
         sequence: sequence++,
-        phase: message.slice(0, 100),
+        phase: message.slice(0, GENERATION_PHASE_MAX_CHARACTERS),
         details,
       }),
     report,

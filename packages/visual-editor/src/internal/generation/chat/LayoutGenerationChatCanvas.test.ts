@@ -1,13 +1,13 @@
-import { describe, expect, it, vi } from "vitest";
 import type { Data } from "@puckeditor/core";
+import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import { createPuckGenerationCatalog } from "../../../utils/generationCatalog.ts";
-import { clone } from "../authored.ts";
 import {
   materializeSectionEdit,
   preserveSectionEditResolution,
-} from "../editMaterializer.ts";
-import type { SectionEditTask, SectionEditResult } from "../editProtocol.ts";
+} from "../edits/applyEditsToLayout.ts";
+import type { SectionEditResult, SectionEditTask } from "../edits/types.ts";
+import { clone } from "../shared/authoredValues.ts";
 import {
   LayoutGenerationChatCanvas,
   serializeChatLayout,

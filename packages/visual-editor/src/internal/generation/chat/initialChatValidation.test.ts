@@ -2,7 +2,7 @@
 import { expect, it } from "vitest";
 import { z } from "zod";
 import { createPuckGenerationCatalog } from "../../../utils/generationCatalog.ts";
-import { slottedFixture } from "../slottedGenerationTestUtils.ts";
+import { slottedFixture } from "../testing/slottedFixtures.ts";
 import { validateInitialChatLayout } from "./initialChatValidation.ts";
 
 it("names the owning section when a nested wrapper has invalid manual slots", () => {

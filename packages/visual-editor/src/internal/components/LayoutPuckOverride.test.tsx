@@ -1,13 +1,16 @@
-import React from "react";
 import { useGetPuck } from "@puckeditor/core";
 import { act, render, waitFor } from "@testing-library/react";
+import React from "react";
 import { expect, it } from "vitest";
-import { ChatHarness } from "../generation/chat/chatTestUtils.tsx";
-import { LayoutGenerationChatCanvas } from "../generation/chat/LayoutGenerationChatCanvas.ts";
-import { LayoutGenerationChatContext } from "../generation/chat/LayoutGenerationChatContext.tsx";
-import { slottedFixture } from "../generation/slottedGenerationTestUtils.ts";
-import { clone, validateAuthored } from "../generation/authored.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
+import { LayoutGenerationChatCanvas } from "../generation/chat/LayoutGenerationChatCanvas.ts";
+import { LayoutGenerationChatContext } from "../generation/chat/contexts.tsx";
+import {
+  clone,
+  validateAuthored,
+} from "../generation/shared/authoredValues.ts";
+import { ChatHarness } from "../generation/testing/chatFixtures.tsx";
+import { slottedFixture } from "../generation/testing/slottedFixtures.ts";
 
 it("keeps generated cards valid after automatic Puck synchronization and allows a follow-up reorder", async () => {
   const f = slottedFixture();
@@ -24,7 +27,9 @@ it("keeps generated cards valid after automatic Puck synchronization and allows 
   const Card = (props: any) => {
     const getPuck = useGetPuck();
     React.useEffect(() => {
-      if (props.index < 3 || props.styles.color === "blue") return;
+      if (props.index < 3 || props.styles.color === "blue") {
+        return;
+      }
       const { dispatch, getSelectorForId, getItemBySelector } = getPuck();
       const selector = getSelectorForId(props.id)!;
       const savedProps = getItemBySelector(selector)!.props;

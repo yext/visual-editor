@@ -1,47 +1,47 @@
-import { lockEditorInteraction } from "../generation/chat/lockEditorInteraction.ts";
 import {
-  Puck,
-  Data,
-  Config,
-  type History,
-  InitialHistory,
-  AppState,
   ActionBar,
+  AppState,
+  ComponentDataOptionalId,
+  Config,
+  Data,
+  FieldLabel,
+  InitialHistory,
+  Puck,
+  blocksPlugin,
+  createUsePuck,
+  outlinePlugin,
   useGetPuck,
   walkTree,
-  ComponentDataOptionalId,
-  FieldLabel,
-  createUsePuck,
-  blocksPlugin,
-  outlinePlugin,
+  type History,
 } from "@puckeditor/core";
-import React, { useRef, useCallback } from "react";
-import * as lzstring from "lz-string";
 import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
-import { v4 as uuidv4 } from "uuid";
+import * as lzstring from "lz-string";
+import React, { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { LayoutGenerationChatUiContext } from "../generation/chat/LayoutGenerationChatUiContext.tsx";
-import { layoutGenerationChatPlugin } from "../generation/chat/layoutGenerationChatPlugin.tsx";
-import { LayoutPuckOverride } from "./LayoutPuckOverride.tsx";
-import { TemplateMetadata } from "../types/templateMetadata.ts";
-import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
-import { LayoutSaveState } from "../types/saveState.ts";
-import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
-import { MetaTitleField } from "../puck/components/meta-title/MetaTitleField.tsx";
-import { DevLogger } from "../../utils/devLogger.ts";
-import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
-import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
-import { Metadata } from "../../editor/Editor.tsx";
-import { AdvancedSettings } from "./AdvancedSettings.tsx";
-import { cn } from "../../utils/cn.ts";
-import { removeDuplicateActionBars } from "../utils/removeDuplicateActionBars.ts";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
+import { v4 as uuidv4 } from "uuid";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
+import { Metadata } from "../../editor/Editor.tsx";
+import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
-import type { MigrationRegistry } from "../../utils/migrate.ts";
 import { createYextFieldTransforms } from "../../fields/fieldTransforms/index.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { cn } from "../../utils/cn.ts";
+import { DevLogger } from "../../utils/devLogger.ts";
+import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
+import type { MigrationRegistry } from "../../utils/migrate.ts";
+import { LayoutGenerationChatUiContext } from "../generation/chat/contexts.tsx";
+import { layoutGenerationChatPlugin } from "../generation/chat/layoutGenerationChatPlugin.tsx";
+import { lockEditorInteraction } from "../generation/chat/lockEditorInteraction.ts";
+import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
+import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { TransformedFieldTooltip } from "../puck/components/TransformedFieldTooltip.tsx";
+import { MetaTitleField } from "../puck/components/meta-title/MetaTitleField.tsx";
+import { LayoutSaveState } from "../types/saveState.ts";
+import { TemplateMetadata } from "../types/templateMetadata.ts";
+import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
+import { removeDuplicateActionBars } from "../utils/removeDuplicateActionBars.ts";
+import { AdvancedSettings } from "./AdvancedSettings.tsx";
+import { LayoutPuckOverride } from "./LayoutPuckOverride.tsx";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -132,8 +132,9 @@ export const InternalLayoutEditor = ({
   const creating = chatUi?.chat.isCreating ?? false;
   const editorRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
-    if (creating && editorRef.current)
+    if (creating && editorRef.current) {
       return lockEditorInteraction(editorRef.current);
+    }
   }, [creating]);
   // Keep plugin sidebar fields mounted when saved state changes.
   const plugins = React.useMemo(
@@ -151,7 +152,9 @@ export const InternalLayoutEditor = ({
    */
   const handleHistoryChange = useCallback(
     (histories: History<Partial<AppState>>[], index: number) => {
-      if (creating) return;
+      if (creating) {
+        return;
+      }
       if (
         index !== 0 &&
         historyIndex.current !== index &&

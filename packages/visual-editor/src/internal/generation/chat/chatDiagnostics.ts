@@ -1,10 +1,14 @@
 import { isDeepEqual } from "../../../utils/deepEqual.ts";
+import { GENERATION_CHANGED_PATHS_LIMIT } from "../limits.ts";
 
 /** Locate changed values, including changes inside visible cards and manual backups. */
 export const changedChatPaths = (before: unknown, after: unknown): string[] => {
   const paths: string[] = [];
   const visit = (left: any, right: any, path: string) => {
-    if (paths.length >= 100 || isDeepEqual(left, right)) {
+    if (
+      paths.length >= GENERATION_CHANGED_PATHS_LIMIT ||
+      isDeepEqual(left, right)
+    ) {
       return;
     }
     if (

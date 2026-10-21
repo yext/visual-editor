@@ -1,34 +1,34 @@
+import {
+  createUsePuck,
+  resolveAllData,
+  useGetPuck,
+  type Data,
+} from "@puckeditor/core";
 import React from "react";
+import type { StreamDocument } from "../../../utils/types/StreamDocument.ts";
+import { buildPuckHistoryState } from "../../utils/buildPuckHistoryState.ts";
+import { clonePuckResolveData } from "../../utils/clonePuckResolveData.ts";
+import { buildEditInventory } from "../edits/buildEditInventory.ts";
+import {
+  materializeSectionEdit,
+  preserveSectionEditResolution,
+} from "../edits/applyEditsToLayout.ts";
+import {
+  assertAuthoredPreserved,
+  extractAuthored,
+  validateAuthored,
+  walkAuthored,
+} from "../shared/authoredValues.ts";
+import { getGenerationCatalog } from "../shared/catalogRegistry.ts";
+import { isLinkedSource, manualBackup } from "../shared/slottedItemSource.ts";
+import type { LayoutGenerationChatCanvas } from "./LayoutGenerationChatCanvas.ts";
+import { changedChatPaths } from "./chatDiagnostics.ts";
+import { LayoutGenerationChatContext } from "./contexts.tsx";
+import { validateInitialChatLayout } from "./initialChatValidation.ts";
 import {
   preservePreviewScroll,
   reusePreviewData,
 } from "./preservePreviewScroll.ts";
-import {
-  resolveAllData,
-  useGetPuck,
-  createUsePuck,
-  type Data,
-} from "@puckeditor/core";
-import { validateInitialChatLayout } from "./initialChatValidation.ts";
-import { changedChatPaths } from "./chatDiagnostics.ts";
-import { isLinkedSource, manualBackup } from "../slottedItemSource.ts";
-import { clonePuckResolveData } from "../../utils/clonePuckResolveData.ts";
-import { buildPuckHistoryState } from "../../utils/buildPuckHistoryState.ts";
-import { getGenerationCatalog } from "../catalogRegistry.ts";
-import {
-  assertAuthoredPreserved,
-  buildEditInventory,
-  validateAuthored,
-  walkAuthored,
-  extractAuthored,
-} from "../authored.ts";
-import {
-  materializeSectionEdit,
-  preserveSectionEditResolution,
-} from "../editMaterializer.ts";
-import type { StreamDocument } from "../../../utils/types/StreamDocument.ts";
-import type { LayoutGenerationChatCanvas } from "./LayoutGenerationChatCanvas.ts";
-import { LayoutGenerationChatContext } from "./LayoutGenerationChatContext.tsx";
 
 /** This component is mounted inside the existing editor's Puck provider. */
 export const LayoutGenerationChatBridge = ({

@@ -1,4 +1,4 @@
-import type { SectionTaskOutcome } from "../editProtocol.ts";
+import type { SectionTaskOutcome } from "../edits/types.ts";
 
 export type SectionTaskProgress = {
   /** The task whose progress is displayed. */

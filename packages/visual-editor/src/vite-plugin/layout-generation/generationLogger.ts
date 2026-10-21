@@ -1,3 +1,7 @@
+import {
+  GENERATION_LOG_FLUSH_INTERVAL_MS,
+  GENERATION_LOG_BUFFER_MAX_BYTES,
+} from "../../internal/generation/limits.ts";
 import { appendFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 
@@ -10,7 +14,9 @@ export const createGenerationLogger = (directory: string) => {
   let timer: ReturnType<typeof setInterval> | undefined;
   let closed = false;
   const flush = () => {
-    if (!pending || !filename) return writes;
+    if (!pending || !filename) {
+      return writes;
+    }
     const batch = pending;
     const target = filename;
     pending = "";
@@ -26,18 +32,22 @@ export const createGenerationLogger = (directory: string) => {
     return writes;
   };
   const log = (message: string, details: object) => {
-    if (closed) return;
+    if (closed) {
+      return;
+    }
     const timestamp = new Date().toISOString();
     if (!filename) {
       filename = path.join(directory, timestamp.replaceAll(":", "-") + ".log");
-      timer = setInterval(() => void flush(), 10_000);
+      timer = setInterval(() => void flush(), GENERATION_LOG_FLUSH_INTERVAL_MS);
       timer.unref();
     }
     const line = JSON.stringify({ timestamp, message, ...details }) + "\n";
     pending += line;
     pendingBytes += Buffer.byteLength(line);
     // Flush oversized batches early to keep the active buffer bounded.
-    if (pendingBytes >= 4 * 1024 * 1024) void flush();
+    if (pendingBytes >= GENERATION_LOG_BUFFER_MAX_BYTES) {
+      void flush();
+    }
   };
   return Object.assign(log, {
     flush,

@@ -1,7 +1,7 @@
 import { walkTree, type Config, type Data } from "@puckeditor/core";
-import { getGenerationCatalog } from "../generation/catalogRegistry.ts";
-import { isLinkedSource } from "../generation/slottedItemSource.ts";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
+import { getGenerationCatalog } from "../generation/shared/catalogRegistry.ts";
+import { isLinkedSource } from "../generation/shared/slottedItemSource.ts";
 import { clonePuckResolveData } from "./clonePuckResolveData.ts";
 
 /** Native slots receive Puck updates; manual backups are hidden from its tree. */

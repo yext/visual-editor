@@ -1,12 +1,12 @@
-import React from "react";
-import { LayoutGenerationChatUiContext } from "../generation/chat/LayoutGenerationChatUiContext.tsx";
 import { createUsePuck, resolveAllData, useGetPuck } from "@puckeditor/core";
-import { LayoutGenerationChatBridge } from "../generation/chat/LayoutGenerationChatBridge.tsx";
-import { ValidationReporters } from "../puck/components/ValidationReporters.tsx";
+import React from "react";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
+import { LayoutGenerationChatBridge } from "../generation/chat/LayoutGenerationChatBridge.tsx";
+import { LayoutGenerationChatUiContext } from "../generation/chat/contexts.tsx";
+import { ValidationReporters } from "../puck/components/ValidationReporters.tsx";
+import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { synchronizeManualCardSlots } from "../utils/synchronizeManualCardSlots.ts";
 
 const devLogger = new DevLogger();
@@ -26,12 +26,15 @@ export const LayoutPuckOverride = ({
   const observedData = usePuck((puck) => puck.appState.data);
   const document = useDocument();
   const documentRef = React.useRef(document);
-  if (!isDeepEqual(documentRef.current, document))
+  if (!isDeepEqual(documentRef.current, document)) {
     documentRef.current = document;
+  }
   const streamDocument = documentRef.current;
 
   React.useEffect(() => {
-    if (creatingRef.current) return;
+    if (creatingRef.current) {
+      return;
+    }
     const { appState, config, dispatch } = getPuck();
     const data = synchronizeManualCardSlots(appState.data, config);
     if (data !== appState.data) {
@@ -43,7 +46,9 @@ export const LayoutPuckOverride = ({
     let active = true;
     const resolveData = async () => {
       devLogger.logFunc("reloadDataOnDocumentChange");
-      if (creatingRef.current) return;
+      if (creatingRef.current) {
+        return;
+      }
       const { appState, config, dispatch } = getPuck();
       const resolvedData = await resolveAllData(
         clonePuckResolveData(appState.data),
@@ -54,8 +59,9 @@ export const LayoutPuckOverride = ({
         !active ||
         creatingRef.current ||
         getPuck().appState.data !== appState.data
-      )
+      ) {
         return;
+      }
       devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
       if (isDeepEqual(appState.data, resolvedData)) {
         devLogger.log(

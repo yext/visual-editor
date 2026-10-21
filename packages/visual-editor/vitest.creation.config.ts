@@ -8,13 +8,13 @@ export default defineConfig({
   optimizeDeps: {
     esbuildOptions: { target: "es2022" },
     entries: [
-      "src/internal/generation/chat/CreationFlow.test.tsx",
+      "src/internal/generation/full-generation/creationFlow.test.tsx",
       "src/internal/generation/chat/preservePreviewScroll.test.ts",
     ],
   },
   test: {
     include: [
-      "src/internal/generation/chat/CreationFlow.test.tsx",
+      "src/internal/generation/full-generation/creationFlow.test.tsx",
       "src/internal/generation/chat/preservePreviewScroll.test.ts",
     ],
     setupFiles: ["./src/editor/editorTests.setup.ts"],

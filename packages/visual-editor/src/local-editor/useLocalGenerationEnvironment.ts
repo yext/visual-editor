@@ -1,10 +1,10 @@
-import React from "react";
 import type { Config } from "@puckeditor/core";
-import { getGenerationCatalog } from "../internal/generation/catalogRegistry.ts";
-import type { GenerationEnvironment } from "../internal/generation/environment.ts";
+import React from "react";
+import { getGenerationCatalog } from "../internal/generation/shared/catalogRegistry.ts";
+import type { GenerationEnvironment } from "../internal/generation/shared/contracts.ts";
+import { createLocalMessageTransport } from "../internal/generation/transport/messageTransport.ts";
 import { createLocalGenerationDiagnostics } from "./generationDiagnostics.ts";
-import { createLocalMessageTransport } from "../internal/generation/messageTransport.ts";
-import { installLocalGenerationHost } from "../internal/generation/localGenerationHost.ts";
+import { installLocalGenerationHost } from "./localGenerationHost.ts";
 
 /** Local model/locale settings come from Vite, not the selected preview entity. */
 export const useLocalGenerationEnvironment = (
@@ -21,28 +21,34 @@ export const useLocalGenerationEnvironment = (
   } | null>(null);
   React.useEffect(() => {
     setSettings(null);
-    if (!enabled || !layoutId) return;
+    if (!enabled || !layoutId) {
+      return;
+    }
     const disposeHost = installLocalGenerationHost(api);
     const controller = new AbortController();
     void fetch(`${api}/context?layoutId=${encodeURIComponent(layoutId)}`, {
       signal: controller.signal,
     })
       .then(async (response) => {
-        if (!response.ok)
+        if (!response.ok) {
           throw new Error(`Generation settings HTTP ${response.status}`);
+        }
         const context = await response.json();
         if (
           typeof context.model !== "string" ||
           !Array.isArray(context.locales) ||
           !context.locales.every((value: unknown) => typeof value === "string")
-        )
+        ) {
           throw new Error("Invalid generation settings");
-        if (!controller.signal.aborted)
+        }
+        if (!controller.signal.aborted) {
           setSettings({ ...context, layoutId, api });
+        }
       })
       .catch((error) => {
-        if (!controller.signal.aborted)
+        if (!controller.signal.aborted) {
           console.error("Unable to load generation settings", error);
+        }
       });
     return () => {
       controller.abort();

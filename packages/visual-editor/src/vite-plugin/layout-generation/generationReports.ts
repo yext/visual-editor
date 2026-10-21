@@ -1,6 +1,12 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { z } from "zod";
 import {
+  GENERATION_ERROR_MAX_CHARACTERS,
+  GENERATION_PHASE_MAX_CHARACTERS,
+  GENERATION_REPORT_MAX_BYTES,
+  GENERATION_STACK_MAX_CHARACTERS,
+} from "../../internal/generation/limits.ts";
+import {
   readJsonRequestBody,
   sendJsonResponse,
 } from "../local-editor/server.ts";
@@ -8,11 +14,11 @@ import {
 const errorReportSchema = z.object({
   layoutId: z.string().max(1024),
   correlationId: z.string().max(100).optional(),
-  phase: z.string().max(100).optional(),
+  phase: z.string().max(GENERATION_PHASE_MAX_CHARACTERS).optional(),
   historyMessageCount: z.number().int().nonnegative().optional(),
   status: z.number().int().optional(),
-  error: z.string().max(32_768),
-  stack: z.string().max(65_536).optional(),
+  error: z.string().max(GENERATION_ERROR_MAX_CHARACTERS),
+  stack: z.string().max(GENERATION_STACK_MAX_CHARACTERS).optional(),
   candidate: z.unknown().optional(),
 });
 
@@ -20,7 +26,7 @@ const diagnosticReportSchema = z.object({
   layoutId: z.string().max(1024),
   correlationId: z.string().max(100),
   sequence: z.number().int().nonnegative(),
-  phase: z.string().max(100),
+  phase: z.string().max(GENERATION_PHASE_MAX_CHARACTERS),
   details: z.record(z.string(), z.unknown()),
 });
 
@@ -48,7 +54,10 @@ const createReportHandler =
       sendJsonResponse(response, { error: options.methodError }, 405);
       return;
     }
-    const body = await readJsonRequestBody(request, 4 * 1024 * 1024);
+    const body = await readJsonRequestBody(
+      request,
+      GENERATION_REPORT_MAX_BYTES
+    );
     if (!body.ok) {
       sendJsonResponse(
         response,

@@ -1,4 +1,3 @@
-import React from "react";
 import {
   act,
   fireEvent,
@@ -8,13 +7,22 @@ import {
   within,
 } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
-import { openChat } from "./chatTestUtils.tsx";
-import { ChatHarness, chatConfig, layout } from "./chatTestUtils.tsx";
-import type { SectionEditTask } from "../editProtocol.ts";
+import type { SectionEditTask } from "../edits/types.ts";
+import type { GenerationResult } from "../shared/contracts.ts";
+import { GenerationError } from "../shared/generationErrors.ts";
+import {
+  ChatHarness,
+  chatConfig,
+  layout,
+  openChat,
+} from "../testing/chatFixtures.tsx";
+import {
+  stubGenerationExecutor,
+  type ExecutorReply,
+} from "../testing/executorFixtures.ts";
 
-vi.mock("../engine.ts", async () => ({
-  executeGeneration: (await import("./generationTestClient.ts"))
-    .mockGenerationRequest,
+vi.mock("../transport/executeGeneration.ts", () => ({
+  executeGeneration: vi.fn(),
 }));
 const task = (taskId: string, dependsOn: string[] = []): SectionEditTask => ({
   taskId,
@@ -26,12 +34,8 @@ const task = (taskId: string, dependsOn: string[] = []): SectionEditTask => ({
   dependsOn,
   generateContent: true,
 });
-const response = (event: unknown) =>
-  new Response(JSON.stringify(event) + "\n", {
-    headers: { "X-Visual-Editor-Generation": "section-edits-v1" },
-  });
 const planned = (tasks: SectionEditTask[]) =>
-  response({
+  ({
     type: "planned",
     plan: {
       intent: "content",
@@ -42,9 +46,9 @@ const planned = (tasks: SectionEditTask[]) =>
       sharedIntent: "Improve copy",
       tasks,
     },
-  });
+  }) satisfies GenerationResult;
 const section = (taskId: string) =>
-  response({
+  ({
     type: "section-result",
     result: {
       taskId,
@@ -57,7 +61,7 @@ const section = (taskId: string) =>
         },
       ],
     },
-  });
+  }) satisfies GenerationResult;
 const submit = async (text = "Improve the page") => {
   fireEvent.change(
     screen.getByRole("textbox", { name: "Describe what you want" }),
@@ -76,19 +80,17 @@ const editor = (ids = ["heading", "second"]) => {
 };
 
 it("shows named section progress and preserves applied work when stopped from collapsed chat", async () => {
-  let finishPlan!: (response: Response) => void;
-  let finishSecond!: (response: Response) => void;
-  vi.stubGlobal(
-    "fetch",
-    vi.fn(async (_url: string, init?: RequestInit) => {
-      const body = JSON.parse(init!.body as string);
+  let finishPlan!: (response: ExecutorReply) => void;
+  let finishSecond!: (response: ExecutorReply) => void;
+  stubGenerationExecutor(
+    vi.fn(async (body: any) => {
       if (body.mode === "plan") {
-        return new Promise<Response>((resolve) => {
+        return new Promise<ExecutorReply>((resolve) => {
           finishPlan = resolve;
         });
       }
       if (body.task.taskId === "second") {
-        return new Promise<Response>((resolve) => {
+        return new Promise<ExecutorReply>((resolve) => {
           finishSecond = resolve;
         });
       }
@@ -133,11 +135,15 @@ it("shows named section progress and preserves applied work when stopped from co
 
 it("shows retrying, failed, skipped and applied outcomes, and sends them in subsequent history", async () => {
   let secondAttempt = 0;
-  let finishRetry!: (response: Response) => void;
+  let finishRetry!: (response: ExecutorReply) => void;
   const invalid = () =>
-    response({ type: "error", error: "Invalid heading copy", retryable: true });
-  const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
-    const body = JSON.parse(init!.body as string);
+    new GenerationError(
+      "Invalid heading copy",
+      true,
+      false,
+      "Invalid heading copy"
+    );
+  const executeMock = vi.fn(async (body: any) => {
     if (body.mode === "plan") {
       return planned([
         task("heading"),
@@ -150,13 +156,13 @@ it("shows retrying, failed, skipped and applied outcomes, and sends them in subs
       secondAttempt++;
       return secondAttempt === 1
         ? invalid()
-        : new Promise<Response>((resolve) => {
+        : new Promise<ExecutorReply>((resolve) => {
             finishRetry = resolve;
           });
     }
     return section(body.task.taskId);
   });
-  vi.stubGlobal("fetch", fetchMock);
+  stubGenerationExecutor(executeMock);
   editor(["heading", "second", "third", "fourth"]);
   await submit();
   await screen.findByText("Retrying changes");
@@ -168,23 +174,24 @@ it("shows retrying, failed, skipped and applied outcomes, and sends them in subs
   expect(screen.getByText("Skipped")).toBeTruthy();
   expect(screen.getByText("Invalid heading copy")).toBeTruthy();
   expect(screen.queryByText("Everything was updated.")).toBeNull();
-  fetchMock.mockImplementation(async () =>
-    response({
-      type: "planned",
-      plan: {
-        intent: "conversation",
-        text: "Reviewed",
-        clarification: null,
-        globalStyleGuidance: null,
-        limitations: null,
-        sharedIntent: "",
-        tasks: [],
-      },
-    })
+  executeMock.mockImplementation(
+    async () =>
+      ({
+        type: "planned",
+        plan: {
+          intent: "conversation",
+          text: "Reviewed",
+          clarification: null,
+          globalStyleGuidance: null,
+          limitations: null,
+          sharedIntent: "",
+          tasks: [],
+        },
+      }) satisfies GenerationResult
   );
   await submit("What changed?");
   await screen.findByText("Reviewed");
-  const body = JSON.parse(fetchMock.mock.calls.at(-1)![1]!.body as string);
+  const body = executeMock.mock.calls.at(-1)![0];
   expect(body.messages[1].content).toContain("Improve the heading.");
   expect(body.messages[1].content).not.toContain("authored schema");
   expect(body.messages[1].content).toContain("Section 2 · Heading: failed");
@@ -199,10 +206,8 @@ it("distinguishes a resolving section from another result waiting in the applica
   const resolution = new Promise<void>((resolve) => {
     finishResolution = resolve;
   });
-  vi.stubGlobal(
-    "fetch",
-    vi.fn(async (_url: string, init?: RequestInit) => {
-      const body = JSON.parse(init!.body as string);
+  stubGenerationExecutor(
+    vi.fn(async (body: any) => {
       return body.mode === "plan"
         ? planned([task("heading"), task("second")])
         : section(body.task.taskId);
