@@ -51,6 +51,7 @@
     "build:cli": "tsup --config tsup.config.ts",
     "build": "pnpm run build:components && pnpm run build:plugin && pnpm run build:cli",
     "test": "pnpm run test:editor && pnpm run test:components",
+    "test:pageGeneration:browser": "vitest run --config vitest.pageGenerationTest.config.ts",
     "test:editor": "vitest run --exclude './src/components/**/*.test.tsx' --browser.enabled false",
     "test:components": "vitest run --dir ./src/components",
     "test:components:local": "./scripts/localScreenshots.sh",
@@ -73,6 +74,7 @@
     "i18n:update": "pnpm run i18n:extract:platform && pnpm run i18n:extract:page && pnpm run i18n:translate:platform && pnpm run i18n:propagate:page && pnpm run i18n:lint"
   },
   "dependencies": {
+    "@json-render/core": "^0.21.0",
     "@mapbox/maki": "^8.2.0",
     "@puckeditor/core": "0.22.4",
     "@radix-ui/react-accordion": "^1.2.3",
@@ -110,7 +112,8 @@
     "ts-morph": "22.0.0",
     "tsx": "^4.22.4",
     "typescript": "^5.5.4",
-    "uuid": "11.0.3"
+    "uuid": "11.0.3",
+    "zod": "^4.6.5"
   },
   "engines": {
     "node": "^20.6.0 || ^22 || ^24"

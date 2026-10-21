@@ -26,6 +26,11 @@ export const forwardHeadingLevel = <T extends CardWrapper>(
   if (cards) {
     data.props.slots.CardsWrapperSlot[0].props.slots.CardSlot = cards.map(
       (card) => {
+        // Empty native slots are valid. setDeep would otherwise create a child
+        // containing only styles, which card resolvers mistake for authored data.
+        if (!card.props.slots?.[destinationHeadingSlotKey]?.[0]?.props) {
+          return card;
+        }
         return setDeep(
           card,
           `props.slots.${destinationHeadingSlotKey}[0].props.styles.semanticLevelOverride`,

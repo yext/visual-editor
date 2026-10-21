@@ -90,6 +90,23 @@ export const generateSectionLibraryFiles = (
   );
   const i18nPath = path.join(generatedDirectory, "i18n.ts");
   const generatedFiles = [...generatedTranslations.generatedFiles];
+  const catalogPath = path.join(generatedDirectory, "catalog.js");
+  if (
+    !writeGeneratedFile(
+      catalogPath,
+      buildJsonRenderSource(
+        rootDir,
+        catalogPath,
+        structure.sections,
+        structure.layouts
+      )
+    )
+  ) {
+    throw new Error(
+      `Refusing to overwrite json-render catalog at ${catalogPath}.`
+    );
+  }
+  generatedFiles.push(catalogPath);
   if (
     writeGeneratedFile(
       i18nPath,
@@ -344,6 +361,80 @@ const writeTemplateManifest = (rootDir: string, layouts: Layout[]): void => {
   }
 };
 
+/** Catalogs use saved Puck props and are scoped to each layout's page-set type. */
+const buildJsonRenderSource = (
+  rootDir: string,
+  generatedPath: string,
+  sections: ResolvedSection[],
+  layouts: Layout[]
+): string => {
+  if (sections.some((section) => section.id === "MainContent")) {
+    throw new Error("MainContent is reserved for json-render composition.");
+  }
+  const imports = sections.map((section, index) => {
+    const relativePath = path
+      .relative(
+        path.dirname(generatedPath),
+        path.join(rootDir, section.sourcePath)
+      )
+      .replace(/\.(tsx|jsx)$/, "")
+      .split(path.sep)
+      .join("/");
+    const specifier = relativePath.startsWith(".")
+      ? relativePath
+      : `./${relativePath}`;
+    return `import { config as sectionConfig${index}, ${section.componentName} as Section${index} } from ${JSON.stringify(specifier)};`;
+  });
+  const hasSharedRegistry = fs.existsSync(
+    path.join(rootDir, "src/library/shared/componentRegistry.ts")
+  );
+  return [
+    GENERATED_FILE_PREFIX,
+    'import { createPuckGenerationCatalog } from "@yext/visual-editor/section-library-support";',
+    ...(hasSharedRegistry
+      ? [
+          'import { sharedComponentConfigs, sharedComponentMetadata, sharedRootAllowedComponentIds } from "../shared/componentRegistry";',
+        ]
+      : []),
+    ...imports,
+    "",
+    "export const catalogs = {",
+    ...layouts.map((layout) => {
+      const pageSetType = JSON.stringify(layout.metadata.pageSetType);
+      return [
+        `  ${JSON.stringify(layout.metadata.id)}: createPuckGenerationCatalog({`,
+        "    CustomCodeSection: {},",
+        ...sections.flatMap((section, index) =>
+          section.pageSetTypes.includes(layout.metadata.pageSetType)
+            ? [
+                `    ${JSON.stringify(section.id)}: { generation: Section${index}.layoutGenerationMetadata, description: sectionConfig${index}.description, fields: Section${index}.fields, defaultProps: Section${index}.defaultProps, permissions: Section${index}.permissions },`,
+              ]
+            : []
+        ),
+        ...(hasSharedRegistry
+          ? [
+              `    ...Object.fromEntries(sharedComponentMetadata.filter((component) => component.pageSetTypes.includes(${pageSetType})).map((component) => [component.id, { generation: sharedComponentConfigs[component.id]?.layoutGenerationMetadata, fields: sharedComponentConfigs[component.id]?.fields, defaultProps: sharedComponentConfigs[component.id]?.defaultProps, permissions: sharedComponentConfigs[component.id]?.permissions, nestedOnly: true }])),`,
+            ]
+          : []),
+        `  }, { ${[
+          ...(hasSharedRegistry
+            ? [
+                `rootAllowedComponentIds: sharedRootAllowedComponentIds[${pageSetType}]`,
+              ]
+            : []),
+          ...(layout.metadata.defaultGenerationSectionIds !== undefined
+            ? [
+                `defaultGenerationSectionIds: ${JSON.stringify(layout.metadata.defaultGenerationSectionIds)}`,
+              ]
+            : []),
+        ].join(", ")} }),`,
+      ].join("\n");
+    }),
+    "};",
+    "",
+  ].join("\n");
+};
+
 const buildConfigSource = (
   rootDir: string,
   layout: Layout,
@@ -385,6 +476,7 @@ const buildConfigSource = (
       return component.pageSetTypes.includes(layout.metadata.pageSetType);
     }) || sharedRootPageSetTypes.includes(layout.metadata.pageSetType);
   return sectionLibraryConfigTemplate
+    .replace("__SECTION_LIBRARY_LAYOUT_ID__", JSON.stringify(layoutId))
     .replace("/* SECTION_LIBRARY_GENERATED_FILE */", GENERATED_FILE_PREFIX)
     .replace("/* SECTION_LIBRARY_IMPORTS */", imports.join("\n"))
     .replace("/* SECTION_LIBRARY_ENTRIES */", entries.join("\n"))

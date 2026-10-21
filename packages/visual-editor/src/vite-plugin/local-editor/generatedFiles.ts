@@ -1,6 +1,7 @@
 import path from "node:path";
 import fs from "fs-extra";
 import type { PageSetType } from "../../types/sectionLibrary.ts";
+import type { LocalEditorStreamDefinition } from "./types.ts";
 
 export const DEFAULT_LOCAL_EDITOR_ROUTE = "/local-editor";
 export const DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH = "stream.config.ts";
@@ -107,14 +108,16 @@ export default config;
  */
 export const buildLocalEditorDataTemplateSource = (
   templateSource: string,
-  streamConfigImportPath: string,
+  stream: LocalEditorStreamDefinition | undefined,
   layoutId: string,
   pageSetType: PageSetType
 ): string => {
   return templateSource
     .replaceAll(
-      '"__LOCAL_EDITOR_STREAM_CONFIG_IMPORT__"',
-      JSON.stringify(streamConfigImportPath)
+      '"__LOCAL_EDITOR_STREAM_CONFIG__"',
+      // Embed only stream data so the template stays within the consumer's
+      // rootDir and does not include environment values from stream.config.ts.
+      () => JSON.stringify({ layouts: { [layoutId]: { stream } } })
     )
     .replaceAll('"__LOCAL_EDITOR_TEMPLATE_ID__"', JSON.stringify(layoutId))
     .replaceAll('"__LOCAL_EDITOR_PAGE_SET_TYPE__"', JSON.stringify(pageSetType))

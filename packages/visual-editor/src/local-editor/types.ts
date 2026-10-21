@@ -24,6 +24,7 @@ export type LocalEditorShellProps = {
   themeConfig?: ThemeConfig;
   sectionLibraryMigrationRegistry?: MigrationRegistry;
   translationLoaders?: SectionLibraryTranslationLoaders;
+  chatEnabled?: boolean;
 };
 
 export type LocalEditorMode = "layout" | "theme";
