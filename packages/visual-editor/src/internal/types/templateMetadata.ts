@@ -5,7 +5,10 @@ import type { LocalDevOptions } from "../../editor/types.ts";
 
 export type HeadDeployStatus = "RUNNING" | "INACTIVE" | "FAILED" | "ACTIVE";
 
-export type AiPageGeneration = { enabled: boolean; model: string };
+export type AiPageGeneration = {
+  layoutGenerationEnabled: boolean;
+  model: string;
+};
 
 export type TemplateMetadata = {
   aiPageGeneration?: AiPageGeneration;

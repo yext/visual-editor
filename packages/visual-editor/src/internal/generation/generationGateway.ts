@@ -33,11 +33,7 @@ const readOutputText = (result: GatewayResponse): string => {
       "Generation exceeded its output token budget. Try a smaller request."
     );
   }
-  if (
-    result.error ||
-    result.status === "failed" ||
-    result.status === "incomplete"
-  ) {
+  if (result.error || result.status !== "completed") {
     throw new Error("The AI gateway did not complete generation.");
   }
   const text = extractOutputText(result);
@@ -125,7 +121,10 @@ export const requestGenerationOutput = async ({
     phase = "read-gateway-response";
     if (!upstream.contentType?.includes("text/event-stream")) {
       const result = (await new Response(upstream.body)
-        .json()
+        .arrayBuffer()
+        .then((bytes) =>
+          JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes))
+        )
         .catch((cause) => {
           transportFailure = true;
           throw cause;
@@ -162,16 +161,14 @@ export const requestGenerationOutput = async ({
         transportFailure = true;
         throw new Error("The gateway returned no response body.");
       }
-      const decoder = new TextDecoder();
+      const decoder = new TextDecoder("utf-8", { fatal: true });
       let pending = "";
+      let dataLines: string[] = [];
+      let frameStarted = false;
       let completed = false;
       const eventCounts: Record<string, number> = {};
       const streamStartedAt = Date.now();
-      const processLine = async (line: string) => {
-        if (!line.startsWith("data:")) {
-          return;
-        }
-        const raw = line.slice(5).trim();
+      const processEvent = async (raw: string) => {
         if (!raw || raw === "[DONE]") {
           return;
         }
@@ -262,6 +259,20 @@ export const requestGenerationOutput = async ({
           completed = true;
         }
       };
+      const processLine = async (line: string) => {
+        if (!line) {
+          const raw = dataLines.join("\n");
+          dataLines = [];
+          frameStarted = false;
+          await processEvent(raw);
+          return;
+        }
+        frameStarted = true;
+        if (line.startsWith("data:")) {
+          const value = line.slice(5);
+          dataLines.push(value.startsWith(" ") ? value.slice(1) : value);
+        }
+      };
       try {
         while (true) {
           const { done, value } = await reader.read().catch((cause) => {
@@ -269,20 +280,40 @@ export const requestGenerationOutput = async ({
               !(cause instanceof ModelTransportError) || cause.transport;
             throw cause;
           });
-          pending += decoder.decode(value, { stream: !done });
-          const lines = pending.split("\n");
-          pending = lines.pop()!;
-          for (const line of lines) await processLine(line);
+          try {
+            pending += decoder.decode(value, { stream: !done });
+          } catch (cause) {
+            transportFailure = true;
+            throw cause;
+          }
+          // A CR at a chunk boundary may be the first half of CRLF.
+          let boundary: RegExpExecArray | null;
+          while ((boundary = /\r\n|\r|\n/.exec(pending))) {
+            if (
+              !done &&
+              boundary[0] === "\r" &&
+              boundary.index === pending.length - 1
+            )
+              break;
+            const line = pending.slice(0, boundary.index);
+            pending = pending.slice(boundary.index + boundary[0].length);
+            await processLine(line);
+          }
           if (done) {
             break;
           }
         }
-        if (pending) {
-          await processLine(pending);
+        if (pending || frameStarted) {
+          transportFailure = true;
+          throw new Error(
+            "Generation interrupted: truncated gateway SSE frame."
+          );
         }
         if (!completed) {
           transportFailure = true;
-          throw new Error("The gateway stream ended before completion.");
+          throw new Error(
+            "Generation interrupted: the gateway stream ended before completion."
+          );
         }
       } finally {
         await reader.cancel().catch(() => {});

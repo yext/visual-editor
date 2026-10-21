@@ -11,6 +11,9 @@ import { LayoutGenerationChatBridge } from "./LayoutGenerationChatBridge.tsx";
 import { creation, heading } from "../testing/creationFixtures.ts";
 import { createPuckGenerationCatalog } from "../../../utils/generationCatalog.ts";
 import type { GenerationEnvironment } from "../environment.ts";
+import { installLocalGenerationHost } from "../localGenerationHost.ts";
+import { createLocalMessageTransport } from "../messageTransport.ts";
+let disposeHost: (() => void) | undefined;
 const chatConfig = {
   components: {
     MainContent,
@@ -39,16 +42,23 @@ beforeEach(() => {
 });
 afterEach(() => {
   cleanup();
+  disposeHost?.();
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
 });
-const event = (value: object) =>
-  new TextEncoder().encode(`data: ${JSON.stringify(value)}\n\n`);
+const enqueueEvent = (
+  stream: ReadableStreamDefaultController<Uint8Array>,
+  value: object
+) => {
+  const bytes = new TextEncoder().encode(`data: ${JSON.stringify(value)}\n\n`);
+  for (const byte of bytes) stream.enqueue(new Uint8Array([byte]));
+};
 const setup = async (rejectSecond = false) => {
   let chat!: ReturnType<typeof useLayoutGenerationChat>;
   let puck!: ReturnType<typeof useGetPuck>;
   let stream!: ReadableStreamDefaultController<Uint8Array>;
   const requests: string[] = [];
+  let generationSignal: AbortSignal;
   const mounts = vi.fn();
   const config: Config = {
     ...chatConfig,
@@ -76,33 +86,49 @@ const setup = async (rejectSecond = false) => {
     model: "test",
     locales: ["en"],
     diagnostics: { log: vi.fn(), report: vi.fn() },
-    transport: async (body) => {
+    transport: createLocalMessageTransport(),
+  };
+  disposeHost = installLocalGenerationHost("/generate");
+  if (navigator.userAgent.includes("jsdom")) {
+    vi.spyOn(window, "postMessage").mockImplementation((data) => {
+      window.dispatchEvent(
+        new MessageEvent("message", {
+          data,
+          source: window,
+          origin: window.location.origin,
+        })
+      );
+    });
+  }
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (_url: unknown, options?: RequestInit) => {
+      const body = JSON.parse(options!.body as string);
       requests.push(body.text.format.name);
       if (body.text.format.name === "puck_generation_preparation") {
-        return {
-          contentType: "application/json",
-          body: new Response(
-            JSON.stringify({
-              status: "completed",
-              output_text: JSON.stringify({
-                question: null,
-                translationMode: "defaultOnly",
-                cardCounts: [],
-              }),
-            })
-          ).body!,
-        };
+        return new Response(
+          JSON.stringify({
+            status: "completed",
+            output_text: JSON.stringify({
+              question: null,
+              translationMode: "defaultOnly",
+              cardCounts: [],
+            }),
+          }),
+          { headers: { "Content-Type": "application/json" } }
+        );
       }
-      return {
-        contentType: "text/event-stream",
-        body: new ReadableStream<Uint8Array>({
+      generationSignal = options!.signal as AbortSignal;
+      return new Response(
+        new ReadableStream<Uint8Array>({
           start(controller) {
             stream = controller;
           },
         }),
-      };
-    },
-  };
+        { headers: { "Content-Type": "text/event-stream" } }
+      );
+    })
+  );
   const baseline: Data = {
     root: {},
     content: [{ type: "MainContent", props: { id: "main", content: [] } }],
@@ -140,10 +166,13 @@ const setup = async (rejectSecond = false) => {
     pending = chat.send("Create a page");
   });
   await waitFor(() => expect(stream).toBeDefined());
-  const wire = JSON.stringify(creation([heading("First"), heading("Second")]));
+  const wire = JSON.stringify(
+    creation([heading("First 世界"), heading("Second")])
+  );
   const boundary = wire.indexOf(',{"type":"Heading"');
   return {
     chat: () => chat,
+    generationSignal: () => generationSignal,
     puck: () => puck(),
     mounts,
     pending,
@@ -151,33 +180,31 @@ const setup = async (rejectSecond = false) => {
     baseline,
     first: async () => {
       await act(async () => {
-        stream.enqueue(
-          event({
-            type: "response.output_text.delta",
-            delta: wire.slice(0, boundary),
-          })
-        );
+        enqueueEvent(stream, {
+          type: "response.output_text.delta",
+          delta: wire.slice(0, boundary),
+        });
       });
       await waitFor(() =>
         expect(puck().appState.data.content[0].props.content).toHaveLength(1)
       );
-      await waitFor(() => expect(mounts).toHaveBeenCalledWith("First"));
+      await waitFor(() => expect(mounts).toHaveBeenCalledWith("First 世界"));
     },
     rest: async (complete = true) => {
+      if (!chat.isCreating) {
+        await pending;
+        return;
+      }
       await act(async () => {
-        stream.enqueue(
-          event({
-            type: "response.output_text.delta",
-            delta: wire.slice(boundary),
-          })
-        );
+        enqueueEvent(stream, {
+          type: "response.output_text.delta",
+          delta: wire.slice(boundary),
+        });
         if (complete)
-          stream.enqueue(
-            event({
-              type: "response.completed",
-              response: { status: "completed", output_text: wire },
-            })
-          );
+          enqueueEvent(stream, {
+            type: "response.completed",
+            response: { status: "completed", output_text: wire },
+          });
         stream.close();
         await pending;
       });
@@ -201,7 +228,7 @@ it("reveals before completion, preserves mounted sections, and records one undo 
     firstId
   );
   expect(
-    run.mounts.mock.calls.filter(([text]) => text === "First")
+    run.mounts.mock.calls.filter(([text]) => text === "First 世界")
   ).toHaveLength(1);
   expect(document.querySelector("iframe")).toBe(frame);
   expect(run.puck().history.histories).toHaveLength(2);
@@ -212,23 +239,24 @@ it("reveals before completion, preserves mounted sections, and records one undo 
 });
 
 it.each(["cancel", "truncated", "resolver"])(
-  "retains one undoable partial page after %s",
+  "discards uncommitted previews and clears loading after %s",
   async (reason) => {
     const run = await setup(reason === "resolver");
     await run.first();
     if (reason === "cancel") {
       act(() => run.chat().cancel());
       await run.rest();
+      await waitFor(() => expect(run.generationSignal().aborted).toBe(true));
     } else await run.rest(reason !== "truncated");
-    expect(run.puck().appState.data.content[0].props.content).toHaveLength(
-      reason === "truncated" ? 2 : 1
-    );
-    expect(run.chat().messages.at(-1)?.text).toContain("incomplete");
+    expect(run.puck().appState.data.content[0].props.content).toHaveLength(0);
+    expect(run.chat().isStreaming).toBe(false);
+    expect(run.chat().isCreating).toBe(false);
+    expect(run.chat().messages.at(-1)?.pending).toBeFalsy();
+    if (reason === "truncated")
+      expect(run.chat().error?.message).toContain("interrupted");
     expect(
       run.requests.filter((name) => name === "puck_generation")
     ).toHaveLength(1);
-    expect(run.puck().history.histories).toHaveLength(2);
-    await act(async () => run.puck().history.back());
-    expect(run.puck().appState.data.content[0].props.content).toHaveLength(0);
+    expect(run.puck().history.histories).toHaveLength(1);
   }
 );

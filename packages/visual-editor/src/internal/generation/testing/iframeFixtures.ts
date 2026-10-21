@@ -1,4 +1,4 @@
-import type { GenerationRequest } from "../iframeTransport.ts";
+import type { GenerationRequest } from "../messageTransport.ts";
 
 /** Synthetic protocol examples shared with the platform handoff documentation. */
 export const generationRequestFixture: GenerationRequest = {

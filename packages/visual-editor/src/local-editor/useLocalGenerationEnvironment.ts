@@ -2,10 +2,9 @@ import React from "react";
 import type { Config } from "@puckeditor/core";
 import { getGenerationCatalog } from "../internal/generation/catalogRegistry.ts";
 import type { GenerationEnvironment } from "../internal/generation/environment.ts";
-import {
-  createLocalGenerationDiagnostics,
-  createLocalModelTransport,
-} from "./generationTransport.ts";
+import { createLocalGenerationDiagnostics } from "./generationDiagnostics.ts";
+import { createLocalMessageTransport } from "../internal/generation/messageTransport.ts";
+import { installLocalGenerationHost } from "../internal/generation/localGenerationHost.ts";
 
 /** Local model/locale settings come from Vite, not the selected preview entity. */
 export const useLocalGenerationEnvironment = (
@@ -21,7 +20,9 @@ export const useLocalGenerationEnvironment = (
     locales: string[];
   } | null>(null);
   React.useEffect(() => {
+    setSettings(null);
     if (!enabled || !layoutId) return;
+    const disposeHost = installLocalGenerationHost(api);
     const controller = new AbortController();
     void fetch(`${api}/context?layoutId=${encodeURIComponent(layoutId)}`, {
       signal: controller.signal,
@@ -43,7 +44,11 @@ export const useLocalGenerationEnvironment = (
         if (!controller.signal.aborted)
           console.error("Unable to load generation settings", error);
       });
-    return () => controller.abort();
+    return () => {
+      controller.abort();
+      disposeHost();
+      setSettings(null);
+    };
   }, [api, layoutId, enabled]);
   return React.useMemo<GenerationEnvironment | null>(
     () =>
@@ -55,7 +60,7 @@ export const useLocalGenerationEnvironment = (
             model: settings.model,
             locales: settings.locales,
             catalog: getGenerationCatalog(config),
-            transport: createLocalModelTransport(api),
+            transport: createLocalMessageTransport(),
             diagnostics: createLocalGenerationDiagnostics(api, layoutId),
           }
         : null,

@@ -3,7 +3,7 @@ import type { Config } from "@puckeditor/core";
 import type { TemplateMetadata } from "../../types/templateMetadata.ts";
 import { getGenerationCatalog } from "../catalogRegistry.ts";
 import { consoleGenerationDiagnostics } from "../environment.ts";
-import { iframeModelTransport } from "../iframeTransport.ts";
+import { iframeModelTransport } from "../messageTransport.ts";
 import { LayoutGenerationChatContext } from "./LayoutGenerationChatContext.tsx";
 import { LayoutGenerationChatUiProvider } from "./LayoutGenerationChatUiContext.tsx";
 import { useLayoutGenerationChat } from "./useLayoutGenerationChat.ts";
@@ -22,7 +22,7 @@ export const LayoutGenerationProvider = ({
 }) => {
   const enabled =
     !localDev &&
-    metadata.aiPageGeneration?.enabled === true &&
+    metadata.aiPageGeneration?.layoutGenerationEnabled === true &&
     !metadata.isThemeMode;
   const model =
     typeof metadata.aiPageGeneration?.model === "string"

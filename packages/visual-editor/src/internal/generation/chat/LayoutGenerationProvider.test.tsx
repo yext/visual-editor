@@ -16,7 +16,10 @@ const metadata = (overrides: Partial<TemplateMetadata> = {}) =>
     layoutId: 2,
     locales: ["en", "fr"],
     isThemeMode: false,
-    aiPageGeneration: { enabled: true, model: "configured-model" },
+    aiPageGeneration: {
+      layoutGenerationEnabled: true,
+      model: "configured-model",
+    },
     ...overrides,
   }) as TemplateMetadata;
 const Probe = () => {
@@ -59,7 +62,9 @@ afterEach(() => {
 
 it.each([
   metadata({ aiPageGeneration: undefined }),
-  metadata({ aiPageGeneration: { enabled: false, model: "test" } }),
+  metadata({
+    aiPageGeneration: { layoutGenerationEnabled: false, model: "test" },
+  }),
   metadata({ isThemeMode: true }),
 ])("keeps the feature inactive when disabled or in theme mode", (value) => {
   const send = post();
@@ -86,7 +91,13 @@ it("preserves the local shell's generation context", () => {
 it("reports a missing model without sending a request", async () => {
   const send = post();
   vi.spyOn(console, "error").mockImplementation(() => {});
-  render(view(metadata({ aiPageGeneration: { enabled: true, model: "" } })));
+  render(
+    view(
+      metadata({
+        aiPageGeneration: { layoutGenerationEnabled: true, model: "" },
+      })
+    )
+  );
   await waitFor(() => expect(ui?.chat.ready).toBe(true));
   await act(async () => {
     await ui!.chat.send("Create page");
@@ -171,7 +182,10 @@ it("cancels work and clears history when the configured model changes", async ()
   rerender(
     view(
       metadata({
-        aiPageGeneration: { enabled: true, model: "different-model" },
+        aiPageGeneration: {
+          layoutGenerationEnabled: true,
+          model: "different-model",
+        },
       })
     )
   );

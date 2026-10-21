@@ -23,7 +23,7 @@ export type ModelResponse = {
 export type ModelTransport = (
   body: ModelRequestBody,
   signal: AbortSignal,
-  /** Local diagnostics only; the iframe adapter does not transmit this value. */
+  /** Local diagnostics only; message transports do not transmit this value. */
   diagnosticId: string
 ) => Promise<ModelResponse>;
 

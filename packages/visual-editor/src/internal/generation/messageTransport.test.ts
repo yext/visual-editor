@@ -1,17 +1,21 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   generationRequestFixture,
   modelCompletionFixture,
 } from "./testing/iframeFixtures.ts";
-import { iframeModelTransport } from "./iframeTransport.ts";
+import {
+  iframeModelTransport,
+  createLocalMessageTransport,
+} from "./messageTransport.ts";
 import { executeGeneration } from "./engine.ts";
 import { createPuckGenerationCatalog } from "../../utils/generationCatalog.ts";
 import { consoleGenerationDiagnostics } from "./environment.ts";
-import { createLocalModelTransport } from "../../local-editor/generationTransport.ts";
+import { installLocalGenerationHost } from "./localGenerationHost.ts";
 import type { ModelRequestBody } from "./modelTransport.ts";
 
 const body: ModelRequestBody = generationRequestFixture.payload.body;
-const origin = "https://dev.yext.com";
+let origin = "https://dev.yext.com";
+let transport = iframeModelTransport;
 const reply = (
   requestId: string,
   payload: object,
@@ -47,16 +51,22 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe("iframe model transport", () => {
+describe.each(["parent", "local"])("%s message transport", (mode) => {
+  beforeEach(() => {
+    origin =
+      mode === "parent" ? "https://dev.yext.com" : window.location.origin;
+    transport =
+      mode === "parent" ? iframeModelTransport : createLocalMessageTransport();
+  });
   it("isolates interleaved calls, sends only requestId/body, and ignores unrelated sources", async () => {
     const h = observe();
-    const one = iframeModelTransport(
+    const one = transport(
       body,
       new AbortController().signal,
       "local-diagnostic"
     );
     const first = h.requests()[0].payload;
-    const two = iframeModelTransport(
+    const two = transport(
       body,
       new AbortController().signal,
       "other-diagnostic"
@@ -91,7 +101,7 @@ describe("iframe model transport", () => {
     const h = observe();
     const remove = vi.spyOn(window, "removeEventListener");
     const controller = new AbortController();
-    const pending = iframeModelTransport(body, controller.signal, "local");
+    const pending = transport(body, controller.signal, "local");
     const rejected = expect(pending).rejects.toMatchObject({
       name: "AbortError",
     });
@@ -112,7 +122,7 @@ describe("iframe model transport", () => {
   it("aborts a started stream when its signal is cancelled", async () => {
     const h = observe();
     const controller = new AbortController();
-    const pending = iframeModelTransport(body, controller.signal, "local");
+    const pending = transport(body, controller.signal, "local");
     reply(h.requests()[0].payload.requestId, {
       event: "start",
       contentType: "text/event-stream",
@@ -124,6 +134,41 @@ describe("iframe model transport", () => {
     await rejected;
   });
 
+  it("starts a retry with fresh state and ignores cancelled request bytes without an acknowledgment", async () => {
+    const h = observe();
+    const controller = new AbortController();
+    const first = transport(body, controller.signal, "same-diagnostic");
+    const firstId = h.requests()[0].payload.requestId;
+    reply(firstId, { event: "start", contentType: "text/plain" });
+    const reader = (await first).body.getReader();
+    reply(firstId, {
+      event: "chunk",
+      chunk: new TextEncoder().encode("partial"),
+    });
+    controller.abort();
+    await expect(reader.read()).rejects.toMatchObject({ name: "AbortError" });
+
+    const retry = transport(
+      body,
+      new AbortController().signal,
+      "same-diagnostic"
+    );
+    const retryId = h.requests().at(-1)!.payload.requestId;
+    expect(retryId).not.toBe(firstId);
+    reply(retryId, { event: "start", contentType: "text/plain" });
+    reply(firstId, {
+      event: "chunk",
+      chunk: new TextEncoder().encode("stale"),
+    });
+    reply(firstId, { event: "end" });
+    reply(retryId, {
+      event: "chunk",
+      chunk: new TextEncoder().encode("fresh"),
+    });
+    reply(retryId, { event: "end" });
+    expect(await new Response((await retry).body).text()).toBe("fresh");
+  });
+
   it.each([
     { event: "chunk", chunk: new Uint8Array() },
     { event: "end" },
@@ -133,19 +178,49 @@ describe("iframe model transport", () => {
   ])("rejects malformed or out-of-order responses: $event", async (payload) => {
     const h = observe();
     const controller = new AbortController();
-    const pending = iframeModelTransport(body, controller.signal, "local");
+    const pending = transport(body, controller.signal, "local");
     const rejected = expect(pending).rejects.toMatchObject({ transport: true });
     reply(h.requests()[0].payload.requestId, payload);
     await rejected;
   });
 
+  it.each([
+    { event: "start", contentType: "text/plain" },
+    { event: "chunk", chunk: "not bytes" },
+    { event: "error", message: "bad", transport: true, status: 999 },
+  ])(
+    "errors a started stream on invalid responses: $event",
+    async (payload) => {
+      const h = observe();
+      const pending = transport(body, new AbortController().signal, "local");
+      const requestId = h.requests()[0].payload.requestId;
+      reply(requestId, { event: "start", contentType: "text/plain" });
+      const reader = (await pending).body.getReader();
+      const rejected = expect(reader.read()).rejects.toMatchObject({
+        transport: true,
+      });
+      reply(requestId, payload);
+      await rejected;
+    }
+  );
+
+  it("notifies the host and removes its listener when the consumer cancels", async () => {
+    const h = observe();
+    const remove = vi.spyOn(window, "removeEventListener");
+    const pending = transport(body, new AbortController().signal, "local");
+    const requestId = h.requests()[0].payload.requestId;
+    reply(requestId, { event: "start", contentType: "text/plain" });
+    await (await pending).body.cancel();
+    expect(h.send).toHaveBeenLastCalledWith(
+      { type: "aiPageGenerationCancel", payload: { requestId } },
+      origin
+    );
+    expect(remove).toHaveBeenCalledWith("message", expect.any(Function));
+  });
+
   it("preserves parent error classification", async () => {
     const h = observe();
-    const pending = iframeModelTransport(
-      body,
-      new AbortController().signal,
-      "local"
-    );
+    const pending = transport(body, new AbortController().signal, "local");
     const rejected = expect(pending).rejects.toMatchObject({
       message: "Unsupported model",
       transport: false,
@@ -162,6 +237,7 @@ describe("iframe model transport", () => {
 });
 
 it("runs the same prepared request and parser through a parent harness and the local adapter", async () => {
+  origin = "https://dev.yext.com";
   const h = observe();
   vi.spyOn(console, "debug").mockImplementation(() => {});
   const preparation = {
@@ -213,15 +289,26 @@ it("runs the same prepared request and parser through a parent harness and the l
       new Response(wire, { headers: { "Content-Type": "text/event-stream" } })
   );
   vi.stubGlobal("fetch", localFetch);
+  h.send.mockImplementation((data) => {
+    window.dispatchEvent(
+      new MessageEvent("message", {
+        data,
+        source: window,
+        origin: window.location.origin,
+      })
+    );
+  });
+  const dispose = installLocalGenerationHost("/generate");
   expect(
     await executeGeneration(
       input,
-      { ...environment, transport: createLocalModelTransport("/generate") },
+      { ...environment, transport: createLocalMessageTransport() },
       new AbortController().signal,
       "local-id",
       vi.fn()
     )
   ).toEqual(await platform);
+  dispose();
   expect(JSON.parse((localFetch.mock.calls[0] as any)[1].body)).toEqual(
     request.body
   );

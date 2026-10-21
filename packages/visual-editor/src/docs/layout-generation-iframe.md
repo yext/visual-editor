@@ -2,8 +2,9 @@
 
 This is the contract between visual-editor and its parent platform. The platform
 handler is implemented by the platform team. Visual-editor owns prompts, schemas,
-response parsing, repairs, and layout changes. The parent forwards prepared
-Responses API requests and raw response bytes.
+response parsing, repairs, and layout changes. Both platform and local development
+use the same internal message client. The host forwards prepared Responses API
+requests and raw response bytes.
 
 ## Enablement and ownership
 
@@ -11,13 +12,14 @@ Supply this value in the existing `getTemplateMetadata` payload:
 
 ```ts
 aiPageGeneration?: {
-  enabled: boolean;
+  layoutGenerationEnabled: boolean;
   model: string;
 };
 ```
 
-Generation is available only in the layout editor with `enabled: true`. Missing
-configuration disables it. A missing/empty model produces a configuration error
+Generation is available only in the layout editor with
+`layoutGenerationEnabled: true`. Missing configuration disables it. A missing/empty
+model produces a configuration error
 when generation is attempted, without a model request. Template metadata `locales`
 is the authoritative list of supported content locales.
 
@@ -100,8 +102,14 @@ The parent must not parse or translate provider stream events. Chunk boundaries
 may split UTF-8 characters, SSE lines, or events. Visual-editor incrementally
 decodes and parses them. Usage, refusals, incomplete output, and provider errors
 remain in the provider response. SSE transport `end` alone is not success: the
-provider completion event and generated output must validate. JSON response
-fallbacks are accumulated and validated at EOF.
+provider must emit `response.completed` with `response.status === "completed"`,
+and generated output must validate before it is committed. HTTP 200 and parent
+`end` mean only EOF. Output-item/text completion events and `[DONE]` are insufficient.
+`response.failed`, `response.incomplete`, and provider errors fail the attempt.
+EOF without provider completion reports an interrupted attempt and clears loading
+state, even when the partial output parses as valid JSON. UTF-8 and SSE frames are
+decoded incrementally; truncated frames are rejected. JSON response fallbacks are
+parsed in full at EOF and also require `status === "completed"` and valid output.
 
 ## Cancellation and timeout
 
@@ -112,7 +120,9 @@ The editor immediately stops processing the call and ignores late events.
 
 The editor enforces a five-minute deadline per model attempt and sends cancel on
 timeout. No separate connection or idle timeout is introduced. Transport failures
-are not automatically retried. Already applied sections remain after cancellation.
+are not automatically retried. Retries and repair calls use fresh request identifiers.
+Uncommitted creation previews are restored to the starting layout on interruption,
+failure, or cancellation. Completed independent section requests remain applied.
 
 ## Errors
 
@@ -137,6 +147,38 @@ Both sides validate message shapes and ignore unrelated messages and
 unknown/completed request identifiers. A malformed response for a known active
 request fails that request as a transport error.
 
+## Local development host
+
+Platform mode targets `window.parent` and retains the existing allowed platform
+origins. Local mode targets `window` and uses exactly `window.location.origin`,
+including the port, for both sending and receiving. The local host accepts only
+request/cancel messages from that same window and origin; it ignores response
+messages and unrelated traffic.
+
+The local request path is:
+
+```text
+Generation engine → shared message client → same-window local host
+  → existing Vite generation endpoint → Consul gateway
+```
+
+The host validates request envelopes, forwards the prepared body unchanged, and
+uses `requestId` in the existing `X-Visual-Editor-Correlation-Id` HTTP header.
+Malformed identifiers are ignored; invalid bodies with an identifiable request
+receive a terminal configuration error. Active duplicate identifiers are ignored.
+Successful response bytes are relayed immediately as `start/chunk/end`, without
+parsing provider events or buffering the full response. HTTP status and error
+classification are preserved; network and read failures are transport errors.
+
+The local environment hook installs the host while generation is enabled for a
+selected layout and endpoint, and exposes the message transport after settings
+load. Scope changes and unmount remove the listener and abort active requests.
+Cancel also releases the reader and suppresses later responses. Settings and
+diagnostic HTTP requests stay separate. The Vite proxy, configured-model checks,
+upstream headers, conversation ownership, and preview mounting are unchanged.
+Local diagnostic identifiers remain outside the wire protocol; client debug logs
+associate them with each message `requestId` for tracing.
+
 ## Example exchange and fixtures
 
 ```text
@@ -158,10 +200,15 @@ Parent: abort upstream A and release its resources
 Synthetic, typed request and Responses API completion fixtures live in
 [`iframeFixtures.ts`](../internal/generation/testing/iframeFixtures.ts).
 The executable parent-window harness is in
-[`iframeTransport.test.ts`](../internal/generation/iframeTransport.test.ts).
+[`messageTransport.test.ts`](../internal/generation/messageTransport.test.ts).
 It exercises interleaving, origin/source validation, cancellation, errors, and
 one-byte chunks splitting both UTF-8 and SSE boundaries. Its engine integration
-case verifies equivalent results through the iframe and local HTTP adapters.
+case verifies equivalent results through the parent harness and local message host.
+[`localGenerationHost.test.ts`](../internal/generation/localGenerationHost.test.ts)
+covers HTTP forwarding and cleanup, and
+[`localGenerationIntegration.test.ts`](../internal/generation/localGenerationIntegration.test.ts)
+runs preparation, creation, planning, section execution, and repair through the
+engine, shared message client, local host, and synthetic HTTP responses.
 
 Before enabling the metadata flag in platform, validate the handler against those
 fixtures, including HTTP failure classification, cancellation, and concurrent calls.
@@ -189,4 +236,5 @@ attempt. Late results cannot apply or save into another layout. The parent must
 forward response chunks promptly rather than buffer them until `end`.
 
 Run `pnpm --dir packages/visual-editor run test:creation:browser` for focused
-Chromium integration checks. This suite does not use Docker or screenshot baselines.
+Chromium integration checks using actual same-window `postMessage`, including
+split UTF-8/SSE bytes, early creation reveals, and cancellation. This suite does not use Docker or screenshot baselines.

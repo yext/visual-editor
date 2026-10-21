@@ -81,29 +81,25 @@ export const useLayoutGenerationChat = (
     setError(error);
     environment?.diagnostics.report("error", details);
   };
-  const cancel = React.useCallback(
-    (retainCreation = true) => {
-      activeRequest.current?.abort();
-      if (retainCreation) canvas.finishCreation();
-      canvas.finish();
-      if (finalizeCancelled.current) {
-        finalizeCancelled.current();
-      } else {
-        setMessages(previousMessagesRef.current);
-      }
-      finalizeCancelled.current = null;
-      activeRequest.current = null;
-      setIsStreaming(false);
-      setIsCreating(false);
-    },
-    [canvas]
-  );
+  const cancel = React.useCallback(() => {
+    activeRequest.current?.abort();
+    canvas.finish();
+    if (finalizeCancelled.current) {
+      finalizeCancelled.current();
+    } else {
+      setMessages(previousMessagesRef.current);
+    }
+    finalizeCancelled.current = null;
+    activeRequest.current = null;
+    setIsStreaming(false);
+    setIsCreating(false);
+  }, [canvas]);
   canvas.onError = (cause) => {
     cancel();
     reportError(cause);
   };
   const clear = React.useCallback(() => {
-    cancel(false);
+    cancel();
     history.current = [];
     previousMessagesRef.current = [];
     setMessages([]);
@@ -112,7 +108,7 @@ export const useLayoutGenerationChat = (
   }, [cancel]);
   React.useLayoutEffect(() => {
     clear();
-    return () => cancel(false);
+    return () => cancel();
   }, [environment?.model, environment?.transport, layoutId, clear, cancel]);
 
   const send = async (prompt: string) => {
@@ -241,11 +237,7 @@ export const useLayoutGenerationChat = (
           outcome: "cancelled",
           sectionCount: createdSections,
         });
-        complete(
-          createdSections
-            ? `Creation cancelled. Kept ${createdSections} validated sections; the page is incomplete.`
-            : "Request cancelled before any changes were applied."
-        );
+        complete("Request cancelled before any changes were applied.");
       }
     };
     setMessages([
@@ -467,16 +459,11 @@ export const useLayoutGenerationChat = (
           outcome: "failed",
           sectionCount: createdSections,
         });
-        complete(
-          createdSections
-            ? `Creation stopped. Kept ${createdSections} validated sections; the page is incomplete.`
-            : "Request failed before any changes were applied."
-        );
+        complete("Request failed before any changes were applied.");
       }
       reportError(cause);
     } finally {
       if (activeRequest.current === controller) {
-        canvas.finishCreation();
         canvas.finish();
         activeRequest.current = null;
         finalizeCancelled.current = null;

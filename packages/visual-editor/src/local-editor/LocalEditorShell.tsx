@@ -229,7 +229,7 @@ export const LocalEditorShell = ({
         selectedLayoutDefaults,
       }),
       aiPageGeneration: {
-        enabled: !!chatEnabled,
+        layoutGenerationEnabled: !!chatEnabled,
         model: generationEnvironment?.model ?? "",
       },
     };
