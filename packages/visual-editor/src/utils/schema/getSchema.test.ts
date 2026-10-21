@@ -486,6 +486,128 @@ describe("getSchema - entity pages", () => {
 });
 
 describe("getSchema - directory pages", () => {
+  it.each([
+    {
+      locale: "en",
+      includeLocalePrefixForPrimaryLocale: true,
+      siteDomain: "example.com",
+      prefix: "en/locations",
+    },
+    {
+      locale: "en",
+      includeLocalePrefixForPrimaryLocale: false,
+      siteDomain: undefined,
+      prefix: "locations",
+    },
+    {
+      locale: "fr",
+      includeLocalePrefixForPrimaryLocale: false,
+      siteDomain: "example.com",
+      prefix: "fr/locations",
+    },
+  ])(
+    "uses resolved breadcrumb paths for $locale (primary prefix=$includeLocalePrefixForPrimaryLocale)",
+    ({ locale, includeLocalePrefixForPrimaryLocale, siteDomain, prefix }) => {
+      const path = `${prefix}/us/ny/current`;
+      const schema = getSchema({
+        relativePrefixToRoot: "../../",
+        path,
+        document: {
+          name: "Current Page",
+          uid: 999,
+          locale,
+          siteDomain,
+          meta: { entityType: { id: "dm_city" } },
+          __: {
+            layout: JSON.stringify({ root: { props: {} } }),
+            pathInfo: {
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale,
+              breadcrumbPrefix: "locations",
+            },
+          },
+          dm_directoryParents_locations: [
+            {
+              name: "Locations Directory",
+              slug: "index.html",
+              meta: { entityType: { id: "dm_root" } },
+            },
+            { name: "US", slug: "us" },
+            { name: "NY", slug: "ny" },
+          ],
+        },
+      }) as { "@graph": Array<Record<string, any>> };
+
+      const breadcrumbs = schema["@graph"][1];
+      const baseUrl = siteDomain ? `https://${siteDomain}/` : "/";
+
+      expect(breadcrumbs.itemListElement).toEqual([
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Locations Directory",
+          item: `${baseUrl}${prefix}`,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "US",
+          item: `${baseUrl}${prefix}/us`,
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "NY",
+          item: `${baseUrl}${prefix}/ny`,
+        },
+        {
+          "@type": "ListItem",
+          position: 4,
+          name: "Current Page",
+          item: `${baseUrl}${path}`,
+        },
+      ]);
+    }
+  );
+
+  it("uses directory parent slugs when path-info breadcrumbs are unavailable", () => {
+    const schema = getSchema({
+      relativePrefixToRoot: "../",
+      path: "us/ny/current",
+      document: {
+        name: "Current Page",
+        uid: 1000,
+        meta: { entityType: { id: "dm_city" } },
+        __: { layout: JSON.stringify({ root: { props: {} } }) },
+        dm_directoryParents_locations: [
+          { name: "Directory", slug: "index.html" },
+          { name: "US", slug: "us" },
+        ],
+      },
+    }) as { "@graph": Array<Record<string, any>> };
+
+    expect(schema["@graph"][1].itemListElement).toEqual([
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Directory",
+        item: "/index.html",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "US",
+        item: "/us",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Current Page",
+        item: "/us/ny/current",
+      },
+    ]);
+  });
+
   it("resolves resolved schema markup for a directory city with a site domain", async () => {
     const testData = {
       relativePrefixToRoot: "../../",
@@ -1182,6 +1304,68 @@ describe("getSchema - custom markup", () => {
         },
       },
     });
+
+  it("includes resolved breadcrumbs in the default custom schema", () => {
+    const output = getSchema({
+      path: "en/locations/us/ny",
+      relativePrefixToRoot: "../../",
+      document: {
+        locale: "en",
+        siteDomain: "example.com",
+        uid: 456,
+        name: "New York",
+        meta: { entityType: { id: "dm_city" } },
+        __: {
+          pathInfo: {
+            primaryLocale: "en",
+            includeLocalePrefixForPrimaryLocale: true,
+            breadcrumbPrefix: "locations",
+          },
+          layout: JSON.stringify({ root: { props: { schemaMode: "custom" } } }),
+        },
+        dm_directoryParents_locations: [
+          {
+            name: "Locations Directory",
+            slug: "index.html",
+            meta: { entityType: { id: "dm_root" } },
+          },
+          { name: "US", slug: "us" },
+        ],
+      },
+    }) as string;
+    const container = globalThis.document.createElement("div");
+    container.innerHTML = output;
+    const scripts = container.querySelectorAll(
+      'script[type="application/ld+json"]'
+    );
+
+    expect(scripts).toHaveLength(2);
+    expect(JSON.parse(scripts[1].textContent!)).toEqual({
+      "@type": "BreadcrumbList",
+      "@context": "https://schema.org",
+      "@id": "https://example.com/#456-breadcrumbs",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Locations Directory",
+          item: "https://example.com/en/locations",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "US",
+          item: "https://example.com/en/locations/us",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "New York",
+          item: "https://example.com/en/locations/us/ny",
+        },
+      ],
+    });
+  });
 
   it("renders the Custom default for a business with escaped fields and structured hours, photos, and services", () => {
     const output = getSchema({

@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import type { Data } from "@puckeditor/core";
 import { Migration, MigrationRegistry, migrate } from "./migrate.ts";
 import { addIdToSchema } from "../components/migrations/0023_add_id_to_schema.ts";
 import { updateSchemaIdAnchorFormat } from "../components/migrations/0069_update_schema_id_anchor_format.ts";
@@ -2277,3 +2278,209 @@ const exampleBasicDataAfter = {
     },
   ],
 };
+
+describe("component rename migrations", () => {
+  it.each<{
+    name: string;
+    content: Data["content"];
+    zones: NonNullable<Data["zones"]>;
+  }>([
+    {
+      name: "top-level content",
+      content: [{ type: "hoursStatus", props: { id: "hours", value: 1 } }],
+      zones: {},
+    },
+    {
+      name: "nested slots",
+      content: [
+        {
+          type: "Parent",
+          props: {
+            id: "parent",
+            content: [
+              { type: "hoursStatus", props: { id: "hours", value: 1 } },
+            ],
+          },
+        },
+      ],
+      zones: {},
+    },
+    {
+      name: "legacy zones",
+      content: [],
+      zones: {
+        "parent:content": [
+          { type: "hoursStatus", props: { id: "hours", value: 1 } },
+        ],
+      },
+    },
+  ])(
+    "when the old type appears in $name then it is renamed after earlier transformations",
+    ({ content, zones }) => {
+      const config = {
+        components: {
+          Parent: { fields: { content: { type: "slot" } } },
+          HoursStatus: { fields: {} },
+        },
+      } as any;
+      const input = { root: { props: {} }, content, zones };
+      const original = JSON.stringify(input);
+      const migrated = migrate(
+        config,
+        input,
+        {},
+        [
+          {
+            hoursStatus: {
+              action: "updated",
+              propTransformation: (props) => ({
+                ...props,
+                value: props.value + 1,
+              }),
+            },
+          },
+        ],
+        [
+          {
+            "*": {
+              action: "updated",
+              propTransformation: (props) => ({ ...props, visited: true }),
+            },
+          },
+          { hoursStatus: { action: "renamed", newType: "HoursStatus" } },
+        ]
+      );
+
+      expect(JSON.stringify(migrated)).toContain(
+        '"type":"HoursStatus","props":{"id":"hours","value":2,"visited":true}'
+      );
+      expect(JSON.stringify(migrated)).not.toContain('"type":"hoursStatus"');
+      expect(migrated.root.props).toMatchObject({
+        version: 1,
+        sectionLibraryMigrationVersion: 2,
+      });
+      expect(JSON.stringify(input)).toBe(original);
+      expect(config.components.hoursStatus).toBeUndefined();
+      expect(
+        migrate(
+          config,
+          migrated,
+          {},
+          [],
+          [
+            {
+              "*": { action: "updated", propTransformation: (props) => props },
+            },
+            { hoursStatus: { action: "renamed", newType: "HoursStatus" } },
+          ]
+        )
+      ).toEqual(migrated);
+    }
+  );
+
+  it("when a renamed parent contains slots then its children are migrated too", () => {
+    const migrated = migrate(
+      {
+        components: {
+          Parent: { fields: { content: { type: "slot" } } },
+          Child: { fields: {} },
+        },
+      } as any,
+      {
+        root: { props: {} },
+        content: [
+          {
+            type: "OldParent",
+            props: {
+              id: "parent",
+              content: [{ type: "OldChild", props: { id: "child" } }],
+            },
+          },
+        ],
+      },
+      {},
+      [],
+      [
+        { OldParent: { action: "renamed", newType: "Parent" } },
+        { OldChild: { action: "renamed", newType: "Child" } },
+      ]
+    );
+    expect(migrated.content[0].type).toBe("Parent");
+    expect(migrated.content[0].props.content).toEqual([
+      { type: "Child", props: { id: "child" } },
+    ]);
+  });
+
+  it("when renames are chained across registries then the final registered schema is used", () => {
+    const migrated = migrate(
+      { components: { Final: { fields: {} } } } as any,
+      {
+        root: { props: {} },
+        content: [{ type: "Original", props: { id: "original" } }],
+      },
+      {},
+      [{ Original: { action: "renamed", newType: "Intermediate" } }],
+      [{ Intermediate: { action: "renamed", newType: "Final" } }]
+    );
+    expect(migrated.content).toEqual([
+      { type: "Final", props: { id: "original" } },
+    ]);
+  });
+
+  it("when only the canonical type exists then the layout is preserved", () => {
+    const migrated = migrate(
+      { components: { HoursStatus: { fields: {} } } } as any,
+      {
+        root: { props: {} },
+        content: [{ type: "HoursStatus", props: { id: "hours" } }],
+      },
+      {},
+      [],
+      [{ hoursStatus: { action: "renamed", newType: "HoursStatus" } }]
+    );
+    expect(migrated.content).toEqual([
+      { type: "HoursStatus", props: { id: "hours" } },
+    ]);
+  });
+
+  it("when a layout has no matching component then its config need not include the rename target", () => {
+    expect(
+      migrate(
+        { components: {} },
+        { root: { props: {} }, content: [] },
+        {},
+        [],
+        [{ hoursStatus: { action: "renamed", newType: "HoursStatus" } }]
+      ).root.props
+    ).toMatchObject({ sectionLibraryMigrationVersion: 1 });
+  });
+
+  it("when the target is unregistered then the rename fails without mutating the input", () => {
+    const input = {
+      root: { props: {} },
+      content: [{ type: "Old", props: { id: "old" } }],
+    };
+    expect(() =>
+      migrate(
+        { components: { Old: { fields: {} } } } as any,
+        input,
+        {},
+        [],
+        [{ Old: { action: "renamed", newType: "Missing" } }]
+      )
+    ).toThrow("Cannot rename Old to unregistered component Missing.");
+    expect(input.content[0].type).toBe("Old");
+  });
+
+  it("when a rename uses a wildcard then it is rejected", () => {
+    expect(() =>
+      migrate(
+        { components: {} },
+        { root: { props: {} }, content: [] },
+        {},
+        [],
+        [{ "*": { action: "renamed", newType: "HoursStatus" } }]
+      )
+    ).toThrow("Cannot apply rename migration to all components.");
+  });
+});

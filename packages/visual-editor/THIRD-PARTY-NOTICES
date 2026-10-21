@@ -202,7 +202,7 @@ Apache License
 
 The following npm package may be included in this product:
 
- - fs-extra@11.4.0
+ - fs-extra@11.4.1
 
 This package contains the following license:
 
@@ -415,7 +415,7 @@ For more information, please see
 
 The following npm package may be included in this product:
 
- - handlebars@4.7.9
+ - handlebars@4.7.10
 
 This package contains the following license:
 
@@ -491,7 +491,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 The following npm packages may be included in this product:
 
- - @puckeditor/core@0.24.0-canary.c1ec9773
+ - @puckeditor/core@0.22.4
  - next-themes@0.3.0
 
 These packages each contain the following license:
@@ -592,7 +592,7 @@ SOFTWARE.
 
 The following npm package may be included in this product:
 
- - @tanstack/react-query@5.102.8
+ - @tanstack/react-query@5.104.3
 
 This package contains the following license:
 
@@ -652,18 +652,18 @@ SOFTWARE.
 
 The following npm packages may be included in this product:
 
- - @radix-ui/react-accordion@1.2.20
- - @radix-ui/react-alert-dialog@1.1.23
- - @radix-ui/react-dialog@1.1.23
- - @radix-ui/react-dropdown-menu@2.1.24
- - @radix-ui/react-label@2.1.15
- - @radix-ui/react-popover@1.1.23
- - @radix-ui/react-progress@1.1.16
- - @radix-ui/react-radio-group@1.4.7
- - @radix-ui/react-separator@1.1.15
- - @radix-ui/react-slot@1.3.3
- - @radix-ui/react-switch@1.3.7
- - @radix-ui/react-tooltip@1.2.16
+ - @radix-ui/react-accordion@1.3.1
+ - @radix-ui/react-alert-dialog@1.2.1
+ - @radix-ui/react-dialog@1.3.1
+ - @radix-ui/react-dropdown-menu@2.2.1
+ - @radix-ui/react-label@2.1.17
+ - @radix-ui/react-popover@1.3.1
+ - @radix-ui/react-progress@1.2.1
+ - @radix-ui/react-radio-group@1.5.1
+ - @radix-ui/react-separator@1.2.0
+ - @radix-ui/react-slot@1.5.0
+ - @radix-ui/react-switch@1.4.1
+ - @radix-ui/react-tooltip@1.4.1
 
 These packages each contain the following license:
 
@@ -753,7 +753,7 @@ SOFTWARE.
 
 The following npm package may be included in this product:
 
- - i18next-cli@1.73.2
+ - i18next-cli@1.75.3
 
 This package contains the following license:
 
@@ -783,7 +783,7 @@ SOFTWARE.
 
 The following npm package may be included in this product:
 
- - tsx@4.23.13
+ - tsx@4.23.15
 
 This package contains the following license:
 
@@ -849,7 +849,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The following npm package may be included in this product:
 
- - dompurify@3.4.15
+ - dompurify@3.4.17
 
 This package contains the following license:
 

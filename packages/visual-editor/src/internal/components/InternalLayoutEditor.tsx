@@ -17,14 +17,11 @@ import {
 import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
 import * as lzstring from "lz-string";
 import React, { useCallback, useRef } from "react";
-import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from "uuid";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { Metadata } from "../../editor/Editor.tsx";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
-import { createYextFieldTransforms } from "../../fields/fieldTransforms/index.ts";
-import { useDocument } from "../../hooks/useDocument.tsx";
 import { cn } from "../../utils/cn.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
@@ -34,7 +31,6 @@ import { layoutGenerationChatPlugin } from "../generation/chat/layoutGenerationC
 import { lockEditorInteraction } from "../generation/chat/lockEditorInteraction.ts";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
-import { TransformedFieldTooltip } from "../puck/components/TransformedFieldTooltip.tsx";
 import { MetaTitleField } from "../puck/components/meta-title/MetaTitleField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
@@ -120,12 +116,6 @@ export const InternalLayoutEditor = ({
 }: InternalLayoutEditorProps) => {
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
-  const streamDocument = useDocument();
-  const { i18n: pageI18n } = useTranslation();
-  const fieldTransforms = React.useMemo(
-    () => createYextFieldTransforms(streamDocument, pageI18n.language),
-    [streamDocument, pageI18n.language]
-  );
   const { errorCount, errorSources, errorDetails } = useErrorContext();
   const chatUi = React.useContext(LayoutGenerationChatUiContext);
   const chatEnabled = !!chatUi;
@@ -389,12 +379,10 @@ export const InternalLayoutEditor = ({
       >
         <Puck
           config={translatedPuckConfigWithRootFields}
-          fieldTransforms={fieldTransforms}
           data={{}} // we use puckInitialHistory instead
           initialHistory={puckInitialHistory}
           plugins={plugins}
           overrides={{
-            componentOverlay: TransformedFieldTooltip,
             fields: fieldsOverride,
             header: () => (
               <LayoutHeader
