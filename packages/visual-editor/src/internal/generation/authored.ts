@@ -1,10 +1,9 @@
-import { unwrapZodSchema as unwrap } from "../utils/unwrapZodSchema.ts";
-import { isDeepEqual } from "../../utils/deepEqual.ts";
 import type { Fields } from "@puckeditor/core";
 import { z } from "zod";
+import { unwrapZodSchema as unwrap } from "../utils/unwrapZodSchema.ts";
+import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
-import type { PuckGenerationCatalog } from "../../vite-plugin/layout-generation/puckGenerationCatalog.ts";
-
+import type { PuckGenerationCatalog } from "../../utils/generationCatalog.ts";
 import {
   generationFields,
   isLinkedSource,

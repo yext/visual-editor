@@ -1,13 +1,16 @@
 import React from "react";
-import { resolveAllData, useGetPuck } from "@puckeditor/core";
-import { LocalEditorChatBridge } from "../../local-editor/chat/LocalEditorChatBridge.tsx";
+import { LayoutGenerationChatUiContext } from "../generation/chat/LayoutGenerationChatUiContext.tsx";
+import { createUsePuck, resolveAllData, useGetPuck } from "@puckeditor/core";
+import { LayoutGenerationChatBridge } from "../generation/chat/LayoutGenerationChatBridge.tsx";
 import { ValidationReporters } from "../puck/components/ValidationReporters.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
+import { synchronizeManualCardSlots } from "../utils/synchronizeManualCardSlots.ts";
 
 const devLogger = new DevLogger();
+const usePuck = createUsePuck();
 
 /** A stable component type keeps the chat bridge mounted on ordinary editor renders. */
 export const LayoutPuckOverride = ({
@@ -16,6 +19,11 @@ export const LayoutPuckOverride = ({
   children: React.ReactNode;
 }) => {
   const getPuck = useGetPuck();
+  const creating = React.useContext(LayoutGenerationChatUiContext)?.chat
+    .isCreating;
+  const creatingRef = React.useRef(creating);
+  creatingRef.current = creating;
+  const observedData = usePuck((puck) => puck.appState.data);
   const document = useDocument();
   const documentRef = React.useRef(document);
   if (!isDeepEqual(documentRef.current, document))
@@ -23,16 +31,31 @@ export const LayoutPuckOverride = ({
   const streamDocument = documentRef.current;
 
   React.useEffect(() => {
+    if (creatingRef.current) return;
+    const { appState, config, dispatch } = getPuck();
+    const data = synchronizeManualCardSlots(appState.data, config);
+    if (data !== appState.data) {
+      dispatch({ type: "setData", data, recordHistory: false });
+    }
+  }, [getPuck, observedData]);
+
+  React.useEffect(() => {
     let active = true;
     const resolveData = async () => {
       devLogger.logFunc("reloadDataOnDocumentChange");
+      if (creatingRef.current) return;
       const { appState, config, dispatch } = getPuck();
       const resolvedData = await resolveAllData(
         clonePuckResolveData(appState.data),
         config,
         { streamDocument }
       );
-      if (!active || getPuck().appState.data !== appState.data) return;
+      if (
+        !active ||
+        creatingRef.current ||
+        getPuck().appState.data !== appState.data
+      )
+        return;
       devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
       if (isDeepEqual(appState.data, resolvedData)) {
         devLogger.log(
@@ -51,7 +74,7 @@ export const LayoutPuckOverride = ({
   return (
     <>
       <ValidationReporters />
-      <LocalEditorChatBridge streamDocument={streamDocument} />
+      <LayoutGenerationChatBridge streamDocument={streamDocument} />
       {children}
     </>
   );

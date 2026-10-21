@@ -1,8 +1,8 @@
-import { hasSlots } from "./editUtils.ts";
 import type { Fields } from "@puckeditor/core";
 import { z } from "zod";
+import { hasSlots } from "./editUtils.ts";
 import { unwrapZodSchema as unwrap } from "../utils/unwrapZodSchema.ts";
-import type { GenerationComponent } from "../../vite-plugin/layout-generation/puckGenerationCatalog.ts";
+import type { GenerationComponent } from "../../utils/generationCatalog.ts";
 import { clone, type SavedComponent } from "./authored.ts";
 import type { AuthoredValueEdit } from "./editProtocol.ts";
 import { generationFields } from "./slottedItemSource.ts";

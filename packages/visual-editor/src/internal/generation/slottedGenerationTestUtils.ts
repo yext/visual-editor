@@ -1,8 +1,8 @@
 import { resolveAllData } from "@puckeditor/core";
 import { z } from "zod";
 import { createSlottedItemSource } from "../../utils/itemSource/createSlottedItemSource.ts";
-import { createPuckGenerationCatalog } from "../../vite-plugin/layout-generation/puckGenerationCatalog.ts";
-import { compileGenerationSchema } from "../../vite-plugin/layout-generation/generationSchema.ts";
+import { createPuckGenerationCatalog } from "../../utils/generationCatalog.ts";
+import { compileGenerationSchema } from "./generationSchema.ts";
 import { clone, type Content } from "./authored.ts";
 
 const defaults = { $default: true };

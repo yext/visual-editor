@@ -1,6 +1,4 @@
-import { LocalEditorChatUiContext } from "../../local-editor/chat/LocalEditorChatUiContext.tsx";
-import { localEditorChatPlugin } from "../../local-editor/chat/localEditorChatPlugin.tsx";
-import { LayoutPuckOverride } from "./LayoutPuckOverride.tsx";
+import { lockEditorInteraction } from "../generation/chat/lockEditorInteraction.ts";
 import {
   Puck,
   Data,
@@ -18,6 +16,13 @@ import {
   outlinePlugin,
 } from "@puckeditor/core";
 import React, { useRef, useCallback } from "react";
+import * as lzstring from "lz-string";
+import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
+import { useTranslation } from "react-i18next";
+import { LayoutGenerationChatUiContext } from "../generation/chat/LayoutGenerationChatUiContext.tsx";
+import { layoutGenerationChatPlugin } from "../generation/chat/layoutGenerationChatPlugin.tsx";
+import { LayoutPuckOverride } from "./LayoutPuckOverride.tsx";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
@@ -25,10 +30,7 @@ import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
 import { MetaTitleField } from "../puck/components/meta-title/MetaTitleField.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
-import * as lzstring from "lz-string";
 import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
-import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
-import { v4 as uuidv4 } from "uuid";
 import { Metadata } from "../../editor/Editor.tsx";
 import { AdvancedSettings } from "./AdvancedSettings.tsx";
 import { cn } from "../../utils/cn.ts";
@@ -38,7 +40,6 @@ import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { YextPuckFieldOverrides } from "../../fields/fieldOverrides.ts";
 import type { MigrationRegistry } from "../../utils/migrate.ts";
-import { useTranslation } from "react-i18next";
 import { createYextFieldTransforms } from "../../fields/fieldTransforms/index.ts";
 import { TransformedFieldTooltip } from "../puck/components/TransformedFieldTooltip.tsx";
 
@@ -126,14 +127,20 @@ export const InternalLayoutEditor = ({
     [streamDocument, pageI18n.language]
   );
   const { errorCount, errorSources, errorDetails } = useErrorContext();
-  const chatUi = React.useContext(LocalEditorChatUiContext);
-  const chatEnabled = localDev && !!chatUi;
+  const chatUi = React.useContext(LayoutGenerationChatUiContext);
+  const chatEnabled = !!chatUi;
+  const creating = chatUi?.chat.isCreating ?? false;
+  const editorRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (creating && editorRef.current)
+      return lockEditorInteraction(editorRef.current);
+  }, [creating]);
   // Keep plugin sidebar fields mounted when saved state changes.
   const plugins = React.useMemo(
     () => [
       { ...blocks, label: pt("sections", "Sections") },
       outline,
-      ...(chatEnabled ? [localEditorChatPlugin] : []),
+      ...(chatEnabled ? [layoutGenerationChatPlugin] : []),
     ],
     [i18n.language, chatEnabled]
   );
@@ -144,6 +151,7 @@ export const InternalLayoutEditor = ({
    */
   const handleHistoryChange = useCallback(
     (histories: History<Partial<AppState>>[], index: number) => {
+      if (creating) return;
       if (
         index !== 0 &&
         historyIndex.current !== index &&
@@ -195,6 +203,7 @@ export const InternalLayoutEditor = ({
       }
     },
     [
+      creating,
       templateMetadata,
       buildVisualConfigLocalStorageKey,
       layoutSaveState,
@@ -370,216 +379,224 @@ export const InternalLayoutEditor = ({
 
   return (
     <EntityTooltipsProvider>
-      <Puck
-        config={translatedPuckConfigWithRootFields}
-        fieldTransforms={fieldTransforms}
-        data={{}} // we use puckInitialHistory instead
-        initialHistory={puckInitialHistory}
-        plugins={plugins}
-        overrides={{
-          componentOverlay: TransformedFieldTooltip,
-          fields: fieldsOverride,
-          header: () => (
-            <LayoutHeader
-              templateMetadata={templateMetadata}
-              onClearLocalChanges={handleClearLocalChanges}
-              onHistoryChange={handleHistoryChange}
-              onPublishLayout={handlePublishLayout}
-              onSendLayoutForApproval={handleSendLayoutForApproval}
-              localDev={localDev}
-              hasErrors={errorCount > 0}
-              errorSources={errorSources}
-              errorDetails={errorDetails}
-              sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
-            />
-          ),
-          iframe: loadMapboxIntoIframe,
-          fieldTypes: {
-            array: TranslatePuckArrayFieldLabels,
-            number: TranslatePuckFieldLabels,
-            object: TranslatePuckFieldLabels,
-            radio: TranslatePuckFieldLabels,
-            select: TranslatePuckFieldLabels,
-            text: TranslatePuckFieldLabels,
-            textarea: TranslatePuckFieldLabels,
-            ...YextPuckFieldOverrides,
-          },
-          actionBar: ({ children, label, parentAction }) => {
-            const getPuck = useGetPuck();
-            const { appState } = getPuck();
-            const itemSelectorState = usePuck(
-              (s) => s.appState.ui.itemSelector
-            );
-
-            React.useEffect(removeDuplicateActionBars, [itemSelectorState]);
-
-            const isAdvancedSettingsSelected =
-              appState?.ui?.itemSelector &&
-              appState.ui.itemSelector.zone === "root:advanced";
-
-            if (isAdvancedSettingsSelected) {
-              return <></>;
-            }
-
-            const copyToClipboard = () => {
-              const { appState, getItemBySelector } = getPuck();
-
-              if (!appState.ui.itemSelector) {
-                return;
-              }
-
-              const selectedComponent = getItemBySelector(
-                appState.ui.itemSelector
+      <div
+        ref={editorRef}
+        style={{ display: "contents" }}
+        aria-busy={creating || undefined}
+      >
+        <Puck
+          config={translatedPuckConfigWithRootFields}
+          fieldTransforms={fieldTransforms}
+          data={{}} // we use puckInitialHistory instead
+          initialHistory={puckInitialHistory}
+          plugins={plugins}
+          overrides={{
+            componentOverlay: TransformedFieldTooltip,
+            fields: fieldsOverride,
+            header: () => (
+              <LayoutHeader
+                templateMetadata={templateMetadata}
+                onClearLocalChanges={handleClearLocalChanges}
+                onHistoryChange={handleHistoryChange}
+                onPublishLayout={handlePublishLayout}
+                onSendLayoutForApproval={handleSendLayoutForApproval}
+                localDev={localDev}
+                hasErrors={errorCount > 0}
+                errorSources={errorSources}
+                errorDetails={errorDetails}
+                sectionLibraryMigrationRegistry={
+                  sectionLibraryMigrationRegistry
+                }
+              />
+            ),
+            iframe: loadMapboxIntoIframe,
+            fieldTypes: {
+              array: TranslatePuckArrayFieldLabels,
+              number: TranslatePuckFieldLabels,
+              object: TranslatePuckFieldLabels,
+              radio: TranslatePuckFieldLabels,
+              select: TranslatePuckFieldLabels,
+              text: TranslatePuckFieldLabels,
+              textarea: TranslatePuckFieldLabels,
+              ...YextPuckFieldOverrides,
+            },
+            actionBar: ({ children, label, parentAction }) => {
+              const getPuck = useGetPuck();
+              const { appState } = getPuck();
+              const itemSelectorState = usePuck(
+                (s) => s.appState.ui.itemSelector
               );
-              navigator.clipboard.writeText(
-                JSON.stringify(selectedComponent, null, 2)
-              );
-            };
 
-            const pasteFromClipboard = async () => {
-              const { appState, dispatch, getItemBySelector } = getPuck();
+              React.useEffect(removeDuplicateActionBars, [itemSelectorState]);
 
-              if (
-                !appState?.ui?.itemSelector?.zone ||
-                appState?.ui?.itemSelector?.index === undefined
-              ) {
-                return;
+              const isAdvancedSettingsSelected =
+                appState?.ui?.itemSelector &&
+                appState.ui.itemSelector.zone === "root:advanced";
+
+              if (isAdvancedSettingsSelected) {
+                return <></>;
               }
 
-              const selectedComponent = getItemBySelector({
-                index: appState.ui.itemSelector?.index,
-                zone: appState.ui.itemSelector?.zone,
-              });
+              const copyToClipboard = () => {
+                const { appState, getItemBySelector } = getPuck();
 
-              if (!selectedComponent) {
-                return;
-              }
+                if (!appState.ui.itemSelector) {
+                  return;
+                }
 
-              try {
-                const rawClipboardText = await navigator.clipboard.readText();
-                const pastedData = JSON.parse(rawClipboardText);
+                const selectedComponent = getItemBySelector(
+                  appState.ui.itemSelector
+                );
+                navigator.clipboard.writeText(
+                  JSON.stringify(selectedComponent, null, 2)
+                );
+              };
+
+              const pasteFromClipboard = async () => {
+                const { appState, dispatch, getItemBySelector } = getPuck();
+
                 if (
-                  !pastedData.props ||
-                  !pastedData.type ||
-                  pastedData.type !== selectedComponent?.type
+                  !appState?.ui?.itemSelector?.zone ||
+                  appState?.ui?.itemSelector?.index === undefined
                 ) {
+                  return;
+                }
+
+                const selectedComponent = getItemBySelector({
+                  index: appState.ui.itemSelector?.index,
+                  zone: appState.ui.itemSelector?.zone,
+                });
+
+                if (!selectedComponent) {
+                  return;
+                }
+
+                try {
+                  const rawClipboardText = await navigator.clipboard.readText();
+                  const pastedData = JSON.parse(rawClipboardText);
+                  if (
+                    !pastedData.props ||
+                    !pastedData.type ||
+                    pastedData.type !== selectedComponent?.type
+                  ) {
+                    alert(
+                      pt(
+                        "failedToPasteComponentInvalidData",
+                        "Failed to paste: Invalid component data."
+                      )
+                    );
+                    return;
+                  }
+
+                  // If the pasted data has children, we need to generate new ids for them
+                  const newData = walkTree(pastedData, puckConfig, (contents) =>
+                    contents.map((item: ComponentDataOptionalId) => {
+                      const id = `${item.type}-${uuidv4()}`;
+                      // oxlint-disable-next-line no-unused-vars
+                      const { id: _, parentData: __, ...rest } = item.props;
+
+                      // CardsWrappers need to have their children's ids preserved in the constantValue array
+                      if (item.type.includes("CardsWrapper")) {
+                        if (
+                          "data" in rest &&
+                          "constantValue" in rest.data &&
+                          "slots" in rest &&
+                          "CardSlot" in rest.slots
+                        ) {
+                          const constantValue = rest.data.constantValue;
+                          if (
+                            Array.isArray(constantValue) &&
+                            constantValue.every(
+                              (cv: unknown) =>
+                                typeof cv === "object" && cv && "id" in cv
+                            )
+                          ) {
+                            constantValue.forEach((cv, i) => {
+                              cv.id =
+                                rest?.slots?.CardSlot[i]?.props?.id || cv.id;
+                            });
+                          }
+                        }
+                      }
+
+                      return {
+                        ...item,
+                        props: { ...rest, id },
+                      };
+                    })
+                  );
+                  // preserve the selected component's id and type
+                  newData.props.id = selectedComponent.props.id;
+
+                  devLogger.logData("PASTED_DATA", newData);
+                  dispatch({
+                    type: "replace",
+                    destinationZone: appState.ui.itemSelector.zone,
+                    destinationIndex: appState.ui.itemSelector.index,
+                    data: newData,
+                  });
+                } catch (err) {
+                  if (
+                    err instanceof DOMException &&
+                    err.name === "NotAllowedError"
+                  ) {
+                    alert(
+                      pt(
+                        "failedToPasteComponentPermissionDenied",
+                        "Failed to paste: Clipboard access is blocked. Enable paste permissions and try again."
+                      )
+                    );
+                    return;
+                  }
+
                   alert(
                     pt(
                       "failedToPasteComponentInvalidData",
                       "Failed to paste: Invalid component data."
                     )
                   );
-                  return;
                 }
+              };
 
-                // If the pasted data has children, we need to generate new ids for them
-                const newData = walkTree(pastedData, puckConfig, (contents) =>
-                  contents.map((item: ComponentDataOptionalId) => {
-                    const id = `${item.type}-${uuidv4()}`;
-                    // oxlint-disable-next-line no-unused-vars
-                    const { id: _, parentData: __, ...rest } = item.props;
+              const additionalActions = (
+                <>
+                  <ActionBar.Action
+                    label={pt("actions.copyToClipboard", "Copy to Clipboard")}
+                    onClick={copyToClipboard}
+                  >
+                    <ClipboardCopyIcon size={16} />
+                  </ActionBar.Action>
+                  <ActionBar.Action
+                    label={pt(
+                      "actions.pasteFromClipboard",
+                      "Paste from Clipboard"
+                    )}
+                    onClick={pasteFromClipboard}
+                  >
+                    <ClipboardPasteIcon size={16} />
+                  </ActionBar.Action>
+                </>
+              );
 
-                    // CardsWrappers need to have their children's ids preserved in the constantValue array
-                    if (item.type.includes("CardsWrapper")) {
-                      if (
-                        "data" in rest &&
-                        "constantValue" in rest.data &&
-                        "slots" in rest &&
-                        "CardSlot" in rest.slots
-                      ) {
-                        const constantValue = rest.data.constantValue;
-                        if (
-                          Array.isArray(constantValue) &&
-                          constantValue.every(
-                            (cv: unknown) =>
-                              typeof cv === "object" && cv && "id" in cv
-                          )
-                        ) {
-                          constantValue.forEach((cv, i) => {
-                            cv.id =
-                              rest?.slots?.CardSlot[i]?.props?.id || cv.id;
-                          });
-                        }
-                      }
-                    }
-
-                    return {
-                      ...item,
-                      props: { ...rest, id },
-                    };
-                  })
-                );
-                // preserve the selected component's id and type
-                newData.props.id = selectedComponent.props.id;
-
-                devLogger.logData("PASTED_DATA", newData);
-                dispatch({
-                  type: "replace",
-                  destinationZone: appState.ui.itemSelector.zone,
-                  destinationIndex: appState.ui.itemSelector.index,
-                  data: newData,
-                });
-              } catch (err) {
-                if (
-                  err instanceof DOMException &&
-                  err.name === "NotAllowedError"
-                ) {
-                  alert(
-                    pt(
-                      "failedToPasteComponentPermissionDenied",
-                      "Failed to paste: Clipboard access is blocked. Enable paste permissions and try again."
-                    )
-                  );
-                  return;
-                }
-
-                alert(
-                  pt(
-                    "failedToPasteComponentInvalidData",
-                    "Failed to paste: Invalid component data."
-                  )
-                );
-              }
-            };
-
-            const additionalActions = (
-              <>
-                <ActionBar.Action
-                  label={pt("actions.copyToClipboard", "Copy to Clipboard")}
-                  onClick={copyToClipboard}
-                >
-                  <ClipboardCopyIcon size={16} />
-                </ActionBar.Action>
-                <ActionBar.Action
-                  label={pt(
-                    "actions.pasteFromClipboard",
-                    "Paste from Clipboard"
-                  )}
-                  onClick={pasteFromClipboard}
-                >
-                  <ClipboardPasteIcon size={16} />
-                </ActionBar.Action>
-              </>
-            );
-
-            return (
-              <ActionBar>
-                <ActionBar.Group>
-                  {parentAction}
-                  {label && <ActionBar.Label label={label} />}
-                </ActionBar.Group>
-                <ActionBar.Group>
-                  {additionalActions}
-                  {children}
-                </ActionBar.Group>
-              </ActionBar>
-            );
-          },
-          fieldLabel: LayoutFieldLabel,
-          puck: LayoutPuckOverride,
-        }}
-        metadata={metadata}
-      />
+              return (
+                <ActionBar>
+                  <ActionBar.Group>
+                    {parentAction}
+                    {label && <ActionBar.Label label={label} />}
+                  </ActionBar.Group>
+                  <ActionBar.Group>
+                    {additionalActions}
+                    {children}
+                  </ActionBar.Group>
+                </ActionBar>
+              );
+            },
+            fieldLabel: LayoutFieldLabel,
+            puck: LayoutPuckOverride,
+          }}
+          metadata={metadata}
+        />
+      </div>
     </EntityTooltipsProvider>
   );
 };

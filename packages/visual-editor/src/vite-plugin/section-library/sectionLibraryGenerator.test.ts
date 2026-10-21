@@ -1,4 +1,3 @@
-import { validateAuthored } from "../../internal/generation/authored.ts";
 // @vitest-environment node
 import os from "node:os";
 import path from "node:path";
@@ -8,9 +7,12 @@ import { createServer } from "vite";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { Render } from "@puckeditor/core";
-import { MainContent } from "../../components/helpers/MainContent.tsx";
-import { buildGenerationPrompt } from "../layout-generation/generationValidation.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { validateAuthored } from "../../internal/generation/authored.ts";
+import { compileSectionEditSchema } from "../../internal/generation/sectionEditSchema.ts";
+import { materializeSectionEdit } from "../../internal/generation/editMaterializer.ts";
+import { MainContent } from "../../components/helpers/MainContent.tsx";
+import { buildGenerationPrompt } from "../../internal/generation/generationValidation.ts";
 import {
   cleanupGeneratedSectionLibraryFiles,
   generateSectionLibraryFiles,
@@ -65,7 +67,7 @@ describe("generateSectionLibraryFiles", () => {
         alias: {
           "@yext/visual-editor/section-library-support": path.join(
             process.cwd(),
-            "src/vite-plugin/layout-generation/puckGenerationCatalog.ts"
+            "src/utils/generationCatalog.ts"
           ),
         },
       },
@@ -165,6 +167,63 @@ describe("generateSectionLibraryFiles", () => {
           })
         )
       ).toBe("<div><p>Directory</p></div>");
+
+      const customCode = {
+        type: "CustomCodeSection",
+        props: { id: "custom-code", html: "<div>Keep this code</div>" },
+      };
+      for (const layoutId of Object.keys(catalogs)) {
+        const generatedCatalog = catalogs[layoutId];
+        expect(
+          generatedCatalog.data.components.CustomCodeSection.generation
+        ).toBeUndefined();
+        expect(() =>
+          validateAuthored(generatedCatalog, { content: [customCode] })
+        ).not.toThrow();
+      }
+      const pageWithCustomCode = {
+        content: [
+          customCode,
+          { type: "Directory", props: { id: "directory", title: "Old" } },
+        ],
+      };
+      const task = {
+        taskId: "update-directory",
+        sectionId: "directory",
+        targetComponentIds: ["directory"],
+        instructions: "Update the directory title",
+        structuralOperations: [],
+        dependsOn: [],
+      };
+      const edit = compileSectionEditSchema(
+        directoryCatalog,
+        ["en"],
+        pageWithCustomCode,
+        task
+      ).parseResponse(
+        JSON.stringify({
+          taskId: task.taskId,
+          sectionId: task.sectionId,
+          updates: [
+            {
+              kind: "update",
+              componentId: "directory",
+              changes: [{ kind: "set", path: "/title", value: "Updated" }],
+            },
+          ],
+          insertions: [],
+        })
+      );
+      const editedPage = materializeSectionEdit(
+        directoryCatalog,
+        pageWithCustomCode,
+        task,
+        edit
+      );
+      expect(editedPage.content[1]).toMatchObject({
+        props: { title: "Updated" },
+      });
+      expect(editedPage.content[0]).toEqual(customCode);
     } finally {
       await server.close();
     }

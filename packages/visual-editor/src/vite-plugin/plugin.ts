@@ -1,11 +1,11 @@
+import type { Plugin } from "vite";
+import path from "node:path";
 import {
   handleGenerationDiagnostics,
   handleGenerationErrorReport,
 } from "./layout-generation/generationReports.ts";
-import type { Plugin } from "vite";
-import path from "node:path";
 import { createGenerationLogger } from "./layout-generation/generationLogger.ts";
-import { handleLocalEditorGenerationRequest } from "./layout-generation/generation.ts";
+import { handleLocalEditorModelRequest } from "./layout-generation/generation.ts";
 import { getLocalEditorGenerationLocales } from "./local-editor/data.ts";
 import {
   cleanupGeneratedSectionLibraryFiles,
@@ -163,6 +163,36 @@ export const yextVisualEditorPlugin = (
         }
         const reportPath = new URL(request.url, "http://localhost").pathname;
         if (
+          reportPath === "/__yext_visual_editor/local-editor/generate/context"
+        ) {
+          const layoutId = new URL(
+            request.url,
+            "http://localhost"
+          ).searchParams.get("layoutId");
+          void (async () => {
+            if (!layoutId) {
+              sendJsonResponse(
+                response,
+                { error: "A layoutId is required." },
+                400
+              );
+              return;
+            }
+            sendJsonResponse(response, {
+              model: options.localEditor?.generationModel ?? "gpt-6-luna",
+              locales: await getLocalEditorGenerationLocales(
+                server.config.root,
+                sectionLibraryLayouts,
+                layoutId
+              ),
+            });
+          })().catch((error) =>
+            sendJsonResponse(response, { error: String(error) }, 500)
+          );
+          return;
+        }
+
+        if (
           reportPath === "/__yext_visual_editor/local-editor/generate/error" ||
           reportPath ===
             "/__yext_visual_editor/local-editor/generate/diagnostics"
@@ -193,24 +223,9 @@ export const yextVisualEditorPlugin = (
           new URL(request.url, "http://localhost").pathname ===
           "/__yext_visual_editor/local-editor/generate"
         ) {
-          void handleLocalEditorGenerationRequest(request, response, {
+          void handleLocalEditorModelRequest(request, response, {
             log: logGeneration,
             model: options.localEditor?.generationModel ?? "gpt-6-luna",
-            loadContext: async (layoutId) => {
-              const { catalogs } = await server.ssrLoadModule(
-                "/src/library/.generated/catalog.js"
-              );
-              return Object.hasOwn(catalogs, layoutId)
-                ? {
-                    catalog: catalogs[layoutId],
-                    locales: await getLocalEditorGenerationLocales(
-                      server.config.root,
-                      sectionLibraryLayouts,
-                      layoutId
-                    ),
-                  }
-                : undefined;
-            },
           }).catch((error: unknown) => {
             logGeneration("[local-editor generation] Request failed", {
               correlationId: request.headers["x-visual-editor-correlation-id"],

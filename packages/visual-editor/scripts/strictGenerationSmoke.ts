@@ -1,12 +1,9 @@
 /** Manual gateway check: sends only the synthetic catalog and prompt below. */
 import assert from "node:assert/strict";
-import type { Content } from "../src/internal/generation/authored.ts";
-import { EventEmitter } from "node:events";
-import { Readable } from "node:stream";
-import type { IncomingMessage, ServerResponse } from "node:http";
 import { z } from "zod";
-import { createPuckGenerationCatalog } from "../src/vite-plugin/layout-generation/puckGenerationCatalog.ts";
-import { handleLocalEditorGenerationRequest } from "../src/vite-plugin/layout-generation/generation.ts";
+import { createPuckGenerationCatalog } from "../src/utils/generationCatalog.ts";
+import { executeGeneration } from "../src/internal/generation/engine.ts";
+import { GENERATION_GATEWAY_URL } from "../src/vite-plugin/layout-generation/generation.ts";
 
 const model = process.argv[2] ?? "gpt-6-luna";
 const color = z.enum(["blue", "green"]);
@@ -44,10 +41,17 @@ const catalog = createPuckGenerationCatalog({
     generation: { props: z.object({ data: greetingProps }) },
   },
 });
-const request = Readable.from([
-  Buffer.from(
-    JSON.stringify({
+const controller = new AbortController();
+const timeout = setTimeout(
+  () => controller.abort(new Error("Smoke check timed out")),
+  30_000
+);
+try {
+  const accepted = await executeGeneration(
+    {
       layoutId: "synthetic",
+      currentData: { content: [] },
+      mode: "create",
       messages: [
         {
           role: "user",
@@ -55,42 +59,38 @@ const request = Readable.from([
             "Create MainContent containing one SyntheticSection with color blue and one GreetingSlot in its heading slot. In that slot's props.data set greeting defaultValue Hello, fr Bonjour, color blue, and no emphasis.",
         },
       ],
-    })
-  ),
-]) as IncomingMessage;
-request.method = "POST";
-const events: {
-  type: string;
-  spec?: Content;
-  error?: string;
-}[] = [];
-let errorBody = "";
-const response = Object.assign(new EventEmitter(), {
-  statusCode: 0,
-  setHeader: () => {},
-  flushHeaders: () => {},
-  write: (line: string) => events.push(JSON.parse(line)),
-  end: (body?: string) => {
-    errorBody = body ?? "";
-  },
-});
-const timeout = setTimeout(() => response.emit("close"), 30_000);
-try {
-  await handleLocalEditorGenerationRequest(
-    request,
-    response as unknown as ServerResponse,
+    },
     {
       model,
-      loadContext: async () => ({ catalog, locales: ["en", "fr"] }),
-      log: () => {},
-    }
+      catalog,
+      locales: ["en", "fr"],
+      diagnostics: { log: () => {}, report: () => {} },
+      transport: async (body, signal, correlationId) => {
+        const response = await fetch(GENERATION_GATEWAY_URL, {
+          method: "POST",
+          signal,
+          headers: {
+            "Content-Type": "application/json",
+            "Yext-Business-Id": "1000152098",
+            "Yext-Source": "vle-ai-layout-generation-poc",
+            "Correlation-Id": correlationId,
+          },
+          body: JSON.stringify(body),
+        });
+        if (!response.ok) throw new Error(`Gateway HTTP ${response.status}`);
+        return {
+          contentType:
+            response.headers.get("Content-Type") ?? "application/json",
+          body: response.body!,
+        };
+      },
+    },
+    controller.signal,
+    crypto.randomUUID(),
+    () => {}
   );
-  const accepted = events.find((event) => event.type === "accepted");
-  if (!accepted?.spec?.content.length)
-    throw new Error(
-      events.find((event) => event.type === "error")?.error ??
-        (errorBody || "No accepted content")
-    );
+  if (accepted.type !== "accepted" || !accepted.spec?.content.length)
+    throw new Error("No accepted content");
   const content = accepted.spec.content;
   assert.equal(content.length, 1);
   assert.equal(content[0].type, "MainContent");

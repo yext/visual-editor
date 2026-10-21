@@ -1,11 +1,14 @@
+import DOMPurify from "dompurify";
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
-import DOMPurify from "dompurify";
 import type { LocalDevOptions } from "../../editor/types.ts";
 
 export type HeadDeployStatus = "RUNNING" | "INACTIVE" | "FAILED" | "ACTIVE";
 
+export type AiPageGeneration = { enabled: boolean; model: string };
+
 export type TemplateMetadata = {
+  aiPageGeneration?: AiPageGeneration;
   siteId: number;
   templateId: string;
   layoutId?: number;
@@ -139,6 +142,7 @@ export function generateTemplateMetadata(
     : ["en", "es", "fr"];
 
   return {
+    aiPageGeneration: localDevOptions?.aiPageGeneration,
     siteId: 1337,
     templateId,
     entityId,

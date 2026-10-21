@@ -1,11 +1,11 @@
+import type { Permissions } from "@puckeditor/core";
 import { sameCollection } from "./editUtils.ts";
 import {
   sectionEditTaskSchema,
   sectionEditResultSchema,
 } from "./editProtocolSchema.ts";
-import type { Permissions } from "@puckeditor/core";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
-import type { PuckGenerationCatalog } from "../../vite-plugin/layout-generation/puckGenerationCatalog.ts";
+import type { PuckGenerationCatalog } from "../../utils/generationCatalog.ts";
 import {
   assertAuthoredPreserved,
   buildEditInventory,

@@ -51,6 +51,7 @@
     "build:cli": "tsup --config tsup.config.ts",
     "build": "pnpm run build:components && pnpm run build:plugin && pnpm run build:cli",
     "test": "pnpm run test:editor && pnpm run test:components",
+    "test:creation:browser": "vitest run --config vitest.creation.config.ts",
     "test:editor": "vitest run --exclude './src/components/**/*.test.tsx' --browser.enabled false",
     "test:components": "vitest run --dir ./src/components",
     "test:components:local": "./scripts/localScreenshots.sh",

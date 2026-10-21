@@ -247,6 +247,6 @@ export { loadTranslationDictionary } from "./utils/i18n/translationResources.ts"
 export { isVisualEditorTestEnv } from "./components/testing/utils.ts";
 export { fetchLocalesToPathsForEntity } from "./utils/api/fetchLocalesToPathsForEntity.ts";
 export { presetImageIcons } from "./utils/presetImageIcons.tsx";
-export { createPuckGenerationCatalog } from "./vite-plugin/layout-generation/puckGenerationCatalog.ts";
-
+export { createPuckGenerationCatalog } from "./utils/generationCatalog.ts";
 export type { ComponentGenerationMetadata } from "./fields/fields.ts";
+export { withGenerationCatalog } from "./utils/generationCatalogRegistry.ts";

@@ -211,8 +211,8 @@ The strict model envelope is `{ text, translationMode, result }`. The result is 
 initial page creation. Generation requires an empty page or a single empty
 MainContent scaffold. Clear an existing layout before generating a new page.
 The complete candidate is materialized and validated in one attempt; validation
-failures, refusals, transport failures, deadlines, and output exhaustion terminate
-the turn without repair. Creation uses an output budget of 128,000 tokens. The
+failures receive one repair attempt; refusals, transport failures, deadlines, and
+output exhaustion terminate the attempt. Creation uses an output budget of 128,000 tokens. The
 gateway request log records the budget and blank-page classification.
 
 No `OPENAI_API_KEY` is required; the development server needs gateway access.
@@ -221,17 +221,18 @@ existing business/source headers and a fresh correlation Id. Component source co
 and snapshot documents are not sent. Authored context, defaults, and descriptions
 are used for generation. Image requests can use model-supplied image URLs.
 
-The NDJSON transport identifies itself with
-`X-Visual-Editor-Generation: strict-puck-overrides-v2`. It emits `accepted`,
-`usage`, and `error` events. Only the accepted event contains a complete materialized
-`spec` (or null for clarification). There are no provisional layouts or compatibility
-events. Conversation history retains assistant prose, without generated layout data.
+Local-editor and platform use a shared browser generation engine. The Vite
+`/generate` endpoint forwards prepared model requests and raw response bytes; the
+engine constructs prompts and parses/validates complete model results before they
+reach the canvas. The platform transport uses the
+[iframe message contract](./layout-generation-iframe.md).
 
-After transport completes, the client validates and resolves the isolated candidate
-through `resolveAllData` in the active editor with its `streamDocument`. It validates
-again and checks that resolution preserved canonical authored state before adding
-one history entry. Failed, cancelled, stale, or invalid turns leave the starting
-layout unchanged. Changes to layout, entity, or locale abort the turn.
+After validation, the client resolves isolated candidates through `resolveAllData`
+in the active editor, checks authored-state preservation, and records undoable
+history. Section edits apply progressively after validation; cancelled or failed
+requests preserve changes already applied. Layout changes reset the conversation.
+Locale/entity switches preserve conversation but abort a turn if the active canvas
+context changes during generation.
 
 Generation outcomes, correlation Ids, and errors are logged locally in
 `src/library/.generated/logs`. Server initialization writes and flushes a startup
@@ -249,11 +250,15 @@ yextVisualEditorPlugin({
 });
 ```
 
-The generated local-editor template enables chat with the optional `chatEnabled`
-prop. The shell supplies a chat canvas through `LocalEditorChatContext`, and the
-layout editor mounts the bridge inside its Puck provider when that local-editor
-context is present. Chat files live in `src/local-editor/chat`; layout generation
-files live in `src/vite-plugin/layout-generation`.
+The generated local-editor template enables chat by default with the `chatEnabled`
+prop. The shell uses shared generation providers above preview remounts. Platform
+owns those providers at the layout-editor boundary. The existing Puck plugin and
+canvas bridge are shared; chat modules live in `src/internal/generation/chat`,
+and prompt/schema/orchestration modules live in `src/internal/generation`.
+
+The local `/generate/context?layoutId=…` endpoint supplies the configured model and
+existing local content-locale union. The model and generated catalog are used by
+the browser engine, and local diagnostic reports continue to use the Vite server.
 
 ## Test Data
 

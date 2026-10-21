@@ -405,6 +405,7 @@ const buildJsonRenderSource = (
       const pageSetType = JSON.stringify(layout.metadata.pageSetType);
       return [
         `  ${JSON.stringify(layout.metadata.id)}: createPuckGenerationCatalog({`,
+        "    CustomCodeSection: {},",
         ...sections.flatMap((section, index) =>
           section.pageSetTypes.includes(layout.metadata.pageSetType)
             ? [
@@ -477,6 +478,7 @@ const buildConfigSource = (
       return component.pageSetTypes.includes(layout.metadata.pageSetType);
     }) || sharedRootPageSetTypes.includes(layout.metadata.pageSetType);
   return sectionLibraryConfigTemplate
+    .replace("__SECTION_LIBRARY_LAYOUT_ID__", JSON.stringify(layoutId))
     .replace("/* SECTION_LIBRARY_GENERATED_FILE */", GENERATED_FILE_PREFIX)
     .replace("/* SECTION_LIBRARY_IMPORTS */", imports.join("\n"))
     .replace("/* SECTION_LIBRARY_ENTRIES */", entries.join("\n"))

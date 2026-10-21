@@ -1,4 +1,3 @@
-import { openChat } from "./chat/chatTestUtils.tsx";
 import React from "react";
 import {
   fireEvent,
@@ -9,20 +8,38 @@ import {
 } from "@testing-library/react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { Puck, blocksPlugin, outlinePlugin } from "@puckeditor/core";
-import { LocalEditorChatUiContext } from "./chat/LocalEditorChatUiContext.tsx";
-import { localEditorChatPlugin } from "./chat/localEditorChatPlugin.tsx";
+import { testGenerationEnvironment } from "../internal/generation/chat/generationTestEnvironment.ts";
+import { openChat } from "../internal/generation/chat/chatTestUtils.tsx";
+import { LayoutGenerationChatUiContext } from "../internal/generation/chat/LayoutGenerationChatUiContext.tsx";
+import { layoutGenerationChatPlugin } from "../internal/generation/chat/layoutGenerationChatPlugin.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
-import { chatConfig, layout, generatedContent } from "./chat/chatTestUtils.tsx";
+import {
+  chatConfig,
+  layout,
+  generatedContent,
+} from "../internal/generation/chat/chatTestUtils.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
-import { LocalEditorChatBridge } from "./chat/LocalEditorChatBridge.tsx";
+import { LayoutGenerationChatBridge } from "../internal/generation/chat/LayoutGenerationChatBridge.tsx";
 import { LocalEditorShell } from "./LocalEditorShell.tsx";
 
+vi.mock("../internal/generation/engine.ts", async () => ({
+  executeGeneration: (
+    await import("../internal/generation/chat/generationTestClient.ts")
+  ).mockGenerationRequest,
+}));
+vi.mock("./useLocalGenerationEnvironment.ts", () => ({
+  useLocalGenerationEnvironment: (
+    api: string,
+    _layoutId: string,
+    config: any
+  ) => testGenerationEnvironment(api, config),
+}));
 vi.mock("../editor/Editor.tsx", () => {
   const ShellPuckOverride = ({ children }: { children: React.ReactNode }) => {
     const document = useDocument();
     return (
       <>
-        <LocalEditorChatBridge streamDocument={document} />
+        <LayoutGenerationChatBridge streamDocument={document} />
         <span>Entity: {String(document.name)}</span>
         {children}
       </>
@@ -32,7 +49,7 @@ vi.mock("../editor/Editor.tsx", () => {
   const outline = outlinePlugin();
   return {
     Editor: ({ forceThemeMode }: { forceThemeMode: boolean }) => {
-      const chatUi = React.useContext(LocalEditorChatUiContext);
+      const chatUi = React.useContext(LayoutGenerationChatUiContext);
       return forceThemeMode ? (
         <p>Theme canvas</p>
       ) : (
@@ -43,7 +60,7 @@ vi.mock("../editor/Editor.tsx", () => {
           plugins={[
             sections,
             outline,
-            ...(chatUi ? [localEditorChatPlugin] : []),
+            ...(chatUi ? [layoutGenerationChatPlugin] : []),
           ]}
           overrides={{ puck: ShellPuckOverride }}
         />
@@ -171,7 +188,7 @@ afterEach(() => {
 it("keeps the normal editor available when chat is disabled", async () => {
   setup(false);
   await screen.findByText("Original", { selector: "h2" });
-  expect(screen.queryByText("Layout assistant")).toBeNull();
+  expect(screen.queryByText("Layout Assistant")).toBeNull();
   expect(
     screen.getByText("Layout Editor", { selector: "button" })
   ).toBeDefined();
@@ -242,8 +259,8 @@ it.each(["theme", "preview"])(
   }
 );
 
-vi.mock("./chat/chatDiagnostics.ts", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("./chat/chatDiagnostics.ts")>()),
+vi.mock("./generationDiagnostics.ts", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("./generationDiagnostics.ts")>()),
   reportChatDiagnostic: vi.fn(),
 }));
 

@@ -1,10 +1,10 @@
-import { unwrapZodSchema as unwrap } from "../utils/unwrapZodSchema.ts";
 import type { Fields } from "@puckeditor/core";
 import { z } from "zod";
+import { unwrapZodSchema as unwrap } from "../utils/unwrapZodSchema.ts";
 import type {
   GenerationComponent,
   PuckGenerationCatalog,
-} from "../../vite-plugin/layout-generation/puckGenerationCatalog.ts";
+} from "../../utils/generationCatalog.ts";
 import {
   createSlottedCard,
   setChildSlotIds,

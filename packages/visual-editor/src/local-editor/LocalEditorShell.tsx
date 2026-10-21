@@ -1,13 +1,14 @@
 import type { Config } from "@puckeditor/core";
 import React from "react";
+import { useLocalGenerationEnvironment } from "./useLocalGenerationEnvironment.ts";
 import { Editor } from "../editor/Editor.tsx";
 import type { LocalDevOptions } from "../editor/types.ts";
 import { SectionLibraryVisualEditorProvider } from "../utils/SectionLibraryVisualEditorProvider.tsx";
 import { LocalEditorControls } from "./LocalEditorControls.tsx";
-import { lockEditorInteraction } from "./lockEditorInteraction.ts";
-import { LocalEditorChatUiProvider } from "./chat/LocalEditorChatUiContext.tsx";
-import { LocalEditorChatContext } from "./chat/LocalEditorChatContext.tsx";
-import { useLocalEditorChat } from "./chat/useLocalEditorChat.ts";
+import { lockEditorInteraction } from "../internal/generation/chat/lockEditorInteraction.ts";
+import { LayoutGenerationChatUiProvider } from "../internal/generation/chat/LayoutGenerationChatUiContext.tsx";
+import { LayoutGenerationChatContext } from "../internal/generation/chat/LayoutGenerationChatContext.tsx";
+import { useLayoutGenerationChat } from "../internal/generation/chat/useLayoutGenerationChat.ts";
 import { LocalEditorNotice } from "./LocalEditorNotice.tsx";
 import {
   buildEditorLocalDevOptions,
@@ -82,7 +83,7 @@ export const LocalEditorShell = ({
   themeConfig,
   sectionLibraryMigrationRegistry,
   translationLoaders,
-  chatEnabled,
+  chatEnabled = true,
 }: LocalEditorShellProps) => {
   const editorFrameRef = React.useRef<HTMLDivElement>(null);
   const [previewContext, setPreviewContext] = React.useState<{
@@ -149,7 +150,13 @@ export const LocalEditorShell = ({
     return buildLocalEditorSelection(manifest, componentRegistry, searchParams);
   }, [componentRegistry, manifest, searchParams]);
 
-  const chat = useLocalEditorChat(`${apiBasePath}/generate`, selectedLayoutId);
+  const generationEnvironment = useLocalGenerationEnvironment(
+    `${apiBasePath}/generate`,
+    selectedLayoutId,
+    componentRegistry[selectedLayoutId],
+    !!chatEnabled
+  );
+  const chat = useLayoutGenerationChat(generationEnvironment, selectedLayoutId);
   React.useEffect(() => {
     if (selectedMode === "theme" || previewContext) chat.cancel();
   }, [selectedMode, previewContext, chat.cancel]);
@@ -214,13 +221,21 @@ export const LocalEditorShell = ({
   const shouldRenderEditorFrame =
     isDocumentLoading || (!!documentResponse?.document && !!selectedLayoutId);
   const editorLocalDevOptions = React.useMemo(() => {
-    return buildEditorLocalDevOptions({
-      selectedLayoutId,
-      selectedEntity,
-      selectedLocale,
-      selectedLayoutDefaults,
-    });
+    return {
+      ...buildEditorLocalDevOptions({
+        selectedLayoutId,
+        selectedEntity,
+        selectedLocale,
+        selectedLayoutDefaults,
+      }),
+      aiPageGeneration: {
+        enabled: !!chatEnabled,
+        model: generationEnvironment?.model ?? "",
+      },
+    };
   }, [
+    chatEnabled,
+    generationEnvironment?.model,
     selectedEntity,
     selectedLocale,
     selectedLayoutDefaults,
@@ -677,17 +692,18 @@ export const LocalEditorShell = ({
               tailwindConfig={tailwindConfig}
               translationLoaders={translationLoaders}
             >
-              <LocalEditorChatContext.Provider
+              <LayoutGenerationChatContext.Provider
                 value={chatEnabled ? chat.canvas : null}
               >
-                <LocalEditorChatUiProvider
+                <LayoutGenerationChatUiProvider
                   key={selectedLayoutId}
                   chat={chatEnabled && selectedMode === "layout" ? chat : null}
                   disabled={
                     isDocumentLoading ||
                     !streamDocument ||
                     !activeConfig ||
-                    !chat.ready
+                    !chat.ready ||
+                    !generationEnvironment
                   }
                 >
                   <Editor
@@ -702,8 +718,8 @@ export const LocalEditorShell = ({
                       sectionLibraryMigrationRegistry
                     }
                   />
-                </LocalEditorChatUiProvider>
-              </LocalEditorChatContext.Provider>
+                </LayoutGenerationChatUiProvider>
+              </LayoutGenerationChatContext.Provider>
             </SectionLibraryVisualEditorProvider>
           )}
         </div>

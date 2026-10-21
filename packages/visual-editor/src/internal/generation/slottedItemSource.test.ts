@@ -1,9 +1,9 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { compileGenerationSchema } from "../../vite-plugin/layout-generation/generationSchema.ts";
-import { buildGenerationPrompt } from "../../vite-plugin/layout-generation/generationValidation.ts";
-import { slottedItemSourceGuidance } from "../../vite-plugin/layout-generation/prompts.ts";
+import { compileGenerationSchema } from "./generationSchema.ts";
+import { buildGenerationPrompt } from "./generationValidation.ts";
+import { slottedItemSourceGuidance } from "./prompts.ts";
 import {
   assertAuthoredPreserved,
   clone,
@@ -11,7 +11,6 @@ import {
   collectAuthoredIds,
   validateAuthored,
 } from "./authored.ts";
-
 import { slottedFixture } from "./slottedGenerationTestUtils.ts";
 
 const defaults = { $default: true };

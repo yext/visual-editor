@@ -17,8 +17,10 @@ const MainContentComponent: PuckComponent<MainContentProps> = ({
         minHeight: puck.isEditing ? "400px" : undefined,
       }}
     >
-      <Content
-        disallow={[
+      {/* Puck replaces the slot callback when children change. Invoke it as a
+          render callback so React retains the underlying section tree. */}
+      {Content({
+        disallow: [
           "Address",
           "BodyText",
           "CTAGroup",
@@ -38,8 +40,8 @@ const MainContentComponent: PuckComponent<MainContentProps> = ({
           "Header",
           "Footer",
           "MainContent",
-        ]}
-      />
+        ],
+      })}
     </main>
   );
 };

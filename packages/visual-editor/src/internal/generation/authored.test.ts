@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { createPuckGenerationCatalog } from "../../vite-plugin/layout-generation/puckGenerationCatalog.ts";
+import { createPuckGenerationCatalog } from "../../utils/generationCatalog.ts";
 import {
   buildEditInventory,
   clone,

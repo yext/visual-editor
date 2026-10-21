@@ -1,6 +1,7 @@
-import "./index.css";
 import React, { ErrorInfo, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import "./index.css";
+import { LayoutGenerationProvider } from "../internal/generation/chat/LayoutGenerationProvider.tsx";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
@@ -238,19 +239,25 @@ export const Editor = ({
                 metadata={{ ...metadata, streamDocument: document }}
               />
             ) : (
-              <LayoutEditor
-                puckConfig={puckConfig!}
-                templateMetadata={templateMetadata!}
-                layoutData={migratedData!}
-                themeData={themeData!}
-                themeConfig={finalThemeConfig}
+              <LayoutGenerationProvider
+                config={puckConfig!}
+                metadata={templateMetadata!}
                 localDev={!!localDev}
-                metadata={{ ...metadata, streamDocument: document }}
-                streamDocument={document}
-                sectionLibraryMigrationRegistry={
-                  sectionLibraryMigrationRegistry
-                }
-              />
+              >
+                <LayoutEditor
+                  puckConfig={puckConfig!}
+                  templateMetadata={templateMetadata!}
+                  layoutData={migratedData!}
+                  themeData={themeData!}
+                  themeConfig={finalThemeConfig}
+                  localDev={!!localDev}
+                  metadata={{ ...metadata, streamDocument: document }}
+                  streamDocument={document}
+                  sectionLibraryMigrationRegistry={
+                    sectionLibraryMigrationRegistry
+                  }
+                />
+              </LayoutGenerationProvider>
             )
           ) : (
             parentLoaded && (
