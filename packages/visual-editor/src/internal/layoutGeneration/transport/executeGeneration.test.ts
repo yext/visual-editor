@@ -385,3 +385,106 @@ describe("strict request execution", () => {
     expect(h.events().some((e) => e.type === "accepted")).toBe(false);
   });
 });
+
+const budgetRejected = (
+  contentType: string,
+  usage: object = { input_tokens: 0, output_tokens: 0 },
+  delta = ""
+) => {
+  const response = {
+    status: "incomplete",
+    incomplete_details: { reason: "max_output_tokens" },
+    usage,
+  };
+  const wire =
+    contentType === "application/json"
+      ? JSON.stringify(response)
+      : (delta
+          ? `data: ${JSON.stringify({ type: "response.output_text.delta", delta })}\n\n`
+          : "") +
+        `data: ${JSON.stringify({ type: "response.incomplete", response })}\n\n`;
+  return new Response(wire, { headers: { "Content-Type": contentType } });
+};
+const regenerationRequest = () => ({
+  mode: "regenerate",
+  layoutId: "location",
+  currentData: baseline,
+  messages: [{ role: "user", content: "Focus on our product" }],
+});
+it.each(["application/json", "text/event-stream"])(
+  "retries regeneration once with a smaller budget after zero-usage rejection in %s",
+  async (contentType) => {
+    modelResponder
+      .mockResolvedValueOnce(budgetRejected(contentType))
+      .mockResolvedValueOnce(
+        completed({
+          translationMode: "defaultOnly",
+          result: { action: "regenerate", steps: [] },
+          text: "Complete",
+        })
+      );
+    const h = harness(regenerationRequest());
+    await h.run();
+    expect(h.error).toBeUndefined();
+    expect(modelResponder).toHaveBeenCalledTimes(2);
+    const first = modelResponder.mock.calls[0][0];
+    const second = modelResponder.mock.calls[1][0];
+    expect(first.max_output_tokens).toBe(128000);
+    expect(second).toEqual({ ...first, max_output_tokens: 64000 });
+    expect(h.events().at(-1)).toMatchObject({
+      type: "regenerated",
+      text: "Complete",
+    });
+  }
+);
+
+it("stops after the smaller budget is also rejected and reports failure before generation", async () => {
+  modelResponder.mockImplementation(async () =>
+    budgetRejected("text/event-stream")
+  );
+  const h = harness(regenerationRequest());
+  await h.run();
+  expect(modelResponder).toHaveBeenCalledTimes(2);
+  expect(h.error).toMatchObject({
+    retryable: false,
+    message: expect.stringContaining("before generating any content"),
+  });
+});
+
+it.each([
+  { input_tokens: 0, output_tokens: 1 },
+  { input_tokens: 1, output_tokens: 0 },
+])(
+  "does not retry actual token consumption on an incomplete regeneration (%j)",
+  async (usage) => {
+    modelResponder.mockResolvedValueOnce(
+      budgetRejected("text/event-stream", usage)
+    );
+    const h = harness(regenerationRequest());
+    await h.run();
+    expect(modelResponder).toHaveBeenCalledOnce();
+    expect(h.error?.retryable).toBe(false);
+  }
+);
+
+it("does not retry a budget failure after any output was streamed", async () => {
+  modelResponder.mockResolvedValueOnce(
+    budgetRejected(
+      "text/event-stream",
+      { input_tokens: 0, output_tokens: 0 },
+      '{"translationMode":'
+    )
+  );
+  const h = harness(regenerationRequest());
+  await h.run();
+  expect(modelResponder).toHaveBeenCalledOnce();
+  expect(h.error?.retryable).toBe(false);
+});
+
+it("keeps other workflow budget handling unchanged", async () => {
+  modelResponder.mockResolvedValueOnce(budgetRejected("text/event-stream"));
+  const h = harness();
+  await h.run();
+  expect(modelResponder).toHaveBeenCalledOnce();
+  expect(h.error?.retryable).toBe(false);
+});

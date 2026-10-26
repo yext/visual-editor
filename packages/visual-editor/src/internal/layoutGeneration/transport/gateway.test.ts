@@ -211,4 +211,49 @@ describe("shared Responses API parser", () => {
       })
     ).rejects.toMatchObject({ transport: false });
   });
+  it.each(["application/json", "text/event-stream"])(
+    "identifies zero-usage output-budget failures before generation in %s",
+    async (contentType) => {
+      const response = {
+        status: "incomplete",
+        incomplete_details: { reason: "max_output_tokens" },
+        usage: { input_tokens: 0, output_tokens: 0 },
+      };
+      const wire =
+        contentType === "application/json"
+          ? JSON.stringify(response)
+          : event({ type: "response.incomplete", response });
+      await expect(read(wire, contentType)).rejects.toMatchObject({
+        outputBytes: 0,
+        cause: { beforeGeneration: true },
+        message: expect.stringContaining("before generating any content"),
+      });
+    }
+  );
+  it.each([
+    undefined,
+    { input_tokens: 0, output_tokens: 100 },
+    { input_tokens: 100, output_tokens: 0 },
+    {
+      input_tokens: 0,
+      output_tokens: 0,
+      output_tokens_details: { reasoning_tokens: 100 },
+    },
+  ])(
+    "does not identify missing or nonzero usage as a pre-generation budget rejection (%j)",
+    async (usage) => {
+      await expect(
+        read(
+          event({
+            type: "response.incomplete",
+            response: {
+              status: "incomplete",
+              incomplete_details: { reason: "max_output_tokens" },
+              usage,
+            },
+          })
+        )
+      ).rejects.toMatchObject({ cause: { beforeGeneration: false } });
+    }
+  );
 });

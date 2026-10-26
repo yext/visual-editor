@@ -6,6 +6,7 @@ import {
   GENERATION_PREPARATION_OUTPUT_TOKEN_BUDGET,
   GENERATION_REPAIR_FEEDBACK_MAX_CHARACTERS,
   SECTION_EDIT_OUTPUT_TOKEN_BUDGET,
+  REGENERATION_FALLBACK_OUTPUT_TOKEN_BUDGET,
 } from "../limits.ts";
 import { buildGenerationPrompt } from "../prompts.ts";
 import type { Content } from "../shared/authoredValues.ts";
@@ -14,9 +15,14 @@ import type {
   GenerationResult,
   LayoutGenerationRequest,
 } from "../shared/contracts.ts";
+import type { RegenerationStep } from "../workflows/fullPageRegeneration/contracts.ts";
 import { GenerationError } from "../shared/generationErrors.ts";
 import { componentDiagnostics, summarizeSchema } from "./diagnostics.ts";
-import { GenerationGatewayError, requestGenerationOutput } from "./gateway.ts";
+import {
+  GenerationGatewayError,
+  GenerationOutputBudgetError,
+  requestGenerationOutput,
+} from "./gateway.ts";
 import {
   compileGenerationRequest,
   parseGenerationResult,
@@ -30,6 +36,13 @@ const utf8Bytes = (text: string): number =>
 const jsonBytes = (value: unknown): number => utf8Bytes(JSON.stringify(value));
 
 const GENERATION_MODES = {
+  regenerate: {
+    maxOutputTokens: FRESH_PAGE_OUTPUT_TOKEN_BUDGET,
+    schemaName: "puck_regeneration",
+    eventType: "regenerated",
+    responseLabel: "Regeneration",
+    resultLabel: "regeneration",
+  },
   prepare: {
     maxOutputTokens: GENERATION_PREPARATION_OUTPUT_TOKEN_BUDGET,
     schemaName: "puck_generation_preparation",
@@ -65,7 +78,8 @@ export const executeGeneration = async (
   { model, catalog, locales, transport, diagnostics }: GenerationEnvironment,
   signal: AbortSignal,
   correlationId: string,
-  onCreationContent?: (content: Content) => Promise<void>
+  onCreationContent?: (content: Content) => Promise<void>,
+  onRegenerationStep?: (step: RegenerationStep, index: number) => Promise<void>
 ): Promise<GenerationResult> => {
   if (!model?.trim()) {
     throw new GenerationError(
@@ -254,39 +268,79 @@ export const executeGeneration = async (
       isBlankPage: compiled.isBlankPage,
     });
     phase = "gateway-fetch";
-    const creationStream = onCreationContent
-      ? compiled.stream?.(onCreationContent)
-      : undefined;
+    const creationStream = onRegenerationStep
+      ? compiled.streamRegeneration?.(onRegenerationStep)
+      : onCreationContent
+        ? compiled.stream?.(onCreationContent)
+        : undefined;
     let streamed = false;
-    const outputText = await requestGenerationOutput({
-      utf8Bytes,
-      serializedRequestBody,
-      transport,
-      model,
-      maxOutputTokens: modeConfig.maxOutputTokens,
-      signal: controller.signal,
-      correlationId,
-      log: (message, details) =>
-        log(message, {
+    const fetchOutput = (maxOutputTokens: number) =>
+      requestGenerationOutput({
+        utf8Bytes,
+        serializedRequestBody:
+          maxOutputTokens === modeConfig.maxOutputTokens
+            ? serializedRequestBody
+            : JSON.stringify({
+                ...requestBody,
+                max_output_tokens: maxOutputTokens,
+              }),
+        transport,
+        model,
+        maxOutputTokens,
+        signal: controller.signal,
+        correlationId,
+        log: (message, details) =>
+          log(message, {
+            correlationId,
+            mode,
+            taskId: context.task?.taskId,
+            sectionId: context.task?.sectionId,
+            ...details,
+          }),
+        onDelta: creationStream
+          ? async (delta) => {
+              streamed = true;
+              phase = "parse-and-validate";
+              try {
+                await creationStream.write(delta);
+              } catch (cause) {
+                creationFailure = true;
+                throw cause;
+              }
+            }
+          : undefined,
+      });
+    let outputText: string;
+    try {
+      outputText = await fetchOutput(modeConfig.maxOutputTokens);
+    } catch (cause) {
+      if (
+        mode !== "regenerate" ||
+        modeConfig.maxOutputTokens <=
+          REGENERATION_FALLBACK_OUTPUT_TOKEN_BUDGET ||
+        streamed ||
+        !(cause instanceof GenerationGatewayError) ||
+        cause.transport ||
+        cause.outputBytes !== 0 ||
+        !(cause.cause instanceof GenerationOutputBudgetError) ||
+        !cause.cause.beforeGeneration
+      )
+        throw cause;
+      controller.signal.throwIfAborted();
+      log(
+        "[layout generation] Retrying regeneration with a smaller output budget",
+        {
           correlationId,
           mode,
-          taskId: context.task?.taskId,
-          sectionId: context.task?.sectionId,
-          ...details,
-        }),
-      onDelta: creationStream
-        ? async (delta) => {
-            streamed = true;
-            phase = "parse-and-validate";
-            try {
-              await creationStream.write(delta);
-            } catch (cause) {
-              creationFailure = true;
-              throw cause;
-            }
-          }
-        : undefined,
-    });
+          model,
+          previousMaxOutputTokens: modeConfig.maxOutputTokens,
+          maxOutputTokens: REGENERATION_FALLBACK_OUTPUT_TOKEN_BUDGET,
+          reason:
+            "Gateway output-token limit before generation with zero usage and no output",
+        }
+      );
+      outputText = await fetchOutput(REGENERATION_FALLBACK_OUTPUT_TOKEN_BUDGET);
+    }
     outputBytes = utf8Bytes(outputText);
     log(`[layout generation] ${modeConfig.responseLabel} response`, {
       correlationId,

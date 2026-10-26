@@ -256,3 +256,62 @@ vi.mock(
     reportChatDiagnostic: vi.fn(),
   })
 );
+
+it("uses the configured display name for a newly inserted section", async () => {
+  const insertion: SectionEditTask = {
+    ...task("insert"),
+    sectionId: "reserved-section",
+    targetComponentIds: [],
+    structuralOperations: [
+      {
+        kind: "insert",
+        insertionKey: "new-heading",
+        componentType: "Heading",
+        collection: { ownerId: "main", slotPath: "/content" },
+        anchor: { position: "end" },
+      },
+    ],
+  };
+  stubGenerationExecutor(
+    vi.fn(async (body: any): Promise<ExecutorReply> => {
+      if (body.mode === "plan") return planned([insertion]);
+      return {
+        type: "section-result",
+        result: {
+          taskId: insertion.taskId,
+          sectionId: insertion.sectionId,
+          operations: [
+            {
+              kind: "insert",
+              insertionKey: "new-heading",
+              collection: { ownerId: "main", slotPath: "/content" },
+              anchor: { position: "end" },
+              component: {
+                type: "Heading",
+                authoredValues: { text: "New event" },
+                slots: [],
+              },
+            },
+          ],
+        },
+      };
+    })
+  );
+  render(
+    <ChatHarness
+      initialData={layout()}
+      config={{
+        ...chatConfig,
+        components: {
+          ...chatConfig.components,
+          Heading: { ...chatConfig.components.Heading, label: "Event details" },
+        },
+      }}
+    />
+  );
+  openChat();
+  await submit("Add an event section");
+  await screen.findByText("New section · Event details");
+  await screen.findByText("New event", { selector: "h2" });
+  expect(screen.queryByText("New section · Heading")).toBeNull();
+});

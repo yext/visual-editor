@@ -841,3 +841,28 @@ describe("fresh page creation schema", () => {
     visit(compileGenerationSchema(catalog(), ["en"]).jsonSchema);
   });
 });
+
+it("requires business-name bindings in fresh-page model instructions", () => {
+  const c = catalog();
+  const compiled = compileGenerationSchema(c, ["en"]);
+  const instructions = buildGenerationPrompt(
+    c,
+    compiled.availableComponentNames,
+    ["en"]
+  );
+  expect(instructions).toContain(
+    'field: "name" with constantValueEnabled: false'
+  );
+  expect(instructions).toContain(
+    "use [[name]] wherever the business name appears"
+  );
+  expect(instructions).toContain(
+    "Do not invent a business name or adopt sample branding from component defaults or template content"
+  );
+  expect(instructions).toContain(
+    "A product, service, topic or industry request does not authorize fictional business branding"
+  );
+  expect(instructions).toContain(
+    "Use a literal business name only when the user explicitly supplies or requests that name, or explicitly requests fictional branding"
+  );
+});

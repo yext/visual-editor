@@ -2,8 +2,7 @@
 
 Layout generation is loosely based on [json-render.dev](https://json-render.dev/). However, we use Puck to render and have a custom spec defined in order to natively generate Puck data and support slots.
 
-At a high level, the section library defines Zod types for all supported sections. We render a chat interface as a Puck plugin that has one workflow for full page generation and one
-workflow for follow up edits. We take the user prompt and combine it with the schema to form an OpenAI API request. We forward this request to ModelGateway with strict generation
+At a high level, the section library defines Zod types for all supported sections. We render a chat interface as a Puck plugin that has workflows for blank-page generation, follow-up section edits, and intent-driven full-page regeneration. We take the user prompt and combine it with the schema to form an OpenAI API request. We forward this request to ModelGateway with strict generation
 mode enabled, ensuring we get valid JSON back from the model. We then validate that the data is able to be rendered and push the update into Puck history.
 
 Layout generation is enabled when `templateMetadata.aiPageGeneration.layoutGenerationEnabled` is true. We currently support gpt-6-luna.
@@ -27,7 +26,7 @@ We want to support response streaming, so these handlers are more complex than t
 
 ## src/internal/layoutGeneration/workflows
 
-These are the full page and follow up edit flows. They define the order of events, handle the preliminary prompts, and do the relevant schema compilation.
+These are the full page, follow-up edit, and intent regeneration flows. They define the order of events, handle the preliminary prompts, and do the relevant schema compilation.
 
 ## src/internal/layoutGeneration/limits.ts
 
@@ -44,3 +43,21 @@ Utilities used across layout generation.
 ## src/internal/layoutGeneration/testing
 
 Testing harnesses and fixtures for layout generation.
+
+## Intent-driven regeneration
+
+Set `templateMetadata.aiPageGeneration.intentPagePrompt` to a non-empty string to automatically regenerate the current page after the editor canvas is ready. The existing `layoutGenerationEnabled` flag and configured `model` are required; theme mode is excluded. This runs once per loaded layout session, including under React effect replay, and runs again if the editor is reopened. The local editor uses the chat interface for page generation and changes.
+
+`workflows/fullPageRegeneration` compiles the full supported section schema and sends the intent, current content tree, section inventory, and locales through the existing model transport using mode `regenerate`. Headers, footers, useful content, and bindings are preserved by prompt guidance unless the intent requests changes. Clarification makes no changes; the next chat reply continues regeneration with the original intent in conversation history.
+
+The model streams ordered `keep`, `replace`, `insert`, `remove`, and `reorder` steps. Replacements contain complete generated sections, with new application-assigned Ids. Keeps and reorders preserve existing data and Ids. Steps target root sections or direct MainContent children; MainContent scaffolding, root settings, and theme are preserved, and reorder stays within a collection. Omitted sections remain unchanged. Each complete step is checked against the latest layout, resolved, validated, and previewed; incomplete JSON never applies. Untouched sections stay visible and explicit removal happens immediately.
+
+Success, cancellation, and failure retain completed steps as one undoable change. Repair is allowed before any step has applied, and stops after streaming application begins. Late results cannot modify a different editor context. Once regeneration completes or is cancelled, ordinary chat returns to the usual blank-page generation or section-edit routing. These contracts are runtime-only and require no saved-layout migration.
+
+Regeneration requires explicit copy in generated text fields and content-bearing containers, including nested slots. Style defaults remain available. This prevents selecting entire default slots or localized fallback defaults in place of intent-specific headings, descriptions and CTAs. Manual section copy belongs in the slots that render it, following each component's schema guidance; writing only a parent source object does not populate those slots. The prompt asks for a complete topic-focused page, adapting existing sections and adding missing content rather than pruning as a substitute for writing. Targeting inventory contains section structure and permissions without duplicating descendant authored values; the complete authored component tree remains available separately.
+
+If the gateway reports an output-token limit before regeneration starts, with explicit zero input/output usage and no generated or streamed text, the executor retries once with a 64,000-token output allowance instead of 128,000. The schema, prompt, layout and shared deadline stay the same. Missing/nonzero usage, actual truncation and failures after streaming are not retried through this path. Diagnostics record the reduced budget, and the error message distinguishes a failure before generation from exhausting a generation's output budget.
+
+Regeneration reduces request size without limiting the available component catalog. The model receives the full authored layout (including bindings and component Ids), excluding resolved/editor-only mirrors. Component guidance includes style defaults rather than repeating complete default slot trees and placeholder copy. An additional definition-graph compaction pass merges structurally identical schema definitions after canonicalizing their dependencies, retaining constraints, descriptions, component boundaries and recursive references. This pass is specific to regeneration; existing creation/edit schema snapshots are unchanged.
+
+As validated sections stream into the preview, it scrolls to the added, changed, or moved section. Removal follows the nearest surviving section. Pending scrolling stops on editor teardown or user interaction. Chat progress uses Puck component display labels, falling back to component types when no label is configured.

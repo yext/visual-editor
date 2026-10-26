@@ -59,7 +59,9 @@ export const validateGenerationRequest = (
   }
   const modeRequest = z
     .object({
-      mode: z.enum(["prepare", "create", "plan", "section"]).optional(),
+      mode: z
+        .enum(["prepare", "create", "plan", "section", "regenerate"])
+        .optional(),
       preparation: generationPreparationSchema.optional(),
       selectedComponentId: z.string().min(1).nullable().optional(),
       task: sectionEditTaskSchema.optional(),
@@ -78,7 +80,10 @@ export const validateGenerationRequest = (
     );
   }
   const mode = modeRequest.data.mode ?? "create";
-  if ((mode === "plan" || mode === "section") && currentData === undefined) {
+  if (
+    (mode === "plan" || mode === "section" || mode === "regenerate") &&
+    currentData === undefined
+  ) {
     return rejectRequest(
       "Follow-up requests require the latest currentData.",
       400

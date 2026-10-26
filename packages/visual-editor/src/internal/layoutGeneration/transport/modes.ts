@@ -5,6 +5,11 @@ import {
   sectionEditResultSchema,
 } from "../workflows/edits/sectionEditTaskSchema.ts";
 import { compileSectionEditSchema } from "../workflows/edits/compileSectionEditSchema.ts";
+import { compileRegenerationSchema } from "../workflows/fullPageRegeneration/pageSchema.ts";
+import {
+  regenerationResultSchema,
+  type RegenerationStep,
+} from "../workflows/fullPageRegeneration/contracts.ts";
 import { compileGenerationSchema } from "../workflows/fullPageGeneration/pageSchema.ts";
 import { compileGenerationPreparation } from "../workflows/fullPageGeneration/preparation.ts";
 import { generationPreparationSchema } from "../workflows/fullPageGeneration/preparationContracts.ts";
@@ -25,6 +30,12 @@ export type CompiledGenerationRequest = {
   instructions?: string;
   localResult?: object;
   parseResponse: (text: string) => object;
+  streamRegeneration?: (
+    onStep: (step: RegenerationStep, index: number) => Promise<void>
+  ) => {
+    write: (delta: string) => Promise<void>;
+    finish: () => void;
+  };
   stream?: (onContent: (content: Content) => Promise<void>) => {
     write: (delta: string) => Promise<void>;
     finish: () => void;
@@ -36,7 +47,9 @@ export const compileGenerationRequest = (
   catalog: GenerationEnvironment["catalog"],
   locales: string[]
 ): CompiledGenerationRequest => {
-  if (mode === "prepare") {
+  if (mode === "regenerate") {
+    return compileRegenerationSchema(catalog, locales, currentData as Content);
+  } else if (mode === "prepare") {
     return compileGenerationPreparation(catalog, locales);
   } else if (mode === "plan") {
     const planner = compileEditPlanningSchema(
@@ -98,11 +111,17 @@ export const parseGenerationResult = (
   event: unknown,
   mode: LayoutGenerationRequest["mode"]
 ): GenerationResult =>
-  (mode === "prepare"
-    ? preparedSchema
-    : mode === "plan"
-      ? planSchema
-      : mode === "section"
-        ? resultSchema
-        : acceptedSchema
+  (mode === "regenerate"
+    ? z.strictObject({
+        type: z.literal("regenerated"),
+        text: z.string(),
+        result: regenerationResultSchema,
+      })
+    : mode === "prepare"
+      ? preparedSchema
+      : mode === "plan"
+        ? planSchema
+        : mode === "section"
+          ? resultSchema
+          : acceptedSchema
   ).parse(event);

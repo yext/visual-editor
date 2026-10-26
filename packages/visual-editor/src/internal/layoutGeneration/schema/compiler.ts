@@ -26,7 +26,8 @@ type SchemaNode = {
 export const createGenerationSchemaCompiler = (
   catalog: PuckGenerationCatalog,
   locales: string[],
-  mode: "create" | "insert" = "create"
+  mode: "create" | "insert" = "create",
+  options: { requireExplicitContent?: boolean } = {}
 ) => {
   const components = catalog.data.components;
   const explicitCardLists = new WeakSet<SavedComponent>();
@@ -104,12 +105,56 @@ export const createGenerationSchemaCompiler = (
       }
     return shape;
   };
+  const isRichText = (schema: z.ZodType) => {
+    const node = unwrap(schema);
+    return (
+      node instanceof z.ZodObject &&
+      Object.keys(node.shape).sort().join(",") === "html,json" &&
+      Object.values(node.shape).every(
+        (child) => unwrap(child as z.ZodType) instanceof z.ZodString
+      )
+    );
+  };
+  const containsContent = (
+    schema: z.ZodType,
+    field?: Fields[string]
+  ): boolean => {
+    const node = unwrap(schema);
+    if (
+      field?.type === "slot" ||
+      localizedTextSchema(schema, locales) ||
+      isRichText(schema)
+    )
+      return true;
+    if (node instanceof z.ZodString)
+      return field?.type === "text" || field?.type === "textarea";
+    if (node instanceof z.ZodUnion)
+      return node.options.some((option) =>
+        containsContent(option as z.ZodType, field)
+      );
+    if (node instanceof z.ZodArray)
+      return containsContent(
+        node.element as z.ZodType,
+        field?.type === "array"
+          ? { type: "object", objectFields: field.arrayFields }
+          : undefined
+      );
+    if (node instanceof z.ZodObject)
+      return Object.entries(node.shape).some(([key, child]) =>
+        containsContent(
+          child as z.ZodType,
+          field?.type === "object" ? field.objectFields[key] : undefined
+        )
+      );
+    return false;
+  };
   const value = (
     schema: z.ZodType,
     path: string,
     field?: Fields[string],
     defaults?: any,
-    markers = true
+    markers = true,
+    textContent = false
   ): SchemaNode => {
     checks(schema, path);
     const native = unwrap(schema);
@@ -165,14 +210,24 @@ export const createGenerationSchemaCompiler = (
           }),
       };
     } else if (native instanceof z.ZodObject) {
+      const localized = localizedTextSchema(native, locales);
+      const richText = isRichText(native);
       const children = Object.fromEntries(
         Object.entries(shapeFor(native, path)).map(([key, schema]) => [
           key,
           value(
-            schema,
+            options.requireExplicitContent &&
+              localized &&
+              key === "defaultValue"
+              ? unwrap(schema)
+              : schema,
             `${path}.${key}`,
             field?.type === "object" ? field.objectFields[key] : undefined,
-            defaults?.[key]
+            defaults?.[key],
+            true,
+            textContent ||
+              richText ||
+              (!!localized && key !== "hasLocalizedValue")
           ),
         ])
       );
@@ -206,7 +261,8 @@ export const createGenerationSchemaCompiler = (
           ? { type: "object", objectFields: field.arrayFields }
           : undefined,
         undefined,
-        mode === "create"
+        mode === "create",
+        textContent
       );
       child = {
         wire: native.clone({ ...native.def, element: item.wire } as any),
@@ -216,15 +272,50 @@ export const createGenerationSchemaCompiler = (
           ),
       };
     } else if (native instanceof z.ZodUnion) {
-      const alternatives = native.options.map((schema) =>
-        value(schema as z.ZodType, path, field, defaults)
+      const textUnion = native.options.some((schema) =>
+        localizedTextSchema(schema as z.ZodType, locales)
       );
+      const alternatives = native.options.map((schema) => ({
+        schema: schema as z.ZodType,
+        node: value(
+          schema as z.ZodType,
+          path,
+          field,
+          defaults,
+          true,
+          textContent || textUnion
+        ),
+      }));
       child = {
-        wire: union(alternatives.map((node) => node.wire)),
-        apply: (input, baseline) =>
-          alternatives
-            .find((node) => node.wire.safeParse(input).success)!
-            .apply(input, baseline),
+        wire: union(alternatives.map(({ node }) => node.wire)),
+        apply: (input, baseline) => {
+          const selected = alternatives.find(
+            ({ node }) => node.wire.safeParse(input).success
+          )!;
+          if (textUnion) {
+            // Direct rich text and localized bundles are different representations.
+            // A stale defaultValue must not override newly authored html/json.
+            baseline = selected.schema.safeParse(baseline).success
+              ? clone(baseline)
+              : undefined;
+            const branch = unwrap(selected.schema);
+            if (
+              branch instanceof z.ZodObject &&
+              baseline &&
+              typeof baseline === "object"
+            ) {
+              for (const { schema } of alternatives) {
+                const other = unwrap(schema);
+                if (other instanceof z.ZodObject) {
+                  for (const key of Object.keys(other.shape)) {
+                    if (!Object.hasOwn(branch.shape, key)) delete baseline[key];
+                  }
+                }
+              }
+            }
+          }
+          return selected.node.apply(input, baseline);
+        },
       };
     } else {
       if ((native.def as any).coerce) {
@@ -254,7 +345,10 @@ export const createGenerationSchemaCompiler = (
     const fallback = parsedDefault.success ? parsedDefault.data : undefined;
     const modes = [child.wire];
     const hasDefault = defaults !== undefined || fallback !== undefined;
-    if (hasDefault) {
+    const explicitContent =
+      options.requireExplicitContent &&
+      (textContent || containsContent(schema, field));
+    if (hasDefault && !explicitContent) {
       modes.push(defaultMarker);
     }
     if (parsedDefault.success) {

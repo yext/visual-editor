@@ -8,6 +8,7 @@ import React from "react";
 import type { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import { buildPuckHistoryState } from "../../utils/buildPuckHistoryState.ts";
 import { clonePuckResolveData } from "../../utils/clonePuckResolveData.ts";
+import { applyRegenerationStep } from "../workflows/fullPageRegeneration/applyRegenerationStep.ts";
 import { buildEditInventory } from "../workflows/edits/buildEditInventory.ts";
 import {
   materializeSectionEdit,
@@ -26,9 +27,10 @@ import { changedChatPaths } from "./chatDiagnostics.ts";
 import { LayoutGenerationChatContext } from "./contexts.tsx";
 import { validateInitialChatLayout } from "./initialChatValidation.ts";
 import {
-  preservePreviewScroll,
+  changedPreviewSection,
+  followPreviewSection,
   reusePreviewData,
-} from "./preservePreviewScroll.ts";
+} from "./previewScroll.ts";
 
 /** This component is mounted inside the existing editor's Puck provider, giving us access to Puck's internal state. */
 export const LayoutGenerationChatBridge = ({
@@ -57,7 +59,6 @@ const LayoutGenerationChatCanvasBridge = ({
   const getPuck = useGetPuck();
 
   const releaseScroll = React.useRef<(() => void) | undefined>(undefined);
-  React.useEffect(() => () => releaseScroll.current?.(), []);
 
   const observedData = useDiagnosticPuck((puck) => puck.appState.data);
   React.useEffect(() => canvas.observe(observedData), [canvas, observedData]);
@@ -116,6 +117,8 @@ const LayoutGenerationChatCanvasBridge = ({
           );
         },
         readSelection: () => getPuck().selectedItem?.props.id ?? null,
+        readComponentLabel: (type) =>
+          getPuck().config.components[type]?.label ?? type,
         readSectionLabels: () => {
           const puck = getPuck();
           const inventory = buildEditInventory(
@@ -177,6 +180,18 @@ const LayoutGenerationChatCanvasBridge = ({
             canvas.catalog ?? getGenerationCatalog(getPuck().config);
           assertAuthoredPreserved(catalog, data as any, candidate as any);
         },
+        materializeRegeneration: (baseline, step) => {
+          const puck = getPuck();
+          return applyRegenerationStep(
+            canvas.catalog ?? getGenerationCatalog(puck.config),
+            baseline,
+            step,
+            (permission, component) =>
+              puck.getPermissions(
+                component ? { item: component as any } : { root: true }
+              )[permission] !== false
+          );
+        },
         materializeSection: (baseline, task, result) => {
           const puck = getPuck();
           const catalog = canvas.catalog ?? getGenerationCatalog(puck.config);
@@ -195,7 +210,11 @@ const LayoutGenerationChatCanvasBridge = ({
           ),
         preview: (data) => {
           releaseScroll.current?.();
-          releaseScroll.current = preservePreviewScroll(window.document);
+          releaseScroll.current = followPreviewSection(
+            window.document,
+            getPuck().appState.data,
+            data
+          );
           getPuck().dispatch({
             type: "setData",
             data: (previous) => reusePreviewData(previous, data),
@@ -204,6 +223,14 @@ const LayoutGenerationChatCanvasBridge = ({
         },
         commit: (data: Data, baseline: Data) => {
           const { history, appState } = getPuck();
+          if (changedPreviewSection(appState.data, data)) {
+            releaseScroll.current?.();
+            releaseScroll.current = followPreviewSection(
+              window.document,
+              appState.data,
+              data
+            );
+          }
           const histories = history.histories.slice(0, history.index + 1);
           // Preserve the exact starting data even if the last manual edit was still debouncing.
           histories[history.index] = {
@@ -222,6 +249,11 @@ const LayoutGenerationChatCanvasBridge = ({
           ]);
         },
       }),
+    [canvas, getPuck, streamDocument]
+  );
+  // Detaching the canvas can finalize a preview; cancel its pending scroll too.
+  React.useEffect(
+    () => () => releaseScroll.current?.(),
     [canvas, getPuck, streamDocument]
   );
   return null;

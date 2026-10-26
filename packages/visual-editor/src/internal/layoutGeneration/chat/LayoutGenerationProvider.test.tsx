@@ -33,6 +33,9 @@ const Probe = () => {
         read: () => ({ root: {}, content: [] }),
         resolve: async (data) => data,
         validate: () => {},
+        preview: () => {},
+        materializeRegeneration: (data) => data,
+        preserveSectionResolution: (_resolved, candidate) => candidate,
         commit: () => {},
       }),
     [canvas]
@@ -200,3 +203,92 @@ it("cancels work and clears history when the configured model changes", async ()
     )
   ).toBe(true);
 });
+
+it("auto-starts intent regeneration with configured model/locales once, then accepts clarification replies", async () => {
+  const send = post();
+  vi.spyOn(console, "debug").mockImplementation(() => {});
+  const value = metadata({
+    aiPageGeneration: {
+      layoutGenerationEnabled: true,
+      model: "intent-model",
+      intentPagePrompt: "Focus on our product",
+    },
+  });
+  const { rerender } = render(
+    <React.StrictMode>{view(value)}</React.StrictMode>
+  );
+  const requests = () => [
+    ...new Map(
+      send.mock.calls
+        .map(([message]) => message)
+        .filter((message) => message.type === "aiPageGenerationRequest")
+        .map((message) => [message.payload.requestId, message])
+    ).values(),
+  ];
+  await waitFor(() => expect(requests()).toHaveLength(1));
+  const request = requests()[0];
+  expect(request.payload.body.text.format.name).toBe("puck_regeneration");
+  expect(request.payload.body.model).toBe("intent-model");
+  expect(
+    JSON.parse(request.payload.body.input.at(-1).content).context.locales
+  ).toEqual(["en", "fr"]);
+  await act(async () => {
+    reply(request.payload.requestId, {
+      event: "start",
+      contentType: "application/json",
+    });
+    reply(request.payload.requestId, {
+      event: "chunk",
+      chunk: new TextEncoder().encode(
+        JSON.stringify({
+          status: "completed",
+          output_text: JSON.stringify({
+            translationMode: "defaultOnly",
+            result: { action: "clarification", question: "Which product?" },
+            text: "Which product?",
+          }),
+        })
+      ),
+    });
+    reply(request.payload.requestId, { event: "end" });
+  });
+  await waitFor(() => expect(ui!.chat.isStreaming).toBe(false));
+  expect(ui!.chat.messages.at(-1)?.text).toBe("Which product?");
+  rerender(
+    <React.StrictMode>
+      {view({ ...value, platformLocale: "fr", entityId: 7 })}
+    </React.StrictMode>
+  );
+  await act(async () => {});
+  expect(requests()).toHaveLength(1);
+  act(() => {
+    void ui!.chat.send("The premium product");
+  });
+  await waitFor(() => expect(requests()).toHaveLength(2));
+  const next = requests()[1];
+  expect(next.payload.body.text.format.name).toBe("puck_regeneration");
+  expect(next.payload.body.input[0].content).toBe("Focus on our product");
+  expect(next.payload.body.input[1].content).toBe("Which product?");
+  act(() => ui!.chat.cancel());
+});
+
+it.each([false, true])(
+  "does not auto-start disabled or theme-mode intent regeneration (%s)",
+  async (themeMode) => {
+    const send = post();
+    render(
+      view(
+        metadata({
+          isThemeMode: themeMode,
+          aiPageGeneration: {
+            model: "test",
+            layoutGenerationEnabled: themeMode,
+            intentPagePrompt: "Product page",
+          },
+        })
+      )
+    );
+    await act(async () => {});
+    expect(send).not.toHaveBeenCalled();
+  }
+);

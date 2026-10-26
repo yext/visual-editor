@@ -5,6 +5,10 @@ import type {
   SectionEditResult,
   SectionEditTask,
 } from "../workflows/edits/types.ts";
+import type {
+  RegenerationResult,
+  RegenerationStep,
+} from "../workflows/fullPageRegeneration/contracts.ts";
 import type { GenerationPreparation } from "../workflows/fullPageGeneration/preparationContracts.ts";
 import type { ModelTransport } from "../transport/modelTransport.ts";
 import type { Content } from "./authoredValues.ts";
@@ -56,6 +60,10 @@ export type LayoutGenerationRequest = RequestContext &
         mode: "prepare";
       }
     | {
+        /** Rework the entire existing page using streamed section decisions. */
+        mode: "regenerate";
+      }
+    | {
         /** Generate a fresh page. */
         mode: "create";
         preparation?: GenerationPreparation;
@@ -78,6 +86,7 @@ export type LayoutGenerationRequest = RequestContext &
 
 /** Validated mode results; these are never persisted as layout data. */
 export type GenerationResult =
+  | { type: "regenerated"; text: string; result: RegenerationResult }
   | { type: "prepared"; preparation: GenerationPreparation }
   | { type: "accepted"; text: string; spec: { content: any[] } | null }
   | { type: "planned"; plan: SectionEditPlan }
@@ -87,7 +96,8 @@ export type GenerationResult =
 export type GenerationRequestExecutor = (
   request: LayoutGenerationRequest,
   signal?: AbortSignal,
-  onCreationContent?: (content: Content) => Promise<void>
+  onCreationContent?: (content: Content) => Promise<void>,
+  onRegenerationStep?: (step: RegenerationStep, index: number) => Promise<void>
 ) => Promise<GenerationResult>;
 
 export type GenerationTurn = {

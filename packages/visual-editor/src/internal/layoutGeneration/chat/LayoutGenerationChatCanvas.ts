@@ -1,3 +1,5 @@
+import { RegenerationSession } from "../workflows/fullPageRegeneration/RegenerationSession.ts";
+import type { RegenerationStep } from "../workflows/fullPageRegeneration/contracts.ts";
 import type { Data } from "@puckeditor/core";
 import { isDeepEqual } from "../../../utils/deepEqual.ts";
 import type { PuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
@@ -18,9 +20,11 @@ import { changedChatPaths } from "./chatDiagnostics.ts";
 
 type GeneratedContent = Pick<Data, "content">;
 export type ChatCanvasAdapter = GenerationCanvasAdapter & {
+  materializeRegeneration?: (baseline: Data, step: RegenerationStep) => Data;
   validateInitial?: (data: Data) => void;
   readSelection?: () => string | null;
   readSectionLabels?: () => Record<string, string>;
+  readComponentLabel?: (type: string) => string;
   /** Apply one section's operations to the latest baseline. */
   materializeSection?: (
     baseline: Data,
@@ -36,6 +40,7 @@ export class LayoutGenerationChatCanvas {
   catalog?: PuckGenerationCatalog;
   private adapter?: ChatCanvasAdapter;
   private creation?: CreationSession;
+  private regeneration?: RegenerationSession;
   private creationStartedAt = 0;
   private baseline?: Data;
   private revision = 0;
@@ -152,6 +157,9 @@ export class LayoutGenerationChatCanvas {
   get sectionLabels() {
     return this.adapter?.readSectionLabels?.() ?? {};
   }
+  componentLabel(type: string) {
+    return this.adapter?.readComponentLabel?.(type) ?? type;
+  }
   get selectedComponentId() {
     return this.adapter?.readSelection?.() ?? null;
   }
@@ -187,6 +195,38 @@ export class LayoutGenerationChatCanvas {
     const creation = this.creation;
     this.creation = undefined;
     creation?.finish();
+  }
+  beginRegeneration() {
+    const adapter = this.adapter;
+    if (
+      !this.baseline ||
+      !adapter?.materializeRegeneration ||
+      !adapter.preserveSectionResolution ||
+      !adapter.preview
+    ) {
+      throw new Error("The editor does not support page regeneration.");
+    }
+    this.regeneration = new RegenerationSession(
+      {
+        ...adapter,
+        materializeRegeneration: adapter.materializeRegeneration,
+        preserveSectionResolution: adapter.preserveSectionResolution,
+      },
+      this.baseline
+    );
+  }
+  async applyRegeneration(
+    step: RegenerationStep,
+    index: number,
+    signal: AbortSignal
+  ) {
+    if (!this.regeneration) throw new Error("Regeneration session ended.");
+    await this.regeneration.apply(step, index, signal);
+  }
+  finishRegeneration() {
+    const session = this.regeneration;
+    this.regeneration = undefined;
+    session?.finish();
   }
   /** Serialize section commits while keeping the current turn open. */
   async commitSection(
@@ -296,6 +336,7 @@ export class LayoutGenerationChatCanvas {
     return queued;
   }
   finish() {
+    this.finishRegeneration();
     this.creation?.discard();
     this.creation = undefined;
     this.revision++;

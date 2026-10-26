@@ -27,11 +27,14 @@ export const generationPreparationPrompt = [
 
 export const generationComponentNamesLabel = "Generation-enabled components: ";
 
+const businessIdentityGuidance =
+  'Use entity bindings for business and location facts. For business-name fields that support entity bindings, use field: "name" with constantValueEnabled: false. In authored copy, use [[name]] wherever the business name appears, including headings, descriptions, CTAs and metadata. Do not invent a business name or adopt sample branding from component defaults or template content. A product, service, topic or industry request does not authorize fictional business branding. Use a literal business name only when the user explicitly supplies or requests that name, or explicitly requests fictional branding. Embed other facts with [[field]], such as [[address.city]], and write marketing copy around these references.';
+
 /** Fresh page structure, values, and content defaults. */
 export const puckCatalogPrompt = [
   "Create a native nested Puck page in one response. Emit component types and authored props; the server assigns identities.",
   'Use direct values. Where offered, {"$default":true} selects the component or slot template default; {"$unset":true} removes an optional value. Use null only where allowed. Slots are ordered component lists; ordinary arrays are complete replacements.',
-  "Prefer entity bindings for business and location facts. Use [[name]] wherever the business name appears unless a name or fictional branding was requested. Embed other facts with [[field]], such as [[address.city]], and write marketing copy around these references.",
+  businessIdentityGuidance,
   'Prefer component and theme styling; emit {"$unset":true} for unnecessary optional style overrides. Leave optional text colors unset unless explicitly requested; do not assign primary or another palette color by default.',
   "When available, use a single MainContent.props.content list for sections in display order. Place Header or ExpandedHeader before MainContent and Footer or ExpandedFooter after MainContent as root siblings, only when available and needed.",
 ].join("\n");
@@ -81,13 +84,14 @@ export const sectionEditPrompt = [
   'Generate each planned insertion exactly once, with new child components in native slots and server-assigned Ids. Where offered, {"$default":true} selects library defaults and {"$unset":true} removes optional defaults. Keep all changes within the validated targets and insertions.',
 ].join("\n");
 
-/** Compose fresh generation instructions with available components and defaults. */
+/** Compose workflow instructions with available components and defaults. */
 export const buildGenerationPrompt = (
   catalog: PuckGenerationCatalog,
   availableComponentNames = Object.keys(catalog.data.components).filter(
     (name) => catalog.data.components[name].generation
   ),
-  locales: string[] = []
+  locales: string[] = [],
+  workflow: "create" | "regenerate" = "create"
 ): string => {
   const defaultSectionIds = [
     ...new Set(catalog.puckOptions.defaultGenerationSectionIds ?? []),
@@ -100,16 +104,21 @@ export const buildGenerationPrompt = (
     (name) => catalog.data.components[name]?.generation?.slottedItemSource
   );
   return (
-    catalog.schema
-      .createCatalog({
-        components: Object.fromEntries(
-          Object.entries(catalog.data.components).filter(
-            ([name, component]) =>
-              component.generation && availableComponentNames.includes(name)
-          )
-        ),
-      })
-      .prompt() +
+    (workflow === "regenerate"
+      ? regenerationPrompt +
+        "\n" +
+        generationComponentNamesLabel +
+        availableComponentNames.join(", ")
+      : catalog.schema
+          .createCatalog({
+            components: Object.fromEntries(
+              Object.entries(catalog.data.components).filter(
+                ([name, component]) =>
+                  component.generation && availableComponentNames.includes(name)
+              )
+            ),
+          })
+          .prompt()) +
     "\n" +
     [
       translationModeGuidance,
@@ -119,13 +128,19 @@ export const buildGenerationPrompt = (
     layoutLocalesLabel +
     JSON.stringify(locales) +
     "\n" +
-    preparationGuidance +
-    (defaultSectionIds.length
+    (workflow === "create" ? preparationGuidance : "") +
+    (workflow === "create" && defaultSectionIds.length
       ? defaultSectionsLabel +
         JSON.stringify(defaultSectionIds) +
         defaultSectionsGuidance
       : "") +
-    (hasSlottedItemSource ? "\n" + slottedItemSourceGuidance + "\n" : "") +
+    (hasSlottedItemSource
+      ? "\n" +
+        (workflow === "regenerate"
+          ? "Manual lists: author each card and all its copy in slots.CardSlot. For linked lists preserve bindings and mappings; leave CardSlot empty rather than generating manual cards."
+          : slottedItemSourceGuidance) +
+        "\n"
+      : "") +
     componentDescriptionsLabel +
     JSON.stringify(
       Object.fromEntries(
@@ -138,15 +153,28 @@ export const buildGenerationPrompt = (
             name,
             {
               description: component.description,
-              defaults: extractAuthored(
-                catalog,
-                {
-                  content: [
-                    { type: name, props: component.defaultProps ?? {} },
-                  ],
-                },
-                { includeIds: false }
-              ).content[0].props,
+              defaults:
+                workflow === "regenerate"
+                  ? {
+                      styles: extractAuthored(
+                        catalog,
+                        {
+                          content: [
+                            { type: name, props: component.defaultProps ?? {} },
+                          ],
+                        },
+                        { includeIds: false }
+                      ).content[0].props.styles,
+                    }
+                  : extractAuthored(
+                      catalog,
+                      {
+                        content: [
+                          { type: name, props: component.defaultProps ?? {} },
+                        ],
+                      },
+                      { includeIds: false }
+                    ).content[0].props,
               ...(component.generation?.slottedItemSource
                 ? {
                     slottedItemSource: {
@@ -181,3 +209,16 @@ export const planningDescriptions = {
 
 export const mainContentDescription =
   "The main content area, containing page sections in display order, with headers before it and footers after it as page-root siblings.";
+
+/** Whole-page intent regeneration preserves the unprocessed remainder while streaming. */
+export const regenerationPrompt = [
+  businessIdentityGuidance,
+  "Regenerate the existing page as a whole for the requested intent. Use the full existing layout as context; preserve useful content, entity bindings, headers and footers by default unless the request asks otherwise.",
+  "Build a complete, coherent page about the requested product, service or topic. Rework the body substantially where needed: introduce the offering, explain its relevant benefits or options, answer useful questions, and provide a clear next action using supported sections. Adapt suitable existing sections and insert missing content; do not treat regeneration as merely deleting sections or changing images. Remove content because it is irrelevant or redundant, not as a substitute for writing relevant content. The request takes precedence over this general guidance; do not invent prices, availability, specifications, testimonials or unsupported claims.",
+  "Author real, intent-specific copy for generated headings, descriptions, cards and CTAs. Library defaults describe structure and styling; they are not finished page content. Do not emit placeholder copy such as Text, Button, Banner Text or sample prices. Content fields and containers require explicit values; use default markers only where the schema permits them, such as styling. Preserve unchanged content with keep rather than rebuilding it from defaults. Use entity bindings for business facts and author meaningful copy around them.",
+  "Follow each component's schema descriptions about where displayed content is authored. For manual/constant sections, write visible copy and links on their child slots. Parent source objects and mappings do not populate those slots unless the component explicitly documents that behavior. When a manual section exposes heading, description and CTA child slots, author those slots rather than only filling an inactive parent source object.",
+  "Return clarification before making any changes if requirements or translation choices need a reply. Otherwise emit ordered steps, normally working from the top down. Author complete replacement sections, not field patches.",
+  "keep preserves a section exactly; replace atomically substitutes complete generated sections; remove deletes immediately; insert adds sections; reorder moves an existing section within its current collection. Omitted sections stay unchanged. Use explicit removal for unwanted sections.",
+  "Only target root sections or direct MainContent children from the inventory. Preserve MainContent scaffolding and root settings. Follow collection allowedInsertionTypes and permissions. Relative anchors must still exist when their step executes. Do not target sections after removing or replacing them. Application code assigns new Ids, so use existing sections or collection boundaries as anchors.",
+  "Emit translationMode, then result.action, then result.steps, then text. Never mix clarification with changes. Keep user-facing text concise and avoid claiming unperformed work.",
+].join("\n");

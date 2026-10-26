@@ -8,6 +8,7 @@ import {
   LayoutGenerationChatContext,
   LayoutGenerationChatUiProvider,
 } from "./contexts.tsx";
+import { useIntentPageRegeneration } from "./useIntentPageRegeneration.ts";
 import { useLayoutGenerationChat } from "./useLayoutGenerationChat.ts";
 
 type LayoutGenerationProviderProps = {
@@ -55,6 +56,12 @@ export const LayoutGenerationProvider = ({
   ]);
 
   const chat = useLayoutGenerationChat(environment, scope);
+  useIntentPageRegeneration(
+    chat,
+    metadata.aiPageGeneration?.intentPagePrompt,
+    scope,
+    enabled
+  );
 
   if (localDev) {
     return children;

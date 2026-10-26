@@ -6,6 +6,7 @@ import type { LocalDevOptions } from "../../editor/types.ts";
 export type HeadDeployStatus = "RUNNING" | "INACTIVE" | "FAILED" | "ACTIVE";
 
 export type AiPageGeneration = {
+  intentPagePrompt?: string;
   layoutGenerationEnabled: boolean;
   model: string;
 };
