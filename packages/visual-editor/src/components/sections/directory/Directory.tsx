@@ -35,6 +35,13 @@ export interface DirectoryStyles {
    * The color of links in the directory list layout.
    */
   linkColor?: ThemeColor;
+
+  /**
+   * The casing of directory list labels. Default uses the link theme transform,
+   * falling back to title case.
+   * @defaultValue default
+   */
+  textTransform?: "none" | "default" | "lowercase" | "uppercase" | "capitalize";
 }
 
 export interface DirectoryProps {
@@ -80,6 +87,26 @@ const directoryFields: YextFields<DirectoryProps> = {
         type: "basicSelector",
         label: msg("fields.linkColor", "Link Color"),
         options: "SITE_COLOR",
+      },
+      textTransform: {
+        type: "select",
+        label: msg("theme.textTransform.textTransform", "Text Transform"),
+        options: [
+          { label: msg("fields.options.none", "None"), value: "none" },
+          { label: msg("fields.options.default", "Default"), value: "default" },
+          {
+            label: msg("theme.textTransform.lowercase", "Lowercase"),
+            value: "lowercase",
+          },
+          {
+            label: msg("theme.textTransform.uppercase", "Uppercase"),
+            value: "uppercase",
+          },
+          {
+            label: msg("theme.textTransform.capitalize", "Capitalize"),
+            value: "capitalize",
+          },
+        ],
       },
     },
   },
@@ -130,6 +157,7 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
             directoryChildren={streamDocument.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot ?? ""}
             linkColor={styles.linkColor}
+            textTransform={styles.textTransform}
             backgroundColor={styles.listBackgroundColor}
           />
         )}
@@ -157,8 +185,17 @@ export const Directory: YextComponentConfig<DirectoryProps> = {
         "styles.objectFields.listBackgroundColor.visible",
         false
       );
+      const listFieldsHidden = setDeep(
+        updatedFields,
+        "styles.objectFields.linkColor.visible",
+        false
+      );
       return toPuckFields(
-        setDeep(updatedFields, "styles.objectFields.linkColor.visible", false)
+        setDeep(
+          listFieldsHidden,
+          "styles.objectFields.textTransform.visible",
+          false
+        )
       );
     }
     return toPuckFields(directoryFields);
@@ -167,6 +204,7 @@ export const Directory: YextComponentConfig<DirectoryProps> = {
     styles: {
       backgroundColor: backgroundColors.background1.value,
       listBackgroundColor: backgroundColors.background1.value,
+      textTransform: "default",
     },
     slots: {
       TitleSlot: [

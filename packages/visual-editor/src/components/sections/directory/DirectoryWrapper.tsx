@@ -46,6 +46,7 @@ import {
   TooltipTrigger,
 } from "../../../internal/puck/ui/Tooltip.tsx";
 import { FaInfoCircle } from "react-icons/fa";
+import type { DirectoryStyles } from "./Directory.tsx";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
 
 export type DirectoryGridProps = {
@@ -239,6 +240,7 @@ export const DirectoryList = ({
   relativePrefixToRoot,
   backgroundColor,
   linkColor,
+  textTransform = "default",
 }: {
   streamDocument: StreamDocument;
   directoryChildren: {
@@ -256,6 +258,7 @@ export const DirectoryList = ({
   relativePrefixToRoot: string;
   backgroundColor: ThemeColor;
   linkColor?: ThemeColor;
+  textTransform?: DirectoryStyles["textTransform"];
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(
     [...directoryChildren],
@@ -264,8 +267,14 @@ export const DirectoryList = ({
   const linkTextTransformValue = (
     getThemeValue("--textTransform-link-textTransform", streamDocument) ?? ""
   ).toLowerCase();
-  const shouldTitleCase =
-    linkTextTransformValue === "none" || linkTextTransformValue === "normal";
+  const resolvedTextTransform =
+    textTransform === "default"
+      ? !linkTextTransformValue ||
+        linkTextTransformValue === "none" ||
+        linkTextTransformValue === "normal"
+        ? "capitalize"
+        : "var(--textTransform-link-textTransform)"
+      : textTransform;
 
   return (
     <PageSection verticalPadding="sm" background={backgroundColor}>
@@ -301,9 +310,8 @@ export const DirectoryList = ({
               >
                 <Body
                   style={{
-                    textTransform: shouldTitleCase
-                      ? ("capitalize" as React.CSSProperties["textTransform"])
-                      : ("var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"]),
+                    textTransform:
+                      resolvedTextTransform as React.CSSProperties["textTransform"],
                   }}
                 >
                   {label}
