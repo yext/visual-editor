@@ -1,3 +1,4 @@
+import { pt } from "../../../utils/i18n/platform.ts";
 import {
   createUsePuck,
   resolveAllData,
@@ -163,7 +164,15 @@ const LayoutGenerationChatCanvasBridge = ({
               .filter((item) => item.componentId === item.sectionId)
               .map((item, index) => [
                 item.componentId,
-                `Section ${index + 1} · ${puck.config.components[item.type]?.label ?? item.type}`,
+                pt(
+                  "layoutGenerationChat.sectionLabel",
+                  "Section {{number}} · {{label}}",
+                  {
+                    number: index + 1,
+                    label:
+                      puck.config.components[item.type]?.label ?? item.type,
+                  }
+                ),
               ])
           );
         },

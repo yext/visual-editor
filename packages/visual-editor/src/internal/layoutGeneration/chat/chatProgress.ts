@@ -1,3 +1,4 @@
+import { pt } from "../../../utils/i18n/platform.ts";
 import type { SectionTaskOutcome } from "../workflows/edits/types.ts";
 
 export type SectionTaskProgress = {
@@ -30,6 +31,32 @@ export const summarizeSectionOutcomes = (outcomes: SectionTaskOutcome[]) => {
       count: outcomes.filter((outcome) => outcome.status === status).length,
     }))
     .filter(({ count }) => count > 0)
-    .map(({ status, count }) => `${count} ${status}`);
-  return `Section changes: ${counts.join(", ")}.`;
+    .map(({ status, count }) => {
+      const labels = {
+        applied: pt(
+          "layoutGenerationChat.outcomes.applied",
+          "{{count}} applied",
+          { count }
+        ),
+        failed: pt("layoutGenerationChat.outcomes.failed", "{{count}} failed", {
+          count,
+        }),
+        skipped: pt(
+          "layoutGenerationChat.outcomes.skipped",
+          "{{count}} skipped",
+          { count }
+        ),
+        cancelled: pt(
+          "layoutGenerationChat.outcomes.cancelled",
+          "{{count}} cancelled",
+          { count }
+        ),
+      };
+      return labels[status];
+    });
+  return pt(
+    "layoutGenerationChat.sectionChanges",
+    "Section changes: {{outcomes}}.",
+    { outcomes: counts.join(", ") }
+  );
 };

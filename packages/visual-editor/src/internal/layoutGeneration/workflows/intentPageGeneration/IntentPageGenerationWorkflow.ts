@@ -1,3 +1,4 @@
+import { pt } from "../../../../utils/i18n/platform.ts";
 import type { IntentPageGeneration } from "../../../types/templateMetadata.ts";
 import {
   sendIntentRequest,
@@ -127,8 +128,14 @@ export class IntentPageGenerationWorkflow {
     if (generation.attemptId !== attempt.id || generation.status === "FAILED") {
       this.stop(
         generation.status === "FAILED"
-          ? "Page generation failed."
-          : "Page generation stopped."
+          ? pt(
+              "layoutGenerationChat.generationFailed",
+              "Page generation failed."
+            )
+          : pt(
+              "layoutGenerationChat.generationStopped",
+              "Page generation stopped."
+            )
       );
       if (generation.status === "RUNNING") this.interrupted();
     } else if (generation.status === "COMPLETED") {
@@ -260,7 +267,9 @@ export class IntentPageGenerationWorkflow {
         return false;
       }
       if (reply.payload?.generation?.status === "FAILED") {
-        this.stop("Page generation failed.");
+        this.stop(
+          pt("layoutGenerationChat.generationFailed", "Page generation failed.")
+        );
         return false;
       }
     }
@@ -323,8 +332,14 @@ export class IntentPageGenerationWorkflow {
           "failed",
           false,
           attempt.cancelled
-            ? "Page generation stopped."
-            : "Page generation failed."
+            ? pt(
+                "layoutGenerationChat.generationStopped",
+                "Page generation stopped."
+              )
+            : pt(
+                "layoutGenerationChat.generationFailed",
+                "Page generation failed."
+              )
         );
         return;
       }
@@ -385,7 +400,13 @@ export class IntentPageGenerationWorkflow {
           this.interrupted("Unable to restart generation. Please try again.");
           return;
         }
-        this.stop("Page generation failed.", "failed");
+        this.stop(
+          pt(
+            "layoutGenerationChat.generationFailed",
+            "Page generation failed."
+          ),
+          "failed"
+        );
         return;
       }
       this.update(

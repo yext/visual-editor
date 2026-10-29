@@ -120,8 +120,11 @@ export const LayoutGenerationChatComposer = ({
           }
         >
           {chat.isStreaming
-            ? "Generating…"
-            : "Enter to send · Shift+Enter for a new line"}
+            ? pt("layoutGenerationChat.generating", "Generating…")
+            : pt(
+                "layoutGenerationChat.keyboardHint",
+                "Enter to send · Shift+Enter for a new line"
+              )}
         </span>
         <div className="local-editor-chat-submit-actions">
           {canCancel && (

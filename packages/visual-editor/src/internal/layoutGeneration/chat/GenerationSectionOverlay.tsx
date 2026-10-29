@@ -1,3 +1,4 @@
+import { pt } from "../../../utils/i18n/platform.ts";
 import { Check, LoaderCircle } from "lucide-react";
 import React from "react";
 import { createPortal } from "react-dom";
@@ -101,7 +102,9 @@ const GenerationSectionOverlay = ({
           ) : (
             <Check size={14} aria-hidden="true" />
           )}
-          {status === "building" ? "Building section…" : "Ready"}
+          {status === "building"
+            ? pt("layoutGenerationChat.buildingSection", "Building section…")
+            : pt("layoutGenerationChat.sectionReady", "Ready")}
         </span>
       </div>
     </>,

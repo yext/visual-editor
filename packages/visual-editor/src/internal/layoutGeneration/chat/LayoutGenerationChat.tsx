@@ -7,9 +7,34 @@ import type { SectionTaskProgress } from "./chatProgress.ts";
 import type { useLayoutGenerationChat } from "./useLayoutGenerationChat.ts";
 import { IntentPageGenerationChatContext } from "./useIntentPageGeneration.ts";
 
+const intentStatusLabels = {
+  PENDING: msg("layoutGenerationChat.intentStatus.pending", "pending"),
+  RUNNING: msg("layoutGenerationChat.intentStatus.running", "running"),
+  FAILED: msg("layoutGenerationChat.intentStatus.failed", "failed"),
+  COMPLETED: msg("layoutGenerationChat.intentStatus.completed", "completed"),
+};
+const intentStageLabels = {
+  idle: msg("layoutGenerationChat.intentStage.idle", "idle"),
+  interrupted: msg(
+    "layoutGenerationChat.intentStage.interrupted",
+    "interrupted"
+  ),
+  starting: msg("layoutGenerationChat.intentStage.starting", "starting"),
+  generating: msg("layoutGenerationChat.intentStage.generating", "generating"),
+  clarification: msg(
+    "layoutGenerationChat.intentStage.clarification",
+    "clarification"
+  ),
+  saving: msg("layoutGenerationChat.intentStage.saving", "saving"),
+  failed: msg("layoutGenerationChat.intentStage.failed", "failed"),
+  completed: msg("layoutGenerationChat.intentStage.completed", "completed"),
+  recovery: msg("layoutGenerationChat.intentStage.recovery", "recovery"),
+  stopped: msg("layoutGenerationChat.intentStage.stopped", "stopped"),
+};
+
 const statusLabels: Record<SectionTaskProgress["status"], string> = {
   pending: msg("layoutGenerationChat.status.pending", "Queued"),
-  waiting: "Waiting",
+  waiting: msg("layoutGenerationChat.status.waiting", "Waiting"),
   generating: msg(
     "layoutGenerationChat.status.generating",
     "Generating changes"
@@ -93,7 +118,9 @@ export const LayoutGenerationChat = ({
                   data-role={message.role}
                 >
                   <span className="local-editor-chat-role">
-                    {message.role === "user" ? "You" : "Assistant"}
+                    {message.role === "user"
+                      ? pt("layoutGenerationChat.you", "You")
+                      : pt("layoutGenerationChat.assistant", "Assistant")}
                   </span>
                   <p>
                     {message.pending && (
@@ -108,7 +135,10 @@ export const LayoutGenerationChat = ({
                   {!!message.sections?.length && (
                     <ul
                       className="local-editor-chat-sections"
-                      aria-label="Section progress"
+                      aria-label={pt(
+                        "layoutGenerationChat.sectionProgress",
+                        "Section progress"
+                      )}
                     >
                       {message.sections.map((section) => (
                         <li key={section.taskId} data-status={section.status}>
@@ -149,16 +179,38 @@ export const LayoutGenerationChat = ({
               intent.state.stage === "idle" && intent.status === "COMPLETED"
             ) && (
               <div className="local-editor-chat-message" data-role="assistant">
-                <span className="local-editor-chat-role">Assistant</span>
+                <span className="local-editor-chat-role">
+                  {pt("layoutGenerationChat.assistant", "Assistant")}
+                </span>
                 <p role="status">
                   {intent.state.stage === "interrupted"
-                    ? "Generation may have been interrupted. You can restart it here."
+                    ? pt(
+                        "layoutGenerationChat.generationInterrupted",
+                        "Generation may have been interrupted. You can restart it here."
+                      )
                     : (intent.state.message ??
                       (intent.state.stage === "idle"
                         ? intent.status === "FAILED"
-                          ? "Page generation failed."
-                          : `Intent page generation: ${intent.status?.toLowerCase() ?? "ready"}`
-                        : `Intent page generation: ${intent.state.stage}`))}
+                          ? pt(
+                              "layoutGenerationChat.generationFailed",
+                              "Page generation failed."
+                            )
+                          : pt(
+                              "layoutGenerationChat.intentGenerationStatus",
+                              "Intent page generation: {{status}}",
+                              {
+                                status: intent.status
+                                  ? intentStatusLabels[intent.status]
+                                  : pt("layoutGenerationChat.ready", "ready"),
+                              }
+                            )
+                        : pt(
+                            "layoutGenerationChat.intentGenerationStatus",
+                            "Intent page generation: {{status}}",
+                            {
+                              status: pt(intentStageLabels[intent.state.stage]),
+                            }
+                          )))}
                 </p>
                 {intent.state.stage === "interrupted" &&
                   intent.state.message && (
@@ -169,7 +221,10 @@ export const LayoutGenerationChat = ({
                 {(intent.workflow.canRestart || intent.workflow.restarting) && (
                   <>
                     <p id="intent-generation-restart-description">
-                      Restarting will replace the previous attempt.
+                      {pt(
+                        "layoutGenerationChat.restartNotice",
+                        "Restarting will replace the previous attempt."
+                      )}
                     </p>
                     <button
                       type="button"
@@ -182,7 +237,10 @@ export const LayoutGenerationChat = ({
                       }
                       aria-describedby="intent-generation-restart-description"
                     >
-                      Restart generation
+                      {pt(
+                        "layoutGenerationChat.restartGeneration",
+                        "Restart generation"
+                      )}
                     </button>
                   </>
                 )}
@@ -190,8 +248,14 @@ export const LayoutGenerationChat = ({
                   <>
                     <button type="button" onClick={intent.workflow.recover}>
                       {intent.workflow.recoveryAction === "save"
-                        ? "Retry draft save"
-                        : "Check draft save status"}
+                        ? pt(
+                            "layoutGenerationChat.retryDraftSave",
+                            "Retry draft save"
+                          )
+                        : pt(
+                            "layoutGenerationChat.checkDraftSaveStatus",
+                            "Check draft save status"
+                          )}
                     </button>
                     {intent.workflow.canRetrySave &&
                       intent.workflow.recoveryAction === "complete" && (
@@ -199,7 +263,10 @@ export const LayoutGenerationChat = ({
                           type="button"
                           onClick={intent.workflow.retrySave}
                         >
-                          Recheck attempt and save draft
+                          {pt(
+                            "layoutGenerationChat.recheckAttemptAndSaveDraft",
+                            "Recheck attempt and save draft"
+                          )}
                         </button>
                       )}
                   </>

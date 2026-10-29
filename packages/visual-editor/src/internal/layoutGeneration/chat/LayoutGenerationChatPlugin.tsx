@@ -1,3 +1,4 @@
+import { pt } from "../../../utils/i18n/platform.ts";
 import { createUsePuck, type Plugin } from "@puckeditor/core";
 import { MessageSquare } from "lucide-react";
 import React from "react";
@@ -20,7 +21,9 @@ const LayoutGenerationChatPanel = () => {
 // Stable identity prevents streaming updates from remounting the panel.
 export const layoutGenerationChatPlugin: Plugin = {
   name: layoutGenerationChatPluginName,
-  label: "Layout Assistant",
+  get label() {
+    return pt("layoutGenerationChat.title", "Layout Assistant");
+  },
   icon: <MessageSquare data-local-editor-chat-rail aria-hidden="true" />,
   render: LayoutGenerationChatPanel,
 };
