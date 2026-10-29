@@ -1,4 +1,7 @@
-import type { GenerationTurn } from "../../shared/contracts.ts";
+import type {
+  GenerationTurn,
+  PageGenerationResult,
+} from "../../shared/contracts.ts";
 import {
   GenerationError,
   repairGenerationOutput,
@@ -32,7 +35,7 @@ export const runRegeneration = async ({
 }: GenerationTurn & {
   canvas: RegenerationCanvas;
   onProgress: (step: RegenerationStep, completedSteps: number) => void;
-}) => {
+}): Promise<PageGenerationResult | undefined> => {
   canvas.beginRegeneration();
   let applied = 0;
   const apply = async (step: RegenerationStep, index: number) => {

@@ -41,7 +41,7 @@ export const useLayoutGenerationChat = (
 ) => {
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = React.useState(false);
-  const [isCreating, setIsCreating] = React.useState(false);
+  const [isGeneratingPage, setIsGeneratingPage] = React.useState(false);
   const [error, setError] = React.useState<Error | null>(null);
   const [canvas] = React.useState(() => new LayoutGenerationChatCanvas());
   canvas.catalog = environment?.catalog;
@@ -105,7 +105,7 @@ export const useLayoutGenerationChat = (
     finalizeCancelled.current = null;
     activeRequest.current = null;
     setIsStreaming(false);
-    setIsCreating(false);
+    setIsGeneratingPage(false);
   }, [canvas]);
   canvas.onError = (cause) => {
     cancel();
@@ -172,7 +172,6 @@ export const useLayoutGenerationChat = (
 
     let plan: SectionEditPlan | undefined;
     let createdSections = 0;
-    let clarification = false;
     let regeneratedSteps = 0;
     const taskOutcomes = new Map<string, SectionTaskOutcome>();
     let completed = false;
@@ -352,7 +351,7 @@ export const useLayoutGenerationChat = (
       const blank = isBlankGenerationPage(currentData);
       if (isIntent) regenerating = !blank;
       const fresh = !regenerating && blank;
-      setIsCreating(fresh || regenerating);
+      setIsGeneratingPage(fresh || regenerating);
       const sectionLabels = fresh ? {} : canvas.sectionLabels;
       if (regenerating) {
         for (const [sectionId, label] of Object.entries(sectionLabels)) {
@@ -435,14 +434,11 @@ export const useLayoutGenerationChat = (
           return result.clarification ? "clarification" : true;
         }
       } else if (fresh) {
-        const text = await runFullGeneration({
+        const result = await runFullGeneration({
           ...turn,
           canvas,
           onProgress: (event) => {
             switch (event.phase) {
-              case "clarification":
-                clarification = true;
-                break;
               case "preparing":
                 showProgress("Checking page requirements…");
                 break;
@@ -474,9 +470,9 @@ export const useLayoutGenerationChat = (
             }
           },
         });
-        if (text !== undefined && active()) {
-          complete(text);
-          return clarification ? "clarification" : createdSections > 0;
+        if (result && active()) {
+          complete(result.text);
+          return result.clarification ? "clarification" : createdSections > 0;
         }
       } else {
         const result = await runEdits({
@@ -557,7 +553,7 @@ export const useLayoutGenerationChat = (
         activeRequest.current = null;
         finalizeCancelled.current = null;
         setIsStreaming(false);
-        setIsCreating(false);
+        setIsGeneratingPage(false);
       }
     }
     return false;
@@ -565,7 +561,7 @@ export const useLayoutGenerationChat = (
   return {
     messages,
     isStreaming,
-    isCreating,
+    isGeneratingPage,
     send: async (prompt: string) => {
       await run(prompt, "chat");
     },

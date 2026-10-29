@@ -1,10 +1,12 @@
-import { expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
-import { createPuckGenerationCatalog } from "../../../../utils/createPuckGenerationCatalog.ts";
-import type { Content } from "../../shared/authoredValues.ts";
-import { applyRegenerationStep } from "./applyRegenerationStep.ts";
-import type { RegenerationStep } from "./contracts.ts";
-import { compileRegenerationSchema } from "./pageSchema.ts";
+import { createPuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
+import type { Content } from "../shared/authoredValues.ts";
+import { applyRegenerationStep } from "../workflows/fullPageRegeneration/applyRegenerationStep.ts";
+import type { RegenerationStep } from "../workflows/fullPageRegeneration/contracts.ts";
+import { compileGenerationSchema } from "../workflows/fullPageGeneration/pageSchema.ts";
+import { creationResponse } from "../testing/editFixtures.ts";
+import { compileRegenerationSchema } from "../workflows/fullPageRegeneration/pageSchema.ts";
 
 // Match the representation choices used by the standard library, including
 // localized defaults and copy authored in manual section slots.
@@ -174,101 +176,137 @@ const promotion = () => ({
   },
 });
 
-it("keeps the generated banner copy instead of the localized template fallback", () => {
-  const { catalog, baseline, compile } = fixture();
-  const authored = {
-    html: "<p>Meet Pumpkin Spice at [[name]]</p>",
-    json: "new document",
-  };
-  const output = compile().parseResponse(
-    response([
-      { type: "BannerSection", props: { data: { text: copy(authored) } } },
-    ])
-  );
-  const next = applyRegenerationStep(catalog, baseline, output.result.steps[0]);
-  expect(next.content[0].props.data.text.constantValue).toEqual({
-    defaultValue: authored,
-  });
-});
-
-it("requires real slot copy while retaining style defaults and business bindings", () => {
-  const { catalog, baseline, compile } = fixture();
-  const section = promotion();
-  section.props.slots.HeadingSlot[0].props.data.text = {
-    field: "name",
-    constantValue: "Business name fallback",
-    constantValueEnabled: false,
-  };
-  const output = compile().parseResponse(response([section]));
-  const next = applyRegenerationStep(catalog, baseline, output.result.steps[0]);
-  const props = next.content[0].props;
-  expect(props.styles.variant).toBe("classic");
-  expect(props.slots.HeadingSlot[0].props.data.text.field).toBe("name");
-  expect(props.slots.HeadingSlot[0].props.data.text.constantValueEnabled).toBe(
-    false
-  );
-  expect(
-    props.slots.DescriptionSlot[0].props.data.text.constantValue.defaultValue
-  ).toContain("seasonal coffee");
-  expect(
-    props.slots.CTASlot[0].props.data.text.constantValue.defaultValue
-  ).toBe("Explore the seasonal menu");
-});
-
-it.each([
-  "fallback",
-  "localizedFallback",
-  "missingFallback",
-  "textData",
-  "childSlot",
-  "allSlots",
-])(
-  "rejects placeholder defaults selected through %s before streaming the section",
-  async (location) => {
-    const section: any = promotion();
-    const props = section.props;
-    if (location === "fallback")
-      props.slots.HeadingSlot[0].props.data.text.constantValue = defaultMarker;
-    if (location === "localizedFallback")
-      props.slots.HeadingSlot[0].props.data.text.constantValue = {
-        defaultValue: defaultMarker,
-        hasLocalizedValue: { $unset: true },
-        en: { $unset: true },
-        es: { $unset: true },
+describe.each(["create", "regenerate"] as const)(
+  "explicit intent content: %s",
+  (mode) => {
+    const contentFixture = () => {
+      const { catalog, baseline, compile } = fixture();
+      if (mode === "create") {
+        const compiled = compileGenerationSchema(
+          catalog,
+          ["en", "es"],
+          undefined,
+          undefined,
+          "intent"
+        );
+        const wire = (sections: any[]) =>
+          JSON.stringify(creationResponse(sections));
+        return {
+          wire,
+          parse: (sections: any[]) =>
+            compiled.parseResponse(wire(sections)).spec!,
+          stream: compiled.stream,
+        };
+      }
+      const compiled = compile();
+      return {
+        wire: response,
+        parse: (sections: any[]) =>
+          applyRegenerationStep(
+            catalog,
+            baseline,
+            compiled.parseResponse(response(sections)).result.steps[0]
+          ),
+        stream: (onContent: (content: Content) => Promise<void>) =>
+          compiled.streamRegeneration(async (step) => {
+            if ("sections" in step) await onContent({ content: step.sections });
+          }),
       };
-    if (location === "missingFallback")
-      props.slots.HeadingSlot[0].props.data.text.constantValue = {
-        defaultValue: { $unset: true },
-        hasLocalizedValue: { $unset: true },
-        en: { $unset: true },
-        es: { $unset: true },
-      };
-    if (location === "textData")
-      props.slots.HeadingSlot[0].props.data = defaultMarker;
-    if (location === "childSlot") props.slots.HeadingSlot = defaultMarker;
-    if (location === "allSlots") props.slots = defaultMarker;
-    // Copy in a parent source does not make defaulted visible slots acceptable.
-    props.data.promo.constantValue = {
-      title: "Pumpkin Spice",
-      description: "Seasonal drinks",
     };
-    const compiled = fixture().compile();
-    const onStep = vi.fn(async (_step: RegenerationStep) => {});
-    const stream = compiled.streamRegeneration(onStep);
-    await expect(stream.write(response([section]))).rejects.toThrow();
-    expect(onStep).not.toHaveBeenCalled();
+
+    it("keeps the generated banner copy instead of the localized template fallback", () => {
+      const { parse } = contentFixture();
+      const authored = {
+        html: "<p>Meet Pumpkin Spice at [[name]]</p>",
+        json: "new document",
+      };
+      const next = parse([
+        { type: "BannerSection", props: { data: { text: copy(authored) } } },
+      ]);
+      expect(next.content[0].props.data.text.constantValue).toEqual({
+        defaultValue: authored,
+      });
+    });
+
+    it("materializes explicit slot copy while retaining style defaults and business bindings", () => {
+      const { parse } = contentFixture();
+      const section = promotion();
+      section.props.slots.HeadingSlot[0].props.data.text = {
+        field: "name",
+        constantValue: "Business name fallback",
+        constantValueEnabled: false,
+      };
+      const next = parse([section]);
+      const props = next.content[0].props;
+      expect(props.styles.variant).toBe("classic");
+      expect(props.slots.HeadingSlot[0].props.data.text.field).toBe("name");
+      expect(
+        props.slots.HeadingSlot[0].props.data.text.constantValueEnabled
+      ).toBe(false);
+      expect(
+        props.slots.DescriptionSlot[0].props.data.text.constantValue
+          .defaultValue
+      ).toContain("seasonal coffee");
+      expect(
+        props.slots.CTASlot[0].props.data.text.constantValue.defaultValue
+      ).toBe("Explore the seasonal menu");
+    });
+
+    it.each([
+      "fallback",
+      "localizedFallback",
+      "missingFallback",
+      "textData",
+      "childSlot",
+      "allSlots",
+    ])(
+      "rejects placeholder defaults selected through %s before streaming the section",
+      async (location) => {
+        const section: any = promotion();
+        const props = section.props;
+        if (location === "fallback")
+          props.slots.HeadingSlot[0].props.data.text.constantValue =
+            defaultMarker;
+        if (location === "localizedFallback")
+          props.slots.HeadingSlot[0].props.data.text.constantValue = {
+            defaultValue: defaultMarker,
+            hasLocalizedValue: { $unset: true },
+            en: { $unset: true },
+            es: { $unset: true },
+          };
+        if (location === "missingFallback")
+          props.slots.HeadingSlot[0].props.data.text.constantValue = {
+            defaultValue: { $unset: true },
+            hasLocalizedValue: { $unset: true },
+            en: { $unset: true },
+            es: { $unset: true },
+          };
+        if (location === "textData")
+          props.slots.HeadingSlot[0].props.data = defaultMarker;
+        if (location === "childSlot") props.slots.HeadingSlot = defaultMarker;
+        if (location === "allSlots") props.slots = defaultMarker;
+        // Copy in a parent source does not make defaulted visible slots acceptable.
+        props.data.promo.constantValue = {
+          title: "Pumpkin Spice",
+          description: "Seasonal drinks",
+        };
+        const compiled = contentFixture();
+        const onContent = vi.fn(async (_content: Content) => {});
+        const stream = compiled.stream(onContent);
+        await expect(stream.write(compiled.wire([section]))).rejects.toThrow();
+        expect(onContent).not.toHaveBeenCalled();
+      }
+    );
+
+    it("also requires explicit plain text editor fields", () => {
+      expect(() =>
+        contentFixture().parse([
+          { type: "PlainText", props: { text: defaultMarker } },
+        ])
+      ).toThrow();
+    });
   }
 );
-
-it("also requires explicit plain text editor fields", () => {
-  expect(() =>
-    fixture()
-      .compile()
-      .parseResponse(
-        response([{ type: "PlainText", props: { text: defaultMarker } }])
-      )
-  ).toThrow();
-});
 
 it("sends regeneration guidance and a compact section inventory alongside the complete layout", () => {
   const { compile, baseline } = fixture();

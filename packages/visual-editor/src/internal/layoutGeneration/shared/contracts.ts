@@ -103,6 +103,9 @@ export type GenerationRequestExecutor = (
   onRegenerationSection?: (sectionId: string) => Promise<void>
 ) => Promise<GenerationResult>;
 
+/** Page workflows return conversation outcomes separately from progress updates. */
+export type PageGenerationResult = { text: string; clarification: boolean };
+
 export type GenerationTurn = {
   layoutId: string;
   currentData: Content;

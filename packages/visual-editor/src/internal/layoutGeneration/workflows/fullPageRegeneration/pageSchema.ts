@@ -10,16 +10,9 @@ import {
   clone,
   extractAuthored,
   validateAuthored,
-  walkAuthored,
   type Content,
-  type SavedComponent,
 } from "../../shared/authoredValues.ts";
-import { normalizeGeneratedText } from "../../shared/localizedText.ts";
-import {
-  finalizeSlottedSource,
-  generationFields,
-  prepareSlottedSource,
-} from "../../shared/slottedItemSource.ts";
+import { finalizeGeneratedContent } from "../../shared/finalizeGeneratedContent.ts";
 import { buildEditInventory } from "../edits/buildEditInventory.ts";
 import { CreationStream } from "../fullPageGeneration/creationStream.ts";
 import {
@@ -125,29 +118,12 @@ export const compileRegenerationSchema = (
           element(section.type).apply(section, undefined)
         ),
       };
-      const sources: SavedComponent[] = [];
-      walkAuthored(catalog, candidate, ({ component }) => {
-        const config = catalog.data.components[component.type];
-        prepareSlottedSource(
-          component,
-          config,
-          explicitCardLists.has(component)
-        );
-        component.props = normalizeGeneratedText(
-          component.props,
-          config.generation!.props,
-          { type: "object", objectFields: generationFields(config) },
-          translationMode === "translate",
-          locales
-        );
-        component.props.id = `generated-${crypto.randomUUID()}`;
-        if (config.generation?.slottedItemSource) sources.push(component);
+      finalizeGeneratedContent(catalog, candidate, {
+        locales,
+        translationMode,
+        explicitCardLists,
+        assignId: () => `generated-${crypto.randomUUID()}`,
       });
-      for (const source of sources)
-        finalizeSlottedSource(source, catalog.data.components[source.type]);
-      for (const source of sources.reverse())
-        finalizeSlottedSource(source, catalog.data.components[source.type]);
-      validateAuthored(catalog, candidate);
       step.sections = candidate.content;
     }
     cache.set(index, { wire, step });

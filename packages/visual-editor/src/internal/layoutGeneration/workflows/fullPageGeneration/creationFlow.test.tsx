@@ -205,7 +205,7 @@ const setup = async (rejectSecond = false, intentMode = false) => {
       await waitFor(() => expect(mounts).toHaveBeenCalledWith("First 世界"));
     },
     rest: async (complete = true) => {
-      if (!chat.isCreating) {
+      if (!chat.isGeneratingPage) {
         await pending;
         return;
       }
@@ -230,7 +230,7 @@ const setup = async (rejectSecond = false, intentMode = false) => {
 it("reveals before completion, preserves mounted sections, and records one undo entry", async () => {
   const run = await setup();
   await run.first();
-  expect(run.chat().isCreating).toBe(true);
+  expect(run.chat().isGeneratingPage).toBe(true);
   await waitFor(() => {
     const overlay = (
       document.querySelector("iframe")?.contentDocument ?? document
@@ -254,7 +254,7 @@ it("reveals before completion, preserves mounted sections, and records one undo 
   const frame = document.querySelector("iframe");
   await run.rest();
   expect(run.chat().error).toBeNull();
-  expect(run.chat().isCreating).toBe(false);
+  expect(run.chat().isGeneratingPage).toBe(false);
   expect(run.puck().appState.data.content[0].props.id).toBe(mainId);
   expect(run.puck().appState.data.content[0].props.content[0].props.id).toBe(
     firstId
@@ -284,7 +284,7 @@ it.each(["cancel", "truncated", "resolver"])(
     }
     expect(run.puck().appState.data.content[0].props.content).toHaveLength(0);
     expect(run.chat().isStreaming).toBe(false);
-    expect(run.chat().isCreating).toBe(false);
+    expect(run.chat().isGeneratingPage).toBe(false);
     expect(run.chat().messages.at(-1)?.pending).toBeFalsy();
     if (reason === "truncated") {
       expect(run.chat().error?.message).toContain("interrupted");

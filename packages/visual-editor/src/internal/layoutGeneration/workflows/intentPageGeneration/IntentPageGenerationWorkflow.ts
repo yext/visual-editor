@@ -6,7 +6,8 @@ import {
 
 type IntentDraft = { hash: string; history: string };
 export type IntentGenerationResult = boolean | "clarification";
-type Recovery = "start" | "fail" | "save" | "complete";
+type Recovery = "save" | "complete";
+type Operation = "start" | "fail" | Recovery;
 type Stage =
   | "idle"
   | "interrupted"
@@ -27,7 +28,7 @@ type Attempt = {
   cancelled: boolean;
   draft?: IntentDraft;
   saveOutcome?: "unknown" | "saved" | "unsaved";
-  recovery: Recovery;
+  recovery?: Recovery;
 };
 
 /** Session-local orchestration; the parent remains the durable source of truth. */
@@ -147,7 +148,6 @@ export class IntentPageGenerationWorkflow {
       previousAttemptId: generation.attemptId,
       explicitRetry: true,
       cancelled: false,
-      recovery: "start",
     };
     this.attempt = attempt;
     void this.perform(attempt, "start");
@@ -167,14 +167,18 @@ export class IntentPageGenerationWorkflow {
       prompt: this.generation.prompt,
       previousAttemptId: this.generation.attemptId,
       cancelled: false,
-      recovery: "start",
     };
     this.attempt = attempt;
     void this.perform(attempt, "start");
   }
   recover = () => {
-    if (this.attempt && !this.state.busy && this.state.stage === "recovery") {
-      void this.perform(this.attempt, this.attempt.recovery);
+    const attempt = this.attempt;
+    if (
+      attempt?.recovery &&
+      !this.state.busy &&
+      this.state.stage === "recovery"
+    ) {
+      void this.perform(attempt, attempt.recovery);
     }
   };
   cancel = () => {
@@ -247,6 +251,22 @@ export class IntentPageGenerationWorkflow {
       );
     }
   }
+  /** Handle terminal start/recheck replies before generating or saving output. */
+  private confirmRunning(reply: IntentReply, attempt: Attempt) {
+    if (!this.active(attempt)) return false;
+    if (reply.status === "success") {
+      if (reply.payload?.generation?.status === "COMPLETED") {
+        this.finish(attempt);
+        return false;
+      }
+      if (reply.payload?.generation?.status === "FAILED") {
+        this.stop("Page generation failed.");
+        return false;
+      }
+    }
+    this.validate(reply, attempt, "RUNNING");
+    return true;
+  }
   answer = async (prompt: string) => {
     const attempt = this.attempt;
     if (!attempt || this.state.stage !== "clarification" || !prompt.trim())
@@ -277,9 +297,10 @@ export class IntentPageGenerationWorkflow {
       ? "save"
       : "fail";
   }
-  private async perform(attempt: Attempt, operation: Recovery) {
+  private async perform(attempt: Attempt, operation: Operation) {
     this.controller = new AbortController();
-    attempt.recovery = operation;
+    attempt.recovery =
+      operation === "save" || operation === "complete" ? operation : undefined;
     this.update(operation === "start" ? "starting" : "saving", true);
     try {
       if (operation === "start") {
@@ -288,26 +309,11 @@ export class IntentPageGenerationWorkflow {
           "start",
           attempt.explicitRetry
         );
-        if (!this.active(attempt)) return;
-        if (
-          reply.status === "success" &&
-          reply.payload?.generation?.status === "COMPLETED"
-        ) {
-          this.finish(attempt);
-          return;
-        }
-        if (
-          reply.status === "success" &&
-          reply.payload?.generation?.status === "FAILED"
-        ) {
-          this.stop("Page generation failed.");
-          return;
-        }
-        this.validate(reply, attempt, "RUNNING");
+        if (!this.confirmRunning(reply, attempt)) return;
         const outcome = await this.generateAttempt(attempt, attempt.prompt);
         if (!outcome) return;
         operation = outcome;
-        attempt.recovery = operation;
+        attempt.recovery = operation === "save" ? operation : undefined;
       }
       if (operation === "fail") {
         const reply = await this.lifecycle(attempt, "fail");
@@ -325,22 +331,7 @@ export class IntentPageGenerationWorkflow {
       if (operation === "save") {
         // Reconcile identity before every save, including retries of retained output.
         const current = await this.lifecycle(attempt, "start");
-        if (!this.active(attempt)) return;
-        if (
-          current.status === "success" &&
-          current.payload?.generation?.status === "COMPLETED"
-        ) {
-          this.finish(attempt);
-          return;
-        }
-        if (
-          current.status === "success" &&
-          current.payload?.generation?.status === "FAILED"
-        ) {
-          this.stop("Page generation failed.");
-          return;
-        }
-        this.validate(current, attempt, "RUNNING");
+        if (!this.confirmRunning(current, attempt)) return;
         attempt.recovery = "complete"; // An unanswered save has an ambiguous durable outcome.
         attempt.saveOutcome = "unknown";
         this.update("saving", true);

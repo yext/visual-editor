@@ -528,3 +528,41 @@ it("ignores late start acknowledgments from a superseded attempt", async () => {
   expect(c.generate).toHaveBeenCalledOnce();
   expect(c.request).toHaveBeenCalledTimes(2);
 });
+
+it.each([
+  { checkpoint: "initial start", startCalls: 1, status: "COMPLETED" },
+  { checkpoint: "initial start", startCalls: 1, status: "FAILED" },
+  { checkpoint: "pre-save recheck", startCalls: 2, status: "COMPLETED" },
+  { checkpoint: "pre-save recheck", startCalls: 2, status: "FAILED" },
+] as const)(
+  "stops on $status at $checkpoint without generating or saving again",
+  async ({ startCalls, status }) => {
+    const c = setup();
+    c.generate.mockImplementation(async () => {
+      c.workflow.captureDraft({ hash: "hash", history: "history" });
+      return true;
+    });
+    let calls = 0;
+    c.request.mockImplementation(async () =>
+      c.reply(++calls === startCalls ? status : "RUNNING")
+    );
+    c.workflow.autoStart(true);
+    await c.settle();
+    expect(c.workflow.state.stage).toBe(
+      status === "COMPLETED" ? "completed" : "stopped"
+    );
+    expect(c.workflow.blocked).toBe(false);
+    expect(c.generate).toHaveBeenCalledTimes(startCalls - 1);
+    expect(
+      c.request.mock.calls.map(([type, payload]) => [type, payload.action])
+    ).toEqual(
+      Array.from({ length: startCalls }, () => [
+        "updateIntentPageGeneration",
+        "start",
+      ])
+    );
+    c.workflow.recover();
+    await c.settle();
+    expect(c.request).toHaveBeenCalledTimes(startCalls);
+  }
+);

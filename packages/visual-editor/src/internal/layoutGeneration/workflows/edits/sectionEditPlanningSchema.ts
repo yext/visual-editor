@@ -166,13 +166,10 @@ export const compileEditPlanningSchema = (
   });
   // One nullable slot per existing section makes duplicate ownership
   // unrepresentable. New sections have their own insertion-only task list.
-  const wireTask = responseSchema.shape.tasks.element
-    .omit({ sectionId: true })
-    .extend({
-      targetComponentIds: editableIds.length
-        ? z.array(z.enum(editableIds.map((id) => ids.encode(id))))
-        : z.array(z.string()).max(0),
-    });
+  const wireTask = responseSchema.shape.tasks.element.omit({
+    sectionId: true,
+    targetComponentIds: true,
+  });
   const dependency = z.strictObject({
     taskId: z.string().trim().min(1),
     kind: z.enum(["structuralPrerequisite", "conditionalReplacement"]),

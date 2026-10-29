@@ -5,18 +5,10 @@ import { createGenerationSchemaCompiler } from "../../schema/compiler.ts";
 import {
   extractAuthored,
   rejectZones,
-  validateAuthored,
-  walkAuthored,
   type Content,
-  type SavedComponent,
 } from "../../shared/authoredValues.ts";
-import { normalizeGeneratedText } from "../../shared/localizedText.ts";
-import {
-  finalizeSlottedSource,
-  generationFields,
-  isLinkedSource,
-  prepareSlottedSource,
-} from "../../shared/slottedItemSource.ts";
+import { finalizeGeneratedContent } from "../../shared/finalizeGeneratedContent.ts";
+import { isLinkedSource } from "../../shared/slottedItemSource.ts";
 import { CreationStream } from "./creationStream.ts";
 import { isBlankGenerationPage } from "./isBlankGenerationPage.ts";
 import type { GenerationPreparation } from "./preparationContracts.ts";
@@ -132,62 +124,54 @@ export const compileGenerationSchema = (
       count: number;
       linked: boolean;
     }[] = [];
-    // Prepare defaults while descending so every newly created card is visited.
-    walkAuthored(catalog, candidate, ({ component, collection }) => {
-      prepareSlottedSource(
-        component,
-        components[component.type],
-        explicitCardLists.has(component)
-      );
-      const counts = cardCounts.get(component.type);
-      if (components[component.type].generation?.slottedItemSource) {
-        const instanceIndex = instanceCounts.get(component.type) ?? 0;
-        instanceCounts.set(component.type, instanceIndex + 1);
-        const linked = isLinkedSource(component.props);
-        observedCollections.push({
-          componentType: component.type,
-          instanceIndex,
-          count: component.props.slots.CardSlot.length,
-          linked,
-        });
-        const count =
-          counts?.get(instanceIndex) ??
-          (!linked ? counts?.get(null) : undefined);
-        if (count !== undefined) {
-          if (linked || component.props.slots.CardSlot.length !== count) {
-            throw new Error(
-              `${component.type} instance ${instanceIndex}: expected ${count} manual CardSlot children. Author cards inside slots.CardSlot, not data.mappings or repeated sections.`
-            );
-          }
-          preparation!.cardCounts.forEach((requirement, index) => {
-            if (
-              requirement.componentType === component.type &&
-              requirement.instanceIndex === instanceIndex
-            ) {
-              matchedCounts.add(index);
-            }
+    finalizeGeneratedContent(catalog, candidate, {
+      locales,
+      translationMode: parsed.translationMode,
+      explicitCardLists,
+      onPrepared: (component) => {
+        const counts = cardCounts.get(component.type);
+        if (components[component.type].generation?.slottedItemSource) {
+          const instanceIndex = instanceCounts.get(component.type) ?? 0;
+          instanceCounts.set(component.type, instanceIndex + 1);
+          const linked = isLinkedSource(component.props);
+          observedCollections.push({
+            componentType: component.type,
+            instanceIndex,
+            count: component.props.slots.CardSlot.length,
+            linked,
           });
+          const count =
+            counts?.get(instanceIndex) ??
+            (!linked ? counts?.get(null) : undefined);
+          if (count !== undefined) {
+            if (linked || component.props.slots.CardSlot.length !== count) {
+              throw new Error(
+                `${component.type} instance ${instanceIndex}: expected ${count} manual CardSlot children. Author cards inside slots.CardSlot, not data.mappings or repeated sections.`
+              );
+            }
+            preparation!.cardCounts.forEach((requirement, index) => {
+              if (
+                requirement.componentType === component.type &&
+                requirement.instanceIndex === instanceIndex
+              ) {
+                matchedCounts.add(index);
+              }
+            });
+          }
         }
-      }
-      const config = components[component.type];
-      component.props = normalizeGeneratedText(
-        component.props,
-        config.generation!.props,
-        { type: "object", objectFields: generationFields(config) },
-        parsed.translationMode === "translate",
-        locales
-      );
-      const path = `${collection.path}/${collection.items.indexOf(component)}`;
-      let id = identities.get(path);
-      if (!id) {
-        id =
-          component.type === "MainContent" &&
-          currentData.content[0]?.type === "MainContent"
-            ? (currentData.content[0].props.id as string)
-            : `generated-${globalThis.crypto.randomUUID()}`;
-        identities.set(path, id);
-      }
-      component.props.id = id;
+      },
+      assignId: (component, path) => {
+        let id = identities.get(path);
+        if (!id) {
+          id =
+            component.type === "MainContent" &&
+            currentData.content[0]?.type === "MainContent"
+              ? (currentData.content[0].props.id as string)
+              : `generated-${globalThis.crypto.randomUUID()}`;
+          identities.set(path, id);
+        }
+        return id;
+      },
     });
     // General counts constrain existing manual collections, not section selection.
     // Only an explicit occurrence requires an owner to be present in the page.
@@ -200,18 +184,6 @@ export const compileGenerationSchema = (
         `Generated page omitted a prepared manual card collection. Unmatched requirements: ${JSON.stringify(unmatchedRequirements)}. Observed collections: ${JSON.stringify(observedCollections)}.`
       );
     }
-    // Parent-first finalization applies the helper's child identity convention.
-    // Mirror copies must be taken after descendants have also finalized their references.
-    const sources: SavedComponent[] = [];
-    walkAuthored(catalog, candidate, ({ component }) => {
-      if (components[component.type]?.generation?.slottedItemSource) {
-        finalizeSlottedSource(component, components[component.type]);
-        sources.push(component);
-      }
-    });
-    for (const component of sources.reverse())
-      finalizeSlottedSource(component, components[component.type]);
-    validateAuthored(catalog, candidate);
     return { text: parsed.text, spec: candidate };
   };
   return {

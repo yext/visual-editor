@@ -1,5 +1,8 @@
 import type { Content } from "../../shared/authoredValues.ts";
-import type { GenerationTurn } from "../../shared/contracts.ts";
+import type {
+  GenerationTurn,
+  PageGenerationResult,
+} from "../../shared/contracts.ts";
 import {
   GenerationError,
   repairGenerationOutput,
@@ -13,7 +16,7 @@ type CreationCanvas = {
 };
 
 type FullGenerationProgress =
-  | { phase: "preparing" | "generating" | "clarification" }
+  | { phase: "preparing" | "generating" }
   | { phase: "revealed"; sectionCount: number }
   | { phase: "applying"; candidate: Content | null }
   | { phase: "resolved" | "complete"; sectionCount: number };
@@ -31,7 +34,7 @@ export const runFullGeneration = async ({
 }: GenerationTurn & {
   canvas: CreationCanvas;
   onProgress: (progress: FullGenerationProgress) => void;
-}): Promise<string | undefined> => {
+}): Promise<PageGenerationResult | undefined> => {
   onProgress({ phase: "preparing" });
   const prepared = await repairGenerationOutput((validationFeedback) =>
     request({
@@ -49,8 +52,7 @@ export const runFullGeneration = async ({
     throw new Error("Expected page preparation output.");
   }
   if (prepared.preparation.question) {
-    onProgress({ phase: "clarification" });
-    return prepared.preparation.question;
+    return { text: prepared.preparation.question, clarification: true };
   }
 
   onProgress({ phase: "generating" });
@@ -100,8 +102,7 @@ export const runFullGeneration = async ({
     if (createdSections) {
       throw new Error("Clarification cannot follow applied creation sections.");
     }
-    onProgress({ phase: "clarification" });
-    return event.text;
+    return { text: event.text, clarification: true };
   }
   onProgress({ phase: "applying", candidate: event.spec });
   await canvas.revealCreation(event.spec, signal);
@@ -110,6 +111,6 @@ export const runFullGeneration = async ({
   canvas.finishCreation();
   if (active()) {
     onProgress({ phase: "complete", sectionCount: createdSections });
-    return event.text;
+    return { text: event.text, clarification: false };
   }
 };

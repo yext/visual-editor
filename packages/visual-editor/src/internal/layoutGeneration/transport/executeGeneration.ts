@@ -190,7 +190,7 @@ export const executeGeneration = async (
   );
   let phase = "prepare";
   let outputBytes = 0;
-  let creationFailure = false;
+  let streamFailure = false;
   try {
     if (compiled.localResult) {
       return parseGenerationResult(
@@ -288,7 +288,7 @@ export const executeGeneration = async (
       isBlankPage: compiled.isBlankPage,
     });
     phase = "gateway-fetch";
-    const creationStream = onRegenerationStep
+    const outputStream = onRegenerationStep
       ? compiled.streamRegeneration?.(onRegenerationStep, onRegenerationSection)
       : onCreationContent
         ? compiled.stream?.(onCreationContent)
@@ -317,14 +317,14 @@ export const executeGeneration = async (
             sectionId: context.task?.sectionId,
             ...details,
           }),
-        onDelta: creationStream
+        onDelta: outputStream
           ? async (delta) => {
               streamed = true;
               phase = "parse-and-validate";
               try {
-                await creationStream.write(delta);
+                await outputStream.write(delta);
               } catch (cause) {
-                creationFailure = true;
+                streamFailure = true;
                 throw cause;
               }
             }
@@ -373,7 +373,7 @@ export const executeGeneration = async (
     try {
       phase = "parse-and-validate";
       if (streamed) {
-        creationStream?.finish();
+        outputStream?.finish();
       }
       const accepted = compiled.parseResponse(outputText);
       log("[layout generation] Validation outcome", {
@@ -412,7 +412,7 @@ export const executeGeneration = async (
       );
     }
   } catch (error) {
-    if (creationFailure) {
+    if (streamFailure) {
       phase = "parse-and-validate";
     } else if (error instanceof GenerationGatewayError) {
       phase = error.phase;

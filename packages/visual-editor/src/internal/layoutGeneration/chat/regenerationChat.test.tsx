@@ -218,7 +218,7 @@ it("cancellation retains streamed changes once and releases the editor", async (
   await act(async () => {
     await revealed;
   });
-  expect(current.result.current.isCreating).toBe(true);
+  expect(current.result.current.isGeneratingPage).toBe(true);
   act(() => {
     current.result.current.cancel();
   });
@@ -229,7 +229,7 @@ it("cancellation retains streamed changes once and releases the editor", async (
     current.data().content[0].props.content.map((item: any) => item.props.id)
   ).toEqual(["second"]);
   expect(current.commit).toHaveBeenCalledOnce();
-  expect(current.result.current.isCreating).toBe(false);
+  expect(current.result.current.isGeneratingPage).toBe(false);
   expect(current.result.current.isStreaming).toBe(false);
   expect(current.result.current.messages.at(-1)?.text).toContain(
     "1 step completed"
@@ -257,7 +257,7 @@ it("failure retains completed steps, reports partial completion and does not ret
   expect(current.result.current.messages.at(-1)?.text).toContain(
     "1 step completed"
   );
-  expect(current.result.current.isCreating).toBe(false);
+  expect(current.result.current.isGeneratingPage).toBe(false);
 });
 
 it("shows existing sections waiting while intent generation streams decisions", async () => {

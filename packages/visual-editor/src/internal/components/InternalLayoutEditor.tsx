@@ -123,7 +123,7 @@ export const InternalLayoutEditor = ({
   const intent = React.useContext(IntentPageGenerationContext);
 
   const layoutGenerationActive =
-    (chatUi?.chat.isCreating ?? false) || (intent?.blocked ?? false);
+    (chatUi?.chat.isGeneratingPage ?? false) || (intent?.blocked ?? false);
   React.useEffect(() => {
     if (layoutGenerationActive && editorRef.current) {
       return lockEditorInteraction(editorRef.current);

@@ -37,7 +37,7 @@ export type ChatCanvasAdapter = GenerationCanvasAdapter & {
   preserveSectionResolution?: (resolved: Data, candidate: Data) => Data;
 };
 
-/** An isolated candidate produces exactly one history entry after resolution. */
+/** Coordinate canvas updates: one history entry per page generation or section edit. */
 export class LayoutGenerationChatCanvas {
   catalog?: PuckGenerationCatalog;
   private adapter?: ChatCanvasAdapter;
