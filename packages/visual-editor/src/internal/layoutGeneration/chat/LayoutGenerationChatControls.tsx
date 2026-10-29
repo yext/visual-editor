@@ -1,3 +1,4 @@
+import { pt } from "../../../utils/i18n/platform.ts";
 import { Send, Square } from "lucide-react";
 import React from "react";
 import { LayoutGenerationChatDraftContext } from "./contexts.tsx";
@@ -87,8 +88,14 @@ export const LayoutGenerationChatComposer = ({
         name="prompt"
         value={draft}
         onChange={(event) => setDraft(event.target.value)}
-        aria-label="Describe what you want"
-        placeholder="Describe what you want to change…"
+        aria-label={pt(
+          "layoutGenerationChat.promptLabel",
+          "Describe what you want"
+        )}
+        placeholder={pt(
+          "layoutGenerationChat.promptPlaceholder",
+          "Describe what you want to change…"
+        )}
         required
         disabled={disabled}
         onKeyDown={(event) => {
@@ -119,11 +126,14 @@ export const LayoutGenerationChatComposer = ({
             <button
               type="button"
               className="local-editor-chat-stop"
-              aria-label="Stop generating"
+              aria-label={pt(
+                "layoutGenerationChat.stopGenerating",
+                "Stop generating"
+              )}
               onClick={chat.cancel}
             >
               <Square size={14} aria-hidden="true" />
-              Stop
+              {pt("layoutGenerationChat.stop", "Stop")}
             </button>
           )}
           <button
@@ -132,7 +142,7 @@ export const LayoutGenerationChatComposer = ({
             disabled={busy}
           >
             <Send size={14} aria-hidden="true" />
-            Send
+            {pt("layoutGenerationChat.send", "Send")}
           </button>
         </div>
       </div>

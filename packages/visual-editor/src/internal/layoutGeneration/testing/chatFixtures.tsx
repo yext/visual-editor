@@ -1,3 +1,4 @@
+import { pt } from "../../../utils/i18n/platform.ts";
 import {
   Puck,
   blocksPlugin,
@@ -69,10 +70,22 @@ const Controls = () => {
   const plugin = usePuck((puck) => puck.appState.ui.plugin.current);
   return (
     <>
-      <output aria-label="History index">{index}</output>
-      <output aria-label="Current plugin">{plugin}</output>
-      <button onClick={() => getPuck().history.back()}>Undo</button>
-      <button onClick={() => getPuck().history.forward()}>Redo</button>
+      <output
+        aria-label={pt("layoutGenerationChat.historyIndex", "History index")}
+      >
+        {index}
+      </output>
+      <output
+        aria-label={pt("layoutGenerationChat.currentPlugin", "Current plugin")}
+      >
+        {plugin}
+      </output>
+      <button onClick={() => getPuck().history.back()}>
+        {pt("undo", "Undo")}
+      </button>
+      <button onClick={() => getPuck().history.forward()}>
+        {pt("redo", "Redo")}
+      </button>
       <button
         onClick={() =>
           getPuck().dispatch({
@@ -82,7 +95,7 @@ const Controls = () => {
           })
         }
       >
-        Manual edit
+        {pt("layoutGenerationChat.manualEdit", "Manual edit")}
       </button>
     </>
   );
