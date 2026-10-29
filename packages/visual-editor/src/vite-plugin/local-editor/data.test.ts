@@ -4,7 +4,11 @@ import path from "node:path";
 import fs from "fs-extra";
 import { afterEach, describe, expect, it } from "vitest";
 import type { SectionLibraryLayout } from "../../types/sectionLibrary.ts";
-import { getLocalEditorDocument, getLocalEditorManifest } from "./data.ts";
+import {
+  getLocalEditorDocument,
+  getLocalEditorManifest,
+  getLocalEditorGenerationLocales,
+} from "./data.ts";
 
 const rootDirs: string[] = [];
 
@@ -15,6 +19,40 @@ afterEach(() => {
 });
 
 describe("getLocalEditorDocument", () => {
+  it("scopes generation locales to the selected layout's stream, snapshots, and default", async () => {
+    const rootDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "local-editor-locales-")
+    );
+    rootDirs.push(rootDir);
+    fs.writeJsonSync(path.join(rootDir, "package.json"), { type: "module" });
+    fs.writeFileSync(
+      path.join(rootDir, "stream.config.ts"),
+      `export default {
+      layouts: {
+        selected: { defaults: { locale: "fr" }, stream: { $id: "selected", localization: { locales: ["de", "en", "de"] } } },
+        other: { defaults: { locale: "ja" }, stream: { $id: "other", localization: { locales: ["ja"] } } }
+      }
+    };`
+    );
+    fs.outputJsonSync(path.join(rootDir, "localData", "snapshot.json"), {
+      id: "one",
+      locale: "es",
+    });
+    fs.outputJsonSync(path.join(rootDir, "localData", "mapping.json"), {
+      "local-editor-data-selected": ["snapshot.json"],
+    });
+    const layouts: SectionLibraryLayout[] = ["selected", "other"].map((id) => ({
+      metadata: { id, displayName: id, pageSetType: "ENTITY" },
+      defaultLayout: {},
+    }));
+    expect(
+      await getLocalEditorGenerationLocales(rootDir, layouts, "selected")
+    ).toEqual(["de", "en", "es", "fr"]);
+    expect(
+      await getLocalEditorGenerationLocales(rootDir, layouts, "other")
+    ).toEqual(["ja"]);
+  });
+
   it("returns four built-in Directory fixture documents", async () => {
     const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "local-editor-"));
     rootDirs.push(rootDir);

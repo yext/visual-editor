@@ -264,6 +264,69 @@ describe("validateSectionLibraryStructure", () => {
     expectRules(rootDir, "layouts/metadata");
   });
 
+  describe.each(["entity-layout", "directory-layout", "locator-layout"])(
+    "%s generation defaults",
+    (layoutId) => {
+      it.each(
+        [undefined, [], ["Header", "hero", "Footer"]].map((value) => [value])
+      )(
+        "preserves optional default generation section IDs %j",
+        (defaultGenerationSectionIds) => {
+          const rootDir = createValidLibrary();
+          const metadata = fs.readJsonSync(
+            layoutFilePath(rootDir, layoutId, "metadata.json")
+          );
+          writeLayoutMetadata(rootDir, layoutId, {
+            ...metadata,
+            ...(defaultGenerationSectionIds === undefined
+              ? {}
+              : { defaultGenerationSectionIds }),
+          });
+
+          const result = validateSectionLibraryStructure(rootDir);
+          expect(result.issues).toEqual([]);
+          expect(
+            result.structure?.layouts.find(
+              (layout) => layout.metadata.id === layoutId
+            )?.metadata
+          ).toEqual({
+            ...metadata,
+            ...(defaultGenerationSectionIds === undefined
+              ? {}
+              : { defaultGenerationSectionIds }),
+          });
+        }
+      );
+
+      it.each([null, "Header", {}, [42], [""], [" "]].map((value) => [value]))(
+        "rejects invalid default generation section IDs %j",
+        (defaultGenerationSectionIds) => {
+          const rootDir = createValidLibrary();
+          const metadataPath = layoutFilePath(
+            rootDir,
+            layoutId,
+            "metadata.json"
+          );
+          writeLayoutMetadata(rootDir, layoutId, {
+            ...fs.readJsonSync(metadataPath),
+            defaultGenerationSectionIds,
+          });
+
+          expect(
+            validateSectionLibraryStructure(rootDir).issues
+          ).toContainEqual(
+            expect.objectContaining({
+              filePath: path.relative(rootDir, metadataPath),
+              rule: "layouts/metadata",
+              message:
+                "defaultGenerationSectionIds must be an array of non-empty section IDs.",
+            })
+          );
+        }
+      );
+    }
+  );
+
   it("ignores a legacy previewImageUrl metadata property", () => {
     const rootDir = createValidLibrary();
     writeLayoutMetadata(rootDir, "entity-layout", {

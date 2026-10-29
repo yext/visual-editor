@@ -62,6 +62,7 @@ const LocalEditor: Template<TemplateRenderProps> = () => {
       themeConfig={defaultThemeConfig}
       sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
       translationLoaders={translationLoaders}
+      chatEnabled={__LOCAL_EDITOR_LAYOUT_GENERATION_ENABLED__}
     />
   );
 };

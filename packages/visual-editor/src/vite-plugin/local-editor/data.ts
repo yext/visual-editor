@@ -59,6 +59,32 @@ export const getLocalEditorManifest = async (
   };
 };
 
+/** Locale keys for generation are scoped to the selected layout, not UI translations. */
+export const getLocalEditorGenerationLocales = async (
+  rootDir: string,
+  libraryLayouts: SectionLibraryLayout[],
+  layoutId: string
+): Promise<string[]> => {
+  const context = await getLocalEditorContext(rootDir, libraryLayouts);
+  return [
+    ...new Set(
+      [
+        ...((
+          context.layoutStreams[layoutId]?.localization as
+            { locales?: string[] } | undefined
+        )?.locales ?? []),
+        ...(context.entitiesByLayout[layoutId] ?? []).flatMap(
+          (entity) => entity.locales
+        ),
+        context.layoutDefaults[layoutId]?.locale ?? context.defaults.locale,
+      ].filter(
+        (locale): locale is string =>
+          typeof locale === "string" && !!locale.trim()
+      )
+    ),
+  ].sort();
+};
+
 export const getLocalEditorDocument = async (
   rootDir: string,
   libraryLayouts: SectionLibraryLayout[],

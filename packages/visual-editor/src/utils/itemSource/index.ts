@@ -5,5 +5,6 @@ export type {
   ItemSourceInstance,
   CreateSlottedItemSourceOptions,
   SlottedItemSourceInstance,
+  SlottedItemSourceGenerationMetadata,
   SlotMappedCardsData,
 } from "./itemSourceTypes.ts";

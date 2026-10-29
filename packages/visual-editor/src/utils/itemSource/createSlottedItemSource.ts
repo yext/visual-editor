@@ -16,6 +16,7 @@ import { resolveItemValue } from "./itemSourceResolution.ts";
 import {
   type CreateSlottedItemSourceOptions,
   type ResolvedItemField,
+  type SlottedItemSourceGenerationMetadata,
   type SlottedItemSourceInstance,
   type SlotMappedCardsData,
 } from "./itemSourceTypes.ts";
@@ -42,7 +43,7 @@ const cloneValue = <T>(value: T): T =>
 /**
  * Assigns stable child-slot ids for one card and clears stale slot parent data.
  */
-const setChildSlotIds = (
+export const setChildSlotIds = (
   card: ComponentData<Record<string, unknown>>,
   cardId: string
 ): ComponentData<Record<string, unknown>> => {
@@ -65,6 +66,28 @@ const setChildSlotIds = (
 
   return card;
 };
+
+/** Creates a card using the same defaults in generation and editor resolution. */
+export const createSlottedCard = (
+  metadata: SlottedItemSourceGenerationMetadata,
+  id: string,
+  index: number
+): ComponentData<Record<string, unknown>> =>
+  setChildSlotIds(
+    {
+      type: metadata.cardType,
+      props: {
+        ...cloneValue(
+          typeof metadata.defaultItemProps === "function"
+            ? metadata.defaultItemProps()
+            : (metadata.defaultItemProps ?? {})
+        ),
+        id,
+        index,
+      },
+    },
+    id
+  );
 
 /**
  * Creates the helper API for one slot-backed repeated-item wrapper.
@@ -132,6 +155,7 @@ export function createSlottedItemSource<
     filter: { itemSourceTypes: [] },
   } satisfies YextFieldDefinition<unknown>;
   const resolvedCardName = cardName ?? itemLabel;
+  const generation = { cardType: resolvedCardName, defaultItemProps };
   const resolveItems = (
     value: SlotMappedCardsData<TMappings> | undefined,
     streamDocument: Parameters<
@@ -173,6 +197,7 @@ export function createSlottedItemSource<
 
   return {
     field,
+    generationMetadata: generation,
     defaultValue,
     defaultWrapperProps,
     value: undefined as unknown as SlotMappedCardsData<TMappings>,
@@ -204,9 +229,8 @@ export function createSlottedItemSource<
         : undefined;
       const hasPersistedManualCards =
         Array.isArray(persistedManualCards) && persistedManualCards.length > 0;
-      const manualCards = hasPersistedManualCards
-        ? persistedManualCards
-        : visibleCards;
+      // An explicitly empty backup must not be replaced by derived linked cards.
+      const manualCards = hasManualSlots ? persistedManualCards! : visibleCards;
       const shouldBootstrapLegacyManualCards =
         wrapperData.props.data.constantValueEnabled &&
         !wrapperData.props.data.field &&
@@ -230,21 +254,7 @@ export function createSlottedItemSource<
         id: string,
         index: number
       ): ComponentData<Record<string, unknown>> => {
-        const card = setChildSlotIds(
-          {
-            type: resolvedCardName,
-            props: {
-              ...(cloneValue(
-                typeof defaultItemProps === "function"
-                  ? defaultItemProps()
-                  : (defaultItemProps ?? {})
-              ) as Record<string, unknown>),
-              id,
-              index,
-            },
-          },
-          id
-        );
+        const card = createSlottedCard(generation, id, index);
 
         if (sharedVisibleCardProps?.styles) {
           card.props.styles = cloneValue(sharedVisibleCardProps.styles);
