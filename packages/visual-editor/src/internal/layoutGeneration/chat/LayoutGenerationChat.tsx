@@ -5,13 +5,11 @@ import { LayoutGenerationChatComposer } from "./LayoutGenerationChatControls.tsx
 import "./layoutGenerationChat.css";
 import type { SectionTaskProgress } from "./chatProgress.ts";
 import type { useLayoutGenerationChat } from "./useLayoutGenerationChat.ts";
+import { IntentPageGenerationChatContext } from "./useIntentPageGeneration.ts";
 
 const statusLabels: Record<SectionTaskProgress["status"], string> = {
   pending: msg("layoutGenerationChat.status.pending", "Queued"),
-  waiting: msg(
-    "layoutGenerationChat.status.waiting",
-    "Waiting for prerequisites"
-  ),
+  waiting: "Waiting",
   generating: msg(
     "layoutGenerationChat.status.generating",
     "Generating changes"
@@ -35,10 +33,7 @@ export const LayoutGenerationChat = ({
   disabled: boolean;
   active: boolean;
 }) => {
-  const logRef = React.useRef<HTMLDivElement>(null);
-  React.useEffect(() => {
-    logRef.current?.scrollTo?.({ top: logRef.current.scrollHeight });
-  }, [chat.messages, active]);
+  const intent = React.useContext(IntentPageGenerationChatContext);
 
   return (
     <aside
@@ -66,7 +61,6 @@ export const LayoutGenerationChat = ({
       </header>
       <div className="local-editor-chat-body">
         <div
-          ref={logRef}
           className="local-editor-chat-log"
           role="log"
           aria-label={pt(
@@ -74,7 +68,7 @@ export const LayoutGenerationChat = ({
             "Generation conversation"
           )}
         >
-          {!chat.messages.length && (
+          {!chat.messages.length && !intent?.eligible && (
             <div className="local-editor-chat-empty">
               <strong>
                 {pt(
@@ -122,6 +116,15 @@ export const LayoutGenerationChat = ({
                           <span>{section.description}</span>
                           <span className="local-editor-chat-section-status">
                             {pt(statusLabels[section.status])}
+                            {(section.status === "generating" ||
+                              section.status === "retrying") && (
+                              <span
+                                className="local-editor-chat-progress-dots"
+                                aria-hidden="true"
+                              >
+                                ...
+                              </span>
+                            )}
                           </span>
                           {section.message && section.status !== "applied" && (
                             <details>
@@ -138,6 +141,71 @@ export const LayoutGenerationChat = ({
                 </div>
               )
           )}
+          {intent?.eligible &&
+            !["generating", "clarification", "saving", "completed"].includes(
+              intent.state.stage
+            ) &&
+            !(
+              intent.state.stage === "idle" && intent.status === "COMPLETED"
+            ) && (
+              <div className="local-editor-chat-message" data-role="assistant">
+                <span className="local-editor-chat-role">Assistant</span>
+                <p role="status">
+                  {intent.state.stage === "interrupted"
+                    ? "Generation may have been interrupted. You can restart it here."
+                    : (intent.state.message ??
+                      (intent.state.stage === "idle"
+                        ? intent.status === "FAILED"
+                          ? "Page generation failed."
+                          : `Intent page generation: ${intent.status?.toLowerCase() ?? "ready"}`
+                        : `Intent page generation: ${intent.state.stage}`))}
+                </p>
+                {intent.state.stage === "interrupted" &&
+                  intent.state.message && (
+                    <p className="local-editor-chat-error" role="alert">
+                      {intent.state.message}
+                    </p>
+                  )}
+                {(intent.workflow.canRestart || intent.workflow.restarting) && (
+                  <>
+                    <p id="intent-generation-restart-description">
+                      Restarting will replace the previous attempt.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={intent.workflow.restart}
+                      disabled={
+                        intent.state.busy ||
+                        disabled ||
+                        !chat.ready ||
+                        chat.isStreaming
+                      }
+                      aria-describedby="intent-generation-restart-description"
+                    >
+                      Restart generation
+                    </button>
+                  </>
+                )}
+                {intent.state.stage === "recovery" && (
+                  <>
+                    <button type="button" onClick={intent.workflow.recover}>
+                      {intent.workflow.recoveryAction === "save"
+                        ? "Retry draft save"
+                        : "Check draft save status"}
+                    </button>
+                    {intent.workflow.canRetrySave &&
+                      intent.workflow.recoveryAction === "complete" && (
+                        <button
+                          type="button"
+                          onClick={intent.workflow.retrySave}
+                        >
+                          Recheck attempt and save draft
+                        </button>
+                      )}
+                  </>
+                )}
+              </div>
+            )}
         </div>
         {chat.error && (
           <p className="local-editor-chat-error" role="alert">
@@ -148,13 +216,16 @@ export const LayoutGenerationChat = ({
           chat={chat}
           disabled={disabled}
           active={active}
+          canCancel={
+            chat.isStreaming || intent?.state.stage === "clarification"
+          }
         />
         <footer className="local-editor-chat-footer">
           <button
             type="button"
             className="local-editor-chat-reset"
             onClick={chat.clear}
-            disabled={chat.isStreaming}
+            disabled={chat.isStreaming || !!intent?.workflow.blocked}
           >
             <RotateCcw size={13} aria-hidden="true" />
             {pt("layoutGenerationChat.newConversation", "New conversation")}

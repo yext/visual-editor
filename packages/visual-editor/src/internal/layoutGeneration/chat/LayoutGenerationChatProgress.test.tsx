@@ -79,6 +79,81 @@ const editor = (ids = ["heading", "second"]) => {
   openChat();
 };
 
+it("shows overlays during concurrent section generation, marks applied sections ready, and clears failed sections", async () => {
+  let finishFirst!: (response: ExecutorReply) => void;
+  let finishSecond!: (response: ExecutorReply) => void;
+  stubGenerationExecutor(async (body) => {
+    if (body.mode === "plan") return planned([task("heading"), task("second")]);
+    return new Promise<ExecutorReply>((resolve) => {
+      if (body.mode === "section" && body.task.taskId === "heading")
+        finishFirst = resolve;
+      else finishSecond = resolve;
+    });
+  });
+  editor();
+  await submit();
+  await waitFor(() => {
+    expect(finishFirst).toBeDefined();
+    expect(finishSecond).toBeDefined();
+    expect(
+      document.querySelectorAll(
+        '.local-editor-generation-section[data-status="building"]'
+      )
+    ).toHaveLength(2);
+  });
+  await act(async () => finishFirst(section("heading")));
+  await screen.findByText("heading updated", { selector: "h2" });
+  await waitFor(() => {
+    expect(
+      document.querySelectorAll(
+        '.local-editor-generation-section[data-status="ready"]'
+      )
+    ).toHaveLength(1);
+    expect(
+      document.querySelectorAll(
+        '.local-editor-generation-section[data-status="building"]'
+      )
+    ).toHaveLength(1);
+  });
+  await act(async () =>
+    finishSecond(new GenerationError("Unable to update this section", false))
+  );
+  await waitFor(() =>
+    expect(
+      document.querySelectorAll(
+        '.local-editor-generation-section[data-status="building"]'
+      )
+    ).toHaveLength(0)
+  );
+  expect(screen.getByText("second", { selector: "h2" })).toBeTruthy();
+});
+
+it("starts the conversation at the top and preserves user scrolling through progress updates", async () => {
+  let finishPlan!: (response: ExecutorReply) => void;
+  stubGenerationExecutor(async (body) => {
+    if (body.mode === "plan") {
+      return new Promise<ExecutorReply>((resolve) => {
+        finishPlan = resolve;
+      });
+    }
+    return section("heading");
+  });
+  editor(["heading"]);
+  const log = screen.getByRole("log", { name: "Generation conversation" });
+  const scrollTo = vi.fn();
+  log.scrollTo = scrollTo;
+  expect(log.scrollTop).toBe(0);
+  await submit();
+  await waitFor(() => expect(finishPlan).toBeDefined());
+  expect(log.scrollTop).toBe(0);
+  log.scrollTop = 72;
+  fireEvent.scroll(log);
+  await act(async () => finishPlan(planned([task("heading")])));
+  await screen.findByText("heading updated", { selector: "h2" });
+  expect(log.scrollTop).toBe(72);
+  expect(scrollTo).not.toHaveBeenCalled();
+});
+
 it("shows named section progress and preserves applied work when stopped from collapsed chat", async () => {
   let finishPlan!: (response: ExecutorReply) => void;
   let finishSecond!: (response: ExecutorReply) => void;
@@ -166,7 +241,7 @@ it("shows retrying, failed, skipped and applied outcomes, and sends them in subs
   editor(["heading", "second", "third", "fourth"]);
   await submit();
   await screen.findByText("Retrying changes");
-  await screen.findByText("Waiting for prerequisites");
+  await screen.findByText("Waiting");
   await screen.findByText("fourth updated", { selector: "h2" });
   await act(async () => finishRetry(invalid()));
   await screen.findByText("Section changes: 2 applied, 1 failed, 1 skipped.");

@@ -26,7 +26,7 @@ We want to support response streaming, so these handlers are more complex than t
 
 ## src/internal/layoutGeneration/workflows
 
-These are the full page, follow-up edit, and intent regeneration flows. They define the order of events, handle the preliminary prompts, and do the relevant schema compilation.
+These are the full page, follow-up edit, and intent page generation flows. They define the order of events, handle the preliminary prompts, and do the relevant schema compilation.
 
 ## src/internal/layoutGeneration/limits.ts
 
@@ -44,9 +44,13 @@ Utilities used across layout generation.
 
 Testing harnesses and fixtures for layout generation.
 
-## Intent-driven regeneration
+## Intent-driven generation
 
-Set `templateMetadata.aiPageGeneration.intentPagePrompt` to a non-empty string to automatically regenerate the current page after the editor canvas is ready. The existing `layoutGenerationEnabled` flag and configured `model` are required; theme mode is excluded. This runs once per loaded layout session, including under React effect replay, and runs again if the editor is reopened. The local editor uses the chat interface for page generation and changes.
+`workflows/intentPageGeneration/IntentPageGenerationWorkflow` owns intent lifecycle and draft-save recovery. The chat hook `useIntentPageGeneration` connects that workflow to editor readiness and metadata.
+
+An iframe owns only attempts it starts locally. Unowned `RUNNING` metadata shows an interruption warning and an explicit Restart generation action, explaining that another editor tab may still be running the previous attempt. Restart creates a fresh attempt Id and persists `start` with `explicitRetry: true` before generating with the retained prompt through the existing generation and save flow. Failed persistence allows another explicit restart without generating. Repeated metadata never takes ownership or restarts an attempt, and superseded callbacks are ignored.
+
+The platform supplies optional `templateMetadata.aiPageGeneration.intentPageGeneration` metadata (`prompt`, `status`, and optional `attemptId`). Only `PENDING` automatically starts once after the editor canvas is ready, with generation enabled and a configured model, outside theme and development modes for assignment `ALL`. The iframe persists `start` over `updateIntentPageGeneration` before generating a blank page or regenerating an existing page. It tags the generated history save with the attempt/layout identity; the parent saves the draft and completes the attempt. Questions pause the current attempt and let the user answer in chat; the reply resumes full-page generation with the same attempt identity and conversation. Model failures and cancellation persist `fail`. Generation failures, including lost start/failure acknowledgements, end the local attempt, show a plain failure message, and release the editor without a generation-retry button or automatic restart. Uncertain draft saves retain explicit save recovery using the same attempt and saved hash. Reopened `RUNNING`, `FAILED`, and `COMPLETED` metadata does not automatically generate again. Intent status and save recovery appear within the chat conversation; cancellation uses the chat's Stop control. The retained prompt remains available. The local editor continues to use the chat interface.
 
 `workflows/fullPageRegeneration` compiles the full supported section schema and sends the intent, current content tree, section inventory, and locales through the existing model transport using mode `regenerate`. Headers, footers, useful content, and bindings are preserved by prompt guidance unless the intent requests changes. Clarification makes no changes; the next chat reply continues regeneration with the original intent in conversation history.
 
@@ -58,6 +62,8 @@ Regeneration requires explicit copy in generated text fields and content-bearing
 
 If the gateway reports an output-token limit before regeneration starts, with explicit zero input/output usage and no generated or streamed text, the executor retries once with a 64,000-token output allowance instead of 128,000. The schema, prompt, layout and shared deadline stay the same. Missing/nonzero usage, actual truncation and failures after streaming are not retried through this path. Diagnostics record the reduced budget, and the error message distinguishes a failure before generation from exhausting a generation's output budget.
 
-Regeneration reduces request size without limiting the available component catalog. The model receives the full authored layout (including bindings and component Ids), excluding resolved/editor-only mirrors. Component guidance includes style defaults rather than repeating complete default slot trees and placeholder copy. An additional definition-graph compaction pass merges structurally identical schema definitions after canonicalizing their dependencies, retaining constraints, descriptions, component boundaries and recursive references. This pass is specific to regeneration; existing creation/edit schema snapshots are unchanged.
+Regeneration reduces request size without limiting the available component catalog. The model receives the full authored layout (including bindings and component Ids), excluding resolved/editor-only mirrors. Component guidance includes style defaults rather than repeating complete default slot trees and placeholder copy. An additional definition-graph compaction pass merges structurally identical schema definitions after canonicalizing their dependencies, retaining constraints, descriptions, component boundaries and recursive references. This pass is specific to regeneration.
 
 As validated sections stream into the preview, it scrolls to the added, changed, or moved section. Removal follows the nearest surviving section. Pending scrolling stops on editor teardown or user interaction. Chat progress uses Puck component display labels, falling back to component types when no label is configured.
+
+The layout metadata's `defaultGenerationSectionIds` is advisory for both fresh creation and intent regeneration. Available recommendations appear in the model instructions and explicitly in request context as `recommendedSectionIds`. They are neither mandatory nor exhaustive: generation should choose relevant sections and can insert supported types absent from the current page to cover the requested intent.

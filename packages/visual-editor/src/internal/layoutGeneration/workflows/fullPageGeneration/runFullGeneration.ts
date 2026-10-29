@@ -12,8 +12,8 @@ type CreationCanvas = {
   readonly createdSectionCount: number;
 };
 
-export type FullGenerationProgress =
-  | { phase: "preparing" | "generating" }
+type FullGenerationProgress =
+  | { phase: "preparing" | "generating" | "clarification" }
   | { phase: "revealed"; sectionCount: number }
   | { phase: "applying"; candidate: Content | null }
   | { phase: "resolved" | "complete"; sectionCount: number };
@@ -49,6 +49,7 @@ export const runFullGeneration = async ({
     throw new Error("Expected page preparation output.");
   }
   if (prepared.preparation.question) {
+    onProgress({ phase: "clarification" });
     return prepared.preparation.question;
   }
 
@@ -95,12 +96,17 @@ export const runFullGeneration = async ({
   if (event.type !== "accepted") {
     throw new Error("Expected fresh generation output.");
   }
-  onProgress({ phase: "applying", candidate: event.spec });
-  if (event.spec) {
-    await canvas.revealCreation(event.spec, signal);
-    createdSections = canvas.createdSectionCount;
-    onProgress({ phase: "resolved", sectionCount: createdSections });
+  if (!event.spec) {
+    if (createdSections) {
+      throw new Error("Clarification cannot follow applied creation sections.");
+    }
+    onProgress({ phase: "clarification" });
+    return event.text;
   }
+  onProgress({ phase: "applying", candidate: event.spec });
+  await canvas.revealCreation(event.spec, signal);
+  createdSections = canvas.createdSectionCount;
+  onProgress({ phase: "resolved", sectionCount: createdSections });
   canvas.finishCreation();
   if (active()) {
     onProgress({ phase: "complete", sectionCount: createdSections });

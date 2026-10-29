@@ -11,6 +11,8 @@ import {
   LayoutGenerationChatContext,
   LayoutGenerationChatUiProvider,
 } from "../../chat/contexts.tsx";
+import { IntentPageGenerationWorkflow } from "../intentPageGeneration/IntentPageGenerationWorkflow.ts";
+import { IntentPageGenerationContext } from "../../chat/useIntentPageGeneration.ts";
 import { useLayoutGenerationChat } from "../../chat/useLayoutGenerationChat.ts";
 import type { GenerationEnvironment } from "../../shared/contracts.ts";
 import { creation, heading } from "../../testing/creationFixtures.ts";
@@ -57,9 +59,11 @@ const enqueueEvent = (
   const bytes = new TextEncoder().encode(`data: ${JSON.stringify(value)}\n\n`);
   for (const byte of bytes) stream.enqueue(new Uint8Array([byte]));
 };
-const setup = async (rejectSecond = false) => {
+const setup = async (rejectSecond = false, intentMode = false) => {
   let chat!: ReturnType<typeof useLayoutGenerationChat>;
   let puck!: ReturnType<typeof useGetPuck>;
+  const captureDraft = vi.fn();
+  const intent = { captureDraft } as unknown as IntentPageGenerationWorkflow;
   let stream!: ReadableStreamDefaultController<Uint8Array>;
   const requests: string[] = [];
   let generationSignal: AbortSignal;
@@ -155,9 +159,11 @@ const setup = async (rejectSecond = false) => {
             <div data-test-viewport style={{ height: 350, overflowY: "auto" }}>
               <Puck.Preview />
             </div>
-            <LayoutGenerationChatBridge
-              streamDocument={React.useMemo(() => ({ locale: "en" }), [])}
-            />
+            <IntentPageGenerationContext.Provider value={intent}>
+              <LayoutGenerationChatBridge
+                streamDocument={React.useMemo(() => ({ locale: "en" }), [])}
+              />
+            </IntentPageGenerationContext.Provider>
             <Capture />
           </Puck>
         </LayoutGenerationChatUiProvider>
@@ -168,7 +174,9 @@ const setup = async (rejectSecond = false) => {
   await waitFor(() => expect(chat.ready).toBe(true));
   let pending!: Promise<void>;
   act(() => {
-    pending = chat.send("Create a page");
+    pending = intentMode
+      ? chat.generateIntent("Create a page").then(() => {})
+      : chat.send("Create a page");
   });
   await waitFor(() => expect(stream).toBeDefined());
   const wire = JSON.stringify(
@@ -180,6 +188,7 @@ const setup = async (rejectSecond = false) => {
     generationSignal: () => generationSignal,
     puck: () => puck(),
     mounts,
+    captureDraft,
     pending,
     requests,
     baseline,
@@ -222,6 +231,23 @@ it("reveals before completion, preserves mounted sections, and records one undo 
   const run = await setup();
   await run.first();
   expect(run.chat().isCreating).toBe(true);
+  await waitFor(() => {
+    const overlay = (
+      document.querySelector("iframe")?.contentDocument ?? document
+    ).querySelector<HTMLElement>(".local-editor-generation-section");
+    expect(overlay).not.toBeNull();
+    // Newly mounted creation sections have already resolved; show their actual state.
+    expect(overlay?.textContent).toBe("Ready");
+    expect(overlay?.style.visibility).toBe("visible");
+    expect(parseFloat(overlay?.style.height ?? "0")).toBeGreaterThanOrEqual(0);
+  });
+  await waitFor(() => {
+    expect(
+      (
+        document.querySelector("iframe")?.contentDocument ?? document
+      ).querySelector(".local-editor-generation-section")?.textContent
+    ).toBe("Ready");
+  });
   expect(run.puck().history.histories).toHaveLength(1);
   const mainId = run.puck().appState.data.content[0].props.id;
   const firstId = run.puck().appState.data.content[0].props.content[0].props.id;
@@ -269,3 +295,17 @@ it.each(["cancel", "truncated", "resolver"])(
     expect(run.puck().history.histories).toHaveLength(1);
   }
 );
+
+it("captures the exact generated history hash and normal serialized draft for intent saves", async () => {
+  const run = await setup(false, true);
+  await run.first();
+  expect(run.captureDraft).not.toHaveBeenCalled();
+  await run.rest();
+  expect(run.captureDraft).toHaveBeenCalledTimes(1);
+  const history = run.puck().history;
+  const entry = history.histories[history.index];
+  expect(run.captureDraft).toHaveBeenCalledWith({
+    hash: entry.id,
+    history: JSON.stringify({ data: entry.state!.data, ui: entry.state!.ui }),
+  });
+});

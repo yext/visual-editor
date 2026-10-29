@@ -5,8 +5,14 @@ import type { LocalDevOptions } from "../../editor/types.ts";
 
 export type HeadDeployStatus = "RUNNING" | "INACTIVE" | "FAILED" | "ACTIVE";
 
+export type IntentPageGeneration = {
+  prompt?: string;
+  status?: "PENDING" | "RUNNING" | "FAILED" | "COMPLETED";
+  attemptId?: string;
+};
+
 export type AiPageGeneration = {
-  intentPagePrompt?: string;
+  intentPageGeneration?: IntentPageGeneration;
   layoutGenerationEnabled: boolean;
   model: string;
 };
@@ -15,7 +21,7 @@ export type TemplateMetadata = {
   aiPageGeneration?: AiPageGeneration;
   siteId: number;
   templateId: string;
-  layoutId?: number;
+  layoutId?: string;
   entityId?: number;
   themeEntityId?: number;
   assignment: "ALL" | "ENTITY";
@@ -151,7 +157,7 @@ export function generateTemplateMetadata(
     templateId,
     entityId,
     themeEntityId: themeScopeKey ? hashCode(themeScopeKey) : undefined,
-    layoutId: hashCode(layoutScopeKey),
+    layoutId: String(hashCode(layoutScopeKey)),
     assignment: "ALL",
     isDevMode: true,
     isxYextDebug: true,

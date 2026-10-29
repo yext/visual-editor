@@ -8,7 +8,10 @@ import {
   SECTION_EDIT_OUTPUT_TOKEN_BUDGET,
   REGENERATION_FALLBACK_OUTPUT_TOKEN_BUDGET,
 } from "../limits.ts";
-import { buildGenerationPrompt } from "../prompts.ts";
+import {
+  buildGenerationPrompt,
+  recommendedGenerationSectionIds,
+} from "../prompts.ts";
 import type { Content } from "../shared/authoredValues.ts";
 import type {
   GenerationEnvironment,
@@ -79,7 +82,8 @@ export const executeGeneration = async (
   signal: AbortSignal,
   correlationId: string,
   onCreationContent?: (content: Content) => Promise<void>,
-  onRegenerationStep?: (step: RegenerationStep, index: number) => Promise<void>
+  onRegenerationStep?: (step: RegenerationStep, index: number) => Promise<void>,
+  onRegenerationSection?: (sectionId: string) => Promise<void>
 ): Promise<GenerationResult> => {
   if (!model?.trim()) {
     throw new GenerationError(
@@ -204,9 +208,18 @@ export const executeGeneration = async (
         : componentDiagnostics(catalog, { jsonBytes, utf8Bytes });
     const schemaStats = summarizeSchema(compiled.jsonSchema, jsonBytes);
     phase = "build-request";
+    const recommendedSectionIds =
+      mode === "create" || mode === "regenerate"
+        ? recommendedGenerationSectionIds(
+            catalog,
+            compiled.availableComponentNames
+          )
+        : [];
     const latestUserContent = JSON.stringify({
       request: messages.at(-1)!.content,
-      context: compiled.context,
+      context: recommendedSectionIds.length
+        ? { ...(compiled.context as object), recommendedSectionIds }
+        : compiled.context,
       ...(mode === "create" && context.preparation
         ? { preparation: context.preparation }
         : {}),
@@ -251,6 +264,7 @@ export const executeGeneration = async (
     log("[layout generation] Gateway request", {
       correlationId,
       mode,
+      ...(mode === "create" ? { preparation: context.preparation } : {}),
       taskId: context.task?.taskId,
       model,
       requestBodyBytes: utf8Bytes(serializedRequestBody),
@@ -269,7 +283,7 @@ export const executeGeneration = async (
     });
     phase = "gateway-fetch";
     const creationStream = onRegenerationStep
-      ? compiled.streamRegeneration?.(onRegenerationStep)
+      ? compiled.streamRegeneration?.(onRegenerationStep, onRegenerationSection)
       : onCreationContent
         ? compiled.stream?.(onCreationContent)
         : undefined;

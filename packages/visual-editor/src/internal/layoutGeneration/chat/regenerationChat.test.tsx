@@ -19,7 +19,7 @@ afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
 });
-const setup = () => {
+const setup = (componentLabel?: (type: string) => string) => {
   let data: Data = layout();
   data.content[0].props.content.push({
     type: "Heading",
@@ -40,6 +40,11 @@ const setup = () => {
   act(() => {
     hook.result.current.canvas.attach({
       read: () => data,
+      readComponentLabel: componentLabel,
+      readSectionLabels: () => ({
+        heading: "Section 1 · Heading",
+        second: "Section 2 · Heading",
+      }),
       resolve: async (candidate) => candidate,
       validate: vi.fn(),
       preview: (next) => {
@@ -64,6 +69,89 @@ const success = (steps: RegenerationStep[] = []) => ({
   result: { action: "regenerate" as const, steps },
 });
 
+it("regenerates populated intent pages and reports completion after committing", async () => {
+  const current = setup();
+  vi.mocked(executeGeneration).mockResolvedValueOnce(
+    success([{ kind: "remove", sectionId: "heading" }])
+  );
+  let completed: Awaited<
+    ReturnType<typeof current.result.current.generateIntent>
+  > = false;
+  await act(async () => {
+    completed = await current.result.current.generateIntent("Chicken menu");
+  });
+  expect(completed).toBe(true);
+  expect(executeGeneration).toHaveBeenCalledOnce();
+  expect(vi.mocked(executeGeneration).mock.calls[0][0]).toMatchObject({
+    mode: "regenerate",
+    currentData: { content: current.initial.content },
+    messages: [{ role: "user", content: "Chicken menu" }],
+  });
+  expect(current.commit).toHaveBeenCalledOnce();
+  expect(current.commit.mock.calls[0][1]).toEqual(current.initial);
+  expect(current.result.current.messages.at(-1)?.sections).toEqual([
+    expect.objectContaining({
+      description: "Removed this section.",
+      status: "applied",
+    }),
+    expect.objectContaining({
+      description: "No change applied to this section.",
+      status: "skipped",
+    }),
+  ]);
+  expect(current.result.current.error).toBeNull();
+});
+
+it.each(["Event details", undefined])(
+  "labels inserted regeneration sections with their display name or type (%s)",
+  async (label) => {
+    const current = setup(label ? () => label : undefined);
+    vi.mocked(executeGeneration).mockResolvedValueOnce(
+      success([
+        {
+          kind: "insert",
+          collection: { ownerId: "main", slotPath: "/content" },
+          anchor: { position: "end" },
+          sections: [
+            { type: "Heading", props: { id: "new", text: "New event" } },
+          ],
+        },
+      ])
+    );
+    await act(async () => {
+      await current.result.current.generateIntent("Add an event section");
+    });
+    expect(current.result.current.messages.at(-1)?.sections).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          label: `New section · ${label ?? "Heading"}`,
+          status: "applied",
+        }),
+      ])
+    );
+  }
+);
+
+it("does not report intent completion for regeneration clarification or failure", async () => {
+  const current = setup();
+  vi.mocked(executeGeneration)
+    .mockResolvedValueOnce({
+      type: "regenerated",
+      text: "",
+      result: { action: "clarification", question: "Which menu?" },
+    })
+    .mockRejectedValueOnce(new GenerationError("Test failure"));
+  for (let attempt = 0; attempt < 2; attempt++) {
+    await act(async () => {
+      expect(await current.result.current.generateIntent("Chicken menu")).toBe(
+        attempt === 0 ? "clarification" : false
+      );
+    });
+  }
+  expect(current.commit).not.toHaveBeenCalled();
+  expect(current.result.current.error?.message).toBe("Test failure");
+});
+
 it("continues clarification in regeneration mode, then returns ordinary chat to edits", async () => {
   const current = setup();
   const execute = vi.mocked(executeGeneration);
@@ -75,12 +163,16 @@ it("continues clarification in regeneration mode, then returns ordinary chat to 
     })
     .mockResolvedValueOnce(success([{ kind: "remove", sectionId: "heading" }]));
   await act(async () => {
-    await current.result.current.regenerate("Focus the page on a service");
+    expect(
+      await current.result.current.generateIntent("Focus the page on a service")
+    ).toBe("clarification");
   });
   expect(current.result.current.messages.at(-1)?.text).toBe("Which service?");
   expect(current.commit).not.toHaveBeenCalled();
   await act(async () => {
-    await current.result.current.send("Repairs");
+    expect(await current.result.current.generateIntent("Repairs", true)).toBe(
+      true
+    );
   });
   expect(execute.mock.calls.map(([request]) => request.mode)).toEqual([
     "regenerate",
@@ -119,9 +211,9 @@ it("cancellation retains streamed changes once and releases the editor", async (
       return success();
     }
   );
-  let pending!: Promise<void>;
+  let pending!: ReturnType<typeof current.result.current.generateIntent>;
   act(() => {
-    pending = current.result.current.regenerate("Product page");
+    pending = current.result.current.generateIntent("Product page");
   });
   await act(async () => {
     await revealed;
@@ -131,7 +223,7 @@ it("cancellation retains streamed changes once and releases the editor", async (
     current.result.current.cancel();
   });
   await act(async () => {
-    await pending;
+    expect(await pending).toBe(false);
   });
   expect(
     current.data().content[0].props.content.map((item: any) => item.props.id)
@@ -155,7 +247,9 @@ it("failure retains completed steps, reports partial completion and does not ret
     }
   );
   await act(async () => {
-    await current.result.current.regenerate("Product page");
+    expect(await current.result.current.generateIntent("Product page")).toBe(
+      false
+    );
   });
   expect(execute).toHaveBeenCalledOnce();
   expect(current.commit).toHaveBeenCalledOnce();
@@ -164,4 +258,55 @@ it("failure retains completed steps, reports partial completion and does not ret
     "1 step completed"
   );
   expect(current.result.current.isCreating).toBe(false);
+});
+
+it("shows existing sections waiting while intent generation streams decisions", async () => {
+  const current = setup();
+  let reveal!: () => void;
+  let finish!: () => void;
+  const revealed = new Promise<void>((resolve) => {
+    reveal = resolve;
+  });
+  const hold = new Promise<void>((resolve) => {
+    finish = resolve;
+  });
+  vi.mocked(executeGeneration).mockImplementationOnce(
+    async (_payload, _environment, _signal, _id, _content, onStep) => {
+      await onStep!({ kind: "remove", sectionId: "heading" }, 0);
+      reveal();
+      await hold;
+      return success([{ kind: "remove", sectionId: "heading" }]);
+    }
+  );
+  let pending!: ReturnType<typeof current.result.current.generateIntent>;
+  act(() => {
+    pending = current.result.current.generateIntent("Chicken menu");
+  });
+  expect(current.result.current.messages.at(-1)?.sections).toEqual([
+    expect.objectContaining({
+      label: "Section 1 · Heading",
+      status: "waiting",
+    }),
+    expect.objectContaining({
+      label: "Section 2 · Heading",
+      status: "waiting",
+    }),
+  ]);
+  await act(async () => {
+    await revealed;
+  });
+  expect(current.result.current.messages.at(-1)?.sections).toEqual([
+    expect.objectContaining({
+      label: "Section 1 · Heading",
+      status: "applied",
+    }),
+    expect.objectContaining({
+      label: "Section 2 · Heading",
+      status: "waiting",
+    }),
+  ]);
+  await act(async () => {
+    finish();
+    await pending;
+  });
 });

@@ -55,7 +55,7 @@ export type SectionEditTask = {
   taskId: string;
   /** Existing section Id, or an application-reserved Id for a new section. */
   sectionId: string;
-  /** Existing component Ids this task may edit. */
+  /** Existing content targets. Structural targets come from structuralOperations. */
   targetComponentIds: string[];
   /** The requested changes within this section. */
   instructions: string;

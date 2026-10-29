@@ -48,7 +48,7 @@ export function getVisualConfigLocalStorageKey(
   isDevMode: boolean,
   scopeToEntityId: boolean,
   templateId: string,
-  layoutId?: number,
+  layoutId?: string,
   entityId?: number
 ): string {
   const devPrefix = isDevMode ? "dev" : "";

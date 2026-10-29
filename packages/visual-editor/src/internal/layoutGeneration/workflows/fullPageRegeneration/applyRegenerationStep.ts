@@ -145,7 +145,9 @@ export const applyRegenerationStep = <T extends Content>(
   if ("componentId" in anchor) {
     index = items.findIndex((item) => item.props.id === anchor.componentId);
     if (index < 0)
-      throw new Error("Anchor is not in the permitted collection.");
+      throw new Error(
+        `Anchor is not in the permitted collection. Anchor: ${JSON.stringify(anchor)}. Destination: ${JSON.stringify(collection)}. Available sibling Ids: ${JSON.stringify(items.map((item) => item.props.id))}.`
+      );
     if (anchor.position === "after") index++;
   }
   items.splice(index, 0, ...additions);

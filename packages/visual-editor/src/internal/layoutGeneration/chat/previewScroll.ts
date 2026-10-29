@@ -23,50 +23,26 @@ export const reusePreviewData = <T>(previous: T, next: T): T => {
   return unchanged ? previous : result;
 };
 
+export const previewSections = (data: Data): Data["content"] =>
+  data.content.flatMap((item) =>
+    item.type === "MainContent" ? (item.props.content ?? []) : [item]
+  );
+
 /** Follow page sections, rather than their nested slot components or MainContent. */
 export const changedPreviewSection = (
   previous: Data,
   next: Data
 ): string | undefined => {
-  const sections = (data: Data) =>
-    data.content.flatMap((item) =>
-      item.type === "MainContent" ? (item.props.content ?? []) : [item]
-    ) as Data["content"];
-  const before = sections(previous);
-  const after = sections(next);
+  const before = previewSections(previous);
+  const after = previewSections(next);
   const originals = new Map(before.map((item) => [item.props.id, item]));
   const changed = after.find(
     (item) => !isDeepEqual(originals.get(item.props.id), item)
   );
-  if (changed) return changed.props.id;
-  const remaining = new Set(after.map((item) => item.props.id));
-  const retained = before.filter((item) => remaining.has(item.props.id));
-  const moved = after.find(
-    (item, index) => item.props.id !== retained[index]?.props.id
-  );
-  if (moved) return moved.props.id;
-  const removedIndex = before.findIndex(
-    (item) => !remaining.has(item.props.id)
-  );
-  return removedIndex < 0
-    ? undefined
-    : after[Math.min(removedIndex, after.length - 1)]?.props.id;
+  return changed?.props.id;
 };
 
-/** Wait for the accepted section to mount, then scroll only its preview viewport.
- * Cancel on the next update, editor teardown, user interaction, or timeout. */
-export const followPreviewSection = (
-  doc: Document,
-  previous: Data,
-  next: Data
-): (() => void) => {
-  const sectionId = changedPreviewSection(previous, next);
-  if (!sectionId) return () => {};
-  const view = doc.defaultView;
-  if (!view) return () => {};
-  let active = true;
-  let frame = 0;
-  const observers: MutationObserver[] = [];
+export const previewDocuments = (doc: Document): Document[] => {
   const documents = [doc];
   doc.querySelectorAll("iframe").forEach((iframe) => {
     try {
@@ -75,17 +51,39 @@ export const followPreviewSection = (
       /* External embed. */
     }
   });
-  const stop = () => {
+  return documents;
+};
+
+/** Wait for the accepted section to mount, then scroll only its preview viewport.
+ * Use a fixed, gentle duration rather than restarting native smooth scrolling. */
+const scrollToPreviewSection = (
+  doc: Document,
+  sectionId: string,
+  onSettled: (interrupted: boolean) => void
+): (() => void) => {
+  const view = doc.defaultView;
+  if (!view) {
+    onSettled(false);
+    return () => {};
+  }
+  let active = true;
+  let frame = 0;
+  const observers: MutationObserver[] = [];
+  const documents = previewDocuments(doc);
+  const stop = (interrupted = false) => {
+    if (!active) return;
     active = false;
     view.cancelAnimationFrame(frame);
     view.clearTimeout(timeout);
     observers.forEach((observer) => observer.disconnect());
     documents.forEach((document) => {
       ["wheel", "touchstart", "pointerdown", "keydown"].forEach((type) =>
-        document.removeEventListener(type, stop, true)
+        document.removeEventListener(type, interrupt, true)
       );
     });
+    onSettled(interrupted);
   };
+  const interrupt = () => stop(true);
   const scroll = () => {
     if (!active) return;
     for (const document of documents) {
@@ -93,6 +91,7 @@ export const followPreviewSection = (
         document.querySelectorAll<HTMLElement>("[data-puck-component]")
       ).find((item) => item.getAttribute("data-puck-component") === sectionId);
       if (!element) continue;
+      view.clearTimeout(timeout);
       // Use the nearest scroll container so the chat and outer editor stay put.
       let viewport = element.parentElement;
       while (viewport) {
@@ -111,11 +110,51 @@ export const followPreviewSection = (
           viewport === document.scrollingElement
             ? 0
             : viewport.getBoundingClientRect().top + viewport.clientTop;
-        const top = element.getBoundingClientRect().top - viewportTop;
-        viewport.scrollTo?.({
-          top: Math.max(0, viewport.scrollTop + top),
-          behavior: "smooth",
-        });
+        const bounds = element.getBoundingClientRect();
+        const top = bounds.top - viewportTop;
+        const visibleHeight = Math.min(
+          bounds.height,
+          viewport.clientHeight - top
+        );
+        // Keep the viewport steady only when the section has meaningful room:
+        // half the viewport for tall sections, or the entire section if shorter.
+        const minimumVisibleHeight = Math.min(
+          bounds.height,
+          viewport.clientHeight / 2
+        );
+        if (
+          top >= 0 &&
+          top < viewport.clientHeight &&
+          visibleHeight >= minimumVisibleHeight
+        ) {
+          stop();
+          return;
+        }
+        observers.forEach((observer) => observer.disconnect());
+        const start = viewport.scrollTop;
+        const destination = Math.max(0, start + top - 24);
+        const reducedMotion = view.matchMedia?.(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+        const startedAt = view.performance.now();
+        const animate = (now: number) => {
+          if (!active) return;
+          const progress = reducedMotion
+            ? 1
+            : Math.min(1, (now - startedAt) / 1000);
+          const eased =
+            progress < 0.5
+              ? 4 * progress ** 3
+              : 1 - (-2 * progress + 2) ** 3 / 2;
+          viewport.scrollTo?.({
+            top: start + (destination - start) * eased,
+            behavior: "instant",
+          });
+          if (progress < 1) frame = view.requestAnimationFrame(animate);
+          else stop();
+        };
+        frame = view.requestAnimationFrame(animate);
+        return;
       }
       stop();
       return;
@@ -125,7 +164,7 @@ export const followPreviewSection = (
     view.cancelAnimationFrame(frame);
     frame = view.requestAnimationFrame(scroll);
   };
-  const timeout = view.setTimeout(stop, 2000);
+  const timeout = view.setTimeout(() => stop(), 2000);
   documents.forEach((document) => {
     const Observer = document.defaultView?.MutationObserver;
     if (Observer) {
@@ -139,9 +178,73 @@ export const followPreviewSection = (
       observers.push(observer);
     }
     ["wheel", "touchstart", "pointerdown", "keydown"].forEach((type) =>
-      document.addEventListener(type, stop, true)
+      document.addEventListener(type, interrupt, true)
     );
   });
   schedule();
-  return stop;
+  return interrupt;
+};
+
+/** Coalesce arrivals; resolving a replacement can await its section's scroll. */
+export const createPreviewSectionFollower = (doc: Document) => {
+  type Scroll = { sectionId: string; done: Promise<void>; finish: () => void };
+  let lastSectionId: string | undefined;
+  let pending: Scroll | undefined;
+  let current: Scroll | undefined;
+  let cancel: (() => void) | undefined;
+  const clearPending = () => {
+    pending?.finish();
+    pending = undefined;
+  };
+  const flush = () => {
+    if (current || !pending) return;
+    const scroll = pending;
+    pending = undefined;
+    current = scroll;
+    cancel = scrollToPreviewSection(doc, scroll.sectionId, (interrupted) => {
+      current = undefined;
+      scroll.finish();
+      if (interrupted) clearPending();
+      flush();
+    });
+  };
+  const enqueue = (sectionId: string) => {
+    if (sectionId === lastSectionId) {
+      return (
+        (pending?.sectionId === sectionId ? pending : current)?.done ??
+        Promise.resolve()
+      );
+    }
+    lastSectionId = sectionId;
+    clearPending();
+    let finish!: () => void;
+    const done = new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+    pending = { sectionId, finish, done };
+    flush();
+    return done;
+  };
+  const stop = () => {
+    clearPending();
+    cancel?.();
+    lastSectionId = undefined;
+  };
+  return {
+    follow(previous: Data, next: Data) {
+      const sectionId = changedPreviewSection(previous, next);
+      if (sectionId) void enqueue(sectionId);
+    },
+    async followSection(sectionId: string, signal: AbortSignal) {
+      signal.throwIfAborted();
+      signal.addEventListener("abort", stop, { once: true });
+      try {
+        await enqueue(sectionId);
+        signal.throwIfAborted();
+      } finally {
+        signal.removeEventListener("abort", stop);
+      }
+    },
+    stop,
+  };
 };

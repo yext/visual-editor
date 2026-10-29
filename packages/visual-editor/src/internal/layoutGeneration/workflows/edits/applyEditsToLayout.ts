@@ -54,7 +54,9 @@ const anchorIndex = (items: SavedComponent[], anchor: EditAnchor): number => {
   }
   const index = items.findIndex((item) => item.props.id === anchor.componentId);
   if (index < 0) {
-    throw new Error("Anchor is not in the permitted collection.");
+    throw new Error(
+      `Anchor is not in the permitted collection. Anchor: ${JSON.stringify(anchor)}. Available sibling Ids: ${JSON.stringify(items.map((item) => item.props.id))}.`
+    );
   }
   return index + (anchor.position === "after" ? 1 : 0);
 };
@@ -295,7 +297,8 @@ export const materializeSectionEdit = <T extends Content>(
       !target?.editable ||
       !component ||
       target.sectionId !== task.sectionId ||
-      !task.targetComponentIds.includes(operation.componentId)
+      (operation.kind === "update" &&
+        !task.targetComponentIds.includes(operation.componentId))
     ) {
       throw new Error("Operation target is protected or outside task scope.");
     }

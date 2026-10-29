@@ -80,6 +80,60 @@ const fixture = () => {
   return { catalog, session, adapter, commit, preview, data: () => data };
 };
 
+it.each([false, true])(
+  "identifies an updating section before streaming its body, reversed header: %s",
+  async (reversed) => {
+    const compiled = compileRegenerationSchema(
+      creationCatalog(),
+      ["en"],
+      original()
+    );
+    const onSection = vi.fn(async (_sectionId: string) => {});
+    const onStep = vi.fn(async (_step: RegenerationStep) => {});
+    const stream = compiled.streamRegeneration(onStep, onSection);
+    const header = reversed
+      ? { sectionId: "hero", kind: "replace" }
+      : { kind: "replace", sectionId: "hero" };
+    const wire = JSON.stringify(
+      response([{ ...header, sections: [heading("Updated")] }])
+    );
+    const boundary = wire.indexOf(',"sections":');
+    await stream.write(wire.slice(0, boundary));
+    expect(onSection).toHaveBeenCalledExactlyOnceWith("hero");
+    expect(onStep).not.toHaveBeenCalled();
+    await stream.write(wire.slice(boundary));
+    stream.finish();
+    expect(onSection).toHaveBeenCalledOnce();
+    expect(onStep).toHaveBeenCalledOnce();
+  }
+);
+
+it.each(["keep", "remove", "reorder"])(
+  "does not focus a %s decision",
+  async (kind) => {
+    const compiled = compileRegenerationSchema(
+      creationCatalog(),
+      ["en"],
+      original()
+    );
+    const onSection = vi.fn(async (_sectionId: string) => {});
+    const stream = compiled.streamRegeneration(async () => {}, onSection);
+    await stream.write(
+      JSON.stringify(
+        response([
+          {
+            kind,
+            sectionId: "hero",
+            ...(kind === "reorder" ? { anchor: { position: "end" } } : {}),
+          },
+        ])
+      )
+    );
+    stream.finish();
+    expect(onSection).not.toHaveBeenCalled();
+  }
+);
+
 it("compiles full-page context and generates stable replacement identities with preserved remainder", () => {
   const catalog = creationCatalog();
   const baseline = original() as Content;
@@ -148,6 +202,74 @@ it("applies keep, deletion, insertion, and reordering without modifying saved me
     "new",
   ]);
   expect(data.content[2].props.id).toBe("footer");
+});
+
+it.each(["remove", "replace"] as const)(
+  "reports insertion and reorder anchors invalidated by an earlier %s while retaining completed work",
+  async (kind) => {
+    for (const operation of ["insert", "reorder"] as const) {
+      const current = fixture();
+      const signal = new AbortController().signal;
+      await current.session.apply(
+        kind === "remove"
+          ? { kind, sectionId: "hero" }
+          : { kind, sectionId: "hero", sections: [newHeading("replacement")] },
+        0,
+        signal
+      );
+      const before = clone(current.data());
+      const anchor = { position: "after" as const, componentId: "hero" };
+      const step: RegenerationStep =
+        operation === "insert"
+          ? {
+              kind: operation,
+              collection: { ownerId: "main", slotPath: "/content" },
+              anchor,
+              sections: [newHeading("new")],
+            }
+          : { kind: operation, sectionId: "testimonials", anchor };
+      let error: Error | undefined;
+      try {
+        await current.session.apply(step, 1, signal);
+      } catch (cause) {
+        error = cause as Error;
+      }
+      expect(error?.message).toContain(
+        "Regeneration step 1 failed: Anchor is not in the permitted collection."
+      );
+      expect(error?.message).toContain(`Anchor: ${JSON.stringify(anchor)}`);
+      expect(error?.message).toContain(`"kind":"${operation}"`);
+      const siblingIds = bodySections(before as Content)
+        .map((item) => item.props.id)
+        .filter((id) => operation !== "reorder" || id !== "testimonials");
+      expect(error?.message).toContain(
+        `Available sibling Ids: ${JSON.stringify(siblingIds)}`
+      );
+      expect(error?.message).not.toContain('"sections"');
+      expect(current.data()).toEqual(before);
+      expect(current.session.stepCount).toBe(1);
+      current.session.finish();
+      expect(current.commit).toHaveBeenCalledOnce();
+      expect(current.data()).toEqual(before);
+    }
+  }
+);
+
+it("reports a root anchor incorrectly used for insertion into MainContent", () => {
+  const baseline = original() as Content;
+  const anchor = { position: "before" as const, componentId: "footer" };
+  const collection = { ownerId: "main", slotPath: "/content" };
+  expect(() =>
+    applyRegenerationStep(creationCatalog(), baseline, {
+      kind: "insert",
+      collection,
+      anchor,
+      sections: [newHeading("new")],
+    })
+  ).toThrow(
+    `Anchor is not in the permitted collection. Anchor: ${JSON.stringify(anchor)}. Destination: ${JSON.stringify(collection)}. Available sibling Ids: ${JSON.stringify(["hero", "services", "testimonials"])}.`
+  );
+  expect(baseline).toEqual(original());
 });
 
 it.each([
@@ -411,11 +533,15 @@ it("streams removal before request completion, includes full model context and d
     diagnostics: { log: vi.fn(), report: vi.fn() },
   };
   const controller = new AbortController();
+  const prepareSection = vi.fn(
+    async (_sectionId: string, _signal: AbortSignal) => {}
+  );
   const request: GenerationRequestExecutor = (
     payload,
     signal = controller.signal,
     onContent,
-    onStep
+    onStep,
+    onSection
   ) =>
     executeGeneration(
       payload,
@@ -423,7 +549,8 @@ it("streams removal before request completion, includes full model context and d
       signal,
       "test",
       onContent,
-      onStep
+      onStep,
+      onSection
     );
   const pending = runRegeneration({
     layoutId: "layout",
@@ -433,6 +560,7 @@ it("streams removal before request completion, includes full model context and d
     active: () => !controller.signal.aborted,
     request,
     canvas: {
+      prepareRegenerationSection: prepareSection,
       beginRegeneration: () => {},
       applyRegeneration: (...args) => current.session.apply(...args),
       finishRegeneration: () => current.session.finish(),
@@ -443,13 +571,14 @@ it("streams removal before request completion, includes full model context and d
     response([
       { kind: "remove", sectionId: "services" },
       {
-        kind: "reorder",
+        kind: "replace",
         sectionId: "testimonials",
-        anchor: { position: "start" },
+        sections: [heading("Updated testimonials")],
       },
     ])
   );
-  const boundary = wire.indexOf(',{"kind":"reorder"');
+  const boundary = wire.indexOf(',{"kind":"replace"');
+  const contentBoundary = wire.indexOf(',"sections":', boundary);
   stream.enqueue(
     event({
       type: "response.output_text.delta",
@@ -461,7 +590,23 @@ it("streams removal before request completion, includes full model context and d
     bodySections(current.data() as Content).map((item) => item.props.id)
   ).toEqual(["hero", "testimonials"]);
   stream.enqueue(
-    event({ type: "response.output_text.delta", delta: wire.slice(boundary) })
+    event({
+      type: "response.output_text.delta",
+      delta: wire.slice(boundary, contentBoundary),
+    })
+  );
+  await vi.waitFor(() =>
+    expect(prepareSection).toHaveBeenCalledExactlyOnceWith(
+      "testimonials",
+      controller.signal
+    )
+  );
+  expect(current.preview).toHaveBeenCalledOnce();
+  stream.enqueue(
+    event({
+      type: "response.output_text.delta",
+      delta: wire.slice(contentBoundary),
+    })
   );
   stream.enqueue(
     event({

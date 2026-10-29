@@ -17,9 +17,11 @@ import {
 import { rejectZones } from "../shared/authoredValues.ts";
 import type { GenerationCanvasAdapter } from "../shared/contracts.ts";
 import { changedChatPaths } from "./chatDiagnostics.ts";
+import { previewSections } from "./previewScroll.ts";
 
 type GeneratedContent = Pick<Data, "content">;
 export type ChatCanvasAdapter = GenerationCanvasAdapter & {
+  beginPresentation?: () => void;
   materializeRegeneration?: (baseline: Data, step: RegenerationStep) => Data;
   validateInitial?: (data: Data) => void;
   readSelection?: () => string | null;
@@ -47,6 +49,56 @@ export class LayoutGenerationChatCanvas {
   private sectionQueue: Promise<void> = Promise.resolve();
   private appliedTaskIds = new Set<string>();
   private subscribers = new Set<() => void>();
+  private sectionStatuses = new Map<string, "building" | "ready">();
+  getSectionStatuses = () => this.sectionStatuses;
+  sectionStatus = (sectionId: string) => this.sectionStatuses.get(sectionId);
+  buildingSection(sectionId: string) {
+    this.sectionStatuses = new Map(this.sectionStatuses);
+    this.sectionStatuses.set(sectionId, "building");
+    this.notify();
+  }
+  clearBuildingSection(sectionId: string) {
+    if (this.sectionStatuses.get(sectionId) !== "building") return;
+    this.sectionStatuses = new Map(this.sectionStatuses);
+    this.sectionStatuses.delete(sectionId);
+    this.notify();
+  }
+  /** Presentation state stays outside Puck data and undo history. */
+  buildingSections(previous: Data, next: Data) {
+    this.sectionStatuses = new Map(this.sectionStatuses);
+    const before = new Map(
+      previewSections(previous).map((item) => [item.props.id, item])
+    );
+    for (const item of previewSections(next)) {
+      // Creation only appends: resolved props on an accepted prefix must not
+      // make earlier sections appear to start building again.
+      if (this.creation && before.has(item.props.id)) continue;
+      if (!isDeepEqual(before.get(item.props.id), item)) {
+        this.sectionStatuses.set(item.props.id, "building");
+      }
+    }
+    this.notify();
+  }
+  readySections(previous: Data, next: Data) {
+    this.sectionStatuses = new Map(this.sectionStatuses);
+    const before = new Map(
+      previewSections(previous).map((item) => [item.props.id, item])
+    );
+    const sections = previewSections(next);
+    const present = new Set(sections.map((item) => item.props.id));
+    for (const item of sections) {
+      if (
+        this.sectionStatuses.has(item.props.id) &&
+        !isDeepEqual(before.get(item.props.id), item)
+      ) {
+        this.sectionStatuses.set(item.props.id, "ready");
+      }
+    }
+    for (const sectionId of this.sectionStatuses.keys()) {
+      if (!present.has(sectionId)) this.sectionStatuses.delete(sectionId);
+    }
+    this.notify();
+  }
   private lastObserved?: Data;
   private lastApplied?: { taskId: string; sectionId: string };
   onDiagnostic: (phase: string, details: Record<string, unknown>) => void =
@@ -132,6 +184,9 @@ export class LayoutGenerationChatCanvas {
     const data = this.adapter.read();
     rejectZones(data as any);
     this.adapter.validateInitial?.(data);
+    this.adapter.beginPresentation?.();
+    this.sectionStatuses = new Map();
+    this.notify();
     this.lastApplied = undefined;
     this.lastObserved = undefined;
     this.diagnose("turn-start", data);
@@ -214,6 +269,10 @@ export class LayoutGenerationChatCanvas {
       },
       this.baseline
     );
+  }
+  async prepareRegenerationSection(sectionId: string, signal: AbortSignal) {
+    if (!this.regeneration) throw new Error("Regeneration session ended.");
+    await this.adapter?.prepareSection?.(sectionId, signal);
   }
   async applyRegeneration(
     step: RegenerationStep,
@@ -343,6 +402,11 @@ export class LayoutGenerationChatCanvas {
     this.baseline = undefined;
     this.appliedTaskIds.clear();
     this.sectionQueue = Promise.resolve();
+    this.sectionStatuses = new Map(this.sectionStatuses);
+    for (const [sectionId, status] of this.sectionStatuses) {
+      if (status === "building") this.sectionStatuses.delete(sectionId);
+    }
+    this.notify();
   }
   private notify() {
     this.subscribers.forEach((listener) => listener());

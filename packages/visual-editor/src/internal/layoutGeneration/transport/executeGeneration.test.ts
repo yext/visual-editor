@@ -47,7 +47,87 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
+it.each(["create", "regenerate"] as const)(
+  "sends layout recommendations in both the %s prompt and request context",
+  async (mode) => {
+    const c = createPuckGenerationCatalog(
+      {
+        Heading: {
+          generation: { props: z.object({ text: z.string().min(1) }) },
+          defaultProps: { text: "Default" },
+        },
+        Extra: {
+          generation: { props: z.object({ text: z.string().min(1) }) },
+          defaultProps: { text: "Default" },
+        },
+      },
+      { defaultGenerationSectionIds: ["Heading"] }
+    );
+    modelResponder.mockImplementation(async () =>
+      completed(
+        mode === "create"
+          ? proposal
+          : {
+              translationMode: "defaultOnly",
+              result: {
+                action: "regenerate",
+                steps: [{ kind: "keep", sectionId: "heading" }],
+              },
+              text: "Kept.",
+            }
+      )
+    );
+    const h = harness(
+      {
+        mode,
+        layoutId: "location",
+        currentData: mode === "create" ? { content: [] } : baseline,
+        messages: [{ role: "user", content: "Build a service page" }],
+      },
+      c
+    );
+    await h.run();
+    expect(h.error).toBeUndefined();
+    const sent = modelResponder.mock.calls[0][0];
+    expect(
+      JSON.parse(sent.input.at(-1)!.content).context.recommendedSectionIds
+    ).toEqual(["Heading"]);
+    expect(sent.instructions).toContain(
+      mode === "create"
+        ? 'Default sections for fresh generation: ["Heading"]'
+        : 'Recommended sections for intent regeneration: ["Heading"]'
+    );
+    expect(sent.instructions).toContain("Extra");
+  }
+);
+
 describe("strict request execution", () => {
+  it("carries preparation in the creation request and its diagnostics", async () => {
+    modelResponder.mockImplementation(async () => completed(proposal));
+    const preparation = {
+      question: null,
+      translationMode: "defaultOnly",
+      cardCounts: [],
+    };
+    const h = harness({
+      mode: "create",
+      layoutId: "location",
+      currentData: { content: [] },
+      messages: [{ role: "user", content: "Create a page" }],
+      preparation,
+    });
+    await h.run();
+    expect(h.error).toBeUndefined();
+    expect(
+      JSON.parse(modelResponder.mock.calls[0][0].input.at(-1)!.content)
+        .preparation
+    ).toEqual(preparation);
+    expect(h.log).toHaveBeenCalledWith(
+      "[layout generation] Gateway request",
+      expect.objectContaining({ mode: "create", preparation })
+    );
+  });
+
   it("asks preparation questions using a small schema before loading component contracts", async () => {
     const c = createPuckGenerationCatalog({
       Uncompilable: {

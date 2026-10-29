@@ -23,12 +23,17 @@ import {
 import { getGenerationCatalog } from "../shared/catalogRegistry.ts";
 import { isLinkedSource, manualBackup } from "../shared/slottedItemSource.ts";
 import type { LayoutGenerationChatCanvas } from "./LayoutGenerationChatCanvas.ts";
+import { GenerationSectionOverlays } from "./GenerationSectionOverlay.tsx";
 import { changedChatPaths } from "./chatDiagnostics.ts";
+import {
+  IntentPageGenerationContext,
+  IntentPageGenerationChatContext,
+} from "./useIntentPageGeneration.ts";
+import { layoutGenerationChatPluginName } from "./LayoutGenerationChatPlugin.tsx";
 import { LayoutGenerationChatContext } from "./contexts.tsx";
 import { validateInitialChatLayout } from "./initialChatValidation.ts";
 import {
-  changedPreviewSection,
-  followPreviewSection,
+  createPreviewSectionFollower,
   reusePreviewData,
 } from "./previewScroll.ts";
 
@@ -57,8 +62,31 @@ const LayoutGenerationChatCanvasBridge = ({
   streamDocument: StreamDocument;
 }) => {
   const getPuck = useGetPuck();
+  const intent = React.useContext(IntentPageGenerationContext);
+  const intentChat = React.useContext(IntentPageGenerationChatContext);
 
-  const releaseScroll = React.useRef<(() => void) | undefined>(undefined);
+  React.useEffect(() => {
+    if (!intentChat?.eligible || intentChat.status !== "PENDING") return;
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled || !intentChat.workflow.openAssistantOnce()) return;
+      getPuck().dispatch({
+        type: "setUi",
+        ui: {
+          plugin: { current: layoutGenerationChatPluginName },
+          leftSideBarVisible: true,
+        },
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [getPuck, intentChat]);
+
+  const follower = React.useMemo(
+    () => createPreviewSectionFollower(window.document),
+    [canvas, getPuck, streamDocument, intent]
+  );
 
   const observedData = useDiagnosticPuck((puck) => puck.appState.data);
   React.useEffect(() => canvas.observe(observedData), [canvas, observedData]);
@@ -66,6 +94,11 @@ const LayoutGenerationChatCanvasBridge = ({
   React.useEffect(
     () =>
       canvas.attach({
+        beginPresentation: () => follower.stop(),
+        prepareSection: async (sectionId, signal) => {
+          canvas.buildingSection(sectionId);
+          await follower.followSection(sectionId, signal);
+        },
         inspect: (data) => {
           const catalog =
             canvas.catalog ?? getGenerationCatalog(getPuck().config);
@@ -135,6 +168,7 @@ const LayoutGenerationChatCanvasBridge = ({
           );
         },
         resolve: (data) => {
+          canvas.buildingSections(getPuck().appState.data, data);
           const config = getPuck().config;
           const components = Object.fromEntries(
             Object.entries(config.components).map(([type, component]) => [
@@ -208,53 +242,46 @@ const LayoutGenerationChatCanvasBridge = ({
             resolved,
             candidate
           ),
-        preview: (data) => {
-          releaseScroll.current?.();
-          releaseScroll.current = followPreviewSection(
-            window.document,
-            getPuck().appState.data,
-            data
-          );
+        preview: (data, options) => {
+          const before = getPuck().appState.data;
+          if (options?.follow !== false) follower.follow(before, data);
           getPuck().dispatch({
             type: "setData",
             data: (previous) => reusePreviewData(previous, data),
             recordHistory: false,
           });
+          canvas.readySections(before, data);
         },
         commit: (data: Data, baseline: Data) => {
           const { history, appState } = getPuck();
-          if (changedPreviewSection(appState.data, data)) {
-            releaseScroll.current?.();
-            releaseScroll.current = followPreviewSection(
-              window.document,
-              appState.data,
-              data
-            );
-          }
+          follower.follow(appState.data, data);
           const histories = history.histories.slice(0, history.index + 1);
           // Preserve the exact starting data even if the last manual edit was still debouncing.
           histories[history.index] = {
             ...histories[history.index],
             state: buildPuckHistoryState(baseline, appState.ui),
           };
-          history.setHistories([
-            ...histories,
-            {
-              id: `history-${crypto.randomUUID()}`,
-              state: buildPuckHistoryState(
-                { ...data, zones: data.zones ?? {} },
-                { ...appState.ui, itemSelector: null }
-              ),
-            },
-          ]);
+          const entry = {
+            id: `history-${crypto.randomUUID()}`,
+            state: buildPuckHistoryState(
+              { ...data, zones: data.zones ?? {} },
+              { ...appState.ui, itemSelector: null }
+            ),
+          };
+          intent?.captureDraft({
+            hash: entry.id,
+            history: JSON.stringify({
+              data: entry.state.data,
+              ui: entry.state.ui,
+            }),
+          });
+          history.setHistories([...histories, entry]);
+          canvas.readySections(appState.data, data);
         },
       }),
-    [canvas, getPuck, streamDocument]
+    [canvas, getPuck, streamDocument, intent, follower]
   );
   // Detaching the canvas can finalize a preview; cancel its pending scroll too.
-  React.useEffect(
-    () => () => releaseScroll.current?.(),
-    [canvas, getPuck, streamDocument]
-  );
-  return null;
+  React.useEffect(() => () => follower.stop(), [follower]);
+  return <GenerationSectionOverlays canvas={canvas} />;
 };

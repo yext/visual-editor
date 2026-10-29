@@ -68,7 +68,11 @@ export const compileRegenerationSchema = (
         sections: content,
       }),
       z.strictObject({
-        kind: z.literal("insert"),
+        kind: z
+          .literal("insert")
+          .describe(
+            "Add new sections where the requested intent needs content that the existing page does not cover. Section types may be absent from the existing layout."
+          ),
         collection: regenerationCollectionSchema,
         anchor: regenerationAnchorSchema,
         sections: content,
@@ -202,9 +206,34 @@ export const compileRegenerationSchema = (
       "regenerate"
     ),
     streamRegeneration: (
-      onStep: (step: RegenerationStep, index: number) => Promise<void>
+      onStep: (step: RegenerationStep, index: number) => Promise<void>,
+      onSection?: (sectionId: string) => Promise<void>
     ) => {
+      const started = new Set<number>();
+      const sectionIds = new Set(
+        inventory.components
+          .filter((item) => item.componentId === item.sectionId)
+          .map((item) => item.sectionId)
+      );
       const parser = new CreationStream(async (path, value) => {
+        // Completed header fields identify a replacement before its content is complete.
+        if (
+          path.length === 4 &&
+          path[0] === "result" &&
+          path[1] === "steps" &&
+          (path[3] === "kind" || path[3] === "sectionId")
+        ) {
+          const index = path[2] as number;
+          const step = parser.value.result.steps[index];
+          if (
+            step.kind === "replace" &&
+            sectionIds.has(step.sectionId) &&
+            !started.has(index)
+          ) {
+            started.add(index);
+            await onSection?.(step.sectionId);
+          }
+        }
         if (path.length !== 3 || path[0] !== "result" || path[1] !== "steps")
           return;
         if (parser.value.result.action !== "regenerate")

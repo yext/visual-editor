@@ -96,6 +96,57 @@ const setup = (
 };
 afterEach(() => vi.unstubAllGlobals());
 
+it.each(["created", "clarification", "failure"] as const)(
+  "returns intent completion after blank-page generation: %s",
+  async (outcome) => {
+    const current = setup(async (candidate) => {
+      if (outcome === "failure") throw new Error("Resolver failed");
+      return candidate;
+    }, true);
+    const executeMock = vi.fn(async (body: any): Promise<ExecutorReply> => {
+      if (body.mode === "prepare") {
+        const question =
+          body.messages.at(-1).content === "Earlier request" ||
+          outcome === "clarification"
+            ? "Which page?"
+            : null;
+        return {
+          type: "prepared",
+          preparation: {
+            question,
+            translationMode: question ? null : "defaultOnly",
+            cardCounts: [],
+          },
+        };
+      }
+      return {
+        type: "accepted",
+        text: "Created",
+        spec: generatedContent("Created"),
+      };
+    });
+    stubGenerationExecutor(executeMock);
+    await act(async () => {
+      await current.result.current.send("Earlier request");
+    });
+    await act(async () => {
+      expect(await current.result.current.generateIntent("Intent page")).toBe(
+        outcome === "clarification" ? "clarification" : outcome === "created"
+      );
+    });
+    expect(current.commit).toHaveBeenCalledTimes(outcome === "created" ? 1 : 0);
+    expect(executeMock).toHaveBeenCalledTimes(
+      outcome === "clarification" ? 2 : 3
+    );
+    for (const [request] of executeMock.mock.calls.slice(1)) {
+      expect(request.messages).toEqual([
+        { role: "user", content: "Intent page" },
+      ]);
+      expect(request.layoutId).toBe("layout");
+    }
+  }
+);
+
 it("asks the translation question after preparation without generating or committing a page", async () => {
   const current = setup(undefined, true);
   const executeMock = vi.fn(

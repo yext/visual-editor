@@ -97,7 +97,8 @@ export type GenerationRequestExecutor = (
   request: LayoutGenerationRequest,
   signal?: AbortSignal,
   onCreationContent?: (content: Content) => Promise<void>,
-  onRegenerationStep?: (step: RegenerationStep, index: number) => Promise<void>
+  onRegenerationStep?: (step: RegenerationStep, index: number) => Promise<void>,
+  onRegenerationSection?: (sectionId: string) => Promise<void>
 ) => Promise<GenerationResult>;
 
 export type GenerationTurn = {
@@ -118,8 +119,10 @@ export type GenerationCanvasAdapter = {
   resolve: (data: Data) => Promise<Data>;
   /** Check that fresh generation survived resolution. */
   validate: (data: Data, candidate: Data) => void;
-  /** Display validated creation data without history or persistence. */
-  preview?: (data: Data) => void;
+  /** Bring an existing section into view before resolving its replacement. */
+  prepareSection?: (sectionId: string, signal: AbortSignal) => Promise<void>;
+  /** Display validated data without history or persistence. */
+  preview?: (data: Data, options?: { follow: boolean }) => void;
   /** Apply data and record one undo entry from its baseline. */
   commit: (data: Data, baseline: Data) => void;
 };

@@ -2,7 +2,7 @@ import type { Data } from "@puckeditor/core";
 import { afterEach, expect, it, vi } from "vitest";
 import {
   changedPreviewSection,
-  followPreviewSection,
+  createPreviewSectionFollower,
   reusePreviewData,
 } from "./previewScroll.ts";
 
@@ -31,9 +31,10 @@ afterEach(() => {
   document.body.replaceChildren();
   vi.useRealTimers();
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
 });
 
-it("follows added, changed, moved and removed sections without targeting their scaffold", () => {
+it("follows additions and updates, ignoring removals, reordering, and scaffolding", () => {
   const before = page(section("first"), section("second"), section("third"));
   expect(
     changedPreviewSection(
@@ -57,10 +58,10 @@ it("follows added, changed, moved and removed sections without targeting their s
       before,
       page(section("third"), section("first"), section("second"))
     )
-  ).toBe("third");
+  ).toBeUndefined();
   expect(
     changedPreviewSection(before, page(section("first"), section("third")))
-  ).toBe("third");
+  ).toBeUndefined();
   expect(changedPreviewSection(before, before)).toBeUndefined();
   expect(changedPreviewSection(before, page())).toBeUndefined();
 });
@@ -71,8 +72,8 @@ const scrollingPreview = (doc = document) => {
   Object.defineProperties(viewport, {
     scrollHeight: { value: 1000 },
     clientHeight: { value: 200 },
+    scrollTop: { value: 80, writable: true },
   });
-  viewport.scrollTop = 80;
   viewport.getBoundingClientRect = () => ({ top: 50 }) as DOMRect;
   const scrollTo = vi.fn();
   viewport.scrollTo = scrollTo;
@@ -80,28 +81,33 @@ const scrollingPreview = (doc = document) => {
   const addSection = () => {
     const element = doc.createElement("div");
     element.dataset.puckComponent = "new";
-    element.getBoundingClientRect = () => ({ top: 350 }) as DOMRect;
+    element.getBoundingClientRect = () =>
+      ({ top: 350, height: 400 }) as DOMRect;
     viewport.append(element);
     return element;
   };
   return { scrollTo, addSection };
 };
 
-it("waits for streamed content to mount and scrolls its viewport once", async () => {
+it("waits for mounting, eases over a second, and then stops scrolling", async () => {
   vi.useFakeTimers();
   const { scrollTo, addSection } = scrollingPreview();
-  const release = followPreviewSection(document, page(), page(section("new")));
+  const follower = createPreviewSectionFollower(document);
+  follower.follow(page(), page(section("new")));
   await vi.advanceTimersByTimeAsync(32);
   expect(scrollTo).not.toHaveBeenCalled();
   addSection();
   await vi.advanceTimersByTimeAsync(32);
-  expect(scrollTo).toHaveBeenCalledExactlyOnceWith({
-    top: 380,
-    behavior: "smooth",
-  });
+  await vi.advanceTimersByTimeAsync(450);
+  const midway = scrollTo.mock.lastCall![0].top;
+  expect(midway).toBeGreaterThan(80);
+  expect(midway).toBeLessThan(356);
+  await vi.advanceTimersByTimeAsync(600);
+  expect(scrollTo).toHaveBeenLastCalledWith({ top: 356, behavior: "instant" });
+  const calls = scrollTo.mock.calls.length;
   await vi.advanceTimersByTimeAsync(100);
-  expect(scrollTo).toHaveBeenCalledOnce();
-  release();
+  expect(scrollTo).toHaveBeenCalledTimes(calls);
+  follower.stop();
 });
 
 it("finds sections inside the Puck preview iframe", async () => {
@@ -110,10 +116,11 @@ it("finds sections inside the Puck preview iframe", async () => {
   document.body.append(iframe);
   const { scrollTo, addSection } = scrollingPreview(iframe.contentDocument!);
   addSection();
-  const release = followPreviewSection(document, page(), page(section("new")));
+  const follower = createPreviewSectionFollower(document);
+  follower.follow(page(), page(section("new")));
   await vi.advanceTimersByTimeAsync(32);
   expect(scrollTo).toHaveBeenCalledOnce();
-  release();
+  follower.stop();
 });
 
 it.each(["cleanup", "interaction", "timeout"])(
@@ -121,18 +128,15 @@ it.each(["cleanup", "interaction", "timeout"])(
   async (reason) => {
     vi.useFakeTimers();
     const { scrollTo, addSection } = scrollingPreview();
-    const release = followPreviewSection(
-      document,
-      page(),
-      page(section("new"))
-    );
-    if (reason === "cleanup") release();
+    const follower = createPreviewSectionFollower(document);
+    follower.follow(page(), page(section("new")));
+    if (reason === "cleanup") follower.stop();
     if (reason === "interaction") document.dispatchEvent(new Event("wheel"));
     if (reason === "timeout") await vi.advanceTimersByTimeAsync(2100);
     addSection();
     await vi.advanceTimersByTimeAsync(32);
     expect(scrollTo).not.toHaveBeenCalled();
-    release();
+    follower.stop();
   }
 );
 
@@ -146,18 +150,120 @@ it("uses viewport coordinates for the iframe document scroll root", async () => 
     value: root,
     configurable: true,
   });
-  root.scrollTop = 200;
+  Object.defineProperty(root, "scrollTop", { value: 200, writable: true });
   root.getBoundingClientRect = () => ({ top: -200 }) as DOMRect;
   root.scrollTo = vi.fn();
   const element = doc.createElement("div");
   element.dataset.puckComponent = "new";
   element.getBoundingClientRect = () => ({ top: 350 }) as DOMRect;
   doc.body.append(element);
-  const release = followPreviewSection(document, page(), page(section("new")));
-  await vi.advanceTimersByTimeAsync(32);
-  expect(root.scrollTo).toHaveBeenCalledExactlyOnceWith({
-    top: 550,
-    behavior: "smooth",
+  const follower = createPreviewSectionFollower(document);
+  follower.follow(page(), page(section("new")));
+  await vi.advanceTimersByTimeAsync(1100);
+  expect(root.scrollTo).toHaveBeenLastCalledWith({
+    top: 526,
+    behavior: "instant",
   });
-  release();
+  follower.stop();
+});
+
+it("does not restart scrolling as the same section changes", async () => {
+  vi.useFakeTimers();
+  const { scrollTo, addSection } = scrollingPreview();
+  addSection();
+  const follower = createPreviewSectionFollower(document);
+  const first = page(section("new"));
+  follower.follow(page(), first);
+  await vi.advanceTimersByTimeAsync(500);
+  follower.follow(first, page(section("new", "Updated")));
+  await vi.advanceTimersByTimeAsync(600);
+  expect(scrollTo).toHaveBeenLastCalledWith({ top: 356, behavior: "instant" });
+  const calls = scrollTo.mock.calls.length;
+  await vi.advanceTimersByTimeAsync(500);
+  expect(scrollTo).toHaveBeenCalledTimes(calls);
+  follower.stop();
+});
+
+it.each([
+  { top: 100, height: 400 },
+  { top: 150, height: 400 },
+  { top: 200, height: 40 },
+])(
+  "leaves sufficiently visible sections in place: %o",
+  async ({ top, height }) => {
+    vi.useFakeTimers();
+    const { scrollTo, addSection } = scrollingPreview();
+    addSection().getBoundingClientRect = () => ({ top, height }) as DOMRect;
+    const follower = createPreviewSectionFollower(document);
+    follower.follow(page(), page(section("new")));
+    await vi.advanceTimersByTimeAsync(1100);
+    expect(scrollTo).not.toHaveBeenCalled();
+  }
+);
+
+it.each([
+  { top: 248, height: 400, destination: 254 },
+  { top: 151, height: 400, destination: 157 },
+  { top: 180, height: 100, destination: 186 },
+])(
+  "scrolls partially visible sections to the top: %o",
+  async ({ top, height, destination }) => {
+    vi.useFakeTimers();
+    const { scrollTo, addSection } = scrollingPreview();
+    addSection().getBoundingClientRect = () => ({ top, height }) as DOMRect;
+    const follower = createPreviewSectionFollower(document);
+    follower.follow(page(), page(section("new")));
+    await vi.advanceTimersByTimeAsync(1100);
+    expect(scrollTo).toHaveBeenLastCalledWith({
+      top: destination,
+      behavior: "instant",
+    });
+  }
+);
+
+it("stops an in-progress animation when the user scrolls", async () => {
+  vi.useFakeTimers();
+  const { scrollTo, addSection } = scrollingPreview();
+  addSection();
+  const follower = createPreviewSectionFollower(document);
+  follower.follow(page(), page(section("new")));
+  await vi.advanceTimersByTimeAsync(300);
+  const calls = scrollTo.mock.calls.length;
+  document.dispatchEvent(new Event("wheel"));
+  await vi.advanceTimersByTimeAsync(1100);
+  expect(scrollTo).toHaveBeenCalledTimes(calls);
+});
+
+it("uses an immediate scroll when reduced motion is requested", async () => {
+  vi.useFakeTimers();
+  vi.stubGlobal("matchMedia", () => ({ matches: true }));
+  const { scrollTo, addSection } = scrollingPreview();
+  addSection();
+  const follower = createPreviewSectionFollower(document);
+  follower.follow(page(), page(section("new")));
+  await vi.advanceTimersByTimeAsync(32);
+  expect(scrollTo).toHaveBeenCalledExactlyOnceWith({
+    top: 356,
+    behavior: "instant",
+  });
+});
+
+it("finishes the current scroll before following a newly arrived section", async () => {
+  vi.useFakeTimers();
+  const { scrollTo, addSection } = scrollingPreview();
+  const firstElement = addSection();
+  const nextElement = addSection();
+  nextElement.dataset.puckComponent = "second";
+  nextElement.getBoundingClientRect = () => ({ top: 700 }) as DOMRect;
+  const follower = createPreviewSectionFollower(document);
+  const first = page(section("new"));
+  follower.follow(page(), first);
+  await vi.advanceTimersByTimeAsync(500);
+  follower.follow(first, page(section("new"), section("second")));
+  await vi.advanceTimersByTimeAsync(540);
+  expect(scrollTo).toHaveBeenLastCalledWith({ top: 356, behavior: "instant" });
+  await vi.advanceTimersByTimeAsync(1100);
+  expect(scrollTo).toHaveBeenLastCalledWith({ top: 706, behavior: "instant" });
+  expect(firstElement.isConnected).toBe(true);
+  follower.stop();
 });

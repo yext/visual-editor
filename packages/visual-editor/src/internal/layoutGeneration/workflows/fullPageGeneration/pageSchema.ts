@@ -123,6 +123,12 @@ export const compileGenerationSchema = (
     };
     const instanceCounts = new Map<string, number>();
     const matchedCounts = new Set<number>();
+    const observedCollections: {
+      componentType: string;
+      instanceIndex: number;
+      count: number;
+      linked: boolean;
+    }[] = [];
     // Prepare defaults while descending so every newly created card is visited.
     walkAuthored(catalog, candidate, ({ component, collection }) => {
       prepareSlottedSource(
@@ -131,12 +137,19 @@ export const compileGenerationSchema = (
         explicitCardLists.has(component)
       );
       const counts = cardCounts.get(component.type);
-      if (counts) {
+      if (components[component.type].generation?.slottedItemSource) {
         const instanceIndex = instanceCounts.get(component.type) ?? 0;
         instanceCounts.set(component.type, instanceIndex + 1);
         const linked = isLinkedSource(component.props);
+        observedCollections.push({
+          componentType: component.type,
+          instanceIndex,
+          count: component.props.slots.CardSlot.length,
+          linked,
+        });
         const count =
-          counts.get(instanceIndex) ?? (!linked ? counts.get(null) : undefined);
+          counts?.get(instanceIndex) ??
+          (!linked ? counts?.get(null) : undefined);
         if (count !== undefined) {
           if (linked || component.props.slots.CardSlot.length !== count) {
             throw new Error(
@@ -146,8 +159,7 @@ export const compileGenerationSchema = (
           preparation!.cardCounts.forEach((requirement, index) => {
             if (
               requirement.componentType === component.type &&
-              (requirement.instanceIndex === null ||
-                requirement.instanceIndex === instanceIndex)
+              requirement.instanceIndex === instanceIndex
             ) {
               matchedCounts.add(index);
             }
@@ -174,12 +186,15 @@ export const compileGenerationSchema = (
       }
       component.props.id = id;
     });
-    if (
-      !partial &&
-      matchedCounts.size !== (preparation?.cardCounts.length ?? 0)
-    ) {
+    // General counts constrain existing manual collections, not section selection.
+    // Only an explicit occurrence requires an owner to be present in the page.
+    const unmatchedRequirements = (preparation?.cardCounts ?? []).filter(
+      (requirement, index) =>
+        requirement.instanceIndex !== null && !matchedCounts.has(index)
+    );
+    if (!partial && unmatchedRequirements.length) {
       throw new Error(
-        "Generated page omitted a prepared manual card collection."
+        `Generated page omitted a prepared manual card collection. Unmatched requirements: ${JSON.stringify(unmatchedRequirements)}. Observed collections: ${JSON.stringify(observedCollections)}.`
       );
     }
     // Parent-first finalization applies the helper's child identity convention.

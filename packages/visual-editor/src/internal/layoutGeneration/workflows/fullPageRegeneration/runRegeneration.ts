@@ -6,6 +6,10 @@ import {
 import type { RegenerationStep } from "./contracts.ts";
 
 type RegenerationCanvas = {
+  prepareRegenerationSection?: (
+    sectionId: string,
+    signal: AbortSignal
+  ) => Promise<void>;
   beginRegeneration: () => void;
   applyRegeneration: (
     step: RegenerationStep,
@@ -52,7 +56,11 @@ export const runRegeneration = async ({
           },
           signal,
           undefined,
-          apply
+          apply,
+          async (sectionId) => {
+            if (active())
+              await canvas.prepareRegenerationSection?.(sectionId, signal);
+          }
         );
       } catch (cause) {
         if (applied && cause instanceof GenerationError)

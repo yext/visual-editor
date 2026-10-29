@@ -58,7 +58,7 @@ declare module "@puckeditor/core" {
   export interface PuckMetadata extends Metadata {}
 }
 
-export type EditorProps = {
+type EditorProps = {
   document: any;
   componentRegistry: ComponentRegistry;
   themeConfig?: ThemeConfig;

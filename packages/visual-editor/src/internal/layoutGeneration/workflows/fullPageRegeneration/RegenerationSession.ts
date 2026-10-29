@@ -4,7 +4,7 @@ import { clonePuckResolveData } from "../../../utils/clonePuckResolveData.ts";
 import type { GenerationCanvasAdapter } from "../../shared/contracts.ts";
 import type { RegenerationStep } from "./contracts.ts";
 
-export type RegenerationAdapter = GenerationCanvasAdapter & {
+type RegenerationAdapter = GenerationCanvasAdapter & {
   materializeRegeneration: (baseline: Data, step: RegenerationStep) => Data;
   preserveSectionResolution: (resolved: Data, candidate: Data) => Data;
 };
@@ -16,7 +16,6 @@ export class RegenerationSession {
   private expected: Data;
   private steps = new Map<number, string>();
   stepCount = 0;
-  changeCount = 0;
 
   constructor(
     private adapter: RegenerationAdapter,
@@ -44,8 +43,22 @@ export class RegenerationSession {
       throw new Error(
         "Layout changed during regeneration. Try the request again."
       );
-    const candidate = this.adapter.materializeRegeneration(before, step);
+    let candidate: Data;
+    try {
+      candidate = this.adapter.materializeRegeneration(before, step);
+    } catch (cause) {
+      const { sections: _sections, ...references } =
+        "sections" in step ? step : { ...step, sections: undefined };
+      throw new Error(
+        `Regeneration step ${index} failed: ${cause instanceof Error ? cause.message : String(cause)} Step references: ${JSON.stringify(references)}.`,
+        { cause }
+      );
+    }
     if (!isDeepEqual(candidate, before)) {
+      if (step.kind === "replace") {
+        await this.adapter.prepareSection?.(step.sectionId, signal);
+        assertActive();
+      }
       const resolved = await this.adapter.resolve(
         clonePuckResolveData(candidate)
       );
@@ -63,10 +76,9 @@ export class RegenerationSession {
         root: this.baseline.root,
         zones: this.baseline.zones,
       };
-      this.adapter.preview?.(data);
+      this.adapter.preview?.(data, { follow: step.kind === "insert" });
       this.accepted = clonePuckResolveData(data);
       this.expected = clonePuckResolveData(data);
-      this.changeCount++;
     }
     this.steps.set(index, serialized);
     this.stepCount++;

@@ -1,4 +1,5 @@
 import React from "react";
+import type { IntentGenerationResult } from "../workflows/intentPageGeneration/IntentPageGenerationWorkflow.ts";
 import { runEdits } from "../workflows/edits/runEdits.ts";
 import type {
   SectionEditPlan,
@@ -31,10 +32,12 @@ type ChatMessage = {
   sections?: SectionTaskProgress[];
 };
 
-/** Keep conversation prose separate from the generated canvas data. */
+/** Keep conversation prose separate from the generated canvas data.
+ * scopeKey controls chat lifetime; layoutId identifies requests and diagnostics. */
 export const useLayoutGenerationChat = (
   environment: GenerationEnvironment | null,
-  layoutId: string
+  layoutId: string,
+  scopeKey = layoutId
 ) => {
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = React.useState(false);
@@ -120,19 +123,30 @@ export const useLayoutGenerationChat = (
   React.useLayoutEffect(() => {
     clear();
     return () => cancel();
-  }, [environment?.model, environment?.transport, layoutId, clear, cancel]);
+  }, [
+    environment?.model,
+    environment?.transport,
+    layoutId,
+    scopeKey,
+    clear,
+    cancel,
+  ]);
 
-  const send = async (prompt: string, forceRegeneration = false) => {
+  const run = async (
+    prompt: string,
+    mode: "chat" | "intent" | "intent-continuation"
+  ): Promise<IntentGenerationResult> => {
     if (
       !environment ||
       !prompt.trim() ||
       activeRequest.current ||
       !canvas.ready
     ) {
-      return;
+      return false;
     }
 
-    const regenerating = forceRegeneration || regenerationPending.current;
+    const isIntent = mode !== "chat";
+    let regenerating = regenerationPending.current;
     regenerationPending.current = false;
     const correlationId = crypto.randomUUID();
     diagnostics.current = {
@@ -153,10 +167,12 @@ export const useLayoutGenerationChat = (
       ...previousMessages,
       { role: "user", text: user.content },
     ];
-    const requestMessages = [...history.current, user];
+    const requestMessages =
+      mode === "intent" ? [user] : [...history.current, user];
 
     let plan: SectionEditPlan | undefined;
     let createdSections = 0;
+    let clarification = false;
     let regeneratedSteps = 0;
     const taskOutcomes = new Map<string, SectionTaskOutcome>();
     let completed = false;
@@ -168,7 +184,7 @@ export const useLayoutGenerationChat = (
         ...nextMessages,
         {
           role: "assistant",
-          text,
+          text: isIntent ? "Creating intent page..." : text,
           pending: true,
           sections: [...progress.values()],
         },
@@ -190,6 +206,15 @@ export const useLayoutGenerationChat = (
       }
 
       progress.set(task.taskId, { ...previous, status, message });
+      const building = [...progress.values()].some(
+        (section) =>
+          section.sectionId === task.sectionId &&
+          ["generating", "retrying", "queued", "applying"].includes(
+            section.status
+          )
+      );
+      if (building) canvas.buildingSection(task.sectionId);
+      else canvas.clearBuildingSection(task.sectionId);
 
       const applied = [...progress.values()].filter(
         (item) => item.status === "applied"
@@ -261,10 +286,27 @@ export const useLayoutGenerationChat = (
       complete(text, sections, [text, details].filter(Boolean).join("\n\n"));
     };
 
+    const finishRegenerationProgress = (status: "cancelled" | "skipped") => {
+      for (const [key, section] of progress) {
+        if (section.status !== "applied") {
+          progress.set(key, {
+            ...section,
+            status,
+            description:
+              status === "skipped"
+                ? "No change applied to this section."
+                : section.description,
+          });
+        }
+      }
+      return [...progress.values()];
+    };
+
     finalizeCancelled.current = () => {
       if (regenerating) {
         complete(
-          `Regeneration cancelled. ${regeneratedSteps} step${regeneratedSteps === 1 ? "" : "s"} completed; remaining sections retained.`
+          `Regeneration cancelled. ${regeneratedSteps} step${regeneratedSteps === 1 ? "" : "s"} completed; remaining sections retained.`,
+          finishRegenerationProgress("cancelled")
         );
       } else if (plan) {
         completeEdits("Request cancelled.");
@@ -279,7 +321,11 @@ export const useLayoutGenerationChat = (
 
     setMessages([
       ...nextMessages,
-      { role: "assistant", text: "Generating layout…", pending: true },
+      {
+        role: "assistant",
+        text: isIntent ? "Creating intent page..." : "Generating layout…",
+        pending: true,
+      },
     ]);
     setIsStreaming(true);
     setError(null);
@@ -288,7 +334,8 @@ export const useLayoutGenerationChat = (
       body,
       signal = controller.signal,
       onCreationContent,
-      onRegenerationStep
+      onRegenerationStep,
+      onRegenerationSection
     ) =>
       requestChatGeneration(
         body,
@@ -296,21 +343,35 @@ export const useLayoutGenerationChat = (
         signal,
         correlationId,
         onCreationContent,
-        onRegenerationStep
+        onRegenerationStep,
+        onRegenerationSection
       );
     try {
       const selectedComponentId = canvas.selectedComponentId;
       const currentData = canvas.begin();
-      const fresh = !regenerating && isBlankGenerationPage(currentData);
+      const blank = isBlankGenerationPage(currentData);
+      if (isIntent) regenerating = !blank;
+      const fresh = !regenerating && blank;
       setIsCreating(fresh || regenerating);
       const sectionLabels = fresh ? {} : canvas.sectionLabels;
+      if (regenerating) {
+        for (const [sectionId, label] of Object.entries(sectionLabels)) {
+          progress.set(`section-${sectionId}`, {
+            taskId: `section-${sectionId}`,
+            sectionId,
+            label,
+            description: "Waiting for a section decision.",
+            status: "waiting",
+          });
+        }
+      }
       showProgress(fresh ? "Generating layout…" : "Planning changes…");
       // Puck records manual changes after 250ms; let pending history settle.
       await new Promise<void>((resolve) =>
         setTimeout(resolve, PUCK_HISTORY_SETTLE_DELAY_MS)
       );
       if (!active()) {
-        return;
+        return false;
       }
       diagnostics.current.phase = fresh ? "request" : "planning";
       const turn = {
@@ -330,6 +391,31 @@ export const useLayoutGenerationChat = (
           onProgress: (step, count) => {
             if (!active()) return;
             regeneratedSteps = count;
+            const sectionId =
+              step.kind === "insert" ? `insert-${count}` : step.sectionId;
+            const label =
+              step.kind === "insert"
+                ? `New section · ${step.sections.map((section) => canvas.componentLabel(section.type)).join(", ")}`
+                : (sectionLabels[sectionId] ?? sectionId);
+            const descriptions = {
+              keep: "Kept this section.",
+              remove: "Removed this section.",
+              reorder: "Moved this section.",
+              replace: "Updated this section.",
+              insert: "Added this section.",
+            };
+            const waitingKey = `section-${sectionId}`;
+            const taskId =
+              progress.get(waitingKey)?.status === "waiting"
+                ? waitingKey
+                : `regeneration-${count}`;
+            progress.set(taskId, {
+              taskId,
+              sectionId,
+              label,
+              description: descriptions[step.kind],
+              status: "applied",
+            });
             diagnostics.current.phase = "streaming-regeneration";
             canvas.onDiagnostic("regeneration-step", {
               kind: step.kind,
@@ -342,7 +428,11 @@ export const useLayoutGenerationChat = (
         });
         if (result && active()) {
           regenerationPending.current = result.clarification;
-          complete(result.text);
+          complete(
+            result.text,
+            result.clarification ? [] : finishRegenerationProgress("skipped")
+          );
+          return result.clarification ? "clarification" : true;
         }
       } else if (fresh) {
         const text = await runFullGeneration({
@@ -350,6 +440,9 @@ export const useLayoutGenerationChat = (
           canvas,
           onProgress: (event) => {
             switch (event.phase) {
+              case "clarification":
+                clarification = true;
+                break;
               case "preparing":
                 showProgress("Checking page requirements…");
                 break;
@@ -383,6 +476,7 @@ export const useLayoutGenerationChat = (
         });
         if (text !== undefined && active()) {
           complete(text);
+          return clarification ? "clarification" : createdSections > 0;
         }
       } else {
         const result = await runEdits({
@@ -430,7 +524,7 @@ export const useLayoutGenerationChat = (
           },
         });
         if (!active()) {
-          return;
+          return false;
         }
         completeEdits();
         if (result?.error) {
@@ -439,12 +533,13 @@ export const useLayoutGenerationChat = (
       }
     } catch (cause) {
       if (!active()) {
-        return;
+        return false;
       }
 
       if (regenerating) {
         complete(
-          `Regeneration stopped. ${regeneratedSteps} step${regeneratedSteps === 1 ? "" : "s"} completed; remaining sections retained.`
+          `Regeneration stopped. ${regeneratedSteps} step${regeneratedSteps === 1 ? "" : "s"} completed; remaining sections retained.`,
+          finishRegenerationProgress("cancelled")
         );
       } else if (plan) {
         completeEdits("Request stopped before completion.");
@@ -465,17 +560,21 @@ export const useLayoutGenerationChat = (
         setIsCreating(false);
       }
     }
+    return false;
   };
   return {
     messages,
     isStreaming,
     isCreating,
-    send,
+    send: async (prompt: string) => {
+      await run(prompt, "chat");
+    },
     clear,
-    regenerate: (prompt: string) => send(prompt, true),
+    generateIntent: (prompt: string, continuation = false) =>
+      run(prompt, continuation ? "intent-continuation" : "intent"),
     error,
     canvas,
     ready,
-    cancel: () => cancel(),
+    cancel,
   };
 };

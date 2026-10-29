@@ -31,7 +31,8 @@ export type CompiledGenerationRequest = {
   localResult?: object;
   parseResponse: (text: string) => object;
   streamRegeneration?: (
-    onStep: (step: RegenerationStep, index: number) => Promise<void>
+    onStep: (step: RegenerationStep, index: number) => Promise<void>,
+    onSection?: (sectionId: string) => Promise<void>
   ) => {
     write: (delta: string) => Promise<void>;
     finish: () => void;

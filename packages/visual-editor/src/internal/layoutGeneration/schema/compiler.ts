@@ -27,7 +27,10 @@ export const createGenerationSchemaCompiler = (
   catalog: PuckGenerationCatalog,
   locales: string[],
   mode: "create" | "insert" = "create",
-  options: { requireExplicitContent?: boolean } = {}
+  options: {
+    requireExplicitContent?: boolean;
+    textOverrideLocales?: string[];
+  } = {}
 ) => {
   const components = catalog.data.components;
   const explicitCardLists = new WeakSet<SavedComponent>();
@@ -215,20 +218,26 @@ export const createGenerationSchemaCompiler = (
       const children = Object.fromEntries(
         Object.entries(shapeFor(native, path)).map(([key, schema]) => [
           key,
-          value(
-            options.requireExplicitContent &&
-              localized &&
-              key === "defaultValue"
-              ? unwrap(schema)
-              : schema,
-            `${path}.${key}`,
-            field?.type === "object" ? field.objectFields[key] : undefined,
-            defaults?.[key],
-            true,
-            textContent ||
-              richText ||
-              (!!localized && key !== "hasLocalizedValue")
-          ),
+          localized &&
+          key !== "defaultValue" &&
+          key !== "hasLocalizedValue" &&
+          options.textOverrideLocales &&
+          !options.textOverrideLocales.includes(key)
+            ? { wire: unsetMarker, apply: () => undefined }
+            : value(
+                options.requireExplicitContent &&
+                  localized &&
+                  key === "defaultValue"
+                  ? unwrap(schema)
+                  : schema,
+                `${path}.${key}`,
+                field?.type === "object" ? field.objectFields[key] : undefined,
+                defaults?.[key],
+                true,
+                textContent ||
+                  richText ||
+                  (!!localized && key !== "hasLocalizedValue")
+              ),
         ])
       );
       child = {

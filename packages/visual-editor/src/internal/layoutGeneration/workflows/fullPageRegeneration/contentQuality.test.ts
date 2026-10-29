@@ -282,6 +282,15 @@ it("sends regeneration guidance and a compact section inventory alongside the co
     "Default sections for fresh generation"
   );
   expect(compiled.instructions).toContain("insert missing content");
+  expect(compiled.instructions).toContain(
+    'Recommended sections for intent regeneration: ["PromoSection"]'
+  );
+  expect(compiled.instructions).toContain(
+    "including types absent from the current layout"
+  );
+  expect(compiled.instructions).toContain(
+    "do not duplicate information already covered"
+  );
   expect(compiled.context.layout).toEqual(authoredBaseline);
   expect(baseline.content[0].props.parentData.text).toBe(
     "Duplicate resolved copy"
@@ -296,6 +305,45 @@ it("sends regeneration guidance and a compact section inventory alongside the co
   expect(compiled.context.inventory.components[0]).not.toHaveProperty(
     "authoredValues"
   );
+});
+
+it("inserts a section type absent from the page without requiring every recommended section", () => {
+  const { catalog, baseline, compile } = fixture();
+  catalog.puckOptions.defaultGenerationSectionIds = [
+    "PromoSection",
+    "PlainText",
+  ];
+  const original = structuredClone(baseline);
+  const output = compile().parseResponse(
+    JSON.stringify({
+      translationMode: "defaultOnly",
+      result: {
+        action: "regenerate",
+        steps: [
+          { kind: "keep", sectionId: "banner" },
+          {
+            kind: "insert",
+            collection: { ownerId: null, slotPath: null },
+            anchor: { position: "end" },
+            sections: [promotion()],
+          },
+        ],
+      },
+      text: "Added a relevant promotion.",
+    })
+  );
+  const next: Content = output.result.steps.reduce(
+    (current: Content, step: RegenerationStep) =>
+      applyRegenerationStep(catalog, current, step),
+    baseline
+  );
+  expect(next.content.map((item) => item.type)).toEqual([
+    "BannerSection",
+    "PromoSection",
+  ]);
+  expect(next.content[0]).toEqual(original.content[0]);
+  expect(next.content[1].props.id).not.toBe("banner");
+  expect(baseline).toEqual(original);
 });
 
 it("instructs regeneration to bind the business name instead of inventing branding", () => {

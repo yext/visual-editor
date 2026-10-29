@@ -47,6 +47,7 @@ describe("slotMappedCards", () => {
 
   it("normalizes manual ids and returns parent card references", () => {
     const existingCard = createCard("Card-1", 0);
+    existingCard.props.slots.TitleSlot[0]!.props.id = "legacy-authored-title";
     existingCard.props.slots.TitleSlot[0]!.props.parentData = { text: "stale" };
 
     const reconciled = syncManualSlotMappedCards({
@@ -62,6 +63,12 @@ describe("slotMappedCards", () => {
 
     expect(reconciled.cards).toHaveLength(2);
     expect(reconciled.cards[0]?.props.id).toBe("Card-1");
+    expect(reconciled.cards[0]?.props.slots.TitleSlot[0]?.props.id).toBe(
+      "legacy-authored-title"
+    );
+    expect(existingCard.props.slots.TitleSlot[0]!.props.id).toBe(
+      "legacy-authored-title"
+    );
     expect(reconciled.cards[0]?.props.parentData).toBeUndefined();
     expect(
       reconciled.cards[0]?.props.slots.TitleSlot[0]?.props.parentData

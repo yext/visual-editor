@@ -145,11 +145,7 @@ const checkTask = (
       anchor(operation.anchor, collection);
     } else {
       const target = byId.get(operation.componentId);
-      if (
-        !target?.editable ||
-        target.sectionId !== task.sectionId ||
-        !task.targetComponentIds.includes(operation.componentId)
-      ) {
+      if (!target?.editable || target.sectionId !== task.sectionId) {
         throw new Error(
           "Structural target is protected or outside task scope."
         );
@@ -203,7 +199,13 @@ const checkTask = (
     if (operation.kind !== "remove") {
       continue;
     }
-    for (const targetId of task.targetComponentIds) {
+    const affectedIds = new Set([
+      ...task.targetComponentIds,
+      ...task.structuralOperations.flatMap((operation) =>
+        operation.kind === "insert" ? [] : [operation.componentId]
+      ),
+    ]);
+    for (const targetId of affectedIds) {
       if (byId.get(targetId)?.ancestorIds.includes(operation.componentId)) {
         throw new Error("Task targets a descendant of a component it removes.");
       }

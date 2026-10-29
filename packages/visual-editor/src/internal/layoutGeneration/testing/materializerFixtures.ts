@@ -55,7 +55,7 @@ export const card = (id: string): SavedComponent => ({
   },
   readOnly: { binding: true },
 });
-export const section = (
+const section = (
   id: string,
   cards = [card(`${id}-a`), card(`${id}-b`)]
 ): SavedComponent => ({
