@@ -3,12 +3,6 @@ import { ModelTransportError, type ModelTransport } from "./modelTransport.ts";
 type GatewayResponse = {
   id?: string;
   model?: string;
-  usage?: {
-    input_tokens?: number;
-    input_tokens_details?: { cached_tokens?: number };
-    output_tokens?: number;
-    output_tokens_details?: { reasoning_tokens?: number };
-  };
   status?: string;
   incomplete_details?: { reason?: string };
   error?: unknown;
@@ -86,7 +80,6 @@ export const requestGenerationOutput = async ({
   signal,
   correlationId,
   log,
-  onUsage,
   onDelta,
 }: {
   utf8Bytes: (text: string) => number;
@@ -98,7 +91,6 @@ export const requestGenerationOutput = async ({
   correlationId: string;
   log: (message: string, details: object) => void;
   onDelta?: (delta: string) => Promise<void>;
-  onUsage: (usage: GatewayResponse["usage"]) => void;
 }): Promise<string> => {
   let phase = "gateway-fetch";
   let transportFailure = false;
@@ -137,12 +129,10 @@ export const requestGenerationOutput = async ({
           status: result.status,
           maxOutputTokens,
           incompleteDetails: result.incomplete_details,
-          usage: result.usage,
           responseOutputCharacters: responseText.length,
           responseOutputBytes: utf8Bytes(responseText),
         });
       }
-      onUsage(result.usage);
       const text = readOutputText(result);
       log("[layout generation] Gateway completed", {
         correlationId,
@@ -213,7 +203,6 @@ export const requestGenerationOutput = async ({
             error: event.error ?? event.response?.error ?? event.message,
             maxOutputTokens,
             incompleteDetails: event.response?.incomplete_details,
-            usage: event.response?.usage,
             streamedOutputCharacters: outputText.length,
             streamedOutputBytes: utf8Bytes(outputText),
             responseOutputCharacters: responseText.length,
@@ -221,7 +210,6 @@ export const requestGenerationOutput = async ({
             streamDurationMs: Date.now() - streamStartedAt,
             eventCounts,
           });
-          onUsage(event.response?.usage);
           if (event.response) {
             readOutputText(event.response);
           }
@@ -234,7 +222,6 @@ export const requestGenerationOutput = async ({
           await consume(event.delta);
         }
         if (event.type === "response.completed") {
-          onUsage(event.response.usage);
           const text = readOutputText(event.response);
           if (outputText && text !== outputText) {
             transportFailure = true;

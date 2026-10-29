@@ -1,16 +1,6 @@
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import React from "react";
-import {
-  ChevronUp,
-  LoaderCircle,
-  MessageSquare,
-  RotateCcw,
-} from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../../puck/ui/Popover.tsx";
+import { LoaderCircle, MessageSquare, RotateCcw } from "lucide-react";
 import { LayoutGenerationChatComposer } from "./LayoutGenerationChatControls.tsx";
 import "./layoutGenerationChat.css";
 import type { SectionTaskProgress } from "./chatProgress.ts";
@@ -46,14 +36,6 @@ export const LayoutGenerationChat = ({
   active: boolean;
 }) => {
   const logRef = React.useRef<HTMLDivElement>(null);
-  const [usageOpen, setUsageOpen] = React.useState(false);
-
-  React.useEffect(() => {
-    if (!active) {
-      setUsageOpen(false);
-    }
-  }, [active]);
-
   React.useEffect(() => {
     logRef.current?.scrollTo?.({ top: logRef.current.scrollHeight });
   }, [chat.messages, active]);
@@ -177,28 +159,6 @@ export const LayoutGenerationChat = ({
             <RotateCcw size={13} aria-hidden="true" />
             {pt("layoutGenerationChat.newConversation", "New conversation")}
           </button>
-          <Popover open={usageOpen} onOpenChange={setUsageOpen}>
-            <PopoverTrigger asChild>
-              <button type="button" className="local-editor-chat-usage">
-                <ChevronUp size={13} aria-hidden="true" />
-                {pt("layoutGenerationChat.tokenUsage", "Token usage")}
-              </button>
-            </PopoverTrigger>
-            <PopoverContent
-              side="top"
-              align="end"
-              sideOffset={8}
-              className="local-editor-chat-usage-popover ve-w-auto"
-              aria-label="Conversation token usage"
-              data-local-editor-chat
-            >
-              Cached input: {chat.usage.cachedInput.toLocaleString()}
-              <br />
-              Uncached input: {chat.usage.uncachedInput.toLocaleString()}
-              <br />
-              Output: {chat.usage.output.toLocaleString()}
-            </PopoverContent>
-          </Popover>
         </footer>
       </div>
     </aside>

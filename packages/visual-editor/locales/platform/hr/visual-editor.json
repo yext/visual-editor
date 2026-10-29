@@ -376,8 +376,7 @@
     "stop": "Stop",
     "stopGenerating": "Prestani generirati",
     "subtitle": "Izgradite i poboljšajte svoju stranicu",
-    "title": "Layout Assistant",
-    "tokenUsage": "Upotreba tokena"
+    "title": "Layout Assistant"
   },
   "linkedEntityFields": "Polja povezanih entiteta",
   "linkedEntityMultiValueWarning": "{{linkedField}} sadrži više povezanih entiteta. Korištenje prvog za {{resolvedField}}.",

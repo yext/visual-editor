@@ -377,8 +377,7 @@
     "stop": "Sustok",
     "stopGenerating": "Nustokite generuoti",
     "subtitle": "Sukurkite ir patobulinkite savo puslapį",
-    "title": "Maketavimo asistentas",
-    "tokenUsage": "Žetonų naudojimas"
+    "title": "Maketavimo asistentas"
   },
   "linkedEntityFields": "Susieti esybių laukai",
   "linkedEntityMultiValueWarning": "{{linkedField}} yra keli susieti objektai. Naudojamas pirmasis, skirtas {{resolvedField}}.",

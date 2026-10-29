@@ -376,8 +376,7 @@
     "stop": "Detener",
     "stopGenerating": "dejar de generar",
     "subtitle": "Construye y perfecciona tu página",
-    "title": "Asistente de diseño",
-    "tokenUsage": "Uso de tokens"
+    "title": "Asistente de diseño"
   },
   "linkedEntityFields": "Campos de entidad vinculados",
   "linkedEntityMultiValueWarning": "{{linkedField}} contiene varias entidades vinculadas. Usando el primero para {{resolvedField}}.",

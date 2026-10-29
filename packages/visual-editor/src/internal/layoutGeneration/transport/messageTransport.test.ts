@@ -259,13 +259,11 @@ it("runs the same prepared request and parser through a parent harness and the l
     transport: iframeModelTransport,
     diagnostics: consoleGenerationDiagnostics,
   };
-  const usage = vi.fn();
   const platform = executeGeneration(
     input,
     environment,
     new AbortController().signal,
-    "editor-local",
-    usage
+    "editor-local"
   );
   const request = h.requests()[0].payload;
   expect(request.body.model).toBe(body.model);
@@ -279,11 +277,6 @@ it("runs the same prepared request and parser through a parent harness and the l
     reply(request.requestId, { event: "chunk", chunk: new Uint8Array([byte]) });
   reply(request.requestId, { event: "end" });
   expect(await platform).toEqual({ type: "prepared", preparation });
-  expect(usage).toHaveBeenCalledWith({
-    cachedInput: 2,
-    uncachedInput: 10,
-    output: 4,
-  });
   const localFetch = vi.fn(
     async () =>
       new Response(wire, { headers: { "Content-Type": "text/event-stream" } })
@@ -304,8 +297,7 @@ it("runs the same prepared request and parser through a parent harness and the l
       input,
       { ...environment, transport: createLocalMessageTransport() },
       new AbortController().signal,
-      "local-id",
-      vi.fn()
+      "local-id"
     )
   ).toEqual(await platform);
   dispose();

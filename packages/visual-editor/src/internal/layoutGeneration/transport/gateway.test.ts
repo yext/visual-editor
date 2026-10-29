@@ -5,7 +5,8 @@ import { ModelTransportError } from "./modelTransport.ts";
 const read = (
   wire: string | Uint8Array[],
   contentType = "text/event-stream",
-  onDelta?: (delta: string) => Promise<void>
+  onDelta?: (delta: string) => Promise<void>,
+  log = vi.fn()
 ) =>
   requestGenerationOutput({
     utf8Bytes: (text) => new TextEncoder().encode(text).byteLength,
@@ -14,8 +15,7 @@ const read = (
     maxOutputTokens: 2048,
     signal: new AbortController().signal,
     correlationId: "local-diagnostic",
-    log: vi.fn(),
-    onUsage: vi.fn(),
+    log,
     onDelta,
     transport: async () => ({
       contentType,
@@ -36,6 +36,31 @@ const completion = (status: string | undefined = "completed") => ({
   response: { status, output_text: '{"text":"世界"}' },
 });
 describe("shared Responses API parser", () => {
+  it.each(["text/event-stream", "application/json"])(
+    "ignores provider token usage in output and diagnostics for %s",
+    async (contentType) => {
+      for (const status of ["completed", "incomplete"]) {
+        const log = vi.fn();
+        const response = {
+          status,
+          output_text: "Hello",
+          usage: { input_tokens: 20, output_tokens: 10 },
+        };
+        const wire =
+          contentType === "application/json"
+            ? JSON.stringify(response)
+            : event({ type: `response.${status}`, response });
+        const result = read(wire, contentType, undefined, log);
+        if (status === "completed") {
+          await expect(result).resolves.toBe("Hello");
+        } else {
+          await expect(result).rejects.toThrow();
+        }
+        expect(log).toHaveBeenCalled();
+        expect(JSON.stringify(log.mock.calls)).not.toContain('"usage"');
+      }
+    }
+  );
   it.each([
     undefined,
     "in_progress",
@@ -180,7 +205,6 @@ describe("shared Responses API parser", () => {
         signal: new AbortController().signal,
         correlationId: "local",
         log: vi.fn(),
-        onUsage: vi.fn(),
         transport: async () => {
           throw new ModelTransportError("bad", false);
         },

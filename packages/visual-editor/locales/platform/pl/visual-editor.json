@@ -377,8 +377,7 @@
     "stop": "Zatrzymywać się",
     "stopGenerating": "Przestań generować",
     "subtitle": "Zbuduj i udoskonal swoją stronę",
-    "title": "Asystent układu",
-    "tokenUsage": "Użycie tokena"
+    "title": "Asystent układu"
   },
   "linkedEntityFields": "Pola encji połączonych",
   "linkedEntityMultiValueWarning": "{{linkedField}} zawiera wiele połączonych jednostek. Używanie pierwszego dla {{resolvedField}}.",

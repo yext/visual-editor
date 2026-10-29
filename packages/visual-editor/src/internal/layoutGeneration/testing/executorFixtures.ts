@@ -9,7 +9,6 @@ import { getGenerationCatalog } from "../shared/catalogRegistry.ts";
 import type {
   GenerationEnvironment,
   GenerationResult,
-  GenerationTokenUsage,
   LayoutGenerationRequest,
 } from "../shared/contracts.ts";
 import { GenerationError } from "../shared/generationErrors.ts";
@@ -23,16 +22,10 @@ export const stubGenerationExecutor = (
     request: LayoutGenerationRequest,
     signal: AbortSignal
   ) => Promise<ExecutorReply>,
-  {
-    usage,
-    skipPreparation = false,
-  }: {
-    usage?: GenerationTokenUsage;
-    skipPreparation?: boolean;
-  } = {}
+  { skipPreparation = false }: { skipPreparation?: boolean } = {}
 ) => {
   vi.mocked(executeGeneration).mockImplementation(
-    async (request, _environment, signal, _correlationId, onUsage) => {
+    async (request, _environment, signal) => {
       if (skipPreparation && request.mode === "prepare") {
         return {
           type: "prepared",
@@ -45,9 +38,6 @@ export const stubGenerationExecutor = (
       }
       const result = await respond(request, signal);
       signal.throwIfAborted();
-      if (usage) {
-        onUsage(usage);
-      }
       if (result instanceof GenerationError) {
         throw result;
       }

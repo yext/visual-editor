@@ -377,8 +377,7 @@
     "stop": "Zastávka",
     "stopGenerating": "Přestaňte generovat",
     "subtitle": "Vytvořte a upravte svou stránku",
-    "title": "Asistent rozvržení",
-    "tokenUsage": "Použití tokenu"
+    "title": "Asistent rozvržení"
   },
   "linkedEntityFields": "Pole propojených entit",
   "linkedEntityMultiValueWarning": "{{linkedField}} obsahuje několik propojených entit. Používá se první pro {{resolvedField}}.",

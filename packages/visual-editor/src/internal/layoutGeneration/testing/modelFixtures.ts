@@ -2,7 +2,6 @@ import { vi } from "vitest";
 import type {
   GenerationEnvironment,
   GenerationResult,
-  GenerationTokenUsage,
   LayoutGenerationRequest,
 } from "../shared/contracts.ts";
 import type { GenerationError } from "../shared/generationErrors.ts";
@@ -33,31 +32,24 @@ export const responseModelTransport =
     };
   };
 
-/** Complete a gateway request with the token counts used by integration tests. */
+/** Complete a gateway request with synthetic model output. */
 export const completed = (output: unknown) =>
   new Response(
     JSON.stringify({
       status: "completed",
       output_text: JSON.stringify(output),
-      usage: {
-        input_tokens: 20,
-        input_tokens_details: { cached_tokens: 8 },
-        output_tokens: 10,
-      },
     }),
     { headers: { "Content-Type": "application/json" } }
   );
 
-/** Run the real executor while observing results, usage, diagnostics, and cancellation. */
+/** Run the real executor while observing results, diagnostics, and cancellation. */
 export const executionHarness = (
   payload: object,
   catalog: GenerationEnvironment["catalog"],
   locales = ["en"]
 ) => {
   const controller = new AbortController();
-  const observations: (
-    GenerationResult | { type: "usage"; usage: GenerationTokenUsage }
-  )[] = [];
+  const observations: GenerationResult[] = [];
   const log = vi.fn();
   let error: GenerationError | undefined;
   return {
@@ -79,8 +71,7 @@ export const executionHarness = (
             diagnostics: { log, report: () => {} },
           },
           controller.signal,
-          crypto.randomUUID(),
-          (usage) => observations.push({ type: "usage", usage })
+          crypto.randomUUID()
         );
         observations.push(result);
       } catch (cause) {

@@ -375,8 +375,7 @@
     "stop": "Stop",
     "stopGenerating": "Stop met genereren",
     "subtitle": "Bouw en verfijn uw pagina",
-    "title": "Lay-out assistent",
-    "tokenUsage": "Tokengebruik"
+    "title": "Lay-out assistent"
   },
   "linkedEntityFields": "Gekoppelde entiteitsvelden",
   "linkedEntityMultiValueWarning": "{{linkedField}} bevat meerdere gekoppelde entiteiten. Gebruik de eerste voor {{resolvedField}}.",

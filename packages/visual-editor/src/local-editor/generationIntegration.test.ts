@@ -52,8 +52,7 @@ it("routes preparation, creation, planning, section execution and repair through
       request,
       environment,
       new AbortController().signal,
-      "local-diagnostic",
-      vi.fn()
+      "local-diagnostic"
     );
   };
   const base = {

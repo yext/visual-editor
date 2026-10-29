@@ -375,8 +375,7 @@
     "stop": "Stop",
     "stopGenerating": "Stop generating",
     "subtitle": "Build and refine your page",
-    "title": "Layout Assistant",
-    "tokenUsage": "Token usage"
+    "title": "Layout Assistant"
   },
   "linkedEntityFields": "Linked Entity Fields",
   "linkedEntityMultiValueWarning": "{{linkedField}} contains multiple linked entities. Using the first one for {{resolvedField}}.",

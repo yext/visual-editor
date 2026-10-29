@@ -3,7 +3,7 @@
 Layout generation is loosely based on [json-render.dev](https://json-render.dev/). However, we use Puck to render and have a custom spec defined in order to natively generate Puck data and support slots.
 
 At a high level, the section library defines Zod types for all supported sections. We render a chat interface as a Puck plugin that has one workflow for full page generation and one
-workflow for follow up edits. We take the user prompt and combine it with the schema to form an OpenAI API requests. We forward this request to ModelGateway with strict generation
+workflow for follow up edits. We take the user prompt and combine it with the schema to form an OpenAI API request. We forward this request to ModelGateway with strict generation
 mode enabled, ensuring we get valid JSON back from the model. We then validate that the data is able to be rendered and push the update into Puck history.
 
 Layout generation is enabled when `templateMetadata.aiPageGeneration.layoutGenerationEnabled` is true. We currently support gpt-6-luna.

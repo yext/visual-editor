@@ -6,7 +6,6 @@ import {
 import { generationPreparationSchema } from "../workflows/fullPageGeneration/preparationContracts.ts";
 import type {
   GenerationEnvironment,
-  GenerationTokenUsage,
   LayoutGenerationRequest,
 } from "../shared/contracts.ts";
 import { GenerationError as ChatGenerationError } from "../shared/generationErrors.ts";
@@ -28,19 +27,13 @@ const resultSchema = z.strictObject({
   type: z.literal("section-result"),
   result: sectionEditResultSchema,
 });
-const usageSchema = z.strictObject({
-  cachedInput: z.number().finite().nonnegative(),
-  uncachedInput: z.number().finite().nonnegative(),
-  output: z.number().finite().nonnegative(),
-});
 
 /** Consume a complete response before allowing its result to reach the canvas. */
 export const mockGenerationRequest = async (
   request: LayoutGenerationRequest,
   environment: GenerationEnvironment,
   signal: AbortSignal,
-  correlationId: string,
-  onUsage: (usage: GenerationTokenUsage) => void
+  correlationId: string
 ) => {
   const api =
     (environment as GenerationEnvironment & { api?: string }).api ??
@@ -108,13 +101,7 @@ export const mockGenerationRequest = async (
     if (!event || typeof event !== "object" || Array.isArray(event)) {
       throw new ChatGenerationError("Invalid generation event", false, true);
     }
-    if (event.type === "usage") {
-      const usage = usageSchema.safeParse(event.usage);
-      if (!usage.success) {
-        throw new ChatGenerationError("Invalid token usage", false, true);
-      }
-      onUsage(usage.data);
-    } else if (event.type === "error") {
+    if (event.type === "error") {
       if (failure || accepted || typeof event.error !== "string") {
         throw new ChatGenerationError(
           "Invalid generation event sequence",

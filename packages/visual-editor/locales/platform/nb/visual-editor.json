@@ -375,8 +375,7 @@
     "stop": "Stoppe",
     "stopGenerating": "Slutt å generere",
     "subtitle": "Bygg og avgrens siden din",
-    "title": "Layoutassistent",
-    "tokenUsage": "Tokenbruk"
+    "title": "Layoutassistent"
   },
   "linkedEntityFields": "Koblede enhetsfelt",
   "linkedEntityMultiValueWarning": "{{linkedField}} inneholder flere koblede enheter. Bruker den første for {{resolvedField}}.",

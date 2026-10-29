@@ -375,8 +375,7 @@
     "stop": "Stop",
     "stopGenerating": "Lopeta tuottaminen",
     "subtitle": "Rakenna ja hio sivuasi",
-    "title": "Layout Assistant",
-    "tokenUsage": "Tokenin käyttö"
+    "title": "Layout Assistant"
   },
   "linkedEntityFields": "Linkitetyt entiteettikentät",
   "linkedEntityMultiValueWarning": "{{linkedField}} sisältää useita linkitettyjä kokonaisuuksia. Ensimmäistä käytetään mallille {{resolvedField}}.",

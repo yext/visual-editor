@@ -375,8 +375,7 @@
     "stop": "Peatus",
     "stopGenerating": "Lõpetage genereerimine",
     "subtitle": "Ehitage ja viimistlege oma lehte",
-    "title": "Küljenduse assistent",
-    "tokenUsage": "Märgi kasutamine"
+    "title": "Küljenduse assistent"
   },
   "linkedEntityFields": "Lingitud olemiväljad",
   "linkedEntityMultiValueWarning": "{{linkedField}} sisaldab mitut lingitud olemit. Kasutades esimest {{resolvedField}} jaoks.",

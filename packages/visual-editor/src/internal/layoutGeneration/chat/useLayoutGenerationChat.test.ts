@@ -45,7 +45,6 @@ const plan = (tasks = [task("heading")]): SectionEditPlan => ({
   sharedIntent: "Use welcoming copy",
   tasks,
 });
-const usage = { cachedInput: 1, uncachedInput: 2, output: 3 };
 const section = (id: string, value = "Updated"): GenerationResult =>
   ({
     type: "section-result",
@@ -110,7 +109,7 @@ it("asks the translation question after preparation without generating or commit
         },
       }) satisfies GenerationResult
   );
-  stubGenerationExecutor(executeMock, { usage });
+  stubGenerationExecutor(executeMock);
   await act(async () => {
     await current.result.current.send(
       "Create a page with three cards per section"
@@ -154,7 +153,7 @@ it.each([
         spec: generatedContent("Created"),
       } satisfies GenerationResult;
     });
-    stubGenerationExecutor(executeMock, { usage });
+    stubGenerationExecutor(executeMock);
     await act(async () => {
       await current.result.current.send(prompt);
     });
@@ -198,7 +197,7 @@ it("plans with selection and sends latest committed data to dependent sections",
         } satisfies GenerationResult)
       : section(body.task.taskId);
   });
-  stubGenerationExecutor(executeMock, { usage });
+  stubGenerationExecutor(executeMock);
   await act(async () => {
     await current.result.current.send("Welcome visitors");
   });
@@ -216,14 +215,9 @@ it("plans with selection and sends latest committed data to dependent sections",
       .at(-1)
       ?.sections?.map((section) => section.status)
   ).toEqual(["applied", "applied"]);
-  expect(current.result.current.usage).toEqual({
-    cachedInput: 3,
-    uncachedInput: 6,
-    output: 9,
-  });
 });
 
-it("retries planning and section output once and aggregates every attempt", async () => {
+it("retries planning and section output once", async () => {
   const current = setup();
   const executeMock = vi
     .fn()
@@ -238,13 +232,12 @@ it("retries planning and section output once and aggregates every attempt", asyn
       new GenerationError("Invalid copy", true, false, "Fix copy")
     )
     .mockResolvedValueOnce(section("heading"));
-  stubGenerationExecutor(executeMock, { usage });
+  stubGenerationExecutor(executeMock);
   await act(async () => {
     await current.result.current.send("Update");
   });
   expect(executeMock.mock.calls[1][0].validationFeedback).toBe("Fix plan");
   expect(executeMock.mock.calls[3][0].validationFeedback).toBe("Fix copy");
-  expect(current.result.current.usage.output).toBe(12);
   expect(current.commit).toHaveBeenCalledOnce();
 });
 
@@ -264,7 +257,7 @@ it.each(["clarification", "globalStyle", "conversation"] as const)(
       async () =>
         ({ type: "planned", plan: noEdits }) satisfies GenerationResult
     );
-    stubGenerationExecutor(executeMock, { usage });
+    stubGenerationExecutor(executeMock);
     await act(async () => {
       await current.result.current.send("Help");
     });
@@ -299,7 +292,7 @@ it.each([false, true])(
           } satisfies GenerationResult)
         : section("heading");
     });
-    stubGenerationExecutor(executeMock, { usage });
+    stubGenerationExecutor(executeMock);
     await act(async () => {
       await current.result.current.send("Update the heading and card grid");
     });
@@ -349,7 +342,7 @@ it("retains applied work and actual history on cancellation, ignoring late respo
     }
     return section("heading");
   });
-  stubGenerationExecutor(executeMock, { usage });
+  stubGenerationExecutor(executeMock);
   let pending!: Promise<void>;
   act(() => {
     pending = current.result.current.send("Update both");
@@ -387,7 +380,6 @@ it("retains applied work and actual history on cancellation, ignoring late respo
   expect(last.currentData.content[0].props.content[0].props.text).toBe(
     "Updated"
   );
-  expect(current.result.current.usage.output).toBe(9);
 });
 
 it("keeps an earlier application after a later resolver fails twice", async () => {
@@ -409,7 +401,7 @@ it("keeps an earlier application after a later resolver fails twice", async () =
         } satisfies GenerationResult)
       : section(body.task.taskId);
   });
-  stubGenerationExecutor(executeMock, { usage });
+  stubGenerationExecutor(executeMock);
   await act(async () => {
     await current.result.current.send("Update both");
   });

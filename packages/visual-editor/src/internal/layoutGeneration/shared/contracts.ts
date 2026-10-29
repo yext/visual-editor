@@ -9,12 +9,6 @@ import type { GenerationPreparation } from "../workflows/fullPageGeneration/prep
 import type { ModelTransport } from "../transport/modelTransport.ts";
 import type { Content } from "./authoredValues.ts";
 
-export type GenerationTokenUsage = {
-  cachedInput: number;
-  uncachedInput: number;
-  output: number;
-};
-
 export type GenerationDiagnostics = {
   log: (message: string, details: object) => void;
   report: (kind: "diagnostics" | "error", details: object) => void;

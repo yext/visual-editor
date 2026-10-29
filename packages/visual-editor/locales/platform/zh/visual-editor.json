@@ -375,8 +375,7 @@
     "stop": "停止",
     "stopGenerating": "停止生成",
     "subtitle": "构建和完善您的页面",
-    "title": "布局助理",
-    "tokenUsage": "代币使用"
+    "title": "布局助理"
   },
   "linkedEntityFields": "链接实体字段",
   "linkedEntityMultiValueWarning": "{{linkedField}} 包含多个链接实体。将第一个用于 {{resolvedField}}。",

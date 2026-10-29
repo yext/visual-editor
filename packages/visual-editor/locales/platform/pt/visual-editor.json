@@ -376,8 +376,7 @@
     "stop": "Parar",
     "stopGenerating": "Pare de gerar",
     "subtitle": "Crie e refine sua página",
-    "title": "Assistente de layout",
-    "tokenUsage": "Uso de token"
+    "title": "Assistente de layout"
   },
   "linkedEntityFields": "Campos de entidade vinculada",
   "linkedEntityMultiValueWarning": "{{linkedField}} contém várias entidades vinculadas. Usando o primeiro para {{resolvedField}}.",

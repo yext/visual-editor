@@ -376,8 +376,7 @@
     "stop": "Arrêt",
     "stopGenerating": "Arrêter de générer",
     "subtitle": "Créez et affinez votre page",
-    "title": "Assistant de mise en page",
-    "tokenUsage": "Utilisation des jetons"
+    "title": "Assistant de mise en page"
   },
   "linkedEntityFields": "Champs d'entité liée",
   "linkedEntityMultiValueWarning": "{{linkedField}} contient plusieurs entités liées. Utilisation du premier pour {{resolvedField}}.",

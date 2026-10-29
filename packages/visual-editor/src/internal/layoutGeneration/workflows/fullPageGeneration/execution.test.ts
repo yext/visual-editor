@@ -41,7 +41,6 @@ const setup = () => {
       environment,
       controller.signal,
       "test",
-      vi.fn(),
       onContent
     );
   return { stream, accepted, run, environment, controller };

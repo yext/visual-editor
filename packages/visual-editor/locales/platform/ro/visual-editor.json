@@ -376,8 +376,7 @@
     "stop": "Stop",
     "stopGenerating": "Nu mai generați",
     "subtitle": "Construiește și rafinează pagina ta",
-    "title": "Asistent de aspect",
-    "tokenUsage": "Utilizarea jetoanelor"
+    "title": "Asistent de aspect"
   },
   "linkedEntityFields": "Câmpurile de entitate conectate",
   "linkedEntityMultiValueWarning": "{{linkedField}} conține mai multe entități legate. Folosind primul pentru {{resolvedField}}.",

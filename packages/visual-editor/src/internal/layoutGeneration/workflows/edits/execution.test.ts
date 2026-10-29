@@ -85,10 +85,6 @@ describe("planning and section execution requests", () => {
     expect(h.events().some((event) => "spec" in event && event.spec)).toBe(
       false
     );
-    expect(h.events()[0]).toEqual({
-      type: "usage",
-      usage: { cachedInput: 8, uncachedInput: 12, output: 10 },
-    });
   });
 
   it.each(["clarification", "globalStyle", "conversation"])(
@@ -232,7 +228,7 @@ describe("planning and section execution requests", () => {
     expect(h.events()).toEqual([{ type: "planned", plan: editPlan() }]);
   });
 
-  it("returns bounded repair feedback for invalid output and counts each separate request's usage", async () => {
+  it("returns bounded repair feedback for invalid output", async () => {
     const task = editTask();
     const invalid = {
       ...editResponse(task),
@@ -271,14 +267,10 @@ describe("planning and section execution requests", () => {
     expect(JSON.parse(body.input.at(-1)!.content).validationFeedback).toBe(
       error.feedback
     );
-    const usage = [...first.events(), ...second.events()]
-      .filter((event) => event.type === "usage")
-      .reduce((sum, event) => sum + event.usage.output, 0);
     expect(second.log).toHaveBeenCalledWith(
       "[layout generation] Section prompt",
       expect.objectContaining({ validationFeedback: error.feedback })
     );
-    expect(usage).toBe(20);
     expect(second.events().at(-1)!.type).toBe("section-result");
   });
 
@@ -392,7 +384,7 @@ describe("planning and section execution requests", () => {
   );
 
   it.each(["refusal", "incomplete"])(
-    "keeps reported usage when a completed gateway response ends in %s",
+    "reports failure when a gateway response ends in %s",
     async (kind) => {
       modelResponder.mockImplementation(
         vi.fn(
@@ -420,10 +412,7 @@ describe("planning and section execution requests", () => {
       );
       const h = harness();
       await h.run();
-      expect(h.events()[0]).toEqual({
-        type: "usage",
-        usage: { cachedInput: 8, uncachedInput: 12, output: 10 },
-      });
+      expect(h.events()).toEqual([]);
       expect(h.error).toMatchObject({
         retryable: false,
         transport: false,

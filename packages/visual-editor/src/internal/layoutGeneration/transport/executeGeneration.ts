@@ -12,7 +12,6 @@ import type { Content } from "../shared/authoredValues.ts";
 import type {
   GenerationEnvironment,
   GenerationResult,
-  GenerationTokenUsage,
   LayoutGenerationRequest,
 } from "../shared/contracts.ts";
 import { GenerationError } from "../shared/generationErrors.ts";
@@ -66,7 +65,6 @@ export const executeGeneration = async (
   { model, catalog, locales, transport, diagnostics }: GenerationEnvironment,
   signal: AbortSignal,
   correlationId: string,
-  onUsage: (usage: GenerationTokenUsage) => void,
   onCreationContent?: (content: Content) => Promise<void>
 ): Promise<GenerationResult> => {
   if (!model?.trim()) {
@@ -172,20 +170,6 @@ export const executeGeneration = async (
       ),
     GENERATION_ATTEMPT_DEADLINE_MS
   );
-  const writeUsage: Parameters<typeof requestGenerationOutput>[0]["onUsage"] = (
-    usage
-  ) => {
-    if (!usage || controller.signal.aborted) {
-      return;
-    }
-    log("[layout generation] Usage", { correlationId, usage });
-    const cachedInput = usage.input_tokens_details?.cached_tokens ?? 0;
-    onUsage({
-      cachedInput,
-      uncachedInput: Math.max(0, (usage.input_tokens ?? 0) - cachedInput),
-      output: usage.output_tokens ?? 0,
-    });
-  };
   let phase = "prepare";
   let outputBytes = 0;
   let creationFailure = false;
@@ -290,7 +274,6 @@ export const executeGeneration = async (
           sectionId: context.task?.sectionId,
           ...details,
         }),
-      onUsage: writeUsage,
       onDelta: creationStream
         ? async (delta) => {
             streamed = true;

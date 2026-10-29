@@ -375,8 +375,7 @@
     "stop": "停止",
     "stopGenerating": "生成を停止する",
     "subtitle": "ページを構築して改良する",
-    "title": "レイアウトアシスタント",
-    "tokenUsage": "トークンの使用法"
+    "title": "レイアウトアシスタント"
   },
   "linkedEntityFields": "リンクされたエンティティフィールド",
   "linkedEntityMultiValueWarning": "{{linkedField}} には、複数のリンクされたエンティティが含まれています。最初のものを {{resolvedField}} に使用します。",

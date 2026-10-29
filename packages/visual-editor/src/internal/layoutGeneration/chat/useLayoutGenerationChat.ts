@@ -17,7 +17,6 @@ import type {
   ConversationMessage,
   GenerationEnvironment,
   GenerationRequestExecutor,
-  GenerationTokenUsage,
 } from "../shared/contracts.ts";
 import { executeGeneration as requestChatGeneration } from "../transport/executeGeneration.ts";
 import { LayoutGenerationChatCanvas } from "./LayoutGenerationChatCanvas.ts";
@@ -40,11 +39,6 @@ export const useLayoutGenerationChat = (
   const [isStreaming, setIsStreaming] = React.useState(false);
   const [isCreating, setIsCreating] = React.useState(false);
   const [error, setError] = React.useState<Error | null>(null);
-  const [usage, setUsage] = React.useState<GenerationTokenUsage>({
-    cachedInput: 0,
-    uncachedInput: 0,
-    output: 0,
-  });
   const [canvas] = React.useState(() => new LayoutGenerationChatCanvas());
   canvas.catalog = environment?.catalog;
 
@@ -117,7 +111,6 @@ export const useLayoutGenerationChat = (
     history.current = [];
     previousMessagesRef.current = [];
     setMessages([]);
-    setUsage({ cachedInput: 0, uncachedInput: 0, output: 0 });
     setError(null);
   }, [cancel]);
 
@@ -291,15 +284,6 @@ export const useLayoutGenerationChat = (
         environment,
         signal,
         correlationId,
-        (added) => {
-          if (active() && !signal.aborted) {
-            setUsage((current) => ({
-              cachedInput: current.cachedInput + added.cachedInput,
-              uncachedInput: current.uncachedInput + added.uncachedInput,
-              output: current.output + added.output,
-            }));
-          }
-        },
         onCreationContent
       );
     try {
@@ -450,7 +434,6 @@ export const useLayoutGenerationChat = (
     send,
     clear,
     error,
-    usage,
     canvas,
     ready,
     cancel: () => cancel(),

@@ -375,8 +375,7 @@
     "stop": "Stop",
     "stopGenerating": "Hagyd abba a generálást",
     "subtitle": "Építse és finomítsa oldalát",
-    "title": "Layout Assistant",
-    "tokenUsage": "Token használat"
+    "title": "Layout Assistant"
   },
   "linkedEntityFields": "Kapcsolt entitásmezők",
   "linkedEntityMultiValueWarning": "A {{linkedField}} több összekapcsolt entitást tartalmaz. Az első használata a következőhöz: {{resolvedField}}.",

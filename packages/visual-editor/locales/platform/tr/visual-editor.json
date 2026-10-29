@@ -375,8 +375,7 @@
     "stop": "Durmak",
     "stopGenerating": "Oluşturmayı durdur",
     "subtitle": "Sayfanızı oluşturun ve hassaslaştırın",
-    "title": "Düzen Asistanı",
-    "tokenUsage": "Jeton kullanımı"
+    "title": "Düzen Asistanı"
   },
   "linkedEntityFields": "Bağlantılı Varlık Alanları",
   "linkedEntityMultiValueWarning": "{{linkedField}} birden fazla bağlantılı varlık içerir. {{resolvedField}} için ilkini kullanma.",

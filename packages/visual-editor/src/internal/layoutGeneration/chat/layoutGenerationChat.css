@@ -298,17 +298,6 @@
   padding: var(--puck-space-1);
 }
 
-.local-editor-chat-usage-popover {
-  padding: var(--puck-space-3);
-  border: var(--puck-border-width-regular) solid var(--puck-color-border);
-  border-radius: var(--puck-radius-l);
-  background: var(--puck-color-surface);
-  color: var(--puck-color-text-secondary);
-  font-family: var(--puck-font-family);
-  font-size: var(--puck-font-size-xxxs);
-  line-height: var(--puck-line-height-base);
-}
-
 .local-editor-chat-error {
   margin: 0 var(--puck-space-4) var(--puck-space-3);
   font-size: var(--puck-font-size-xxxs);

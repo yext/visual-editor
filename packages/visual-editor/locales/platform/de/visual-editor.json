@@ -375,8 +375,7 @@
     "stop": "Stoppen",
     "stopGenerating": "Hören Sie auf zu generieren",
     "subtitle": "Erstellen und verfeinern Sie Ihre Seite",
-    "title": "Layout-Assistent",
-    "tokenUsage": "Token-Nutzung"
+    "title": "Layout-Assistent"
   },
   "linkedEntityFields": "Verknüpfte Entitätsfelder",
   "linkedEntityMultiValueWarning": "{{linkedField}} enthält mehrere verknüpfte Entitäten. Verwenden des ersten für {{resolvedField}}.",

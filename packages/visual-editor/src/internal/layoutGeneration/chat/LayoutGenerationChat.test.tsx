@@ -432,31 +432,6 @@ it("keeps Sections first and preserves drafts across panel switches and editor r
   ).toBe("");
 });
 
-it("shows token usage in a dismissible popover and closes it when switching panels", async () => {
-  render(<ChatHarness />);
-  openChat();
-  const trigger = screen.getByRole("button", { name: "Token usage" });
-  expect(
-    screen.queryByRole("dialog", { name: "Conversation token usage" })
-  ).toBeNull();
-  fireEvent.click(trigger);
-  const usage = await screen.findByRole("dialog", {
-    name: "Conversation token usage",
-  });
-  expect(usage.textContent).toContain("Cached input: 0");
-  expect(usage.textContent).toContain("Uncached input: 0");
-  expect(usage.textContent).toContain("Output: 0");
-  expect(trigger.getAttribute("aria-expanded")).toBe("true");
-  fireEvent.keyDown(usage, { key: "Escape" });
-  await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
-  fireEvent.click(trigger);
-  await screen.findByRole("dialog", { name: "Conversation token usage" });
-  fireEvent.click(within(screen.getByRole("navigation")).getByText("Outline"));
-  await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
-  openChat();
-  expect(trigger.getAttribute("aria-expanded")).toBe("false");
-});
-
 it("does not rerender editor context consumers when typing a draft", async () => {
   const editorRender = vi.fn();
   const EditorSubscriber = () => {

@@ -377,8 +377,7 @@
     "stop": "Stop",
     "stopGenerating": "Zastavte generovanie",
     "subtitle": "Vytvorte a upravte svoju stránku",
-    "title": "Asistent rozloženia",
-    "tokenUsage": "Použitie tokenu"
+    "title": "Asistent rozloženia"
   },
   "linkedEntityFields": "Polia prepojených entít",
   "linkedEntityMultiValueWarning": "{{linkedField}} obsahuje viacero prepojených entít. Používa sa prvý pre {{resolvedField}}.",

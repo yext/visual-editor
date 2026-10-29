@@ -375,8 +375,7 @@
     "stop": "Stop",
     "stopGenerating": "Beidziet ģenerēt",
     "subtitle": "Veidojiet un uzlabojiet savu lapu",
-    "title": "Izkārtojuma palīgs",
-    "tokenUsage": "Token izmantošana"
+    "title": "Izkārtojuma palīgs"
   },
   "linkedEntityFields": "Saistītie entītiju lauki",
   "linkedEntityMultiValueWarning": "{{linkedField}} satur vairākas saistītas entītijas. Izmantojot pirmo {{resolvedField}}.",

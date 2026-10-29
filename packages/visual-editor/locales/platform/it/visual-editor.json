@@ -376,8 +376,7 @@
     "stop": "Fermare",
     "stopGenerating": "Smetti di generare",
     "subtitle": "Costruisci e perfeziona la tua pagina",
-    "title": "Assistente al layout",
-    "tokenUsage": "Utilizzo dei gettoni"
+    "title": "Assistente al layout"
   },
   "linkedEntityFields": "Campi di entità collegate",
   "linkedEntityMultiValueWarning": "{{linkedField}} contiene più entità collegate. Utilizzando il primo per {{resolvedField}}.",

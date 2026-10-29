@@ -375,8 +375,7 @@
     "stop": "Stopp",
     "stopGenerating": "Sluta generera",
     "subtitle": "Skapa och förfina din sida",
-    "title": "Layoutassistent",
-    "tokenUsage": "Tokenanvändning"
+    "title": "Layoutassistent"
   },
   "linkedEntityFields": "Länkade enhetsfält",
   "linkedEntityMultiValueWarning": "{{linkedField}} innehåller flera länkade enheter. Använder den första för {{resolvedField}}.",
