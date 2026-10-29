@@ -98,11 +98,13 @@ Available on Directory templates.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                         | Type         | Description                                               | Default              |
-| :--------------------------- | :----------- | :-------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`     | `ThemeColor` | The background color for the directory page heading area. | `Background Color 1` |
-| `styles.linkColor`           | `ThemeColor` | The color of links in the directory list layout.          |                      |
-| `styles.listBackgroundColor` | `ThemeColor` | The background color for the directory list area.         | `Background Color 1` |
+| Prop                         | Type                                                                | Description                                                                 | Default              |
+| :--------------------------- | :------------------------------------------------------------------ | :-------------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`     | `ThemeColor`                                                        | The background color for the directory page heading area.                   | `Background Color 1` |
+| `styles.linkColor`           | `ThemeColor`                                                        | The color of links in the directory list layout.                            |                      |
+| `styles.listBackgroundColor` | `ThemeColor`                                                        | The background color for the directory list area.                           | `Background Color 1` |
+| `styles.textTransform`       | `"none" \| "default" \| "lowercase" \| "uppercase" \| "capitalize"` | The casing of directory list labels. Default uses the link theme transform, |
+| falling back to title case.  | `default`                                                           |
 
 ---
 
