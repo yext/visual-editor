@@ -138,7 +138,9 @@ it.each(["created", "clarification", "failure"] as const)(
     expect(executeMock).toHaveBeenCalledTimes(
       outcome === "clarification" ? 2 : 3
     );
+    expect(executeMock.mock.calls[0][0].purpose).toBeUndefined();
     for (const [request] of executeMock.mock.calls.slice(1)) {
+      expect(request.purpose).toBe("intent");
       expect(request.messages).toEqual([
         { role: "user", content: "Intent page" },
       ]);

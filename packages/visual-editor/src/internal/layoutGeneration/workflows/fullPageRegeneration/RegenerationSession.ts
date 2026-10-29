@@ -15,6 +15,7 @@ export class RegenerationSession {
   private accepted?: Data;
   private expected: Data;
   private steps = new Map<number, string>();
+  private replacements = new Map<string, string[]>();
   stepCount = 0;
 
   constructor(
@@ -45,7 +46,47 @@ export class RegenerationSession {
       );
     let candidate: Data;
     try {
-      candidate = this.adapter.materializeRegeneration(before, step);
+      let operations = [step];
+      if (step.kind === "reorder" || step.kind === "insert") {
+        let anchor = step.anchor;
+        if ("componentId" in anchor) {
+          const replacement = this.replacements.get(anchor.componentId);
+          if (replacement) {
+            anchor = {
+              ...anchor,
+              componentId:
+                anchor.position === "before"
+                  ? replacement[0]
+                  : replacement[replacement.length - 1],
+            };
+          }
+        }
+        if (step.kind === "reorder") {
+          const sectionIds = this.replacements.get(step.sectionId) ?? [
+            step.sectionId,
+          ];
+          if (
+            "componentId" in anchor &&
+            sectionIds.includes(anchor.componentId)
+          )
+            throw new Error("Cannot reorder a section relative to itself.");
+          // Moving each section to start/after would otherwise reverse the block.
+          const ordered =
+            anchor.position === "start" || anchor.position === "after"
+              ? [...sectionIds].reverse()
+              : sectionIds;
+          operations = ordered.map((sectionId) => ({
+            ...step,
+            sectionId,
+            anchor,
+          }));
+        } else {
+          operations = [{ ...step, anchor }];
+        }
+      }
+      candidate = before;
+      for (const operation of operations)
+        candidate = this.adapter.materializeRegeneration(candidate, operation);
     } catch (cause) {
       const { sections: _sections, ...references } =
         "sections" in step ? step : { ...step, sections: undefined };
@@ -80,6 +121,11 @@ export class RegenerationSession {
       this.accepted = clonePuckResolveData(data);
       this.expected = clonePuckResolveData(data);
     }
+    if (step.kind === "replace")
+      this.replacements.set(
+        step.sectionId,
+        step.sections.map((section) => section.props.id)
+      );
     this.steps.set(index, serialized);
     this.stepCount++;
   }

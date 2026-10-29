@@ -80,12 +80,13 @@ it("shows interrupted generation recovery and disables restart until persistence
   expect(result.getByRole("status").textContent).toBe(
     "Generation may have been interrupted. You can restart it here."
   );
-  expect(
-    result.getByText("Restarting will replace the previous attempt.")
-  ).toBeTruthy();
+  const description = result.getByText(
+    "Restarting will replace the previous attempt."
+  );
   const restart = result.getByRole("button", {
     name: "Restart generation",
   }) as HTMLButtonElement;
+  expect(restart.getAttribute("aria-describedby")).toBe(description.id);
   expect(restart.disabled).toBe(false);
   expect(send).not.toHaveBeenCalled();
   fireEvent.click(restart);

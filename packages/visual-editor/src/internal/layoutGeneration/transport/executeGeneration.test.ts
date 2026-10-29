@@ -6,6 +6,7 @@ import { z } from "zod";
 import { createPuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
 import { compileGenerationSchema } from "../workflows/fullPageGeneration/pageSchema.ts";
 import { FRESH_PAGE_OUTPUT_TOKEN_BUDGET } from "../limits.ts";
+import { intentPageGuidance } from "../intentPageGuidance.ts";
 import {
   clarificationResponse,
   creationResponse,
@@ -100,6 +101,177 @@ it.each(["create", "regenerate"] as const)(
     expect(sent.instructions).toContain("Extra");
   }
 );
+
+it.each(["create", "regenerate"] as const)(
+  "keeps missing-content requests in explicit draft text for intent %s",
+  async (mode) => {
+    const draft =
+      "[Content needed: verified expert quote about knee pain treatment]";
+    const sections = [{ type: "Heading", props: { text: draft } }];
+    modelResponder.mockImplementation(async () =>
+      completed(
+        mode === "create"
+          ? creationResponse(sections)
+          : {
+              translationMode: "defaultOnly",
+              result: {
+                action: "regenerate",
+                steps: [{ kind: "replace", sectionId: "heading", sections }],
+              },
+              text: "Expert insights needs a verified quote.",
+            }
+      )
+    );
+    const h = harness({
+      mode,
+      purpose: "intent",
+      layoutId: "location",
+      currentData: mode === "create" ? { content: [] } : baseline,
+      messages: [
+        {
+          role: "user",
+          content: "Explain who treats knee pain, with expert insights",
+        },
+        { role: "assistant", content: "Translate this page?" },
+        { role: "user", content: "No translations" },
+      ],
+    });
+    await h.run();
+    expect(h.error).toBeUndefined();
+    const sent = modelResponder.mock.calls[0][0];
+    expect(sent.instructions.match(/^# .+$/gm)).toEqual([
+      "# Purpose",
+      "# Yext intent page guidance",
+      "# Mechanical guidance",
+      "# Reference context",
+    ]);
+    expect(sent.instructions.split(intentPageGuidance)).toHaveLength(2);
+    expect(sent.instructions).not.toContain(
+      "Explain who treats knee pain, with expert insights"
+    );
+    expect(sent.instructions).not.toContain("No translations");
+    const [beforeMechanics, afterMechanics] = sent.instructions.split(
+      "# Mechanical guidance"
+    );
+    const [mechanics, references] = afterMechanics.split("# Reference context");
+    expect(beforeMechanics).not.toContain("[Content needed:");
+    expect(mechanics).toContain("[Content needed:");
+    expect(mechanics).toContain(
+      mode === "create" ? "## Page creation" : "## Existing page adaptation"
+    );
+    expect(mechanics).not.toContain(
+      mode === "create" ? "## Existing page adaptation" : "## Page creation"
+    );
+    expect(mechanics).not.toContain("Generation-enabled components:");
+    expect(references).toContain("Generation-enabled components:");
+    expect(references).toContain("Component descriptions and defaults:");
+    expect(sent.instructions).toContain("retain the relevant section");
+    expect(sent.instructions).toContain(
+      "editorial requests, never finished visitor-facing claims"
+    );
+    expect(sent.input[0]).toEqual({
+      role: "user",
+      content: "Explain who treats knee pain, with expert insights",
+    });
+    expect(JSON.parse(sent.input.at(-1)!.content).request).toBe(
+      "No translations"
+    );
+    expect(h.events().at(-1)).toMatchObject(
+      mode === "create"
+        ? { type: "accepted", spec: { content: [{ props: { text: draft } }] } }
+        : {
+            type: "regenerated",
+            result: { steps: [{ sections: [{ props: { text: draft } }] }] },
+          }
+    );
+  }
+);
+
+it("keeps intent business guidance out of ordinary page creation", async () => {
+  modelResponder.mockImplementation(async () => completed(proposal));
+  const h = harness();
+  await h.run();
+  expect(h.error).toBeUndefined();
+  expect(modelResponder.mock.calls[0][0].instructions).not.toContain(
+    "# Yext intent page guidance"
+  );
+});
+
+it.each([undefined, "intent"] as const)(
+  "scopes explicit-content schemas and reference defaults to purpose %s",
+  async (purpose) => {
+    const c = createPuckGenerationCatalog({
+      Heading: {
+        generation: {
+          props: z.object({
+            text: z.string().describe("Write displayed copy in this field."),
+            styles: z.object({ color: z.string() }),
+          }),
+        },
+        fields: { text: { type: "text" } },
+        description: "Introduce the topic when an introduction is useful.",
+        defaultProps: {
+          text: "Sample offer for $99",
+          styles: { color: "primary" },
+        },
+      },
+    });
+    modelResponder.mockImplementation(async () =>
+      completed(
+        creationResponse([
+          {
+            type: "Heading",
+            props: { text: { $default: true }, styles: { $default: true } },
+          },
+        ])
+      )
+    );
+    const h = harness(
+      {
+        mode: "create",
+        purpose,
+        layoutId: "location",
+        currentData: { content: [] },
+        messages: [{ role: "user", content: "Create a service page" }],
+      },
+      c
+    );
+    await h.run();
+    const sent = modelResponder.mock.calls[0][0];
+    const references = JSON.parse(
+      sent.instructions.split("Component descriptions and defaults:\n")[1]
+    );
+    expect(JSON.stringify(sent.text.format.schema)).toContain(
+      "Write displayed copy in this field."
+    );
+    expect(references.Heading.description).toBe(
+      c.data.components.Heading.description
+    );
+    if (purpose === "intent") {
+      expect(h.error).toBeDefined();
+      expect(references.Heading.defaults).toEqual({
+        styles: { color: "primary" },
+      });
+      expect(sent.instructions).not.toContain("Sample offer for $99");
+    } else {
+      expect(h.error).toBeUndefined();
+      expect(references.Heading.defaults.text).toBe("Sample offer for $99");
+    }
+  }
+);
+
+it("rejects an unknown generation purpose before calling the model", async () => {
+  const h = harness({
+    mode: "create",
+    purpose: "unknown",
+    layoutId: "location",
+    currentData: { content: [] },
+    messages: [{ role: "user", content: "Create a page" }],
+  });
+  await h.run();
+  expect(h.error).toMatchObject({ status: 400 });
+  expect(modelResponder).not.toHaveBeenCalled();
+});
 
 describe("strict request execution", () => {
   it("carries preparation in the creation request and its diagnostics", async () => {

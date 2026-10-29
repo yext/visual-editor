@@ -32,6 +32,14 @@ it.each(
     const prompt = "Generate an intent page for our custom fit shoe service.";
     const question = "What URL should the Book an appointment buttons link to?";
     const answer = "https://example.com/book";
+    const contentRequest =
+      "[Content needed: verified custom fit service options]";
+    const contentRequestSection = {
+      type: "Heading",
+      props: { id: "service-options", text: contentRequest },
+    };
+    const generated = generatedContent("Custom fit shoes");
+    generated.content[0].props.content.push(contentRequestSection);
     let intent: React.ContextType<typeof IntentPageGenerationChatContext>;
     const Capture = () => {
       intent = React.useContext(IntentPageGenerationChatContext);
@@ -140,6 +148,7 @@ it.each(
                         type: "Heading",
                         props: { id: "custom-fit", text: "Custom fit shoes" },
                       },
+                      contentRequestSection,
                     ],
                   },
                 ],
@@ -148,7 +157,7 @@ it.each(
           : {
               type: "accepted",
               text: "Created the service page.",
-              spec: generatedContent("Custom fit shoes"),
+              spec: generated,
             };
       });
     const initial = layout();
@@ -231,6 +240,9 @@ it.each(
     fireEvent.click(screen.getByRole("button", { name: "Send" }));
     await screen.findByText("Custom fit shoes", { selector: "h2" });
     await waitFor(() => expect(intent?.state.stage).toBe("completed"));
+    for (const [request] of execute.mock.calls) {
+      expect(request.purpose).toBe("intent");
+    }
     expect(
       execute.mock.calls.find(([request]) =>
         request.messages.some((message) => message.content === answer)
@@ -258,6 +270,16 @@ it.each(
     );
     expect(saves).toHaveLength(1);
     expect(saves[0].payload.intentPageGeneration.attemptId).toBe(attemptId);
+    expect(screen.getByText(contentRequest, { selector: "h2" })).toBeTruthy();
+    const savedData = JSON.parse(saves[0].payload.history).data;
+    expect(savedData.content[0].props.content).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          type: "Heading",
+          props: expect.objectContaining({ text: contentRequest }),
+        }),
+      ])
+    );
     expect(
       messages
         .filter((message) => message.type === "updateIntentPageGeneration")

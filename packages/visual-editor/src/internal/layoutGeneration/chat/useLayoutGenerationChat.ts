@@ -338,7 +338,7 @@ export const useLayoutGenerationChat = (
       onRegenerationSection
     ) =>
       requestChatGeneration(
-        body,
+        isIntent || regenerating ? { ...body, purpose: "intent" } : body,
         environment,
         signal,
         correlationId,

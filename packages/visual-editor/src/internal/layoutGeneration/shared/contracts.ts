@@ -43,6 +43,8 @@ export type ConversationMessage = {
 };
 
 type RequestContext = {
+  /** Apply Yext search intent guidance to fresh intent-page creation. */
+  purpose?: "intent";
   /** The layout being generated or edited. */
   layoutId: string;
   /** Conversation history ending with the current user request. */

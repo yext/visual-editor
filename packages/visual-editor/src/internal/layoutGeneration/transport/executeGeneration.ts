@@ -201,7 +201,13 @@ export const executeGeneration = async (
     phase = "build-prompt";
     const instructions =
       compiled.instructions ??
-      buildGenerationPrompt(catalog, compiled.availableComponentNames, locales);
+      buildGenerationPrompt(
+        catalog,
+        compiled.availableComponentNames,
+        locales,
+        "create",
+        context.purpose
+      );
     const componentStats =
       mode === "prepare"
         ? []

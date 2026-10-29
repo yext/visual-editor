@@ -1010,6 +1010,57 @@ describe("fresh page creation schema", () => {
   });
 });
 
+it("requires explicit content in fresh intent pages while keeping ordinary creation defaults", () => {
+  const c = catalog();
+  const ordinary = compileGenerationSchema(c, ["en"]);
+  const intent = compileGenerationSchema(
+    c,
+    ["en"],
+    undefined,
+    undefined,
+    "intent"
+  );
+  expect(
+    ordinary.parseResponse(JSON.stringify(create([section()]))).spec
+  ).not.toBeNull();
+  expect(() =>
+    intent.parseResponse(JSON.stringify(create([section()])))
+  ).toThrow();
+  expect(() =>
+    intent.parseResponse(
+      JSON.stringify(
+        create([
+          { type: "Section", props: { title: "Service", slots: defaults } },
+        ])
+      )
+    )
+  ).toThrow();
+
+  const generated = {
+    type: "Section",
+    props: {
+      title: "Service",
+      slots: {
+        heading: [
+          {
+            type: "Heading",
+            props: {
+              ...heading().props,
+              text: "[Content needed: verified service benefits]",
+            },
+          },
+        ],
+      },
+    },
+  };
+  const output = intent.parseResponse(
+    JSON.stringify(create([generated]))
+  ).spec!;
+  const saved = output.content[0].props.slots.heading[0].props;
+  expect(saved.text).toBe("[Content needed: verified service benefits]");
+  expect(saved.style).toEqual({ color: "blue", width: 25 });
+});
+
 it("requires business-name bindings in fresh-page model instructions", () => {
   const c = catalog();
   const compiled = compileGenerationSchema(c, ["en"]);

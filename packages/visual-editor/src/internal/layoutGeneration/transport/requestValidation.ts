@@ -59,6 +59,7 @@ export const validateGenerationRequest = (
   }
   const modeRequest = z
     .object({
+      purpose: z.literal("intent").optional(),
       mode: z
         .enum(["prepare", "create", "plan", "section", "regenerate"])
         .optional(),

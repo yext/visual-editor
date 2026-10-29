@@ -26,7 +26,8 @@ export const compileGenerationSchema = (
   catalog: PuckGenerationCatalog,
   locales: string[],
   currentData: Content = { content: [] },
-  preparation?: GenerationPreparation
+  preparation?: GenerationPreparation,
+  purpose?: "intent"
 ) => {
   rejectZones(currentData);
   if (!isBlankGenerationPage(currentData)) {
@@ -58,7 +59,9 @@ export const compileGenerationSchema = (
     cardCounts.set(requirement.componentType, counts);
   }
   const { element, union, exportSchema, nodes, explicitCardLists } =
-    createGenerationSchemaCompiler(catalog, locales);
+    createGenerationSchemaCompiler(catalog, locales, "create", {
+      requireExplicitContent: purpose === "intent",
+    });
   const rootNodes = Object.keys(components)
     .filter(
       (name) =>

@@ -204,19 +204,13 @@ it("applies keep, deletion, insertion, and reordering without modifying saved me
   expect(data.content[2].props.id).toBe("footer");
 });
 
-it.each(["remove", "replace"] as const)(
+it.each(["remove"] as const)(
   "reports insertion and reorder anchors invalidated by an earlier %s while retaining completed work",
   async (kind) => {
     for (const operation of ["insert", "reorder"] as const) {
       const current = fixture();
       const signal = new AbortController().signal;
-      await current.session.apply(
-        kind === "remove"
-          ? { kind, sectionId: "hero" }
-          : { kind, sectionId: "hero", sections: [newHeading("replacement")] },
-        0,
-        signal
-      );
+      await current.session.apply({ kind, sectionId: "hero" }, 0, signal);
       const before = clone(current.data());
       const anchor = { position: "after" as const, componentId: "hero" };
       const step: RegenerationStep =
@@ -254,6 +248,117 @@ it.each(["remove", "replace"] as const)(
     }
   }
 );
+
+it.each(["start", "end", "before", "after"] as const)(
+  "reorders a replacement block at %s using the original section Id",
+  async (position) => {
+    const current = fixture();
+    const signal = new AbortController().signal;
+    await current.session.apply(
+      {
+        kind: "replace",
+        sectionId: "hero",
+        sections: [newHeading("replacement-a"), newHeading("replacement-b")],
+      },
+      0,
+      signal
+    );
+    const step: RegenerationStep = {
+      kind: "reorder",
+      sectionId: "hero",
+      anchor:
+        position === "before" || position === "after"
+          ? { position, componentId: "testimonials" }
+          : { position },
+    };
+    await current.session.apply(step, 1, signal);
+    await current.session.apply(step, 1, signal);
+    const block = ["replacement-a", "replacement-b"];
+    expect(
+      bodySections(current.data() as Content).map((item) => item.props.id)
+    ).toEqual(
+      position === "start"
+        ? [...block, "services", "testimonials"]
+        : position === "before"
+          ? ["services", ...block, "testimonials"]
+          : ["services", "testimonials", ...block]
+    );
+    expect(current.preview).toHaveBeenCalledTimes(position === "start" ? 1 : 2);
+    expect(current.session.stepCount).toBe(2);
+    current.session.finish();
+    expect(current.commit).toHaveBeenCalledOnce();
+    expect(current.commit.mock.calls[0][1]).toEqual(original());
+  }
+);
+
+it.each(["insert", "reorder"] as const)(
+  "resolves replaced anchors on either side of a replacement block for %s",
+  async (kind) => {
+    for (const position of ["before", "after"] as const) {
+      const current = fixture();
+      const signal = new AbortController().signal;
+      await current.session.apply(
+        {
+          kind: "replace",
+          sectionId: "hero",
+          sections: [newHeading("replacement-a"), newHeading("replacement-b")],
+        },
+        0,
+        signal
+      );
+      const anchor = { position, componentId: "hero" };
+      await current.session.apply(
+        kind === "insert"
+          ? {
+              kind,
+              collection: { ownerId: "main", slotPath: "/content" },
+              anchor,
+              sections: [newHeading("new")],
+            }
+          : { kind, sectionId: "testimonials", anchor },
+        1,
+        signal
+      );
+      const block = ["replacement-a", "replacement-b"];
+      const moved = kind === "insert" ? "new" : "testimonials";
+      expect(
+        bodySections(current.data() as Content).map((item) => item.props.id)
+      ).toEqual([
+        ...(position === "before" ? [moved, ...block] : [...block, moved]),
+        "services",
+        ...(kind === "insert" ? ["testimonials"] : []),
+      ]);
+    }
+  }
+);
+
+it("keeps a replacement block unchanged when reordering relative to itself", async () => {
+  const current = fixture();
+  const signal = new AbortController().signal;
+  await current.session.apply(
+    {
+      kind: "replace",
+      sectionId: "hero",
+      sections: [newHeading("replacement-a"), newHeading("replacement-b")],
+    },
+    0,
+    signal
+  );
+  const before = clone(current.data());
+  await expect(
+    current.session.apply(
+      {
+        kind: "reorder",
+        sectionId: "hero",
+        anchor: { position: "after", componentId: "hero" },
+      },
+      1,
+      signal
+    )
+  ).rejects.toThrow("relative to itself");
+  expect(current.data()).toEqual(before);
+  expect(current.session.stepCount).toBe(1);
+});
 
 it("reports a root anchor incorrectly used for insertion into MainContent", () => {
   const baseline = original() as Content;

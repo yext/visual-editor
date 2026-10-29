@@ -87,7 +87,8 @@ export const compileGenerationRequest = (
       catalog,
       locales,
       currentData as Content | undefined,
-      context.preparation
+      context.preparation,
+      context.purpose
     );
   }
 };
