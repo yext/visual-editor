@@ -1,4 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
+import { editGenerationFixture, editTask } from "../../testing/editFixtures.ts";
+import {
+  materializeSectionEdit,
+  structuralEditResult,
+} from "./applyEditsToLayout.ts";
 import { GenerationError } from "../../shared/generationErrors.ts";
 import { runSectionTasks } from "./sectionTaskRunner.ts";
 import type { SectionEditResult, SectionEditTask } from "./types.ts";
@@ -201,4 +206,45 @@ describe("browser section coordination", () => {
     await expect(runSectionTasks(options)).rejects.toThrow();
     expect(options.generate).not.toHaveBeenCalled();
   });
+});
+
+it("applies independent cleanup after promotion failure but keeps a conditional replacement", async () => {
+  const fixture = editGenerationFixture();
+  const promotion = editTask("header", ["header"]);
+  const remove = (sectionId: string, dependsOn: string[] = []) => ({
+    ...editTask(
+      sectionId,
+      [],
+      [{ kind: "remove" as const, componentId: sectionId }]
+    ),
+    generateContent: false,
+    dependsOn,
+  });
+  const options = setup([
+    promotion,
+    remove("first"),
+    remove("second", [promotion.taskId]),
+  ]);
+  options.generate.mockRejectedValue(
+    new GenerationError("Invalid promotion image", true)
+  );
+  let data = fixture.data;
+  options.commit.mockImplementation(async (task) => {
+    data = materializeSectionEdit(
+      fixture.catalog,
+      data,
+      task,
+      structuralEditResult(task)
+    ) as typeof data;
+  });
+  const finished = await runSectionTasks(options);
+  expect(finished.outcomes.map((outcome) => outcome.status)).toEqual([
+    "failed",
+    "applied",
+    "skipped",
+  ]);
+  expect(
+    data.content[1].props.content.map((item: any) => item.props.id)
+  ).toEqual(["second"]);
+  expect(options.commit).toHaveBeenCalledOnce();
 });

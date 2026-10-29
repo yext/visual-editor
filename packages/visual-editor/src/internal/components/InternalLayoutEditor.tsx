@@ -26,6 +26,7 @@ import { cn } from "../../utils/cn.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
 import type { MigrationRegistry } from "../../utils/migrate.ts";
+import { IntentPageGenerationContext } from "../layoutGeneration/chat/useIntentPageGeneration.ts";
 import { LayoutGenerationChatUiContext } from "../layoutGeneration/chat/contexts.tsx";
 import { layoutGenerationChatPlugin } from "../layoutGeneration/chat/LayoutGenerationChatPlugin.tsx";
 import { lockEditorInteraction } from "../layoutGeneration/chat/lockEditorInteraction.ts";
@@ -119,8 +120,10 @@ export const InternalLayoutEditor = ({
   const { errorCount, errorSources, errorDetails } = useErrorContext();
   const chatUi = React.useContext(LayoutGenerationChatUiContext);
   const editorRef = React.useRef<HTMLDivElement>(null);
+  const intent = React.useContext(IntentPageGenerationContext);
 
-  const layoutGenerationActive = chatUi?.chat.isCreating ?? false;
+  const layoutGenerationActive =
+    (chatUi?.chat.isGeneratingPage ?? false) || (intent?.blocked ?? false);
   React.useEffect(() => {
     if (layoutGenerationActive && editorRef.current) {
       return lockEditorInteraction(editorRef.current);
@@ -143,7 +146,9 @@ export const InternalLayoutEditor = ({
    */
   const handleHistoryChange = useCallback(
     (histories: History<Partial<AppState>>[], index: number) => {
-      if (layoutGenerationActive) {
+      if (layoutGenerationActive) return;
+      if (intent?.suppressSave(histories[index]?.id)) {
+        historyIndex.current = index;
         return;
       }
 
@@ -199,6 +204,7 @@ export const InternalLayoutEditor = ({
     },
     [
       layoutGenerationActive,
+      intent,
       templateMetadata,
       buildVisualConfigLocalStorageKey,
       layoutSaveState,

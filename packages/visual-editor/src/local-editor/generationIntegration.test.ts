@@ -10,6 +10,7 @@ import {
 import {
   editGenerationFixture,
   editPlan,
+  planningResponse,
   editResponse,
   editTask,
 } from "../internal/layoutGeneration/testing/editFixtures.ts";
@@ -47,7 +48,13 @@ it("routes preparation, creation, planning, section execution and repair through
     diagnostics: { log: vi.fn(), report: vi.fn() },
   };
   const run = (request: LayoutGenerationRequest, output: unknown) => {
-    fetchMock.mockImplementation(async () => completed(output));
+    fetchMock.mockImplementation(async () =>
+      completed(
+        request.mode === "plan"
+          ? planningResponse(output, environment.catalog, request.currentData!)
+          : output
+      )
+    );
     return executeGeneration(
       request,
       environment,

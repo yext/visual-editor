@@ -1,5 +1,8 @@
 import type { Content } from "../../shared/authoredValues.ts";
-import type { GenerationTurn } from "../../shared/contracts.ts";
+import type {
+  GenerationTurn,
+  PageGenerationResult,
+} from "../../shared/contracts.ts";
 import {
   GenerationError,
   repairGenerationOutput,
@@ -12,7 +15,7 @@ type CreationCanvas = {
   readonly createdSectionCount: number;
 };
 
-export type FullGenerationProgress =
+type FullGenerationProgress =
   | { phase: "preparing" | "generating" }
   | { phase: "revealed"; sectionCount: number }
   | { phase: "applying"; candidate: Content | null }
@@ -31,7 +34,7 @@ export const runFullGeneration = async ({
 }: GenerationTurn & {
   canvas: CreationCanvas;
   onProgress: (progress: FullGenerationProgress) => void;
-}): Promise<string | undefined> => {
+}): Promise<PageGenerationResult | undefined> => {
   onProgress({ phase: "preparing" });
   const prepared = await repairGenerationOutput((validationFeedback) =>
     request({
@@ -49,7 +52,7 @@ export const runFullGeneration = async ({
     throw new Error("Expected page preparation output.");
   }
   if (prepared.preparation.question) {
-    return prepared.preparation.question;
+    return { text: prepared.preparation.question, clarification: true };
   }
 
   onProgress({ phase: "generating" });
@@ -95,15 +98,19 @@ export const runFullGeneration = async ({
   if (event.type !== "accepted") {
     throw new Error("Expected fresh generation output.");
   }
-  onProgress({ phase: "applying", candidate: event.spec });
-  if (event.spec) {
-    await canvas.revealCreation(event.spec, signal);
-    createdSections = canvas.createdSectionCount;
-    onProgress({ phase: "resolved", sectionCount: createdSections });
+  if (!event.spec) {
+    if (createdSections) {
+      throw new Error("Clarification cannot follow applied creation sections.");
+    }
+    return { text: event.text, clarification: true };
   }
+  onProgress({ phase: "applying", candidate: event.spec });
+  await canvas.revealCreation(event.spec, signal);
+  createdSections = canvas.createdSectionCount;
+  onProgress({ phase: "resolved", sectionCount: createdSections });
   canvas.finishCreation();
   if (active()) {
     onProgress({ phase: "complete", sectionCount: createdSections });
-    return event.text;
+    return { text: event.text, clarification: false };
   }
 };

@@ -80,7 +80,11 @@ export const syncManualSlotMappedCards = <TCard extends CardWithId>({
     }
 
     if (card) {
-      card = syncChildSlotIds ? syncChildSlotIds(card, nextId) : card;
+      // Reusing a card must preserve its authored child identities. Only a new
+      // card identity (legacy or duplicate) requires rebasing its child slots.
+      if (syncChildSlotIds && card.props.id !== nextId) {
+        card = syncChildSlotIds(card, nextId);
+      }
       const slots = card.props.slots as
         Record<string, Array<{ props?: Record<string, unknown> }>> | undefined;
 

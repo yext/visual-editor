@@ -2,6 +2,8 @@
 import { expect, it, vi } from "vitest";
 import { z } from "zod";
 import { createPuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
+import { normalizeGeneratedText } from "../shared/localizedText.ts";
+import { createGenerationSchemaCompiler } from "./compiler.ts";
 import { compileGenerationSchema } from "../workflows/fullPageGeneration/pageSchema.ts";
 import { exportGenerationSchema } from "./strictSchema.ts";
 
@@ -84,3 +86,78 @@ it.each([z.coerce.string(), z.coerce.number(), z.coerce.boolean()])(
     );
   }
 );
+
+it.each(["create", "insert"] as const)(
+  "preserves newly authored rich text when switching away from localized defaults (%s)",
+  (mode) => {
+    const rich = z.strictObject({
+      html: z.string().optional(),
+      json: z.string().optional(),
+    });
+    const text = z.union([
+      z.string(),
+      z
+        .object({
+          defaultValue: z.union([z.string(), rich]).optional(),
+          hasLocalizedValue: z.literal("true").optional(),
+        })
+        .catchall(z.union([z.string(), rich]).optional()),
+      rich,
+    ]);
+    const props = z.object({ text });
+    const old = { html: "<p>Banner Text</p>", json: "old document" };
+    const authored = {
+      html: "<p>Meet Pumpkin Spice</p>",
+      json: "new document",
+    };
+    const catalog = createPuckGenerationCatalog({
+      Banner: {
+        generation: { props },
+        defaultProps: { text: { defaultValue: old } },
+      },
+    });
+    const compiler = createGenerationSchemaCompiler(
+      catalog,
+      ["en", "es"],
+      mode
+    );
+    const candidate = compiler
+      .element("Banner")
+      .apply({ type: "Banner", props: { text: authored } }, undefined);
+    expect(candidate.props.text).toEqual(authored);
+    expect(
+      normalizeGeneratedText(candidate.props, props, undefined, false, [
+        "en",
+        "es",
+      ]).text
+    ).toEqual({ defaultValue: authored });
+  }
+);
+
+it("drops direct-rich-text keys when authoring a localized bundle without retaining the old representation", () => {
+  const rich = z.strictObject({
+    html: z.string().optional(),
+    json: z.string().optional(),
+  });
+  const text = z.union([
+    z.string(),
+    z
+      .object({ defaultValue: z.union([z.string(), rich]).optional() })
+      .catchall(z.union([z.string(), rich]).optional()),
+    rich,
+  ]);
+  const catalog = createPuckGenerationCatalog({
+    Banner: {
+      generation: { props: z.object({ text }) },
+      defaultProps: { text: { html: "old", json: "old" } },
+    },
+  });
+  const compiler = createGenerationSchemaCompiler(catalog, ["en"], "insert");
+  const input = {
+    type: "Banner",
+    props: { text: { defaultValue: "New fallback", en: { $unset: true } } },
+  };
+  expect(compiler.element("Banner").apply(input, undefined).props.text).toEqual(
+    { defaultValue: "New fallback" }
+  );
+});

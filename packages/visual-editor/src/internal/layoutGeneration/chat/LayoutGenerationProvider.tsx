@@ -8,6 +8,11 @@ import {
   LayoutGenerationChatContext,
   LayoutGenerationChatUiProvider,
 } from "./contexts.tsx";
+import {
+  IntentPageGenerationContext,
+  IntentPageGenerationChatContext,
+  useIntentPageGeneration,
+} from "./useIntentPageGeneration.ts";
 import { useLayoutGenerationChat } from "./useLayoutGenerationChat.ts";
 
 type LayoutGenerationProviderProps = {
@@ -48,13 +53,35 @@ export const LayoutGenerationProvider = ({
     [enabled, model, config, metadata.locales]
   );
 
-  const scope = JSON.stringify([
+  const scopeKey = JSON.stringify([
     metadata.siteId,
     metadata.templateId,
     metadata.layoutId,
   ]);
 
-  const chat = useLayoutGenerationChat(environment, scope);
+  const chat = useLayoutGenerationChat(
+    environment,
+    String(metadata.layoutId ?? ""),
+    scopeKey
+  );
+  const intent = useIntentPageGeneration(
+    chat,
+    metadata,
+    `${scopeKey}:${model}:${enabled}`,
+    enabled
+  );
+  const intentBlocked = intent.workflow.blocked;
+  const uiChat = {
+    ...chat,
+    send: async (prompt: string) => {
+      if (intent.workflow.state.stage === "clarification") {
+        await intent.workflow.answer(prompt);
+      } else if (!intent.workflow.blocked) {
+        await chat.send(prompt);
+      }
+    },
+    cancel: intentBlocked ? intent.workflow.cancel : chat.cancel,
+  };
 
   if (localDev) {
     return children;
@@ -63,11 +90,18 @@ export const LayoutGenerationProvider = ({
   return (
     <LayoutGenerationChatContext.Provider value={enabled ? chat.canvas : null}>
       <LayoutGenerationChatUiProvider
-        scopeKey={`${scope}:${model}`}
-        chat={enabled ? chat : null}
-        disabled={!chat.ready}
+        scopeKey={`${scopeKey}:${model}`}
+        chat={enabled ? uiChat : null}
+        disabled={
+          !chat.ready ||
+          (intentBlocked && intent.state.stage !== "clarification")
+        }
       >
-        {children}
+        <IntentPageGenerationContext.Provider value={intent.workflow}>
+          <IntentPageGenerationChatContext.Provider value={intent}>
+            {children}
+          </IntentPageGenerationChatContext.Provider>
+        </IntentPageGenerationContext.Provider>
       </LayoutGenerationChatUiProvider>
     </LayoutGenerationChatContext.Provider>
   );

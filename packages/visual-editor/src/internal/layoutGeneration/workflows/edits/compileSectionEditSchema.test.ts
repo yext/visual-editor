@@ -8,6 +8,8 @@ import { clone, type Content } from "../../shared/authoredValues.ts";
 import {
   defaults,
   editGenerationFixture,
+  editPlan,
+  planningResponse,
   editResponse,
   editTask,
   insertedCard,
@@ -365,6 +367,266 @@ describe("section edit targets and values", () => {
       "/text/defaultValue"
     );
   });
+
+  it("plans and applies removal without duplicating structural targets as content targets", () => {
+    const fixture = editGenerationFixture();
+    const task = {
+      ...editTask("first", [], [{ kind: "remove", componentId: "first" }]),
+      generateContent: false,
+    };
+    const compiled = compileEditPlanningSchema(
+      fixture.catalog,
+      ["en"],
+      fixture.data
+    );
+    const output = planningResponse(
+      editPlan([task]),
+      fixture.catalog,
+      fixture.data
+    );
+    expect(
+      z.fromJSONSchema(compiled.jsonSchema).safeParse(output).success
+    ).toBe(true);
+    const plan = compiled.parseResponse(JSON.stringify(output));
+    const section = compileSectionEditSchema(
+      fixture.catalog,
+      ["en"],
+      fixture.data,
+      plan.tasks[0]
+    );
+    expect(section.localResult).toBeTruthy();
+    const applied = materializeSectionEdit(
+      fixture.catalog,
+      fixture.data,
+      plan.tasks[0],
+      section.localResult!
+    );
+    expect(
+      applied.content[1].props.content.map((item: any) => item.props.id)
+    ).toEqual(["second"]);
+    expect(fixture.data.content[1].props.content).toHaveLength(2);
+  });
+
+  it("rejects protected and cross-section structural targets even without content targets", () => {
+    const fixture = editGenerationFixture();
+    for (const componentId of ["main", "second"]) {
+      const task = {
+        ...editTask("first", [], [{ kind: "remove", componentId }]),
+        generateContent: false,
+      };
+      expect(() =>
+        compileSectionEditSchema(fixture.catalog, ["en"], fixture.data, task)
+      ).toThrow();
+    }
+    fixture.components.Section.permissions = { delete: false };
+    const task = {
+      ...editTask("first", [], [{ kind: "remove", componentId: "first" }]),
+      generateContent: false,
+    };
+    expect(() =>
+      compileSectionEditSchema(fixture.catalog, ["en"], fixture.data, task)
+    ).toThrow("protected content");
+  });
+
+  it("reorders without duplicate targets and rejects structure beneath a removed parent", () => {
+    const fixture = editGenerationFixture();
+    const task = {
+      ...editTask(
+        "first",
+        [],
+        [
+          {
+            kind: "reorder",
+            componentId: "first-a",
+            anchor: { position: "after", componentId: "first-b" },
+          },
+        ]
+      ),
+      generateContent: false,
+    };
+    const compiled = compileSectionEditSchema(
+      fixture.catalog,
+      ["en"],
+      fixture.data,
+      task
+    );
+    const applied = materializeSectionEdit(
+      fixture.catalog,
+      fixture.data,
+      task,
+      compiled.localResult!
+    );
+    expect(
+      applied.content[1].props.content[0].props.cards.map(
+        (card: any) => card.props.id
+      )
+    ).toEqual(["first-b", "first-a"]);
+    const conflicting = {
+      ...task,
+      structuralOperations: [
+        { kind: "remove" as const, componentId: "first" },
+        ...task.structuralOperations,
+      ],
+    };
+    expect(() =>
+      compileSectionEditSchema(
+        fixture.catalog,
+        ["en"],
+        fixture.data,
+        conflicting
+      )
+    ).toThrow("descendant");
+  });
+
+  it("carries parent and child visibility guidance through planning and section execution", () => {
+    const parentGuidance =
+      "Controls HeadingSlot. Enable when writing a marketing headline.";
+    const slotGuidance =
+      "Marketing headline; requires styles.showHeading, even on a topic page.";
+    const childGuidance =
+      "Render the secondary CTA when writing its label and link.";
+    const catalog = createPuckGenerationCatalog({
+      Header: {
+        generation: {
+          props: z.object({
+            styles: z.object({
+              showHeading: z.boolean().describe(parentGuidance),
+            }),
+            slots: z.object({
+              HeadingSlot: z
+                .array(z.unknown())
+                .length(1)
+                .describe(slotGuidance),
+              SecondaryCTASlot: z
+                .array(z.unknown())
+                .length(1)
+                .describe("Enable the child CTA's data.show."),
+            }),
+          }),
+        },
+        fields: {
+          slots: {
+            type: "object",
+            objectFields: {
+              HeadingSlot: { type: "slot", allow: ["Heading"] },
+              SecondaryCTASlot: { type: "slot", allow: ["CTA"] },
+            },
+          },
+        },
+      },
+      Heading: { generation: { props: z.object({ text: z.string() }) } },
+      CTA: {
+        generation: {
+          props: z.object({
+            data: z.object({
+              show: z.boolean().optional().describe(childGuidance),
+              label: z.string(),
+              link: z.string(),
+            }),
+          }),
+        },
+      },
+    });
+    const data = {
+      content: [
+        {
+          type: "Header",
+          props: {
+            id: "header",
+            styles: { showHeading: false },
+            slots: {
+              HeadingSlot: [
+                {
+                  type: "Heading",
+                  props: { id: "heading", text: "Old headline" },
+                },
+              ],
+              SecondaryCTASlot: [
+                {
+                  type: "CTA",
+                  props: {
+                    id: "cta",
+                    data: { show: false, label: "Placeholder", link: "#" },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      ],
+    };
+    const planning = compileEditPlanningSchema(catalog, ["en"], data);
+    expect(planning.context.capabilities.Header.authoredPaths).toContainEqual({
+      path: "/styles/showHeading",
+      set: true,
+      unset: false,
+      description: parentGuidance,
+    });
+    expect(planning.context.capabilities.Header.slots).toContainEqual({
+      path: "/slots/HeadingSlot",
+      allow: ["Heading"],
+      disallow: [],
+      description: slotGuidance,
+    });
+    expect(planning.context.capabilities.CTA.authoredPaths).toContainEqual({
+      path: "/data/show",
+      set: true,
+      unset: true,
+      description: childGuidance,
+    });
+    const task = editTask("header", ["header", "heading", "cta"]);
+    const planned = planning.parseResponse(
+      JSON.stringify(planningResponse(editPlan([task]), catalog, data))
+    );
+    const section = compileSectionEditSchema(
+      catalog,
+      ["en"],
+      data,
+      planned.tasks[0]
+    );
+    expect(JSON.stringify(section.jsonSchema)).toContain(parentGuidance);
+    expect(JSON.stringify(section.jsonSchema)).toContain(childGuidance);
+    const response = {
+      taskId: task.taskId,
+      sectionId: task.sectionId,
+      insertions: [],
+      updates: [
+        {
+          kind: "update",
+          componentId: "header",
+          changes: [{ kind: "set", path: "/styles/showHeading", value: true }],
+        },
+        {
+          kind: "update",
+          componentId: "heading",
+          changes: [{ kind: "set", path: "/text", value: "Shop fall boots" }],
+        },
+        {
+          kind: "update",
+          componentId: "cta",
+          changes: [
+            { kind: "set", path: "/data/show", value: true },
+            { kind: "set", path: "/data/label", value: "Find your fit" },
+            { kind: "set", path: "/data/link", value: "/boots" },
+          ],
+        },
+      ],
+    };
+    const applied = materializeSectionEdit(
+      catalog,
+      data,
+      task,
+      section.parseResponse(JSON.stringify(response))
+    );
+    expect(applied.content[0].props.styles.showHeading).toBe(true);
+    expect(
+      applied.content[0].props.slots.SecondaryCTASlot[0].props.data
+    ).toEqual({ show: true, label: "Find your fit", link: "/boots" });
+    expect(data.content[0].props.styles.showHeading).toBe(false);
+    expect(
+      data.content[0].props.slots.SecondaryCTASlot[0].props.data.show
+    ).toBe(false);
+  });
 });
 
 describe("section edit localization", () => {
@@ -675,7 +937,11 @@ describe("section edit localization", () => {
       const task = editTask("heading", ["heading"]);
       const localePath = kind === "array" ? "/value/0/text" : "/value";
       const planning = compileEditPlanningSchema(catalog, ["en", "fr"], data);
-      expect(planning.context.localizedText.heading).toContainEqual({
+      expect(
+        planning.context.localizedText[
+          planning.context.inventory.components[0].componentId
+        ]
+      ).toContainEqual({
         path: localePath,
         overrideLocales: ["en", "fr"],
       });

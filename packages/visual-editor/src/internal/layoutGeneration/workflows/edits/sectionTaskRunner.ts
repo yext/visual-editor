@@ -1,3 +1,4 @@
+import { pt } from "../../../../utils/i18n/platform.ts";
 import { SECTION_TASK_CONCURRENCY } from "../../limits.ts";
 import {
   GenerationError,
@@ -84,7 +85,11 @@ export const runSectionTasks = async (options: RunnerOptions) => {
         }
         controller.signal.throwIfAborted();
       });
-      finish(task, "applied", "Applied successfully.");
+      finish(
+        task,
+        "applied",
+        pt("layoutGenerationChat.appliedSuccessfully", "Applied successfully.")
+      );
     } catch (cause) {
       if (controller.signal.aborted) {
         return;
@@ -116,7 +121,14 @@ export const runSectionTasks = async (options: RunnerOptions) => {
             (id) => outcomes.has(id) && outcomes.get(id)!.status !== "applied"
           )
         ) {
-          finish(task, "skipped", "A required task did not apply.");
+          finish(
+            task,
+            "skipped",
+            pt(
+              "layoutGenerationChat.requiredTaskFailed",
+              "A required task did not apply."
+            )
+          );
         } else if (
           running.size < SECTION_TASK_CONCURRENCY &&
           task.dependsOn.every((id) => outcomes.get(id)?.status === "applied")
@@ -133,7 +145,14 @@ export const runSectionTasks = async (options: RunnerOptions) => {
     }
     for (const task of options.tasks) {
       if (!outcomes.has(task.taskId)) {
-        finish(task, "cancelled", "Stopped before application completed.");
+        finish(
+          task,
+          "cancelled",
+          pt(
+            "layoutGenerationChat.applicationStopped",
+            "Stopped before application completed."
+          )
+        );
       }
     }
     return {

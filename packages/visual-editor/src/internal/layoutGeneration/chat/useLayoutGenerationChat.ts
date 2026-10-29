@@ -1,4 +1,6 @@
+import { pt } from "../../../utils/i18n/platform.ts";
 import React from "react";
+import type { IntentGenerationResult } from "../workflows/intentPageGeneration/IntentPageGenerationWorkflow.ts";
 import { runEdits } from "../workflows/edits/runEdits.ts";
 import type {
   SectionEditPlan,
@@ -6,6 +8,7 @@ import type {
   SectionTaskOutcome,
 } from "../workflows/edits/types.ts";
 import { isBlankGenerationPage } from "../workflows/fullPageGeneration/isBlankGenerationPage.ts";
+import { runRegeneration } from "../workflows/fullPageRegeneration/runRegeneration.ts";
 import { runFullGeneration } from "../workflows/fullPageGeneration/runFullGeneration.ts";
 import {
   GENERATION_CANDIDATE_MAX_CHARACTERS,
@@ -30,14 +33,16 @@ type ChatMessage = {
   sections?: SectionTaskProgress[];
 };
 
-/** Keep conversation prose separate from the generated canvas data. */
+/** Keep conversation prose separate from the generated canvas data.
+ * scopeKey controls chat lifetime; layoutId identifies requests and diagnostics. */
 export const useLayoutGenerationChat = (
   environment: GenerationEnvironment | null,
-  layoutId: string
+  layoutId: string,
+  scopeKey = layoutId
 ) => {
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = React.useState(false);
-  const [isCreating, setIsCreating] = React.useState(false);
+  const [isGeneratingPage, setIsGeneratingPage] = React.useState(false);
   const [error, setError] = React.useState<Error | null>(null);
   const [canvas] = React.useState(() => new LayoutGenerationChatCanvas());
   canvas.catalog = environment?.catalog;
@@ -50,6 +55,7 @@ export const useLayoutGenerationChat = (
 
   const previousMessagesRef = React.useRef<ChatMessage[]>([]);
   const history = React.useRef<ConversationMessage[]>([]);
+  const regenerationPending = React.useRef(false);
   const activeRequest = React.useRef<AbortController | null>(null);
   const finalizeCancelled = React.useRef<(() => void) | null>(null);
   const diagnostics = React.useRef<Record<string, unknown>>({});
@@ -89,6 +95,7 @@ export const useLayoutGenerationChat = (
   };
 
   const cancel = React.useCallback(() => {
+    regenerationPending.current = false;
     activeRequest.current?.abort();
     canvas.finish();
     if (finalizeCancelled.current) {
@@ -99,7 +106,7 @@ export const useLayoutGenerationChat = (
     finalizeCancelled.current = null;
     activeRequest.current = null;
     setIsStreaming(false);
-    setIsCreating(false);
+    setIsGeneratingPage(false);
   }, [canvas]);
   canvas.onError = (cause) => {
     cancel();
@@ -117,18 +124,31 @@ export const useLayoutGenerationChat = (
   React.useLayoutEffect(() => {
     clear();
     return () => cancel();
-  }, [environment?.model, environment?.transport, layoutId, clear, cancel]);
+  }, [
+    environment?.model,
+    environment?.transport,
+    layoutId,
+    scopeKey,
+    clear,
+    cancel,
+  ]);
 
-  const send = async (prompt: string) => {
+  const run = async (
+    prompt: string,
+    mode: "chat" | "intent" | "intent-continuation"
+  ): Promise<IntentGenerationResult> => {
     if (
       !environment ||
       !prompt.trim() ||
       activeRequest.current ||
       !canvas.ready
     ) {
-      return;
+      return false;
     }
 
+    const isIntent = mode !== "chat";
+    let regenerating = regenerationPending.current;
+    regenerationPending.current = false;
     const correlationId = crypto.randomUUID();
     diagnostics.current = {
       correlationId,
@@ -148,10 +168,12 @@ export const useLayoutGenerationChat = (
       ...previousMessages,
       { role: "user", text: user.content },
     ];
-    const requestMessages = [...history.current, user];
+    const requestMessages =
+      mode === "intent" ? [user] : [...history.current, user];
 
     let plan: SectionEditPlan | undefined;
     let createdSections = 0;
+    let regeneratedSteps = 0;
     const taskOutcomes = new Map<string, SectionTaskOutcome>();
     let completed = false;
 
@@ -162,7 +184,12 @@ export const useLayoutGenerationChat = (
         ...nextMessages,
         {
           role: "assistant",
-          text,
+          text: isIntent
+            ? pt(
+                "layoutGenerationChat.creatingIntentPage",
+                "Creating intent page..."
+              )
+            : text,
           pending: true,
           sections: [...progress.values()],
         },
@@ -184,12 +211,27 @@ export const useLayoutGenerationChat = (
       }
 
       progress.set(task.taskId, { ...previous, status, message });
+      const building = [...progress.values()].some(
+        (section) =>
+          section.sectionId === task.sectionId &&
+          ["generating", "retrying", "queued", "applying"].includes(
+            section.status
+          )
+      );
+      if (building) canvas.buildingSection(task.sectionId);
+      else canvas.clearBuildingSection(task.sectionId);
 
       const applied = [...progress.values()].filter(
         (item) => item.status === "applied"
       ).length;
 
-      showProgress(`${applied} of ${progress.size} sections applied.`);
+      showProgress(
+        pt(
+          "layoutGenerationChat.sectionsApplied",
+          "{{applied}} of {{total}} sections applied.",
+          { applied, total: progress.size }
+        )
+      );
     };
     const complete = (
       text: string,
@@ -224,7 +266,10 @@ export const useLayoutGenerationChat = (
             taskId: task.taskId,
             sectionId: task.sectionId,
             status: "cancelled",
-            message: "Stopped before application completed.",
+            message: pt(
+              "layoutGenerationChat.applicationStopped",
+              "Stopped before application completed."
+            ),
           }
       );
 
@@ -255,21 +300,69 @@ export const useLayoutGenerationChat = (
       complete(text, sections, [text, details].filter(Boolean).join("\n\n"));
     };
 
+    const finishRegenerationProgress = (status: "cancelled" | "skipped") => {
+      for (const [key, section] of progress) {
+        if (section.status !== "applied") {
+          progress.set(key, {
+            ...section,
+            status,
+            description:
+              status === "skipped"
+                ? pt(
+                    "layoutGenerationChat.noSectionChange",
+                    "No change applied to this section."
+                  )
+                : section.description,
+          });
+        }
+      }
+      return [...progress.values()];
+    };
+
     finalizeCancelled.current = () => {
-      if (plan) {
-        completeEdits("Request cancelled.");
+      if (regenerating) {
+        complete(
+          pt(
+            "layoutGenerationChat.regenerationCancelled",
+            "Regeneration cancelled. {{count}} steps completed; remaining sections retained.",
+            {
+              count: regeneratedSteps,
+              defaultValue_one:
+                "Regeneration cancelled. {{count}} step completed; remaining sections retained.",
+            }
+          ),
+          finishRegenerationProgress("cancelled")
+        );
+      } else if (plan) {
+        completeEdits(
+          pt("layoutGenerationChat.requestCancelled", "Request cancelled.")
+        );
       } else {
         canvas.onDiagnostic("creation-stopped", {
           outcome: "cancelled",
           sectionCount: createdSections,
         });
-        complete("Request cancelled before any changes were applied.");
+        complete(
+          pt(
+            "layoutGenerationChat.cancelledBeforeChanges",
+            "Request cancelled before any changes were applied."
+          )
+        );
       }
     };
 
     setMessages([
       ...nextMessages,
-      { role: "assistant", text: "Generating layout…", pending: true },
+      {
+        role: "assistant",
+        text: isIntent
+          ? pt(
+              "layoutGenerationChat.creatingIntentPage",
+              "Creating intent page..."
+            )
+          : pt("layoutGenerationChat.generatingLayout", "Generating layout…"),
+        pending: true,
+      },
     ]);
     setIsStreaming(true);
     setError(null);
@@ -277,28 +370,52 @@ export const useLayoutGenerationChat = (
     const request: GenerationRequestExecutor = (
       body,
       signal = controller.signal,
-      onCreationContent
+      onCreationContent,
+      onRegenerationStep,
+      onRegenerationSection
     ) =>
       requestChatGeneration(
-        body,
+        isIntent || regenerating ? { ...body, purpose: "intent" } : body,
         environment,
         signal,
         correlationId,
-        onCreationContent
+        onCreationContent,
+        onRegenerationStep,
+        onRegenerationSection
       );
     try {
       const selectedComponentId = canvas.selectedComponentId;
       const currentData = canvas.begin();
-      const fresh = isBlankGenerationPage(currentData);
-      setIsCreating(fresh);
+      const blank = isBlankGenerationPage(currentData);
+      if (isIntent) regenerating = !blank;
+      const fresh = !regenerating && blank;
+      setIsGeneratingPage(fresh || regenerating);
       const sectionLabels = fresh ? {} : canvas.sectionLabels;
-      showProgress(fresh ? "Generating layout…" : "Planning changes…");
+      if (regenerating) {
+        for (const [sectionId, label] of Object.entries(sectionLabels)) {
+          progress.set(`section-${sectionId}`, {
+            taskId: `section-${sectionId}`,
+            sectionId,
+            label,
+            description: pt(
+              "layoutGenerationChat.waitingForDecision",
+              "Waiting for a section decision."
+            ),
+            status: "waiting",
+          });
+        }
+      }
+      showProgress(
+        fresh
+          ? pt("layoutGenerationChat.generatingLayout", "Generating layout…")
+          : pt("layoutGenerationChat.planningChanges", "Planning changes…")
+      );
       // Puck records manual changes after 250ms; let pending history settle.
       await new Promise<void>((resolve) =>
         setTimeout(resolve, PUCK_HISTORY_SETTLE_DELAY_MS)
       );
       if (!active()) {
-        return;
+        return false;
       }
       diagnostics.current.phase = fresh ? "request" : "planning";
       const turn = {
@@ -309,29 +426,133 @@ export const useLayoutGenerationChat = (
         active,
         request,
       };
-      if (fresh) {
-        const text = await runFullGeneration({
+      if (regenerating) {
+        showProgress(
+          pt("layoutGenerationChat.regeneratingPage", "Regenerating page…")
+        );
+        diagnostics.current.phase = "regeneration";
+        const result = await runRegeneration({
+          ...turn,
+          canvas,
+          onProgress: (step, count) => {
+            if (!active()) return;
+            regeneratedSteps = count;
+            const sectionId =
+              step.kind === "insert" ? `insert-${count}` : step.sectionId;
+            const label =
+              step.kind === "insert"
+                ? pt(
+                    "layoutGenerationChat.newSection",
+                    "New section · {{label}}",
+                    {
+                      label: step.sections
+                        .map((section) => canvas.componentLabel(section.type))
+                        .join(", "),
+                    }
+                  )
+                : (sectionLabels[sectionId] ?? sectionId);
+            const descriptions = {
+              keep: pt(
+                "layoutGenerationChat.sectionKept",
+                "Kept this section."
+              ),
+              remove: pt(
+                "layoutGenerationChat.sectionRemoved",
+                "Removed this section."
+              ),
+              reorder: pt(
+                "layoutGenerationChat.sectionMoved",
+                "Moved this section."
+              ),
+              replace: pt(
+                "layoutGenerationChat.sectionUpdated",
+                "Updated this section."
+              ),
+              insert: pt(
+                "layoutGenerationChat.sectionAdded",
+                "Added this section."
+              ),
+            };
+            const waitingKey = `section-${sectionId}`;
+            const taskId =
+              progress.get(waitingKey)?.status === "waiting"
+                ? waitingKey
+                : `regeneration-${count}`;
+            progress.set(taskId, {
+              taskId,
+              sectionId,
+              label,
+              description: descriptions[step.kind],
+              status: "applied",
+            });
+            diagnostics.current.phase = "streaming-regeneration";
+            canvas.onDiagnostic("regeneration-step", {
+              kind: step.kind,
+              completedSteps: count,
+            });
+            showProgress(
+              pt(
+                "layoutGenerationChat.regenerationProgress",
+                "{{count}} regeneration steps completed…",
+                {
+                  count,
+                  defaultValue_one: "{{count}} regeneration step completed…",
+                }
+              )
+            );
+          },
+        });
+        if (result && active()) {
+          regenerationPending.current = result.clarification;
+          complete(
+            result.text,
+            result.clarification ? [] : finishRegenerationProgress("skipped")
+          );
+          return result.clarification ? "clarification" : true;
+        }
+      } else if (fresh) {
+        const result = await runFullGeneration({
           ...turn,
           canvas,
           onProgress: (event) => {
             switch (event.phase) {
               case "preparing":
-                showProgress("Checking page requirements…");
+                showProgress(
+                  pt(
+                    "layoutGenerationChat.checkingRequirements",
+                    "Checking page requirements…"
+                  )
+                );
                 break;
               case "generating":
-                showProgress("Generating layout…");
+                showProgress(
+                  pt(
+                    "layoutGenerationChat.generatingLayout",
+                    "Generating layout…"
+                  )
+                );
                 break;
               case "revealed":
                 createdSections = event.sectionCount;
                 diagnostics.current.phase = "streaming-creation";
                 showProgress(
-                  `${createdSections} sections applied. Generating layout…`
+                  pt(
+                    "layoutGenerationChat.sectionsAppliedGenerating",
+                    "{{count}} sections applied. Generating layout…",
+                    {
+                      count: createdSections,
+                      defaultValue_one:
+                        "{{count}} section applied. Generating layout…",
+                    }
+                  )
                 );
                 break;
               case "applying":
                 diagnostics.current.phase = "resolve-and-commit";
                 diagnostics.current.candidate = event.candidate;
-                showProgress("Applying layout…");
+                showProgress(
+                  pt("layoutGenerationChat.applyingLayout", "Applying layout…")
+                );
                 break;
               case "resolved":
                 createdSections = event.sectionCount;
@@ -346,8 +567,9 @@ export const useLayoutGenerationChat = (
             }
           },
         });
-        if (text !== undefined && active()) {
-          complete(text);
+        if (result && active()) {
+          complete(result.text);
+          return result.clarification ? "clarification" : createdSections > 0;
         }
       } else {
         const result = await runEdits({
@@ -357,7 +579,12 @@ export const useLayoutGenerationChat = (
           onProgress: (event) => {
             if (event.phase === "planning") {
               showProgress(
-                event.retrying ? "Retrying plan…" : "Planning changes…"
+                event.retrying
+                  ? pt("layoutGenerationChat.retryingPlan", "Retrying plan…")
+                  : pt(
+                      "layoutGenerationChat.planningChanges",
+                      "Planning changes…"
+                    )
               );
             } else if (event.phase === "section") {
               updateProgress(event.task, event.status);
@@ -373,13 +600,36 @@ export const useLayoutGenerationChat = (
                   label:
                     sectionLabels[task.sectionId] ??
                     (insertion?.kind === "insert"
-                      ? `New section · ${insertion.componentType}`
-                      : `Section ${index + 1}`),
-                  description: task.description ?? "Update this section.",
+                      ? pt(
+                          "layoutGenerationChat.newSection",
+                          "New section · {{label}}",
+                          {
+                            label: canvas.componentLabel(
+                              insertion.componentType
+                            ),
+                          }
+                        )
+                      : pt(
+                          "layoutGenerationChat.sectionNumber",
+                          "Section {{number}}",
+                          { number: index + 1 }
+                        )),
+                  description:
+                    task.description ??
+                    pt(
+                      "layoutGenerationChat.updateSection",
+                      "Update this section."
+                    ),
                   status: task.dependsOn.length ? "waiting" : "pending",
                 });
               });
-              showProgress(`0 of ${plan.tasks.length} sections applied.`);
+              showProgress(
+                pt(
+                  "layoutGenerationChat.sectionsApplied",
+                  "{{applied}} of {{total}} sections applied.",
+                  { applied: 0, total: plan.tasks.length }
+                )
+              );
               diagnostics.current.phase = "section-execution";
             }
           },
@@ -395,7 +645,7 @@ export const useLayoutGenerationChat = (
           },
         });
         if (!active()) {
-          return;
+          return false;
         }
         completeEdits();
         if (result?.error) {
@@ -404,17 +654,40 @@ export const useLayoutGenerationChat = (
       }
     } catch (cause) {
       if (!active()) {
-        return;
+        return false;
       }
 
-      if (plan) {
-        completeEdits("Request stopped before completion.");
+      if (regenerating) {
+        complete(
+          pt(
+            "layoutGenerationChat.regenerationStopped",
+            "Regeneration stopped. {{count}} steps completed; remaining sections retained.",
+            {
+              count: regeneratedSteps,
+              defaultValue_one:
+                "Regeneration stopped. {{count}} step completed; remaining sections retained.",
+            }
+          ),
+          finishRegenerationProgress("cancelled")
+        );
+      } else if (plan) {
+        completeEdits(
+          pt(
+            "layoutGenerationChat.requestStopped",
+            "Request stopped before completion."
+          )
+        );
       } else {
         canvas.onDiagnostic("creation-stopped", {
           outcome: "failed",
           sectionCount: createdSections,
         });
-        complete("Request failed before any changes were applied.");
+        complete(
+          pt(
+            "layoutGenerationChat.failedBeforeChanges",
+            "Request failed before any changes were applied."
+          )
+        );
       }
       reportError(cause);
     } finally {
@@ -423,19 +696,24 @@ export const useLayoutGenerationChat = (
         activeRequest.current = null;
         finalizeCancelled.current = null;
         setIsStreaming(false);
-        setIsCreating(false);
+        setIsGeneratingPage(false);
       }
     }
+    return false;
   };
   return {
     messages,
     isStreaming,
-    isCreating,
-    send,
+    isGeneratingPage,
+    send: async (prompt: string) => {
+      await run(prompt, "chat");
+    },
     clear,
+    generateIntent: (prompt: string, continuation = false) =>
+      run(prompt, continuation ? "intent-continuation" : "intent"),
     error,
     canvas,
     ready,
-    cancel: () => cancel(),
+    cancel,
   };
 };

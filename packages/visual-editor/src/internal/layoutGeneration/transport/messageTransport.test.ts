@@ -304,4 +304,9 @@ it("runs the same prepared request and parser through a parent harness and the l
   expect(JSON.parse((localFetch.mock.calls[0] as any)[1].body)).toEqual(
     request.body
   );
+  expect(
+    (localFetch.mock.calls[0] as any)[1].headers[
+      "X-Visual-Editor-Correlation-Id"
+    ]
+  ).toBe(h.requests().at(-1)!.payload.requestId);
 });

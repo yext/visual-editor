@@ -31,7 +31,7 @@ import type { ComprehensiveCTAField } from "./styledFields/ComprehensiveCTAField
 import { YextAutoField } from "./YextAutoField.tsx";
 import { adaptYextFieldMap } from "./yextFieldAdapter.ts";
 
-export type YextPuckFields = {
+type YextPuckFields = {
   basicSelector: BasicSelectorField;
   ctaSelector: CTASelectorField;
   code: CodeField;
