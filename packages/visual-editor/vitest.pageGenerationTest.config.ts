@@ -10,7 +10,7 @@ export default defineConfig({
     entries: [
       "src/internal/layoutGeneration/workflows/fullPageGeneration/creationFlow.test.tsx",
       "src/internal/layoutGeneration/chat/previewScroll.test.ts",
-      "src/internal/layoutGeneration/chat/regeneration.integration.test.tsx",
+      "src/internal/layoutGeneration/chat/fullPageUpdate.integration.test.tsx",
       "src/internal/layoutGeneration/chat/intentClarification.integration.test.tsx",
       "src/internal/layoutGeneration/chat/LayoutGenerationChatProgress.test.tsx",
     ],
@@ -19,7 +19,7 @@ export default defineConfig({
     include: [
       "src/internal/layoutGeneration/workflows/fullPageGeneration/creationFlow.test.tsx",
       "src/internal/layoutGeneration/chat/previewScroll.test.ts",
-      "src/internal/layoutGeneration/chat/regeneration.integration.test.tsx",
+      "src/internal/layoutGeneration/chat/fullPageUpdate.integration.test.tsx",
       "src/internal/layoutGeneration/chat/intentClarification.integration.test.tsx",
       "src/internal/layoutGeneration/chat/LayoutGenerationChatProgress.test.tsx",
     ],

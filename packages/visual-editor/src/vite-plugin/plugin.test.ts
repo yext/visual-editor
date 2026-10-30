@@ -42,7 +42,7 @@ afterEach(() => {
 });
 
 describe("yextVisualEditorPlugin", () => {
-  it("initializes the generation log and closes it with the local editor server", () => {
+  it("initializes the generation log and closes it with the local editor server", async () => {
     const existingSignals = new Map(
       (["SIGINT", "SIGTERM"] as const).map((event) => [
         event,
@@ -62,7 +62,7 @@ describe("yextVisualEditorPlugin", () => {
         httpServer: { once: vi.fn() },
         middlewares: { use: vi.fn() },
       };
-      (configureServer as (server: ViteDevServer) => void)(
+      await (configureServer as (server: ViteDevServer) => Promise<void>)(
         server as unknown as ViteDevServer
       );
       expect(server.middlewares.use).toHaveBeenCalledTimes(2);
@@ -93,36 +93,39 @@ describe("yextVisualEditorPlugin", () => {
     { enabled: true },
     { enabled: true, layoutGenerationEnabled: false },
     { enabled: false, layoutGenerationEnabled: true },
-  ])("disables generation and logging with localEditor %j", (localEditor) => {
-    vi.spyOn(process, "once").mockReturnValue(process);
-    const plugin = yextVisualEditorPlugin({ localEditor });
-    const configureServer =
-      typeof plugin.configureServer === "object"
-        ? plugin.configureServer.handler
-        : plugin.configureServer;
-    const server = {
-      config: { root: "/test/library" },
-      httpServer: { once: vi.fn() },
-      middlewares: { use: vi.fn() },
-    };
+  ])(
+    "disables generation and logging with localEditor %j",
+    async (localEditor) => {
+      vi.spyOn(process, "once").mockReturnValue(process);
+      const plugin = yextVisualEditorPlugin({ localEditor });
+      const configureServer =
+        typeof plugin.configureServer === "object"
+          ? plugin.configureServer.handler
+          : plugin.configureServer;
+      const server = {
+        config: { root: "/test/library" },
+        httpServer: { once: vi.fn() },
+        middlewares: { use: vi.fn() },
+      };
 
-    (configureServer as (server: ViteDevServer) => void)(
-      server as unknown as ViteDevServer
-    );
+      await (configureServer as (server: ViteDevServer) => Promise<void>)(
+        server as unknown as ViteDevServer
+      );
 
-    expect(loggerMocks.createGenerationLogger).not.toHaveBeenCalled();
-    expect(server.middlewares.use).toHaveBeenCalledTimes(
-      localEditor.enabled ? 1 : 0
-    );
-    if (localEditor.enabled) {
-      const [, closeServer] = server.httpServer.once.mock.calls[0];
-      closeServer();
-      expect(loggerMocks.log.close).not.toHaveBeenCalled();
-      expect(
-        localEditorMocks.cleanupGeneratedLocalEditorArtifacts
-      ).toHaveBeenCalledOnce();
+      expect(loggerMocks.createGenerationLogger).not.toHaveBeenCalled();
+      expect(server.middlewares.use).toHaveBeenCalledTimes(
+        localEditor.enabled ? 1 : 0
+      );
+      if (localEditor.enabled) {
+        const [, closeServer] = server.httpServer.once.mock.calls[0];
+        closeServer();
+        expect(loggerMocks.log.close).not.toHaveBeenCalled();
+        expect(
+          localEditorMocks.cleanupGeneratedLocalEditorArtifacts
+        ).toHaveBeenCalledOnce();
+      }
     }
-  });
+  );
 
   it.each([
     ["omitted", undefined],

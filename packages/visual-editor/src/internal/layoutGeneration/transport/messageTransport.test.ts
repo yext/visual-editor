@@ -1,3 +1,7 @@
+import {
+  testPrompts,
+  testGenerationSettings,
+} from "../testing/promptFixtures.ts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { installLocalGenerationHost } from "../../../local-editor/localGenerationHost.ts";
 import { createPuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
@@ -254,6 +258,8 @@ it("runs the same prepared request and parser through a parent harness and the l
   };
   const environment = {
     model: body.model,
+    prompts: testPrompts,
+    generationSettings: testGenerationSettings,
     catalog: createPuckGenerationCatalog({}),
     locales: ["en", "fr"],
     transport: iframeModelTransport,
@@ -267,7 +273,7 @@ it("runs the same prepared request and parser through a parent harness and the l
   );
   const request = h.requests()[0].payload;
   expect(request.body.model).toBe(body.model);
-  expect(request.body.instructions).toBeTruthy();
+  expect(request.body.instructions).toBe(testPrompts.prompts.prepare);
   reply(request.requestId, {
     event: "start",
     contentType: "text/event-stream",

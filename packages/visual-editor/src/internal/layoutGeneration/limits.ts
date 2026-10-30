@@ -1,16 +1,3 @@
-/** Maximum duration of one model attempt before it is aborted. */
-export const GENERATION_ATTEMPT_DEADLINE_MS = 5 * 60 * 1000; // 5 minutes
-/** Maximum output tokens for generating a complete page. */
-export const FRESH_PAGE_OUTPUT_TOKEN_BUDGET = 128_000;
-/** Retry allowance when the gateway rejects regeneration before using any tokens. */
-export const REGENERATION_FALLBACK_OUTPUT_TOKEN_BUDGET = 64_000;
-/** Maximum output tokens for resolving translation choices and requested card counts. */
-export const GENERATION_PREPARATION_OUTPUT_TOKEN_BUDGET = 2_048;
-/** Maximum output tokens for planning changes to an existing page. */
-export const EDIT_PLANNING_OUTPUT_TOKEN_BUDGET = 16_384;
-/** Maximum output tokens for generating changes to one planned section. */
-export const SECTION_EDIT_OUTPUT_TOKEN_BUDGET = 32_768;
-
 /** Maximum validation-feedback length included in a repair request. */
 export const GENERATION_REPAIR_FEEDBACK_MAX_CHARACTERS = 4_000;
 /** Maximum number of independent section tasks allowed to run at once. */

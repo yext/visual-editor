@@ -1,3 +1,5 @@
+import type { GenerationSettings } from "../../types/generationSettings.ts";
+import type { GenerationPromptBundle } from "../../types/generationPrompts.ts";
 import DOMPurify from "dompurify";
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
@@ -12,6 +14,8 @@ export type IntentPageGeneration = {
 };
 
 export type AiPageGeneration = {
+  prompts?: GenerationPromptBundle;
+  generationSettings?: GenerationSettings;
   intentPageGeneration?: IntentPageGeneration;
   layoutGenerationEnabled: boolean;
   model: string;

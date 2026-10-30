@@ -1,4 +1,8 @@
 import {
+  testPrompts,
+  testGenerationSettings,
+} from "../testing/promptFixtures.ts";
+import {
   act,
   cleanup,
   fireEvent,
@@ -29,6 +33,8 @@ const metadata = (overrides: Partial<TemplateMetadata> = {}) =>
     aiPageGeneration: {
       layoutGenerationEnabled: true,
       model: "configured-model",
+      prompts: testPrompts,
+      generationSettings: testGenerationSettings,
     },
     ...overrides,
   }) as TemplateMetadata;
@@ -42,7 +48,7 @@ const Probe = () => {
         resolve: async (data) => data,
         validate: () => {},
         preview: () => {},
-        materializeRegeneration: (data) => data,
+        materializeFullPageUpdate: (data) => data,
         preserveSectionResolution: (_resolved, candidate) => candidate,
         commit: () => {},
       }),
@@ -62,6 +68,8 @@ it("shows interrupted generation recovery and disables restart until persistence
     aiPageGeneration: {
       layoutGenerationEnabled: true,
       model: "model",
+      prompts: testPrompts,
+      generationSettings: testGenerationSettings,
       intentPageGeneration: {
         prompt: "Retained prompt",
         status: "RUNNING",
@@ -168,6 +176,8 @@ it("reports an already failed intent without a retry button or blocked composer"
     aiPageGeneration: {
       layoutGenerationEnabled: true,
       model: "model",
+      prompts: testPrompts,
+      generationSettings: testGenerationSettings,
       intentPageGeneration: {
         prompt: "Chicken menu",
         status: "FAILED",
@@ -198,6 +208,8 @@ it("releases the chat after a refused intent start without offering generation r
     aiPageGeneration: {
       layoutGenerationEnabled: true,
       model: "model",
+      prompts: testPrompts,
+      generationSettings: testGenerationSettings,
       intentPageGeneration: { prompt: "Chicken menu", status: "PENDING" },
     },
   });
@@ -242,6 +254,8 @@ it("leaves the conversation empty when an intent is already completed", async ()
     aiPageGeneration: {
       layoutGenerationEnabled: true,
       model: "configured-model",
+      prompts: testPrompts,
+      generationSettings: testGenerationSettings,
       intentPageGeneration: {
         prompt: "Chicken menu",
         status: "COMPLETED",
@@ -264,7 +278,12 @@ it("leaves the conversation empty when an intent is already completed", async ()
 it.each([
   metadata({ aiPageGeneration: undefined }),
   metadata({
-    aiPageGeneration: { layoutGenerationEnabled: false, model: "test" },
+    aiPageGeneration: {
+      layoutGenerationEnabled: false,
+      model: "test",
+      prompts: testPrompts,
+      generationSettings: testGenerationSettings,
+    },
   }),
   metadata({ isThemeMode: true }),
 ])("keeps the feature inactive when disabled or in theme mode", (value) => {
@@ -295,7 +314,12 @@ it("reports a missing model without sending a request", async () => {
   render(
     view(
       metadata({
-        aiPageGeneration: { layoutGenerationEnabled: true, model: "" },
+        aiPageGeneration: {
+          layoutGenerationEnabled: true,
+          model: "",
+          prompts: testPrompts,
+          generationSettings: testGenerationSettings,
+        },
       })
     )
   );
@@ -406,6 +430,8 @@ it("cancels work and clears history when the configured model changes", async ()
         aiPageGeneration: {
           layoutGenerationEnabled: true,
           model: "different-model",
+          prompts: testPrompts,
+          generationSettings: testGenerationSettings,
         },
       })
     )
@@ -428,6 +454,8 @@ it("waits for durable start acknowledgement before invoking intent generation", 
     aiPageGeneration: {
       layoutGenerationEnabled: true,
       model: "intent-model",
+      prompts: testPrompts,
+      generationSettings: testGenerationSettings,
       intentPageGeneration: { prompt: "Product page", status: "PENDING" },
     },
   });
@@ -487,13 +515,11 @@ it("waits for durable start acknowledgement before invoking intent generation", 
     .map(([message]) => message)
     .find((message) => message.type === "aiPageGenerationRequest");
   expect(request.payload.body.model).toBe("intent-model");
-  expect(request.payload.body.text.format.name).toBe(
-    "puck_generation_preparation"
-  );
+  expect(request.payload.body.text.format.name).toBe("puck_full_page_update");
 });
 
 it.each([false, true])(
-  "does not auto-start disabled or theme-mode intent regeneration (%s)",
+  "does not auto-start disabled or theme-mode intent full-page update (%s)",
   async (themeMode) => {
     const send = post();
     render(
@@ -502,6 +528,8 @@ it.each([false, true])(
           isThemeMode: themeMode,
           aiPageGeneration: {
             model: "test",
+            prompts: testPrompts,
+            generationSettings: testGenerationSettings,
             layoutGenerationEnabled: themeMode,
             intentPageGeneration: { prompt: "Product page", status: "PENDING" },
           },
@@ -512,3 +540,125 @@ it.each([false, true])(
     expect(send).not.toHaveBeenCalled();
   }
 );
+
+it.each([undefined, { ...testPrompts, contractVersion: 999 }])(
+  "disables AI while preserving editor content for absent or incompatible prompts",
+  (prompts) => {
+    const send = post();
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    const value = metadata({
+      aiPageGeneration: {
+        layoutGenerationEnabled: true,
+        model: "test",
+        prompts: prompts as typeof testPrompts | undefined,
+        generationSettings: testGenerationSettings,
+      },
+    });
+    const result = render(view(value));
+    expect(result.getByText("Editor content")).toBeTruthy();
+    expect(ui).toBeNull();
+    expect(send).not.toHaveBeenCalled();
+    expect(error).toHaveBeenCalledWith(
+      expect.stringContaining("aiPageGeneration.prompts"),
+      expect.anything()
+    );
+  }
+);
+
+it("retains the loaded prompt bundle when metadata changes during a session", async () => {
+  const send = post();
+  vi.spyOn(console, "debug").mockImplementation(() => {});
+  const { rerender, unmount } = render(view(metadata()));
+  await waitFor(() => expect(ui?.chat.ready).toBe(true));
+  rerender(
+    view(
+      metadata({
+        aiPageGeneration: {
+          layoutGenerationEnabled: true,
+          model: "configured-model",
+          generationSettings: testGenerationSettings,
+          prompts: {
+            ...testPrompts,
+            prompts: {
+              ...testPrompts.prompts,
+              prepare: "New preparation instructions",
+            },
+          },
+        },
+      })
+    )
+  );
+  let pending!: Promise<void>;
+  act(() => {
+    pending = ui!.chat.send("Create page");
+  });
+  await waitFor(() => expect(send).toHaveBeenCalled());
+  const request = send.mock.calls
+    .map(([message]) => message)
+    .find((message) => message.type === "aiPageGenerationRequest");
+  expect(request.payload.body.instructions).toBe(testPrompts.prompts.prepare);
+  unmount();
+  await pending;
+});
+
+it.each([undefined, { ...testGenerationSettings, attemptTimeoutMs: 0 }])(
+  "disables platform AI when ALPHA does not supply valid generation settings",
+  (generationSettings) => {
+    const send = post();
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    const result = render(
+      view(
+        metadata({
+          aiPageGeneration: {
+            layoutGenerationEnabled: true,
+            model: "test",
+            prompts: testPrompts,
+            generationSettings,
+          },
+        })
+      )
+    );
+    expect(result.getByText("Editor content")).toBeTruthy();
+    expect(ui).toBeNull();
+    expect(send).not.toHaveBeenCalled();
+    expect(error).toHaveBeenCalledWith(
+      expect.stringContaining("aiPageGeneration.generationSettings"),
+      expect.anything()
+    );
+  }
+);
+
+it("sends the preparation token allowance supplied by ALPHA", async () => {
+  const send = post();
+  vi.spyOn(console, "debug").mockImplementation(() => {});
+  const { unmount } = render(
+    view(
+      metadata({
+        aiPageGeneration: {
+          layoutGenerationEnabled: true,
+          model: "test",
+          prompts: testPrompts,
+          generationSettings: {
+            ...testGenerationSettings,
+            maxOutputTokens: {
+              ...testGenerationSettings.maxOutputTokens,
+              prepare: 123,
+            },
+          },
+        },
+      })
+    )
+  );
+  await waitFor(() => expect(ui?.chat.ready).toBe(true));
+  let pending!: Promise<void>;
+  act(() => {
+    pending = ui!.chat.send("Create page");
+  });
+  await waitFor(() => expect(send).toHaveBeenCalled());
+  const request = send.mock.calls
+    .map(([message]) => message)
+    .find((message) => message.type === "aiPageGenerationRequest");
+  expect(request.payload.body.max_output_tokens).toBe(123);
+  unmount();
+  await pending;
+});

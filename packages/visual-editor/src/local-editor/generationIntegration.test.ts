@@ -1,3 +1,4 @@
+import { testPrompts } from "../internal/layoutGeneration/testing/promptFixtures.ts";
 import { afterEach, expect, it, vi } from "vitest";
 import type {
   GenerationEnvironment,
@@ -42,6 +43,21 @@ it("routes preparation, creation, planning, section execution and repair through
   vi.stubGlobal("fetch", fetchMock);
   const environment: GenerationEnvironment = {
     model: "test",
+    generationSettings: {
+      attemptTimeoutMs: 60_000,
+      maxOutputTokens: { page: 777, prepare: 111, plan: 222, section: 333 },
+    },
+    prompts: {
+      ...testPrompts,
+      prompts: {
+        prepare: "ALPHA preparation",
+        create: "ALPHA creation\n" + testPrompts.prompts.create,
+        fullPageUpdate:
+          "ALPHA fullPageUpdate\n" + testPrompts.prompts.fullPageUpdate,
+        plan: "ALPHA planning",
+        section: "ALPHA section execution",
+      },
+    },
     locales: ["en", "fr"],
     catalog: creationCatalog(),
     transport: createLocalMessageTransport(),
@@ -84,6 +100,18 @@ it("routes preparation, creation, planning, section execution and repair through
   expect(
     (
       await run(
+        { ...edit, mode: "fullPageUpdate" },
+        {
+          translationMode: "defaultOnly",
+          result: { action: "fullPageUpdate", steps: [] },
+          text: "No changes",
+        }
+      )
+    ).type
+  ).toBe("fullPageUpdated");
+  expect(
+    (
+      await run(
         { ...edit, mode: "plan", selectedComponentId: null },
         editPlan()
       )
@@ -112,10 +140,29 @@ it("routes preparation, creation, planning, section execution and repair through
   const requests = send.mock.calls
     .map(([message]) => message)
     .filter((message) => message.type === "aiPageGenerationRequest");
-  expect(requests).toHaveLength(6);
+  expect(requests).toHaveLength(7);
+  const instructionPrefixes = [
+    "ALPHA preparation",
+    "ALPHA creation",
+    "ALPHA fullPageUpdate",
+    "ALPHA planning",
+    "ALPHA section execution",
+    "ALPHA section execution",
+    "ALPHA section execution",
+  ];
+  const expectedBudgets = [111, 777, 777, 222, 333, 333, 333];
+  requests.forEach((request, index) => {
+    expect(request.payload.body.max_output_tokens).toBe(expectedBudgets[index]);
+    expect(
+      request.payload.body.instructions.startsWith(instructionPrefixes[index])
+    ).toBe(true);
+    expect(request.payload.body.instructions).not.toMatch(
+      /\{\{(?:componentNames|locales|componentDescriptions|recommendedSections|listGuidance)\}\}/
+    );
+  });
   expect(
     new Set(requests.map((request) => request.payload.requestId)).size
-  ).toBe(6);
+  ).toBe(7);
   fetchMock.mock.calls.forEach(([url, options], index) => {
     expect(url).toBe("/generate");
     expect(JSON.parse(options!.body as string)).toEqual(

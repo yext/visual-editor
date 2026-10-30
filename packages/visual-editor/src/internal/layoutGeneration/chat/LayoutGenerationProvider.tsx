@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { generationSettingsSchema } from "../../../types/generationSettings.ts";
+import { generationPromptBundleSchema } from "../../../types/generationPrompts.ts";
 import type { Config } from "@puckeditor/core";
 import React from "react";
 import type { TemplateMetadata } from "../../types/templateMetadata.ts";
@@ -15,6 +18,11 @@ import {
 } from "./useIntentPageGeneration.ts";
 import { useLayoutGenerationChat } from "./useLayoutGenerationChat.ts";
 
+const generationConfigSchema = z.object({
+  prompts: generationPromptBundleSchema,
+  generationSettings: generationSettingsSchema,
+});
+
 type LayoutGenerationProviderProps = {
   config: Config;
   metadata: TemplateMetadata;
@@ -29,10 +37,51 @@ export const LayoutGenerationProvider = ({
   localDev = false,
   children,
 }: LayoutGenerationProviderProps) => {
+  const scopeKey = JSON.stringify([
+    metadata.siteId,
+    metadata.templateId,
+    metadata.layoutId,
+  ]);
+  // Metadata may refresh for persistence acknowledgments; prompts and generation limits stay fixed for this scope.
+  const snapshot = React.useRef<{
+    scopeKey: string;
+    result: ReturnType<typeof generationConfigSchema.safeParse>;
+  } | null>(null);
+  if (
+    !localDev &&
+    metadata.aiPageGeneration &&
+    snapshot.current?.scopeKey !== scopeKey
+  ) {
+    snapshot.current = {
+      scopeKey,
+      result: generationConfigSchema.safeParse(metadata.aiPageGeneration),
+    };
+  }
+  const parsed =
+    snapshot.current?.scopeKey === scopeKey ? snapshot.current.result : null;
+  const prompts = parsed?.success ? parsed.data.prompts : null;
+  const generationSettings = parsed?.success
+    ? parsed.data.generationSettings
+    : null;
+  React.useEffect(() => {
+    if (
+      !localDev &&
+      metadata.aiPageGeneration?.layoutGenerationEnabled &&
+      parsed &&
+      !parsed.success
+    ) {
+      console.error(
+        "AI page generation disabled: provide compatible aiPageGeneration.prompts and aiPageGeneration.generationSettings.",
+        parsed.error
+      );
+    }
+  }, [localDev, metadata.aiPageGeneration?.layoutGenerationEnabled, parsed]);
+
   const enabled =
     !localDev &&
     metadata.aiPageGeneration?.layoutGenerationEnabled === true &&
-    !metadata.isThemeMode;
+    !metadata.isThemeMode &&
+    !!prompts;
 
   const model =
     typeof metadata.aiPageGeneration?.model === "string"
@@ -44,20 +93,16 @@ export const LayoutGenerationProvider = ({
       enabled
         ? {
             model,
+            prompts: prompts!,
+            generationSettings: generationSettings!,
             catalog: getGenerationCatalog(config),
             locales: metadata.locales,
             transport: iframeModelTransport,
             diagnostics: consoleGenerationDiagnostics,
           }
         : null,
-    [enabled, model, config, metadata.locales]
+    [enabled, model, config, metadata.locales, prompts, generationSettings]
   );
-
-  const scopeKey = JSON.stringify([
-    metadata.siteId,
-    metadata.templateId,
-    metadata.layoutId,
-  ]);
 
   const chat = useLayoutGenerationChat(
     environment,

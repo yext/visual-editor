@@ -1,4 +1,4 @@
-/** Prepared Responses API request; prompts and schemas remain editor-owned. */
+/** Prepared Responses API request; instructions are supplied by ALPHA; schemas remain editor-owned. */
 export type ModelRequestBody = {
   model: string;
   stream: true;

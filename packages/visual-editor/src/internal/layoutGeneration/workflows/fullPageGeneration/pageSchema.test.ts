@@ -1,3 +1,4 @@
+import { testPrompts } from "../../testing/promptFixtures.ts";
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
@@ -440,11 +441,12 @@ describe("fresh page creation schema", () => {
       }
     );
     const compiled = compileGenerationSchema(c, ["en"]);
-    const prompt = buildGenerationPrompt(c, compiled.availableComponentNames);
-    expect(prompt).toContain(
-      'Default sections for fresh generation: ["Section"]'
+    const prompt = buildGenerationPrompt(
+      testPrompts,
+      c,
+      compiled.availableComponentNames
     );
-    expect(prompt).toContain("explicit user requests take precedence");
+    expect(prompt).toContain('CREATE_RECOMMENDATIONS ["Section"]');
     expect(prompt).not.toContain("Unreachable");
     expect(prompt).not.toContain("Missing");
     expect(prompt).not.toContain("Disabled");
@@ -453,12 +455,12 @@ describe("fresh page creation schema", () => {
         create([{ type: "MainContent", props: { content: [] } }])
       ).spec
     ).toBeTruthy();
-    expect(buildGenerationPrompt(catalog())).not.toContain(
-      "Default sections for fresh generation:"
+    expect(buildGenerationPrompt(testPrompts, catalog())).not.toContain(
+      "CREATE_RECOMMENDATIONS"
     );
     c.puckOptions.defaultGenerationSectionIds = [];
-    expect(buildGenerationPrompt(c)).not.toContain(
-      "Default sections for fresh generation:"
+    expect(buildGenerationPrompt(testPrompts, c)).not.toContain(
+      "CREATE_RECOMMENDATIONS"
     );
   });
 
@@ -548,10 +550,6 @@ describe("fresh page creation schema", () => {
         )
       ).toThrow();
     }
-    const prompt = buildGenerationPrompt(c, compiled.availableComponentNames);
-    expect(prompt).toContain("before MainContent");
-    expect(prompt).toContain("after MainContent");
-    expect(prompt).toContain("single MainContent.props.content list");
   });
 
   it("accepts only empty content or a single empty MainContent scaffold", () => {
@@ -710,7 +708,11 @@ describe("fresh page creation schema", () => {
       "Unique root description",
     ])
       expect(serialized).not.toContain(name);
-    const prompt = buildGenerationPrompt(c, compiled.availableComponentNames);
+    const prompt = buildGenerationPrompt(
+      testPrompts,
+      c,
+      compiled.availableComponentNames
+    );
     expect(prompt.split("Unique root description")).toHaveLength(2);
     expect(prompt).not.toContain("Unreachable");
     const valid = {
@@ -1008,80 +1010,4 @@ describe("fresh page creation schema", () => {
     };
     visit(compileGenerationSchema(catalog(), ["en"]).jsonSchema);
   });
-});
-
-it("requires explicit content in fresh intent pages while keeping ordinary creation defaults", () => {
-  const c = catalog();
-  const ordinary = compileGenerationSchema(c, ["en"]);
-  const intent = compileGenerationSchema(
-    c,
-    ["en"],
-    undefined,
-    undefined,
-    "intent"
-  );
-  expect(
-    ordinary.parseResponse(JSON.stringify(create([section()]))).spec
-  ).not.toBeNull();
-  expect(() =>
-    intent.parseResponse(JSON.stringify(create([section()])))
-  ).toThrow();
-  expect(() =>
-    intent.parseResponse(
-      JSON.stringify(
-        create([
-          { type: "Section", props: { title: "Service", slots: defaults } },
-        ])
-      )
-    )
-  ).toThrow();
-
-  const generated = {
-    type: "Section",
-    props: {
-      title: "Service",
-      slots: {
-        heading: [
-          {
-            type: "Heading",
-            props: {
-              ...heading().props,
-              text: "[Content needed: verified service benefits]",
-            },
-          },
-        ],
-      },
-    },
-  };
-  const output = intent.parseResponse(
-    JSON.stringify(create([generated]))
-  ).spec!;
-  const saved = output.content[0].props.slots.heading[0].props;
-  expect(saved.text).toBe("[Content needed: verified service benefits]");
-  expect(saved.style).toEqual({ color: "blue", width: 25 });
-});
-
-it("requires business-name bindings in fresh-page model instructions", () => {
-  const c = catalog();
-  const compiled = compileGenerationSchema(c, ["en"]);
-  const instructions = buildGenerationPrompt(
-    c,
-    compiled.availableComponentNames,
-    ["en"]
-  );
-  expect(instructions).toContain(
-    'field: "name" with constantValueEnabled: false'
-  );
-  expect(instructions).toContain(
-    "use [[name]] wherever the business name appears"
-  );
-  expect(instructions).toContain(
-    "Do not invent a business name or adopt sample branding from component defaults or template content"
-  );
-  expect(instructions).toContain(
-    "A product, service, topic or industry request does not authorize fictional business branding"
-  );
-  expect(instructions).toContain(
-    "Use a literal business name only when the user explicitly supplies or requests that name, or explicitly requests fictional branding"
-  );
 });

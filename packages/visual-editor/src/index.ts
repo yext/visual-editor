@@ -6,3 +6,12 @@ export * from "./components/index.ts";
 export * from "./fields/index.ts";
 export type { SectionConfig } from "./types/sectionLibrary.ts";
 export { LocalEditorShell } from "./local-editor/LocalEditorShell.tsx";
+export {
+  generationPromptBundleSchema,
+  type GenerationPromptBundle,
+} from "./types/generationPrompts.ts";
+
+export {
+  generationSettingsSchema,
+  type GenerationSettings,
+} from "./types/generationSettings.ts";

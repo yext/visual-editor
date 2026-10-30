@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { createPuckGenerationCatalog } from "../../../../utils/createPuckGenerationCatalog.ts";
 import { resolveComponentData } from "../../../../utils/resolveComponentData.tsx";
-import { sectionEditPrompt } from "../../prompts.ts";
 import { clone, type Content } from "../../shared/authoredValues.ts";
 import {
   defaults,
@@ -182,9 +181,6 @@ describe("section edit targets and values", () => {
       "Updated";
     expect(candidate).toEqual(expected);
     expect(fixture.data).toEqual(before);
-    expect(sectionEditPrompt).toContain(
-      "sharedIntent coordinates copy within this task's scope"
-    );
   });
 
   it.each(["/id", "/editorMetadata", "/missing", "/cards", "/binding/missing"])(
