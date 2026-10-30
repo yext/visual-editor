@@ -1,3 +1,7 @@
+import {
+  testPrompts,
+  testGenerationSettings,
+} from "../testing/promptFixtures.ts";
 import { Puck } from "@puckeditor/core";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import React from "react";
@@ -6,11 +10,7 @@ import { ErrorProvider } from "../../../contexts/ErrorContext.tsx";
 import { TemplatePropsContext } from "../../../hooks/useDocument.tsx";
 import { LayoutPuckOverride } from "../../components/LayoutPuckOverride.tsx";
 import type { TemplateMetadata } from "../../types/templateMetadata.ts";
-import {
-  chatConfig,
-  generatedContent,
-  layout,
-} from "../testing/chatFixtures.tsx";
+import { chatConfig, layout } from "../testing/chatFixtures.tsx";
 import { executeGeneration } from "../transport/executeGeneration.ts";
 import { LayoutGenerationProvider } from "./LayoutGenerationProvider.tsx";
 import { layoutGenerationChatPlugin } from "./LayoutGenerationChatPlugin.tsx";
@@ -20,15 +20,9 @@ vi.mock("../transport/executeGeneration.ts", () => ({
   executeGeneration: vi.fn(),
 }));
 
-it.each(
-  (["blank", "blank-create", "existing"] as const).flatMap((scenario) => [
-    { scenario, action: "answer" as const },
-    { scenario, action: "cancel" as const },
-  ])
-)(
-  "$action an intent clarification using the same attempt: $scenario",
-  async ({ scenario, action }) => {
-    const existing = scenario === "existing";
+it.each(["answer", "cancel"] as const)(
+  "%s an intent-page full-page-update clarification using the same attempt",
+  async (action) => {
     const prompt = "Generate an intent page for our custom fit shoe service.";
     const question = "What URL should the Book an appointment buttons link to?";
     const answer = "https://example.com/book";
@@ -38,8 +32,6 @@ it.each(
       type: "Heading",
       props: { id: "service-options", text: contentRequest },
     };
-    const generated = generatedContent("Custom fit shoes");
-    generated.content[0].props.content.push(contentRequestSection);
     let intent: React.ContextType<typeof IntentPageGenerationChatContext>;
     const Capture = () => {
       intent = React.useContext(IntentPageGenerationChatContext);
@@ -91,77 +83,37 @@ it.each(
     const execute = vi
       .mocked(executeGeneration)
       .mockImplementation(async (request) => {
-        if (
-          !asked &&
-          scenario === "blank-create" &&
-          request.mode === "prepare"
-        ) {
-          return {
-            type: "prepared",
-            preparation: {
-              question: null,
-              translationMode: "defaultOnly",
-              cardCounts: [],
-            },
-          };
-        }
+        expect(request.mode).toBe("fullPageUpdate");
         if (!asked) {
           asked = true;
-          return existing
-            ? {
-                type: "regenerated",
-                text: "",
-                result: { action: "clarification", question },
-              }
-            : scenario === "blank-create"
-              ? { type: "accepted", text: question, spec: null }
-              : {
-                  type: "prepared",
-                  preparation: {
-                    question,
-                    translationMode: null,
-                    cardCounts: [],
-                  },
-                };
-        }
-        if (request.mode === "prepare")
           return {
-            type: "prepared",
-            preparation: {
-              question: null,
-              translationMode: "defaultOnly",
-              cardCounts: [],
-            },
+            type: "fullPageUpdated",
+            text: "",
+            result: { action: "clarification", question },
           };
-        return existing
-          ? {
-              type: "regenerated",
-              text: "Created the service page.",
-              result: {
-                action: "regenerate",
-                steps: [
+        }
+        return {
+          type: "fullPageUpdated",
+          text: "Created the service page.",
+          result: {
+            action: "fullPageUpdate",
+            steps: [
+              {
+                kind: "replace",
+                sectionId: "heading",
+                sections: [
                   {
-                    kind: "replace",
-                    sectionId: "heading",
-                    sections: [
-                      {
-                        type: "Heading",
-                        props: { id: "custom-fit", text: "Custom fit shoes" },
-                      },
-                      contentRequestSection,
-                    ],
+                    type: "Heading",
+                    props: { id: "custom-fit", text: "Custom fit shoes" },
                   },
+                  contentRequestSection,
                 ],
               },
-            }
-          : {
-              type: "accepted",
-              text: "Created the service page.",
-              spec: generated,
-            };
+            ],
+          },
+        };
       });
     const initial = layout();
-    if (!existing) initial.content[0].props.content = [];
     const metadata = {
       siteId: 1,
       templateId: "template",
@@ -171,6 +123,8 @@ it.each(
       aiPageGeneration: {
         layoutGenerationEnabled: true,
         model: "model",
+        prompts: testPrompts,
+        generationSettings: testGenerationSettings,
         intentPageGeneration: { prompt, status: "PENDING" },
       },
     } as TemplateMetadata;
@@ -224,9 +178,7 @@ it.each(
           ([message]) => message.type === "saveLayoutSaveState"
         )
       ).toBe(false);
-      expect(execute).toHaveBeenCalledTimes(
-        scenario === "blank-create" ? 2 : 1
-      );
+      expect(execute).toHaveBeenCalledOnce();
       expect(input.disabled).toBe(false);
       expect(reset.disabled).toBe(false);
       expect(
@@ -240,9 +192,6 @@ it.each(
     fireEvent.click(screen.getByRole("button", { name: "Send" }));
     await screen.findByText("Custom fit shoes", { selector: "h2" });
     await waitFor(() => expect(intent?.state.stage).toBe("completed"));
-    for (const [request] of execute.mock.calls) {
-      expect(request.purpose).toBe("intent");
-    }
     expect(
       execute.mock.calls.find(([request]) =>
         request.messages.some((message) => message.content === answer)
@@ -252,13 +201,10 @@ it.each(
       { role: "assistant", content: question },
       { role: "user", content: answer },
     ]);
-    expect(execute.mock.calls.map(([request]) => request.mode)).toEqual(
-      existing
-        ? ["regenerate", "regenerate"]
-        : scenario === "blank-create"
-          ? ["prepare", "create", "prepare", "create"]
-          : ["prepare", "prepare", "create"]
-    );
+    expect(execute.mock.calls.map(([request]) => request.mode)).toEqual([
+      "fullPageUpdate",
+      "fullPageUpdate",
+    ]);
     const messages = post.mock.calls
       .filter(([, origin]) => String(origin) === "http://localhost")
       .map(([message]) => message);

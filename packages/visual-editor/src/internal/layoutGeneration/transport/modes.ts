@@ -5,15 +5,14 @@ import {
   sectionEditResultSchema,
 } from "../workflows/edits/sectionEditTaskSchema.ts";
 import { compileSectionEditSchema } from "../workflows/edits/compileSectionEditSchema.ts";
-import { compileRegenerationSchema } from "../workflows/fullPageRegeneration/pageSchema.ts";
+import { compileFullPageUpdateSchema } from "../workflows/fullPageUpdate/pageSchema.ts";
 import {
-  regenerationResultSchema,
-  type RegenerationStep,
-} from "../workflows/fullPageRegeneration/contracts.ts";
+  fullPageUpdateResultSchema,
+  type FullPageUpdateStep,
+} from "../workflows/fullPageUpdate/contracts.ts";
 import { compileGenerationSchema } from "../workflows/fullPageGeneration/pageSchema.ts";
 import { compileGenerationPreparation } from "../workflows/fullPageGeneration/preparation.ts";
 import { generationPreparationSchema } from "../workflows/fullPageGeneration/preparationContracts.ts";
-import { editPlanningPrompt, sectionEditPrompt } from "../prompts.ts";
 import type { Content } from "../shared/authoredValues.ts";
 import type {
   GenerationEnvironment,
@@ -27,11 +26,10 @@ export type CompiledGenerationRequest = {
   context: unknown;
   availableComponentNames: string[];
   isBlankPage: boolean;
-  instructions?: string;
   localResult?: object;
   parseResponse: (text: string) => object;
-  streamRegeneration?: (
-    onStep: (step: RegenerationStep, index: number) => Promise<void>,
+  streamFullPageUpdate?: (
+    onStep: (step: FullPageUpdateStep, index: number) => Promise<void>,
     onSection?: (sectionId: string) => Promise<void>
   ) => {
     write: (delta: string) => Promise<void>;
@@ -48,8 +46,12 @@ export const compileGenerationRequest = (
   catalog: GenerationEnvironment["catalog"],
   locales: string[]
 ): CompiledGenerationRequest => {
-  if (mode === "regenerate") {
-    return compileRegenerationSchema(catalog, locales, currentData as Content);
+  if (mode === "fullPageUpdate") {
+    return compileFullPageUpdateSchema(
+      catalog,
+      locales,
+      currentData as Content
+    );
   } else if (mode === "prepare") {
     return compileGenerationPreparation(catalog, locales);
   } else if (mode === "plan") {
@@ -62,7 +64,6 @@ export const compileGenerationRequest = (
     return {
       ...planner,
       isBlankPage: false,
-      instructions: editPlanningPrompt,
       parseResponse: (text) => ({ plan: planner.parseResponse(text) }),
     };
   } else if (mode === "section") {
@@ -76,7 +77,6 @@ export const compileGenerationRequest = (
     return {
       ...section,
       isBlankPage: false,
-      instructions: sectionEditPrompt,
       localResult: section.localResult
         ? { result: section.localResult }
         : undefined,
@@ -87,8 +87,7 @@ export const compileGenerationRequest = (
       catalog,
       locales,
       currentData as Content | undefined,
-      context.preparation,
-      context.purpose
+      context.preparation
     );
   }
 };
@@ -113,11 +112,11 @@ export const parseGenerationResult = (
   event: unknown,
   mode: LayoutGenerationRequest["mode"]
 ): GenerationResult =>
-  (mode === "regenerate"
+  (mode === "fullPageUpdate"
     ? z.strictObject({
-        type: z.literal("regenerated"),
+        type: z.literal("fullPageUpdated"),
         text: z.string(),
-        result: regenerationResultSchema,
+        result: fullPageUpdateResultSchema,
       })
     : mode === "prepare"
       ? preparedSchema

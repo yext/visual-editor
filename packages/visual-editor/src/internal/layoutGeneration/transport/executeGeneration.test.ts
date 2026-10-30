@@ -1,3 +1,8 @@
+import {
+  testPrompts,
+  testGenerationSettings,
+  readTestPromptComponents,
+} from "../testing/promptFixtures.ts";
 import { GenerationError } from "../shared/generationErrors.ts";
 import { executionHarness, modelResponder } from "../testing/modelFixtures.ts";
 // @vitest-environment node
@@ -5,8 +10,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import { createPuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
 import { compileGenerationSchema } from "../workflows/fullPageGeneration/pageSchema.ts";
-import { FRESH_PAGE_OUTPUT_TOKEN_BUDGET } from "../limits.ts";
-import { intentPageGuidance } from "../intentPageGuidance.ts";
+
 import {
   clarificationResponse,
   creationResponse,
@@ -37,9 +41,10 @@ const harness = (
     messages: [{ role: "user", content: "Create page" }],
   },
   c = catalog,
-  locales = ["en"]
+  locales = ["en"],
+  generationSettings = testGenerationSettings
 ) => {
-  return executionHarness(body, c, locales);
+  return executionHarness(body, c, locales, generationSettings);
 };
 
 afterEach(() => {
@@ -48,7 +53,7 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-it.each(["create", "regenerate"] as const)(
+it.each(["create", "fullPageUpdate"] as const)(
   "sends layout recommendations in both the %s prompt and request context",
   async (mode) => {
     const c = createPuckGenerationCatalog(
@@ -71,7 +76,7 @@ it.each(["create", "regenerate"] as const)(
           : {
               translationMode: "defaultOnly",
               result: {
-                action: "regenerate",
+                action: "fullPageUpdate",
                 steps: [{ kind: "keep", sectionId: "heading" }],
               },
               text: "Kept.",
@@ -95,15 +100,15 @@ it.each(["create", "regenerate"] as const)(
     ).toEqual(["Heading"]);
     expect(sent.instructions).toContain(
       mode === "create"
-        ? 'Default sections for fresh generation: ["Heading"]'
-        : 'Recommended sections for intent regeneration: ["Heading"]'
+        ? 'CREATE_RECOMMENDATIONS ["Heading"]'
+        : 'FULL_PAGE_UPDATE_RECOMMENDATIONS ["Heading"]'
     );
     expect(sent.instructions).toContain("Extra");
   }
 );
 
-it.each(["create", "regenerate"] as const)(
-  "keeps missing-content requests in explicit draft text for intent %s",
+it.each(["create", "fullPageUpdate"] as const)(
+  "preserves draft content and conversation through %s",
   async (mode) => {
     const draft =
       "[Content needed: verified expert quote about knee pain treatment]";
@@ -115,7 +120,7 @@ it.each(["create", "regenerate"] as const)(
           : {
               translationMode: "defaultOnly",
               result: {
-                action: "regenerate",
+                action: "fullPageUpdate",
                 steps: [{ kind: "replace", sectionId: "heading", sections }],
               },
               text: "Expert insights needs a verified quote.",
@@ -124,7 +129,6 @@ it.each(["create", "regenerate"] as const)(
     );
     const h = harness({
       mode,
-      purpose: "intent",
       layoutId: "location",
       currentData: mode === "create" ? { content: [] } : baseline,
       messages: [
@@ -139,36 +143,15 @@ it.each(["create", "regenerate"] as const)(
     await h.run();
     expect(h.error).toBeUndefined();
     const sent = modelResponder.mock.calls[0][0];
-    expect(sent.instructions.match(/^# .+$/gm)).toEqual([
-      "# Purpose",
-      "# Yext intent page guidance",
-      "# Mechanical guidance",
-      "# Reference context",
-    ]);
-    expect(sent.instructions.split(intentPageGuidance)).toHaveLength(2);
+    expect(
+      sent.instructions.startsWith(
+        mode === "create" ? "CREATE\n" : "FULL_PAGE_UPDATE\n"
+      )
+    ).toBe(true);
     expect(sent.instructions).not.toContain(
       "Explain who treats knee pain, with expert insights"
     );
     expect(sent.instructions).not.toContain("No translations");
-    const [beforeMechanics, afterMechanics] = sent.instructions.split(
-      "# Mechanical guidance"
-    );
-    const [mechanics, references] = afterMechanics.split("# Reference context");
-    expect(beforeMechanics).not.toContain("[Content needed:");
-    expect(mechanics).toContain("[Content needed:");
-    expect(mechanics).toContain(
-      mode === "create" ? "## Page creation" : "## Existing page adaptation"
-    );
-    expect(mechanics).not.toContain(
-      mode === "create" ? "## Existing page adaptation" : "## Page creation"
-    );
-    expect(mechanics).not.toContain("Generation-enabled components:");
-    expect(references).toContain("Generation-enabled components:");
-    expect(references).toContain("Component descriptions and defaults:");
-    expect(sent.instructions).toContain("retain the relevant section");
-    expect(sent.instructions).toContain(
-      "editorial requests, never finished visitor-facing claims"
-    );
     expect(sent.input[0]).toEqual({
       role: "user",
       content: "Explain who treats knee pain, with expert insights",
@@ -180,26 +163,16 @@ it.each(["create", "regenerate"] as const)(
       mode === "create"
         ? { type: "accepted", spec: { content: [{ props: { text: draft } }] } }
         : {
-            type: "regenerated",
+            type: "fullPageUpdated",
             result: { steps: [{ sections: [{ props: { text: draft } }] }] },
           }
     );
   }
 );
 
-it("keeps intent business guidance out of ordinary page creation", async () => {
-  modelResponder.mockImplementation(async () => completed(proposal));
-  const h = harness();
-  await h.run();
-  expect(h.error).toBeUndefined();
-  expect(modelResponder.mock.calls[0][0].instructions).not.toContain(
-    "# Yext intent page guidance"
-  );
-});
-
-it.each([undefined, "intent"] as const)(
-  "scopes explicit-content schemas and reference defaults to purpose %s",
-  async (purpose) => {
+it.each(["create", "fullPageUpdate"] as const)(
+  "scopes explicit-content schemas and reference defaults to workflow %s",
+  async (mode) => {
     const c = createPuckGenerationCatalog({
       Heading: {
         generation: {
@@ -216,38 +189,58 @@ it.each([undefined, "intent"] as const)(
         },
       },
     });
+    const sections = [
+      {
+        type: "Heading",
+        props: { text: { $default: true }, styles: { $default: true } },
+      },
+    ];
     modelResponder.mockImplementation(async () =>
       completed(
-        creationResponse([
-          {
-            type: "Heading",
-            props: { text: { $default: true }, styles: { $default: true } },
-          },
-        ])
+        mode === "create"
+          ? creationResponse(sections)
+          : {
+              translationMode: "defaultOnly",
+              result: {
+                action: "fullPageUpdate",
+                steps: [{ kind: "replace", sectionId: "heading", sections }],
+              },
+              text: "Updated",
+            }
       )
     );
     const h = harness(
       {
-        mode: "create",
-        purpose,
+        mode,
         layoutId: "location",
-        currentData: { content: [] },
+        currentData:
+          mode === "create"
+            ? { content: [] }
+            : {
+                content: [
+                  {
+                    type: "Heading",
+                    props: {
+                      id: "heading",
+                      ...c.data.components.Heading.defaultProps,
+                    },
+                  },
+                ],
+              },
         messages: [{ role: "user", content: "Create a service page" }],
       },
       c
     );
     await h.run();
     const sent = modelResponder.mock.calls[0][0];
-    const references = JSON.parse(
-      sent.instructions.split("Component descriptions and defaults:\n")[1]
-    );
+    const references = readTestPromptComponents(sent.instructions);
     expect(JSON.stringify(sent.text.format.schema)).toContain(
       "Write displayed copy in this field."
     );
     expect(references.Heading.description).toBe(
       c.data.components.Heading.description
     );
-    if (purpose === "intent") {
+    if (mode === "fullPageUpdate") {
       expect(h.error).toBeDefined();
       expect(references.Heading.defaults).toEqual({
         styles: { color: "primary" },
@@ -259,19 +252,6 @@ it.each([undefined, "intent"] as const)(
     }
   }
 );
-
-it("rejects an unknown generation purpose before calling the model", async () => {
-  const h = harness({
-    mode: "create",
-    purpose: "unknown",
-    layoutId: "location",
-    currentData: { content: [] },
-    messages: [{ role: "user", content: "Create a page" }],
-  });
-  await h.run();
-  expect(h.error).toMatchObject({ status: 400 });
-  expect(modelResponder).not.toHaveBeenCalled();
-});
 
 describe("strict request execution", () => {
   it("carries preparation in the creation request and its diagnostics", async () => {
@@ -327,11 +307,8 @@ describe("strict request execution", () => {
     const body = modelResponder.mock.calls[0][0];
     expect(body.text.format.name).toBe("puck_generation_preparation");
     expect(JSON.stringify(body.text.format.schema).length).toBeLessThan(6000);
-    expect(body.instructions.length).toBeLessThan(4000);
     expect(h.events().at(-1)).toEqual({ type: "prepared", preparation });
-    expect(body.instructions).not.toContain(
-      "Component descriptions and defaults"
-    );
+    expect(body.instructions).toBe(testPrompts.prompts.prepare);
   });
 
   it("passes page-set locales and prior translation decisions to generation and pauses on a translation question", async () => {
@@ -399,7 +376,6 @@ describe("strict request execution", () => {
     });
     const localSchema = compileGenerationSchema(catalog, ["en"]).jsonSchema;
     expect(body.text.format.schema).toEqual(localSchema);
-    expect(body.instructions).not.toContain("JSONL");
     expect(body.input.at(-1)!.content).not.toContain('"extra"');
     expect(h.events().find((e) => e.type === "accepted")!.spec).toEqual({
       content: [
@@ -451,7 +427,7 @@ describe("strict request execution", () => {
       expect(fetchMock).toHaveBeenCalledOnce();
       const requestBody = modelResponder.mock.calls[0][0];
       expect(requestBody.max_output_tokens).toBe(
-        FRESH_PAGE_OUTPUT_TOKEN_BUDGET
+        testGenerationSettings.maxOutputTokens.page
       );
       expect(h.events().at(-1)).toMatchObject({
         type: "accepted",
@@ -597,7 +573,7 @@ describe("strict request execution", () => {
       },
     ]);
   });
-  it("terminates deadline failures without attempting repair", async () => {
+  it("uses the configured attempt deadline and stops without repair", async () => {
     vi.useFakeTimers();
     const fetchMock = vi.fn(
       (_body, signal) =>
@@ -606,10 +582,13 @@ describe("strict request execution", () => {
         })
     );
     modelResponder.mockImplementation(fetchMock);
-    const h = harness();
+    const h = harness(undefined, catalog, ["en"], {
+      ...testGenerationSettings,
+      attemptTimeoutMs: 100,
+    });
     const run = h.run();
     await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
-    await vi.advanceTimersByTimeAsync(5 * 60_000);
+    await vi.advanceTimersByTimeAsync(100);
     await run;
     expect(fetchMock).toHaveBeenCalledOnce();
     expect(h.error).toMatchObject({
@@ -657,86 +636,35 @@ const budgetRejected = (
         `data: ${JSON.stringify({ type: "response.incomplete", response })}\n\n`;
   return new Response(wire, { headers: { "Content-Type": contentType } });
 };
-const regenerationRequest = () => ({
-  mode: "regenerate",
+const fullPageUpdateRequest = () => ({
+  mode: "fullPageUpdate",
   layoutId: "location",
   currentData: baseline,
   messages: [{ role: "user", content: "Focus on our product" }],
 });
 it.each(["application/json", "text/event-stream"])(
-  "retries regeneration once with a smaller budget after zero-usage rejection in %s",
+  "reports an output-budget rejection in %s without retrying at another allowance",
   async (contentType) => {
-    modelResponder
-      .mockResolvedValueOnce(budgetRejected(contentType))
-      .mockResolvedValueOnce(
-        completed({
-          translationMode: "defaultOnly",
-          result: { action: "regenerate", steps: [] },
-          text: "Complete",
-        })
-      );
-    const h = harness(regenerationRequest());
+    modelResponder.mockResolvedValueOnce(budgetRejected(contentType));
+    const generationSettings = {
+      ...testGenerationSettings,
+      maxOutputTokens: {
+        ...testGenerationSettings.maxOutputTokens,
+        page: 99_999,
+      },
+    };
+    const h = harness(
+      fullPageUpdateRequest(),
+      catalog,
+      ["en"],
+      generationSettings
+    );
     await h.run();
-    expect(h.error).toBeUndefined();
-    expect(modelResponder).toHaveBeenCalledTimes(2);
-    const first = modelResponder.mock.calls[0][0];
-    const second = modelResponder.mock.calls[1][0];
-    expect(first.max_output_tokens).toBe(128000);
-    expect(second).toEqual({ ...first, max_output_tokens: 64000 });
-    expect(h.events().at(-1)).toMatchObject({
-      type: "regenerated",
-      text: "Complete",
+    expect(modelResponder).toHaveBeenCalledOnce();
+    expect(modelResponder.mock.calls[0][0].max_output_tokens).toBe(99_999);
+    expect(h.error).toMatchObject({
+      retryable: false,
+      message: expect.stringContaining("before generating any content"),
     });
   }
 );
-
-it("stops after the smaller budget is also rejected and reports failure before generation", async () => {
-  modelResponder.mockImplementation(async () =>
-    budgetRejected("text/event-stream")
-  );
-  const h = harness(regenerationRequest());
-  await h.run();
-  expect(modelResponder).toHaveBeenCalledTimes(2);
-  expect(h.error).toMatchObject({
-    retryable: false,
-    message: expect.stringContaining("before generating any content"),
-  });
-});
-
-it.each([
-  { input_tokens: 0, output_tokens: 1 },
-  { input_tokens: 1, output_tokens: 0 },
-])(
-  "does not retry actual token consumption on an incomplete regeneration (%j)",
-  async (usage) => {
-    modelResponder.mockResolvedValueOnce(
-      budgetRejected("text/event-stream", usage)
-    );
-    const h = harness(regenerationRequest());
-    await h.run();
-    expect(modelResponder).toHaveBeenCalledOnce();
-    expect(h.error?.retryable).toBe(false);
-  }
-);
-
-it("does not retry a budget failure after any output was streamed", async () => {
-  modelResponder.mockResolvedValueOnce(
-    budgetRejected(
-      "text/event-stream",
-      { input_tokens: 0, output_tokens: 0 },
-      '{"translationMode":'
-    )
-  );
-  const h = harness(regenerationRequest());
-  await h.run();
-  expect(modelResponder).toHaveBeenCalledOnce();
-  expect(h.error?.retryable).toBe(false);
-});
-
-it("keeps other workflow budget handling unchanged", async () => {
-  modelResponder.mockResolvedValueOnce(budgetRejected("text/event-stream"));
-  const h = harness();
-  await h.run();
-  expect(modelResponder).toHaveBeenCalledOnce();
-  expect(h.error?.retryable).toBe(false);
-});

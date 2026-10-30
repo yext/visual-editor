@@ -42,12 +42,12 @@ it("shows Building on the original section before replacing it, then Ready on th
   await waitFor(() => expect(canvas.ready).toBe(true));
   act(() => {
     canvas.begin();
-    canvas.beginRegeneration();
+    canvas.beginFullPageUpdate();
   });
   let pending!: Promise<void>;
   const controller = new AbortController();
   act(() => {
-    pending = canvas.applyRegeneration(
+    pending = canvas.applyFullPageUpdate(
       {
         kind: "replace",
         sectionId: "heading",
@@ -81,7 +81,7 @@ it("shows Building on the original section before replacing it, then Ready on th
   act(() => canvas.finish());
 });
 
-it("previews progressive regeneration through Puck and keeps a single undo/redo entry on stop", async () => {
+it("previews progressive full-page update through Puck and keeps a single undo/redo entry on stop", async () => {
   const canvas = new LayoutGenerationChatCanvas();
   let getPuck!: ReturnType<typeof useGetPuck>;
   const Capture = () => {
@@ -104,10 +104,10 @@ it("previews progressive regeneration through Puck and keeps a single undo/redo 
   );
   await waitFor(() => expect(canvas.ready).toBe(true));
   canvas.begin();
-  canvas.beginRegeneration();
+  canvas.beginFullPageUpdate();
   const controller = new AbortController();
   await act(async () => {
-    await canvas.applyRegeneration(
+    await canvas.applyFullPageUpdate(
       { kind: "remove", sectionId: "second" },
       0,
       controller.signal
@@ -118,7 +118,7 @@ it("previews progressive regeneration through Puck and keeps a single undo/redo 
   expect(screen.getByText("Third")).toBeTruthy();
   expect(getPuck().history.index).toBe(0);
   await act(async () => {
-    await canvas.applyRegeneration(
+    await canvas.applyFullPageUpdate(
       {
         kind: "replace",
         sectionId: "heading",

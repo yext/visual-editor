@@ -1,3 +1,4 @@
+import { testPrompts, testGenerationSettings } from "./promptFixtures.ts";
 import type { Config } from "@puckeditor/core";
 import { vi } from "vitest";
 import {
@@ -62,6 +63,8 @@ export const testGenerationEnvironment = (
   if (!environments.has(api)) {
     environments.set(api, {
       model: "test",
+      prompts: testPrompts,
+      generationSettings: testGenerationSettings,
       locales: ["en"],
       catalog: createPuckGenerationCatalog({}),
       transport: async () => {

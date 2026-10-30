@@ -1,6 +1,5 @@
 import { z } from "zod";
 import type { PuckGenerationCatalog } from "../../../../utils/createPuckGenerationCatalog.ts";
-import { generationPreparationPrompt } from "../../prompts.ts";
 import { exportGenerationSchema } from "../../schema/strictSchema.ts";
 import { generationPreparationSchema } from "./preparationContracts.ts";
 
@@ -35,7 +34,6 @@ export const compileGenerationPreparation = (
     context: { locales, cardSources },
     availableComponentNames: names,
     isBlankPage: true,
-    instructions: generationPreparationPrompt,
     parseResponse: (text: string) => {
       const preparation = generationPreparationSchema.parse(
         schema.parse(JSON.parse(text))

@@ -59,9 +59,8 @@ export const validateGenerationRequest = (
   }
   const modeRequest = z
     .object({
-      purpose: z.literal("intent").optional(),
       mode: z
-        .enum(["prepare", "create", "plan", "section", "regenerate"])
+        .enum(["prepare", "create", "plan", "section", "fullPageUpdate"])
         .optional(),
       preparation: generationPreparationSchema.optional(),
       selectedComponentId: z.string().min(1).nullable().optional(),
@@ -82,7 +81,7 @@ export const validateGenerationRequest = (
   }
   const mode = modeRequest.data.mode ?? "create";
   if (
-    (mode === "plan" || mode === "section" || mode === "regenerate") &&
+    (mode === "plan" || mode === "section" || mode === "fullPageUpdate") &&
     currentData === undefined
   ) {
     return rejectRequest(

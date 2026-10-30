@@ -1,3 +1,5 @@
+import { resolveLocalGenerationSettings } from "./layout-generation/settings.ts";
+import { loadLocalGenerationPrompts } from "./layout-generation/prompts.ts";
 import path from "node:path";
 import type { Plugin } from "vite";
 import type { SectionLibraryLayout } from "../types/sectionLibrary.ts";
@@ -138,7 +140,7 @@ export const yextVisualEditorPlugin = (
         });
       }
     },
-    configureServer(server) {
+    async configureServer(server) {
       if (!options.localEditor?.enabled) {
         return;
       }
@@ -160,6 +162,13 @@ export const yextVisualEditorPlugin = (
             getModel: () =>
               options.localEditor?.generationModel ?? "gpt-6-luna",
             logGeneration,
+            generationSettings: resolveLocalGenerationSettings(
+              options.localEditor?.generationSettings
+            ),
+            prompts: await loadLocalGenerationPrompts(
+              server.config.root,
+              options.localEditor?.generationPromptsPath
+            ),
           })
         );
       }

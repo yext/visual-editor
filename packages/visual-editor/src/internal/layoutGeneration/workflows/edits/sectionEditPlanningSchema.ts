@@ -4,7 +4,7 @@ import type { PuckGenerationCatalog } from "../../../../utils/createPuckGenerati
 import {
   planningDescriptions,
   translationModeGuidance,
-} from "../../prompts.ts";
+} from "../../schemaGuidance.ts";
 import { createGenerationSchemaCompiler } from "../../schema/compiler.ts";
 import { createRequestLocalIds } from "../../shared/requestLocalIds.ts";
 import { exportGenerationSchema } from "../../schema/strictSchema.ts";
