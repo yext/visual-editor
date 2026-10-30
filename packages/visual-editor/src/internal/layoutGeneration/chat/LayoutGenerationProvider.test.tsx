@@ -565,6 +565,72 @@ it.each([undefined, { ...testPrompts, contractVersion: 999 }])(
   }
 );
 
+it("does not retain prompts from a discarded scope render", async () => {
+  const send = post();
+  vi.spyOn(console, "debug").mockImplementation(() => {});
+  const suspended = vi.fn();
+  const pendingRender = new Promise<void>(() => {});
+  const Gate = ({ suspend }: { suspend: boolean }) => {
+    if (suspend) {
+      suspended();
+      throw pendingRender;
+    }
+    return <Probe />;
+  };
+  let update!: React.Dispatch<
+    React.SetStateAction<{ value: TemplateMetadata; suspend: boolean }>
+  >;
+  const Host = () => {
+    const [state, setState] = React.useState({
+      value: metadata(),
+      suspend: false,
+    });
+    update = setState;
+    return (
+      <React.Suspense fallback={<span>Loading</span>}>
+        <LayoutGenerationProvider config={config} metadata={state.value}>
+          <Gate suspend={state.suspend} />
+        </LayoutGenerationProvider>
+      </React.Suspense>
+    );
+  };
+  const { unmount } = render(<Host />);
+  await waitFor(() => expect(ui?.chat.ready).toBe(true));
+  act(() => {
+    React.startTransition(() => {
+      update({ value: metadata({ layoutId: "9" }), suspend: true });
+    });
+  });
+  expect(suspended).toHaveBeenCalled();
+  act(() => {
+    update({
+      value: metadata({
+        layoutId: "9",
+        aiPageGeneration: {
+          ...metadata().aiPageGeneration!,
+          prompts: {
+            ...testPrompts,
+            prompts: { ...testPrompts.prompts, prepare: "COMMITTED PREPARE" },
+          },
+        },
+      }),
+      suspend: false,
+    });
+  });
+  await waitFor(() => expect(ui?.chat.ready).toBe(true));
+  let pending!: Promise<void>;
+  act(() => {
+    pending = ui!.chat.send("Create page");
+  });
+  await waitFor(() => expect(send).toHaveBeenCalled());
+  const request = send.mock.calls
+    .map(([message]) => message)
+    .find((message) => message.type === "aiPageGenerationRequest");
+  expect(request.payload.body.instructions).toBe("COMMITTED PREPARE");
+  unmount();
+  await pending;
+});
+
 it("retains the loaded prompt bundle when metadata changes during a session", async () => {
   const send = post();
   vi.spyOn(console, "debug").mockImplementation(() => {});

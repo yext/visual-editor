@@ -5,7 +5,12 @@ Layout generation is loosely based on [json-render.dev](https://json-render.dev/
 At a high level, the section library defines Zod types for all supported sections. We render a chat interface as a Puck plugin that has workflows for blank-page generation, follow-up section edits, and intent-driven full-page updates. We take the user prompt and combine it with the schema to form an OpenAI API request. We forward this request to ModelGateway with strict generation
 mode enabled, ensuring we get valid JSON back from the model. We then validate that the data is able to be rendered and push the update into Puck history.
 
-Layout generation is enabled when `templateMetadata.aiPageGeneration.layoutGenerationEnabled` is true and a compatible `aiPageGeneration.prompts` bundle is supplied. We currently support gpt-6-luna.
+Layout generation is enabled when `templateMetadata.aiPageGeneration.layoutGenerationEnabled` is true and a compatible `aiPageGeneration.prompts` bundle is supplied.
+
+## System prompts
+
+System prompts are owned by ALPHA and passed via `aiPageGeneration.prompts`. This allows us to change the prompts without a section library update.
+Prompts can be tested using the local editor's `generationPromptsPath` configuration option.
 
 ## src/internal/layoutGeneration/schema
 
@@ -31,10 +36,6 @@ These are the full page, follow-up edit, and intent page generation flows. They 
 ## src/internal/layoutGeneration/limits.ts
 
 Defines editor mechanics and diagnostic limits. Model-attempt deadlines and output-token allowances come from ALPHA through `aiPageGeneration.generationSettings`; only the local harness supplies defaults in `vite-plugin/layout-generation/settings.ts`.
-
-## src/internal/layoutGeneration/prompts.ts
-
-Substitutes editor-owned runtime data into ALPHA-owned prompt strings. The complete bundle arrives through `templateMetadata.aiPageGeneration.prompts`; the local shell receives the same contract through its Vite context endpoint. `schemaGuidance.ts` retains field and Zod descriptions. See [the bundle handoff guide](../../../prompt-bundle/README.md) for the contract, prompt inventory, and local prompt-file configuration. The handoff TypeScript bundle is independent of both tests and production code; tests use synthetic prompts in `testing/promptFixtures.ts`.
 
 ## src/internal/layoutGeneration/shared
 
@@ -71,32 +72,3 @@ Full-page updates reduce request size without limiting the available component c
 As validated sections stream into the preview, it scrolls to the added, changed, or moved section. Removal follows the nearest surviving section. Pending scrolling stops on editor teardown or user interaction. Chat progress uses Puck component display labels, falling back to component types when no label is configured.
 
 The layout metadata's `defaultGenerationSectionIds` is advisory for both fresh creation and intent-driven full-page updates. Available recommendations appear in the model instructions and explicitly in request context as `recommendedSectionIds`. They are neither mandatory nor exhaustive: generation should choose relevant sections and can insert supported types absent from the current page to cover the requested intent.
-
-## Verification
-
-### Automated mechanics
-
-Run `pnpm --dir packages/visual-editor run test:editor` and, after TypeScript changes, `pnpm --dir packages/visual-editor exec tsc --noEmit` from the repository root. These tests use synthetic prompt strings and model responses; they verify application behavior, not the model's ability to follow the business guidance.
-
-- `transport/executeGeneration.test.ts` checks the actual model request: workflow template selection, runtime context and recommendation injection, intent-specific defaults, separate user messages, and explicit draft-content materialization.
-- `chat/intentClarification.integration.test.tsx` checks full-page update clarifications on copied existing layouts, preserving workflow, conversation and attempt identity through the draft save. Content-request labels must appear on the canvas and in saved layout data.
-- Existing creation, full-page update and section-edit tests check schema validation, permissions, bindings, localization, streaming, cancellation, undo and save recovery.
-
-### Manual page quality
-
-Use the configured model in the local or platform editor. For before/after comparisons, hold the model version/settings, section library, initial layout, locales and supplied facts constant. Save the request, clarification answers, rendered page and layout data for each result. Compare more than one generation when results disagree; do not select only the strongest output. Do not infer page quality from a passing schema or mocked-response test.
-
-| Scenario                      | Example request                                                                        | Expected quality                                                                                             |
-| ----------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| Question/answer               | What type of doctor treats knee pain?                                                  | Direct answer early; relevant explanation rather than promotion first.                                       |
-| Educational audience          | Explain mortgage pre-approval for first-time buyers.                                   | Accessible explanations and useful steps appropriate to the audience.                                        |
-| Comparison with missing facts | Compare our catering options for office events. No menus or prices have been supplied. | Useful comparison structure with specific requests for missing details; no invented options or prices.       |
-| Local intent                  | Create a page about hotels near Madison Square Garden.                                 | Geography influences relevant sections; no invented properties, distances or availability.                   |
-| General intent                | Create a general catering planning guide.                                              | No location sections without a reason; practical guidance remains central.                                   |
-| Existing-page adaptation      | Adapt a location page to explain our custom fit shoe service.                          | Relevant content and brand assets retained; unrelated copy/imagery addressed; useful missing coverage added. |
-| Missing evidence              | Include expert insights, but no verified quotes are available.                         | Useful section retained with a specific editorial request rather than a fabricated expert quote.             |
-| Explicit preference           | Explain catering planning without FAQs or a promotional CTA.                           | Requested omissions honored; recommendations do not become a checklist.                                      |
-
-For each page, score each criterion 0 (missed), 1 (partly met) or 2 (met), and record a concrete observation: primary intent answered early; audience-appropriate depth; distinct and relevant sections; logical ordering; business/geographic relevance; meaningful draft copy and clearly identified gaps. Prefer the page with better intent satisfaction, not more sections or longer copy. Unsupported factual claims or fabricated evidence are failures regardless of the total score.
-
-Also check that editorial requests remain visible after saving and reopening, are absent from URLs/image sources/bindings/alt text, and identify every required default retained for replacement. For multilingual pages, answer a translation clarification and verify that the original topic and audience still govern the result. Business review should confirm the rubric and assess the actual generated copy; automated checks cover the separate editor mechanics.

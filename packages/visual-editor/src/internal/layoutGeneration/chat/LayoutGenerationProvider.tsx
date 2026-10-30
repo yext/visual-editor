@@ -43,22 +43,21 @@ export const LayoutGenerationProvider = ({
     metadata.layoutId,
   ]);
   // Metadata may refresh for persistence acknowledgments; prompts and generation limits stay fixed for this scope.
-  const snapshot = React.useRef<{
+  const [snapshot, setSnapshot] = React.useState<{
     scopeKey: string;
     result: ReturnType<typeof generationConfigSchema.safeParse>;
   } | null>(null);
   if (
     !localDev &&
     metadata.aiPageGeneration &&
-    snapshot.current?.scopeKey !== scopeKey
+    snapshot?.scopeKey !== scopeKey
   ) {
-    snapshot.current = {
+    setSnapshot({
       scopeKey,
       result: generationConfigSchema.safeParse(metadata.aiPageGeneration),
-    };
+    });
   }
-  const parsed =
-    snapshot.current?.scopeKey === scopeKey ? snapshot.current.result : null;
+  const parsed = snapshot?.scopeKey === scopeKey ? snapshot.result : null;
   const prompts = parsed?.success ? parsed.data.prompts : null;
   const generationSettings = parsed?.success
     ? parsed.data.generationSettings
