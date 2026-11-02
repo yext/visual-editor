@@ -715,6 +715,37 @@ describe("declared resolved props", () => {
     expect(find(candidate, "first-a").props.parentData.removed).toBe("Old");
   });
 
+  it.each([
+    {
+      before: ["Keep", "Remove"],
+      after: ["Keep"],
+      path: "/items/1",
+      expected: ["Keep"],
+    },
+    {
+      before: ["Remove", "Keep", "Sibling"],
+      after: [],
+      path: "/items/0",
+      expected: ["Keep", "Sibling"],
+    },
+  ])(
+    "removes resolved array elements without holes at $path",
+    ({ before, after, path, expected }) => {
+      const candidate = page();
+      find(candidate, "first-a").props.items = before;
+      const resolved = clone(candidate);
+      find(resolved, "first-a").props.items = after;
+      const restored = preserveSectionEditResolution(
+        resolvedCatalog([path]),
+        resolved,
+        candidate
+      );
+      expect(find(restored, "first-a").props.items).toStrictEqual(expected);
+      expect(find(candidate, "first-a").props.items).toStrictEqual(before);
+      expect(find(resolved, "first-a").props.items).toStrictEqual(after);
+    }
+  );
+
   it("creates missing parents and clones resolved values", () => {
     const candidate = page();
     delete find(candidate, "first-a").props.parentData;

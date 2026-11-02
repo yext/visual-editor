@@ -536,7 +536,7 @@ export const useLayoutGenerationChat = (
             showProgress(
               pt(
                 "layoutGenerationChat.fullPageUpdateProgress",
-                "Sections updated: {{count}}...",
+                "Steps completed: {{count}}...",
                 {
                   count,
                 }

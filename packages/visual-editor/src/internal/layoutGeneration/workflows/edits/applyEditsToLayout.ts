@@ -423,6 +423,8 @@ const preserveResolvedProp = (
   if (!rest.length) {
     if (hasValue) {
       target[key] = clone(value);
+    } else if (Array.isArray(target)) {
+      target.splice(Number(key), 1);
     } else {
       delete target[key];
     }
