@@ -72,6 +72,10 @@ describe("browser section coordination", () => {
     ]);
     gates.get("a")!.resolve(result(task("a")));
     await vi.waitFor(() => expect(options.commit).toHaveBeenCalledOnce());
+    expect(options.onProgress).toHaveBeenCalledWith(
+      options.tasks[0],
+      "readyToApply"
+    );
     expect(options.generate).toHaveBeenCalledTimes(2);
     application.resolve();
     await vi.waitFor(() => expect(options.generate).toHaveBeenCalledTimes(3));

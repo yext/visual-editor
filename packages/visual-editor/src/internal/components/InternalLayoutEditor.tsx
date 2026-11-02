@@ -38,7 +38,10 @@ import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import { removeDuplicateActionBars } from "../utils/removeDuplicateActionBars.ts";
 import { AdvancedSettings } from "./AdvancedSettings.tsx";
-import { LayoutPuckOverride } from "./LayoutPuckOverride.tsx";
+import {
+  LayoutPuckOverride,
+  LayoutPreviewOverride,
+} from "./LayoutPuckOverride.tsx";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -146,7 +149,9 @@ export const InternalLayoutEditor = ({
    */
   const handleHistoryChange = useCallback(
     (histories: History<Partial<AppState>>[], index: number) => {
-      if (layoutGenerationActive) return;
+      if (layoutGenerationActive) {
+        return;
+      }
       if (intent?.suppressSave(histories[index]?.id)) {
         historyIndex.current = index;
         return;
@@ -592,6 +597,7 @@ export const InternalLayoutEditor = ({
             },
             fieldLabel: LayoutFieldLabel,
             puck: LayoutPuckOverride,
+            preview: LayoutPreviewOverride,
           }}
           metadata={metadata}
         />

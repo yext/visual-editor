@@ -8,7 +8,10 @@ import React from "react";
 import { expect, it, vi } from "vitest";
 import { ErrorProvider } from "../../../contexts/ErrorContext.tsx";
 import { TemplatePropsContext } from "../../../hooks/useDocument.tsx";
-import { LayoutPuckOverride } from "../../components/LayoutPuckOverride.tsx";
+import {
+  LayoutPuckOverride,
+  LayoutPreviewOverride,
+} from "../../components/LayoutPuckOverride.tsx";
 import type { TemplateMetadata } from "../../types/templateMetadata.ts";
 import { chatConfig, layout } from "../testing/chatFixtures.tsx";
 import { executeGeneration } from "../transport/executeGeneration.ts";
@@ -44,8 +47,9 @@ it.each(["answer", "cancel"] as const)(
           !["updateIntentPageGeneration", "saveLayoutSaveState"].includes(
             message.type
           )
-        )
+        ) {
           return;
+        }
         const status =
           message.type === "saveLayoutSaveState"
             ? "COMPLETED"
@@ -84,6 +88,9 @@ it.each(["answer", "cancel"] as const)(
       .mocked(executeGeneration)
       .mockImplementation(async (request) => {
         expect(request.mode).toBe("fullPageUpdate");
+        expect(
+          screen.getByText("Original", { selector: "h2" }).closest("[hidden]")
+        ).toBeTruthy();
         if (!asked) {
           asked = true;
           return {
@@ -128,6 +135,7 @@ it.each(["answer", "cancel"] as const)(
         intentPageGeneration: { prompt, status: "PENDING" },
       },
     } as TemplateMetadata;
+    const scrollTop = vi.spyOn(Element.prototype, "scrollTop", "set");
     render(
       <ErrorProvider>
         <TemplatePropsContext.Provider value={{ document: { locale: "en" } }}>
@@ -137,7 +145,10 @@ it.each(["answer", "cancel"] as const)(
               data={initial}
               iframe={{ enabled: false }}
               plugins={[layoutGenerationChatPlugin]}
-              overrides={{ puck: LayoutPuckOverride }}
+              overrides={{
+                puck: LayoutPuckOverride,
+                preview: LayoutPreviewOverride,
+              }}
             />
             <Capture />
           </LayoutGenerationProvider>
@@ -146,7 +157,17 @@ it.each(["answer", "cancel"] as const)(
     );
     document.querySelector<HTMLElement>(".Puck")!.style.visibility = "visible";
     await screen.findByText(question);
+    const log = screen.getByRole("log", { name: "Generation conversation" });
+    expect(
+      scrollTop.mock.contexts.filter((element) => element === log)
+    ).toHaveLength(0);
+    scrollTop.mockRestore();
+    Object.defineProperty(log, "scrollHeight", { value: 500 });
+    expect(log.scrollTop).toBe(0);
     await waitFor(() => expect(intent?.state.stage).toBe("clarification"));
+    expect(
+      screen.getByText("Original", { selector: "h2" }).closest("[hidden]")
+    ).toBeTruthy();
     const start = post.mock.calls
       .map(([message]) => message)
       .find((message) => message.type === "updateIntentPageGeneration");
@@ -164,6 +185,9 @@ it.each(["answer", "cancel"] as const)(
     if (action === "cancel") {
       fireEvent.click(stop);
       await waitFor(() => expect(intent?.state.stage).toBe("failed"));
+      expect(
+        screen.getByText("Original", { selector: "h2" }).closest("[hidden]")
+      ).toBeNull();
       expect(intent!.workflow.blocked).toBe(false);
       expect(
         post.mock.calls.some(
@@ -190,8 +214,14 @@ it.each(["answer", "cancel"] as const)(
     }
     fireEvent.change(input, { target: { value: answer } });
     fireEvent.click(screen.getByRole("button", { name: "Send" }));
+    expect(log.scrollTop).toBe(500);
     await screen.findByText("Custom fit shoes", { selector: "h2" });
     await waitFor(() => expect(intent?.state.stage).toBe("completed"));
+    expect(
+      screen
+        .getByText("Custom fit shoes", { selector: "h2" })
+        .closest("[hidden]")
+    ).toBeNull();
     expect(
       execute.mock.calls.find(([request]) =>
         request.messages.some((message) => message.content === answer)

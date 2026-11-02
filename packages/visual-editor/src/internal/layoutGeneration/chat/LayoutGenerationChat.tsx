@@ -29,18 +29,15 @@ const intentStageLabels = {
   failed: msg("layoutGenerationChat.intentStage.failed", "failed"),
   completed: msg("layoutGenerationChat.intentStage.completed", "completed"),
   recovery: msg("layoutGenerationChat.intentStage.recovery", "recovery"),
-  stopped: msg("layoutGenerationChat.intentStage.stopped", "stopped"),
+  stopped: msg("layoutGenerationChat.status.cancelled", "Cancelled"),
 };
 
 const statusLabels: Record<SectionTaskProgress["status"], string> = {
-  pending: msg("layoutGenerationChat.status.pending", "Queued"),
+  queued: msg("layoutGenerationChat.status.waiting", "Waiting"),
   waiting: msg("layoutGenerationChat.status.waiting", "Waiting"),
-  generating: msg(
-    "layoutGenerationChat.status.generating",
-    "Generating changes"
-  ),
-  retrying: msg("layoutGenerationChat.status.retrying", "Retrying changes"),
-  queued: msg("layoutGenerationChat.status.queued", "Waiting to apply"),
+  generating: msg("layoutGenerationChat.status.generating", "Generating"),
+  retrying: msg("layoutGenerationChat.status.generating", "Generating"),
+  readyToApply: msg("layoutGenerationChat.status.applying", "Applying changes"),
   applying: msg("layoutGenerationChat.status.applying", "Applying changes"),
   applied: msg("layoutGenerationChat.status.applied", "Applied"),
   failed: msg("layoutGenerationChat.status.failed", "Failed"),
@@ -59,6 +56,47 @@ export const LayoutGenerationChat = ({
   active: boolean;
 }) => {
   const intent = React.useContext(IntentPageGenerationChatContext);
+  const logRef = React.useRef<HTMLDivElement>(null);
+  const userMessageCount = chat.messages.filter(
+    (message) => message.role === "user"
+  ).length;
+  const previousUserMessageCount = React.useRef(userMessageCount);
+  const assistantMessageCount = chat.messages.filter(
+    (message) => message.role === "assistant" && !message.pending
+  ).length;
+  const previousAssistantMessageCount = React.useRef(assistantMessageCount);
+  const initialIntentMessage =
+    userMessageCount === 1 &&
+    intent?.eligible &&
+    (intent.state.stage === "starting" || intent.state.stage === "generating");
+  const preserveInitialIntent = React.useRef(initialIntentMessage);
+  const scrolledAway = React.useRef(false);
+
+  React.useLayoutEffect(() => {
+    const addedUserMessage =
+      userMessageCount > previousUserMessageCount.current;
+    const addedAssistantMessage =
+      assistantMessageCount > previousAssistantMessageCount.current;
+    previousUserMessageCount.current = userMessageCount;
+    previousAssistantMessageCount.current = assistantMessageCount;
+    if (addedUserMessage) {
+      preserveInitialIntent.current = initialIntentMessage;
+      scrolledAway.current = false;
+    }
+    if (
+      (!addedUserMessage && !addedAssistantMessage) ||
+      preserveInitialIntent.current ||
+      scrolledAway.current ||
+      !active
+    ) {
+      return;
+    }
+    const log = logRef.current;
+    // Jump on send and final replies, while leaving streamed updates and manual scrolling alone.
+    if (log) {
+      log.scrollTop = log.scrollHeight;
+    }
+  }, [userMessageCount, assistantMessageCount, initialIntentMessage, active]);
 
   return (
     <aside
@@ -87,6 +125,12 @@ export const LayoutGenerationChat = ({
       <div className="local-editor-chat-body">
         <div
           className="local-editor-chat-log"
+          ref={logRef}
+          onScroll={(event) => {
+            const log = event.currentTarget;
+            scrolledAway.current =
+              log.scrollHeight - log.clientHeight - log.scrollTop > 32;
+          }}
           role="log"
           aria-label={pt(
             "layoutGenerationChat.conversation",
@@ -141,7 +185,11 @@ export const LayoutGenerationChat = ({
                       )}
                     >
                       {message.sections.map((section) => (
-                        <li key={section.taskId} data-status={section.status}>
+                        <li
+                          key={section.taskId}
+                          data-action={section.action}
+                          data-status={section.status}
+                        >
                           <strong>{section.label}</strong>
                           <span>{section.description}</span>
                           <span className="local-editor-chat-section-status">

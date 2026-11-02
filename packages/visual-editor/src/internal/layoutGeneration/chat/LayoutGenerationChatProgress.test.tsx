@@ -83,11 +83,15 @@ it("shows overlays during concurrent section generation, marks applied sections 
   let finishFirst!: (response: ExecutorReply) => void;
   let finishSecond!: (response: ExecutorReply) => void;
   stubGenerationExecutor(async (body) => {
-    if (body.mode === "plan") return planned([task("heading"), task("second")]);
+    if (body.mode === "plan") {
+      return planned([task("heading"), task("second")]);
+    }
     return new Promise<ExecutorReply>((resolve) => {
-      if (body.mode === "section" && body.task.taskId === "heading")
+      if (body.mode === "section" && body.task.taskId === "heading") {
         finishFirst = resolve;
-      else finishSecond = resolve;
+      } else {
+        finishSecond = resolve;
+      }
     });
   });
   editor();
@@ -128,7 +132,7 @@ it("shows overlays during concurrent section generation, marks applied sections 
   expect(screen.getByText("second", { selector: "h2" })).toBeTruthy();
 });
 
-it("starts the conversation at the top and preserves user scrolling through progress updates", async () => {
+const setupScrolling = () => {
   let finishPlan!: (response: ExecutorReply) => void;
   stubGenerationExecutor(async (body) => {
     if (body.mode === "plan") {
@@ -140,18 +144,58 @@ it("starts the conversation at the top and preserves user scrolling through prog
   });
   editor(["heading"]);
   const log = screen.getByRole("log", { name: "Generation conversation" });
-  const scrollTo = vi.fn();
-  log.scrollTo = scrollTo;
+  let scrollHeight = 500;
+  Object.defineProperty(log, "scrollHeight", { get: () => scrollHeight });
+  return {
+    log,
+    setScrollHeight: (height: number) => {
+      scrollHeight = height;
+    },
+    get finishPlan() {
+      return finishPlan;
+    },
+  };
+};
+
+it("scrolls after each user message and preserves manual scrolling through progress and final replies", async () => {
+  const current = setupScrolling();
+  const { log } = current;
   expect(log.scrollTop).toBe(0);
   await submit();
-  await waitFor(() => expect(finishPlan).toBeDefined());
-  expect(log.scrollTop).toBe(0);
+  await waitFor(() => expect(current.finishPlan).toBeDefined());
+  expect(log.scrollTop).toBe(500);
   log.scrollTop = 72;
   fireEvent.scroll(log);
-  await act(async () => finishPlan(planned([task("heading")])));
+  await act(async () => current.finishPlan(planned([task("heading")])));
   await screen.findByText("heading updated", { selector: "h2" });
   expect(log.scrollTop).toBe(72);
-  expect(scrollTo).not.toHaveBeenCalled();
+  const firstPlan = current.finishPlan;
+  await submit("Improve it again");
+  await waitFor(() => expect(current.finishPlan).not.toBe(firstPlan));
+  expect(log.scrollTop).toBe(500);
+  log.scrollTop = 40;
+  fireEvent.scroll(log);
+  await act(async () => current.finishPlan(planned([task("heading")])));
+  await waitFor(() =>
+    expect(screen.getAllByText("Section changes: 1 applied.")).toHaveLength(2)
+  );
+  expect(log.scrollTop).toBe(40);
+});
+
+it("scrolls to the completed assistant reply when the user is following the bottom", async () => {
+  const current = setupScrolling();
+  const { log } = current;
+  await submit();
+  await waitFor(() => expect(current.finishPlan).toBeDefined());
+  expect(log.scrollTop).toBe(500);
+  log.scrollTop = 72;
+  fireEvent.scroll(log);
+  log.scrollTop = 500;
+  fireEvent.scroll(log);
+  current.setScrollHeight(800);
+  await act(async () => current.finishPlan(planned([task("heading")])));
+  await screen.findByText("Section changes: 1 applied.");
+  expect(log.scrollTop).toBe(800);
 });
 
 it("shows named section progress and preserves applied work when stopped from collapsed chat", async () => {
@@ -188,7 +232,7 @@ it("shows named section progress and preserves applied work when stopped from co
   expect(within(progress).getByText("Update this section.")).toBeTruthy();
   expect(within(progress).queryByText(/authored schema/)).toBeNull();
   expect(within(progress).getByText("Applied")).toBeTruthy();
-  expect(within(progress).getByText("Generating changes")).toBeTruthy();
+  expect(within(progress).getByText("Generating")).toBeTruthy();
   expect(
     (
       screen.getByRole("button", {
@@ -208,7 +252,7 @@ it("shows named section progress and preserves applied work when stopped from co
   expect(screen.queryByText("second updated", { selector: "h2" })).toBeNull();
 });
 
-it("shows retrying, failed, skipped and applied outcomes, and sends them in subsequent history", async () => {
+it("labels retries as generating and preserves final outcomes in subsequent history", async () => {
   let secondAttempt = 0;
   let finishRetry!: (response: ExecutorReply) => void;
   const invalid = () =>
@@ -240,12 +284,19 @@ it("shows retrying, failed, skipped and applied outcomes, and sends them in subs
   stubGenerationExecutor(executeMock);
   editor(["heading", "second", "third", "fourth"]);
   await submit();
-  await screen.findByText("Retrying changes");
+  await waitFor(() => {
+    const section = screen.getByText("Section 2 · Heading").closest("li")!;
+    expect(section.getAttribute("data-status")).toBe("retrying");
+    expect(within(section).getByText("Generating")).toBeTruthy();
+  });
   await screen.findByText("Waiting");
   await screen.findByText("fourth updated", { selector: "h2" });
   await act(async () => finishRetry(invalid()));
   await screen.findByText("Section changes: 2 applied, 1 failed, 1 skipped.");
   expect(screen.getByText("Failed")).toBeTruthy();
+  expect(
+    screen.getByText("Failed").closest("li")?.getAttribute("data-action")
+  ).toBe("updated");
   expect(screen.getByText("Skipped")).toBeTruthy();
   expect(screen.getByText("Invalid heading copy")).toBeTruthy();
   expect(screen.queryByText("Everything was updated.")).toBeNull();
@@ -276,7 +327,7 @@ it("shows retrying, failed, skipped and applied outcomes, and sends them in subs
   ).toHaveLength(1);
 });
 
-it("distinguishes a resolving section from another result waiting in the application queue", async () => {
+it("shows the same applying label for resolving and queued sections while preserving their states", async () => {
   let finishResolution!: () => void;
   const resolution = new Promise<void>((resolve) => {
     finishResolution = resolve;
@@ -314,8 +365,15 @@ it("distinguishes a resolving section from another result waiting in the applica
   );
   openChat();
   await submit();
-  await screen.findByText("Applying changes");
-  await screen.findByText("Waiting to apply");
+  await waitFor(() => {
+    const applyingLabels = screen.getAllByText("Applying changes");
+    expect(applyingLabels).toHaveLength(2);
+    expect(
+      applyingLabels.map((label) =>
+        label.closest("li")?.getAttribute("data-status")
+      )
+    ).toEqual(["applying", "readyToApply"]);
+  });
   expect(screen.getByLabelText("History index").textContent).toBe("0");
   await act(async () => finishResolution());
   await screen.findByText("Section changes: 2 applied.");
@@ -349,7 +407,9 @@ it("uses the configured display name for a newly inserted section", async () => 
   };
   stubGenerationExecutor(
     vi.fn(async (body: any): Promise<ExecutorReply> => {
-      if (body.mode === "plan") return planned([insertion]);
+      if (body.mode === "plan") {
+        return planned([insertion]);
+      }
       return {
         type: "section-result",
         result: {

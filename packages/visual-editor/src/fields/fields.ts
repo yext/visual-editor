@@ -83,6 +83,8 @@ export type YextFieldDefinition<ValueType = any> =
 /** Provides a formal zod type describing the props for AI layout generation. */
 export type LayoutGenerationMetadata = {
   props: z.ZodObject;
+  /** JSON Pointer paths relative to props whose resolved values survive chat edit preservation. */
+  resolvedProps?: string[];
   slottedItemSource?: SlottedItemSourceGenerationMetadata;
 };
 

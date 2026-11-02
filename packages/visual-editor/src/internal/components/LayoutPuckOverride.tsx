@@ -5,12 +5,38 @@ import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { LayoutGenerationChatBridge } from "../layoutGeneration/chat/LayoutGenerationChatBridge.tsx";
 import { LayoutGenerationChatUiContext } from "../layoutGeneration/chat/contexts.tsx";
+import { IntentPageGenerationChatContext } from "../layoutGeneration/chat/useIntentPageGeneration.ts";
 import { synchronizeManualCardSlots } from "../layoutGeneration/shared/synchronizeManualCardSlots.ts";
 import { ValidationReporters } from "../puck/components/ValidationReporters.tsx";
 import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
+
+export const LayoutPreviewOverride = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const intent = React.useContext(IntentPageGenerationChatContext);
+  const ui = React.useContext(LayoutGenerationChatUiContext);
+  const hidePreview =
+    ui?.chat.isPlanningIntentPage ||
+    (intent?.eligible &&
+      (intent.state.stage === "starting" ||
+        intent.state.stage === "clarification" ||
+        (intent.state.stage === "idle" && intent.status === "PENDING")));
+
+  // Preserve Puck's preview sizing when visible; an extra block collapses its height.
+  return (
+    <div
+      hidden={!!hidePreview}
+      style={{ display: hidePreview ? "none" : "contents" }}
+    >
+      {children}
+    </div>
+  );
+};
 
 /** Wrap the Puck editor in a chat bridge that remains mounted on ordinary editor renders. */
 export const LayoutPuckOverride = ({

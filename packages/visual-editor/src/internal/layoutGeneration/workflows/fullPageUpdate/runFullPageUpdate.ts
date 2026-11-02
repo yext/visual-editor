@@ -32,14 +32,29 @@ export const runFullPageUpdate = async ({
   request,
   canvas,
   onProgress,
+  onPreviewReveal,
 }: GenerationTurn & {
   canvas: FullPageUpdateCanvas;
   onProgress: (step: FullPageUpdateStep, completedSteps: number) => void;
+  onPreviewReveal?: () => void;
 }): Promise<PageGenerationResult | undefined> => {
   canvas.beginFullPageUpdate();
   let applied = 0;
+  let previewRevealed = false;
+  const revealPreview = () => {
+    if (!active() || previewRevealed) {
+      return;
+    }
+    previewRevealed = true;
+    onPreviewReveal?.();
+  };
   const apply = async (step: FullPageUpdateStep, index: number) => {
-    if (!active()) return;
+    if (!active()) {
+      return;
+    }
+    if (step.kind !== "remove" && step.kind !== "keep") {
+      revealPreview();
+    }
     await canvas.applyFullPageUpdate(step, index, signal);
     if (index >= applied) {
       applied = index + 1;
@@ -61,37 +76,52 @@ export const runFullPageUpdate = async ({
           undefined,
           apply,
           async (sectionId) => {
-            if (active())
+            if (active()) {
+              revealPreview();
               await canvas.prepareFullPageUpdateSection?.(sectionId, signal);
+            }
           }
         );
       } catch (cause) {
-        if (applied && cause instanceof GenerationError)
+        if (applied && cause instanceof GenerationError) {
           throw new GenerationError(
             cause.message,
             false,
             cause.transport,
             cause.feedback
           );
+        }
         throw cause;
       }
     });
-    if (!active()) return;
-    if (event.type !== "fullPageUpdated")
+    if (!active()) {
+      return;
+    }
+    if (event.type !== "fullPageUpdated") {
       throw new Error("Expected full-page update output.");
+    }
     if (event.result.action === "clarification") {
-      if (applied)
+      if (applied) {
         throw new Error(
           "Clarification cannot follow applied full-page update steps."
         );
+      }
       return { text: event.result.question, clarification: true };
     }
     for (let index = 0; index < event.result.steps.length; index++) {
-      if (!active()) return;
-      if (index >= applied) await apply(event.result.steps[index], index);
+      if (!active()) {
+        return;
+      }
+      if (index >= applied) {
+        await apply(event.result.steps[index], index);
+      }
     }
+    // A plan containing only removals/keeps still reveals its completed canvas.
+    revealPreview();
     return { text: event.text, clarification: false };
   } finally {
-    if (active()) canvas.finishFullPageUpdate();
+    if (active()) {
+      canvas.finishFullPageUpdate();
+    }
   }
 };

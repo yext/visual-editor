@@ -338,7 +338,7 @@
 .local-editor-chat-sections .local-editor-chat-section-status {
   margin-top: var(--puck-space-1);
   font-weight: var(--puck-font-weight-semibold);
-  color: var(--puck-color-interactive);
+  color: var(--puck-color-text-secondary);
 }
 
 .local-editor-chat-sections .local-editor-chat-progress-dots {
@@ -367,11 +367,13 @@
   }
 }
 
-.local-editor-chat-sections li[data-status="applied"] {
+.local-editor-chat-sections li[data-status="applied"],
+.local-editor-chat-sections li[data-status="skipped"] {
   border-color: var(--puck-color-green-04);
 }
 
-.local-editor-chat-sections li[data-status="failed"] {
+.local-editor-chat-sections li[data-status="failed"],
+.local-editor-chat-sections li[data-status="cancelled"] {
   border-color: var(--puck-color-red-04);
 }
 

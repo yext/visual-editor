@@ -44,6 +44,8 @@ it("streams removal before request completion, includes full model context and d
     diagnostics: { log: vi.fn(), report: vi.fn() },
   };
   const controller = new AbortController();
+  const onPreviewReveal = vi.fn();
+  const onProgress = vi.fn();
   const prepareSection = vi.fn(
     async (_sectionId: string, _signal: AbortSignal) => {}
   );
@@ -76,11 +78,13 @@ it("streams removal before request completion, includes full model context and d
       applyFullPageUpdate: (...args) => current.session.apply(...args),
       finishFullPageUpdate: () => current.session.finish(),
     },
-    onProgress: vi.fn(),
+    onProgress,
+    onPreviewReveal,
   });
   const wire = JSON.stringify(
     fullPageUpdateResponse([
       { kind: "remove", sectionId: "services" },
+      { kind: "keep", sectionId: "hero" },
       {
         kind: "replace",
         sectionId: "testimonials",
@@ -100,6 +104,8 @@ it("streams removal before request completion, includes full model context and d
   expect(
     bodySections(current.data() as Content).map((item) => item.props.id)
   ).toEqual(["hero", "testimonials"]);
+  await vi.waitFor(() => expect(onProgress).toHaveBeenCalledTimes(2));
+  expect(onPreviewReveal).not.toHaveBeenCalled();
   stream.enqueue(
     event({
       type: "response.output_text.delta",
@@ -113,6 +119,7 @@ it("streams removal before request completion, includes full model context and d
     )
   );
   expect(current.preview).toHaveBeenCalledOnce();
+  expect(onPreviewReveal).toHaveBeenCalledOnce();
   stream.enqueue(
     event({
       type: "response.output_text.delta",
@@ -149,8 +156,9 @@ it("repairs before application but never retries after streamed steps", async ()
     const request = vi
       .fn<GenerationRequestExecutor>()
       .mockImplementationOnce(async (_payload, _signal, _content, onStep) => {
-        if (streamed)
+        if (streamed) {
           await onStep!({ kind: "remove", sectionId: "services" }, 0);
+        }
         throw new GenerationError("Invalid output", true);
       })
       .mockResolvedValueOnce({
@@ -173,9 +181,11 @@ it("repairs before application but never retries after streamed steps", async ()
       },
       onProgress: vi.fn(),
     });
-    if (streamed)
+    if (streamed) {
       await expect(pending).rejects.toMatchObject({ retryable: false });
-    else expect(await pending).toEqual({ text: "Fixed", clarification: false });
+    } else {
+      expect(await pending).toEqual({ text: "Fixed", clarification: false });
+    }
     expect(request).toHaveBeenCalledTimes(streamed ? 1 : 2);
     expect(finishFullPageUpdate).toHaveBeenCalledOnce();
   };
