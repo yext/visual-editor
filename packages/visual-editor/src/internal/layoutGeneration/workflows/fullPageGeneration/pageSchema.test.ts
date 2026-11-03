@@ -14,6 +14,7 @@ import {
 import { slottedFixture } from "../../testing/slottedFixtures.ts";
 import { isBlankGenerationPage } from "./isBlankGenerationPage.ts";
 import { compileGenerationSchema } from "./pageSchema.ts";
+import { compileGenerationPreparation } from "./preparation.ts";
 
 const defaults = { $default: true };
 const unset = { $unset: true };
@@ -85,6 +86,173 @@ const section = (child: any = heading()) => ({
 });
 
 describe("fresh page creation schema", () => {
+  const collectionPage = () => {
+    const products = slottedFixture("ProductCard");
+    const faqs = slottedFixture();
+    const ownerTypes = [
+      "FAQSection",
+      "ProductCardsWrapper",
+      "TestimonialCardsWrapper",
+      "TeamCardsWrapper",
+      "InsightCardsWrapper",
+      "EventCardsWrapper",
+    ];
+    const c = createPuckGenerationCatalog({
+      ...faqs.components,
+      ...products.components,
+      ...Object.fromEntries(
+        ownerTypes.map((type) => [
+          type,
+          {
+            ...(type === "FAQSection" ? faqs : products).components.Section,
+            nestedOnly: type !== "FAQSection",
+          },
+        ])
+      ),
+      ProductSection: {
+        generation: {
+          props: z.object({
+            slots: z.object({ CardsWrapperSlot: z.array(z.unknown()) }),
+          }),
+        },
+        fields: {
+          slots: {
+            type: "object",
+            objectFields: {
+              CardsWrapperSlot: {
+                type: "slot",
+                allow: ["ProductCardsWrapper"],
+              },
+            },
+          },
+        },
+      },
+    });
+    const productOwner = {
+      ...products.section(Array.from({ length: 3 }, () => products.card())),
+      type: "ProductCardsWrapper",
+    };
+    const faqOwner = {
+      ...faqs.section(Array.from({ length: 3 }, () => faqs.card())),
+      type: "FAQSection",
+    };
+    const content = [
+      {
+        type: "MainContent",
+        props: {
+          content: [
+            {
+              type: "ProductSection",
+              props: { slots: { CardsWrapperSlot: [productOwner] } },
+            },
+            faqOwner,
+          ],
+        },
+      },
+    ];
+    const preparation = compileGenerationPreparation(c, [
+      "en",
+      "fr",
+    ]).parseResponse(
+      JSON.stringify({
+        question: null,
+        translationMode: "translate",
+        cardCounts: ownerTypes.map((componentType) => ({
+          componentType,
+          instanceIndex: null,
+          count: 3,
+        })),
+      })
+    ).preparation;
+    return { c, content, preparation, productOwner, faqOwner };
+  };
+
+  it("applies general counts to nested products and direct FAQs without requiring omitted types", () => {
+    const { c, content, preparation, productOwner, faqOwner } =
+      collectionPage();
+    const compiled = compileGenerationSchema(
+      c,
+      ["en", "fr"],
+      undefined,
+      preparation
+    );
+    const spec = compiled.materialize(create(content, "translate")).spec!;
+    const sections = spec.content[0].props.content;
+    expect(
+      sections[0].props.slots.CardsWrapperSlot[0].props.slots.CardSlot
+    ).toHaveLength(3);
+    expect(sections[1].props.slots.CardSlot).toHaveLength(3);
+    for (const owner of [productOwner, faqOwner]) {
+      owner.props.slots.CardSlot.pop();
+      expect(() => compiled.materialize(create(content, "translate"))).toThrow(
+        `${owner.type} instance 0: expected 3 manual CardSlot children`
+      );
+      owner.props.slots.CardSlot.push(
+        owner.type === "FAQSection"
+          ? slottedFixture().card()
+          : slottedFixture("ProductCard").card()
+      );
+    }
+  });
+
+  it.each(["ProductCardsWrapper", "FAQSection", "TeamCardsWrapper"])(
+    "reports unmatched indices or omitted owners for %s with the observed collection inventory",
+    (componentType) => {
+      const { c, content, preparation } = collectionPage();
+      const requirement = {
+        componentType,
+        instanceIndex: componentType === "TeamCardsWrapper" ? 0 : 1,
+        count: 3,
+      };
+      const compiled = compileGenerationSchema(c, ["en", "fr"], undefined, {
+        ...preparation,
+        cardCounts: [...preparation.cardCounts, requirement],
+      });
+      expect(() =>
+        compiled.materialize(create(content, "translate"), true)
+      ).not.toThrow();
+      expect(() => compiled.materialize(create(content, "translate"))).toThrow(
+        `Unmatched requirements: ${JSON.stringify([requirement])}. Observed collections: ${JSON.stringify(
+          [
+            {
+              componentType: "ProductCardsWrapper",
+              instanceIndex: 0,
+              count: 3,
+              linked: false,
+            },
+            {
+              componentType: "FAQSection",
+              instanceIndex: 0,
+              count: 3,
+              linked: false,
+            },
+          ]
+        )}`
+      );
+    }
+  );
+
+  it("requires explicitly requested collections even when their general count permits omission", () => {
+    const { c, content, preparation } = collectionPage();
+    for (const componentType of ["ProductCardsWrapper", "FAQSection"]) {
+      const compiled = compileGenerationSchema(c, ["en", "fr"], undefined, {
+        ...preparation,
+        cardCounts: [
+          ...preparation.cardCounts,
+          { componentType, instanceIndex: 0, count: 3 },
+        ],
+      });
+      expect(() =>
+        compiled.materialize(create(content, "translate"))
+      ).not.toThrow();
+      expect(() =>
+        compiled.materialize(
+          create([{ type: "MainContent", props: { content: [] } }], "translate")
+        )
+      ).toThrow(JSON.stringify({ componentType, instanceIndex: 0, count: 3 }));
+    }
+  });
+
   it("enforces prepared card counts after materialization and default selection", () => {
     const fixture = slottedFixture();
     const preparation = {
@@ -190,7 +358,7 @@ describe("fresh page creation schema", () => {
   );
 
   it.each([0, null])(
-    "does not satisfy a manual count with a linked instance (index %s)",
+    "excludes linked instances from general rules and rejects explicit manual targets (index %s)",
     (instanceIndex) => {
       const fixture = slottedFixture();
       const compiled = compileGenerationSchema(
@@ -203,15 +371,15 @@ describe("fresh page creation schema", () => {
           cardCounts: [{ componentType: "Section", instanceIndex, count: 0 }],
         }
       );
-      expect(() =>
+      const materialize = () =>
         compiled.materialize(
           create([fixture.section([], fixture.linked)], "translate")
-        )
-      ).toThrow(
-        instanceIndex === null
-          ? "omitted a prepared manual card collection"
-          : "expected 0 manual CardSlot children"
-      );
+        );
+      if (instanceIndex === null) {
+        expect(materialize).not.toThrow();
+      } else {
+        expect(materialize).toThrow("expected 0 manual CardSlot children");
+      }
       if (instanceIndex === null) {
         expect(() =>
           compiled.materialize(
@@ -840,4 +1008,80 @@ describe("fresh page creation schema", () => {
     };
     visit(compileGenerationSchema(catalog(), ["en"]).jsonSchema);
   });
+});
+
+it("requires explicit content in fresh intent pages while keeping ordinary creation defaults", () => {
+  const c = catalog();
+  const ordinary = compileGenerationSchema(c, ["en"]);
+  const intent = compileGenerationSchema(
+    c,
+    ["en"],
+    undefined,
+    undefined,
+    "intent"
+  );
+  expect(
+    ordinary.parseResponse(JSON.stringify(create([section()]))).spec
+  ).not.toBeNull();
+  expect(() =>
+    intent.parseResponse(JSON.stringify(create([section()])))
+  ).toThrow();
+  expect(() =>
+    intent.parseResponse(
+      JSON.stringify(
+        create([
+          { type: "Section", props: { title: "Service", slots: defaults } },
+        ])
+      )
+    )
+  ).toThrow();
+
+  const generated = {
+    type: "Section",
+    props: {
+      title: "Service",
+      slots: {
+        heading: [
+          {
+            type: "Heading",
+            props: {
+              ...heading().props,
+              text: "[Content needed: verified service benefits]",
+            },
+          },
+        ],
+      },
+    },
+  };
+  const output = intent.parseResponse(
+    JSON.stringify(create([generated]))
+  ).spec!;
+  const saved = output.content[0].props.slots.heading[0].props;
+  expect(saved.text).toBe("[Content needed: verified service benefits]");
+  expect(saved.style).toEqual({ color: "blue", width: 25 });
+});
+
+it("requires business-name bindings in fresh-page model instructions", () => {
+  const c = catalog();
+  const compiled = compileGenerationSchema(c, ["en"]);
+  const instructions = buildGenerationPrompt(
+    c,
+    compiled.availableComponentNames,
+    ["en"]
+  );
+  expect(instructions).toContain(
+    'field: "name" with constantValueEnabled: false'
+  );
+  expect(instructions).toContain(
+    "use [[name]] wherever the business name appears"
+  );
+  expect(instructions).toContain(
+    "Do not invent a business name or adopt sample branding from component defaults or template content"
+  );
+  expect(instructions).toContain(
+    "A product, service, topic or industry request does not authorize fictional business branding"
+  );
+  expect(instructions).toContain(
+    "Use a literal business name only when the user explicitly supplies or requests that name, or explicitly requests fictional branding"
+  );
 });

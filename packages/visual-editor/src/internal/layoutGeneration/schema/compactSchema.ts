@@ -102,3 +102,91 @@ export const compactGenerationSchema = (
     ? { ...result, $defs: definitions }
     : result;
 };
+
+/** Merge equivalent definition graphs after their dependencies become canonical.
+ * Keep references at component boundaries, including recursive graphs. */
+export const deduplicateGenerationDefinitions = (
+  schema: Record<string, any>
+): Record<string, any> => {
+  let definitions: Record<string, Record<string, any>> = { ...schema.$defs };
+  const aliases = new Map<string, string>();
+  const canonical = (name: string): string => {
+    while (aliases.has(name)) name = aliases.get(name)!;
+    return name;
+  };
+  const rewrite = (node: Record<string, any>): Record<string, any> => {
+    const result = { ...node };
+    if (node.$ref?.startsWith("#/$defs/")) {
+      const name = node.$ref
+        .slice("#/$defs/".length)
+        .replaceAll("~1", "/")
+        .replaceAll("~0", "~");
+      const target = canonical(name);
+      result.$ref = `#/$defs/${target.replaceAll("~", "~0").replaceAll("/", "~1")}`;
+    }
+    if (node.properties)
+      result.properties = Object.fromEntries(
+        Object.entries(node.properties).map(([key, value]) => [
+          key,
+          rewrite(value as Record<string, any>),
+        ])
+      );
+    if (node.items) result.items = rewrite(node.items);
+    if (node.anyOf) {
+      const branches = node.anyOf.map(rewrite);
+      result.anyOf = [
+        ...new Map(
+          branches.map((branch: Record<string, any>) => [
+            JSON.stringify(branch),
+            branch,
+          ])
+        ).values(),
+      ];
+    }
+    return result;
+  };
+  while (true) {
+    const seen = new Map<string, string>();
+    const next: Record<string, any> = Object.create(null);
+    let merged = false;
+    for (const [name, definition] of Object.entries(definitions)) {
+      const rewritten = rewrite(definition);
+      const signature = JSON.stringify(rewritten);
+      const previous = seen.get(signature);
+      if (previous) {
+        aliases.set(name, previous);
+        merged = true;
+      } else {
+        seen.set(signature, name);
+        next[name] = rewritten;
+      }
+    }
+    definitions = next;
+    if (!merged) break;
+  }
+  const { $defs: _definitions, ...root } = schema;
+  const result = rewrite(root);
+  // Only send definitions reachable from the response, retaining recursion.
+  const reachable: Record<string, any> = Object.create(null);
+  const visit = (node: Record<string, any>) => {
+    if (node.$ref?.startsWith("#/$defs/")) {
+      const name = node.$ref
+        .slice("#/$defs/".length)
+        .replaceAll("~1", "/")
+        .replaceAll("~0", "~");
+      if (Object.hasOwn(definitions, name) && !Object.hasOwn(reachable, name)) {
+        reachable[name] = rewrite(definitions[name]);
+        visit(reachable[name]);
+      }
+    }
+    Object.values(node.properties ?? {}).forEach((child) =>
+      visit(child as Record<string, any>)
+    );
+    if (node.items) visit(node.items);
+    node.anyOf?.forEach(visit);
+  };
+  visit(result);
+  return Object.keys(reachable).length
+    ? { ...result, $defs: reachable }
+    : result;
+};

@@ -1,0 +1,70 @@
+.local-editor-generation-section {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  box-sizing: border-box;
+  border: 2px solid var(--puck-color-interactive, #2563eb);
+  background: color-mix(
+    in srgb,
+    var(--puck-color-surface, #ffffff) 30%,
+    transparent
+  );
+  transition:
+    background 300ms ease,
+    border-color 300ms ease;
+}
+
+.local-editor-generation-section-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--puck-color-border, #d8dee8);
+  border-radius: var(--puck-radius-m, 6px);
+  background: var(--puck-color-surface, #ffffff);
+  color: var(--puck-color-text, #172033);
+  box-shadow: 0 2px 8px #00000014;
+  font: 500 12px/1.4 var(--puck-font-family, system-ui, sans-serif);
+  white-space: nowrap;
+}
+
+.local-editor-generation-section[data-status="building"] svg {
+  animation: local-editor-generation-spin 1.2s linear infinite;
+}
+
+.local-editor-generation-section[data-status="ready"] {
+  background: transparent;
+  border-color: transparent;
+  animation: local-editor-generation-fade 2s ease forwards;
+}
+
+.local-editor-generation-section[data-status="ready"] svg {
+  color: var(--puck-color-interactive, #2563eb);
+}
+
+@keyframes local-editor-generation-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes local-editor-generation-fade {
+  0%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .local-editor-generation-section,
+  .local-editor-generation-section svg {
+    animation: none !important;
+    transition: none;
+  }
+}

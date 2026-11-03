@@ -18,6 +18,27 @@ import {
 const defaults = { $default: true };
 
 describe("slotted source generation", () => {
+  it("resolves existing manual child identities without renaming them", async () => {
+    const f = slottedFixture();
+    const candidate = f.materialize();
+    const props = candidate.content[0].props;
+    props.slots.CardSlot.forEach((card: any, index: number) => {
+      card.props.slots.BodySlot[0].props.id = `existing-body-${index}`;
+    });
+    props.manualSlots.CardSlot = clone(props.slots.CardSlot);
+    const before = clone(candidate);
+    const resolved = await f.resolve(candidate);
+    assertAuthoredPreserved(f.catalog, resolved, candidate);
+    expect(candidate).toEqual(before);
+    expect(
+      resolved.content[0].props.slots.CardSlot.map(
+        (card: any) => card.props.slots.BodySlot[0].props.id
+      )
+    ).toEqual(["existing-body-0", "existing-body-1", "existing-body-2"]);
+    const again = await f.resolve(resolved);
+    assertAuthoredPreserved(f.catalog, again, candidate);
+  });
+
   it("canonicalizes absent optional values while preserving explicit null", async () => {
     const f = slottedFixture();
     const cardConfig = f.components.FAQCard;

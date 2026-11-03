@@ -14,6 +14,7 @@ import { ChatHarness, chatConfig, openChat } from "../testing/chatFixtures.tsx";
 import {
   editGenerationFixture,
   editPlan,
+  planningResponse,
   editResponse,
   editTask,
 } from "../testing/editFixtures.ts";
@@ -100,7 +101,22 @@ const setup = (
           transport: responseModelTransport(
             vi.fn(async (body) => {
               gatewayRequests.push(body);
-              return gateway(body);
+              const response = await gateway(body);
+              if (body.text.format.name !== "puck_edit_plan" || !response.ok)
+                return response;
+              // Encode semantic fixture plans using this request's actual canvas.
+              const provider = await response.json();
+              provider.output_text = JSON.stringify(
+                planningResponse(
+                  JSON.parse(provider.output_text),
+                  catalog,
+                  request.currentData!
+                )
+              );
+              return new Response(JSON.stringify(provider), {
+                headers: response.headers,
+                status: response.status,
+              });
             })
           ),
         },

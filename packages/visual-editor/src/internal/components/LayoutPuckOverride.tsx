@@ -23,7 +23,7 @@ export const LayoutPuckOverride = ({
   const document = useDocument();
 
   const isGenerationActive = React.useContext(LayoutGenerationChatUiContext)
-    ?.chat.isCreating;
+    ?.chat.isGeneratingPage;
   const isGenerationActiveRef = React.useRef(isGenerationActive);
   isGenerationActiveRef.current = isGenerationActive;
 

@@ -57,6 +57,21 @@ describe("generation locale policy", () => {
     ).toEqual({ defaultValue: value });
   });
 
+  it("does not wrap localized rich text again when its rich schema allows unknown keys", () => {
+    const rich = z.object({
+      html: z.string().optional(),
+      json: z.string().optional(),
+    });
+    const text = z.union([
+      rich,
+      z.object({ defaultValue: rich }).catchall(rich),
+    ]);
+    const value = {
+      defaultValue: { html: "<p>New copy</p>", json: "new document" },
+    };
+    expect(normalizeGeneratedText(value, text)).toEqual(value);
+  });
+
   it("rejects locale-only generation instead of silently losing its text", () => {
     expect(() => normalizeGeneratedText({ en: "Hello" }, text)).toThrow(
       "requires defaultValue"

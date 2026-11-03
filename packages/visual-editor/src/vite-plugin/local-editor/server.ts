@@ -8,7 +8,7 @@ import type {
   LocalEditorManifestResponse,
 } from "./types.ts";
 
-export type JsonResponseWriter = {
+type JsonResponseWriter = {
   setHeader: (name: string, value: string) => void;
   end: (chunk?: string) => void;
   statusCode: number;

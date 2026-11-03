@@ -5,6 +5,10 @@ import type {
   SectionEditResult,
   SectionEditTask,
 } from "../workflows/edits/types.ts";
+import type {
+  RegenerationResult,
+  RegenerationStep,
+} from "../workflows/fullPageRegeneration/contracts.ts";
 import type { GenerationPreparation } from "../workflows/fullPageGeneration/preparationContracts.ts";
 import type { ModelTransport } from "../transport/modelTransport.ts";
 import type { Content } from "./authoredValues.ts";
@@ -39,6 +43,8 @@ export type ConversationMessage = {
 };
 
 type RequestContext = {
+  /** Apply Yext search intent guidance to fresh intent-page creation. */
+  purpose?: "intent";
   /** The layout being generated or edited. */
   layoutId: string;
   /** Conversation history ending with the current user request. */
@@ -54,6 +60,10 @@ export type LayoutGenerationRequest = RequestContext &
     | {
         /** Resolve translation choices and card counts without compiling page schemas. */
         mode: "prepare";
+      }
+    | {
+        /** Rework the entire existing page using streamed section decisions. */
+        mode: "regenerate";
       }
     | {
         /** Generate a fresh page. */
@@ -78,6 +88,7 @@ export type LayoutGenerationRequest = RequestContext &
 
 /** Validated mode results; these are never persisted as layout data. */
 export type GenerationResult =
+  | { type: "regenerated"; text: string; result: RegenerationResult }
   | { type: "prepared"; preparation: GenerationPreparation }
   | { type: "accepted"; text: string; spec: { content: any[] } | null }
   | { type: "planned"; plan: SectionEditPlan }
@@ -87,8 +98,13 @@ export type GenerationResult =
 export type GenerationRequestExecutor = (
   request: LayoutGenerationRequest,
   signal?: AbortSignal,
-  onCreationContent?: (content: Content) => Promise<void>
+  onCreationContent?: (content: Content) => Promise<void>,
+  onRegenerationStep?: (step: RegenerationStep, index: number) => Promise<void>,
+  onRegenerationSection?: (sectionId: string) => Promise<void>
 ) => Promise<GenerationResult>;
+
+/** Page workflows return conversation outcomes separately from progress updates. */
+export type PageGenerationResult = { text: string; clarification: boolean };
 
 export type GenerationTurn = {
   layoutId: string;
@@ -108,8 +124,10 @@ export type GenerationCanvasAdapter = {
   resolve: (data: Data) => Promise<Data>;
   /** Check that fresh generation survived resolution. */
   validate: (data: Data, candidate: Data) => void;
-  /** Display validated creation data without history or persistence. */
-  preview?: (data: Data) => void;
+  /** Bring an existing section into view before resolving its replacement. */
+  prepareSection?: (sectionId: string, signal: AbortSignal) => Promise<void>;
+  /** Display validated data without history or persistence. */
+  preview?: (data: Data, options?: { follow: boolean }) => void;
   /** Apply data and record one undo entry from its baseline. */
   commit: (data: Data, baseline: Data) => void;
 };

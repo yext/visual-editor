@@ -23,7 +23,7 @@ type EditCanvas = {
   ) => Promise<unknown>;
 };
 
-export type EditProgress =
+type EditProgress =
   | { phase: "planning"; retrying: boolean }
   | { phase: "planned"; plan: SectionEditPlan }
   | {

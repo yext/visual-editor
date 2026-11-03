@@ -1,8 +1,8 @@
+// @vitest-environment node
 import {
   executionHarness,
   modelResponder,
 } from "../../testing/modelFixtures.ts";
-// @vitest-environment node
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   EDIT_PLANNING_OUTPUT_TOKEN_BUDGET,
@@ -11,10 +11,30 @@ import {
 import {
   editGenerationFixture,
   editPlan,
+  planningResponse,
   editResponse,
   editTask,
 } from "../../testing/editFixtures.ts";
-import { completed } from "../../testing/modelFixtures.ts";
+import { createRequestLocalIds } from "../../shared/requestLocalIds.ts";
+import { buildEditInventory } from "./buildEditInventory.ts";
+import { completed as completedProvider } from "../../testing/modelFixtures.ts";
+import { z } from "zod";
+import { clone } from "../../shared/authoredValues.ts";
+import { repairGenerationOutput } from "../../shared/generationErrors.ts";
+import { executeGeneration } from "../../transport/executeGeneration.ts";
+import { slottedFixture } from "../../testing/slottedFixtures.ts";
+import {
+  materializeSectionEdit,
+  preserveSectionEditResolution,
+} from "./applyEditsToLayout.ts";
+import { compileSectionEditSchema } from "./compileSectionEditSchema.ts";
+import { compileEditPlanningSchema } from "./sectionEditPlanningSchema.ts";
+
+const wirePlan = (plan: unknown) => {
+  const fixture = editGenerationFixture();
+  return planningResponse(plan, fixture.catalog, fixture.data);
+};
+const completed = (output: unknown) => completedProvider(wirePlan(output));
 
 const harness = (changes: Record<string, unknown> = {}) => {
   const fixture = editGenerationFixture();
@@ -46,17 +66,23 @@ afterEach(() => {
 
 describe("planning and section execution requests", () => {
   it("plans against current inventory, captured selection and conversation history", async () => {
+    const h = harness();
+    const ids = createRequestLocalIds(
+      buildEditInventory(h.fixture.catalog, h.fixture.data).components.map(
+        (item) => item.componentId
+      )
+    );
+    const output = wirePlan(editPlan([editTask("first", ["first-b"])]));
     const fetchMock = vi.fn(async (_body: unknown, _signal?: AbortSignal) =>
-      completed(editPlan([editTask("first", ["first-b"])]))
+      completed(output)
     );
     modelResponder.mockImplementation(fetchMock);
-    const h = harness();
     await h.run();
     expect(fetchMock).toHaveBeenCalledOnce();
     expect(h.log).toHaveBeenCalledWith(
       "[layout generation] Planning response",
       expect.objectContaining({
-        outputText: JSON.stringify(editPlan([editTask("first", ["first-b"])])),
+        outputText: JSON.stringify(output),
       })
     );
     expect(h.error).toBeUndefined();
@@ -73,8 +99,8 @@ describe("planning and section execution requests", () => {
     });
     const latest = JSON.parse(body.input.at(-1)!.content);
     expect(latest.context.inventory).toMatchObject({
-      selectedComponentId: "first-b",
-      selectedSectionId: "first",
+      selectedComponentId: ids.encode("first-b"),
+      selectedSectionId: ids.encode("first"),
     });
     expect(body.input.at(-1)!.content).not.toContain("editorMetadata");
     expect(body.input.at(-1)!.content).not.toContain("Private root setting");
@@ -211,7 +237,7 @@ describe("planning and section execution requests", () => {
     const h = harness();
     const run = h.run();
     await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
-    const outputText = JSON.stringify(editPlan());
+    const outputText = JSON.stringify(wirePlan(editPlan()));
     controller.enqueue(
       new TextEncoder().encode(
         `data: ${JSON.stringify({ type: "response.output_text.delta", delta: outputText.slice(0, 20) })}\n\n`
@@ -439,5 +465,122 @@ describe("planning and section execution requests", () => {
     await run;
     expect(signal.aborted).toBe(true);
     expect(h.events().some((event) => event.type === "planned")).toBe(false);
+  });
+
+  it("keeps the fourth card and its content requirements in the sole owning section task", async () => {
+    const fixture = slottedFixture("ProductCard");
+    const data = fixture.materialize();
+    const before = clone(data);
+    const sectionId = data.content[0].props.id;
+    const task = editTask(
+      sectionId,
+      [],
+      [
+        {
+          kind: "insert",
+          insertionKey: "fashion-card",
+          componentType: "ProductCard",
+          collection: { ownerId: sectionId, slotPath: "/slots/CardSlot" },
+          anchor: { position: "end" },
+        },
+      ]
+    );
+    task.instructions =
+      "Keep snow, rain, and work boots in the three existing cards. Add a complete fourth card for fashion boots, including its image, title and description.";
+    const compiled = compileEditPlanningSchema(
+      fixture.catalog,
+      ["en", "fr"],
+      data
+    );
+    const response = planningResponse(editPlan([task]), fixture.catalog, data);
+    const wire = z.fromJSONSchema(compiled.jsonSchema);
+    expect(wire.safeParse(response).success).toBe(true);
+    expect(Object.values(response.existingTasks).filter(Boolean)).toHaveLength(
+      1
+    );
+    expect(response.newSections).toEqual([]);
+    // The old split-task shape cannot pass the provider schema or decoder.
+    const split = editPlan([
+      task,
+      { ...task, taskId: "fashion-copy", structuralOperations: [] },
+    ]);
+    expect(wire.safeParse(split).success).toBe(false);
+    expect(() => compiled.parseResponse(JSON.stringify(split))).toThrow();
+    const originalRequest =
+      "Create a boot page with snow, rain, work, and fashion boots. Keep all four categories.";
+    const attempts: { request: string; validationFeedback?: string }[] = [];
+    const accepted = await repairGenerationOutput((validationFeedback) =>
+      executeGeneration(
+        {
+          mode: "plan",
+          selectedComponentId: null,
+          layoutId: "boots",
+          currentData: data,
+          messages: [{ role: "user", content: originalRequest }],
+          validationFeedback,
+        },
+        {
+          model: "test",
+          locales: ["en", "fr"],
+          catalog: fixture.catalog,
+          diagnostics: { log: () => {}, report: () => {} },
+          transport: async (body) => {
+            attempts.push(JSON.parse(body.input.at(-1)!.content));
+            const provider = completedProvider(
+              attempts.length === 1 ? split : response
+            );
+            return { contentType: "application/json", body: provider.body! };
+          },
+        },
+        new AbortController().signal,
+        "repair-fourth-card"
+      )
+    );
+    expect(attempts).toHaveLength(2);
+    expect(attempts.map((attempt) => attempt.request)).toEqual([
+      originalRequest,
+      originalRequest,
+    ]);
+    expect(attempts[1].validationFeedback).toBeTruthy();
+    if (accepted.type !== "planned")
+      throw new Error("Expected the repaired plan");
+    const plan = accepted.plan;
+    expect(plan.tasks).toEqual([task]);
+    const section = compileSectionEditSchema(
+      fixture.catalog,
+      ["en", "fr"],
+      data,
+      plan.tasks[0]
+    );
+    expect(section.context.task.instructions).toBe(task.instructions);
+    const result = section.parseResponse(
+      JSON.stringify({
+        taskId: task.taskId,
+        sectionId,
+        updates: [],
+        insertions: [
+          {
+            insertionKey: "fashion-card",
+            component: fixture.card("Fashion boots", "pink"),
+          },
+        ],
+      })
+    );
+    const candidate = materializeSectionEdit(
+      fixture.catalog,
+      data,
+      task,
+      result
+    );
+    const applied = preserveSectionEditResolution(
+      fixture.catalog,
+      await fixture.resolve(candidate),
+      candidate
+    );
+    const cards = applied.content[0].props.slots.CardSlot;
+    expect(cards).toHaveLength(4);
+    expect(cards.slice(0, 3)).toEqual(data.content[0].props.slots.CardSlot);
+    expect(cards[3].props.data.question.defaultValue).toBe("Fashion boots");
+    expect(data).toEqual(before);
   });
 });

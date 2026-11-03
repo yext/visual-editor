@@ -5,6 +5,11 @@ type GatewayResponse = {
   model?: string;
   status?: string;
   incomplete_details?: { reason?: string };
+  usage?: {
+    input_tokens?: number;
+    output_tokens?: number;
+    output_tokens_details?: { reasoning_tokens?: number };
+  };
   error?: unknown;
   output_text?: string;
   output?: {
@@ -12,6 +17,17 @@ type GatewayResponse = {
     content?: { type: string; text?: string }[];
   }[];
 };
+
+/** Distinguish a zero-usage budget rejection from an exhausted generation. */
+export class GenerationOutputBudgetError extends Error {
+  constructor(readonly beforeGeneration: boolean) {
+    super(
+      beforeGeneration
+        ? "The AI gateway reported an output token limit before generating any content. Try a smaller generation budget."
+        : "Generation exceeded its output token budget. Try a smaller request."
+    );
+  }
+}
 
 const readOutputText = (result: GatewayResponse): string => {
   if (
@@ -22,8 +38,11 @@ const readOutputText = (result: GatewayResponse): string => {
     throw new Error("The AI gateway refused generation.");
   }
   if (result.incomplete_details?.reason === "max_output_tokens") {
-    throw new Error(
-      "Generation exceeded its output token budget. Try a smaller request."
+    throw new GenerationOutputBudgetError(
+      result.usage?.input_tokens === 0 &&
+        result.usage?.output_tokens === 0 &&
+        (result.usage.output_tokens_details?.reasoning_tokens ?? 0) === 0 &&
+        !extractOutputText(result)
     );
   }
   if (result.error || result.status !== "completed") {

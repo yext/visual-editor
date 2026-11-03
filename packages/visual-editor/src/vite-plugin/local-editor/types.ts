@@ -9,13 +9,13 @@ export type LocalEditorOptions = {
   generationModel?: string;
 };
 
-export type LocalEditorDefaults = {
+type LocalEditorDefaults = {
   layoutId?: string;
   locale?: string;
   entityId?: string;
 };
 
-export type LocalEditorStreamField =
+type LocalEditorStreamField =
   | string
   | {
       name: string;

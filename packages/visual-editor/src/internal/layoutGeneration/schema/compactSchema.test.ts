@@ -1,7 +1,10 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { compactGenerationSchema } from "./compactSchema.ts";
+import {
+  compactGenerationSchema,
+  deduplicateGenerationDefinitions,
+} from "./compactSchema.ts";
 
 const expand = (schema: Record<string, any>) => {
   const visit = (node: any, active: Set<string>): any => {
@@ -148,4 +151,91 @@ describe("compact generation schema", () => {
       validator.safeParse({ root: { children: [{ children: "bad" }] } }).success
     ).toBe(false);
   });
+});
+
+it("deduplicates layered definition graphs without dropping constraints, annotations or component references", () => {
+  const definitions: Record<string, any> = {};
+  for (let index = 0; index < 25; index++) {
+    definitions[`text${index}`] = {
+      type: "string",
+      minLength: 1,
+      description: "Author a meaningful heading",
+    };
+    definitions[`props${index}`] = {
+      type: "object",
+      properties: { text: { $ref: `#/$defs/text${index}` } },
+      required: ["text"],
+      additionalProperties: false,
+    };
+    definitions[`component${index}`] = {
+      type: "object",
+      properties: {
+        type: { type: "string", const: `Section${index}` },
+        props: { $ref: `#/$defs/props${index}` },
+      },
+      required: ["type", "props"],
+      additionalProperties: false,
+    };
+  }
+  definitions.unused = { type: "number" };
+  const original: Record<string, any> = {
+    type: "object",
+    properties: {
+      content: {
+        type: "array",
+        items: {
+          anyOf: Array.from({ length: 25 }, (_, index) => ({
+            $ref: `#/$defs/component${index}`,
+          })),
+        },
+      },
+    },
+    required: ["content"],
+    additionalProperties: false,
+    $defs: definitions,
+  };
+  const snapshot = JSON.stringify(original);
+  const compact = deduplicateGenerationDefinitions(original);
+  expect(JSON.stringify(original)).toBe(snapshot);
+  expect(expand(compact)).toEqual(expand(original));
+  expect(Object.keys(compact.$defs)).toHaveLength(27);
+  expect(JSON.stringify(compact).length).toBeLessThan(snapshot.length * 0.7);
+  const before = z.fromJSONSchema(original);
+  const after = z.fromJSONSchema(compact);
+  for (const input of [
+    { content: [{ type: "Section0", props: { text: "Heading" } }] },
+    { content: [{ type: "Section24", props: { text: "" } }] },
+    { content: [{ type: "Unknown", props: { text: "Heading" } }] },
+  ]) {
+    expect(after.safeParse(input).success).toBe(
+      before.safeParse(input).success
+    );
+  }
+});
+
+it("keeps recursive and annotated definitions distinct while merging their shared dependencies", () => {
+  const schema = {
+    type: "object",
+    properties: { root: { $ref: "#/$defs/root" } },
+    required: ["root"],
+    additionalProperties: false,
+    $defs: {
+      text: { type: "string", description: "Copy" },
+      same: { type: "string", description: "Copy" },
+      annotated: { type: "string", description: "Different guidance" },
+      root: {
+        type: "object",
+        properties: {
+          text: { $ref: "#/$defs/same" },
+          other: { $ref: "#/$defs/annotated" },
+          children: { type: "array", items: { $ref: "#/$defs/root" } },
+        },
+        required: ["text", "other", "children"],
+        additionalProperties: false,
+      },
+    },
+  };
+  const compact = deduplicateGenerationDefinitions(schema);
+  expect(expand(compact)).toEqual(expand(schema));
+  expect(Object.keys(compact.$defs)).toHaveLength(3);
 });

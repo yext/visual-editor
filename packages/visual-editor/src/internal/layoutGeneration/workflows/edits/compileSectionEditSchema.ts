@@ -67,6 +67,11 @@ export const compileSectionEditSchema = (
     Map<string, (input: any) => AuthoredValueEdit>
   >();
   const updateSchemas: z.ZodType[] = [];
+  const modelUpdateSchemas: z.ZodType[] = [];
+  const modelCompilers = new Map<
+    string,
+    ReturnType<typeof createGenerationSchemaCompiler>
+  >();
   const removedIds = new Set(
     task.structuralOperations
       .filter((operation) => operation.kind === "remove")
@@ -79,11 +84,59 @@ export const compileSectionEditSchema = (
       }
       const component = saved.get(componentId)!;
       const changes: z.ZodType[] = [];
+      const modelChanges: z.ZodType[] = [];
+      const componentConfig = catalog.data.components[component.type];
+      const componentLocales = localizedTextState(
+        component.props,
+        componentConfig,
+        locales,
+        component.readOnly
+      ).flatMap((state) => state.overrideLocales);
+      // The provider can preserve saved overrides, but cannot add new locales
+      // without approval. Keep the local decoder and bundle validator complete
+      // so rejected provider responses still get precise repair feedback.
+      const textOverrideLocales = [
+        ...new Set([
+          ...componentLocales,
+          ...(task.translationMode === "translate" ? locales : []),
+        ]),
+      ].sort();
+      const localeKey = JSON.stringify(textOverrideLocales);
+      let modelCompiler = modelCompilers.get(localeKey);
+      if (!modelCompiler) {
+        modelCompiler = createGenerationSchemaCompiler(
+          catalog,
+          [...new Set([...locales, ...savedLocales])],
+          "insert",
+          { textOverrideLocales }
+        );
+        modelCompilers.set(localeKey, modelCompiler);
+      }
+      const offeredContracts = getEditValueContracts(
+        modelCompiler,
+        componentConfig,
+        component.readOnly,
+        component.props
+      );
+      // Offer a single representation: leaf paths where available, otherwise
+      // atomic values (including correlated object unions). Parent resets and
+      // replacements cannot coexist with descendant edits in model output.
+      const modelContracts = new Map(
+        offeredContracts
+          .filter(
+            (contract) =>
+              !offeredContracts.some((other) =>
+                other.path.startsWith(`${contract.path}/`)
+              )
+          )
+          .map((contract) => [contract.path, contract])
+      );
       const decoders = new Map<string, (input: any) => AuthoredValueEdit>();
       const contracts = getEditValueContracts(
         compiler,
         catalog.data.components[component.type],
-        component.readOnly
+        component.readOnly,
+        component.props
       );
       for (const contract of contracts) {
         if (contract.set) {
@@ -95,6 +148,16 @@ export const compileSectionEditSchema = (
               value: node.wire,
             })
           );
+          const modelContract = modelContracts.get(contract.path);
+          if (modelContract?.set) {
+            modelChanges.push(
+              z.strictObject({
+                kind: z.literal("set"),
+                path: z.literal(contract.path),
+                value: modelContract.set.wire,
+              })
+            );
+          }
           decoders.set(`set:${contract.path}`, (input) => ({
             kind: "set",
             path: contract.path,
@@ -108,6 +171,14 @@ export const compileSectionEditSchema = (
               path: z.literal(contract.path),
             })
           );
+          if (modelContracts.get(contract.path)?.unset) {
+            modelChanges.push(
+              z.strictObject({
+                kind: z.literal("unset"),
+                path: z.literal(contract.path),
+              })
+            );
+          }
           decoders.set(`unset:${contract.path}`, () => ({
             kind: "unset",
             path: contract.path,
@@ -120,6 +191,13 @@ export const compileSectionEditSchema = (
             kind: z.literal("update"),
             componentId: z.literal(componentId),
             changes: z.array(compiler.union(changes)).min(1),
+          })
+        );
+        modelUpdateSchemas.push(
+          z.strictObject({
+            kind: z.literal("update"),
+            componentId: z.literal(componentId),
+            changes: z.array(compiler.union(modelChanges)).min(1),
           })
         );
         updateDecoders.set(componentId, decoders);
@@ -265,7 +343,32 @@ export const compileSectionEditSchema = (
     };
   };
   const parseResponse = (text: string): SectionEditResult => {
-    const parsed = responseSchema.parse(JSON.parse(text)) as any;
+    const input = JSON.parse(text);
+    // Give repair actionable paths before a large union error obscures the cause.
+    if (Array.isArray(input?.updates)) {
+      for (const update of input.updates) {
+        const decoders = updateDecoders.get(update?.componentId);
+        if (!decoders || !Array.isArray(update?.changes)) continue;
+        for (const change of update.changes) {
+          if (
+            typeof change?.path !== "string" ||
+            decoders.has(`${change.kind}:${change.path}`)
+          )
+            continue;
+          const ancestors = [...decoders.keys()].filter(
+            (key) =>
+              key.startsWith(`${change.kind}:`) &&
+              change.path.startsWith(`${key.slice(key.indexOf(":") + 1)}/`)
+          );
+          if (ancestors.length) {
+            throw new Error(
+              `Unsupported authored edit at ${change.path}. Use ${ancestors.join(", ")} with a complete value matching its schema; do not mix fields from different union alternatives.`
+            );
+          }
+        }
+      }
+    }
+    const parsed = responseSchema.parse(input) as any;
     const seenTargets = new Set<string>();
     const operations: SectionEditOperation[] = parsed.updates.map(
       (update: any) => {
@@ -381,7 +484,13 @@ export const compileSectionEditSchema = (
       .map((item) => item.componentId)
   );
   return {
-    jsonSchema: compiler.exportSchema(responseSchema),
+    jsonSchema: compiler.exportSchema(
+      responseSchema.extend({
+        updates: modelUpdateSchemas.length
+          ? z.array(compiler.union(modelUpdateSchemas))
+          : z.array(z.string()).max(0),
+      })
+    ),
     availableComponentNames: [
       ...new Set([
         ...compiler.nodes.keys(),

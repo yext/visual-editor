@@ -9,10 +9,12 @@ export const LayoutGenerationChatComposer = ({
   chat,
   disabled,
   active,
+  canCancel = chat.isStreaming,
 }: {
   chat: ReturnType<typeof useLayoutGenerationChat>;
   disabled: boolean;
   active: boolean;
+  canCancel?: boolean;
 }) => {
   const draftState = React.useContext(LayoutGenerationChatDraftContext);
   if (!draftState) {
@@ -118,11 +120,14 @@ export const LayoutGenerationChatComposer = ({
           }
         >
           {chat.isStreaming
-            ? "Generating…"
-            : "Enter to send · Shift+Enter for a new line"}
+            ? pt("layoutGenerationChat.generating", "Generating…")
+            : pt(
+                "layoutGenerationChat.keyboardHint",
+                "Enter to send · Shift+Enter for a new line"
+              )}
         </span>
         <div className="local-editor-chat-submit-actions">
-          {chat.isStreaming && (
+          {canCancel && (
             <button
               type="button"
               className="local-editor-chat-stop"

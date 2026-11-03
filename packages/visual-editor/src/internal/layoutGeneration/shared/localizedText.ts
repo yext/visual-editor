@@ -92,6 +92,7 @@ const mapText = (
     if (
       create &&
       localized &&
+      !(typeof value === "object" && Object.hasOwn(value, "defaultValue")) &&
       localized.shape.defaultValue.safeParse(value).success
     ) {
       return mapText(

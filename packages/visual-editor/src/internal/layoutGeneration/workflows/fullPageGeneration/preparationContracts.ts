@@ -7,7 +7,8 @@ export type GenerationPreparation = {
     componentType: string;
     /**
      * Zero-based occurrence of this type in depth-first page order, including
-     * linked instances; null means every manual instance.
+     * linked instances; an explicit index requires that owner to exist.
+     * null constrains every existing manual instance without requiring the type.
      */
     instanceIndex: number | null;
     count: number;
@@ -21,7 +22,14 @@ export const generationPreparationSchema = z.strictObject({
   cardCounts: z.array(
     z.strictObject({
       componentType: id,
-      instanceIndex: z.number().int().min(0).nullable(),
+      instanceIndex: z
+        .number()
+        .int()
+        .min(0)
+        .nullable()
+        .describe(
+          "Zero-based occurrence of this componentType in depth-first page order, including linked instances. An explicit index requires that owner to exist. null applies to existing manual instances without requiring the type to appear."
+        ),
       count: z.number().int().min(0),
     })
   ),

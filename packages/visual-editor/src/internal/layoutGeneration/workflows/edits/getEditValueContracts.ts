@@ -3,13 +3,24 @@ import { z } from "zod";
 import type { GenerationComponent } from "../../../../utils/createPuckGenerationCatalog.ts";
 import { unwrapZodSchema as unwrap } from "../../../utils/unwrapZodSchema.ts";
 import type { createGenerationSchemaCompiler } from "../../schema/compiler.ts";
+import { localizedTextSchema } from "../../shared/localizedText.ts";
 import { generationFields } from "../../shared/slottedItemSource.ts";
 import { hasSlots } from "./utils.ts";
+
+// Nested unions still describe one correlated value (for example image or video).
+const unionAlternatives = (schema: z.ZodType): z.ZodType[] => {
+  const node = unwrap(schema);
+  return node instanceof z.ZodUnion
+    ? node.options.flatMap((option) => unionAlternatives(option as z.ZodType))
+    : [schema];
+};
 
 type Compiler = ReturnType<typeof createGenerationSchemaCompiler>;
 type EditValueContract = {
   /** A JSON pointer relative to authored props. */
   path: string;
+  /** Component-authored guidance, including visibility relationships. */
+  description?: string;
   /** A strict schema and decoder for explicit assignments. */
   set?: ReturnType<Compiler["value"]>;
   /** Whether an optional value can be removed. */
@@ -20,7 +31,8 @@ type EditValueContract = {
 export const getEditValueContracts = (
   compiler: Compiler,
   config: GenerationComponent,
-  readOnly: Record<string, boolean> = {}
+  readOnly: Record<string, boolean> = {},
+  currentProps?: Record<string, unknown>
 ): EditValueContract[] => {
   if (!config.generation) {
     return [];
@@ -29,25 +41,59 @@ export const getEditValueContracts = (
   const visit = (
     schema: z.ZodType,
     field: Fields[string] | undefined,
-    path: string
+    path: string,
+    current?: any
   ) => {
     if (field?.type === "slot") {
       return;
     }
     compiler.checks(schema, path);
     const node = unwrap(schema);
+    // Keep structured fallbacks (such as localized images) in their saved
+    // representation. Merging a direct asset beside defaultValue would leave
+    // the old rendered fallback in place while falsely reporting success.
+    if (node instanceof z.ZodUnion && current && typeof current === "object") {
+      const fallback = unionAlternatives(node).find((option) => {
+        const branch = unwrap(option as z.ZodType);
+        return (
+          branch instanceof z.ZodObject &&
+          ["defaultValue", "image"].some(
+            (key) =>
+              Object.hasOwn(current, key) &&
+              branch.shape[key] &&
+              Object.keys(branch.shape).every(
+                (name) => name === key || name === "hasLocalizedValue"
+              ) &&
+              unwrap(branch.shape[key]) instanceof z.ZodObject
+          ) &&
+          !localizedTextSchema(branch) &&
+          branch.safeParse(current).success
+        );
+      });
+      if (fallback) {
+        let savedSchema = fallback as z.ZodType;
+        if (schema.safeParse(undefined).success) {
+          savedSchema = savedSchema.optional();
+        }
+        if (schema.safeParse(null).success) {
+          savedSchema = savedSchema.nullable();
+        }
+        visit(savedSchema, field, path, current);
+        return;
+      }
+    }
     // Object union branches can correlate siblings (for example, a custom
     // color requires a contrast and darkness flag). Expose the complete value
     // so the wire schema enforces those constraints before materialization.
     const objectUnion =
       node instanceof z.ZodUnion &&
-      node.options.every(
-        (option) => unwrap(option as z.ZodType) instanceof z.ZodObject
+      unionAlternatives(node).every(
+        (option) => unwrap(option) instanceof z.ZodObject
       ) &&
       !hasSlots(field);
     if (node instanceof z.ZodUnion && !objectUnion) {
       for (const option of node.options) {
-        visit(option as z.ZodType, field, path);
+        visit(option as z.ZodType, field, path, current);
       }
     } else if (node instanceof z.ZodObject) {
       for (const [key, child] of Object.entries(
@@ -56,7 +102,8 @@ export const getEditValueContracts = (
         visit(
           child,
           field?.type === "object" ? field.objectFields[key] : undefined,
-          `${path}/${key.replaceAll("~", "~0").replaceAll("/", "~1")}`
+          `${path}/${key.replaceAll("~", "~0").replaceAll("/", "~1")}`,
+          current?.[key]
         );
       }
     }
@@ -85,6 +132,7 @@ export const getEditValueContracts = (
     if (set || unset || existing) {
       contracts.set(path, {
         path,
+        description: schema.description ?? existing?.description,
         set: set ?? existing?.set,
         unset: unset || !!existing?.unset,
       });
@@ -99,7 +147,8 @@ export const getEditValueContracts = (
       visit(
         schema as z.ZodType,
         fields[key],
-        `/${key.replaceAll("~", "~0").replaceAll("/", "~1")}`
+        `/${key.replaceAll("~", "~0").replaceAll("/", "~1")}`,
+        currentProps?.[key]
       );
     }
   }

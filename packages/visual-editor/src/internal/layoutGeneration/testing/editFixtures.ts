@@ -8,6 +8,47 @@ import type {
   SectionEditTask,
 } from "../workflows/edits/types.ts";
 import type { Content, SavedComponent } from "../shared/authoredValues.ts";
+import { buildPlanningContext } from "../workflows/edits/taskValidation.ts";
+import { createRequestLocalIds } from "../shared/requestLocalIds.ts";
+import type { PuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
+
+/** Encode semantic test plans at the provider boundary, including all nullable section slots. */
+export const planningResponse = (
+  plan: any,
+  catalog: PuckGenerationCatalog,
+  data: Content
+): any => {
+  if (!Array.isArray(plan?.tasks)) return plan;
+  const { inventory } = buildPlanningContext(catalog, data);
+  const ids = createRequestLocalIds(
+    inventory.components.map((item) => item.componentId)
+  );
+  const { tasks, ...reply } = ids.references(plan, ids.encode) as typeof plan;
+  const existingTasks: Record<string, any> = Object.fromEntries(
+    inventory.components
+      .filter((item) => item.editable && item.componentId === item.sectionId)
+      .map((item) => [ids.encode(item.componentId), null])
+  );
+  const newSections: any[] = [];
+  for (const { sectionId, ...input } of tasks) {
+    const task = {
+      ...input,
+      dependsOn: input.dependsOn.map((taskId: string) => ({
+        taskId,
+        kind: "conditionalReplacement",
+        reason:
+          "Remove the original only after its requested replacement succeeds.",
+      })),
+    };
+    if (sectionId === null) newSections.push(task);
+    else {
+      if (existingTasks[sectionId])
+        throw new Error("Plan sections must be unique.");
+      existingTasks[sectionId] = task;
+    }
+  }
+  return { ...reply, existingTasks, newSections };
+};
 
 /** A repeated-card catalog with bindings, translations and opaque content. */
 export const editGenerationFixture = () => {

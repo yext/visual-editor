@@ -65,6 +65,7 @@
 }
 
 .local-editor-chat-log {
+  overflow-anchor: none;
   display: flex;
   flex-direction: column;
   gap: var(--puck-space-4);
@@ -338,6 +339,32 @@
   margin-top: var(--puck-space-1);
   font-weight: var(--puck-font-weight-semibold);
   color: var(--puck-color-interactive);
+}
+
+.local-editor-chat-sections .local-editor-chat-progress-dots {
+  display: inline-block;
+  width: 3ch;
+  font-family: monospace;
+  color: inherit;
+  animation: local-editor-chat-progress-dots 1.5s steps(1, end) infinite;
+}
+
+@keyframes local-editor-chat-progress-dots {
+  0% {
+    clip-path: inset(0 66.666% 0 0);
+  }
+  33.333% {
+    clip-path: inset(0 33.333% 0 0);
+  }
+  66.666% {
+    clip-path: inset(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .local-editor-chat-sections .local-editor-chat-progress-dots {
+    animation: none;
+  }
 }
 
 .local-editor-chat-sections li[data-status="applied"] {
