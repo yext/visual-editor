@@ -1,3 +1,7 @@
+import {
+  testPrompts,
+  testGenerationSettings,
+} from "../../testing/promptFixtures.ts";
 import { expect, it, vi } from "vitest";
 import type { Content } from "../../shared/authoredValues.ts";
 import type { GenerationEnvironment } from "../../shared/contracts.ts";
@@ -19,6 +23,8 @@ const setup = () => {
   });
   const environment: GenerationEnvironment = {
     model: "test",
+    prompts: testPrompts,
+    generationSettings: testGenerationSettings,
     catalog: creationCatalog(),
     locales: ["en"],
     transport: async () => ({ contentType: "text/event-stream", body }),

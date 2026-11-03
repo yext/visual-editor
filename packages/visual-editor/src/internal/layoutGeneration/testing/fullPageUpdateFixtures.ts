@@ -3,9 +3,9 @@ import { vi } from "vitest";
 import { clone, type Content } from "../shared/authoredValues.ts";
 import { creationCatalog } from "./creationFixtures.ts";
 import { preserveSectionEditResolution } from "../workflows/edits/applyEditsToLayout.ts";
-import { applyRegenerationStep } from "../workflows/fullPageRegeneration/applyRegenerationStep.ts";
-import type { RegenerationStep } from "../workflows/fullPageRegeneration/contracts.ts";
-import { RegenerationSession } from "../workflows/fullPageRegeneration/RegenerationSession.ts";
+import { applyFullPageUpdateStep } from "../workflows/fullPageUpdate/applyFullPageUpdateStep.ts";
+import type { FullPageUpdateStep } from "../workflows/fullPageUpdate/contracts.ts";
+import { FullPageUpdateSession } from "../workflows/fullPageUpdate/FullPageUpdateSession.ts";
 
 export const savedHeading = (id: string) => ({
   type: "Heading",
@@ -16,7 +16,7 @@ export const newHeading = (id: string) => ({
   type: "Heading",
   props: { id, text: id },
 });
-export const regenerationLayout = (): Data => ({
+export const fullPageUpdateLayout = (): Data => ({
   root: { props: { title: "Untouched root" } },
   zones: {},
   content: [
@@ -35,20 +35,20 @@ export const regenerationLayout = (): Data => ({
     savedHeading("footer"),
   ],
 });
-export const regenerationResponse = (
+export const fullPageUpdateResponse = (
   steps: unknown[],
   translationMode = "defaultOnly"
 ) => ({
   translationMode,
-  result: { action: "regenerate", steps },
-  text: "Page regenerated.",
+  result: { action: "fullPageUpdate", steps },
+  text: "Page updated.",
 });
 export const bodySections = (data: Content) =>
   data.content.find((item) => item.type === "MainContent")!.props
     .content as Content["content"];
-export const regenerationSessionFixture = () => {
+export const fullPageUpdateSessionFixture = () => {
   const catalog = creationCatalog();
-  let data = regenerationLayout();
+  let data = fullPageUpdateLayout();
   const commit = vi.fn((next: Data, _baseline: Data) => {
     data = next;
   });
@@ -61,8 +61,8 @@ export const regenerationSessionFixture = () => {
     validate: vi.fn(),
     preview,
     commit,
-    materializeRegeneration: (baseline: Data, step: RegenerationStep) =>
-      applyRegenerationStep(catalog, baseline as Content, step) as Data,
+    materializeFullPageUpdate: (baseline: Data, step: FullPageUpdateStep) =>
+      applyFullPageUpdateStep(catalog, baseline as Content, step) as Data,
     preserveSectionResolution: (resolved: Data, candidate: Data) =>
       preserveSectionEditResolution(
         catalog,
@@ -70,6 +70,6 @@ export const regenerationSessionFixture = () => {
         candidate as Content
       ) as Data,
   };
-  const session = new RegenerationSession(adapter, clone(data));
+  const session = new FullPageUpdateSession(adapter, clone(data));
   return { catalog, session, adapter, commit, preview, data: () => data };
 };

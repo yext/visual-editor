@@ -1,19 +1,19 @@
 import { expect, it } from "vitest";
 import type { Data } from "@puckeditor/core";
 import { clone, type Content } from "../../shared/authoredValues.ts";
-import type { RegenerationStep } from "./contracts.ts";
+import type { FullPageUpdateStep } from "./contracts.ts";
 import {
-  regenerationLayout,
-  regenerationSessionFixture,
+  fullPageUpdateLayout,
+  fullPageUpdateSessionFixture,
   savedHeading,
   newHeading,
   bodySections,
-} from "../../testing/regenerationFixtures.ts";
+} from "../../testing/fullPageUpdateFixtures.ts";
 
 it.each(["insert", "reorder"] as const)(
   "reports a removed %s anchor while retaining completed work",
   async (operation) => {
-    const current = regenerationSessionFixture();
+    const current = fullPageUpdateSessionFixture();
     const signal = new AbortController().signal;
     await current.session.apply(
       { kind: "remove", sectionId: "hero" },
@@ -22,7 +22,7 @@ it.each(["insert", "reorder"] as const)(
     );
     const before = clone(current.data());
     const anchor = { position: "after" as const, componentId: "hero" };
-    const step: RegenerationStep =
+    const step: FullPageUpdateStep =
       operation === "insert"
         ? {
             kind: operation,
@@ -38,7 +38,7 @@ it.each(["insert", "reorder"] as const)(
       error = cause as Error;
     }
     expect(error?.message).toContain(
-      "Regeneration step 1 failed: Anchor is not in the permitted collection."
+      "FullPageUpdate step 1 failed: Anchor is not in the permitted collection."
     );
     expect(error?.message).toContain(`Anchor: ${JSON.stringify(anchor)}`);
     expect(error?.message).toContain(`"kind":"${operation}"`);
@@ -60,7 +60,7 @@ it.each(["insert", "reorder"] as const)(
 it.each(["start", "end", "before", "after"] as const)(
   "reorders a replacement block at %s using the original section Id",
   async (position) => {
-    const current = regenerationSessionFixture();
+    const current = fullPageUpdateSessionFixture();
     const signal = new AbortController().signal;
     await current.session.apply(
       {
@@ -71,7 +71,7 @@ it.each(["start", "end", "before", "after"] as const)(
       0,
       signal
     );
-    const step: RegenerationStep = {
+    const step: FullPageUpdateStep = {
       kind: "reorder",
       sectionId: "hero",
       anchor:
@@ -95,7 +95,7 @@ it.each(["start", "end", "before", "after"] as const)(
     expect(current.session.stepCount).toBe(2);
     current.session.finish();
     expect(current.commit).toHaveBeenCalledOnce();
-    expect(current.commit.mock.calls[0][1]).toEqual(regenerationLayout());
+    expect(current.commit.mock.calls[0][1]).toEqual(fullPageUpdateLayout());
   }
 );
 
@@ -103,7 +103,7 @@ it.each(["insert", "reorder"] as const)(
   "resolves replaced anchors on either side of a replacement block for %s",
   async (kind) => {
     for (const position of ["before", "after"] as const) {
-      const current = regenerationSessionFixture();
+      const current = fullPageUpdateSessionFixture();
       const signal = new AbortController().signal;
       await current.session.apply(
         {
@@ -141,7 +141,7 @@ it.each(["insert", "reorder"] as const)(
 );
 
 it("keeps a replacement block unchanged when reordering relative to itself", async () => {
-  const current = regenerationSessionFixture();
+  const current = fullPageUpdateSessionFixture();
   const signal = new AbortController().signal;
   await current.session.apply(
     {
@@ -169,7 +169,7 @@ it("keeps a replacement block unchanged when reordering relative to itself", asy
 });
 
 it("retains completed streamed changes on stop with one undo baseline", async () => {
-  const current = regenerationSessionFixture();
+  const current = fullPageUpdateSessionFixture();
   const signal = new AbortController().signal;
   await current.session.apply(
     { kind: "remove", sectionId: "services" },
@@ -193,16 +193,16 @@ it("retains completed streamed changes on stop with one undo baseline", async ()
   current.session.finish();
   current.session.finish();
   expect(current.commit).toHaveBeenCalledOnce();
-  expect(current.commit.mock.calls[0][1]).toEqual(regenerationLayout());
+  expect(current.commit.mock.calls[0][1]).toEqual(fullPageUpdateLayout());
   expect(bodySections(current.data() as Content)[0].props.id).toBe(
     "testimonials"
   );
 });
 
 it("deduplicates steps and prevents late resolution after cancellation", async () => {
-  const current = regenerationSessionFixture();
+  const current = fullPageUpdateSessionFixture();
   const controller = new AbortController();
-  const step: RegenerationStep = { kind: "remove", sectionId: "services" };
+  const step: FullPageUpdateStep = { kind: "remove", sectionId: "services" };
   await current.session.apply(step, 0, controller.signal);
   await current.session.apply(step, 0, controller.signal);
   expect(current.preview).toHaveBeenCalledOnce();
@@ -220,7 +220,7 @@ it("deduplicates steps and prevents late resolution after cancellation", async (
   );
   controller.abort();
   current.session.finish();
-  release(regenerationLayout());
+  release(fullPageUpdateLayout());
   await expect(pending).rejects.toThrow();
   expect(current.preview).toHaveBeenCalledOnce();
   expect(current.commit).toHaveBeenCalledOnce();
@@ -230,7 +230,7 @@ it("deduplicates steps and prevents late resolution after cancellation", async (
 });
 
 it("rejects resolution that loses generated content and retains earlier changes", async () => {
-  const current = regenerationSessionFixture();
+  const current = fullPageUpdateSessionFixture();
   const signal = new AbortController().signal;
   await current.session.apply(
     { kind: "remove", sectionId: "services" },
@@ -256,7 +256,7 @@ it("rejects resolution that loses generated content and retains earlier changes"
 });
 
 it("does not overwrite a different editor context when ending a partial session", async () => {
-  const current = regenerationSessionFixture();
+  const current = fullPageUpdateSessionFixture();
   await current.session.apply(
     { kind: "remove", sectionId: "services" },
     0,

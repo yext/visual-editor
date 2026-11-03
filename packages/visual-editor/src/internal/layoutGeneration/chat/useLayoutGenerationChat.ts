@@ -8,7 +8,7 @@ import type {
   SectionTaskOutcome,
 } from "../workflows/edits/types.ts";
 import { isBlankGenerationPage } from "../workflows/fullPageGeneration/isBlankGenerationPage.ts";
-import { runRegeneration } from "../workflows/fullPageRegeneration/runRegeneration.ts";
+import { runFullPageUpdate } from "../workflows/fullPageUpdate/runFullPageUpdate.ts";
 import { runFullGeneration } from "../workflows/fullPageGeneration/runFullGeneration.ts";
 import {
   GENERATION_CANDIDATE_MAX_CHARACTERS,
@@ -55,7 +55,7 @@ export const useLayoutGenerationChat = (
 
   const previousMessagesRef = React.useRef<ChatMessage[]>([]);
   const history = React.useRef<ConversationMessage[]>([]);
-  const regenerationPending = React.useRef(false);
+  const fullPageUpdatePending = React.useRef(false);
   const activeRequest = React.useRef<AbortController | null>(null);
   const finalizeCancelled = React.useRef<(() => void) | null>(null);
   const diagnostics = React.useRef<Record<string, unknown>>({});
@@ -95,7 +95,7 @@ export const useLayoutGenerationChat = (
   };
 
   const cancel = React.useCallback(() => {
-    regenerationPending.current = false;
+    fullPageUpdatePending.current = false;
     activeRequest.current?.abort();
     canvas.finish();
     if (finalizeCancelled.current) {
@@ -147,8 +147,8 @@ export const useLayoutGenerationChat = (
     }
 
     const isIntent = mode !== "chat";
-    let regenerating = regenerationPending.current;
-    regenerationPending.current = false;
+    let updatingFullPage = fullPageUpdatePending.current;
+    fullPageUpdatePending.current = false;
     const correlationId = crypto.randomUUID();
     diagnostics.current = {
       correlationId,
@@ -173,7 +173,7 @@ export const useLayoutGenerationChat = (
 
     let plan: SectionEditPlan | undefined;
     let createdSections = 0;
-    let regeneratedSteps = 0;
+    let fullPageUpdatedSteps = 0;
     const taskOutcomes = new Map<string, SectionTaskOutcome>();
     let completed = false;
 
@@ -300,7 +300,7 @@ export const useLayoutGenerationChat = (
       complete(text, sections, [text, details].filter(Boolean).join("\n\n"));
     };
 
-    const finishRegenerationProgress = (status: "cancelled" | "skipped") => {
+    const finishFullPageUpdateProgress = (status: "cancelled" | "skipped") => {
       for (const [key, section] of progress) {
         if (section.status !== "applied") {
           progress.set(key, {
@@ -320,18 +320,16 @@ export const useLayoutGenerationChat = (
     };
 
     finalizeCancelled.current = () => {
-      if (regenerating) {
+      if (updatingFullPage) {
         complete(
           pt(
-            "layoutGenerationChat.regenerationCancelled",
-            "Regeneration cancelled. {{count}} steps completed; remaining sections retained.",
+            "layoutGenerationChat.fullPageUpdateCancelled",
+            "Page update cancelled. Steps completed: {{count}}. Remaining sections kept.",
             {
-              count: regeneratedSteps,
-              defaultValue_one:
-                "Regeneration cancelled. {{count}} step completed; remaining sections retained.",
+              count: fullPageUpdatedSteps,
             }
           ),
-          finishRegenerationProgress("cancelled")
+          finishFullPageUpdateProgress("cancelled")
         );
       } else if (plan) {
         completeEdits(
@@ -371,27 +369,27 @@ export const useLayoutGenerationChat = (
       body,
       signal = controller.signal,
       onCreationContent,
-      onRegenerationStep,
-      onRegenerationSection
+      onFullPageUpdateStep,
+      onFullPageUpdateSection
     ) =>
       requestChatGeneration(
-        isIntent || regenerating ? { ...body, purpose: "intent" } : body,
+        body,
         environment,
         signal,
         correlationId,
         onCreationContent,
-        onRegenerationStep,
-        onRegenerationSection
+        onFullPageUpdateStep,
+        onFullPageUpdateSection
       );
     try {
       const selectedComponentId = canvas.selectedComponentId;
       const currentData = canvas.begin();
       const blank = isBlankGenerationPage(currentData);
-      if (isIntent) regenerating = !blank;
-      const fresh = !regenerating && blank;
-      setIsGeneratingPage(fresh || regenerating);
+      if (isIntent) updatingFullPage = true;
+      const fresh = !updatingFullPage && blank;
+      setIsGeneratingPage(fresh || updatingFullPage);
       const sectionLabels = fresh ? {} : canvas.sectionLabels;
-      if (regenerating) {
+      if (updatingFullPage) {
         for (const [sectionId, label] of Object.entries(sectionLabels)) {
           progress.set(`section-${sectionId}`, {
             taskId: `section-${sectionId}`,
@@ -426,17 +424,17 @@ export const useLayoutGenerationChat = (
         active,
         request,
       };
-      if (regenerating) {
+      if (updatingFullPage) {
         showProgress(
-          pt("layoutGenerationChat.regeneratingPage", "Regenerating page…")
+          pt("layoutGenerationChat.fullPageUpdateInProgress", "Updating page…")
         );
-        diagnostics.current.phase = "regeneration";
-        const result = await runRegeneration({
+        diagnostics.current.phase = "fullPageUpdate";
+        const result = await runFullPageUpdate({
           ...turn,
           canvas,
           onProgress: (step, count) => {
             if (!active()) return;
-            regeneratedSteps = count;
+            fullPageUpdatedSteps = count;
             const sectionId =
               step.kind === "insert" ? `insert-${count}` : step.sectionId;
             const label =
@@ -477,7 +475,7 @@ export const useLayoutGenerationChat = (
             const taskId =
               progress.get(waitingKey)?.status === "waiting"
                 ? waitingKey
-                : `regeneration-${count}`;
+                : `fullPageUpdate-${count}`;
             progress.set(taskId, {
               taskId,
               sectionId,
@@ -485,28 +483,27 @@ export const useLayoutGenerationChat = (
               description: descriptions[step.kind],
               status: "applied",
             });
-            diagnostics.current.phase = "streaming-regeneration";
-            canvas.onDiagnostic("regeneration-step", {
+            diagnostics.current.phase = "streaming-fullPageUpdate";
+            canvas.onDiagnostic("fullPageUpdate-step", {
               kind: step.kind,
               completedSteps: count,
             });
             showProgress(
               pt(
-                "layoutGenerationChat.regenerationProgress",
-                "{{count}} regeneration steps completed…",
+                "layoutGenerationChat.fullPageUpdateProgress",
+                "Page update steps completed: {{count}}…",
                 {
                   count,
-                  defaultValue_one: "{{count}} regeneration step completed…",
                 }
               )
             );
           },
         });
         if (result && active()) {
-          regenerationPending.current = result.clarification;
+          fullPageUpdatePending.current = result.clarification;
           complete(
             result.text,
-            result.clarification ? [] : finishRegenerationProgress("skipped")
+            result.clarification ? [] : finishFullPageUpdateProgress("skipped")
           );
           return result.clarification ? "clarification" : true;
         }
@@ -657,18 +654,16 @@ export const useLayoutGenerationChat = (
         return false;
       }
 
-      if (regenerating) {
+      if (updatingFullPage) {
         complete(
           pt(
-            "layoutGenerationChat.regenerationStopped",
-            "Regeneration stopped. {{count}} steps completed; remaining sections retained.",
+            "layoutGenerationChat.fullPageUpdateStopped",
+            "Page update stopped. Steps completed: {{count}}. Remaining sections kept.",
             {
-              count: regeneratedSteps,
-              defaultValue_one:
-                "Regeneration stopped. {{count}} step completed; remaining sections retained.",
+              count: fullPageUpdatedSteps,
             }
           ),
-          finishRegenerationProgress("cancelled")
+          finishFullPageUpdateProgress("cancelled")
         );
       } else if (plan) {
         completeEdits(

@@ -1,11 +1,12 @@
+import {
+  testPrompts,
+  readTestPromptComponents,
+} from "../testing/promptFixtures.ts";
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { compileGenerationSchema } from "../workflows/fullPageGeneration/pageSchema.ts";
-import {
-  buildGenerationPrompt,
-  slottedItemSourceGuidance,
-} from "../prompts.ts";
+import { buildGenerationPrompt } from "../prompts.ts";
 import { slottedFixture } from "../testing/slottedFixtures.ts";
 import {
   assertAuthoredPreserved,
@@ -286,15 +287,15 @@ describe("slotted source generation", () => {
   it("includes card authoring guidance once and only for available slotted sources", () => {
     const catalog = slottedFixture().catalog;
     catalog.data.components.OtherSection = catalog.data.components.Section;
-    const prompt = buildGenerationPrompt(catalog);
+    const prompt = buildGenerationPrompt(testPrompts, catalog);
     expect(prompt.split(slottedItemSourceGuidance)).toHaveLength(2);
     expect(prompt).toContain('"cardType":"FAQCard"');
-    expect(
-      prompt.slice(prompt.indexOf("Component descriptions and defaults:"))
-    ).not.toContain(slottedItemSourceGuidance);
-    expect(buildGenerationPrompt(catalog, ["MainContent"])).not.toContain(
+    expect(JSON.stringify(readTestPromptComponents(prompt))).not.toContain(
       slottedItemSourceGuidance
     );
+    expect(
+      buildGenerationPrompt(testPrompts, catalog, ["MainContent"])
+    ).not.toContain(slottedItemSourceGuidance);
   });
 
   it("keeps references and backup storage out of model context", () => {
@@ -302,7 +303,7 @@ describe("slotted source generation", () => {
     const compiled = compileGenerationSchema(f.catalog, ["en"]);
     expect(JSON.stringify(compiled.jsonSchema)).not.toContain('"manualSlots"');
     f.components.Section.defaultProps = f.materialize().content[0].props;
-    const prompt = buildGenerationPrompt(f.catalog);
+    const prompt = buildGenerationPrompt(testPrompts, f.catalog);
     expect(prompt).toContain('"defaultManualItems":3');
     expect(prompt).not.toContain('"manualSlots"');
     expect(prompt).not.toContain('"id":');
@@ -347,3 +348,5 @@ describe("slotted source generation", () => {
     );
   });
 });
+
+const slottedItemSourceGuidance = testPrompts.context.createLists;

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { PuckGenerationCatalog } from "../../../../utils/createPuckGenerationCatalog.ts";
-import { translationModeGuidance } from "../../prompts.ts";
+import { translationModeGuidance } from "../../schemaGuidance.ts";
 import { createGenerationSchemaCompiler } from "../../schema/compiler.ts";
 import {
   extractAuthored,
@@ -18,8 +18,7 @@ export const compileGenerationSchema = (
   catalog: PuckGenerationCatalog,
   locales: string[],
   currentData: Content = { content: [] },
-  preparation?: GenerationPreparation,
-  purpose?: "intent"
+  preparation?: GenerationPreparation
 ) => {
   rejectZones(currentData);
   if (!isBlankGenerationPage(currentData)) {
@@ -51,9 +50,7 @@ export const compileGenerationSchema = (
     cardCounts.set(requirement.componentType, counts);
   }
   const { element, union, exportSchema, nodes, explicitCardLists } =
-    createGenerationSchemaCompiler(catalog, locales, "create", {
-      requireExplicitContent: purpose === "intent",
-    });
+    createGenerationSchemaCompiler(catalog, locales, "create");
   const rootNodes = Object.keys(components)
     .filter(
       (name) =>

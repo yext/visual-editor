@@ -1,3 +1,7 @@
+import {
+  testPrompts,
+  testGenerationSettings,
+} from "../../testing/promptFixtures.ts";
 import { expect, it, vi } from "vitest";
 import type { Content } from "../../shared/authoredValues.ts";
 import type {
@@ -7,19 +11,19 @@ import type {
 import { GenerationError } from "../../shared/generationErrors.ts";
 import { heading } from "../../testing/creationFixtures.ts";
 import { executeGeneration } from "../../transport/executeGeneration.ts";
-import { runRegeneration } from "./runRegeneration.ts";
+import { runFullPageUpdate } from "./runFullPageUpdate.ts";
 import {
-  regenerationLayout,
-  regenerationResponse,
-  regenerationSessionFixture,
+  fullPageUpdateLayout,
+  fullPageUpdateResponse,
+  fullPageUpdateSessionFixture,
   bodySections,
-} from "../../testing/regenerationFixtures.ts";
+} from "../../testing/fullPageUpdateFixtures.ts";
 
 const event = (value: unknown) =>
   new TextEncoder().encode(`data: ${JSON.stringify(value)}\n\n`);
 
 it("streams removal before request completion, includes full model context and does not replay steps", async () => {
-  const current = regenerationSessionFixture();
+  const current = fullPageUpdateSessionFixture();
   let stream!: ReadableStreamDefaultController<Uint8Array>;
   const body = new ReadableStream<Uint8Array>({
     start(controller) {
@@ -32,6 +36,8 @@ it("streams removal before request completion, includes full model context and d
   }));
   const environment: GenerationEnvironment = {
     model: "test",
+    prompts: testPrompts,
+    generationSettings: testGenerationSettings,
     catalog: current.catalog,
     locales: ["en"],
     transport,
@@ -57,23 +63,23 @@ it("streams removal before request completion, includes full model context and d
       onStep,
       onSection
     );
-  const pending = runRegeneration({
+  const pending = runFullPageUpdate({
     layoutId: "layout",
-    currentData: regenerationLayout() as Content,
+    currentData: fullPageUpdateLayout() as Content,
     messages: [{ role: "user", content: "Focus on the product" }],
     signal: controller.signal,
     active: () => !controller.signal.aborted,
     request,
     canvas: {
-      prepareRegenerationSection: prepareSection,
-      beginRegeneration: () => {},
-      applyRegeneration: (...args) => current.session.apply(...args),
-      finishRegeneration: () => current.session.finish(),
+      prepareFullPageUpdateSection: prepareSection,
+      beginFullPageUpdate: () => {},
+      applyFullPageUpdate: (...args) => current.session.apply(...args),
+      finishFullPageUpdate: () => current.session.finish(),
     },
     onProgress: vi.fn(),
   });
   const wire = JSON.stringify(
-    regenerationResponse([
+    fullPageUpdateResponse([
       { kind: "remove", sectionId: "services" },
       {
         kind: "replace",
@@ -121,7 +127,7 @@ it("streams removal before request completion, includes full model context and d
   );
   stream.close();
   expect(await pending).toEqual({
-    text: "Page regenerated.",
+    text: "Page updated.",
     clarification: false,
   });
   expect(current.preview).toHaveBeenCalledTimes(2);
@@ -148,22 +154,22 @@ it("repairs before application but never retries after streamed steps", async ()
         throw new GenerationError("Invalid output", true);
       })
       .mockResolvedValueOnce({
-        type: "regenerated",
+        type: "fullPageUpdated",
         text: "Fixed",
-        result: { action: "regenerate", steps: [] },
+        result: { action: "fullPageUpdate", steps: [] },
       });
-    const finishRegeneration = vi.fn();
-    const pending = runRegeneration({
+    const finishFullPageUpdate = vi.fn();
+    const pending = runFullPageUpdate({
       layoutId: "layout",
-      currentData: regenerationLayout() as Content,
+      currentData: fullPageUpdateLayout() as Content,
       messages: [{ role: "user", content: "Product page" }],
       signal: controller.signal,
       active: () => true,
       request,
       canvas: {
-        beginRegeneration: vi.fn(),
-        applyRegeneration: vi.fn(),
-        finishRegeneration,
+        beginFullPageUpdate: vi.fn(),
+        applyFullPageUpdate: vi.fn(),
+        finishFullPageUpdate,
       },
       onProgress: vi.fn(),
     });
@@ -171,7 +177,7 @@ it("repairs before application but never retries after streamed steps", async ()
       await expect(pending).rejects.toMatchObject({ retryable: false });
     else expect(await pending).toEqual({ text: "Fixed", clarification: false });
     expect(request).toHaveBeenCalledTimes(streamed ? 1 : 2);
-    expect(finishRegeneration).toHaveBeenCalledOnce();
+    expect(finishFullPageUpdate).toHaveBeenCalledOnce();
   };
   await run(false);
   await run(true);

@@ -1,3 +1,5 @@
+import type { GenerationSettings } from "../../../types/generationSettings.ts";
+import type { GenerationPromptBundle } from "../../../types/generationPrompts.ts";
 import type { Data } from "@puckeditor/core";
 import type { PuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
 import type {
@@ -6,9 +8,9 @@ import type {
   SectionEditTask,
 } from "../workflows/edits/types.ts";
 import type {
-  RegenerationResult,
-  RegenerationStep,
-} from "../workflows/fullPageRegeneration/contracts.ts";
+  FullPageUpdateResult,
+  FullPageUpdateStep,
+} from "../workflows/fullPageUpdate/contracts.ts";
 import type { GenerationPreparation } from "../workflows/fullPageGeneration/preparationContracts.ts";
 import type { ModelTransport } from "../transport/modelTransport.ts";
 import type { Content } from "./authoredValues.ts";
@@ -19,6 +21,8 @@ export type GenerationDiagnostics = {
 };
 
 export type GenerationEnvironment = {
+  prompts: GenerationPromptBundle;
+  generationSettings: GenerationSettings;
   model: string;
   catalog: PuckGenerationCatalog;
   locales: string[];
@@ -43,8 +47,6 @@ export type ConversationMessage = {
 };
 
 type RequestContext = {
-  /** Apply Yext search intent guidance to fresh intent-page creation. */
-  purpose?: "intent";
   /** The layout being generated or edited. */
   layoutId: string;
   /** Conversation history ending with the current user request. */
@@ -63,7 +65,7 @@ export type LayoutGenerationRequest = RequestContext &
       }
     | {
         /** Rework the entire existing page using streamed section decisions. */
-        mode: "regenerate";
+        mode: "fullPageUpdate";
       }
     | {
         /** Generate a fresh page. */
@@ -88,7 +90,7 @@ export type LayoutGenerationRequest = RequestContext &
 
 /** Validated mode results; these are never persisted as layout data. */
 export type GenerationResult =
-  | { type: "regenerated"; text: string; result: RegenerationResult }
+  | { type: "fullPageUpdated"; text: string; result: FullPageUpdateResult }
   | { type: "prepared"; preparation: GenerationPreparation }
   | { type: "accepted"; text: string; spec: { content: any[] } | null }
   | { type: "planned"; plan: SectionEditPlan }
@@ -99,8 +101,11 @@ export type GenerationRequestExecutor = (
   request: LayoutGenerationRequest,
   signal?: AbortSignal,
   onCreationContent?: (content: Content) => Promise<void>,
-  onRegenerationStep?: (step: RegenerationStep, index: number) => Promise<void>,
-  onRegenerationSection?: (sectionId: string) => Promise<void>
+  onFullPageUpdateStep?: (
+    step: FullPageUpdateStep,
+    index: number
+  ) => Promise<void>,
+  onFullPageUpdateSection?: (sectionId: string) => Promise<void>
 ) => Promise<GenerationResult>;
 
 /** Page workflows return conversation outcomes separately from progress updates. */

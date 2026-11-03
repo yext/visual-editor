@@ -1,13 +1,13 @@
+import {
+  testPrompts,
+  testGenerationSettings,
+} from "../../testing/promptFixtures.ts";
 // @vitest-environment node
 import {
   executionHarness,
   modelResponder,
 } from "../../testing/modelFixtures.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import {
-  EDIT_PLANNING_OUTPUT_TOKEN_BUDGET,
-  SECTION_EDIT_OUTPUT_TOKEN_BUDGET,
-} from "../../limits.ts";
 import {
   editGenerationFixture,
   editPlan,
@@ -92,7 +92,9 @@ describe("planning and section execution requests", () => {
       strict: true,
       name: "puck_edit_plan",
     });
-    expect(body.max_output_tokens).toBe(EDIT_PLANNING_OUTPUT_TOKEN_BUDGET);
+    expect(body.max_output_tokens).toBe(
+      testGenerationSettings.maxOutputTokens.plan
+    );
     expect(body.input[1]).toEqual({
       role: "assistant",
       content: "Earlier applied outcome",
@@ -149,7 +151,9 @@ describe("planning and section execution requests", () => {
       name: "puck_section_edit",
       strict: true,
     });
-    expect(body.max_output_tokens).toBe(SECTION_EDIT_OUTPUT_TOKEN_BUDGET);
+    expect(body.max_output_tokens).toBe(
+      testGenerationSettings.maxOutputTokens.section
+    );
     expect(h.log).toHaveBeenCalledWith(
       "[layout generation] Section prompt",
       expect.objectContaining({
@@ -521,6 +525,8 @@ describe("planning and section execution requests", () => {
         },
         {
           model: "test",
+          prompts: testPrompts,
+          generationSettings: testGenerationSettings,
           locales: ["en", "fr"],
           catalog: fixture.catalog,
           diagnostics: { log: () => {}, report: () => {} },

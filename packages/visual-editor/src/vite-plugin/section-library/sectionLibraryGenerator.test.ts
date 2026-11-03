@@ -11,7 +11,6 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { MainContent } from "../../components/helpers/MainContent.tsx";
 import { materializeSectionEdit } from "../../internal/layoutGeneration/workflows/edits/applyEditsToLayout.ts";
 import { compileSectionEditSchema } from "../../internal/layoutGeneration/workflows/edits/compileSectionEditSchema.ts";
-import { buildGenerationPrompt } from "../../internal/layoutGeneration/prompts.ts";
 import { validateAuthored } from "../../internal/layoutGeneration/shared/authoredValues.ts";
 import {
   cleanupGeneratedSectionLibraryFiles,
@@ -115,9 +114,6 @@ describe("generateSectionLibraryFiles", () => {
       expect(
         catalogs["alternate-location"].puckOptions.defaultGenerationSectionIds
       ).toEqual([]);
-      expect(
-        buildGenerationPrompt(catalogs["alternate-location"])
-      ).not.toContain("Default sections for fresh generation:");
       expect(catalogs["locator-layout"].puckOptions).not.toHaveProperty(
         "defaultGenerationSectionIds"
       );
@@ -150,13 +146,6 @@ describe("generateSectionLibraryFiles", () => {
       ).toBe(true);
       expect(directoryCatalog.componentNames).not.toContain("hero");
       expect(catalog.componentNames).not.toContain("Locator");
-      expect(buildGenerationPrompt(catalog)).not.toContain("Locator");
-      expect(buildGenerationPrompt(catalog)).toContain(
-        'Default sections for fresh generation: ["hero"]'
-      );
-      expect(buildGenerationPrompt(directoryCatalog)).toContain(
-        'Default sections for fresh generation: ["Directory"]'
-      );
       expect(
         catalog.data.components.hero.props.safeParse({
           id: "hero",

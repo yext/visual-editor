@@ -2,15 +2,15 @@ import type { Data } from "@puckeditor/core";
 import { isDeepEqual } from "../../../../utils/deepEqual.ts";
 import { clonePuckResolveData } from "../../../utils/clonePuckResolveData.ts";
 import type { GenerationCanvasAdapter } from "../../shared/contracts.ts";
-import type { RegenerationStep } from "./contracts.ts";
+import type { FullPageUpdateStep } from "./contracts.ts";
 
-type RegenerationAdapter = GenerationCanvasAdapter & {
-  materializeRegeneration: (baseline: Data, step: RegenerationStep) => Data;
+type FullPageUpdateAdapter = GenerationCanvasAdapter & {
+  materializeFullPageUpdate: (baseline: Data, step: FullPageUpdateStep) => Data;
   preserveSectionResolution: (resolved: Data, candidate: Data) => Data;
 };
 
 /** Stream isolated steps over the existing page, retaining one undo baseline. */
-export class RegenerationSession {
+export class FullPageUpdateSession {
   private active = true;
   private accepted?: Data;
   private expected: Data;
@@ -19,30 +19,30 @@ export class RegenerationSession {
   stepCount = 0;
 
   constructor(
-    private adapter: RegenerationAdapter,
+    private adapter: FullPageUpdateAdapter,
     private baseline: Data
   ) {
     this.expected = clonePuckResolveData(baseline);
   }
 
-  async apply(step: RegenerationStep, index: number, signal: AbortSignal) {
+  async apply(step: FullPageUpdateStep, index: number, signal: AbortSignal) {
     const assertActive = () => {
       signal.throwIfAborted();
-      if (!this.active) throw new Error("Regeneration session ended.");
+      if (!this.active) throw new Error("Full-page update session ended.");
     };
     assertActive();
     const serialized = JSON.stringify(step);
     if (this.steps.has(index)) {
       if (this.steps.get(index) !== serialized)
-        throw new Error("Regeneration changed an already applied step.");
+        throw new Error("Full-page update changed an already applied step.");
       return;
     }
     if (index !== this.stepCount)
-      throw new Error("Regeneration steps must apply in order.");
+      throw new Error("Full-page update steps must apply in order.");
     const before = clonePuckResolveData(this.adapter.read());
     if (!isDeepEqual(before, this.expected))
       throw new Error(
-        "Layout changed during regeneration. Try the request again."
+        "Layout changed during the full-page update. Try the request again."
       );
     let candidate: Data;
     try {
@@ -86,12 +86,15 @@ export class RegenerationSession {
       }
       candidate = before;
       for (const operation of operations)
-        candidate = this.adapter.materializeRegeneration(candidate, operation);
+        candidate = this.adapter.materializeFullPageUpdate(
+          candidate,
+          operation
+        );
     } catch (cause) {
       const { sections: _sections, ...references } =
         "sections" in step ? step : { ...step, sections: undefined };
       throw new Error(
-        `Regeneration step ${index} failed: ${cause instanceof Error ? cause.message : String(cause)} Step references: ${JSON.stringify(references)}.`,
+        `FullPageUpdate step ${index} failed: ${cause instanceof Error ? cause.message : String(cause)} Step references: ${JSON.stringify(references)}.`,
         { cause }
       );
     }
@@ -106,7 +109,7 @@ export class RegenerationSession {
       assertActive();
       if (!isDeepEqual(before, this.adapter.read()))
         throw new Error(
-          "Layout changed during regeneration. Try the request again."
+          "Layout changed during the full-page update. Try the request again."
         );
       const preserved = this.adapter.preserveSectionResolution(
         resolved,

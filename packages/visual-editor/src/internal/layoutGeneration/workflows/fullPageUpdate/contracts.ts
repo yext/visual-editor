@@ -1,23 +1,23 @@
 import { z } from "zod";
 
 const id = z.string().trim().min(1);
-export const regenerationAnchorSchema = z.union([
+export const fullPageUpdateAnchorSchema = z.union([
   z.strictObject({ position: z.enum(["start", "end"]) }),
   z.strictObject({ position: z.enum(["before", "after"]), componentId: id }),
 ]);
-export const regenerationCollectionSchema = z.strictObject({
+export const fullPageUpdateCollectionSchema = z.strictObject({
   ownerId: id.nullable(),
   slotPath: z.string().nullable(),
 });
 
 /** Materialized internal values. The model-facing component schemas are stricter. */
-export const regenerationStepSchema = z.union([
+export const fullPageUpdateStepSchema = z.union([
   z.strictObject({ kind: z.literal("keep"), sectionId: id }),
   z.strictObject({ kind: z.literal("remove"), sectionId: id }),
   z.strictObject({
     kind: z.literal("reorder"),
     sectionId: id,
-    anchor: regenerationAnchorSchema,
+    anchor: fullPageUpdateAnchorSchema,
   }),
   z.strictObject({
     kind: z.literal("replace"),
@@ -28,20 +28,20 @@ export const regenerationStepSchema = z.union([
   }),
   z.strictObject({
     kind: z.literal("insert"),
-    collection: regenerationCollectionSchema,
-    anchor: regenerationAnchorSchema,
+    collection: fullPageUpdateCollectionSchema,
+    anchor: fullPageUpdateAnchorSchema,
     sections: z
       .array(z.strictObject({ type: id, props: z.record(z.string(), z.any()) }))
       .min(1),
   }),
 ]);
-export type RegenerationStep = z.infer<typeof regenerationStepSchema>;
+export type FullPageUpdateStep = z.infer<typeof fullPageUpdateStepSchema>;
 
-export const regenerationResultSchema = z.union([
+export const fullPageUpdateResultSchema = z.union([
   z.strictObject({ action: z.literal("clarification"), question: id }),
   z.strictObject({
-    action: z.literal("regenerate"),
-    steps: z.array(regenerationStepSchema),
+    action: z.literal("fullPageUpdate"),
+    steps: z.array(fullPageUpdateStepSchema),
   }),
 ]);
-export type RegenerationResult = z.infer<typeof regenerationResultSchema>;
+export type FullPageUpdateResult = z.infer<typeof fullPageUpdateResultSchema>;

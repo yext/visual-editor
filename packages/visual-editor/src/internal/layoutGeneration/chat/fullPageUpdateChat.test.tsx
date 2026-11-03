@@ -5,8 +5,8 @@ import { createPuckGenerationCatalog } from "../../../utils/createPuckGeneration
 import type { Content } from "../shared/authoredValues.ts";
 import { GenerationError } from "../shared/generationErrors.ts";
 import { preserveSectionEditResolution } from "../workflows/edits/applyEditsToLayout.ts";
-import { applyRegenerationStep } from "../workflows/fullPageRegeneration/applyRegenerationStep.ts";
-import type { RegenerationStep } from "../workflows/fullPageRegeneration/contracts.ts";
+import { applyFullPageUpdateStep } from "../workflows/fullPageUpdate/applyFullPageUpdateStep.ts";
+import type { FullPageUpdateStep } from "../workflows/fullPageUpdate/contracts.ts";
 import { chatConfig, layout } from "../testing/chatFixtures.tsx";
 import { testGenerationEnvironment } from "../testing/executorFixtures.ts";
 import { executeGeneration } from "../transport/executeGeneration.ts";
@@ -51,8 +51,8 @@ const setup = (componentLabel?: (type: string) => string) => {
         data = next;
       },
       commit,
-      materializeRegeneration: (baseline, step) =>
-        applyRegenerationStep(catalog, baseline as Content, step) as Data,
+      materializeFullPageUpdate: (baseline, step) =>
+        applyFullPageUpdateStep(catalog, baseline as Content, step) as Data,
       preserveSectionResolution: (resolved, candidate) =>
         preserveSectionEditResolution(
           catalog,
@@ -63,13 +63,13 @@ const setup = (componentLabel?: (type: string) => string) => {
   });
   return { ...hook, commit, initial, data: () => data };
 };
-const success = (steps: RegenerationStep[] = []) => ({
-  type: "regenerated" as const,
-  text: "Regenerated.",
-  result: { action: "regenerate" as const, steps },
+const success = (steps: FullPageUpdateStep[] = []) => ({
+  type: "fullPageUpdated" as const,
+  text: "Page updated.",
+  result: { action: "fullPageUpdate" as const, steps },
 });
 
-it("regenerates populated intent pages and reports completion after committing", async () => {
+it("updates populated intent pages and reports completion after committing", async () => {
   const current = setup();
   vi.mocked(executeGeneration).mockResolvedValueOnce(
     success([{ kind: "remove", sectionId: "heading" }])
@@ -83,7 +83,7 @@ it("regenerates populated intent pages and reports completion after committing",
   expect(completed).toBe(true);
   expect(executeGeneration).toHaveBeenCalledOnce();
   expect(vi.mocked(executeGeneration).mock.calls[0][0]).toMatchObject({
-    mode: "regenerate",
+    mode: "fullPageUpdate",
     currentData: { content: current.initial.content },
     messages: [{ role: "user", content: "Chicken menu" }],
   });
@@ -103,7 +103,7 @@ it("regenerates populated intent pages and reports completion after committing",
 });
 
 it.each(["Event details", undefined])(
-  "labels inserted regeneration sections with their display name or type (%s)",
+  "labels inserted full-page update sections with their display name or type (%s)",
   async (label) => {
     const current = setup(label ? () => label : undefined);
     vi.mocked(executeGeneration).mockResolvedValueOnce(
@@ -132,11 +132,11 @@ it.each(["Event details", undefined])(
   }
 );
 
-it("does not report intent completion for regeneration clarification or failure", async () => {
+it("does not report intent completion for full-page update clarification or failure", async () => {
   const current = setup();
   vi.mocked(executeGeneration)
     .mockResolvedValueOnce({
-      type: "regenerated",
+      type: "fullPageUpdated",
       text: "",
       result: { action: "clarification", question: "Which menu?" },
     })
@@ -152,12 +152,12 @@ it("does not report intent completion for regeneration clarification or failure"
   expect(current.result.current.error?.message).toBe("Test failure");
 });
 
-it("continues clarification in regeneration mode, then returns ordinary chat to edits", async () => {
+it("continues clarification in full-page update mode, then returns ordinary chat to edits", async () => {
   const current = setup();
   const execute = vi.mocked(executeGeneration);
   execute
     .mockResolvedValueOnce({
-      type: "regenerated",
+      type: "fullPageUpdated",
       text: "",
       result: { action: "clarification", question: "Which service?" },
     })
@@ -175,8 +175,8 @@ it("continues clarification in regeneration mode, then returns ordinary chat to 
     );
   });
   expect(execute.mock.calls.map(([request]) => request.mode)).toEqual([
-    "regenerate",
-    "regenerate",
+    "fullPageUpdate",
+    "fullPageUpdate",
   ]);
   expect(
     execute.mock.calls[1][0].messages.map((message) => message.content)
@@ -232,7 +232,7 @@ it("cancellation retains streamed changes once and releases the editor", async (
   expect(current.result.current.isGeneratingPage).toBe(false);
   expect(current.result.current.isStreaming).toBe(false);
   expect(current.result.current.messages.at(-1)?.text).toContain(
-    "1 step completed"
+    "Steps completed: 1."
   );
 });
 
@@ -255,7 +255,7 @@ it("failure retains completed steps, reports partial completion and does not ret
   expect(current.commit).toHaveBeenCalledOnce();
   expect(current.result.current.error?.message).toBe("Invalid later step");
   expect(current.result.current.messages.at(-1)?.text).toContain(
-    "1 step completed"
+    "Steps completed: 1."
   );
   expect(current.result.current.isGeneratingPage).toBe(false);
 });

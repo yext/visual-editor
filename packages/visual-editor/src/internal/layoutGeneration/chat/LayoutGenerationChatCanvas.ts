@@ -1,5 +1,5 @@
-import { RegenerationSession } from "../workflows/fullPageRegeneration/RegenerationSession.ts";
-import type { RegenerationStep } from "../workflows/fullPageRegeneration/contracts.ts";
+import { FullPageUpdateSession } from "../workflows/fullPageUpdate/FullPageUpdateSession.ts";
+import type { FullPageUpdateStep } from "../workflows/fullPageUpdate/contracts.ts";
 import type { Data } from "@puckeditor/core";
 import { isDeepEqual } from "../../../utils/deepEqual.ts";
 import type { PuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
@@ -22,7 +22,10 @@ import { previewSections } from "./previewScroll.ts";
 type GeneratedContent = Pick<Data, "content">;
 export type ChatCanvasAdapter = GenerationCanvasAdapter & {
   beginPresentation?: () => void;
-  materializeRegeneration?: (baseline: Data, step: RegenerationStep) => Data;
+  materializeFullPageUpdate?: (
+    baseline: Data,
+    step: FullPageUpdateStep
+  ) => Data;
   validateInitial?: (data: Data) => void;
   readSelection?: () => string | null;
   readSectionLabels?: () => Record<string, string>;
@@ -42,7 +45,7 @@ export class LayoutGenerationChatCanvas {
   catalog?: PuckGenerationCatalog;
   private adapter?: ChatCanvasAdapter;
   private creation?: CreationSession;
-  private regeneration?: RegenerationSession;
+  private fullPageUpdate?: FullPageUpdateSession;
   private creationStartedAt = 0;
   private baseline?: Data;
   private revision = 0;
@@ -251,40 +254,42 @@ export class LayoutGenerationChatCanvas {
     this.creation = undefined;
     creation?.finish();
   }
-  beginRegeneration() {
+  beginFullPageUpdate() {
     const adapter = this.adapter;
     if (
       !this.baseline ||
-      !adapter?.materializeRegeneration ||
+      !adapter?.materializeFullPageUpdate ||
       !adapter.preserveSectionResolution ||
       !adapter.preview
     ) {
-      throw new Error("The editor does not support page regeneration.");
+      throw new Error("The editor does not support full-page updates.");
     }
-    this.regeneration = new RegenerationSession(
+    this.fullPageUpdate = new FullPageUpdateSession(
       {
         ...adapter,
-        materializeRegeneration: adapter.materializeRegeneration,
+        materializeFullPageUpdate: adapter.materializeFullPageUpdate,
         preserveSectionResolution: adapter.preserveSectionResolution,
       },
       this.baseline
     );
   }
-  async prepareRegenerationSection(sectionId: string, signal: AbortSignal) {
-    if (!this.regeneration) throw new Error("Regeneration session ended.");
+  async prepareFullPageUpdateSection(sectionId: string, signal: AbortSignal) {
+    if (!this.fullPageUpdate)
+      throw new Error("Full-page update session ended.");
     await this.adapter?.prepareSection?.(sectionId, signal);
   }
-  async applyRegeneration(
-    step: RegenerationStep,
+  async applyFullPageUpdate(
+    step: FullPageUpdateStep,
     index: number,
     signal: AbortSignal
   ) {
-    if (!this.regeneration) throw new Error("Regeneration session ended.");
-    await this.regeneration.apply(step, index, signal);
+    if (!this.fullPageUpdate)
+      throw new Error("Full-page update session ended.");
+    await this.fullPageUpdate.apply(step, index, signal);
   }
-  finishRegeneration() {
-    const session = this.regeneration;
-    this.regeneration = undefined;
+  finishFullPageUpdate() {
+    const session = this.fullPageUpdate;
+    this.fullPageUpdate = undefined;
     session?.finish();
   }
   /** Serialize section commits while keeping the current turn open. */
@@ -395,7 +400,7 @@ export class LayoutGenerationChatCanvas {
     return queued;
   }
   finish() {
-    this.finishRegeneration();
+    this.finishFullPageUpdate();
     this.creation?.discard();
     this.creation = undefined;
     this.revision++;

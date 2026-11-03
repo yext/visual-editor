@@ -1,3 +1,4 @@
+import type { GenerationSettings } from "../../types/generationSettings.ts";
 import type { YextSchemaField } from "../../types/entityFields.ts";
 import type { PageSetType } from "../../types/sectionLibrary.ts";
 
@@ -7,6 +8,16 @@ export type LocalEditorOptions = {
   layoutGenerationEnabled?: boolean;
   /** Model used by the local json-render generation endpoint. */
   generationModel?: string;
+  /** Override local generation limits; omitted values retain the local defaults. */
+  generationSettings?: {
+    attemptTimeoutMs?: GenerationSettings["attemptTimeoutMs"];
+    maxOutputTokens?: Partial<GenerationSettings["maxOutputTokens"]>;
+  };
+  /**
+   * Path to the TypeScript prompt bundle in your ALPHA checkout, absolute or relative
+   * to the Vite root. Required for local AI generation.
+   */
+  generationPromptsPath?: string;
 };
 
 type LocalEditorDefaults = {

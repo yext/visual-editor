@@ -1,3 +1,4 @@
+import { testPrompts, testGenerationSettings } from "./promptFixtures.ts";
 import { vi } from "vitest";
 import type {
   GenerationEnvironment,
@@ -46,7 +47,8 @@ export const completed = (output: unknown) =>
 export const executionHarness = (
   payload: object,
   catalog: GenerationEnvironment["catalog"],
-  locales = ["en"]
+  locales = ["en"],
+  generationSettings = testGenerationSettings
 ) => {
   const controller = new AbortController();
   const observations: GenerationResult[] = [];
@@ -65,6 +67,8 @@ export const executionHarness = (
           payload as LayoutGenerationRequest,
           {
             model: "test",
+            prompts: testPrompts,
+            generationSettings,
             catalog,
             locales,
             transport: responseModelTransport(modelResponder),

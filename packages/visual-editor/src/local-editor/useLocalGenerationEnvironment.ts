@@ -1,3 +1,11 @@
+import {
+  generationSettingsSchema,
+  type GenerationSettings,
+} from "../types/generationSettings.ts";
+import {
+  generationPromptBundleSchema,
+  type GenerationPromptBundle,
+} from "../types/generationPrompts.ts";
 import type { Config } from "@puckeditor/core";
 import React from "react";
 import { getGenerationCatalog } from "../internal/layoutGeneration/shared/catalogRegistry.ts";
@@ -17,6 +25,8 @@ export const useLocalGenerationEnvironment = (
     layoutId: string;
     api: string;
     model: string;
+    prompts: GenerationPromptBundle;
+    generationSettings: GenerationSettings;
     locales: string[];
   } | null>(null);
   React.useEffect(() => {
@@ -41,8 +51,18 @@ export const useLocalGenerationEnvironment = (
         ) {
           throw new Error("Invalid generation settings");
         }
+        const prompts = generationPromptBundleSchema.parse(context.prompts);
+        const generationSettings = generationSettingsSchema.parse(
+          context.generationSettings
+        );
         if (!controller.signal.aborted) {
-          setSettings({ ...context, layoutId, api });
+          setSettings({
+            ...context,
+            prompts,
+            generationSettings,
+            layoutId,
+            api,
+          });
         }
       })
       .catch((error) => {
@@ -64,6 +84,8 @@ export const useLocalGenerationEnvironment = (
       settings.api === api
         ? {
             model: settings.model,
+            prompts: settings.prompts,
+            generationSettings: settings.generationSettings,
             locales: settings.locales,
             catalog: getGenerationCatalog(config),
             transport: createLocalMessageTransport(),

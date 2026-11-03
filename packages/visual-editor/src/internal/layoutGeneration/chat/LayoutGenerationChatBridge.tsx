@@ -9,7 +9,7 @@ import React from "react";
 import type { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import { buildPuckHistoryState } from "../../utils/buildPuckHistoryState.ts";
 import { clonePuckResolveData } from "../../utils/clonePuckResolveData.ts";
-import { applyRegenerationStep } from "../workflows/fullPageRegeneration/applyRegenerationStep.ts";
+import { applyFullPageUpdateStep } from "../workflows/fullPageUpdate/applyFullPageUpdateStep.ts";
 import { buildEditInventory } from "../workflows/edits/buildEditInventory.ts";
 import {
   materializeSectionEdit,
@@ -223,9 +223,9 @@ const LayoutGenerationChatCanvasBridge = ({
             canvas.catalog ?? getGenerationCatalog(getPuck().config);
           assertAuthoredPreserved(catalog, data as any, candidate as any);
         },
-        materializeRegeneration: (baseline, step) => {
+        materializeFullPageUpdate: (baseline, step) => {
           const puck = getPuck();
-          return applyRegenerationStep(
+          return applyFullPageUpdateStep(
             canvas.catalog ?? getGenerationCatalog(puck.config),
             baseline,
             step,

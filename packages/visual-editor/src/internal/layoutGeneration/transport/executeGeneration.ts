@@ -1,13 +1,5 @@
 import { z } from "zod";
-import {
-  EDIT_PLANNING_OUTPUT_TOKEN_BUDGET,
-  FRESH_PAGE_OUTPUT_TOKEN_BUDGET,
-  GENERATION_ATTEMPT_DEADLINE_MS,
-  GENERATION_PREPARATION_OUTPUT_TOKEN_BUDGET,
-  GENERATION_REPAIR_FEEDBACK_MAX_CHARACTERS,
-  SECTION_EDIT_OUTPUT_TOKEN_BUDGET,
-  REGENERATION_FALLBACK_OUTPUT_TOKEN_BUDGET,
-} from "../limits.ts";
+import { GENERATION_REPAIR_FEEDBACK_MAX_CHARACTERS } from "../limits.ts";
 import {
   buildGenerationPrompt,
   recommendedGenerationSectionIds,
@@ -18,14 +10,10 @@ import type {
   GenerationResult,
   LayoutGenerationRequest,
 } from "../shared/contracts.ts";
-import type { RegenerationStep } from "../workflows/fullPageRegeneration/contracts.ts";
+import type { FullPageUpdateStep } from "../workflows/fullPageUpdate/contracts.ts";
 import { GenerationError } from "../shared/generationErrors.ts";
 import { componentDiagnostics, summarizeSchema } from "./diagnostics.ts";
-import {
-  GenerationGatewayError,
-  GenerationOutputBudgetError,
-  requestGenerationOutput,
-} from "./gateway.ts";
+import { GenerationGatewayError, requestGenerationOutput } from "./gateway.ts";
 import {
   compileGenerationRequest,
   parseGenerationResult,
@@ -39,36 +27,31 @@ const utf8Bytes = (text: string): number =>
 const jsonBytes = (value: unknown): number => utf8Bytes(JSON.stringify(value));
 
 const GENERATION_MODES = {
-  regenerate: {
-    maxOutputTokens: FRESH_PAGE_OUTPUT_TOKEN_BUDGET,
-    schemaName: "puck_regeneration",
-    eventType: "regenerated",
-    responseLabel: "Regeneration",
-    resultLabel: "regeneration",
+  fullPageUpdate: {
+    schemaName: "puck_full_page_update",
+    eventType: "fullPageUpdated",
+    responseLabel: "Full-page update",
+    resultLabel: "page update",
   },
   prepare: {
-    maxOutputTokens: GENERATION_PREPARATION_OUTPUT_TOKEN_BUDGET,
     schemaName: "puck_generation_preparation",
     eventType: "prepared",
     responseLabel: "Preparation",
     resultLabel: "preparation",
   },
   create: {
-    maxOutputTokens: FRESH_PAGE_OUTPUT_TOKEN_BUDGET,
     schemaName: "puck_generation",
     eventType: "accepted",
     responseLabel: "Creation",
     resultLabel: "layout",
   },
   plan: {
-    maxOutputTokens: EDIT_PLANNING_OUTPUT_TOKEN_BUDGET,
     schemaName: "puck_edit_plan",
     eventType: "planned",
     responseLabel: "Planning",
     resultLabel: "edit",
   },
   section: {
-    maxOutputTokens: SECTION_EDIT_OUTPUT_TOKEN_BUDGET,
     schemaName: "puck_section_edit",
     eventType: "section-result",
     responseLabel: "Section",
@@ -78,22 +61,46 @@ const GENERATION_MODES = {
 
 export const executeGeneration = async (
   payload: LayoutGenerationRequest,
-  { model, catalog, locales, transport, diagnostics }: GenerationEnvironment,
+  {
+    model,
+    catalog,
+    locales,
+    prompts,
+    generationSettings,
+    transport,
+    diagnostics,
+  }: GenerationEnvironment,
   signal: AbortSignal,
   correlationId: string,
   onCreationContent?: (content: Content) => Promise<void>,
-  onRegenerationStep?: (step: RegenerationStep, index: number) => Promise<void>,
-  onRegenerationSection?: (sectionId: string) => Promise<void>
+  onFullPageUpdateStep?: (
+    step: FullPageUpdateStep,
+    index: number
+  ) => Promise<void>,
+  onFullPageUpdateSection?: (sectionId: string) => Promise<void>
 ): Promise<GenerationResult> => {
   if (!model?.trim()) {
     throw new GenerationError(
       "AI page generation requires a configured model."
     );
   }
+  if (!prompts) {
+    throw new GenerationError(
+      "AI page generation requires a compatible prompt bundle."
+    );
+  }
+  if (!generationSettings) {
+    throw new GenerationError(
+      "AI page generation requires configured generation settings."
+    );
+  }
   signal.throwIfAborted();
   const log = diagnostics.log;
   const bodyBytes = jsonBytes(payload);
-  const requestDetails = { correlationId };
+  const requestDetails = {
+    correlationId,
+    promptContractVersion: prompts.contractVersion,
+  };
   const rejectRequest = (
     message: string,
     status: number,
@@ -114,6 +121,10 @@ export const executeGeneration = async (
   );
   const { messages, layoutId, currentData, mode, context } = validated;
   const modeConfig = GENERATION_MODES[mode];
+  const maxOutputTokens =
+    generationSettings.maxOutputTokens[
+      mode === "create" || mode === "fullPageUpdate" ? "page" : mode
+    ];
   Object.assign(requestDetails, {
     mode,
     taskId: context.task?.taskId,
@@ -183,10 +194,10 @@ export const executeGeneration = async (
     () =>
       controller.abort(
         new Error(
-          "Generation exceeded the five-minute deadline. Try a smaller request."
+          "Generation exceeded its configured deadline. Try a smaller request."
         )
       ),
-    GENERATION_ATTEMPT_DEADLINE_MS
+    generationSettings.attemptTimeoutMs
   );
   let phase = "prepare";
   let outputBytes = 0;
@@ -200,14 +211,19 @@ export const executeGeneration = async (
     }
     phase = "build-prompt";
     const instructions =
-      compiled.instructions ??
-      buildGenerationPrompt(
-        catalog,
-        compiled.availableComponentNames,
-        locales,
-        "create",
-        context.purpose
-      );
+      mode === "prepare"
+        ? prompts.prompts.prepare
+        : mode === "plan"
+          ? prompts.prompts.plan
+          : mode === "section"
+            ? prompts.prompts.section
+            : buildGenerationPrompt(
+                prompts,
+                catalog,
+                compiled.availableComponentNames,
+                locales,
+                mode === "fullPageUpdate" ? "fullPageUpdate" : "create"
+              );
     const componentStats =
       mode === "prepare"
         ? []
@@ -215,7 +231,7 @@ export const executeGeneration = async (
     const schemaStats = summarizeSchema(compiled.jsonSchema, jsonBytes);
     phase = "build-request";
     const recommendedSectionIds =
-      mode === "create" || mode === "regenerate"
+      mode === "create" || mode === "fullPageUpdate"
         ? recommendedGenerationSectionIds(
             catalog,
             compiled.availableComponentNames
@@ -240,7 +256,7 @@ export const executeGeneration = async (
     const requestBody = {
       model,
       stream: true,
-      max_output_tokens: modeConfig.maxOutputTokens,
+      max_output_tokens: maxOutputTokens,
       instructions,
       input,
       text: {
@@ -273,6 +289,7 @@ export const executeGeneration = async (
       ...(mode === "create" ? { preparation: context.preparation } : {}),
       taskId: context.task?.taskId,
       model,
+      promptContractVersion: prompts.contractVersion,
       requestBodyBytes: utf8Bytes(serializedRequestBody),
       requestBodyCharacters: serializedRequestBody.length,
       instructionsBytes: utf8Bytes(instructions),
@@ -288,79 +305,44 @@ export const executeGeneration = async (
       isBlankPage: compiled.isBlankPage,
     });
     phase = "gateway-fetch";
-    const outputStream = onRegenerationStep
-      ? compiled.streamRegeneration?.(onRegenerationStep, onRegenerationSection)
+    const outputStream = onFullPageUpdateStep
+      ? compiled.streamFullPageUpdate?.(
+          onFullPageUpdateStep,
+          onFullPageUpdateSection
+        )
       : onCreationContent
         ? compiled.stream?.(onCreationContent)
         : undefined;
     let streamed = false;
-    const fetchOutput = (maxOutputTokens: number) =>
-      requestGenerationOutput({
-        utf8Bytes,
-        serializedRequestBody:
-          maxOutputTokens === modeConfig.maxOutputTokens
-            ? serializedRequestBody
-            : JSON.stringify({
-                ...requestBody,
-                max_output_tokens: maxOutputTokens,
-              }),
-        transport,
-        model,
-        maxOutputTokens,
-        signal: controller.signal,
-        correlationId,
-        log: (message, details) =>
-          log(message, {
-            correlationId,
-            mode,
-            taskId: context.task?.taskId,
-            sectionId: context.task?.sectionId,
-            ...details,
-          }),
-        onDelta: outputStream
-          ? async (delta) => {
-              streamed = true;
-              phase = "parse-and-validate";
-              try {
-                await outputStream.write(delta);
-              } catch (cause) {
-                streamFailure = true;
-                throw cause;
-              }
-            }
-          : undefined,
-      });
-    let outputText: string;
-    try {
-      outputText = await fetchOutput(modeConfig.maxOutputTokens);
-    } catch (cause) {
-      if (
-        mode !== "regenerate" ||
-        modeConfig.maxOutputTokens <=
-          REGENERATION_FALLBACK_OUTPUT_TOKEN_BUDGET ||
-        streamed ||
-        !(cause instanceof GenerationGatewayError) ||
-        cause.transport ||
-        cause.outputBytes !== 0 ||
-        !(cause.cause instanceof GenerationOutputBudgetError) ||
-        !cause.cause.beforeGeneration
-      )
-        throw cause;
-      controller.signal.throwIfAborted();
-      log(
-        "[layout generation] Retrying regeneration with a smaller output budget",
-        {
+    const outputText = await requestGenerationOutput({
+      utf8Bytes,
+      serializedRequestBody,
+      transport,
+      model,
+      maxOutputTokens,
+      signal: controller.signal,
+      correlationId,
+      log: (message, details) =>
+        log(message, {
           correlationId,
           mode,
-          model,
-          previousMaxOutputTokens: modeConfig.maxOutputTokens,
-          maxOutputTokens: REGENERATION_FALLBACK_OUTPUT_TOKEN_BUDGET,
-          reason:
-            "Gateway output-token limit before generation with zero usage and no output",
-        }
-      );
-      outputText = await fetchOutput(REGENERATION_FALLBACK_OUTPUT_TOKEN_BUDGET);
-    }
+          taskId: context.task?.taskId,
+          sectionId: context.task?.sectionId,
+          ...details,
+        }),
+      onDelta: outputStream
+        ? async (delta) => {
+            streamed = true;
+            phase = "parse-and-validate";
+            try {
+              await outputStream.write(delta);
+            } catch (cause) {
+              streamFailure = true;
+              throw cause;
+            }
+          }
+        : undefined,
+    });
     outputBytes = utf8Bytes(outputText);
     log(`[layout generation] ${modeConfig.responseLabel} response`, {
       correlationId,

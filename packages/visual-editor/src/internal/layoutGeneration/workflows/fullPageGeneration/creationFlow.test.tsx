@@ -1,3 +1,7 @@
+import {
+  testPrompts,
+  testGenerationSettings,
+} from "../../testing/promptFixtures.ts";
 import { Puck, useGetPuck, type Config, type Data } from "@puckeditor/core";
 import { act, cleanup, render, waitFor } from "@testing-library/react";
 import React from "react";
@@ -93,6 +97,8 @@ const setup = async (rejectSecond = false, intentMode = false) => {
   const environment: GenerationEnvironment = {
     catalog: createPuckGenerationCatalog(config.components),
     model: "test",
+    prompts: testPrompts,
+    generationSettings: testGenerationSettings,
     locales: ["en"],
     diagnostics: { log: vi.fn(), report: vi.fn() },
     transport: createLocalMessageTransport(),
@@ -140,7 +146,17 @@ const setup = async (rejectSecond = false, intentMode = false) => {
   );
   const baseline: Data = {
     root: {},
-    content: [{ type: "MainContent", props: { id: "main", content: [] } }],
+    content: [
+      {
+        type: "MainContent",
+        props: {
+          id: "main",
+          content: intentMode
+            ? [{ type: "Heading", props: { id: "original", text: "Original" } }]
+            : [],
+        },
+      },
+    ],
   };
   const Capture = () => {
     puck = useGetPuck();
@@ -180,9 +196,32 @@ const setup = async (rejectSecond = false, intentMode = false) => {
   });
   await waitFor(() => expect(stream).toBeDefined());
   const wire = JSON.stringify(
-    creation([heading("First 世界"), heading("Second")])
+    intentMode
+      ? {
+          translationMode: "defaultOnly",
+          result: {
+            action: "fullPageUpdate",
+            steps: [
+              {
+                kind: "replace",
+                sectionId: "original",
+                sections: [heading("First 世界")],
+              },
+              {
+                kind: "insert",
+                collection: { ownerId: "main", slotPath: "/content" },
+                anchor: { position: "end" },
+                sections: [heading("Second")],
+              },
+            ],
+          },
+          text: "Updated page.",
+        }
+      : creation([heading("First 世界"), heading("Second")])
   );
-  const boundary = wire.indexOf(',{"type":"Heading"');
+  const boundary = wire.indexOf(
+    intentMode ? ',{"kind":"insert"' : ',{"type":"Heading"'
+  );
   return {
     chat: () => chat,
     generationSignal: () => generationSignal,
@@ -298,6 +337,7 @@ it.each(["cancel", "truncated", "resolver"])(
 
 it("captures the exact generated history hash and normal serialized draft for intent saves", async () => {
   const run = await setup(false, true);
+  expect(run.requests).toEqual(["puck_full_page_update"]);
   await run.first();
   expect(run.captureDraft).not.toHaveBeenCalled();
   await run.rest();

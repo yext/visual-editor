@@ -1,9 +1,6 @@
 import { z } from "zod";
 import type { PuckGenerationCatalog } from "../../../../utils/createPuckGenerationCatalog.ts";
-import {
-  buildGenerationPrompt,
-  translationModeGuidance,
-} from "../../prompts.ts";
+import { translationModeGuidance } from "../../schemaGuidance.ts";
 import { deduplicateGenerationDefinitions } from "../../schema/compactSchema.ts";
 import { createGenerationSchemaCompiler } from "../../schema/compiler.ts";
 import {
@@ -16,12 +13,12 @@ import { finalizeGeneratedContent } from "../../shared/finalizeGeneratedContent.
 import { buildEditInventory } from "../edits/buildEditInventory.ts";
 import { CreationStream } from "../fullPageGeneration/creationStream.ts";
 import {
-  regenerationAnchorSchema,
-  regenerationCollectionSchema,
-  type RegenerationStep,
+  fullPageUpdateAnchorSchema,
+  fullPageUpdateCollectionSchema,
+  type FullPageUpdateStep,
 } from "./contracts.ts";
 
-export const compileRegenerationSchema = (
+export const compileFullPageUpdateSchema = (
   catalog: PuckGenerationCatalog,
   locales: string[],
   currentData: Content
@@ -49,7 +46,7 @@ export const compileRegenerationSchema = (
     z.strictObject({
       kind: z.literal("reorder"),
       sectionId,
-      anchor: regenerationAnchorSchema,
+      anchor: fullPageUpdateAnchorSchema,
     }),
   ];
   if (sections.length) {
@@ -66,8 +63,8 @@ export const compileRegenerationSchema = (
           .describe(
             "Add new sections where the requested intent needs content that the existing page does not cover. Section types may be absent from the existing layout."
           ),
-        collection: regenerationCollectionSchema,
-        anchor: regenerationAnchorSchema,
+        collection: fullPageUpdateCollectionSchema,
+        anchor: fullPageUpdateAnchorSchema,
         sections: content,
       })
     );
@@ -83,7 +80,7 @@ export const compileRegenerationSchema = (
         question: z.string().min(1),
       }),
       z.strictObject({
-        action: z.literal("regenerate"),
+        action: z.literal("fullPageUpdate"),
         steps: z.array(stepSchema),
       }),
     ]),
@@ -93,23 +90,20 @@ export const compileRegenerationSchema = (
     exportSchema(responseSchema)
   );
   const availableComponentNames = [...nodes.keys()].sort();
-  // Compilation for scaffold/default guidance must not add it to the insertion union.
-  for (const [name, config] of Object.entries(catalog.data.components)) {
-    if (config.generation && !nodes.has(name))
-      exportSchema(z.strictObject({ component: element(name).wire }));
-  }
-  const cache = new Map<number, { wire: string; step: RegenerationStep }>();
+  const cache = new Map<number, { wire: string; step: FullPageUpdateStep }>();
   const materialize = (
     input: unknown,
     index: number,
     translationMode: "defaultOnly" | "translate"
-  ): RegenerationStep => {
+  ): FullPageUpdateStep => {
     const step = stepSchema.parse(input) as any;
     const wire = JSON.stringify({ translationMode, step });
     const previous = cache.get(index);
     if (previous) {
       if (previous.wire !== wire)
-        throw new Error("Regeneration changed an already streamed step.");
+        throw new Error(
+          "The full-page update changed an already streamed step."
+        );
       return clone(previous.step);
     }
     if (step.sections) {
@@ -175,14 +169,8 @@ export const compileRegenerationSchema = (
         ),
       },
     },
-    instructions: buildGenerationPrompt(
-      catalog,
-      [...nodes.keys()],
-      locales,
-      "regenerate"
-    ),
-    streamRegeneration: (
-      onStep: (step: RegenerationStep, index: number) => Promise<void>,
+    streamFullPageUpdate: (
+      onStep: (step: FullPageUpdateStep, index: number) => Promise<void>,
       onSection?: (sectionId: string) => Promise<void>
     ) => {
       const started = new Set<number>();
@@ -212,8 +200,8 @@ export const compileRegenerationSchema = (
         }
         if (path.length !== 3 || path[0] !== "result" || path[1] !== "steps")
           return;
-        if (parser.value.result.action !== "regenerate")
-          throw new Error("Expected regeneration action before steps.");
+        if (parser.value.result.action !== "fullPageUpdate")
+          throw new Error("Expected full-page update action before steps.");
         const translationMode = z
           .enum(["defaultOnly", "translate"])
           .parse(parser.value.translationMode);
@@ -232,11 +220,11 @@ export const compileRegenerationSchema = (
         return { text: parsed.text, result: parsed.result };
       }
       if (cache.size > parsed.result.steps.length)
-        throw new Error("Regeneration omitted streamed steps.");
+        throw new Error("The full-page update omitted streamed steps.");
       return {
         text: parsed.text,
         result: {
-          action: "regenerate" as const,
+          action: "fullPageUpdate" as const,
           steps: parsed.result.steps.map((step: unknown, index: number) =>
             materialize(step, index, parsed.translationMode)
           ),

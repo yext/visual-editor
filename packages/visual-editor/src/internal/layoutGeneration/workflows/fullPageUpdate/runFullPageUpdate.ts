@@ -6,24 +6,24 @@ import {
   GenerationError,
   repairGenerationOutput,
 } from "../../shared/generationErrors.ts";
-import type { RegenerationStep } from "./contracts.ts";
+import type { FullPageUpdateStep } from "./contracts.ts";
 
-type RegenerationCanvas = {
-  prepareRegenerationSection?: (
+type FullPageUpdateCanvas = {
+  prepareFullPageUpdateSection?: (
     sectionId: string,
     signal: AbortSignal
   ) => Promise<void>;
-  beginRegeneration: () => void;
-  applyRegeneration: (
-    step: RegenerationStep,
+  beginFullPageUpdate: () => void;
+  applyFullPageUpdate: (
+    step: FullPageUpdateStep,
     index: number,
     signal: AbortSignal
   ) => Promise<void>;
-  finishRegeneration: () => void;
+  finishFullPageUpdate: () => void;
 };
 
 /** A single full-page request streams complete section decisions, never field patches. */
-export const runRegeneration = async ({
+export const runFullPageUpdate = async ({
   layoutId,
   currentData,
   messages,
@@ -33,14 +33,14 @@ export const runRegeneration = async ({
   canvas,
   onProgress,
 }: GenerationTurn & {
-  canvas: RegenerationCanvas;
-  onProgress: (step: RegenerationStep, completedSteps: number) => void;
+  canvas: FullPageUpdateCanvas;
+  onProgress: (step: FullPageUpdateStep, completedSteps: number) => void;
 }): Promise<PageGenerationResult | undefined> => {
-  canvas.beginRegeneration();
+  canvas.beginFullPageUpdate();
   let applied = 0;
-  const apply = async (step: RegenerationStep, index: number) => {
+  const apply = async (step: FullPageUpdateStep, index: number) => {
     if (!active()) return;
-    await canvas.applyRegeneration(step, index, signal);
+    await canvas.applyFullPageUpdate(step, index, signal);
     if (index >= applied) {
       applied = index + 1;
       onProgress(step, applied);
@@ -51,7 +51,7 @@ export const runRegeneration = async ({
       try {
         return await request(
           {
-            mode: "regenerate",
+            mode: "fullPageUpdate",
             layoutId,
             currentData,
             messages,
@@ -62,7 +62,7 @@ export const runRegeneration = async ({
           apply,
           async (sectionId) => {
             if (active())
-              await canvas.prepareRegenerationSection?.(sectionId, signal);
+              await canvas.prepareFullPageUpdateSection?.(sectionId, signal);
           }
         );
       } catch (cause) {
@@ -77,12 +77,12 @@ export const runRegeneration = async ({
       }
     });
     if (!active()) return;
-    if (event.type !== "regenerated")
-      throw new Error("Expected page regeneration output.");
+    if (event.type !== "fullPageUpdated")
+      throw new Error("Expected full-page update output.");
     if (event.result.action === "clarification") {
       if (applied)
         throw new Error(
-          "Clarification cannot follow applied regeneration steps."
+          "Clarification cannot follow applied full-page update steps."
         );
       return { text: event.result.question, clarification: true };
     }
@@ -92,6 +92,6 @@ export const runRegeneration = async ({
     }
     return { text: event.text, clarification: false };
   } finally {
-    if (active()) canvas.finishRegeneration();
+    if (active()) canvas.finishFullPageUpdate();
   }
 };

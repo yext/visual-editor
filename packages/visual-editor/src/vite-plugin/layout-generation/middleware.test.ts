@@ -1,3 +1,7 @@
+import {
+  testPrompts,
+  testGenerationSettings,
+} from "../../internal/layoutGeneration/testing/promptFixtures.ts";
 // @vitest-environment node
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { beforeEach, expect, it, vi } from "vitest";
@@ -22,6 +26,8 @@ const requestContext = async (url?: string) => {
     rootDir: "/library",
     getLayouts: () => [],
     getModel: () => "configured-model",
+    prompts: testPrompts,
+    generationSettings: testGenerationSettings,
     logGeneration: log,
   })({ url } as IncomingMessage, response as unknown as ServerResponse, next);
   return { response, next };
@@ -63,6 +69,8 @@ it("returns the configured model and the selected layout's locale union", async 
   expect(response.statusCode).toBe(200);
   expect(JSON.parse(response.end.mock.calls[0][0])).toEqual({
     model: "configured-model",
+    prompts: testPrompts,
+    generationSettings: testGenerationSettings,
     locales: ["en", "fr"],
   });
   expect(next).not.toHaveBeenCalled();

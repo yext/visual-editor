@@ -1,3 +1,5 @@
+import type { GenerationSettings } from "../../types/generationSettings.ts";
+import type { GenerationPromptBundle } from "../../types/generationPrompts.ts";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { SectionLibraryLayout } from "../../types/sectionLibrary.ts";
 import { getLocalEditorGenerationLocales } from "../local-editor/data.ts";
@@ -15,11 +17,15 @@ export const createGenerationMiddleware =
     rootDir,
     getLayouts,
     getModel,
+    prompts,
+    generationSettings,
     logGeneration,
   }: {
     rootDir: string;
     getLayouts: () => SectionLibraryLayout[];
     getModel: () => string;
+    prompts: GenerationPromptBundle | null;
+    generationSettings: GenerationSettings | null;
     logGeneration: ReturnType<typeof createGenerationLogger>;
   }) =>
   (request: IncomingMessage, response: ServerResponse, next: () => void) => {
@@ -40,6 +46,8 @@ export const createGenerationMiddleware =
         }
         sendJsonResponse(response, {
           model: getModel(),
+          prompts,
+          generationSettings,
           locales: await getLocalEditorGenerationLocales(
             rootDir,
             getLayouts(),

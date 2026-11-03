@@ -1,3 +1,7 @@
+import {
+  testPrompts,
+  testGenerationSettings,
+} from "../internal/layoutGeneration/testing/promptFixtures.ts";
 import React from "react";
 import { act, cleanup, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
@@ -21,7 +25,12 @@ it("uses Vite's configured model and full locale union with the associated brows
   const fetchMock = vi.fn(
     async () =>
       new Response(
-        JSON.stringify({ model: "local-model", locales: ["en", "fr", "es"] })
+        JSON.stringify({
+          prompts: testPrompts,
+          generationSettings: testGenerationSettings,
+          model: "local-model",
+          locales: ["en", "fr", "es"],
+        })
       )
   );
   vi.stubGlobal("fetch", fetchMock);
@@ -32,6 +41,7 @@ it("uses Vite's configured model and full locale union with the associated brows
   expect(result.current!.model).toBe("local-model");
   expect(result.current!.locales).toEqual(["en", "fr", "es"]);
   expect(result.current!.catalog).toBe(catalog);
+  expect(result.current!.generationSettings).toEqual(testGenerationSettings);
   expect(fetchMock).toHaveBeenCalledWith(
     "/generate/context?layoutId=layout",
     expect.objectContaining({ signal: expect.any(AbortSignal) })
@@ -56,7 +66,16 @@ it("does not load settings while disabled and invalidates them on layout changes
   expect(fetch).not.toHaveBeenCalled();
   rerender({ enabled: true, layoutId: "first" });
   await act(async () => {
-    resolve(new Response(JSON.stringify({ model: "local", locales: ["en"] })));
+    resolve(
+      new Response(
+        JSON.stringify({
+          prompts: testPrompts,
+          generationSettings: testGenerationSettings,
+          model: "local",
+          locales: ["en"],
+        })
+      )
+    );
   });
   expect(result.current?.model).toBe("local");
   rerender({ enabled: true, layoutId: "second" });
@@ -93,7 +112,14 @@ it("disposes the host on scope changes and Strict Mode remounts", async () => {
           )
         );
       }
-      return new Response(JSON.stringify({ model: "test", locales: ["en"] }));
+      return new Response(
+        JSON.stringify({
+          prompts: testPrompts,
+          generationSettings: testGenerationSettings,
+          model: "test",
+          locales: ["en"],
+        })
+      );
     })
   );
   const { result, rerender, unmount } = renderHook(
@@ -137,3 +163,50 @@ it("disposes the host on scope changes and Strict Mode remounts", async () => {
   expect(signals[3].aborted).toBe(true);
   expect(listeners.size).toBe(0);
 });
+
+it.each([null, { ...testPrompts, contractVersion: 999 }])(
+  "keeps generation disabled when the Vite context has no compatible prompts",
+  async (prompts) => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        async () =>
+          new Response(
+            JSON.stringify({ model: "test", locales: ["en"], prompts })
+          )
+      )
+    );
+    const { result } = renderHook(() =>
+      useLocalGenerationEnvironment("/generate", "layout", config, true)
+    );
+    await waitFor(() => expect(error).toHaveBeenCalled());
+    expect(result.current).toBeNull();
+  }
+);
+
+it.each([undefined, { ...testGenerationSettings, attemptTimeoutMs: 0 }])(
+  "keeps local AI disabled for missing or invalid settings in the Vite context",
+  async (generationSettings) => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        async () =>
+          new Response(
+            JSON.stringify({
+              model: "test",
+              locales: ["en"],
+              prompts: testPrompts,
+              generationSettings,
+            })
+          )
+      )
+    );
+    const { result } = renderHook(() =>
+      useLocalGenerationEnvironment("/generate", "layout", config, true)
+    );
+    await waitFor(() => expect(error).toHaveBeenCalled());
+    expect(result.current).toBeNull();
+  }
+);

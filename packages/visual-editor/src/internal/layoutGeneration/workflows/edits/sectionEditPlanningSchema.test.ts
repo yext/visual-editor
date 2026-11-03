@@ -1,7 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { editPlanningPrompt } from "../../prompts.ts";
 import { clone } from "../../shared/authoredValues.ts";
 import {
   editGenerationFixture,
@@ -279,13 +278,6 @@ describe("follow-up planning", () => {
     expect(context).not.toContain("editorMetadata");
     expect(context).not.toContain("Private root setting");
     expect(context).not.toContain('"zones"');
-    const prompt = editPlanningPrompt;
-    expect(prompt).toContain("explicit user references override selection");
-    expect(prompt).toContain("User ordinals are one-based");
-    expect(prompt).toContain("materially plausible");
-    expect(prompt).toContain(
-      "Cross-section moves are unsupported, including removal followed by insertion"
-    );
     // An explicit reference to the second section can override the first section's selection.
     const plan = compiled.parseResponse(
       JSON.stringify(

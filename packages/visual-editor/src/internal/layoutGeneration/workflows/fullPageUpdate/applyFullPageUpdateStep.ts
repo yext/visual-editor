@@ -16,19 +16,22 @@ import type {
   SectionEditTask,
 } from "../edits/types.ts";
 import { sameCollection } from "../edits/utils.ts";
-import { regenerationStepSchema, type RegenerationStep } from "./contracts.ts";
+import {
+  fullPageUpdateStepSchema,
+  type FullPageUpdateStep,
+} from "./contracts.ts";
 
 /** Apply a whole-section step atomically, preserving every untouched saved value. */
-export const applyRegenerationStep = <T extends Content>(
+export const applyFullPageUpdateStep = <T extends Content>(
   catalog: PuckGenerationCatalog,
   baseline: T,
-  input: RegenerationStep,
+  input: FullPageUpdateStep,
   can: (
     permission: keyof Permissions,
     component: SavedComponent | null
   ) => boolean = () => true
 ): T => {
-  const step = regenerationStepSchema.parse(input);
+  const step = fullPageUpdateStepSchema.parse(input);
   let candidate = clone(baseline);
   const inventory = buildEditInventory(catalog, candidate);
   const section =
@@ -37,7 +40,7 @@ export const applyRegenerationStep = <T extends Content>(
       : undefined;
   if ("sectionId" in step && (!section || section.sectionId !== step.sectionId))
     throw new Error(
-      "Regeneration must target an existing section, not scaffolding or nested components."
+      "Full-page update must target an existing section, not scaffolding or nested components."
     );
   if (step.kind === "keep") return candidate;
   const structure = (
@@ -47,7 +50,7 @@ export const applyRegenerationStep = <T extends Content>(
       taskId: crypto.randomUUID(),
       sectionId: section!.componentId,
       targetComponentIds: [section!.componentId],
-      instructions: "Regenerate page",
+      instructions: "FullPageUpdate page",
       structuralOperations: [operation],
       dependsOn: [],
     };
@@ -104,7 +107,7 @@ export const applyRegenerationStep = <T extends Content>(
     (collection.ownerId === null && collection.slotPath !== null)
   )
     throw new Error(
-      "Regeneration insertion requires a page section collection."
+      "Full-page update insertion requires a page section collection."
     );
   const requirePermission = (
     permission: keyof Permissions,

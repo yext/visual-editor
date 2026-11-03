@@ -3,11 +3,7 @@ import type { Config, Fields, Permissions } from "@puckeditor/core";
 import { z } from "zod";
 import { mainContentDisallowedComponents } from "../components/helpers/MainContent.tsx";
 import type { LayoutGenerationMetadata } from "../fields/fields.ts";
-import {
-  generationComponentNamesLabel,
-  mainContentDescription,
-  puckCatalogPrompt,
-} from "../internal/layoutGeneration/prompts.ts";
+import { mainContentDescription } from "../internal/layoutGeneration/schemaGuidance.ts";
 
 export type GenerationComponent = {
   generation?: LayoutGenerationMetadata;
@@ -23,32 +19,23 @@ type GenerationComponentInput = GenerationComponent & {
   layoutGenerationMetadata?: LayoutGenerationMetadata;
 };
 
-const puckSchema = defineSchema(
-  (s) => ({
-    spec: s.object({
-      content: s.array(
-        s.object({
-          type: s.ref("catalog.components"),
-          props: s.record(s.any()),
-        })
-      ),
-    }),
-    catalog: s.object({
-      components: s.map({
-        props: s.zod(),
-        description: s.string(),
-        fields: s.any(),
-      }),
+const puckSchema = defineSchema((s) => ({
+  spec: s.object({
+    content: s.array(
+      s.object({
+        type: s.ref("catalog.components"),
+        props: s.record(s.any()),
+      })
+    ),
+  }),
+  catalog: s.object({
+    components: s.map({
+      props: s.zod(),
+      description: s.string(),
+      fields: s.any(),
     }),
   }),
-  {
-    promptTemplate: ({ componentNames }) =>
-      puckCatalogPrompt +
-      "\n" +
-      generationComponentNamesLabel +
-      componentNames.join(", "),
-  }
-);
+}));
 
 /** Contracts belong to registered Puck components, including hidden slot children. */
 export const createPuckGenerationCatalog = (
