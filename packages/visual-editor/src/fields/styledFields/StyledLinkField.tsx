@@ -18,6 +18,8 @@ export type StyledLinkValue = BaseTextStyles & {
 
 export type StyledLinkField = BaseField & {
   type: "styledLink";
+  /** Converts authored link typography and caret choice into CSS styles. */
+  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   showIncludeCaretField?: boolean;

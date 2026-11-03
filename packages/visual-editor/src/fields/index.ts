@@ -4,6 +4,10 @@ export {
   BasicSelectorFieldOverride,
   type BasicSelectorField,
 } from "./BasicSelectorField.tsx";
+export {
+  ThemeColorFieldOverride,
+  type ThemeColorField,
+} from "./ThemeColorField.tsx";
 
 export {
   CTASelectorFieldOverride,
@@ -53,6 +57,8 @@ export { VideoFieldOverride, type VideoField } from "./VideoField.tsx";
 export {
   toPuckFields,
   type YextComponentConfig,
+  type YextTransformedProps,
+  type ResolvedComprehensiveCTAValue,
   type LayoutGenerationMetadata,
   type YextArrayField,
   type YextFields,
@@ -66,3 +72,4 @@ export {
 export { YextPuckFieldOverrides } from "./fieldOverrides.ts";
 
 export { YextAutoField } from "./YextAutoField.tsx";
+export { createYextFieldTransforms } from "./fieldTransforms/index.ts";

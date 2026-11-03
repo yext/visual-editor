@@ -5,6 +5,8 @@ import {
 } from "../../types/types.ts";
 import { createItemSource } from "./index.ts";
 import { ITEM_SOURCE_SELF_FIELD } from "./itemSourceTypes.ts";
+import { createYextFieldTransforms } from "../../fields/fieldTransforms/index.ts";
+import { toPuckFields } from "../../fields/fields.ts";
 
 type ArticleItemProps = {
   title: {
@@ -515,20 +517,29 @@ describe("createItemSource", () => {
 
   it.each([
     {
+      field: "$item",
       constantValueEnabled: false,
       expected: { url: "https://example.com/source.jpg" },
     },
     {
+      field: "$item",
+      constantValueEnabled: true,
+      expected: { url: "https://example.com/manual.jpg" },
+    },
+    { field: "", constantValueEnabled: false, expected: undefined },
+    { field: "", constantValueEnabled: undefined, expected: undefined },
+    {
+      field: "",
       constantValueEnabled: true,
       expected: { url: "https://example.com/manual.jpg" },
     },
   ])(
-    "when a direct mapping has constant mode $constantValueEnabled then it uses the selected value",
-    ({ constantValueEnabled, expected }) => {
+    "when a direct mapping uses '$field' with constant mode $constantValueEnabled then it uses the selected value",
+    ({ field, constantValueEnabled, expected }) => {
       const source = createItemSource<{
         image: {
           field: string;
-          constantValueEnabled: boolean;
+          constantValueEnabled?: boolean;
           constantValue: { url: string };
         };
       }>({
@@ -542,23 +553,38 @@ describe("createItemSource", () => {
         },
       });
 
-      expect(
-        source.resolveItems(
-          {
-            field: "images",
-            constantValueEnabled: false,
-            constantValue: [],
-            mappings: {
-              image: {
-                field: "$item",
-                constantValueEnabled,
-                constantValue: { url: "https://example.com/manual.jpg" },
-              },
-            },
+      const value = {
+        field: "images",
+        constantValueEnabled: false,
+        constantValue: [],
+        mappings: {
+          image: {
+            field,
+            constantValueEnabled,
+            constantValue: { url: "https://example.com/manual.jpg" },
           },
-          { locale: "en", images: [{ url: "https://example.com/source.jpg" }] }
-        )
+        },
+      };
+      const streamDocument = {
+        locale: "en",
+        images: [{ url: "https://example.com/source.jpg" }],
+      };
+      const authored = structuredClone(value);
+      expect(source.resolveItems(value, streamDocument)).toEqual([
+        { image: expected },
+      ]);
+      expect(
+        createYextFieldTransforms(streamDocument, "en").custom({
+          field: toPuckFields({ images: { ...source.field, transform: true } })
+            .images,
+          value,
+          componentId: "test",
+          propName: "images",
+          propPath: "images",
+          isReadOnly: true,
+        })
       ).toEqual([{ image: expected }]);
+      expect(value).toEqual(authored);
     }
   );
   it.each([
@@ -599,6 +625,24 @@ describe("createItemSource", () => {
           },
           { items: [item] }
         )
+      ).toEqual([{ value: item }]);
+      expect(
+        createYextFieldTransforms({ items: [item] }, "en").custom({
+          field: toPuckFields({ value: { ...source.field, transform: true } })
+            .value,
+          value: {
+            field: "items",
+            constantValueEnabled: false,
+            constantValue: [],
+            mappings: {
+              value: { field: "$item", constantValueEnabled: false },
+            },
+          },
+          componentId: "test",
+          propName: "value",
+          propPath: "value",
+          isReadOnly: true,
+        })
       ).toEqual([{ value: item }]);
     }
   );

@@ -52,6 +52,8 @@ export type MultiSelectorOptions<T extends MultiSelectorOptionValue> =
 export type MultiSelectorField<T extends MultiSelectorOptionValue = any> =
   BaseField & {
     type: "multiSelector";
+    /** Returns the selected values as an array before rendering. */
+    transform?: boolean;
     label: string | MsgString;
     dropdownLabel: string | MsgString;
     options: MultiSelectorOptions<T>;
@@ -69,14 +71,17 @@ const getDefaultSelection = <
   value: undefined,
 });
 
-/** A multi-select field whose options may be static or loaded from a function. */
-export const MultiSelectorFieldOverride = <T extends MultiSelectorOptionValue>({
+/**
+ * A multi-select field whose options may be static or loaded from a function.
+ * Its declaration is available when the field registry initializes.
+ */
+export function MultiSelectorFieldOverride<T extends MultiSelectorOptionValue>({
   field,
   value,
   onChange,
   id,
   readOnly,
-}: MultiSelectorFieldProps<T>) => {
+}: MultiSelectorFieldProps<T>) {
   const allOptions =
     typeof field.options === "function" ? field.options() : field.options;
   const selectedValues = value?.selections ?? [];
@@ -104,7 +109,7 @@ export const MultiSelectorFieldOverride = <T extends MultiSelectorOptionValue>({
       />
     </div>
   );
-};
+}
 
 const MultiSelectorArrayField = <T extends MultiSelectorOptionValue>(
   options: MultiSelectorOption<T>[],

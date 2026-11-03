@@ -11,6 +11,8 @@ import { pt, type MsgString } from "../utils/i18n/platform.ts";
 
 export type VideoField = BaseField & {
   type: "video";
+  /** Resolves embedded fields in the video asset before rendering. */
+  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
 };

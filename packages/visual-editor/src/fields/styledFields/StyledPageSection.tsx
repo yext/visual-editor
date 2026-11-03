@@ -38,6 +38,8 @@ type VerticalPaddingValue =
 
 export type StyledPageSectionField = BaseField & {
   type: "styledPageSection";
+  /** Converts authored width and padding choices into CSS styles. */
+  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
 };
