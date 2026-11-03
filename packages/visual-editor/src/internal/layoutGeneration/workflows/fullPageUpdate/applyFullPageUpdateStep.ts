@@ -118,8 +118,9 @@ export const applyFullPageUpdateStep = <T extends Content>(
         catalog.data.components[component.type]?.permissions?.[permission] ===
           false) ||
       !can(permission, component)
-    )
+    ) {
       throw new Error(`Editor permission denied: ${permission}`);
+    }
   };
   if (owner?.readOnly?.content)
     throw new Error("Cannot insert into a read-only slot.");

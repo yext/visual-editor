@@ -301,11 +301,17 @@ export const materializeSectionEdit = <T extends Content>(
         throw new Error("Component type is not permitted in this collection.");
       }
       requirePermission("edit", owner ?? null);
-      if (!managed) requirePermission("insert", owner ?? null);
+      if (!managed) {
+        requirePermission("insert", owner ?? null);
+      }
       const component = createComponent(operation.component);
-      if (!managed) requirePermission("insert", component);
+      if (!managed) {
+        requirePermission("insert", component);
+      }
       if (sectionCollection) {
-        if (!existingSection) component.props.id = task.sectionId;
+        if (!existingSection) {
+          component.props.id = task.sectionId;
+        }
         insertedSection = true;
       }
       items.splice(anchorIndex(items, operation.anchor), 0, component);

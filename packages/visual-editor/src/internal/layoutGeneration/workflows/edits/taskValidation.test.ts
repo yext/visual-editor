@@ -173,8 +173,11 @@ it.each([true, false])(
         },
       ]
     );
-    if (removeFirst) insert.dependsOn = [remove.taskId];
-    else remove.dependsOn = [insert.taskId];
+    if (removeFirst) {
+      insert.dependsOn = [remove.taskId];
+    } else {
+      remove.dependsOn = [insert.taskId];
+    }
     expect(() =>
       validateEditPlan(
         fixture.catalog,
