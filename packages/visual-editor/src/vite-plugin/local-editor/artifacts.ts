@@ -4,12 +4,11 @@ import type { SectionLibraryLayout } from "../../types/sectionLibrary.ts";
 import {
   buildLocalEditorDataTemplatePath,
   buildLocalEditorDataTemplateSource,
-  DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH,
   isGeneratedLocalEditorTemplate,
   LEGACY_LOCAL_EDITOR_DATA_TEMPLATE_PATH,
   LOCAL_EDITOR_DATA_TEMPLATE_PREFIX,
-  toAbsoluteLocalEditorPath,
 } from "./generatedFiles.ts";
+import type { ResolvedLocalEditorLayoutConfig } from "./types.ts";
 import { writeFileIfChanged } from "./utils.ts";
 
 const LOCAL_EDITOR_STYLESHEET_HREFS_PLACEHOLDER =
@@ -18,6 +17,7 @@ const LOCAL_EDITOR_STYLESHEET_HREFS_PLACEHOLDER =
 type CreateLocalEditorArtifactsManagerOptions = {
   localEditorTemplateSource: string;
   localEditorDataTemplateSource: string;
+  layoutGenerationEnabled?: boolean;
 };
 
 /**
@@ -30,6 +30,7 @@ type CreateLocalEditorArtifactsManagerOptions = {
 export const createLocalEditorArtifactsManager = ({
   localEditorTemplateSource,
   localEditorDataTemplateSource,
+  layoutGenerationEnabled = false,
 }: CreateLocalEditorArtifactsManagerOptions) => {
   const syncLocalEditorTemplate = (
     layouts: SectionLibraryLayout[],
@@ -44,6 +45,10 @@ export const createLocalEditorArtifactsManager = ({
     writeGeneratedTemplate(
       templatePath,
       localEditorTemplateSource
+        .replace(
+          "__LOCAL_EDITOR_LAYOUT_GENERATION_ENABLED__",
+          JSON.stringify(layoutGenerationEnabled)
+        )
         .replace(
           LOCAL_EDITOR_STYLESHEET_HREFS_PLACEHOLDER,
           JSON.stringify(readLocalEditorFontStylesheetHrefs(rootDir))
@@ -73,7 +78,8 @@ export const createLocalEditorArtifactsManager = ({
 
   const syncLocalEditorDataTemplates = (
     layouts: SectionLibraryLayout[],
-    rootDir = process.cwd()
+    rootDir = process.cwd(),
+    resolvedLayouts: ResolvedLocalEditorLayoutConfig[] = []
   ): void => {
     const activeTemplatePaths = new Set<string>();
     const layoutIdByTemplatePath = new Map<string, string>();
@@ -96,23 +102,14 @@ export const createLocalEditorArtifactsManager = ({
       } else {
         layoutIdByTemplatePath.set(templatePath, layout.metadata.id);
       }
-      const streamConfigPath = path
-        .relative(
-          path.dirname(templatePath),
-          toAbsoluteLocalEditorPath(
-            rootDir,
-            DEFAULT_LOCAL_EDITOR_STREAM_CONFIG_PATH
-          )
-        )
-        .split(path.sep)
-        .join("/");
+      const stream = resolvedLayouts.find(
+        (resolvedLayout) => resolvedLayout.layoutId === layout.metadata.id
+      )?.stream;
       writeGeneratedTemplate(
         templatePath,
         buildLocalEditorDataTemplateSource(
           localEditorDataTemplateSource,
-          streamConfigPath.startsWith(".")
-            ? streamConfigPath
-            : `./${streamConfigPath}`,
+          stream,
           layout.metadata.id,
           layout.metadata.pageSetType
         )

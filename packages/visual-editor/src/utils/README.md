@@ -261,6 +261,7 @@ or manual item order.
 - `field`: one repeated `entityField` definition
 - `defaultValue`: default authored state for linked and manual modes
 - `defaultWrapperProps`: helper-owned default wrapper props for `data` and `CardSlot`
+- `generation`: opt-in slotted-source metadata for `generation.slottedItemSource`
 - `value`: helper-owned prop type marker for `typeof itemSource.value`
 - `resolveItems(value, streamDocument)`: render-ready repeated items
 - `populateSlots(data, streamDocument)`: updated wrapper data with `CardSlot`

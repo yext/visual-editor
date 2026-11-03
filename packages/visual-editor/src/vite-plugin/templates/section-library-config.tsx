@@ -6,6 +6,9 @@ import {
   MainContent,
   type SectionConfig,
 } from "@yext/visual-editor";
+import { withGenerationCatalog } from "@yext/visual-editor/section-library-support";
+import { catalogs } from "./catalog";
+
 /* SECTION_LIBRARY_IMPORTS */
 /* SECTION_LIBRARY_SHARED_COMPONENT_REGISTRY */
 
@@ -81,32 +84,35 @@ const rootAllowedComponentIds = hasSharedComponentRegistry
   ? sharedRootAllowedComponentIds[pageSetType]
   : undefined;
 
-export const sectionLibraryConfig: Config = {
-  components,
-  categories: {
-    structure: {
-      title: "Structure",
-      visible: false,
-      components: ["MainContent"],
+export const sectionLibraryConfig: Config = withGenerationCatalog(
+  {
+    components,
+    categories: {
+      structure: {
+        title: "Structure",
+        visible: false,
+        components: ["MainContent"],
+      },
+      /* SECTION_LIBRARY_CATEGORIES */
     },
-    /* SECTION_LIBRARY_CATEGORIES */
+    root: sharedRootConfig
+      ? {
+          ...sharedRootConfig,
+          render: () => (
+            <DropZone
+              zone="default-zone"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                minHeight: "100vh",
+              }}
+              disallow={Object.keys(components).filter(
+                (componentId) => !rootAllowedComponentIds?.includes(componentId)
+              )}
+            />
+          ),
+        }
+      : defaultRoot,
   },
-  root: sharedRootConfig
-    ? {
-        ...sharedRootConfig,
-        render: () => (
-          <DropZone
-            zone="default-zone"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              minHeight: "100vh",
-            }}
-            disallow={Object.keys(components).filter(
-              (componentId) => !rootAllowedComponentIds?.includes(componentId)
-            )}
-          />
-        ),
-      }
-    : defaultRoot,
-};
+  catalogs[__SECTION_LIBRARY_LAYOUT_ID__]
+);

@@ -1,3 +1,5 @@
+import type { SlottedItemSourceGenerationMetadata } from "../utils/itemSource/itemSourceTypes.ts";
+import type { z } from "zod";
 import { createElement, type ReactElement } from "react";
 import type {
   ArrayField,
@@ -78,6 +80,12 @@ export type YextFieldDefinition<ValueType = any> =
       ? YextObjectField<ValueType>
       : never);
 
+/** Provides a formal zod type describing the props for AI layout generation. */
+export type LayoutGenerationMetadata = {
+  props: z.ZodObject;
+  slottedItemSource?: SlottedItemSourceGenerationMetadata;
+};
+
 export type YextComponentConfig<
   Props extends DefaultComponentProps = DefaultComponentProps,
 > = Omit<
@@ -88,6 +96,7 @@ export type YextComponentConfig<
   "fields" | "resolveFields"
 > & {
   fields?: YextFields<Props>;
+  layoutGenerationMetadata?: LayoutGenerationMetadata;
   resolveFields?: ComponentConfig<{
     props: Props;
     fields: YextPuckFields;

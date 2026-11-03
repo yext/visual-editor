@@ -1,3 +1,4 @@
+import type { IncomingMessage } from "node:http";
 import { getLocalEditorDocument, getLocalEditorManifest } from "./data.ts";
 import { MAX_LOCAL_EDITOR_DIRECTORY_CHILD_COUNT } from "./fixtureData.ts";
 import { LOCAL_EDITOR_API_BASE_PATH } from "./generatedFiles.ts";
@@ -54,6 +55,47 @@ export const sendJsonResponse = (
   response.statusCode = statusCode;
   response.setHeader("Content-Type", "application/json");
   response.end(JSON.stringify(payload));
+};
+
+type JsonRequestBody =
+  | { ok: true; payload: unknown; bodyBytes: number }
+  | { ok: false; status: 400 | 413; bodyBytes: number; parseError?: string };
+
+/** Read parsed middleware bodies or bounded UTF-8 streams using the same limits. */
+export const readJsonRequestBody = async (
+  request: IncomingMessage & { body?: unknown },
+  maxBytes: number
+): Promise<JsonRequestBody> => {
+  let body: string;
+  let bodyBytes = 0;
+  if (request.body !== undefined) {
+    body = Buffer.isBuffer(request.body)
+      ? request.body.toString("utf8")
+      : typeof request.body === "string"
+        ? request.body
+        : JSON.stringify(request.body);
+    bodyBytes = Buffer.byteLength(body, "utf8");
+  } else {
+    const chunks: Buffer[] = [];
+    for await (const chunk of request) {
+      const buffer = Buffer.from(chunk);
+      bodyBytes += buffer.length;
+      if (bodyBytes > maxBytes) return { ok: false, status: 413, bodyBytes };
+      chunks.push(buffer);
+    }
+    body = Buffer.concat(chunks).toString("utf8");
+  }
+  if (bodyBytes > maxBytes) return { ok: false, status: 413, bodyBytes };
+  try {
+    return { ok: true, payload: JSON.parse(body), bodyBytes };
+  } catch (error) {
+    return {
+      ok: false,
+      status: 400,
+      bodyBytes,
+      parseError: error instanceof Error ? error.message : String(error),
+    };
+  }
 };
 
 const isLocalEditorManifestRequest = (requestUrl: URL): boolean => {

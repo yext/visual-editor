@@ -79,6 +79,8 @@ export type Purpose = (typeof purposes)[number];
 
 /** A layout for use with entity page sets. */
 export type EntityLayoutMetadata = {
+  /** Sections to include in fresh generation unless the user requests otherwise. */
+  defaultGenerationSectionIds?: string[];
   /** The internal id of the entity layout. */
   id: string;
   /** The user-facing display name of the layout. */
@@ -92,6 +94,8 @@ export type EntityLayoutMetadata = {
 
 /** A layout for use with directory page sets. */
 export type DirectoryLayoutMetadata = {
+  /** Sections to include in fresh generation unless the user requests otherwise. */
+  defaultGenerationSectionIds?: string[];
   /** The internal id of the directory layout. */
   id: string;
   /** The user-facing display name of the layout. */
@@ -101,6 +105,8 @@ export type DirectoryLayoutMetadata = {
 
 /** A layout for use with locator page sets. */
 export type LocatorLayoutMetadata = {
+  /** Sections to include in fresh generation unless the user requests otherwise. */
+  defaultGenerationSectionIds?: string[];
   /** The internal id of the locator layout. */
   id: string;
   /** The user-facing display name of the layout. */

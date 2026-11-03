@@ -34,6 +34,7 @@ export {
   type CreateSlottedItemSourceOptions,
   type ItemSourceInstance,
   type SlottedItemSourceInstance,
+  type SlottedItemSourceGenerationMetadata,
 } from "./itemSource/index.ts";
 export {
   createSearchAnalyticsConfig,
