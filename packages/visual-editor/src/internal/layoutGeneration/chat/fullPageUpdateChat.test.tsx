@@ -1,5 +1,5 @@
 import type { Data } from "@puckeditor/core";
-import { act, cleanup, renderHook } from "@testing-library/react";
+import { act, cleanup, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { createPuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
 import type { Content } from "../shared/authoredValues.ts";
@@ -37,6 +37,7 @@ const setup = (componentLabel?: (type: string) => string) => {
   const commit = vi.fn((next: Data, _baseline: Data) => {
     data = next;
   });
+  const resolve = vi.fn(async (candidate: Data) => candidate);
   act(() => {
     hook.result.current.canvas.attach({
       read: () => data,
@@ -45,7 +46,7 @@ const setup = (componentLabel?: (type: string) => string) => {
         heading: "Section 1 · Heading",
         second: "Section 2 · Heading",
       }),
-      resolve: async (candidate) => candidate,
+      resolve,
       validate: vi.fn(),
       preview: (next) => {
         data = next;
@@ -61,12 +62,102 @@ const setup = (componentLabel?: (type: string) => string) => {
         ) as Data,
     });
   });
-  return { ...hook, commit, initial, data: () => data };
+  return { ...hook, commit, resolve, initial, data: () => data };
 };
 const success = (steps: FullPageUpdateStep[] = []) => ({
   type: "fullPageUpdated" as const,
   text: "Page updated.",
   result: { action: "fullPageUpdate" as const, steps },
+});
+
+it("keeps intent planning active through removals and keeps, then clears it before resolution", async () => {
+  const current = setup();
+  current.data().content[0].props.content.push({
+    type: "Heading",
+    props: { id: "kept", text: "Unchanged" },
+  });
+  const deferred = () => {
+    let release!: () => void;
+    const promise = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    return { promise, release };
+  };
+  const allowUpdates = deferred();
+  const allowResolution = deferred();
+  const allowCompletion = deferred();
+  const steps: FullPageUpdateStep[] = [
+    { kind: "remove", sectionId: "heading" },
+    { kind: "keep", sectionId: "kept" },
+    {
+      kind: "replace",
+      sectionId: "second",
+      sections: [{ type: "Heading", props: { id: "new", text: "Ready" } }],
+    },
+  ];
+  vi.mocked(executeGeneration).mockImplementationOnce(
+    async (
+      _payload,
+      _environment,
+      _signal,
+      _id,
+      _content,
+      onStep,
+      onSection
+    ) => {
+      await onStep!(steps[0], 0);
+      await onStep!(steps[1], 1);
+      await allowUpdates.promise;
+      await onSection!("second");
+      await onStep!(steps[2], 2);
+      await allowCompletion.promise;
+      return success(steps);
+    }
+  );
+  let pending!: ReturnType<typeof current.result.current.generateIntent>;
+  act(() => {
+    pending = current.result.current.generateIntent("Focus the page");
+  });
+  await waitFor(() =>
+    expect(current.result.current.messages.at(-1)?.sections).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ action: "removed", status: "applied" }),
+        expect.objectContaining({ action: "unchanged", status: "applied" }),
+      ])
+    )
+  );
+  expect(current.result.current.isPlanningIntentPage).toBe(true);
+  expect(current.data().content[0].props.content).toHaveLength(2);
+  const resolveUpdate = vi.fn(async (candidate: Data) => {
+    await allowResolution.promise;
+    return candidate;
+  });
+  current.resolve.mockImplementationOnce(resolveUpdate);
+  await act(async () => {
+    allowUpdates.release();
+  });
+  await waitFor(() => expect(resolveUpdate).toHaveBeenCalledOnce());
+  expect(current.result.current.isPlanningIntentPage).toBe(false);
+  expect(current.data().content[0].props.content[0].props.text).toBe("Second");
+  expect(current.result.current.messages.at(-1)?.sections).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({ action: "removed", status: "applied" }),
+      expect.objectContaining({ action: "unchanged", status: "applied" }),
+      expect.objectContaining({ action: "updated", status: "generating" }),
+    ])
+  );
+  await act(async () => {
+    allowResolution.release();
+  });
+  await waitFor(() =>
+    expect(current.data().content[0].props.content[0].props.text).toBe("Ready")
+  );
+  expect(current.result.current.isPlanningIntentPage).toBe(false);
+  expect(current.result.current.isStreaming).toBe(true);
+  await act(async () => {
+    allowCompletion.release();
+    await pending;
+  });
 });
 
 it("updates populated intent pages and reports completion after committing", async () => {
@@ -92,10 +183,12 @@ it("updates populated intent pages and reports completion after committing", asy
   expect(current.result.current.messages.at(-1)?.sections).toEqual([
     expect.objectContaining({
       description: "Removed this section.",
+      action: "removed",
       status: "applied",
     }),
     expect.objectContaining({
       description: "No change applied to this section.",
+      action: "unchanged",
       status: "skipped",
     }),
   ]);
@@ -125,6 +218,7 @@ it.each(["Event details", undefined])(
       expect.arrayContaining([
         expect.objectContaining({
           label: `New section · ${label ?? "Heading"}`,
+          action: "updated",
           status: "applied",
         }),
       ])

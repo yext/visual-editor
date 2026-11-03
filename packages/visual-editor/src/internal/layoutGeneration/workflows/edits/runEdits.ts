@@ -29,7 +29,7 @@ type EditProgress =
   | {
       phase: "section";
       task: SectionEditTask;
-      status: "generating" | "retrying" | "queued" | "applying";
+      status: "generating" | "retrying" | "readyToApply" | "applying";
     };
 
 /** Capture selection once, then execute each task against the latest canvas. */

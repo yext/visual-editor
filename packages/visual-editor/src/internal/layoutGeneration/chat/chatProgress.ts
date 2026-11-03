@@ -10,13 +10,15 @@ export type SectionTaskProgress = {
   label: string;
   /** A plain-language description of the requested change. */
   description: string;
+  /** The section action, independent of execution status. */
+  action: "removed" | "unchanged" | "updated";
   /** The current stage or final outcome of the task. */
   status:
-    | "pending"
+    | "queued"
     | "waiting"
     | "generating"
     | "retrying"
-    | "queued"
+    | "readyToApply"
     | "applying"
     | SectionTaskOutcome["status"];
   /** A short explanation when the task finishes. */

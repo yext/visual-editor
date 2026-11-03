@@ -618,6 +618,183 @@ describe("section edit permissions and preservation", () => {
   });
 });
 
+describe("declared resolved props", () => {
+  const resolvedCatalog = (paths: string[]) => {
+    const result = catalog();
+    result.data.components.Card.generation = {
+      ...result.data.components.Card.generation!,
+      resolvedProps: paths,
+    };
+    return result;
+  };
+
+  it.each([
+    [true, false],
+    [false, true],
+  ])(
+    "preserves declared nested booleans from %s to %s and saved siblings",
+    (before, after) => {
+      const candidate = page();
+      find(candidate, "first-a").props.data = {
+        showPhoneNumber: before,
+        customization: "Keep",
+      };
+      const resolved = clone(candidate);
+      find(resolved, "first-a").props.data = {
+        showPhoneNumber: after,
+        customization: "Changed",
+      };
+      const restored = preserveSectionEditResolution(
+        resolvedCatalog(["/data/showPhoneNumber"]),
+        resolved,
+        candidate
+      );
+      expect(find(restored, "first-a").props.data).toEqual({
+        showPhoneNumber: after,
+        customization: "Keep",
+      });
+      expect(find(candidate, "first-a").props.data.showPhoneNumber).toBe(
+        before
+      );
+      expect(find(resolved, "first-a").props.data.customization).toBe(
+        "Changed"
+      );
+    }
+  );
+
+  it("preserves multiple declared paths across nested and top-level props", () => {
+    const candidate = page();
+    Object.assign(find(candidate, "first-a").props, {
+      parentData: { variant: "gallery", customization: "Keep" },
+      desktopContentAlignment: "left",
+      mobileContentAlignment: "left",
+    });
+    const resolved = clone(candidate);
+    Object.assign(find(resolved, "first-a").props, {
+      parentData: { variant: "carousel", customization: "Changed" },
+      desktopContentAlignment: "center",
+      mobileContentAlignment: "right",
+    });
+    const restored = preserveSectionEditResolution(
+      resolvedCatalog([
+        "/parentData/variant",
+        "/desktopContentAlignment",
+        "/mobileContentAlignment",
+      ]),
+      resolved,
+      candidate
+    );
+    expect(find(restored, "first-a").props).toMatchObject({
+      parentData: { variant: "carousel", customization: "Keep" },
+      desktopContentAlignment: "center",
+      mobileContentAlignment: "right",
+    });
+  });
+
+  it("distinguishes explicit undefined from removed values and missing ancestors", () => {
+    const candidate = page();
+    find(candidate, "first-a").props.parentData = {
+      explicit: "Old",
+      removed: "Old",
+      customization: "Keep",
+    };
+    find(candidate, "first-b").props.parentData = { removed: "Old" };
+    const resolved = clone(candidate);
+    find(resolved, "first-a").props.parentData = { explicit: undefined };
+    delete find(resolved, "first-b").props.parentData;
+    const restored = preserveSectionEditResolution(
+      resolvedCatalog(["/parentData/explicit", "/parentData/removed"]),
+      resolved,
+      candidate
+    );
+    const parentData = find(restored, "first-a").props.parentData;
+    expect(parentData).toEqual({ explicit: undefined, customization: "Keep" });
+    expect(Object.hasOwn(parentData, "explicit")).toBe(true);
+    expect(Object.hasOwn(parentData, "removed")).toBe(false);
+    expect(find(restored, "first-b").props.parentData).toEqual({});
+    expect(find(candidate, "first-a").props.parentData.removed).toBe("Old");
+  });
+
+  it.each([
+    {
+      before: ["Keep", "Remove"],
+      after: ["Keep"],
+      path: "/items/1",
+      expected: ["Keep"],
+    },
+    {
+      before: ["Remove", "Keep", "Sibling"],
+      after: [],
+      path: "/items/0",
+      expected: ["Keep", "Sibling"],
+    },
+  ])(
+    "removes resolved array elements without holes at $path",
+    ({ before, after, path, expected }) => {
+      const candidate = page();
+      find(candidate, "first-a").props.items = before;
+      const resolved = clone(candidate);
+      find(resolved, "first-a").props.items = after;
+      const restored = preserveSectionEditResolution(
+        resolvedCatalog([path]),
+        resolved,
+        candidate
+      );
+      expect(find(restored, "first-a").props.items).toStrictEqual(expected);
+      expect(find(candidate, "first-a").props.items).toStrictEqual(before);
+      expect(find(resolved, "first-a").props.items).toStrictEqual(after);
+    }
+  );
+
+  it("creates missing parents and clones resolved values", () => {
+    const candidate = page();
+    delete find(candidate, "first-a").props.parentData;
+    const resolved = clone(candidate);
+    find(resolved, "first-a").props.parentData = {
+      nested: { values: [false] },
+    };
+    const restored = preserveSectionEditResolution(
+      resolvedCatalog(["/parentData/nested"]),
+      resolved,
+      candidate
+    );
+    find(restored, "first-a").props.parentData.nested.values.push(true);
+    expect(find(resolved, "first-a").props.parentData.nested.values).toEqual([
+      false,
+    ]);
+    expect(Object.hasOwn(find(candidate, "first-a").props, "parentData")).toBe(
+      false
+    );
+  });
+
+  it("rejects authored changes even when the path is declared resolved", () => {
+    const candidate = page();
+    const resolved = clone(candidate);
+    find(resolved, "first-a").props.text.defaultValue = "Changed";
+    expect(() =>
+      preserveSectionEditResolution(
+        resolvedCatalog(["/text/defaultValue"]),
+        resolved,
+        candidate
+      )
+    ).toThrow("Resolution changed authored state");
+  });
+
+  it.each(["invalid", "/parentData/~2", "/__proto__/polluted"])(
+    "rejects unsafe or invalid pointers: %s",
+    (path) => {
+      const candidate = page();
+      expect(() =>
+        preserveSectionEditResolution(
+          resolvedCatalog([path]),
+          clone(candidate),
+          candidate
+        )
+      ).toThrow("Invalid authored edit");
+    }
+  );
+});
+
 describe("card source edit consistency", () => {
   it("updates and reorders manual cards while preserving child Ids and mirroring storage", async () => {
     const fixture = slottedFixture();

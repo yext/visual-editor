@@ -412,6 +412,39 @@ export const materializeSectionEdit = <T extends Content>(
   return candidate;
 };
 
+/** Copy only the declared resolved path, retaining saved sibling customization. */
+const preserveResolvedProp = (
+  target: Record<string, any>,
+  source: Record<string, any> | undefined,
+  [key, ...rest]: string[]
+): void => {
+  const hasValue = !!source && Object.hasOwn(source, key);
+  const value = hasValue ? source[key] : undefined;
+  if (!rest.length) {
+    if (hasValue) {
+      target[key] = clone(value);
+    } else if (Array.isArray(target)) {
+      target.splice(Number(key), 1);
+    } else {
+      delete target[key];
+    }
+    return;
+  }
+
+  const childSource =
+    value !== null && typeof value === "object" ? value : undefined;
+  const childTarget = Object.hasOwn(target, key) ? target[key] : undefined;
+  if (childTarget === null || typeof childTarget !== "object") {
+    if (!childSource) {
+      return;
+    }
+    target[key] = Array.isArray(childSource) ? [] : {};
+  } else {
+    target[key] = clone(childTarget);
+  }
+  preserveResolvedProp(target[key], childSource, rest);
+};
+
 /** Verify authored resolution, then restore existing opaque values and editor metadata. */
 export const preserveSectionEditResolution = <T extends Content>(
   catalog: PuckGenerationCatalog,
@@ -454,6 +487,9 @@ export const preserveSectionEditResolution = <T extends Content>(
         children.length,
         ...children.map((child, index) => restore(child, actualChildren[index]))
       );
+    }
+    for (const path of config.generation.resolvedProps ?? []) {
+      preserveResolvedProp(component.props, actual.props, editPath(path));
     }
     return component;
   };

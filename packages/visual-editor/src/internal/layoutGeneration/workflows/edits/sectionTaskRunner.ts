@@ -27,7 +27,7 @@ type RunnerOptions = {
   onOutcome: (outcome: SectionTaskOutcome) => void;
   onProgress?: (
     task: SectionEditTask,
-    status: "generating" | "retrying" | "queued"
+    status: "generating" | "retrying" | "readyToApply"
   ) => void;
 };
 
@@ -72,7 +72,7 @@ export const runSectionTasks = async (options: RunnerOptions) => {
             ? undefined
             : await options.generate(task, controller.signal, feedback);
         controller.signal.throwIfAborted();
-        options.onProgress?.(task, "queued");
+        options.onProgress?.(task, "readyToApply");
         try {
           await options.commit(task, result, controller.signal);
         } catch (cause) {
@@ -126,7 +126,7 @@ export const runSectionTasks = async (options: RunnerOptions) => {
             "skipped",
             pt(
               "layoutGenerationChat.requiredTaskFailed",
-              "A required task did not apply."
+              "A prerequisite task failed."
             )
           );
         } else if (
@@ -150,7 +150,7 @@ export const runSectionTasks = async (options: RunnerOptions) => {
           "cancelled",
           pt(
             "layoutGenerationChat.applicationStopped",
-            "Stopped before application completed."
+            "Cancelled before any changes were applied"
           )
         );
       }

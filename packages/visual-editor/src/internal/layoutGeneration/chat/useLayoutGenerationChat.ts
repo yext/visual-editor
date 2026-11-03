@@ -43,6 +43,7 @@ export const useLayoutGenerationChat = (
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = React.useState(false);
   const [isGeneratingPage, setIsGeneratingPage] = React.useState(false);
+  const [isPlanningIntentPage, setIsPlanningIntentPage] = React.useState(false);
   const [error, setError] = React.useState<Error | null>(null);
   const [canvas] = React.useState(() => new LayoutGenerationChatCanvas());
   canvas.catalog = environment?.catalog;
@@ -107,6 +108,7 @@ export const useLayoutGenerationChat = (
     activeRequest.current = null;
     setIsStreaming(false);
     setIsGeneratingPage(false);
+    setIsPlanningIntentPage(false);
   }, [canvas]);
   canvas.onError = (cause) => {
     cancel();
@@ -214,12 +216,15 @@ export const useLayoutGenerationChat = (
       const building = [...progress.values()].some(
         (section) =>
           section.sectionId === task.sectionId &&
-          ["generating", "retrying", "queued", "applying"].includes(
+          ["generating", "retrying", "readyToApply", "applying"].includes(
             section.status
           )
       );
-      if (building) canvas.buildingSection(task.sectionId);
-      else canvas.clearBuildingSection(task.sectionId);
+      if (building) {
+        canvas.buildingSection(task.sectionId);
+      } else {
+        canvas.clearBuildingSection(task.sectionId);
+      }
 
       const applied = [...progress.values()].filter(
         (item) => item.status === "applied"
@@ -268,7 +273,7 @@ export const useLayoutGenerationChat = (
             status: "cancelled",
             message: pt(
               "layoutGenerationChat.applicationStopped",
-              "Stopped before application completed."
+              "Cancelled before any changes were applied"
             ),
           }
       );
@@ -363,6 +368,7 @@ export const useLayoutGenerationChat = (
       },
     ]);
     setIsStreaming(true);
+    setIsPlanningIntentPage(isIntent);
     setError(null);
 
     const request: GenerationRequestExecutor = (
@@ -379,13 +385,37 @@ export const useLayoutGenerationChat = (
         correlationId,
         onCreationContent,
         onFullPageUpdateStep,
-        onFullPageUpdateSection
+        onFullPageUpdateSection &&
+          (async (sectionId) => {
+            const taskId = `section-${sectionId}`;
+            const section = progress.get(taskId);
+            if (active() && section && section.status !== "applied") {
+              progress.set(taskId, {
+                ...section,
+                action: "updated",
+                status: "generating",
+                description: pt(
+                  "layoutGenerationChat.updateSection",
+                  "Update this section."
+                ),
+              });
+              showProgress(
+                pt(
+                  "layoutGenerationChat.fullPageUpdateInProgress",
+                  "Updating page…"
+                )
+              );
+            }
+            await onFullPageUpdateSection(sectionId);
+          })
       );
     try {
       const selectedComponentId = canvas.selectedComponentId;
       const currentData = canvas.begin();
       const blank = isBlankGenerationPage(currentData);
-      if (isIntent) updatingFullPage = true;
+      if (isIntent) {
+        updatingFullPage = true;
+      }
       const fresh = !updatingFullPage && blank;
       setIsGeneratingPage(fresh || updatingFullPage);
       const sectionLabels = fresh ? {} : canvas.sectionLabels;
@@ -395,9 +425,10 @@ export const useLayoutGenerationChat = (
             taskId: `section-${sectionId}`,
             sectionId,
             label,
+            action: "unchanged",
             description: pt(
               "layoutGenerationChat.waitingForDecision",
-              "Waiting for a section decision."
+              "Awaiting section plan"
             ),
             status: "waiting",
           });
@@ -432,8 +463,15 @@ export const useLayoutGenerationChat = (
         const result = await runFullPageUpdate({
           ...turn,
           canvas,
+          onPreviewReveal: () => {
+            if (active()) {
+              setIsPlanningIntentPage(false);
+            }
+          },
           onProgress: (step, count) => {
-            if (!active()) return;
+            if (!active()) {
+              return;
+            }
             fullPageUpdatedSteps = count;
             const sectionId =
               step.kind === "insert" ? `insert-${count}` : step.sectionId;
@@ -473,7 +511,8 @@ export const useLayoutGenerationChat = (
             };
             const waitingKey = `section-${sectionId}`;
             const taskId =
-              progress.get(waitingKey)?.status === "waiting"
+              progress.has(waitingKey) &&
+              progress.get(waitingKey)?.status !== "applied"
                 ? waitingKey
                 : `fullPageUpdate-${count}`;
             progress.set(taskId, {
@@ -481,6 +520,12 @@ export const useLayoutGenerationChat = (
               sectionId,
               label,
               description: descriptions[step.kind],
+              action:
+                step.kind === "remove"
+                  ? "removed"
+                  : step.kind === "keep"
+                    ? "unchanged"
+                    : "updated",
               status: "applied",
             });
             diagnostics.current.phase = "streaming-fullPageUpdate";
@@ -491,7 +536,7 @@ export const useLayoutGenerationChat = (
             showProgress(
               pt(
                 "layoutGenerationChat.fullPageUpdateProgress",
-                "Page update steps completed: {{count}}…",
+                "Steps completed: {{count}}...",
                 {
                   count,
                 }
@@ -594,6 +639,13 @@ export const useLayoutGenerationChat = (
                 progress.set(task.taskId, {
                   taskId: task.taskId,
                   sectionId: task.sectionId,
+                  action: task.structuralOperations.some(
+                    (operation) =>
+                      operation.kind === "remove" &&
+                      operation.componentId === task.sectionId
+                  )
+                    ? "removed"
+                    : "updated",
                   label:
                     sectionLabels[task.sectionId] ??
                     (insertion?.kind === "insert"
@@ -617,7 +669,7 @@ export const useLayoutGenerationChat = (
                       "layoutGenerationChat.updateSection",
                       "Update this section."
                     ),
-                  status: task.dependsOn.length ? "waiting" : "pending",
+                  status: task.dependsOn.length ? "waiting" : "queued",
                 });
               });
               showProgress(
@@ -657,8 +709,8 @@ export const useLayoutGenerationChat = (
       if (updatingFullPage) {
         complete(
           pt(
-            "layoutGenerationChat.fullPageUpdateStopped",
-            "Page update stopped. Steps completed: {{count}}. Remaining sections kept.",
+            "layoutGenerationChat.fullPageUpdateCancelled",
+            "Page update cancelled. Steps completed: {{count}}. Remaining sections kept.",
             {
               count: fullPageUpdatedSteps,
             }
@@ -667,10 +719,7 @@ export const useLayoutGenerationChat = (
         );
       } else if (plan) {
         completeEdits(
-          pt(
-            "layoutGenerationChat.requestStopped",
-            "Request stopped before completion."
-          )
+          pt("layoutGenerationChat.requestCancelled", "Request cancelled.")
         );
       } else {
         canvas.onDiagnostic("creation-stopped", {
@@ -692,6 +741,7 @@ export const useLayoutGenerationChat = (
         finalizeCancelled.current = null;
         setIsStreaming(false);
         setIsGeneratingPage(false);
+        setIsPlanningIntentPage(false);
       }
     }
     return false;
@@ -700,6 +750,7 @@ export const useLayoutGenerationChat = (
     messages,
     isStreaming,
     isGeneratingPage,
+    isPlanningIntentPage,
     send: async (prompt: string) => {
       await run(prompt, "chat");
     },

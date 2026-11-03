@@ -81,7 +81,11 @@ export const compileFullPageUpdateSchema = (
       }),
       z.strictObject({
         action: z.literal("fullPageUpdate"),
-        steps: z.array(stepSchema),
+        steps: z
+          .array(stepSchema)
+          .describe(
+            "Plan all section decisions before generating updated content. Emit all remove steps first, then explicit keep steps for every unchanged section, before any reorder, replace, or insert steps. The canvas is revealed after removals and keeps, before updates begin. Use surviving sections as anchors."
+          ),
       }),
     ]),
     text: z.string(),
@@ -100,10 +104,11 @@ export const compileFullPageUpdateSchema = (
     const wire = JSON.stringify({ translationMode, step });
     const previous = cache.get(index);
     if (previous) {
-      if (previous.wire !== wire)
+      if (previous.wire !== wire) {
         throw new Error(
           "The full-page update changed an already streamed step."
         );
+      }
       return clone(previous.step);
     }
     if (step.sections) {
@@ -198,10 +203,12 @@ export const compileFullPageUpdateSchema = (
             await onSection?.(step.sectionId);
           }
         }
-        if (path.length !== 3 || path[0] !== "result" || path[1] !== "steps")
+        if (path.length !== 3 || path[0] !== "result" || path[1] !== "steps") {
           return;
-        if (parser.value.result.action !== "fullPageUpdate")
+        }
+        if (parser.value.result.action !== "fullPageUpdate") {
           throw new Error("Expected full-page update action before steps.");
+        }
         const translationMode = z
           .enum(["defaultOnly", "translate"])
           .parse(parser.value.translationMode);
@@ -215,12 +222,14 @@ export const compileFullPageUpdateSchema = (
     parseResponse: (text: string) => {
       const parsed = responseSchema.parse(JSON.parse(text)) as any;
       if (parsed.result.action === "clarification") {
-        if (cache.size)
+        if (cache.size) {
           throw new Error("Clarification cannot follow streamed changes.");
+        }
         return { text: parsed.text, result: parsed.result };
       }
-      if (cache.size > parsed.result.steps.length)
+      if (cache.size > parsed.result.steps.length) {
         throw new Error("The full-page update omitted streamed steps.");
+      }
       return {
         text: parsed.text,
         result: {

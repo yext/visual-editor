@@ -59,7 +59,9 @@ export class IntentPageGenerationWorkflow {
   };
   snapshot = () => this.state;
   openAssistantOnce = () => {
-    if (this.assistantOpened) return false;
+    if (this.assistantOpened) {
+      return false;
+    }
     this.assistantOpened = true;
     return true;
   };
@@ -95,9 +97,13 @@ export class IntentPageGenerationWorkflow {
     );
   }
   suppressSave = (hash?: string) => {
-    if (this.blocked) return true;
+    if (this.blocked) {
+      return true;
+    }
     // Once history moves away, undo/redo must save normally again.
-    if (hash !== this.savedHash) this.savedHash = undefined;
+    if (hash !== this.savedHash) {
+      this.savedHash = undefined;
+    }
     return !!hash && hash === this.savedHash;
   };
   captureDraft = (draft: IntentDraft) => {
@@ -114,17 +120,27 @@ export class IntentPageGenerationWorkflow {
     const attempt = this.attempt;
     if (!attempt) {
       if (generation?.status === "RUNNING") {
-        if (this.state.stage !== "interrupted") this.interrupted();
+        if (this.state.stage !== "interrupted") {
+          this.interrupted();
+        }
       } else if (this.state.stage === "interrupted") {
         this.update("idle");
       }
       return;
     }
-    if (!generation?.attemptId) return;
-    if (this.state.stage === "completed" && generation.attemptId === attempt.id)
+    if (!generation?.attemptId) {
       return;
+    }
+    if (
+      this.state.stage === "completed" &&
+      generation.attemptId === attempt.id
+    ) {
+      return;
+    }
     // Parent metadata can repeat the pending state from before this attempt started.
-    if (generation.attemptId === attempt.previousAttemptId) return;
+    if (generation.attemptId === attempt.previousAttemptId) {
+      return;
+    }
     if (generation.attemptId !== attempt.id || generation.status === "FAILED") {
       this.stop(
         generation.status === "FAILED"
@@ -133,11 +149,13 @@ export class IntentPageGenerationWorkflow {
               "Page generation failed."
             )
           : pt(
-              "layoutGenerationChat.generationStopped",
-              "Page generation stopped."
+              "layoutGenerationChat.generationCancelled",
+              "Page generation cancelled."
             )
       );
-      if (generation.status === "RUNNING") this.interrupted();
+      if (generation.status === "RUNNING") {
+        this.interrupted();
+      }
     } else if (generation.status === "COMPLETED") {
       this.finish(attempt);
     }
@@ -147,7 +165,9 @@ export class IntentPageGenerationWorkflow {
   }
   restart = () => {
     const generation = this.generation;
-    if (!this.canRestart || this.state.busy || !generation?.prompt) return;
+    if (!this.canRestart || this.state.busy || !generation?.prompt) {
+      return;
+    }
     this.attempted = true;
     const attempt: Attempt = {
       id: crypto.randomUUID(),
@@ -166,8 +186,9 @@ export class IntentPageGenerationWorkflow {
       this.generation?.status !== "PENDING" ||
       this.layoutId === undefined ||
       !this.generation.prompt?.trim()
-    )
+    ) {
       return;
+    }
     this.attempted = true; // Synchronous guard, before any await or React update.
     const attempt: Attempt = {
       id: crypto.randomUUID(),
@@ -190,17 +211,24 @@ export class IntentPageGenerationWorkflow {
   };
   cancel = () => {
     const attempt = this.attempt;
-    if (!attempt || !["generating", "clarification"].includes(this.state.stage))
+    if (
+      !attempt ||
+      !["generating", "clarification"].includes(this.state.stage)
+    ) {
       return;
+    }
     attempt.cancelled = true;
     this.cancelGeneration();
-    if (this.state.stage === "clarification")
+    if (this.state.stage === "clarification") {
       void this.perform(attempt, "fail");
+    }
     // The generation promise settles before fail is sent, keeping lifecycle calls serial.
   };
   dispose = () => {
     this.controller?.abort();
-    if (this.attempt) this.attempt.cancelled = true;
+    if (this.attempt) {
+      this.attempt.cancelled = true;
+    }
     this.attempt = undefined;
     this.cancelGeneration();
   };
@@ -213,7 +241,9 @@ export class IntentPageGenerationWorkflow {
     this.update(stage, false, message);
   }
   private finish(attempt: Attempt) {
-    if (!this.active(attempt)) return;
+    if (!this.active(attempt)) {
+      return;
+    }
     this.savedHash = attempt.draft?.hash;
     this.controller?.abort();
     this.cancelGeneration();
@@ -253,14 +283,15 @@ export class IntentPageGenerationWorkflow {
       generation.status !== expected
     ) {
       throw new Error(
-        reply.payload?.message ??
-          "The parent has not confirmed the expected generation state."
+        reply.payload?.message ?? "Error receiving the generation state"
       );
     }
   }
   /** Handle terminal start/recheck replies before generating or saving output. */
   private confirmRunning(reply: IntentReply, attempt: Attempt) {
-    if (!this.active(attempt)) return false;
+    if (!this.active(attempt)) {
+      return false;
+    }
     if (reply.status === "success") {
       if (reply.payload?.generation?.status === "COMPLETED") {
         this.finish(attempt);
@@ -278,10 +309,13 @@ export class IntentPageGenerationWorkflow {
   }
   answer = async (prompt: string) => {
     const attempt = this.attempt;
-    if (!attempt || this.state.stage !== "clarification" || !prompt.trim())
+    if (!attempt || this.state.stage !== "clarification" || !prompt.trim()) {
       return;
+    }
     const operation = await this.generateAttempt(attempt, prompt, true);
-    if (operation) await this.perform(attempt, operation);
+    if (operation) {
+      await this.perform(attempt, operation);
+    }
   };
   private async generateAttempt(
     attempt: Attempt,
@@ -297,7 +331,9 @@ export class IntentPageGenerationWorkflow {
     } catch {
       // Persist actual generation failures using the current attempt identity.
     }
-    if (!this.active(attempt) || this.state.stage === "completed") return;
+    if (!this.active(attempt) || this.state.stage === "completed") {
+      return;
+    }
     if (result === "clarification" && !attempt.cancelled) {
       this.update("clarification");
       return;
@@ -318,23 +354,29 @@ export class IntentPageGenerationWorkflow {
           "start",
           attempt.explicitRetry
         );
-        if (!this.confirmRunning(reply, attempt)) return;
+        if (!this.confirmRunning(reply, attempt)) {
+          return;
+        }
         const outcome = await this.generateAttempt(attempt, attempt.prompt);
-        if (!outcome) return;
+        if (!outcome) {
+          return;
+        }
         operation = outcome;
         attempt.recovery = operation === "save" ? operation : undefined;
       }
       if (operation === "fail") {
         const reply = await this.lifecycle(attempt, "fail");
-        if (!this.active(attempt)) return;
+        if (!this.active(attempt)) {
+          return;
+        }
         this.validate(reply, attempt, "FAILED");
         this.update(
           "failed",
           false,
           attempt.cancelled
             ? pt(
-                "layoutGenerationChat.generationStopped",
-                "Page generation stopped."
+                "layoutGenerationChat.generationCancelled",
+                "Page generation cancelled."
               )
             : pt(
                 "layoutGenerationChat.generationFailed",
@@ -346,7 +388,9 @@ export class IntentPageGenerationWorkflow {
       if (operation === "save") {
         // Reconcile identity before every save, including retries of retained output.
         const current = await this.lifecycle(attempt, "start");
-        if (!this.confirmRunning(current, attempt)) return;
+        if (!this.confirmRunning(current, attempt)) {
+          return;
+        }
         attempt.recovery = "complete"; // An unanswered save has an ambiguous durable outcome.
         attempt.saveOutcome = "unknown";
         this.update("saving", true);
@@ -362,11 +406,12 @@ export class IntentPageGenerationWorkflow {
           attempt.id,
           this.controller.signal
         );
-        if (!this.active(attempt)) return;
+        if (!this.active(attempt)) {
+          return;
+        }
         if (!reply.payload?.attemptId) {
           this.stop(
-            reply.payload?.message ??
-              "This layout cannot save intent generation."
+            reply.payload?.message ?? "Unable to save the generated layout."
           );
           return;
         }
@@ -376,24 +421,30 @@ export class IntentPageGenerationWorkflow {
         } else if (reply.payload.layoutSaved === true) {
           attempt.saveOutcome = "saved";
         }
-        if (reply.status === "error")
+        if (reply.status === "error") {
           throw new Error(
             reply.payload.message ?? "Unable to save the generated layout."
           );
-        if (reply.payload.layoutSaved !== true)
-          throw new Error("The parent has not confirmed the draft save.");
+        }
+        if (reply.payload.layoutSaved !== true) {
+          throw new Error("Error saving the generated layout");
+        }
         this.validate(reply, attempt, "COMPLETED");
         this.finish(attempt);
         return;
       }
       if (operation === "complete") {
         const reply = await this.lifecycle(attempt, "complete");
-        if (!this.active(attempt)) return;
+        if (!this.active(attempt)) {
+          return;
+        }
         this.validate(reply, attempt, "COMPLETED");
         this.finish(attempt);
       }
     } catch (error) {
-      if (!this.active(attempt) || this.state.stage === "completed") return;
+      if (!this.active(attempt) || this.state.stage === "completed") {
+        return;
+      }
       if (operation === "start" || operation === "fail") {
         if (operation === "start" && attempt.explicitRetry) {
           this.dispose();
