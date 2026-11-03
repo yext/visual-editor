@@ -6,8 +6,50 @@ import {
   EntityTooltipsProvider,
   useEntityTooltips,
 } from "./EntityField.tsx";
+import { toPuckFields, type YextFieldMap } from "../fields/fields.ts";
+import { getTransformedFieldSources } from "../internal/puck/components/TransformedFieldTooltip.tsx";
 
 describe("Entity Tooltips", () => {
+  it.each([false, true])(
+    "collects only opted-in sources when fields are adapted: %s",
+    (adapted) => {
+      const fields = {
+        title: {
+          type: "entityField",
+          label: "Title",
+          filter: { types: ["type.string"] },
+          transform: true,
+        },
+        subtitle: { type: "translatableString", transform: true },
+        legacy: {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+        },
+        disabled: { type: "translatableString", transform: false },
+        html: { type: "code", codeLanguage: "html" },
+        css: { type: "code", codeLanguage: "css" },
+        javascript: { type: "code", codeLanguage: "javascript" },
+        color: { type: "themeColor", options: "SITE_COLOR" },
+      } satisfies YextFieldMap;
+
+      expect(
+        getTransformedFieldSources(adapted ? toPuckFields(fields) : fields, {
+          title: { field: "name", constantValueEnabled: false },
+          subtitle: { defaultValue: "Subtitle" },
+          legacy: { field: "description", constantValueEnabled: false },
+          disabled: { defaultValue: "Disabled" },
+          html: "<p>Content</p>",
+          css: "p { color: red; }",
+          javascript: "console.log('Content');",
+          color: { selectedColor: "palette-primary" },
+        })
+      ).toEqual([
+        { label: "Title", field: "name" },
+        { label: "subtitle", field: undefined },
+      ]);
+    }
+  );
+
   it("renders the children and displays a tooltip when tooltips are toggled", () => {
     const TestComponent = () => {
       const tooltipsContext = useEntityTooltips();

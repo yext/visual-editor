@@ -28,7 +28,11 @@ export function getTransformedFieldSources(
     const value = values[key];
     const propPath = path ? `${path}.${key}` : key;
     const authoredField = getTransformField(field);
-    if (authoredField) {
+    if (
+      authoredField &&
+      "transform" in authoredField &&
+      authoredField.transform === true
+    ) {
       const source =
         authoredField.type === "comprehensiveCTA" ? value?.data?.cta : value;
       return [

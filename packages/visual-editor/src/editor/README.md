@@ -212,7 +212,8 @@ and renders a localized string. Styled fields render CSS style objects that can
 be passed to React's `style` prop. Code fields always transform: HTML uses
 Handlebars, JavaScript resolves embedded fields, and CSS remains authored.
 The built-in `CustomCodeSection` uses those render values. Renderers using the
-component directly through Puck must pass `createYextFieldTransforms`, as
+component directly through Puck must pass
+`fieldTransforms={createYextFieldTransforms(streamDocument, locale)}`, as
 `VisualEditorRender` does.
 
 To support another opt-in field, add its `transform?: boolean` option, a handler in
@@ -249,17 +250,23 @@ const fields = {
 } satisfies YextFieldMap<AuthoredProps>;
 
 // In the component's render function:
-<ComprehensiveCTA value={primaryCta} />
-<VideoAtom
-  youTubeEmbedUrl={video.video.embeddedUrl}
-  title={video.video.title}
-/>
-{cards.map((card, index) => (
-  <article key={index}>
-    <h2>{card.title}</h2>
-    <MaybeRTF data={card.description} />
-  </article>
-))}
+<ComprehensiveCTA value={primaryCta} />;
+{
+  video && (
+    <VideoAtom
+      youTubeEmbedUrl={video.video.embeddedUrl}
+      title={video.video.title}
+    />
+  );
+}
+{
+  cards.map((card, index) => (
+    <article key={index}>
+      <h2>{card.title}</h2>
+      <MaybeRTF data={card.description} />
+    </article>
+  ));
+}
 ```
 
 With the repeated source opted in, the render function no longer needs to call
