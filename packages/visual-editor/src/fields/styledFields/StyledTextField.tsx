@@ -1,7 +1,7 @@
 import React from "react";
 import { BaseField, type FieldProps } from "@puckeditor/core";
 import { pt, type MsgString } from "../../utils/i18n/platform.ts";
-import { BasicSelectorFieldOverride } from "../BasicSelectorField.tsx";
+import { ThemeColorFieldOverride } from "../ThemeColorField.tsx";
 import { type ThemeColor } from "../../utils/themeConfigOptions.ts";
 import {
   BaseTextStyles,
@@ -16,6 +16,8 @@ export type StyledTextValue = BaseTextStyles & {
 
 export type StyledTextField = BaseField & {
   type: "styledText";
+  /** Converts authored typography and color choices into CSS styles. */
+  transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
   includeColor?: boolean;
@@ -60,9 +62,9 @@ export const StyledTextFieldOverride = ({
             typographyOptions={typographyOptions}
           />
           {field.includeColor ? (
-            <BasicSelectorFieldOverride
+            <ThemeColorFieldOverride
               field={{
-                type: "basicSelector",
+                type: "themeColor",
                 label: field.colorLabel ?? pt("fields.fontColor", "Font Color"),
                 options: "SITE_COLOR",
               }}

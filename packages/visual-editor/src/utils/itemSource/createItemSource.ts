@@ -25,17 +25,24 @@ import { resolveItemValue } from "./itemSourceResolution.ts";
  * 3. Resolves linked or manual items into render-ready values without writing
  *    derived data back onto component props.
  */
-export function createItemSource<TItemProps extends Record<string, unknown>>({
+export function createItemSource<
+  TItemProps extends Record<string, unknown>,
+  const MappingFields extends YextFieldMap<TItemProps> =
+    YextFieldMap<TItemProps>,
+>({
   label,
   mappingFields,
   defaultValues,
-}: CreateItemSourceOptions<TItemProps>): ItemSourceInstance<TItemProps> {
+}: CreateItemSourceOptions<TItemProps, MappingFields>): ItemSourceInstance<
+  TItemProps,
+  MappingFields
+> {
   const scopedMappingFields = Object.fromEntries(
     Object.entries(mappingFields).map(([key, field]) => [
       key,
       getMappingItemField(field as YextFieldDefinition<any>),
     ])
-  ) as YextFieldMap<TItemProps>;
+  ) as MappingFields;
   const manualItemFields = Object.fromEntries(
     Object.entries(scopedMappingFields).map(([key, field]) => [
       key,
@@ -68,7 +75,7 @@ export function createItemSource<TItemProps extends Record<string, unknown>>({
       defaultItemValue,
       defaultMappings,
     },
-  } satisfies RepeatedEntityFieldDefinition<TItemProps>;
+  } satisfies RepeatedEntityFieldDefinition<TItemProps, MappingFields>;
   const defaultValue: RepeatedEntityFieldValue<TItemProps> = {
     field: "",
     constantValueEnabled: true,

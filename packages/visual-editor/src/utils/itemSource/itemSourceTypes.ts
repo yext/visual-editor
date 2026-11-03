@@ -17,6 +17,7 @@ export const ITEM_SOURCE_SELF_FIELD = "$item";
  */
 export type CreateItemSourceOptions<
   TItemProps extends Record<string, unknown>,
+  MappingFields extends YextFieldMap<TItemProps> = YextFieldMap<TItemProps>,
 > = {
   /** Label shown above the item source controls. */
   label: string;
@@ -26,7 +27,7 @@ export type CreateItemSourceOptions<
    * A list can be selected when its item type or a child field matches any
    * mapping field filter.
    */
-  mappingFields: YextFieldMap<TItemProps>;
+  mappingFields: MappingFields;
   /** Initial manual items. The first item is also the template for new items. */
   defaultValues?: TItemProps[];
 };
@@ -37,8 +38,9 @@ export type RepeatedEntityFieldValue<
 
 export type RepeatedEntityFieldMetadata<
   TItemProps extends Record<string, unknown>,
+  MappingFields extends YextFieldMap<TItemProps> = YextFieldMap<TItemProps>,
 > = {
-  mappingFields: YextFieldMap<TItemProps>;
+  mappingFields: MappingFields;
   manualItemFields: YextFieldMap<TItemProps>;
   defaultItemValue: TItemProps;
   defaultMappings: TItemProps;
@@ -47,8 +49,9 @@ export type RepeatedEntityFieldMetadata<
 
 export type RepeatedEntityFieldDefinition<
   TItemProps extends Record<string, unknown>,
+  MappingFields extends YextFieldMap<TItemProps> = YextFieldMap<TItemProps>,
 > = EntityFieldSelectorField<RepeatedEntityFieldValue<TItemProps>> & {
-  repeated: RepeatedEntityFieldMetadata<TItemProps>;
+  repeated: RepeatedEntityFieldMetadata<TItemProps, MappingFields>;
 };
 
 /**
@@ -67,8 +70,11 @@ export type ResolvedItemField<TValue> =
 /**
  * Public contract returned by `createItemSource(...)`.
  */
-export type ItemSourceInstance<TItemProps extends Record<string, unknown>> = {
-  field: YextFieldDefinition<RepeatedEntityFieldValue<TItemProps>>;
+export type ItemSourceInstance<
+  TItemProps extends Record<string, unknown>,
+  MappingFields extends YextFieldMap<TItemProps> = YextFieldMap<TItemProps>,
+> = {
+  field: RepeatedEntityFieldDefinition<TItemProps, MappingFields>;
   defaultValue: RepeatedEntityFieldValue<TItemProps>;
   value: RepeatedEntityFieldValue<TItemProps>;
   resolveItems: (

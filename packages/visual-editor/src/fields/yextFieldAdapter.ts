@@ -9,7 +9,10 @@ export const adaptYextField = (
   renderYextField: YextFieldRender
 ): Field<any> => {
   if (isYextOverrideType(field.type)) {
-    return renderYextField(field as YextPuckField);
+    return {
+      ...renderYextField(field as YextPuckField),
+      metadata: { ...field.metadata, yextField: field },
+    };
   }
 
   if (field.type === "object" && "objectFields" in field) {
