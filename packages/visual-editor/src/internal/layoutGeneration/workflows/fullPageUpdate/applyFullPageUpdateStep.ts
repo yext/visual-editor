@@ -113,7 +113,12 @@ export const applyFullPageUpdateStep = <T extends Content>(
     permission: keyof Permissions,
     component: SavedComponent | null
   ) => {
-    if (!can(permission, component))
+    if (
+      (component &&
+        catalog.data.components[component.type]?.permissions?.[permission] ===
+          false) ||
+      !can(permission, component)
+    )
       throw new Error(`Editor permission denied: ${permission}`);
   };
   if (owner?.readOnly?.content)
@@ -122,6 +127,7 @@ export const applyFullPageUpdateStep = <T extends Content>(
   requirePermission("insert", owner ?? null);
   const additions = clone(step.sections);
   for (const component of additions) {
+    requirePermission("insert", component);
     if (
       component.type === "MainContent" ||
       !destination.allowedInsertionTypes.includes(component.type)
@@ -134,7 +140,6 @@ export const applyFullPageUpdateStep = <T extends Content>(
     inventory.components.map((item) => item.componentId)
   );
   walkAuthored(catalog, { content: additions }, ({ component }) => {
-    requirePermission("insert", component);
     if (!component.props.id || reserved.has(component.props.id))
       throw new Error(
         "Generated component identity is missing or already in use."

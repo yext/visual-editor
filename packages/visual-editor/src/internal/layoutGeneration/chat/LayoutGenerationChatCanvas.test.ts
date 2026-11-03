@@ -10,7 +10,9 @@ import type {
   SectionEditResult,
   SectionEditTask,
 } from "../workflows/edits/types.ts";
+import { compileSectionEditSchema } from "../workflows/edits/compileSectionEditSchema.ts";
 import { clone } from "../shared/authoredValues.ts";
+import { fullPageUpdateSessionFixture } from "../testing/fullPageUpdateFixtures.ts";
 import {
   LayoutGenerationChatCanvas,
   serializeChatLayout,
@@ -85,6 +87,66 @@ const sectionAdapter = () => {
 };
 
 describe("progressive section commits", () => {
+  it("keeps the original section when replacement resolution fails and commits both operations on success", async () => {
+    const canvas = new LayoutGenerationChatCanvas();
+    const { target, history } = sectionAdapter();
+    const catalog = createPuckGenerationCatalog({
+      Heading: { generation: { props: z.object({ text: z.string() }) } },
+    });
+    const task: SectionEditTask = {
+      ...sectionTask("replace"),
+      targetComponentIds: [],
+      structuralOperations: [
+        {
+          kind: "insert",
+          insertionKey: "replacement",
+          componentType: "Heading",
+          collection: { ownerId: null, slotPath: null },
+          anchor: { position: "before", componentId: "heading" },
+        },
+        { kind: "remove", componentId: "heading" },
+      ],
+    };
+    const compiled = compileSectionEditSchema(catalog, [], target.read(), task);
+    const response = {
+      taskId: task.taskId,
+      sectionId: task.sectionId,
+      updates: [],
+      insertions: [
+        {
+          insertionKey: "replacement",
+          component: { type: "Heading", props: { text: "Replacement" } },
+        },
+      ],
+    };
+    const baseline = clone(target.read());
+    // Invalid generation is rejected before the canvas can apply the removal.
+    expect(() =>
+      compiled.parseResponse(JSON.stringify({ ...response, insertions: [] }))
+    ).toThrow("omitted");
+    expect(target.read()).toEqual(baseline);
+    const result = compiled.parseResponse(JSON.stringify(response));
+    canvas.attach(target);
+    canvas.begin();
+    vi.mocked(target.resolve).mockRejectedValueOnce(
+      new Error("Replacement failed")
+    );
+    await expect(canvas.commitSection(task, result)).rejects.toThrow(
+      "Replacement failed"
+    );
+    expect(target.read()).toEqual(baseline);
+    expect(target.commit).not.toHaveBeenCalled();
+    await expect(canvas.commitSection(task, result)).resolves.toBe(true);
+    expect(target.read().content.map((item) => item.props.text)).toEqual([
+      "Replacement",
+      "Second",
+    ]);
+    expect(target.read().content[0].props.id).not.toBe("heading");
+    expect(target.commit).toHaveBeenCalledOnce();
+    expect(history).toHaveLength(2);
+    expect(history[0]).toEqual(baseline);
+  });
+
   it("serializes resolution and commits against fresh baselines, keeping one history entry per section", async () => {
     const canvas = new LayoutGenerationChatCanvas();
     const { target, history } = sectionAdapter();
@@ -494,6 +556,44 @@ it("records application snapshots and catches later Puck changes without changin
   expect(diagnostic).toHaveBeenCalledTimes(count);
   expect(h.target.read()).toEqual(later);
   expect(before.content[0].props.text).toBe("Updated");
+});
+
+it("observes full-page updates and later resolution without an individual section edit", async () => {
+  const fixture = fullPageUpdateSessionFixture();
+  const canvas = new LayoutGenerationChatCanvas();
+  const diagnostic = vi.fn();
+  canvas.attach(fixture.adapter);
+  canvas.onDiagnostic = diagnostic;
+  canvas.begin();
+  canvas.beginFullPageUpdate();
+  await canvas.applyFullPageUpdate(
+    { kind: "remove", sectionId: "services" },
+    0,
+    new AbortController().signal
+  );
+  canvas.observe(fixture.data());
+  expect(diagnostic).toHaveBeenLastCalledWith(
+    "canvas-observed",
+    expect.objectContaining({
+      snapshot: fixture.data(),
+    })
+  );
+  canvas.finish();
+  const later = clone(fixture.data());
+  later.content[0].props.text = "Later resolution";
+  canvas.observe(later);
+  expect(diagnostic).toHaveBeenLastCalledWith(
+    "canvas-observed",
+    expect.objectContaining({
+      changedPaths: ["/content/0/props/text"],
+    })
+  );
+  const count = diagnostic.mock.calls.length;
+  canvas.observe(later);
+  expect(diagnostic).toHaveBeenCalledTimes(count);
+  canvas.begin();
+  canvas.observe(later);
+  expect(diagnostic.mock.calls.length).toBe(count + 1);
 });
 
 it("logs the failing section and stage when local resolution rejects an accepted result", async () => {

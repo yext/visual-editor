@@ -39,9 +39,11 @@ export const sectionEditTaskSchema = z.strictObject({
   instructions: z.string(),
   description: z.string().trim().min(1).optional(),
   translationMode: z.enum(["defaultOnly", "translate"]).optional(),
-  structuralOperations: z.array(
-    z.union([insertPlanSchema, removeSchema, reorderSchema])
-  ),
+  structuralOperations: z
+    .array(z.union([insertPlanSchema, removeSchema, reorderSchema]))
+    .describe(
+      "For a section replacement, use one existing-section task containing an insertion into the section's collection followed by removal of that section. Anchor the insertion before or after the original section. Both operations commit atomically after generation and resolution succeed. Never split a replacement into separate removal and insertion tasks."
+    ),
   dependsOn: z.array(id),
   generateContent: z.boolean().optional(),
 });

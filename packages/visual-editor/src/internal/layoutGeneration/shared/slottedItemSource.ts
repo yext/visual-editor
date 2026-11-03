@@ -16,6 +16,17 @@ import type { SavedComponent } from "./authoredValues.ts";
 export const isLinkedSource = (props: Record<string, any>): boolean =>
   !props.data?.constantValueEnabled && !!props.data?.field;
 
+/** Manual list structure is edited through the source field, independently of Puck DnD. */
+export const isManagedCardCollection = (
+  catalog: PuckGenerationCatalog,
+  owner: SavedComponent | undefined,
+  slotPath: string | null
+): boolean =>
+  !!owner &&
+  slotPath === "/slots/CardSlot" &&
+  !!catalog.data.components[owner.type]?.generation?.slottedItemSource &&
+  !isLinkedSource(owner.props);
+
 /** Apply generation-only restrictions without modifying the editor's fields. */
 export const generationFields = (config: GenerationComponent): Fields => {
   const fields = config.fields ?? {};

@@ -102,6 +102,7 @@ export class LayoutGenerationChatCanvas {
     }
     this.notify();
   }
+  private observeFullPageUpdate = false;
   private lastObserved?: Data;
   private lastApplied?: { taskId: string; sectionId: string };
   onDiagnostic: (phase: string, details: Record<string, unknown>) => void =
@@ -138,7 +139,7 @@ export class LayoutGenerationChatCanvas {
   }
   /** Record Puck changes after history commits, including resolution after the turn ends. */
   observe(data: Data) {
-    if (!this.lastApplied) {
+    if (!this.lastApplied && !this.observeFullPageUpdate) {
       return;
     }
     try {
@@ -163,6 +164,7 @@ export class LayoutGenerationChatCanvas {
   }
   attach(adapter: ChatCanvasAdapter) {
     this.finish();
+    this.observeFullPageUpdate = false;
     this.lastApplied = undefined;
     this.lastObserved = undefined;
     this.adapter = adapter;
@@ -190,6 +192,7 @@ export class LayoutGenerationChatCanvas {
     this.adapter.beginPresentation?.();
     this.sectionStatuses = new Map();
     this.notify();
+    this.observeFullPageUpdate = false;
     this.lastApplied = undefined;
     this.lastObserved = undefined;
     this.diagnose("turn-start", data);
@@ -272,6 +275,7 @@ export class LayoutGenerationChatCanvas {
       },
       this.baseline
     );
+    this.observeFullPageUpdate = true;
   }
   async prepareFullPageUpdateSection(sectionId: string, signal: AbortSignal) {
     if (!this.fullPageUpdate)

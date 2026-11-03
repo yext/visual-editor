@@ -14,6 +14,7 @@ import type {
   SectionEditTask,
 } from "./types.ts";
 import { sameCollection, validateTaskGraph } from "./utils.ts";
+import { isManagedCardCollection } from "../../shared/slottedItemSource.ts";
 import { editPath } from "./applyEditsToComponent.ts";
 
 /** Include current read-only fields and static permissions in planning context. */
@@ -31,8 +32,14 @@ export const buildPlanningContext = (
   for (const item of inventory.components) {
     const permissions = catalog.data.components[item.type]?.permissions;
     item.editable &&= permissions?.edit !== false;
-    item.canRemove &&= permissions?.delete !== false;
-    item.canReorder &&= permissions?.drag !== false;
+    const owner = item.parentId ? saved.get(item.parentId) : undefined;
+    const managed = isManagedCardCollection(
+      catalog,
+      owner,
+      item.collection.slotPath
+    );
+    item.canRemove &&= managed || permissions?.delete !== false;
+    item.canReorder &&= managed || permissions?.drag !== false;
   }
   for (const collection of inventory.collections) {
     const owner = collection.ownerId
@@ -41,19 +48,27 @@ export const buildPlanningContext = (
     const permissions = owner
       ? catalog.data.components[owner.type]?.permissions
       : undefined;
+    const managed = isManagedCardCollection(
+      catalog,
+      owner,
+      collection.slotPath
+    );
     const topField = collection.slotPath
       ? editPath(collection.slotPath)[0]
       : undefined;
     if (
       permissions?.edit === false ||
-      permissions?.insert === false ||
+      (!managed && permissions?.insert === false) ||
+      (managed && owner?.readOnly?.data) ||
       (topField && owner?.readOnly?.[topField])
     ) {
       collection.allowedInsertionTypes = [];
     } else {
       collection.allowedInsertionTypes =
         collection.allowedInsertionTypes.filter(
-          (name) => catalog.data.components[name].permissions?.insert !== false
+          (name) =>
+            managed ||
+            catalog.data.components[name].permissions?.insert !== false
         );
     }
   }
@@ -107,7 +122,10 @@ const checkTask = (
   };
   let newSections = 0;
   const seen = new Set<string>();
-  for (const operation of task.structuralOperations) {
+  for (const [
+    operationIndex,
+    operation,
+  ] of task.structuralOperations.entries()) {
     const key =
       operation.kind === "insert"
         ? `insert:${operation.insertionKey}`
@@ -136,8 +154,29 @@ const checkTask = (
       }
       if (sectionCollection) {
         newSections++;
-        if (section) {
-          throw new Error("A new section requires its own task.");
+        if (
+          section &&
+          (newSections > 1 ||
+            !sameCollection(section.collection, operation.collection) ||
+            !task.structuralOperations.some(
+              (operation) =>
+                operation.kind === "remove" &&
+                operation.componentId === task.sectionId
+            ))
+        ) {
+          throw new Error(
+            "A new section requires its own task or an atomic replacement."
+          );
+        }
+        if (
+          section &&
+          task.structuralOperations.findIndex(
+            (operation) =>
+              operation.kind === "remove" &&
+              operation.componentId === task.sectionId
+          ) < operationIndex
+        ) {
+          throw new Error("Section replacement must insert before removing.");
         }
       } else if (!owner?.editable || owner.sectionId !== task.sectionId) {
         throw new Error("Insertion is outside the owning section.");
@@ -164,7 +203,13 @@ const checkTask = (
       if (
         owner &&
         topField &&
-        saved.get(owner.componentId)?.readOnly?.[topField]
+        (saved.get(owner.componentId)?.readOnly?.[topField] ||
+          (isManagedCardCollection(
+            catalog,
+            saved.get(owner.componentId),
+            target.collection.slotPath
+          ) &&
+            saved.get(owner.componentId)?.readOnly?.data))
       ) {
         throw new Error("Cannot restructure a protected slot.");
       }
@@ -245,6 +290,25 @@ export const validateEditPlan = (
   validateTaskGraph(plan.tasks);
   for (const task of plan.tasks) {
     checkTask(catalog, task, context);
+  }
+  const tasks = new Map(plan.tasks.map((task) => [task.taskId, task]));
+  const removesSection = (task: SectionEditTask) =>
+    task.structuralOperations.some(
+      (operation) =>
+        operation.kind === "remove" && operation.componentId === task.sectionId
+    );
+  for (const task of plan.tasks) {
+    for (const dependencyId of task.dependsOn) {
+      const dependency = tasks.get(dependencyId)!;
+      if (
+        (removesSection(task) && !context.byId.has(dependency.sectionId)) ||
+        (removesSection(dependency) && !context.byId.has(task.sectionId))
+      ) {
+        throw new Error(
+          "Section replacement must insert and remove in one atomic task."
+        );
+      }
+    }
   }
   if (plan.intent === "globalStyle" || plan.intent === "mixed") {
     if (!plan.globalStyleGuidance?.trim()) {

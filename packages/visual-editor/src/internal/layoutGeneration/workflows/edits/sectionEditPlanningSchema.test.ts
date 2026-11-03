@@ -816,3 +816,33 @@ describe("follow-up planning", () => {
     expect(wire.safeParse(output).success).toBe(false);
   });
 });
+
+it("plans a section replacement as one task with insertion before removal", () => {
+  const fixture = editGenerationFixture();
+  const compiled = compileEditPlanningSchema(
+    fixture.catalog,
+    ["en"],
+    fixture.data
+  );
+  const plan = editPlan([
+    editTask(
+      "first",
+      [],
+      [
+        {
+          kind: "insert",
+          insertionKey: "replacement",
+          componentType: "Section",
+          collection: { ownerId: "main", slotPath: "/content" },
+          anchor: { position: "before", componentId: "first" },
+        },
+        { kind: "remove", componentId: "first" },
+      ]
+    ),
+  ]);
+  const response = planningResponse(plan, fixture.catalog, fixture.data);
+  expect(
+    z.fromJSONSchema(compiled.jsonSchema).safeParse(response).success
+  ).toBe(true);
+  expect(compiled.parseResponse(JSON.stringify(response))).toEqual(plan);
+});
