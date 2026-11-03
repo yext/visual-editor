@@ -1,0 +1,64 @@
+import { pt } from "../../../utils/i18n/platform.ts";
+import type { SectionTaskOutcome } from "../workflows/edits/types.ts";
+
+export type SectionTaskProgress = {
+  /** The task whose progress is displayed. */
+  taskId: string;
+  /** The section associated with this task. */
+  sectionId: string;
+  /** A section name and position captured before edits start. */
+  label: string;
+  /** A plain-language description of the requested change. */
+  description: string;
+  /** The section action, independent of execution status. */
+  action: "removed" | "unchanged" | "updated";
+  /** The current stage or final outcome of the task. */
+  status:
+    | "queued"
+    | "waiting"
+    | "generating"
+    | "retrying"
+    | "readyToApply"
+    | "applying"
+    | SectionTaskOutcome["status"];
+  /** A short explanation when the task finishes. */
+  message?: string;
+};
+
+/** Summarize actual applications without repeating the planner's promises. */
+export const summarizeSectionOutcomes = (outcomes: SectionTaskOutcome[]) => {
+  const counts = (["applied", "failed", "skipped", "cancelled"] as const)
+    .map((status) => ({
+      status,
+      count: outcomes.filter((outcome) => outcome.status === status).length,
+    }))
+    .filter(({ count }) => count > 0)
+    .map(({ status, count }) => {
+      const labels = {
+        applied: pt(
+          "layoutGenerationChat.outcomes.applied",
+          "{{count}} applied",
+          { count }
+        ),
+        failed: pt("layoutGenerationChat.outcomes.failed", "{{count}} failed", {
+          count,
+        }),
+        skipped: pt(
+          "layoutGenerationChat.outcomes.skipped",
+          "{{count}} skipped",
+          { count }
+        ),
+        cancelled: pt(
+          "layoutGenerationChat.outcomes.cancelled",
+          "{{count}} cancelled",
+          { count }
+        ),
+      };
+      return labels[status];
+    });
+  return pt(
+    "layoutGenerationChat.sectionChanges",
+    "Section changes: {{outcomes}}.",
+    { outcomes: counts.join(", ") }
+  );
+};

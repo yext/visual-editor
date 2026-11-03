@@ -5,7 +5,6 @@ import type {
   TemplateConfig,
   TemplateProps,
 } from "@yext/pages";
-import localEditorStreamConfigJson from "__LOCAL_EDITOR_STREAM_CONFIG_IMPORT__";
 
 type LocalEditorStreamDefinition = {
   $id?: string;
@@ -27,7 +26,9 @@ type LocalEditorStreamDefinition = {
 };
 
 type LocalEditorStreamConfig = {
-  pageSetTypes?: Partial<Record<string, LocalEditorStreamConfig>>;
+  pageSetTypes?: Partial<
+    Record<string, { stream?: LocalEditorStreamDefinition }>
+  >;
   layouts?: Record<
     string,
     {
@@ -42,7 +43,7 @@ const localEditorDataTemplateName = "__LOCAL_EDITOR_DATA_TEMPLATE_NAME__";
 
 const normalizeLocalEditorPagesStream = (
   streamConfig?: LocalEditorStreamDefinition
-) => {
+): TemplateConfig["stream"] => {
   if (!streamConfig) {
     return undefined;
   }
@@ -60,12 +61,16 @@ const normalizeLocalEditorPagesStream = (
 
   return {
     ...streamConfig,
+    $id:
+      typeof streamConfig.$id === "string" && streamConfig.$id.trim()
+        ? streamConfig.$id
+        : `${localEditorDataTemplateName}-stream`,
     fields,
   };
 };
 
 const localEditorConfig =
-  localEditorStreamConfigJson as LocalEditorStreamConfig;
+  "__LOCAL_EDITOR_STREAM_CONFIG__" as unknown as LocalEditorStreamConfig;
 const layoutStreamConfig =
   localEditorConfig.layouts?.[localEditorLayoutId]?.stream ??
   localEditorConfig.pageSetTypes?.[localEditorPageSetType]?.stream;
@@ -96,7 +101,7 @@ export const config: TemplateConfig = localEditorStreamConfig
       name: localEditorDataTemplateName,
     };
 
-const LocalEditorData: Template = () => {
+const LocalEditorData: Template<TemplateProps> = () => {
   return null;
 };
 

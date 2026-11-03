@@ -71,14 +71,16 @@ export const verticals = [
   "PROFESSIONAL_SERVICES",
 ] as const;
 
-export type Vertical = (typeof verticals)[number];
+type Vertical = (typeof verticals)[number];
 
 export const purposes = ["LOCATION", "CITATION"] as const;
 
-export type Purpose = (typeof purposes)[number];
+type Purpose = (typeof purposes)[number];
 
 /** A layout for use with entity page sets. */
 export type EntityLayoutMetadata = {
+  /** Recommended starting sections for generation; adapt to the requested intent. */
+  defaultGenerationSectionIds?: string[];
   /** The internal id of the entity layout. */
   id: string;
   /** The user-facing display name of the layout. */
@@ -91,7 +93,9 @@ export type EntityLayoutMetadata = {
 };
 
 /** A layout for use with directory page sets. */
-export type DirectoryLayoutMetadata = {
+type DirectoryLayoutMetadata = {
+  /** Recommended starting sections for generation; adapt to the requested intent. */
+  defaultGenerationSectionIds?: string[];
   /** The internal id of the directory layout. */
   id: string;
   /** The user-facing display name of the layout. */
@@ -100,7 +104,9 @@ export type DirectoryLayoutMetadata = {
 };
 
 /** A layout for use with locator page sets. */
-export type LocatorLayoutMetadata = {
+type LocatorLayoutMetadata = {
+  /** Recommended starting sections for generation; adapt to the requested intent. */
+  defaultGenerationSectionIds?: string[];
   /** The internal id of the locator layout. */
   id: string;
   /** The user-facing display name of the layout. */

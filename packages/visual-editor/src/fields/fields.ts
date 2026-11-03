@@ -1,3 +1,5 @@
+import type { SlottedItemSourceGenerationMetadata } from "../utils/itemSource/itemSourceTypes.ts";
+import type { z } from "zod";
 import { createElement, type CSSProperties, type ReactElement } from "react";
 import type { LinkType } from "@yext/pages-components";
 import type { ResolvedThemeColor } from "../utils/colors.ts";
@@ -169,7 +171,7 @@ export type YextTransformedProps<Props, Definitions> = {
     : Props[Key];
 };
 
-export type YextPuckFields = {
+type YextPuckFields = {
   basicSelector: BasicSelectorField;
   themeColor: ThemeColorField;
   ctaSelector: CTASelectorField;
@@ -219,6 +221,14 @@ export type YextFieldDefinition<ValueType = any> =
       ? YextObjectField<ValueType>
       : never);
 
+/** Provides a formal zod type describing the props for AI layout generation. */
+export type LayoutGenerationMetadata = {
+  props: z.ZodObject;
+  /** JSON Pointer paths relative to props whose resolved values survive chat edit preservation. */
+  resolvedProps?: string[];
+  slottedItemSource?: SlottedItemSourceGenerationMetadata;
+};
+
 export type YextComponentConfig<
   Props extends DefaultComponentProps = DefaultComponentProps,
   TransformFields = {},
@@ -234,6 +244,7 @@ export type YextComponentConfig<
     fields: YextPuckFields;
   }>["render"];
   fields?: YextFields<Props>;
+  layoutGenerationMetadata?: LayoutGenerationMetadata;
   resolveFields?: ComponentConfig<{
     props: Props;
     fields: YextPuckFields;

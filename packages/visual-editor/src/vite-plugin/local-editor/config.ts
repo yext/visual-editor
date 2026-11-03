@@ -71,7 +71,8 @@ const loadLocalEditorConfig = async (
     typeof config === "object" &&
     "default" in config &&
     Object.keys(config).every(
-      (key) => key === "default" || key === "__esModule"
+      (key) =>
+        key === "default" || key === "__esModule" || key === "module.exports"
     )
   ) {
     config = config.default;

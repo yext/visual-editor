@@ -1,14 +1,31 @@
+import type { GenerationSettings } from "../../types/generationSettings.ts";
+import type { GenerationPromptBundle } from "../../types/generationPrompts.ts";
+import DOMPurify from "dompurify";
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
-import DOMPurify from "dompurify";
 import type { LocalDevOptions } from "../../editor/types.ts";
 
 export type HeadDeployStatus = "RUNNING" | "INACTIVE" | "FAILED" | "ACTIVE";
 
+export type IntentPageGeneration = {
+  prompt?: string;
+  status?: "PENDING" | "RUNNING" | "FAILED" | "COMPLETED";
+  attemptId?: string;
+};
+
+export type AiPageGeneration = {
+  prompts?: GenerationPromptBundle;
+  generationSettings?: GenerationSettings;
+  intentPageGeneration?: IntentPageGeneration;
+  layoutGenerationEnabled: boolean;
+  model: string;
+};
+
 export type TemplateMetadata = {
+  aiPageGeneration?: AiPageGeneration;
   siteId: number;
   templateId: string;
-  layoutId?: number;
+  layoutId?: string;
   entityId?: number;
   themeEntityId?: number;
   assignment: "ALL" | "ENTITY";
@@ -139,11 +156,12 @@ export function generateTemplateMetadata(
     : ["en", "es", "fr"];
 
   return {
+    aiPageGeneration: localDevOptions?.aiPageGeneration,
     siteId: 1337,
     templateId,
     entityId,
     themeEntityId: themeScopeKey ? hashCode(themeScopeKey) : undefined,
-    layoutId: hashCode(layoutScopeKey),
+    layoutId: String(hashCode(layoutScopeKey)),
     assignment: "ALL",
     isDevMode: true,
     isxYextDebug: true,

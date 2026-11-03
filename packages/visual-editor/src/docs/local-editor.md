@@ -28,6 +28,19 @@ for each Entity and Directory layout. Pages uses these templates to create
 local snapshots. The plug-in removes them when development stops and before
 production builds.
 
+## Enable Layout Generation
+
+Layout generation is disabled by default. Enable it in your Vite config:
+
+```ts
+yextVisualEditorPlugin({
+  localEditor: { enabled: true, layoutGenerationEnabled: true },
+});
+```
+
+This enables generation chat, its local endpoints, and generation logs in
+`src/library/.generated/logs`. Both flags must be enabled.
+
 ## Test Data
 
 ### ENTITY Page Sets
