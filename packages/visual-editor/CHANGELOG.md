@@ -1,3 +1,20 @@
+#### 2.0.0-beta.7 (2026-11-03)
+
+##### Chores
+
+- upgrade to puck 0.24.0 ([#1375](https://github.com/yext/visual-editor/pull/1375)) ([1aa6b158](https://github.com/yext/visual-editor/commit/1aa6b1589aaecf1b0667127b2df2ee4396f67b39))
+
+##### New Features
+
+- intent page generation ([#1372](https://github.com/yext/visual-editor/pull/1372)) ([000a24eb](https://github.com/yext/visual-editor/commit/000a24eb38e0f91d9a617e54a0a616a56243e71e))
+- layout generation ([#1370](https://github.com/yext/visual-editor/pull/1370)) ([c13ca3c0](https://github.com/yext/visual-editor/commit/c13ca3c04f852aeea1da36f34e5815e8438a4f5f))
+- add directory list textTransform ([#1371](https://github.com/yext/visual-editor/pull/1371)) ([4e0daae4](https://github.com/yext/visual-editor/commit/4e0daae412ef48d25b0405cef43745de6294c315))
+
+##### Refactors
+
+- miscellaneous layout generation follow ups ([#1376](https://github.com/yext/visual-editor/pull/1376)) ([d710d229](https://github.com/yext/visual-editor/commit/d710d229870e716196db90820b6d18a76529e9c1))
+- move prompts to alpha ([#1374](https://github.com/yext/visual-editor/pull/1374)) ([691e6efc](https://github.com/yext/visual-editor/commit/691e6efc002fb55f82541f9c4c86e40a6002f0aa))
+
 #### 2.0.0-beta.6 (2026-10-19)
 
 ##### Chores
