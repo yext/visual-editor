@@ -1,3 +1,9 @@
+#### 2.0.0-beta.9 (2026-11-04)
+
+##### Bug Fixes
+
+- handle permission changes for layout generation ([#1378](https://github.com/yext/visual-editor/pull/1378)) ([d3741c3d](https://github.com/yext/visual-editor/commit/d3741c3d0e4b78bf8f82fe0601cd4be14b7c7fc4))
+
 #### 2.0.0-beta.8 (2026-11-04)
 
 ##### New Features
