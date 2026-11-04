@@ -1,5 +1,5 @@
 import { defineYextVECommand } from "../command.ts";
-import { convertTemplatesToSectionLibrary } from "./internal/convertTemplatesToSectionLibrary.ts";
+import { convertTemplatesToSectionLibrary } from "./internal/convertTemplatesToSectionLibrary/index.ts";
 
 const usage = `Usage:
   yextve convert-template [--apply] [--delete-source]
@@ -7,8 +7,8 @@ const usage = `Usage:
 Convert every legacy template in src/registry into layouts in one Section Library.
 
 Options:
-  --apply                          Write the converted Section Library.
-  --delete-source                  Remove converted legacy templates; requires --apply.
+  --apply                          Convert the library, project config, and dependencies.
+  --delete-source                  Include legacy registry and generated templates in cleanup.
   -h, --help                       Show this help.
 `;
 
