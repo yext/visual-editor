@@ -105,9 +105,9 @@ const createLayout = (version: number): LayoutData => {
 
 const getGrid = (data: LayoutData) => {
   const grid = data.content
-    .flatMap<Data["content"][number]>((component) =>
-      component.type === "MainContent" ? component.props.content : [component]
-    )
+    .flatMap<
+      Data["content"][number]
+    >((component) => (component.type === "MainContent" ? component.props.content : [component]))
     .find((component) => component.type === "DirectoryGrid");
   expect(grid).toBeDefined();
   return grid!;
