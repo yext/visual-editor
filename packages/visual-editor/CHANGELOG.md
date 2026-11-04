@@ -1,3 +1,11 @@
+#### 1.4.14 (2026-11-04)
+
+##### Bug Fixes
+
+- deduplicate directory card ids ([#1380](https://github.com/yext/visual-editor/pull/1380)) ([b6cef838](https://github.com/yext/visual-editor/commit/b6cef83859d16e9399f2fc8ecd763135eb4e9ec1))
+- normalize locales in breadcrumbs schema ([#1362](https://github.com/yext/visual-editor/pull/1362)) ([34c557ce](https://github.com/yext/visual-editor/commit/34c557ce5da7fb98926f4cd88c00de9453497815))
+- breadcrumbs schema ([#1361](https://github.com/yext/visual-editor/pull/1361)) ([6cb5fc00](https://github.com/yext/visual-editor/commit/6cb5fc00d901ecc84caed5f41b7417dd857972ab))
+
 #### 1.4.13 (2026-10-09)
 
 ##### New Features
