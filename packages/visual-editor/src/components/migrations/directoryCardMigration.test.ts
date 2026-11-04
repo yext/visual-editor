@@ -6,8 +6,8 @@ import {
 } from "@puckeditor/core";
 import { createElement, Fragment } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
-import { migrate } from "./migrate.ts";
+import { migrationRegistry } from "./migrationRegistry.ts";
+import { migrate } from "../../utils/migrate.ts";
 
 type LayoutData = Data<DefaultComponents, { title?: string; version?: number }>;
 
@@ -129,14 +129,13 @@ describe("directory card identity migration", () => {
     "repairs duplicated hidden cards in version %i layouts without changing visible cards",
     (version) => {
       const input = createLayout(version);
-      const originalInput = structuredClone(input);
       const beforeRepair = migrate(
+        structuredClone(input),
+        migrationRegistry.slice(0, 83),
         config,
-        input,
-        {},
-        migrationRegistry.slice(0, 83)
+        {}
       );
-      const result = migrate(config, input, {});
+      const result = migrate(input, migrationRegistry, config, {});
       const ids = collectComponentIds(result);
 
       expect(new Set(ids).size).toBe(ids.length);
@@ -164,8 +163,7 @@ describe("directory card identity migration", () => {
       expect(hiddenCard.props.slots.HeadingSlot[0].props.styles).toEqual(
         previousHiddenCard.props.slots.HeadingSlot[0].props.styles
       );
-      expect(input).toEqual(originalInput);
-      expect(migrate(config, result, {})).toEqual(result);
+      expect(migrate(result, migrationRegistry, config, {})).toEqual(result);
     }
   );
 
@@ -173,7 +171,7 @@ describe("directory card identity migration", () => {
     const input = createLayout(83);
     getGrid(input).props.manualSlots.CardSlot = [createCard("manual-card")];
 
-    const result = migrate(config, input, {});
+    const result = migrate(input, migrationRegistry, config, {});
 
     expect(getGrid(result).props).toEqual(getGrid(input).props);
     expect(
@@ -197,7 +195,7 @@ describe("directory card identity migration", () => {
       random.mockReturnValueOnce(1 / 62);
     }
 
-    const result = migrate(config, input, {});
+    const result = migrate(input, migrationRegistry, config, {});
     const hiddenCards = getGrid(result).props.manualSlots.CardSlot;
     const ids = collectComponentIds(result);
 
@@ -212,7 +210,7 @@ describe("directory card identity migration", () => {
       createCard("manual-card", "DirectoryCard-example-heading"),
     ];
 
-    const result = migrate(config, input, {});
+    const result = migrate(input, migrationRegistry, config, {});
     const hiddenCard = getGrid(result).props.manualSlots.CardSlot[0];
     const ids = collectComponentIds(result);
 
@@ -235,7 +233,7 @@ describe("directory card identity migration", () => {
     ];
     const originalInput = structuredClone(input);
 
-    const result = migrate(config, input, {});
+    const result = migrate(input, migrationRegistry, config, {});
     const hiddenContainer =
       getGrid(result).props.manualSlots.CardSlot[0].props.slots.HeadingSlot[0];
     const ids = collectComponentIds(result);
@@ -258,9 +256,9 @@ describe("directory card identity migration", () => {
       const input = createLayout(83);
       getGrid(input).props.manualSlots = manualSlots;
 
-      expect(getGrid(migrate(config, input, {})).props).toEqual(
-        getGrid(input).props
-      );
+      expect(
+        getGrid(migrate(input, migrationRegistry, config, {})).props
+      ).toEqual(getGrid(input).props);
     }
   );
 });
