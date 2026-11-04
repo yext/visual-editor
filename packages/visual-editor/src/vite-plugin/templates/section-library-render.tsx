@@ -155,6 +155,17 @@ const SectionLibraryLayout: Template<TemplateRenderProps> = (props) => {
       `Section Library layout ${layoutId} has invalid layout data`
     );
   }
+  let requireAnalyticsOptIn = false;
+  if (props.document.__?.visualEditorConfig) {
+    try {
+      requireAnalyticsOptIn =
+        JSON.parse(props.document.__.visualEditorConfig)
+          ?.requireAnalyticsOptIn ?? false;
+    } catch (e) {
+      console.error("Failed to parse visualEditorConfig JSON:", e);
+    }
+  }
+
   return (
     <>
       {/* SECTION_LIBRARY_MAPBOX_ASSETS */}
@@ -162,6 +173,7 @@ const SectionLibraryLayout: Template<TemplateRenderProps> = (props) => {
         apiKey={props.document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY}
         templateData={props}
         currency="USD"
+        requireOptIn={requireAnalyticsOptIn}
       >
         <SectionLibraryVisualEditorProvider
           templateProps={props}

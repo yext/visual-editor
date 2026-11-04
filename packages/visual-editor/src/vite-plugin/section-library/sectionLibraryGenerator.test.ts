@@ -4,9 +4,11 @@ import fs from "fs-extra";
 import { createServer as createHttpServer } from "node:http";
 import os from "node:os";
 import path from "node:path";
-import { createElement } from "react";
+import { runInNewContext } from "node:vm";
+import { Children, createElement, isValidElement } from "react";
+import * as jsxRuntime from "react/jsx-runtime";
 import { renderToStaticMarkup } from "react-dom/server";
-import { createServer } from "vite";
+import { createServer, transformWithEsbuild } from "vite";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { MainContent } from "../../components/helpers/MainContent.tsx";
 import { materializeSectionEdit } from "../../internal/layoutGeneration/workflows/edits/applyEditsToLayout.ts";
@@ -763,6 +765,65 @@ describe("generateSectionLibraryFiles", () => {
     expect(renderTemplate).toContain(
       "Section Library layout ${layoutId} has invalid layout data"
     );
+  });
+
+  it("passes site analytics opt-in to the provider for every page group type", async () => {
+    const rootDir = createLibrary();
+    generateSectionLibraryFiles(rootDir, "revision");
+
+    for (const layoutId of ["location", "directory-layout", "locator-layout"]) {
+      const filePath = path.join(
+        rootDir,
+        "src",
+        "templates",
+        `${layoutId}.tsx`
+      );
+      const { code } = await transformWithEsbuild(
+        fs.readFileSync(filePath, "utf8"),
+        filePath,
+        { jsx: "automatic", format: "cjs" }
+      );
+      // Evaluate the generated template without mounting its child providers.
+      const logError = vi.fn();
+      const render = runInNewContext(`${code}\nmodule.exports.default;`, {
+        module: { exports: {} },
+        exports: {},
+        console: { error: logError },
+        require: (id: string) =>
+          id === "react/jsx-runtime"
+            ? jsxRuntime
+            : {
+                AnalyticsProvider: "analytics-provider",
+                SectionLibraryVisualEditorProvider: "visual-editor-provider",
+                GTMBody: "gtm-body",
+                VisualEditorRender: "visual-editor-render",
+              },
+      });
+
+      for (const [visualEditorConfig, expected] of [
+        [JSON.stringify({ requireAnalyticsOptIn: true }), true],
+        [JSON.stringify({ requireAnalyticsOptIn: false }), false],
+        [JSON.stringify({}), false],
+        [undefined, false],
+        ["{invalid", false],
+      ] as const) {
+        const rendered = render({
+          document: {
+            __: { layout: JSON.stringify({}), visualEditorConfig },
+          },
+        });
+        const provider = Children.toArray(rendered.props.children).find(
+          (child) =>
+            isValidElement(child) && child.type === "analytics-provider"
+        );
+        expect(provider).toHaveProperty("props.requireOptIn", expected);
+      }
+      expect(logError).toHaveBeenCalledTimes(1);
+      expect(logError).toHaveBeenCalledWith(
+        "Failed to parse visualEditorConfig JSON:",
+        expect.anything()
+      );
+    }
   });
 
   it("threads an optional repo migration registry through generated editor and render templates", () => {
