@@ -177,14 +177,14 @@ export const createGenerationSchemaCompiler = (
           "slot items must defer to registered component contracts (use z.unknown())"
         );
       }
+      // The parent slot authorizes these children. Independent insertion is
+      // permission-checked by the planning context and application boundary.
       const alternatives = Object.keys(components)
         .filter(
           (name) =>
             components[name].generation &&
             permitted(name, field) &&
-            (mode === "create" ||
-              (name !== "MainContent" &&
-                components[name].permissions?.insert !== false))
+            (mode === "create" || name !== "MainContent")
         )
         .map(element);
       if (!alternatives.length && !array.safeParse([]).success) {

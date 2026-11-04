@@ -18,6 +18,11 @@ import {
   preserveSectionEditResolution,
   structuralEditResult,
 } from "./applyEditsToLayout.ts";
+import {
+  buildPlanningContext,
+  validateSectionEditTask,
+} from "./taskValidation.ts";
+import { editTask } from "../../testing/editFixtures.ts";
 import { buildEditInventory } from "./buildEditInventory.ts";
 import type {
   NewEditComponent,
@@ -796,8 +801,94 @@ describe("declared resolved props", () => {
 });
 
 describe("card source edit consistency", () => {
+  it.each(["data", "slots"])(
+    "protects read-only %s on a managed list",
+    (field) => {
+      const fixture = slottedFixture();
+      fixture.components.FAQCard.permissions = {
+        insert: false,
+        drag: false,
+        delete: false,
+      };
+      const baseline = fixture.materialize([
+        fixture.section([fixture.card("Keep")]),
+      ]);
+      const section = baseline.content[0];
+      section.readOnly = { [field]: true };
+      const task = editTask(
+        section.props.id,
+        [],
+        [
+          {
+            kind: "remove",
+            componentId: section.props.slots.CardSlot[0].props.id,
+          },
+        ]
+      );
+      task.generateContent = false;
+      expect(() =>
+        validateSectionEditTask(fixture.catalog, baseline, task)
+      ).toThrow("protected slot");
+      expect(() =>
+        materializeSectionEdit(
+          fixture.catalog,
+          baseline,
+          task,
+          structuralEditResult(task)
+        )
+      ).toThrow("read-only slot");
+      const collection = buildPlanningContext(
+        fixture.catalog,
+        baseline
+      ).inventory.collections.find(
+        (collection) =>
+          collection.ownerId === section.props.id &&
+          collection.slotPath === "/slots/CardSlot"
+      );
+      expect(collection?.allowedInsertionTypes).toEqual([]);
+    }
+  );
+
+  it("keeps entity-linked cards and their inactive manual backup protected", async () => {
+    const fixture = slottedFixture();
+    fixture.components.FAQCard.permissions = { insert: false, drag: false };
+    const baseline = await fixture.resolve(
+      fixture.materialize([fixture.section([], fixture.linked)]),
+      {
+        locale: "en",
+        c_items: [{ name: "Linked" }],
+      }
+    );
+    const before = clone(baseline);
+    const section = baseline.content[0];
+    const context = buildPlanningContext(fixture.catalog, baseline);
+    expect(
+      context.inventory.collections
+        .filter((collection) => collection.ownerId === section.props.id)
+        .every(
+          (collection) => !collection.allowedInsertionTypes.includes("FAQCard")
+        )
+    ).toBe(true);
+    const task = editTask(
+      section.props.id,
+      [],
+      [
+        {
+          kind: "remove",
+          componentId: section.props.slots.CardSlot[0].props.id,
+        },
+      ]
+    );
+    expect(() =>
+      validateSectionEditTask(fixture.catalog, baseline, task)
+    ).toThrow("protected");
+    expect(baseline).toEqual(before);
+  });
+
   it("updates and reorders manual cards while preserving child Ids and mirroring storage", async () => {
     const fixture = slottedFixture();
+    const permissions = { insert: false, drag: false, delete: false };
+    fixture.components.FAQCard.permissions = permissions;
     const baseline = fixture.materialize([
       fixture.section([fixture.card("First"), fixture.card("Second")]),
     ]);
@@ -814,6 +905,7 @@ describe("card source edit consistency", () => {
       ],
       section.props.id
     );
+    validateSectionEditTask(fixture.catalog, baseline, editTask);
     const operations: SectionEditOperation[] = [
       update(first.props.id, "/data/question/defaultValue", "Updated"),
       ...structuralEditResult(editTask).operations,
@@ -822,8 +914,14 @@ describe("card source edit consistency", () => {
       fixture.catalog,
       baseline,
       editTask,
-      { taskId: editTask.taskId, sectionId: editTask.sectionId, operations }
+      { taskId: editTask.taskId, sectionId: editTask.sectionId, operations },
+      {
+        can: (permission, component) =>
+          component?.type !== "FAQCard" ||
+          permissions[permission as keyof typeof permissions] !== false,
+      }
     );
+    expect(fixture.components.FAQCard.permissions).toEqual(permissions);
     const cards = candidate.content[0].props.slots.CardSlot;
     expect(cards.map((card: SavedComponent) => card.props.id)).toEqual([
       second.props.id,
@@ -832,6 +930,9 @@ describe("card source edit consistency", () => {
     expect(cards[1].props.slots.BodySlot[0].props.id).toBe(
       first.props.slots.BodySlot[0].props.id
     );
+    expect(cards.map((card: SavedComponent) => card.props.index)).toEqual([
+      0, 1,
+    ]);
     expect(cards[1].props.data.question.fr).toBe("Traduction");
     expect(candidate.content[0].props.manualSlots.CardSlot).toEqual(cards);
     expect(candidate.content[0].props.data.constantValue).toEqual(

@@ -21,6 +21,8 @@ import {
 } from "./applyEditsToLayout.ts";
 import { compileEditPlanningSchema } from "./sectionEditPlanningSchema.ts";
 import { compileSectionEditSchema } from "./compileSectionEditSchema.ts";
+import { buildPlanningContext } from "./taskValidation.ts";
+import { applyFullPageUpdateStep } from "../fullPageUpdate/applyFullPageUpdateStep.ts";
 
 describe("section edit targets and values", () => {
   it.each([
@@ -1424,6 +1426,94 @@ describe("section edit localization", () => {
 });
 
 describe("section edit insertion schemas", () => {
+  it("inserts a section with required children protected from independent insertion", () => {
+    const catalog = createPuckGenerationCatalog({
+      Section: {
+        generation: {
+          props: z.object({ heading: z.array(z.unknown()).length(1) }),
+        },
+        fields: { heading: { type: "slot", allow: ["Heading"] } },
+      },
+      Heading: {
+        permissions: { insert: false, drag: false },
+        generation: { props: z.object({ text: z.string() }) },
+      },
+    });
+    const baseline: Content = { content: [] };
+    const task = editTask(
+      "new",
+      [],
+      [
+        {
+          kind: "insert",
+          insertionKey: "section",
+          componentType: "Section",
+          collection: { ownerId: null, slotPath: null },
+          anchor: { position: "end" },
+        },
+      ]
+    );
+    const compiled = compileSectionEditSchema(catalog, [], baseline, task);
+    const result = compiled.parseResponse(
+      JSON.stringify({
+        taskId: task.taskId,
+        sectionId: task.sectionId,
+        updates: [],
+        insertions: [
+          {
+            insertionKey: "section",
+            component: {
+              type: "Section",
+              props: {
+                heading: [{ type: "Heading", props: { text: "New heading" } }],
+              },
+            },
+          },
+        ],
+      })
+    );
+    const candidate = materializeSectionEdit(catalog, baseline, task, result, {
+      can: (permission, component) =>
+        permission !== "insert" || component?.type !== "Heading",
+    });
+    expect(candidate.content[0].props.heading[0].props.text).toBe(
+      "New heading"
+    );
+    const updated = applyFullPageUpdateStep(
+      catalog,
+      baseline,
+      {
+        kind: "insert",
+        collection: { ownerId: null, slotPath: null },
+        anchor: { position: "end" },
+        sections: candidate.content,
+      },
+      (permission, component) =>
+        permission !== "insert" || component?.type !== "Heading"
+    );
+    expect(updated).toEqual(candidate);
+    expect(() =>
+      applyFullPageUpdateStep(
+        catalog,
+        baseline,
+        {
+          kind: "insert",
+          collection: { ownerId: null, slotPath: null },
+          anchor: { position: "end" },
+          sections: candidate.content,
+        },
+        (permission, component) =>
+          permission !== "insert" || component?.type !== "Section"
+      )
+    ).toThrow("permission denied");
+    const context = buildPlanningContext(catalog, candidate);
+    expect(
+      context.inventory.collections.every(
+        (collection) => !collection.allowedInsertionTypes.includes("Heading")
+      )
+    ).toBe(true);
+  });
+
   it("generates only planned insertions with library defaults and explicit unsets", () => {
     const fixture = editGenerationFixture();
     const task = editTask(
@@ -1939,6 +2029,12 @@ describe("section edit insertion schemas", () => {
 describe("section edit slotted sources", () => {
   it("uses slotted-source helpers for new cards and preserves existing card identities", async () => {
     const fixture = slottedFixture();
+    fixture.components.FAQCard.permissions = {
+      insert: false,
+      drag: false,
+      delete: false,
+    };
+    fixture.components.Text.permissions = { insert: false, drag: false };
     const data = fixture.materialize([
       fixture.section([fixture.card("Existing")]),
     ]);
@@ -1985,9 +2081,23 @@ describe("section edit slotted sources", () => {
       fixture.catalog,
       data,
       task,
-      result
+      result,
+      {
+        can: (permission, component) =>
+          permission !== "insert" || component?.type === "Section",
+      }
     );
     const cards = candidate.content[0].props.slots.CardSlot;
+    expect(cards.map((card: any) => card.props.index)).toEqual([0, 1]);
+    expect(candidate.content[0].props.manualSlots.CardSlot).toEqual(cards);
+    expect(candidate.content[0].props.data.constantValue).toEqual(
+      cards.map((card: any) => ({ id: card.props.id }))
+    );
+    expect(fixture.components.FAQCard.permissions).toEqual({
+      insert: false,
+      drag: false,
+      delete: false,
+    });
     expect(cards[0]).toEqual(section.props.slots.CardSlot[0]);
     expect(cards[1].props.slots.BodySlot[0].props.id).toBe(
       `${cards[1].props.id}-BodySlot-0`

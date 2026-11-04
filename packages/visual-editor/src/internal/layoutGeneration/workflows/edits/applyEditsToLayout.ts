@@ -13,6 +13,7 @@ import {
 import {
   finalizeSlottedSource,
   isLinkedSource,
+  isManagedCardCollection,
   prepareSlottedSource,
 } from "../../shared/slottedItemSource.ts";
 import { buildEditInventory } from "./buildEditInventory.ts";
@@ -158,7 +159,12 @@ export const materializeSectionEdit = <T extends Content>(
     permission: keyof Permissions,
     component: SavedComponent | null
   ) => {
-    if (options.can?.(permission, component) === false) {
+    if (
+      (component &&
+        catalog.data.components[component.type]?.permissions?.[permission] ===
+          false) ||
+      options.can?.(permission, component) === false
+    ) {
       throw new Error(`Editor permission denied: ${permission}`);
     }
   };
@@ -220,7 +226,6 @@ export const materializeSectionEdit = <T extends Content>(
         );
         child.props.id = allocateId();
         newComponents.add(child);
-        requirePermission("insert", child);
       }
     });
     return component;
@@ -261,7 +266,17 @@ export const materializeSectionEdit = <T extends Content>(
           operation.collection.slotPath === "/content");
       if (
         sectionCollection
-          ? !!existingSection || insertedSection
+          ? insertedSection ||
+            (!!existingSection &&
+              (!sameCollection(
+                existingSection.collection,
+                operation.collection
+              ) ||
+                !task.structuralOperations.some(
+                  (operation) =>
+                    operation.kind === "remove" &&
+                    operation.componentId === task.sectionId
+                )))
           : !owner || byId.get(owner.props.id)?.sectionId !== task.sectionId
       ) {
         throw new Error("Insertion is outside the task's section.");
@@ -269,7 +284,15 @@ export const materializeSectionEdit = <T extends Content>(
       if (!sectionCollection && !byId.get(owner!.props.id)?.editable) {
         throw new Error("Cannot insert into a protected component.");
       }
-      if (owner?.readOnly?.[editPath(operation.collection.slotPath!)[0]]) {
+      const managed = isManagedCardCollection(
+        catalog,
+        owner,
+        operation.collection.slotPath
+      );
+      if (
+        owner?.readOnly?.[editPath(operation.collection.slotPath!)[0]] ||
+        (managed && owner?.readOnly?.data)
+      ) {
         throw new Error("Cannot insert into a read-only slot.");
       }
       if (
@@ -278,10 +301,17 @@ export const materializeSectionEdit = <T extends Content>(
         throw new Error("Component type is not permitted in this collection.");
       }
       requirePermission("edit", owner ?? null);
-      requirePermission("insert", owner ?? null);
+      if (!managed) {
+        requirePermission("insert", owner ?? null);
+      }
       const component = createComponent(operation.component);
+      if (!managed) {
+        requirePermission("insert", component);
+      }
       if (sectionCollection) {
-        component.props.id = task.sectionId;
+        if (!existingSection) {
+          component.props.id = task.sectionId;
+        }
         insertedSection = true;
       }
       items.splice(anchorIndex(items, operation.anchor), 0, component);
@@ -333,13 +363,23 @@ export const materializeSectionEdit = <T extends Content>(
         throw new Error("Structural operation would change protected content.");
       }
       const { owner, items } = collectionItems(target.collection);
-      if (owner?.readOnly?.[editPath(target.collection.slotPath!)[0]]) {
+      const managed = isManagedCardCollection(
+        catalog,
+        owner,
+        target.collection.slotPath
+      );
+      if (
+        owner?.readOnly?.[editPath(target.collection.slotPath!)[0]] ||
+        (managed && owner?.readOnly?.data)
+      ) {
         throw new Error("Cannot change a read-only slot.");
       }
-      requirePermission(
-        operation.kind === "remove" ? "delete" : "drag",
-        component
-      );
+      if (!managed) {
+        requirePermission(
+          operation.kind === "remove" ? "delete" : "drag",
+          component
+        );
+      }
       if (owner) {
         requirePermission("edit", owner);
       }

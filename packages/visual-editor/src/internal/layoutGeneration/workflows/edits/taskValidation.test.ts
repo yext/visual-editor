@@ -124,3 +124,66 @@ describe("edit plan and task validation", () => {
     );
   });
 });
+
+it("rejects a replacement plan that removes its insertion anchor first", () => {
+  const fixture = editGenerationFixture();
+  const task = editTask(
+    "first",
+    [],
+    [
+      { kind: "remove", componentId: "first" },
+      {
+        kind: "insert",
+        insertionKey: "replacement",
+        componentType: "Section",
+        collection: { ownerId: "main", slotPath: "/content" },
+        anchor: { position: "before", componentId: "first" },
+      },
+    ]
+  );
+  expect(() =>
+    validateEditPlan(
+      fixture.catalog,
+      buildPlanningContext(fixture.catalog, fixture.data),
+      editPlan([task])
+    )
+  ).toThrow("insert before removing");
+});
+
+it.each([true, false])(
+  "rejects split replacements regardless of dependency direction (%s)",
+  (removeFirst) => {
+    const fixture = editGenerationFixture();
+    const remove = editTask(
+      "first",
+      [],
+      [{ kind: "remove", componentId: "first" }]
+    );
+    remove.generateContent = false;
+    const insert = editTask(
+      "new",
+      [],
+      [
+        {
+          kind: "insert",
+          insertionKey: "replacement",
+          componentType: "Section",
+          collection: { ownerId: "main", slotPath: "/content" },
+          anchor: { position: "end" },
+        },
+      ]
+    );
+    if (removeFirst) {
+      insert.dependsOn = [remove.taskId];
+    } else {
+      remove.dependsOn = [insert.taskId];
+    }
+    expect(() =>
+      validateEditPlan(
+        fixture.catalog,
+        buildPlanningContext(fixture.catalog, fixture.data),
+        editPlan([remove, insert])
+      )
+    ).toThrow("one atomic task");
+  }
+);
