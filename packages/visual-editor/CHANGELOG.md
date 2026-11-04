@@ -1,3 +1,13 @@
+#### 2.0.0-beta.8 (2026-11-04)
+
+##### New Features
+
+- re-add field transforms work ([#1377](https://github.com/yext/visual-editor/pull/1377)) ([5bda26b7](https://github.com/yext/visual-editor/commit/5bda26b7a95444fd5bf0902881049d4cd84d99e1))
+
+##### Bug Fixes
+
+- analytics for section libraries ([#1379](https://github.com/yext/visual-editor/pull/1379)) ([b997bd33](https://github.com/yext/visual-editor/commit/b997bd3358e5911160ca9b03ab3868072354fadc))
+
 #### 2.0.0-beta.7 (2026-11-03)
 
 ##### Chores
