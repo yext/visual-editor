@@ -5,9 +5,10 @@ import mapboxgl from "mapbox-gl";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { LocatorMap } from "./Map.tsx";
 
-vi.mock("mapbox-gl", () => ({
-  default: { supported: vi.fn() },
-}));
+vi.mock("mapbox-gl", () => {
+  const supported = vi.fn();
+  return { supported, default: { supported } };
+});
 
 vi.mock("@yext/search-ui-react", () => ({
   MapboxMap: () => <div data-testid="mapbox-map" />,
@@ -23,7 +24,6 @@ vi.mock("../testing/utils.ts", () => ({
 
 afterEach(() => {
   vi.clearAllMocks();
-  vi.unstubAllGlobals();
 });
 
 describe("LocatorMap", () => {
@@ -33,14 +33,23 @@ describe("LocatorMap", () => {
     };
     mapboxSupport.supported.mockReturnValue(false);
 
-    vi.stubGlobal("window", undefined);
     const serverMarkup = renderToString(<LocatorMap />);
-    vi.unstubAllGlobals();
-    const clientMarkup = renderToString(<LocatorMap />);
-
     expect(serverMarkup).toContain("Loading Map...");
-    expect(clientMarkup).toBe(serverMarkup);
     expect(mapboxSupport.supported).not.toHaveBeenCalled();
+
+    const container = document.createElement("div");
+    container.innerHTML = serverMarkup;
+
+    let clientMarkup: string | undefined;
+    mapboxSupport.supported.mockImplementation(() => {
+      // Capture the hydrated markup before the support check updates state.
+      clientMarkup = container.innerHTML;
+      return false;
+    });
+
+    render(<LocatorMap />, { container, hydrate: true });
+
+    expect(clientMarkup).toBe(serverMarkup);
   });
 
   it.each([
