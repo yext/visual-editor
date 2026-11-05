@@ -8,7 +8,6 @@ import {
 import { normalizeGeneratedText } from "./localizedText.ts";
 import {
   finalizeSlottedSource,
-  generationFields,
   prepareSlottedSource,
 } from "./slottedItemSource.ts";
 
@@ -37,7 +36,7 @@ export const finalizeGeneratedContent = (
     component.props = normalizeGeneratedText(
       component.props,
       config.generation!.props,
-      { type: "object", objectFields: generationFields(config) },
+      { type: "object", objectFields: config.fields ?? {} },
       translationMode === "translate",
       locales
     );

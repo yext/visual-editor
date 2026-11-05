@@ -7,12 +7,11 @@ import {
   permitted,
   type SavedComponent,
 } from "../shared/authoredValues.ts";
-import { localizedTextSchema } from "../shared/localizedText.ts";
 import {
-  generationFields,
-  isLinkedSource,
-  preflightSlottedItemSource,
-} from "../shared/slottedItemSource.ts";
+  isRichTextSchema,
+  localizedTextSchema,
+} from "../shared/localizedText.ts";
+import { isLinkedSource } from "../shared/slottedItemSource.ts";
 import { exportGenerationSchema } from "./strictSchema.ts";
 
 type SchemaNode = {
@@ -34,8 +33,6 @@ export const createGenerationSchemaCompiler = (
 ) => {
   const components = catalog.data.components;
   const explicitCardLists = new WeakSet<SavedComponent>();
-  for (const [name, config] of Object.entries(components))
-    preflightSlottedItemSource(name, config, catalog);
   const fail = (path: string, message: string): never => {
     throw new Error(`Generation schema at ${path}: ${message}`);
   };
@@ -108,16 +105,6 @@ export const createGenerationSchemaCompiler = (
       }
     return shape;
   };
-  const isRichText = (schema: z.ZodType) => {
-    const node = unwrap(schema);
-    return (
-      node instanceof z.ZodObject &&
-      Object.keys(node.shape).sort().join(",") === "html,json" &&
-      Object.values(node.shape).every(
-        (child) => unwrap(child as z.ZodType) instanceof z.ZodString
-      )
-    );
-  };
   const containsContent = (
     schema: z.ZodType,
     field?: Fields[string]
@@ -126,11 +113,16 @@ export const createGenerationSchemaCompiler = (
     if (
       field?.type === "slot" ||
       localizedTextSchema(schema, locales) ||
-      isRichText(schema)
+      isRichTextSchema(schema)
     )
       return true;
-    if (node instanceof z.ZodString)
-      return field?.type === "text" || field?.type === "textarea";
+    if (node instanceof z.ZodString) {
+      return (
+        field?.type === "text" ||
+        field?.type === "textarea" ||
+        field?.type === "richtext"
+      );
+    }
     if (node instanceof z.ZodUnion)
       return node.options.some((option) =>
         containsContent(option as z.ZodType, field)
@@ -214,7 +206,7 @@ export const createGenerationSchemaCompiler = (
       };
     } else if (native instanceof z.ZodObject) {
       const localized = localizedTextSchema(native, locales);
-      const richText = isRichText(native);
+      const richText = isRichTextSchema(native);
       const children = Object.fromEntries(
         Object.entries(shapeFor(native, path)).map(([key, schema]) => [
           key,
@@ -404,7 +396,7 @@ export const createGenerationSchemaCompiler = (
     const props = value(
       config.generation!.props,
       name,
-      { type: "object", objectFields: generationFields(config) },
+      { type: "object", objectFields: config.fields ?? {} },
       config.defaultProps
     );
     // Props themselves are always an authored object; markers apply to its fields.

@@ -4,12 +4,16 @@ import { createPuckGenerationCatalog } from "../../../utils/createPuckGeneration
 export const creationCatalog = () =>
   createPuckGenerationCatalog({
     MainContent: {
-      generation: { props: z.object({ content: z.array(z.unknown()) }) },
+      layoutGenerationMetadata: {
+        props: z.object({ content: z.array(z.unknown()) }),
+      },
       fields: { content: { type: "slot", allow: ["Heading"] } },
       defaultProps: { content: [] },
     },
     Heading: {
-      generation: { props: z.object({ text: z.string().min(1) }) },
+      layoutGenerationMetadata: {
+        props: z.object({ text: z.string().min(1) }),
+      },
       fields: { text: { type: "text" } },
     },
   });

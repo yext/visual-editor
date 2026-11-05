@@ -5,7 +5,6 @@ import type { PuckGenerationCatalog } from "../../../utils/createPuckGenerationC
 import { clonePuckResolveData } from "../../utils/clonePuckResolveData.ts";
 import { unwrapZodSchema as unwrap } from "../../utils/unwrapZodSchema.ts";
 import {
-  generationFields,
   isLinkedSource,
   manualBackup,
   slottedAuthoredProps,
@@ -191,7 +190,7 @@ export const walkAuthored = (
         authoredValue(
           slottedAuthoredProps(component, config),
           config.generation.props,
-          { type: "object", objectFields: generationFields(config) },
+          { type: "object", objectFields: config.fields ?? {} },
           `${collection.path}/${index}/props`,
           (items, path, field) => {
             visitCollection({
@@ -255,7 +254,7 @@ export const extractAuthored = (
           ? authoredValue(
               slottedAuthoredProps(input, config),
               config.generation.props,
-              { type: "object", objectFields: generationFields(config) },
+              { type: "object", objectFields: config.fields ?? {} },
               "props",
               (items) => items.map(component)
             )

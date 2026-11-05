@@ -52,7 +52,9 @@ const sectionResult = (
 });
 const sectionAdapter = () => {
   const catalog = createPuckGenerationCatalog({
-    Heading: { generation: { props: z.object({ text: z.string() }) } },
+    Heading: {
+      layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
+    },
   });
   let current: Data = {
     ...data("Original"),
@@ -91,7 +93,9 @@ describe("progressive section commits", () => {
     const canvas = new LayoutGenerationChatCanvas();
     const { target, history } = sectionAdapter();
     const catalog = createPuckGenerationCatalog({
-      Heading: { generation: { props: z.object({ text: z.string() }) } },
+      Heading: {
+        layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
+      },
     });
     const task: SectionEditTask = {
       ...sectionTask("replace"),

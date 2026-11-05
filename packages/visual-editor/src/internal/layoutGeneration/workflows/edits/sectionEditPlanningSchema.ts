@@ -10,7 +10,6 @@ import { createRequestLocalIds } from "../../shared/requestLocalIds.ts";
 import { exportGenerationSchema } from "../../schema/strictSchema.ts";
 import type { Content } from "../../shared/authoredValues.ts";
 import { localizedTextState } from "../../shared/localizedText.ts";
-import { generationFields } from "../../shared/slottedItemSource.ts";
 import { getEditValueContracts } from "./getEditValueContracts.ts";
 import { sectionEditTaskSchema } from "./sectionEditTaskSchema.ts";
 import type { SectionEditPlan } from "./types.ts";
@@ -67,7 +66,7 @@ export const compileEditPlanningSchema = (
               : {}),
           })),
           slots: slotCapabilities(
-            generationFields(config),
+            config.fields ?? {},
             config.generation!.props
           ),
         },

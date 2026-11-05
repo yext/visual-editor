@@ -6,7 +6,6 @@ import {
   type Content,
 } from "../../shared/authoredValues.ts";
 import {
-  generationFields,
   isLinkedSource,
   slottedAuthoredProps,
 } from "../../shared/slottedItemSource.ts";
@@ -124,7 +123,7 @@ export const buildEditInventory = (
             ? authoredValue(
                 slottedAuthoredProps(component, config),
                 config.generation.props,
-                { type: "object", objectFields: generationFields(config) },
+                { type: "object", objectFields: config.fields ?? {} },
                 "props",
                 () => []
               )

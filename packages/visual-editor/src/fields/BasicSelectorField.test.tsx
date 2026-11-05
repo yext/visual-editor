@@ -4,6 +4,8 @@ import { describe, expect, it, vi } from "vitest";
 import { YextAutoField } from "./YextAutoField.tsx";
 import { type BasicSelectorField } from "./BasicSelectorField.tsx";
 
+import { resolveCanonicalSelectorGroups } from "../utils/selectorOptions.ts";
+
 const renderField = (
   field: BasicSelectorField,
   value?: any
@@ -170,6 +172,32 @@ describe("BasicSelectorField", () => {
       expect(screen.getByText(expectedHeading)).toBeDefined();
     }
   );
+
+  it("renders expanded canonical groups and preserves their descriptions", () => {
+    const { onChange } = renderField(
+      {
+        type: "basicSelector",
+        optionGroups: [
+          ...resolveCanonicalSelectorGroups("MAX_WIDTH").map((group) => ({
+            ...group,
+            title: "Widths",
+            description: "Match the page grid.",
+          })),
+          { title: "Other", options: [{ label: "Custom", value: "custom" }] },
+        ],
+      },
+      "theme"
+    );
+    expect(screen.getByRole("combobox").textContent).toContain(
+      "Match Other Sections"
+    );
+    fireEvent.click(screen.getByRole("combobox"));
+    expect(screen.getByText("Match the page grid.")).toBeDefined();
+    expect(screen.getByText("Widths")).toBeDefined();
+    expect(screen.getByText("Custom")).toBeDefined();
+    fireEvent.click(screen.getByText("Full Width"));
+    expect(onChange).toHaveBeenCalledWith("fullWidth");
+  });
 
   it("renders the empty state for function-valued options with no results", () => {
     const field: BasicSelectorField = {

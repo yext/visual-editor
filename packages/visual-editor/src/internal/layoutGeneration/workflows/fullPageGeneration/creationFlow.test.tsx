@@ -26,7 +26,7 @@ const chatConfig = {
   components: {
     MainContent,
     Heading: {
-      generation: { props: z.object({ text: z.string() }) },
+      layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
       fields: { text: { type: "text" as const } },
       render: ({ text }: any) => <h2>{text}</h2>,
     },

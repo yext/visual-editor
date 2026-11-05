@@ -19,7 +19,9 @@ it("names the owning section when a nested wrapper has invalid manual slots", ()
   const catalog = createPuckGenerationCatalog({
     ...fixture.components,
     ProductSection: {
-      generation: { props: z.object({ content: z.array(z.unknown()) }) },
+      layoutGenerationMetadata: {
+        props: z.object({ content: z.array(z.unknown()) }),
+      },
       fields: { content: { type: "slot" } },
     },
   });

@@ -5,7 +5,7 @@ import type { GenerationDiagnostics } from "../internal/layoutGeneration/shared/
 const postChatReport = (
   url: string,
   details: object,
-  failureMessage: string
+  failureMessage?: string
 ) => {
   void (async () => {
     try {
@@ -14,11 +14,14 @@ const postChatReport = (
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(details),
       });
+
       if (!response.ok) {
         throw new Error(`HTTP error: ${response.status}`);
       }
     } catch (error) {
-      console.error(failureMessage, error);
+      if (failureMessage) {
+        console.error(failureMessage, error);
+      }
     }
   })();
 };
@@ -39,12 +42,24 @@ export const createLocalGenerationDiagnostics = (
   layoutId: string
 ): GenerationDiagnostics => {
   let sequence = 0;
+
   const diagnosticId = crypto.randomUUID();
+
   const report: GenerationDiagnostics["report"] = (kind, details) =>
     kind === "error"
       ? reportChatError(api, details)
       : reportChatDiagnostic(api, details);
+
   return {
+    schemaOmissions: (details) =>
+      postChatReport(`${api}/diagnostics`, {
+        layoutId,
+        correlationId:
+          (details as { correlationId?: string }).correlationId ?? diagnosticId,
+        sequence: sequence++,
+        phase: "[layout generation] Fields omitted from inference",
+        details,
+      }),
     log: (message, details) =>
       report("diagnostics", {
         layoutId,

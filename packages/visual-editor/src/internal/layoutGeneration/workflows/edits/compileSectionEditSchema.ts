@@ -15,10 +15,7 @@ import {
   localizedTextState,
   normalizeGeneratedText,
 } from "../../shared/localizedText.ts";
-import {
-  generationFields,
-  prepareSlottedSource,
-} from "../../shared/slottedItemSource.ts";
+import { prepareSlottedSource } from "../../shared/slottedItemSource.ts";
 import { getEditValueContracts } from "./getEditValueContracts.ts";
 import { validateLocalizedTextEdits } from "./localizedText.ts";
 import {
@@ -333,7 +330,7 @@ export const compileSectionEditSchema = (
       authoredValues: project(
         projected.props,
         config.generation.props,
-        { type: "object", objectFields: generationFields(config) },
+        { type: "object", objectFields: config.fields ?? {} },
         "",
         true,
         config.defaultProps
@@ -416,7 +413,7 @@ export const compileSectionEditSchema = (
         component.props = normalizeGeneratedText(
           component.props,
           childConfig.generation.props,
-          { type: "object", objectFields: generationFields(childConfig) },
+          { type: "object", objectFields: childConfig.fields ?? {} },
           task.translationMode === "translate",
           locales
         );
@@ -459,7 +456,7 @@ export const compileSectionEditSchema = (
       const normalized = normalizeGeneratedText(
         component.props,
         config.generation!.props,
-        { type: "object", objectFields: generationFields(config) },
+        { type: "object", objectFields: config.fields ?? {} },
         task.translationMode === "translate",
         locales
       );

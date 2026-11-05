@@ -43,11 +43,12 @@ describe("slotted source generation", () => {
   it("canonicalizes absent optional values while preserving explicit null", async () => {
     const f = slottedFixture();
     const cardConfig = f.components.FAQCard;
-    cardConfig.generation.props = cardConfig.generation.props.extend({
-      styles: cardConfig.generation.props.shape.styles.extend({
-        accent: z.string().nullable().optional(),
-      }),
-    });
+    cardConfig.layoutGenerationMetadata.props =
+      cardConfig.layoutGenerationMetadata.props.extend({
+        styles: cardConfig.layoutGenerationMetadata.props.shape.styles.extend({
+          accent: z.string().nullable().optional(),
+        }),
+      });
     cardConfig.defaultProps.styles.accent = undefined;
     const candidate = f.materialize();
     const resolved = await f.resolve(candidate);
@@ -311,41 +312,6 @@ describe("slotted source generation", () => {
       extractAuthored(f.catalog, f.materialize()).content[0].props.data
         .constantValue
     ).toBeUndefined();
-  });
-
-  it.each([
-    "missing card",
-    "references",
-    "backup",
-    "slot restriction",
-    "missing slot",
-  ])("preflights invalid metadata: %s", (change) => {
-    const f = slottedFixture();
-    const config = f.components.Section;
-    if (change === "missing card") {
-      config.generation.slottedItemSource = { cardType: "Missing" };
-    }
-    if (change === "references") {
-      config.generation.props = config.generation.props.extend({
-        data: config.generation.props.shape.data.extend({
-          constantValue: z.array(z.unknown()),
-        }),
-      });
-    }
-    if (change === "backup") {
-      config.generation.props = config.generation.props.extend({
-        manualSlots: z.object({}),
-      });
-    }
-    if (change === "slot restriction") {
-      config.fields.slots.objectFields.CardSlot.disallow = ["FAQCard"];
-    }
-    if (change === "missing slot") {
-      delete config.fields.slots.objectFields.CardSlot;
-    }
-    expect(() => compileGenerationSchema(f.catalog, ["en"])).toThrow(
-      /slottedItemSource/
-    );
   });
 });
 

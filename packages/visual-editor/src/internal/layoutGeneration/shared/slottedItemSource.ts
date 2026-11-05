@@ -1,5 +1,4 @@
 import type { Fields } from "@puckeditor/core";
-import { z } from "zod";
 import { isDeepEqual } from "../../../utils/deepEqual.ts";
 import type {
   GenerationComponent,
@@ -10,7 +9,6 @@ import {
   setChildSlotIds,
 } from "../../../utils/itemSource/createSlottedItemSource.ts";
 import { clonePuckResolveData as clone } from "../../utils/clonePuckResolveData.ts";
-import { unwrapZodSchema as unwrap } from "../../utils/unwrapZodSchema.ts";
 import type { SavedComponent } from "./authoredValues.ts";
 
 export const isLinkedSource = (props: Record<string, any>): boolean =>
@@ -26,98 +24,6 @@ export const isManagedCardCollection = (
   slotPath === "/slots/CardSlot" &&
   !!catalog.data.components[owner.type]?.generation?.slottedItemSource &&
   !isLinkedSource(owner.props);
-
-/** Apply generation-only restrictions without modifying the editor's fields. */
-export const generationFields = (config: GenerationComponent): Fields => {
-  const fields = config.fields ?? {};
-  const source = config.generation?.slottedItemSource;
-  const slots = fields.slots;
-  if (!source || slots?.type !== "object") {
-    return fields;
-  }
-  const cardSlot = slots.objectFields.CardSlot;
-  return {
-    ...fields,
-    slots: {
-      ...slots,
-      objectFields: {
-        ...slots.objectFields,
-        CardSlot: { ...cardSlot, type: "slot", allow: [source.cardType] },
-      },
-    },
-  };
-};
-
-/** Contracts must leave helper-owned reference and backup storage out of model input. */
-export const preflightSlottedItemSource = (
-  name: string,
-  config: GenerationComponent,
-  catalog: PuckGenerationCatalog
-) => {
-  const source = config.generation?.slottedItemSource;
-  if (!source) {
-    return;
-  }
-  const shape = config.generation!.props.shape;
-  const data = unwrap(shape.data);
-  const slots = unwrap(shape.slots);
-  const fields = config.fields?.slots;
-  const cardSlot =
-    fields?.type === "object" ? fields.objectFields.CardSlot : undefined;
-  const error = (detail: string): never => {
-    throw new Error(
-      `Generation schema at ${name}: slottedItemSource ${detail}`
-    );
-  };
-  if (
-    typeof source.cardType !== "string" ||
-    !source.cardType.trim() ||
-    !Object.hasOwn(catalog.data.components, source.cardType) ||
-    !catalog.data.components[source.cardType].generation
-  ) {
-    error("requires a registered card generation contract");
-  }
-  if (
-    source.defaultItemProps !== undefined &&
-    typeof source.defaultItemProps !== "function" &&
-    (typeof source.defaultItemProps !== "object" ||
-      source.defaultItemProps === null ||
-      Array.isArray(source.defaultItemProps))
-  ) {
-    error("has invalid defaultItemProps");
-  }
-  if (
-    !(data instanceof z.ZodObject) ||
-    !(unwrap(data.shape.field) instanceof z.ZodString) ||
-    !(unwrap(data.shape.constantValueEnabled) instanceof z.ZodBoolean) ||
-    data.shape.constantValue ||
-    (data.def.catchall && (data.def.catchall as z.ZodType).def.type !== "never")
-  ) {
-    error(
-      "requires data.field and data.constantValueEnabled, without constantValue or open-ended data"
-    );
-  }
-  if (catalog.data.components[source.cardType].generation?.props.shape.index) {
-    error("card contracts must omit derived indexes");
-  }
-  if (shape.manualSlots || shape.conditionalRender) {
-    error("cannot declare manualSlots or conditionalRender as authored");
-  }
-  if (
-    !(slots instanceof z.ZodObject) ||
-    !(unwrap(slots.shape.CardSlot) instanceof z.ZodArray) ||
-    cardSlot?.type !== "slot"
-  ) {
-    error("requires slots.CardSlot as an authored native slot");
-  }
-  if (
-    cardSlot?.type === "slot" &&
-    (cardSlot.disallow?.includes(source.cardType) ||
-      (cardSlot.allow?.length && !cardSlot.allow.includes(source.cardType)))
-  ) {
-    error("card type conflicts with the native slot restrictions");
-  }
-};
 
 /** Linked visible cards are derived; the inactive manual backup remains authored. */
 export const slottedAuthoredProps = (
