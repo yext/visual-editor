@@ -47,6 +47,26 @@ export const rejectZones = (data: Content) => {
   }
 };
 
+/** Identity traversal follows normalized fields even when generation omits them. */
+const identitySchema = (field: Fields[string] | undefined): z.ZodType => {
+  if (field?.type === "object") {
+    return z.object(
+      Object.fromEntries(
+        Object.entries(field.objectFields).map(([key, child]) => [
+          key,
+          identitySchema(child),
+        ])
+      )
+    );
+  }
+  if (field?.type === "array") {
+    return z.array(
+      identitySchema({ type: "object", objectFields: field.arrayFields })
+    );
+  }
+  return z.unknown();
+};
+
 /** Shared value traversal used by extraction, indexing, slot handling and Id allocation. */
 export const authoredValue = (
   input: any,
@@ -57,12 +77,13 @@ export const authoredValue = (
     items: SavedComponent[],
     path: string,
     field: NonNullable<Collection["field"]>
-  ) => SavedComponent[]
+  ) => SavedComponent[],
+  identityOnly = false
 ): any => {
   if (input === undefined || input === null) {
     return input;
   }
-  const node = unwrap(schema);
+  const node = unwrap(identityOnly ? identitySchema(field) : schema);
   if (field?.type === "slot") {
     if (!Array.isArray(input)) {
       throw new Error(`${path}: slot must be an array`);
@@ -167,6 +188,8 @@ export const walkAuthored = (
   data: Content,
   onComponent: (item: InventoryItem) => void,
   options: {
+    /** Include system-owned slots for identity allocation and validation only. */
+    identityOnly?: boolean;
     /** Visit each authored collection, including empty slots. */
     onCollection?: (collection: Collection) => void;
   } = {}
@@ -186,10 +209,10 @@ export const walkAuthored = (
       }
       onComponent({ component, collection });
       const config = catalog.data.components[component.type];
-      if (config?.generation) {
+      if (config && (config.generation || options.identityOnly)) {
         authoredValue(
           slottedAuthoredProps(component, config),
-          config.generation.props,
+          config.generation?.props ?? z.object({}),
           { type: "object", objectFields: config.fields ?? {} },
           `${collection.path}/${index}/props`,
           (items, path, field) => {
@@ -200,7 +223,8 @@ export const walkAuthored = (
               field,
             });
             return items;
-          }
+          },
+          options.identityOnly
         );
       }
       if (
@@ -225,16 +249,21 @@ export const collectAuthoredIds = (
   data: Content
 ) => {
   const ids = new Set<string>();
-  walkAuthored(catalog, data, ({ component, collection }) => {
-    const id = component.props.id;
-    if (typeof id !== "string" || !id.trim()) {
-      throw new Error(`${collection.path}: missing component Id`);
-    }
-    if (ids.has(id)) {
-      throw new Error(`${collection.path}: duplicate component Id ${id}`);
-    }
-    ids.add(id);
-  });
+  walkAuthored(
+    catalog,
+    data,
+    ({ component, collection }) => {
+      const id = component.props.id;
+      if (typeof id !== "string" || !id.trim()) {
+        throw new Error(`${collection.path}: missing component Id`);
+      }
+      if (ids.has(id)) {
+        throw new Error(`${collection.path}: duplicate component Id ${id}`);
+      }
+      ids.add(id);
+    },
+    { identityOnly: true }
+  );
   return ids;
 };
 

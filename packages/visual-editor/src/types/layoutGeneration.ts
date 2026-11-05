@@ -31,3 +31,9 @@ export type LayoutGenerationMetadata = {
   resolvedProps?: string[];
   slottedItemSource?: SlottedItemSourceGenerationMetadata;
 };
+
+declare module "@puckeditor/core" {
+  interface BaseField {
+    generation?: FieldGenerationMetadata;
+  }
+}

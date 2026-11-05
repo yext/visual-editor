@@ -2,7 +2,7 @@ import type {
   ComboboxOption,
   ComboboxOptionGroup,
 } from "../internal/types/combobox.ts";
-import { msg, pt } from "./i18n/platform.ts";
+import { msg } from "./i18n/platform.ts";
 import { ThemeOptions } from "./themeConfigOptions.ts";
 
 /** Stable saved width values used by generation and canonical selector groups. */
@@ -12,7 +12,10 @@ export const canonicalWidthOptions = [
     label: msg(
       "fields.options.matchOtherSections",
       "Match Other Sections ({{value}})",
-      { value: pt("default", "Default") }
+      {
+        value: '$t(default, {"defaultValue": "Default"})',
+        interpolation: { skipOnVariables: false },
+      }
     ),
     value: "theme",
   },

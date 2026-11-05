@@ -32,7 +32,6 @@ import { migrationRegistry } from "../components/migrations/migrationRegistry.ts
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 import type { LocalDevOptions } from "./types.ts";
 import { useTranslationRuntime } from "../utils/i18n/TranslationRuntimeContext.tsx";
-import { FieldGenerationMetadata } from "../types/layoutGeneration.ts";
 
 const devLogger = new DevLogger();
 
@@ -57,9 +56,6 @@ export interface Metadata {
 
 declare module "@puckeditor/core" {
   export interface PuckMetadata extends Metadata {}
-  interface BaseField {
-    generation?: FieldGenerationMetadata;
-  }
 }
 
 type EditorProps = {

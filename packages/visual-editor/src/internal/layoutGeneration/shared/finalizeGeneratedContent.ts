@@ -29,7 +29,7 @@ export const finalizeGeneratedContent = (
     onPrepared?: (component: SavedComponent) => void;
   }
 ) => {
-  walkAuthored(catalog, candidate, ({ component, collection }) => {
+  walkAuthored(catalog, candidate, ({ component }) => {
     const config = catalog.data.components[component.type];
     prepareSlottedSource(component, config, explicitCardLists.has(component));
     onPrepared?.(component);
@@ -40,11 +40,18 @@ export const finalizeGeneratedContent = (
       translationMode === "translate",
       locales
     );
-    component.props.id = assignId(
-      component,
-      `${collection.path}/${collection.items.indexOf(component)}`
-    );
   });
+  walkAuthored(
+    catalog,
+    candidate,
+    ({ component, collection }) => {
+      component.props.id = assignId(
+        component,
+        `${collection.path}/${collection.items.indexOf(component)}`
+      );
+    },
+    { identityOnly: true }
+  );
   // Parent-first finalization applies child identity conventions. Copy mirrors
   // again after descendants have finalized their own references.
   const sources: SavedComponent[] = [];
