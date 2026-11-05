@@ -17,8 +17,15 @@ import {
 } from "../ui/Tooltip.tsx";
 
 const usePuck = createUsePuck();
+const styleFieldTypes = new Set([
+  "styledText",
+  "styledImage",
+  "styledLink",
+  "styledButton",
+  "styledPageSection",
+]);
 
-/** Collects source descriptions for opted-in fields from authored component props. */
+/** Collects source descriptions for opted-in content fields from authored component props. */
 export function getTransformedFieldSources(
   fields: Fields<any, BaseField & { type: string }>,
   values: Record<string, any>,
@@ -28,6 +35,9 @@ export function getTransformedFieldSources(
     const value = values[key];
     const propPath = path ? `${path}.${key}` : key;
     const authoredField = getTransformField(field);
+    if (authoredField && styleFieldTypes.has(authoredField.type)) {
+      return [];
+    }
     if (
       authoredField &&
       "transform" in authoredField &&

@@ -13,7 +13,39 @@ describe("Entity Tooltips", () => {
   it.each([false, true])(
     "collects only opted-in sources when fields are adapted: %s",
     (adapted) => {
+      const styleFields = {
+        textStyles: { type: "styledText", transform: true },
+        imageStyles: { type: "styledImage", transform: true },
+        linkStyles: { type: "styledLink", transform: true },
+        buttonStyles: { type: "styledButton", transform: true },
+        sectionStyles: { type: "styledPageSection", transform: true },
+      } satisfies YextFieldMap;
+      const styleValues = {
+        textStyles: { fontSize: "24px" },
+        imageStyles: { borderRadius: "8px" },
+        linkStyles: { includeCaret: "none" },
+        buttonStyles: { borderRadius: "4px" },
+        sectionStyles: { verticalPadding: "16px" },
+      };
+      const styleOnlyFields = {
+        ...styleFields,
+        nested: { type: "object", objectFields: styleFields },
+        items: { type: "array", arrayFields: styleFields },
+      } satisfies YextFieldMap;
+      const styleOnlyValues = {
+        ...styleValues,
+        nested: styleValues,
+        items: [styleValues, styleValues],
+      };
+      expect(
+        getTransformedFieldSources(
+          adapted ? toPuckFields(styleOnlyFields) : styleOnlyFields,
+          styleOnlyValues
+        )
+      ).toEqual([]);
+
       const fields = {
+        ...styleOnlyFields,
         title: {
           type: "entityField",
           label: "Title",
@@ -21,6 +53,21 @@ describe("Entity Tooltips", () => {
           transform: true,
         },
         subtitle: { type: "translatableString", transform: true },
+        content: {
+          type: "object",
+          objectFields: {
+            ...styleFields,
+            items: {
+              type: "array",
+              arrayFields: {
+                ...styleFields,
+                label: { type: "translatableString", transform: true },
+                cta: { type: "comprehensiveCTA", transform: true },
+                link: { type: "ctaSelector", transform: true },
+              },
+            },
+          },
+        },
         legacy: {
           type: "entityField",
           filter: { types: ["type.string"] },
@@ -34,6 +81,22 @@ describe("Entity Tooltips", () => {
 
       expect(
         getTransformedFieldSources(adapted ? toPuckFields(fields) : fields, {
+          ...styleOnlyValues,
+          content: {
+            ...styleValues,
+            items: [
+              {
+                ...styleValues,
+                label: { defaultValue: "Nested label" },
+                cta: {
+                  data: {
+                    cta: { field: "c_orderNow", constantValueEnabled: false },
+                  },
+                },
+                link: { field: "websiteUrl", constantValueEnabled: false },
+              },
+            ],
+          },
           title: { field: "name", constantValueEnabled: false },
           subtitle: { defaultValue: "Subtitle" },
           legacy: { field: "description", constantValueEnabled: false },
@@ -46,6 +109,9 @@ describe("Entity Tooltips", () => {
       ).toEqual([
         { label: "Title", field: "name" },
         { label: "subtitle", field: undefined },
+        { label: "content.items[0].label", field: undefined },
+        { label: "content.items[0].cta", field: "c_orderNow" },
+        { label: "content.items[0].link", field: "websiteUrl" },
       ]);
     }
   );
