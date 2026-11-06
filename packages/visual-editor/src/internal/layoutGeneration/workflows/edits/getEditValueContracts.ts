@@ -4,7 +4,6 @@ import type { GenerationComponent } from "../../../../utils/createPuckGeneration
 import { unwrapZodSchema as unwrap } from "../../../utils/unwrapZodSchema.ts";
 import type { createGenerationSchemaCompiler } from "../../schema/compiler.ts";
 import { localizedTextSchema } from "../../shared/localizedText.ts";
-import { generationFields } from "../../shared/slottedItemSource.ts";
 import { hasSlots } from "./utils.ts";
 
 // Nested unions still describe one correlated value (for example image or video).
@@ -138,7 +137,7 @@ export const getEditValueContracts = (
       });
     }
   };
-  const fields = generationFields(config);
+  const fields = config.fields ?? {};
   for (const [key, schema] of Object.entries(config.generation.props.shape)) {
     if (["id", "puck", "readOnly"].includes(key)) {
       throw new Error("Generation contract declares editor-owned metadata.");

@@ -268,3 +268,34 @@ it("does not overwrite a different editor context when ending a partial session"
   expect(current.data()).toEqual(otherPage);
   expect(current.commit).not.toHaveBeenCalled();
 });
+
+it("continues after missing and repeated removals without extra history or resolution", async () => {
+  const current = fullPageUpdateSessionFixture();
+  const signal = new AbortController().signal;
+  await current.session.apply(
+    { kind: "remove", sectionId: "missing" },
+    0,
+    signal
+  );
+  expect(current.preview).not.toHaveBeenCalled();
+  expect(current.adapter.resolve).not.toHaveBeenCalled();
+  await current.session.apply(
+    { kind: "remove", sectionId: "services" },
+    1,
+    signal
+  );
+  await current.session.apply(
+    { kind: "remove", sectionId: "services" },
+    2,
+    signal
+  );
+  await current.session.apply({ kind: "keep", sectionId: "hero" }, 3, signal);
+  expect(current.session.stepCount).toBe(4);
+  expect(current.adapter.resolve).toHaveBeenCalledOnce();
+  expect(bodySections(current.data()).map((item) => item.props.id)).toEqual([
+    "hero",
+    "testimonials",
+  ]);
+  current.session.finish();
+  expect(current.commit).toHaveBeenCalledOnce();
+});

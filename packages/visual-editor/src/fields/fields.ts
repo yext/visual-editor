@@ -1,5 +1,8 @@
-import type { SlottedItemSourceGenerationMetadata } from "../utils/itemSource/itemSourceTypes.ts";
-import type { z } from "zod";
+import type { LayoutGenerationMetadata } from "../types/layoutGeneration.ts";
+export type {
+  LayoutGenerationMetadata,
+  FieldGenerationMetadata,
+} from "../types/layoutGeneration.ts";
 import { createElement, type CSSProperties, type ReactElement } from "react";
 import type { LinkType } from "@yext/pages-components";
 import type { ResolvedThemeColor } from "../utils/colors.ts";
@@ -220,14 +223,6 @@ export type YextFieldDefinition<ValueType = any> =
   | (ValueType extends Record<string, any>
       ? YextObjectField<ValueType>
       : never);
-
-/** Provides a formal zod type describing the props for AI layout generation. */
-export type LayoutGenerationMetadata = {
-  props: z.ZodObject;
-  /** JSON Pointer paths relative to props whose resolved values survive chat edit preservation. */
-  resolvedProps?: string[];
-  slottedItemSource?: SlottedItemSourceGenerationMetadata;
-};
 
 /**
  * Puck 0.24's deep slot mapper expands intersections such as CSS's `string & {}`

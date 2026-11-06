@@ -43,7 +43,7 @@ it("offers alt-text leaf edits without a competing parent replacement", () => {
   const assetWithAlt = asset.extend({ alternateText: text.optional() });
   const catalog = createPuckGenerationCatalog({
     Image: {
-      generation: {
+      layoutGenerationMetadata: {
         props: z.object({
           data: z.object({
             image: source(
@@ -118,7 +118,7 @@ it.each(["direct", "nested", "fallback"] as const)(
   (representation) => {
     const catalog = createPuckGenerationCatalog({
       Image: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({ data: z.object({ image: source(image) }) }),
         },
       },
@@ -198,7 +198,7 @@ it.each([false, true])(
       .catchall(z.string().optional());
     const catalog = createPuckGenerationCatalog({
       Gallery: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             data: z.object({
               images: source(
@@ -313,7 +313,7 @@ it("keeps nested image/video unions atomic instead of offering video metadata on
   });
   const catalog = createPuckGenerationCatalog({
     Promo: {
-      generation: {
+      layoutGenerationMetadata: {
         props: z.object({
           data: z.object({
             promo: source(

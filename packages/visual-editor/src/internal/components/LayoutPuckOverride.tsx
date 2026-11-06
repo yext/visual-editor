@@ -68,7 +68,7 @@ export const LayoutPuckOverride = ({
     if (data !== appState.data) {
       dispatch({ type: "setData", data, recordHistory: false });
     }
-  }, [getPuck, puckData]);
+  }, [getPuck, puckData, isGenerationActive]);
 
   React.useEffect(() => {
     let active = true;

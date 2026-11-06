@@ -19,7 +19,7 @@ it("exports a reachable component graph once with the same input and output sche
   const catalog = createPuckGenerationCatalog(
     {
       Section: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             slots: z.object({ cards: z.array(z.unknown()).min(1).max(3) }),
           }),
@@ -34,7 +34,7 @@ it("exports a reachable component graph once with the same input and output sche
       },
       Card: {
         nestedOnly: true,
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             text: z
               .object({
@@ -75,17 +75,50 @@ it("exports a reachable component graph once with the same input and output sche
   );
 });
 
-it.each([z.coerce.string(), z.coerce.number(), z.coerce.boolean()])(
-  "rejects coercion before exporting the wire contract (%#)",
-  (value) => {
-    const catalog = createPuckGenerationCatalog({
-      Section: { generation: { props: z.object({ value }) } },
-    });
-    expect(() => compileGenerationSchema(catalog, ["en"])).toThrow(
-      /Section.value: coercion cannot be represented/
-    );
-  }
-);
+it.each([
+  { name: "any", value: z.any(), message: "unsupported any schema" },
+  {
+    name: "open-ended records",
+    value: z.record(z.string(), z.string()),
+    message: "unsupported record schema",
+  },
+  {
+    name: "transforms",
+    value: z.string().transform((value) => value.length),
+    message: "unsupported pipe schema",
+  },
+  {
+    name: "refinements",
+    value: z.string().refine((value) => !!value),
+    message: "custom refinements cannot be represented by strict JSON Schema",
+  },
+  {
+    name: "optional refinements",
+    value: z
+      .string()
+      .refine((value) => !!value)
+      .optional(),
+    message: "custom refinements cannot be represented by strict JSON Schema",
+  },
+  ...[
+    { name: "string coercion", value: z.coerce.string() },
+    { name: "number coercion", value: z.coerce.number() },
+    { name: "boolean coercion", value: z.coerce.boolean() },
+  ].map((entry) => ({
+    ...entry,
+    message: "coercion cannot be represented by a strict wire schema",
+  })),
+])("rejects $name in authored contracts", ({ value, message }) => {
+  const catalog = createPuckGenerationCatalog({
+    Section: { layoutGenerationMetadata: { props: z.object({ value }) } },
+  });
+
+  const compiler = createGenerationSchemaCompiler(catalog, ["en"]);
+
+  expect(() => compiler.element("Section")).toThrow(
+    `Generation schema at Section.value: ${message}`
+  );
+});
 
 it.each(["create", "insert"] as const)(
   "preserves newly authored rich text when switching away from localized defaults (%s)",
@@ -112,7 +145,7 @@ it.each(["create", "insert"] as const)(
     };
     const catalog = createPuckGenerationCatalog({
       Banner: {
-        generation: { props },
+        layoutGenerationMetadata: { props },
         defaultProps: { text: { defaultValue: old } },
       },
     });
@@ -148,7 +181,7 @@ it("drops direct-rich-text keys when authoring a localized bundle without retain
   ]);
   const catalog = createPuckGenerationCatalog({
     Banner: {
-      generation: { props: z.object({ text }) },
+      layoutGenerationMetadata: { props: z.object({ text }) },
       defaultProps: { text: { html: "old", json: "old" } },
     },
   });

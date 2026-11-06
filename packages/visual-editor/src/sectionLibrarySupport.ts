@@ -98,6 +98,7 @@ export {
 export { type YextCTAField } from "./fields/CTASelectorField.tsx";
 export {
   toPuckFields,
+  type FieldGenerationMetadata,
   type YextArrayField,
   type YextComponentConfig,
   type YextTransformedProps,
@@ -151,6 +152,7 @@ export {
   type RootConfig,
 } from "./utils/getPageMetadata.ts";
 export {
+  LOCATOR_ENTITY_TYPES,
   getEntityTypeLabel,
   getLocatorEntityTypeSourceMap,
   isLocatorEntityType,
@@ -252,3 +254,24 @@ export {
   withGenerationCatalog,
 } from "./utils/createPuckGenerationCatalog.ts";
 export type { LayoutGenerationMetadata as ComponentGenerationMetadata } from "./fields/fields.ts";
+export {
+  inferFieldZodSchema,
+  widthZodSchema,
+} from "./utils/layoutGenerationSchemas/inferFieldZodSchema.ts";
+export { resolveCanonicalSelectorGroups } from "./utils/selectorOptions.ts";
+export {
+  translatableStringZodSchema,
+  richTextZodSchema,
+  translatableRichTextZodSchema,
+  assetImageZodSchema,
+  imageZodSchema,
+  entityFieldZodSchema,
+  enhancedCtaZodSchema,
+  ctaSelectorZodSchema,
+  comprehensiveCtaZodSchema,
+  hoursZodSchema,
+} from "./utils/layoutGenerationSchemas/yextFieldSchemas.ts";
+export {
+  backgroundColorZodSchema,
+  siteColorZodSchema,
+} from "./utils/layoutGenerationSchemas/colorFieldSchemas.ts";

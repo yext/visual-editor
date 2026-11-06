@@ -281,7 +281,7 @@ describe("section edit values and structure", () => {
   it("constructs required object and union slots before validating a new section", () => {
     const customCatalog = createPuckGenerationCatalog({
       NestedSection: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             layout: z.union([
               z.object({
@@ -306,7 +306,7 @@ describe("section edit values and structure", () => {
       },
       Leaf: {
         nestedOnly: true,
-        generation: { props: z.object({ text: z.string() }) },
+        layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
       },
     });
     const editTask = task(
@@ -529,10 +529,14 @@ describe("section edit permissions and preservation", () => {
       const slotPath = `/${field.replaceAll("~", "~0").replaceAll("/", "~1")}`;
       const c = createPuckGenerationCatalog({
         Section: {
-          generation: { props: z.object({ [field]: z.array(z.unknown()) }) },
+          layoutGenerationMetadata: {
+            props: z.object({ [field]: z.array(z.unknown()) }),
+          },
           fields: { [field]: { type: "slot", allow: ["Card"] } },
         },
-        Card: { generation: { props: z.object({ text: z.string() }) } },
+        Card: {
+          layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
+        },
       });
       const baseline = {
         content: [

@@ -19,63 +19,64 @@ import { compileGenerationPreparation } from "./preparation.ts";
 
 const defaults = { $default: true };
 const unset = { $unset: true };
-const catalog = () =>
-  createPuckGenerationCatalog({
-    Heading: {
-      generation: {
-        props: z.object({
-          text: z.string().min(1),
-          optional: z.string().nullable().optional(),
-          style: z.object({
-            color: z.enum(["red", "blue"]),
-            width: z.number().min(1),
-          }),
-          links: z
-            .array(z.object({ label: z.string(), url: z.string() }))
-            .max(3),
+const catalogComponents = (): Parameters<
+  typeof createPuckGenerationCatalog
+>[0] => ({
+  Heading: {
+    layoutGenerationMetadata: {
+      props: z.object({
+        text: z.string().min(1),
+        optional: z.string().nullable().optional(),
+        style: z.object({
+          color: z.enum(["red", "blue"]),
+          width: z.number().min(1),
         }),
-      },
-      defaultProps: {
-        text: "Default",
-        style: { color: "red", width: 10 },
-        links: [],
-        hidden: { preserve: true },
-      },
-      fields: { text: { type: "text" } },
-      nestedOnly: true,
+        links: z.array(z.object({ label: z.string(), url: z.string() })).max(3),
+      }),
     },
-    Section: {
-      generation: {
-        props: z.object({
-          title: z.string(),
-          slots: z.object({ heading: z.array(z.unknown()).length(1) }),
-        }),
+    defaultProps: {
+      text: "Default",
+      style: { color: "red", width: 10 },
+      links: [],
+      hidden: { preserve: true },
+    },
+    fields: { text: { type: "text" } },
+    nestedOnly: true,
+  },
+  Section: {
+    layoutGenerationMetadata: {
+      props: z.object({
+        title: z.string(),
+        slots: z.object({ heading: z.array(z.unknown()).length(1) }),
+      }),
+    },
+    fields: {
+      slots: {
+        type: "object",
+        objectFields: { heading: { type: "slot", allow: ["Heading"] } },
       },
-      fields: {
-        slots: {
-          type: "object",
-          objectFields: { heading: { type: "slot", allow: ["Heading"] } },
-        },
-        copied: { type: "slot" },
-      },
-      defaultProps: {
-        title: "Default section",
-        slots: {
-          heading: [
-            {
-              type: "Heading",
-              props: {
-                id: "template",
-                text: "Contextual",
-                style: { color: "blue", width: 25 },
-                links: [],
-              },
+      copied: { type: "slot" },
+    },
+    defaultProps: {
+      title: "Default section",
+      slots: {
+        heading: [
+          {
+            type: "Heading",
+            props: {
+              id: "template",
+              text: "Contextual",
+              style: { color: "blue", width: 25 },
+              links: [],
             },
-          ],
-        },
+          },
+        ],
       },
     },
-  });
+  },
+});
+
+const catalog = () => createPuckGenerationCatalog(catalogComponents());
 
 const heading = (optional: any = unset) => ({
   type: "Heading",
@@ -111,7 +112,7 @@ describe("fresh page creation schema", () => {
         ])
       ),
       ProductSection: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             slots: z.object({ CardsWrapperSlot: z.array(z.unknown()) }),
           }),
@@ -419,16 +420,16 @@ describe("fresh page creation schema", () => {
   });
 
   it("adds reachable generation defaults to the prompt without requiring them", () => {
-    const components = catalog().data.components;
+    const components = catalogComponents();
     const c = createPuckGenerationCatalog(
       {
         Heading: components.Heading,
         Section: components.Section,
         Unreachable: {
-          generation: { props: z.object({}) },
+          layoutGenerationMetadata: { props: z.object({}) },
           nestedOnly: true,
         },
-        Disabled: {},
+        Disabled: { layoutGenerationMetadata: { exclude: true } },
       },
       {
         defaultGenerationSectionIds: [
@@ -483,9 +484,9 @@ describe("fresh page creation schema", () => {
     "allows %s inside Grid but rejects it directly inside MainContent",
     (type) => {
       const c = createPuckGenerationCatalog({
-        [type]: { generation: { props: z.object({}) } },
+        [type]: { layoutGenerationMetadata: { props: z.object({}) } },
         Grid: {
-          generation: {
+          layoutGenerationMetadata: {
             props: z.object({
               slots: z.array(z.object({ Column: z.array(z.unknown()) })),
             }),
@@ -523,9 +524,9 @@ describe("fresh page creation schema", () => {
     ["ExpandedHeader", "ExpandedFooter"],
   ])("keeps %s and %s outside MainContent", (headerType, footerType) => {
     const c = createPuckGenerationCatalog({
-      ...catalog().data.components,
-      [headerType]: { generation: { props: z.object({}) } },
-      [footerType]: { generation: { props: z.object({}) } },
+      ...catalogComponents(),
+      [headerType]: { layoutGenerationMetadata: { props: z.object({}) } },
+      [footerType]: { layoutGenerationMetadata: { props: z.object({}) } },
     });
     const compiled = compileGenerationSchema(c, ["en"]);
     const header = { type: headerType, props: {} };
@@ -621,7 +622,7 @@ describe("fresh page creation schema", () => {
   it("preserves undeclared object and union defaults while validating all authored constraints", () => {
     const c = createPuckGenerationCatalog({
       Box: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.strictObject({
             style: z.strictObject({
               width: z.number().min(1).describe("Width in pixels"),
@@ -672,7 +673,9 @@ describe("fresh page creation schema", () => {
     const c = createPuckGenerationCatalog(
       {
         Root: {
-          generation: { props: z.object({ children: z.array(z.unknown()) }) },
+          layoutGenerationMetadata: {
+            props: z.object({ children: z.array(z.unknown()) }),
+          },
           fields: {
             children: {
               type: "slot",
@@ -684,15 +687,15 @@ describe("fresh page creation schema", () => {
           description: "Unique root description",
         },
         Child: {
-          generation: { props: z.object({ text: z.string() }) },
+          layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
           nestedOnly: true,
         },
         Blocked: {
-          generation: { props: z.object({ secret: z.string() }) },
+          layoutGenerationMetadata: { props: z.object({ secret: z.string() }) },
           nestedOnly: true,
         },
         Unreachable: {
-          generation: { props: z.object({ unused: z.string() }) },
+          layoutGenerationMetadata: { props: z.object({ unused: z.string() }) },
           nestedOnly: true,
         },
       },
@@ -762,31 +765,19 @@ describe("fresh page creation schema", () => {
   });
 
   it("preflights unreachable contracts independently", () => {
-    for (const value of [
-      z.any(),
-      z.record(z.string(), z.string()),
-      z.string().transform((s) => s.length),
-      z.string().refine((s) => !!s),
-      z
-        .string()
-        .refine((s) => !!s)
-        .optional(),
-    ]) {
-      expect(() =>
-        compileGenerationSchema(
-          createPuckGenerationCatalog(
-            {
-              Invalid: {
-                generation: { props: z.object({ value }) },
-                nestedOnly: true,
-              },
-            },
-            { rootAllowedComponentIds: ["MainContent"] }
-          ),
-          ["en"]
-        )
-      ).toThrow();
-    }
+    const catalog = createPuckGenerationCatalog(
+      {
+        Invalid: {
+          layoutGenerationMetadata: { props: z.object({ value: z.any() }) },
+          nestedOnly: true,
+        },
+      },
+      { rootAllowedComponentIds: ["MainContent"] }
+    );
+
+    expect(() => compileGenerationSchema(catalog, ["en"])).toThrow(
+      "Generation schema at Invalid.value: unsupported any schema"
+    );
   });
 
   it.each(["fixed", "catchall"] as const)(
@@ -800,7 +791,7 @@ describe("fresh page creation schema", () => {
       });
       const c = createPuckGenerationCatalog({
         Heading: {
-          generation: {
+          layoutGenerationMetadata: {
             props: z.object({
               text: kind === "fixed" ? fixed : fixed.catchall(z.string()),
             }),
@@ -848,12 +839,12 @@ describe("fresh page creation schema", () => {
     (translationMode) => {
       const c = createPuckGenerationCatalog({
         Child: {
-          generation: { props: z.object({ text: z.string() }) },
+          layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
           defaultProps: { text: "Child" },
           nestedOnly: true,
         },
         List: {
-          generation: {
+          layoutGenerationMetadata: {
             props: z.object({
               text: z.object({ defaultValue: z.string() }).catchall(z.string()),
               rows: z
@@ -914,7 +905,9 @@ describe("fresh page creation schema", () => {
   it("rejects incomplete output, model Ids, invalid values, unavailable defaults and removed outcomes", () => {
     const c = createPuckGenerationCatalog({
       Required: {
-        generation: { props: z.object({ title: z.string().min(1) }) },
+        layoutGenerationMetadata: {
+          props: z.object({ title: z.string().min(1) }),
+        },
       },
     });
     const compiled = compileGenerationSchema(c, ["en"]);
@@ -965,7 +958,7 @@ describe("fresh page creation schema", () => {
       Array.from({ length: 20 }, (_, componentIndex) => [
         `Section${componentIndex}`,
         {
-          generation: {
+          layoutGenerationMetadata: {
             props: z.object(
               Object.fromEntries(
                 Array.from({ length: 75 }, (_, index) => [

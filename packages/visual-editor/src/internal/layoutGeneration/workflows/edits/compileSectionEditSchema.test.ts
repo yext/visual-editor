@@ -56,7 +56,7 @@ describe("section edit targets and values", () => {
     ]);
     const catalog = createPuckGenerationCatalog({
       Banner: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             text: z.string(),
             styles: z.object({ backgroundColor: color }),
@@ -485,7 +485,7 @@ describe("section edit targets and values", () => {
       "Render the secondary CTA when writing its label and link.";
     const catalog = createPuckGenerationCatalog({
       Header: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             styles: z.object({
               showHeading: z.boolean().describe(parentGuidance),
@@ -512,9 +512,11 @@ describe("section edit targets and values", () => {
           },
         },
       },
-      Heading: { generation: { props: z.object({ text: z.string() }) } },
+      Heading: {
+        layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
+      },
       CTA: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             data: z.object({
               show: z.boolean().optional().describe(childGuidance),
@@ -633,7 +635,7 @@ describe("section edit localization", () => {
     (explicit) => {
       const catalog = createPuckGenerationCatalog({
         Heading: {
-          generation: {
+          layoutGenerationMetadata: {
             props: z.object({
               data: z.object({
                 text: z.object({
@@ -735,7 +737,7 @@ describe("section edit localization", () => {
     const richText = z.object({ html: z.string(), json: z.string() });
     const catalog = createPuckGenerationCatalog({
       Heading: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             text: z
               .object({
@@ -811,7 +813,7 @@ describe("section edit localization", () => {
         .catchall(z.string());
       const catalog = createPuckGenerationCatalog({
         Heading: {
-          generation: {
+          layoutGenerationMetadata: {
             props: z.object({
               wrapper: z
                 .object({
@@ -909,7 +911,9 @@ describe("section edit localization", () => {
           ? z.array(z.object({ text: localized }))
           : z.union([rich, localized]);
       const catalog = createPuckGenerationCatalog({
-        Heading: { generation: { props: z.object({ value: valueSchema }) } },
+        Heading: {
+          layoutGenerationMetadata: { props: z.object({ value: valueSchema }) },
+        },
       });
       const old = { html: "Hello", json: "original" };
       const translated = { html: "Bonjour", json: "French" };
@@ -1022,7 +1026,7 @@ describe("section edit localization", () => {
         .catchall(value.optional());
       const catalog = createPuckGenerationCatalog({
         Heading: {
-          generation: {
+          layoutGenerationMetadata: {
             props: z.object({
               rows: z.array(z.object({ text: z.union([value, localized]) })),
             }),
@@ -1092,7 +1096,7 @@ describe("section edit localization", () => {
       .catchall(z.string().optional());
     const catalog = createPuckGenerationCatalog({
       Heading: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             text: z.union([z.string(), localized]).optional(),
           }),
@@ -1144,7 +1148,7 @@ describe("section edit localization", () => {
         .catchall(z.string().optional());
       const catalog = createPuckGenerationCatalog({
         Heading: {
-          generation: {
+          layoutGenerationMetadata: {
             props: z.object({
               title: z.string(),
               rows: z.array(z.object({ text: localized })),
@@ -1219,7 +1223,7 @@ describe("section edit localization", () => {
         .catchall(z.string());
       const catalog = createPuckGenerationCatalog({
         Heading: {
-          generation: {
+          layoutGenerationMetadata: {
             props: z.object({ rows: z.array(z.object({ text: localized })) }),
           },
         },
@@ -1288,7 +1292,7 @@ describe("section edit localization", () => {
       .catchall(z.string());
     const catalog = createPuckGenerationCatalog({
       Heading: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({ rows: z.array(z.object({ text: localized })) }),
         },
       },
@@ -1337,7 +1341,7 @@ describe("section edit localization", () => {
         .catchall(z.string());
       const catalog = createPuckGenerationCatalog({
         Heading: {
-          generation: {
+          layoutGenerationMetadata: {
             props: z.object({
               text: z.union([z.string(), localized]).nullable().optional(),
             }),
@@ -1429,14 +1433,14 @@ describe("section edit insertion schemas", () => {
   it("inserts a section with required children protected from independent insertion", () => {
     const catalog = createPuckGenerationCatalog({
       Section: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({ heading: z.array(z.unknown()).length(1) }),
         },
         fields: { heading: { type: "slot", allow: ["Heading"] } },
       },
       Heading: {
         permissions: { insert: false, drag: false },
-        generation: { props: z.object({ text: z.string() }) },
+        layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
       },
     });
     const baseline: Content = { content: [] };
@@ -1619,7 +1623,7 @@ describe("section edit insertion schemas", () => {
       const binding = { field: "name", constantValueEnabled: false };
       const catalog = createPuckGenerationCatalog({
         Text: {
-          generation: {
+          layoutGenerationMetadata: {
             props: z.object({
               "text/a~b": text,
               rows: z.array(z.object({ text })),
@@ -1637,7 +1641,7 @@ describe("section edit insertion schemas", () => {
           },
         },
         Wrapper: {
-          generation: {
+          layoutGenerationMetadata: {
             props: z.object({ children: z.array(z.unknown()) }),
           },
           fields: { children: { type: "slot", allow: ["Text"] } },
@@ -1728,7 +1732,7 @@ describe("section edit insertion schemas", () => {
     ({ locale, translationMode, accepted }) => {
       const catalog = createPuckGenerationCatalog({
         Heading: {
-          generation: {
+          layoutGenerationMetadata: {
             props: z.object({
               text: z.object({
                 defaultValue: z.string(),
@@ -1795,7 +1799,7 @@ describe("section edit insertion schemas", () => {
   it("rejects unrepresentable locale removals instead of accepting restored defaults", () => {
     const catalog = createPuckGenerationCatalog({
       Heading: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             text: z.object({
               defaultValue: z.string(),
@@ -1845,8 +1849,8 @@ describe("section edit insertion schemas", () => {
 
   it("inserts cards whose default styles leave an optional union unset", () => {
     const fixture = editGenerationFixture();
-    fixture.components.Card.generation!.props =
-      fixture.components.Card.generation!.props.extend({
+    fixture.components.Card.layoutGenerationMetadata!.props =
+      fixture.components.Card.layoutGenerationMetadata!.props!.extend({
         style: z.object({
           color: z.enum(["red", "blue"]),
           border: z
@@ -1956,7 +1960,7 @@ describe("section edit insertion schemas", () => {
   it("handles required arrays containing slots without using existing array members", () => {
     const catalog = createPuckGenerationCatalog({
       Group: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             groups: z.array(
               z.object({ label: z.string(), children: z.array(z.unknown()) })
@@ -1975,7 +1979,7 @@ describe("section edit insertion schemas", () => {
       },
       Text: {
         nestedOnly: true,
-        generation: { props: z.object({ text: z.string() }) },
+        layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
       },
     });
     const data: Content = {
@@ -2120,7 +2124,9 @@ describe("section edit slotted sources", () => {
         fixture.section([fixture.card("Existing")]),
       ]);
       fixture.components.Outer = {
-        generation: { props: z.object({ children: z.array(z.unknown()) }) },
+        layoutGenerationMetadata: {
+          props: z.object({ children: z.array(z.unknown()) }),
+        },
         fields: { children: { type: "slot", allow: ["Section"] } },
         defaultProps: {
           children: [

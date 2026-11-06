@@ -57,9 +57,29 @@ export const LayoutGenerationChat = ({
 }) => {
   const intent = React.useContext(IntentPageGenerationChatContext);
   const logRef = React.useRef<HTMLDivElement>(null);
-  const userMessageCount = chat.messages.filter(
+  const userMessages = chat.messages.filter(
     (message) => message.role === "user"
-  ).length;
+  );
+  const userMessageCount = userMessages.length;
+  const lastUserMessage = userMessages.at(-1);
+  const isIntentFailure =
+    intent?.state.stage === "failed" ||
+    (["idle", "stopped"].includes(intent?.state.stage ?? "") &&
+      intent?.status === "FAILED");
+  const failureState = isIntentFailure ? intent?.state : null;
+  const [failureNotice, setFailureNotice] = React.useState({
+    state: failureState,
+    userMessageCount,
+  });
+  if (failureNotice.state !== failureState) {
+    setFailureNotice({ state: failureState, userMessageCount });
+  }
+  const dismissedIntentFailure =
+    isIntentFailure &&
+    failureNotice.state === failureState &&
+    userMessageCount > failureNotice.userMessageCount &&
+    !!lastUserMessage &&
+    !lastUserMessage.intent;
   const previousUserMessageCount = React.useRef(userMessageCount);
   const assistantMessageCount = chat.messages.filter(
     (message) => message.role === "assistant" && !message.pending
@@ -220,6 +240,8 @@ export const LayoutGenerationChat = ({
               )
           )}
           {intent?.eligible &&
+            !dismissedIntentFailure &&
+            (intent.state.stage !== "stopped" || intent.status === "FAILED") &&
             !["generating", "clarification", "saving", "completed"].includes(
               intent.state.stage
             ) &&

@@ -1,10 +1,23 @@
+import React from "react";
 import { Puck, useGetPuck } from "@puckeditor/core";
 import { act, render, screen, waitFor } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { chatConfig, layout } from "../testing/chatFixtures.tsx";
 import { LayoutGenerationChatBridge } from "./LayoutGenerationChatBridge.tsx";
 import { LayoutGenerationChatCanvas } from "./LayoutGenerationChatCanvas.ts";
-import { LayoutGenerationChatContext } from "./contexts.tsx";
+import {
+  LayoutGenerationChatContext,
+  LayoutGenerationChatUiContext,
+} from "./contexts.tsx";
+import {
+  CardContextProvider,
+  useCardContext,
+} from "../../../hooks/useCardContext.tsx";
+import { slottedFixture } from "../testing/slottedFixtures.ts";
+import { validateAuthored } from "../shared/authoredValues.ts";
+import { LayoutPuckOverride } from "../../components/LayoutPuckOverride.tsx";
+import { TemplatePropsContext } from "../../../hooks/useDocument.tsx";
+import { ErrorProvider } from "../../../contexts/ErrorContext.tsx";
 import { IntentPageGenerationChatContext } from "./useIntentPageGeneration.ts";
 import { IntentPageGenerationWorkflow } from "../workflows/intentPageGeneration/IntentPageGenerationWorkflow.ts";
 import { layoutGenerationChatPlugin } from "./LayoutGenerationChatPlugin.tsx";
@@ -193,4 +206,139 @@ it("opens the assistant once for a pending intent generation", async () => {
   expect(getPuck().appState.ui.leftSideBarVisible).toBe(false);
   view.rerender(renderEditor("COMPLETED"));
   expect(getPuck().appState.ui.plugin.current).toBe("blocks");
+});
+
+it("keeps shared card effects from racing streamed updates and resumes manual backup synchronization", async () => {
+  const f = slottedFixture();
+  const canvas = new LayoutGenerationChatCanvas();
+  let getPuck!: ReturnType<typeof useGetPuck>;
+  const Section = ({ slots: { CardSlot } }: any) => {
+    getPuck = useGetPuck();
+    return (
+      <CardContextProvider>
+        <CardSlot />
+      </CardContextProvider>
+    );
+  };
+  // Match section-library cards: publish styles to context and replace siblings
+  // when shared styles change. Generation must own its authored styles instead.
+  const Card = (props: any) => {
+    const getPuck = useGetPuck();
+    const { sharedCardProps, setSharedCardProps } = useCardContext<{
+      color: string;
+    }>();
+    React.useEffect(() => {
+      if (!sharedCardProps || sharedCardProps.color === props.styles.color)
+        return;
+      const { dispatch, getSelectorForId, getItemBySelector } = getPuck();
+      const selector = getSelectorForId(props.id)!;
+      const saved = getItemBySelector(selector)!;
+      dispatch({
+        type: "replace",
+        destinationZone: selector.zone,
+        destinationIndex: selector.index,
+        data: {
+          ...saved,
+          props: { ...saved.props, styles: { color: sharedCardProps.color } },
+        },
+      });
+    }, [sharedCardProps]);
+    React.useEffect(() => {
+      if (sharedCardProps?.color === props.styles.color) return;
+      setSharedCardProps({ color: props.styles.color });
+    }, [props.styles.color]);
+    return null;
+  };
+  f.components.Section.render = Section;
+  f.components.FAQCard.render = Card;
+  const initial = { root: { props: {} }, content: f.materialize().content };
+  const streamDocument = { locale: "en" };
+  const config = { components: f.components };
+  const tree = (active: boolean) => (
+    <ErrorProvider>
+      <TemplatePropsContext.Provider value={{ document: streamDocument }}>
+        <LayoutGenerationChatUiContext.Provider
+          value={{ chat: { isGeneratingPage: active } } as any}
+        >
+          <LayoutGenerationChatContext.Provider value={canvas}>
+            <Puck
+              config={config}
+              data={initial}
+              iframe={{ enabled: false }}
+              overrides={{ puck: LayoutPuckOverride }}
+            />
+          </LayoutGenerationChatContext.Provider>
+        </LayoutGenerationChatUiContext.Provider>
+      </TemplatePropsContext.Provider>
+    </ErrorProvider>
+  );
+  const view = render(tree(false));
+  await waitFor(() => expect(canvas.ready).toBe(true));
+  view.rerender(tree(true));
+  act(() => {
+    canvas.begin();
+    canvas.beginFullPageUpdate();
+  });
+  const replacement = f.materialize([
+    f.section(
+      Array.from({ length: 5 }, (_, index) =>
+        f.card(`Card ${index}`, index < 3 ? "pink" : "green")
+      )
+    ),
+  ]).content[0];
+  const signal = new AbortController().signal;
+  const sectionId = getPuck().appState.data.content[0].props.id;
+  await act(async () => {
+    await canvas.applyFullPageUpdate(
+      { kind: "replace", sectionId, sections: [replacement] },
+      0,
+      signal
+    );
+  });
+  const props = getPuck().appState.data.content[0].props;
+  expect(
+    props.slots.CardSlot.map((card: any) => card.props.styles.color)
+  ).toEqual(["pink", "pink", "pink", "green", "green"]);
+  expect(props.manualSlots.CardSlot).toEqual(props.slots.CardSlot);
+  await act(async () => {
+    await canvas.applyFullPageUpdate(
+      { kind: "keep", sectionId: replacement.props.id },
+      1,
+      signal
+    );
+    canvas.finish();
+  });
+  await act(async () => view.rerender(tree(false)));
+  await waitFor(() => {
+    const current = getPuck().appState.data.content[0].props;
+    expect(current.manualSlots.CardSlot).toEqual(current.slots.CardSlot);
+    expect(() =>
+      validateAuthored(f.catalog, getPuck().appState.data)
+    ).not.toThrow();
+  });
+  // A real style edit after generation still propagates and updates backups.
+  await act(async () => {
+    const { dispatch, getSelectorForId, getItemBySelector } = getPuck();
+    const selector = getSelectorForId(props.slots.CardSlot[0].props.id)!;
+    const saved = getItemBySelector(selector)!;
+    dispatch({
+      type: "replace",
+      destinationZone: selector.zone,
+      destinationIndex: selector.index,
+      data: {
+        ...saved,
+        props: { ...saved.props, styles: { color: "purple" } },
+      },
+    });
+  });
+  await waitFor(() => {
+    const current = getPuck().appState.data.content[0].props;
+    expect(
+      current.slots.CardSlot.map((card: any) => card.props.styles.color)
+    ).toEqual(Array(5).fill("purple"));
+    expect(current.manualSlots.CardSlot).toEqual(current.slots.CardSlot);
+    expect(() =>
+      validateAuthored(f.catalog, getPuck().appState.data)
+    ).not.toThrow();
+  });
 });

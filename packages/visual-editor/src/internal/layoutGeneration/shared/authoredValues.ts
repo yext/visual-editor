@@ -5,7 +5,6 @@ import type { PuckGenerationCatalog } from "../../../utils/createPuckGenerationC
 import { clonePuckResolveData } from "../../utils/clonePuckResolveData.ts";
 import { unwrapZodSchema as unwrap } from "../../utils/unwrapZodSchema.ts";
 import {
-  generationFields,
   isLinkedSource,
   manualBackup,
   slottedAuthoredProps,
@@ -48,6 +47,26 @@ export const rejectZones = (data: Content) => {
   }
 };
 
+/** Identity traversal follows normalized fields even when generation omits them. */
+const identitySchema = (field: Fields[string] | undefined): z.ZodType => {
+  if (field?.type === "object") {
+    return z.object(
+      Object.fromEntries(
+        Object.entries(field.objectFields).map(([key, child]) => [
+          key,
+          identitySchema(child),
+        ])
+      )
+    );
+  }
+  if (field?.type === "array") {
+    return z.array(
+      identitySchema({ type: "object", objectFields: field.arrayFields })
+    );
+  }
+  return z.unknown();
+};
+
 /** Shared value traversal used by extraction, indexing, slot handling and Id allocation. */
 export const authoredValue = (
   input: any,
@@ -58,12 +77,13 @@ export const authoredValue = (
     items: SavedComponent[],
     path: string,
     field: NonNullable<Collection["field"]>
-  ) => SavedComponent[]
+  ) => SavedComponent[],
+  identityOnly = false
 ): any => {
   if (input === undefined || input === null) {
     return input;
   }
-  const node = unwrap(schema);
+  const node = unwrap(identityOnly ? identitySchema(field) : schema);
   if (field?.type === "slot") {
     if (!Array.isArray(input)) {
       throw new Error(`${path}: slot must be an array`);
@@ -168,6 +188,8 @@ export const walkAuthored = (
   data: Content,
   onComponent: (item: InventoryItem) => void,
   options: {
+    /** Include system-owned slots for identity allocation and validation only. */
+    identityOnly?: boolean;
     /** Visit each authored collection, including empty slots. */
     onCollection?: (collection: Collection) => void;
   } = {}
@@ -187,11 +209,11 @@ export const walkAuthored = (
       }
       onComponent({ component, collection });
       const config = catalog.data.components[component.type];
-      if (config?.generation) {
+      if (config && (config.generation || options.identityOnly)) {
         authoredValue(
           slottedAuthoredProps(component, config),
-          config.generation.props,
-          { type: "object", objectFields: generationFields(config) },
+          config.generation?.props ?? z.object({}),
+          { type: "object", objectFields: config.fields ?? {} },
           `${collection.path}/${index}/props`,
           (items, path, field) => {
             visitCollection({
@@ -201,7 +223,8 @@ export const walkAuthored = (
               field,
             });
             return items;
-          }
+          },
+          options.identityOnly
         );
       }
       if (
@@ -220,22 +243,32 @@ export const walkAuthored = (
   visitCollection({ items: data.content, path: "content" });
 };
 
-/** Collect authored identities and reject missing or duplicate Ids. */
+/** Require targetable identities; check all existing descendant Ids for duplicates. */
 export const collectAuthoredIds = (
   catalog: PuckGenerationCatalog,
   data: Content
 ) => {
+  const required = new WeakSet<SavedComponent>();
+  walkAuthored(catalog, data, ({ component }) => required.add(component));
   const ids = new Set<string>();
-  walkAuthored(catalog, data, ({ component, collection }) => {
-    const id = component.props.id;
-    if (typeof id !== "string" || !id.trim()) {
-      throw new Error(`${collection.path}: missing component Id`);
-    }
-    if (ids.has(id)) {
-      throw new Error(`${collection.path}: duplicate component Id ${id}`);
-    }
-    ids.add(id);
-  });
+  walkAuthored(
+    catalog,
+    data,
+    ({ component, collection }) => {
+      const id = component.props.id;
+      if (typeof id !== "string" || !id.trim()) {
+        if (required.has(component)) {
+          throw new Error(`${collection.path}: missing component Id`);
+        }
+        return;
+      }
+      if (ids.has(id)) {
+        throw new Error(`${collection.path}: duplicate component Id ${id}`);
+      }
+      ids.add(id);
+    },
+    { identityOnly: true }
+  );
   return ids;
 };
 
@@ -255,7 +288,7 @@ export const extractAuthored = (
           ? authoredValue(
               slottedAuthoredProps(input, config),
               config.generation.props,
-              { type: "object", objectFields: generationFields(config) },
+              { type: "object", objectFields: config.fields ?? {} },
               "props",
               (items) => items.map(component)
             )
@@ -276,52 +309,57 @@ export const validateAuthored = (
   data: Content
 ) => {
   const seenIds = collectAuthoredIds(catalog, data);
-  walkAuthored(catalog, data, ({ component, collection }) => {
-    const config = Object.hasOwn(catalog.data.components, component.type)
-      ? catalog.data.components[component.type]
-      : undefined;
-    if (!config) {
-      throw new Error(
-        `${collection.path}: unknown component ${component.type}`
-      );
-    }
-    if (
-      !permitted(component.type, collection.field) ||
-      (!collection.ownerId &&
-        (config.nestedOnly ||
-          (catalog.puckOptions.rootAllowedComponentIds &&
-            !catalog.puckOptions.rootAllowedComponentIds.includes(
-              component.type
-            ))))
-    ) {
-      throw new Error(`${collection.path}: ${component.type} is not allowed`);
-    }
-    validateSlottedSource(component, config);
-    validateLinkedCardStructure(component, config, catalog, seenIds);
-    if (
-      config.generation?.slottedItemSource &&
-      !isLinkedSource(component.props) &&
-      !isDeepEqual(
-        extractAuthored(catalog, { content: component.props.slots.CardSlot }),
-        extractAuthored(catalog, { content: manualBackup(component) })
-      )
-    ) {
-      throw new Error(
-        `${component.type} (${component.props.id}): invalid props/manualSlots/CardSlot`
-      );
-    }
-    if (config.generation) {
-      const projected = extractAuthored(catalog, { content: [component] })
-        .content[0].props;
-      delete projected.id;
-      const result = config.generation.props.safeParse(projected);
-      if (!result.success) {
+  walkAuthored(
+    catalog,
+    data,
+    ({ component, collection }) => {
+      const config = Object.hasOwn(catalog.data.components, component.type)
+        ? catalog.data.components[component.type]
+        : undefined;
+      if (!config) {
         throw new Error(
-          `${collection.path} (${component.type}, ${component.props.id}): ${result.error.issues.map((issue) => `props/${issue.path.join("/")}: ${issue.code}`).join(", ")}`
+          `${collection.path}: unknown component ${component.type}`
         );
       }
-    }
-  });
+      if (
+        !permitted(component.type, collection.field) ||
+        (collection.path === "content" &&
+          (config.nestedOnly ||
+            (catalog.puckOptions.rootAllowedComponentIds &&
+              !catalog.puckOptions.rootAllowedComponentIds.includes(
+                component.type
+              ))))
+      ) {
+        throw new Error(`${collection.path}: ${component.type} is not allowed`);
+      }
+      validateSlottedSource(component, config);
+      validateLinkedCardStructure(component, config, catalog, seenIds);
+      if (
+        config.generation?.slottedItemSource &&
+        !isLinkedSource(component.props) &&
+        !isDeepEqual(
+          extractAuthored(catalog, { content: component.props.slots.CardSlot }),
+          extractAuthored(catalog, { content: manualBackup(component) })
+        )
+      ) {
+        throw new Error(
+          `${component.type} (${component.props.id}): invalid props/manualSlots/CardSlot`
+        );
+      }
+      if (config.generation) {
+        const projected = extractAuthored(catalog, { content: [component] })
+          .content[0].props;
+        delete projected.id;
+        const result = config.generation.props.safeParse(projected);
+        if (!result.success) {
+          throw new Error(
+            `${collection.path} (${component.type}, ${component.props.id}): ${result.error.issues.map((issue) => `props/${issue.path.join("/")}: ${issue.code}`).join(", ")}`
+          );
+        }
+      }
+    },
+    { identityOnly: true }
+  );
 };
 
 /** Report a bounded location, never authored values, when resolution changes content. */

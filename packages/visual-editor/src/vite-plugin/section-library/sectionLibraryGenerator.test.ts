@@ -136,7 +136,9 @@ describe("generateSectionLibraryFiles", () => {
         ].generation.props.safeParse({ title: "Nested heading" }).success
       ).toBe(true);
       expect(
-        directoryCatalog.data.components["directory-header"].props.safeParse({
+        directoryCatalog.data.components[
+          "directory-header"
+        ].generation!.props.safeParse({
           title: 42,
         }).success
       ).toBe(false);
@@ -149,14 +151,16 @@ describe("generateSectionLibraryFiles", () => {
       expect(directoryCatalog.componentNames).not.toContain("hero");
       expect(catalog.componentNames).not.toContain("Locator");
       expect(
-        catalog.data.components.hero.props.safeParse({
+        catalog.data.components.hero.generation!.props.safeParse({
           id: "hero",
           title: "Hello",
         }).success
       ).toBe(true);
       expect(
-        catalog.data.components.hero.props.safeParse({ id: "hero", title: 42 })
-          .success
+        catalog.data.components.hero.generation!.props.safeParse({
+          id: "hero",
+          title: 42,
+        }).success
       ).toBe(false);
       const { Hero } = await server.ssrLoadModule(
         "/src/library/sections/Hero.tsx"
@@ -286,7 +290,7 @@ describe("generateSectionLibraryFiles", () => {
     );
     expect(source).toContain("config as sectionConfig1, Hero as Section1");
     expect(source).toContain(
-      '"hero": { generation: Section1.layoutGenerationMetadata'
+      '"hero": { layoutGenerationMetadata: Section1.layoutGenerationMetadata'
     );
     expect(source).toContain("fields: Section1.fields");
     expect(source).toContain("defaultProps: Section1.defaultProps");
@@ -295,7 +299,7 @@ describe("generateSectionLibraryFiles", () => {
       "permissions: sharedComponentConfigs[component.id]?.permissions"
     );
     expect(source).toContain(
-      "generation: sharedComponentConfigs[component.id]?.layoutGenerationMetadata"
+      "layoutGenerationMetadata: sharedComponentConfigs[component.id]?.layoutGenerationMetadata"
     );
     expect(source).toContain('"location": createPuckGenerationCatalog');
     expect(source).not.toContain("formalProps");

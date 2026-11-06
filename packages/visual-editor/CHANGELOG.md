@@ -1,3 +1,13 @@
+#### 2.0.0-beta.10 (2026-11-06)
+
+##### New Features
+
+- infer zod schema for layout generation ([#1382](https://github.com/yext/visual-editor/pull/1382)) ([70faea78](https://github.com/yext/visual-editor/commit/70faea78e99c9d346962ed14da784d5ada1c4af9))
+
+##### Bug Fixes
+
+- tooltips appearing for styled fields ([#1381](https://github.com/yext/visual-editor/pull/1381)) ([b75e50f4](https://github.com/yext/visual-editor/commit/b75e50f42a8070657681fdfa509809c5ae529a8c))
+
 #### 2.0.0-beta.9 (2026-11-04)
 
 ##### Bug Fixes

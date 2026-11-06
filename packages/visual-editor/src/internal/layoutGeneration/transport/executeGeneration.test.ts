@@ -19,7 +19,7 @@ import { completed } from "../testing/modelFixtures.ts";
 
 const catalog = createPuckGenerationCatalog({
   Heading: {
-    generation: { props: z.object({ text: z.string().min(1) }) },
+    layoutGenerationMetadata: { props: z.object({ text: z.string().min(1) }) },
     defaultProps: { text: "Default" },
   },
 });
@@ -59,11 +59,15 @@ it.each(["create", "fullPageUpdate"] as const)(
     const c = createPuckGenerationCatalog(
       {
         Heading: {
-          generation: { props: z.object({ text: z.string().min(1) }) },
+          layoutGenerationMetadata: {
+            props: z.object({ text: z.string().min(1) }),
+          },
           defaultProps: { text: "Default" },
         },
         Extra: {
-          generation: { props: z.object({ text: z.string().min(1) }) },
+          layoutGenerationMetadata: {
+            props: z.object({ text: z.string().min(1) }),
+          },
           defaultProps: { text: "Default" },
         },
       },
@@ -175,7 +179,7 @@ it.each(["create", "fullPageUpdate"] as const)(
   async (mode) => {
     const c = createPuckGenerationCatalog({
       Heading: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             text: z.string().describe("Write displayed copy in this field."),
             styles: z.object({ color: z.string() }),
@@ -283,7 +287,9 @@ describe("strict request execution", () => {
   it("asks preparation questions using a small schema before loading component contracts", async () => {
     const c = createPuckGenerationCatalog({
       Uncompilable: {
-        generation: { props: z.object({ unsupported: z.custom() }) },
+        layoutGenerationMetadata: {
+          props: z.object({ unsupported: z.custom() }),
+        },
       },
     });
     const preparation = {
@@ -517,7 +523,9 @@ describe("strict request execution", () => {
     const fetchMock = vi.fn();
     modelResponder.mockImplementation(fetchMock);
     const unsupported = createPuckGenerationCatalog({
-      Invalid: { generation: { props: z.object({ open: z.any() }) } },
+      Invalid: {
+        layoutGenerationMetadata: { props: z.object({ open: z.any() }) },
+      },
     });
     const invalid = harness(
       {

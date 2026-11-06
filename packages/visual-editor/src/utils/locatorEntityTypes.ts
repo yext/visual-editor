@@ -6,7 +6,7 @@ import {
 import { useDocument } from "../hooks/useDocument.tsx";
 import { pt } from "../utils/i18n/platform.ts";
 
-const LOCATOR_ENTITY_TYPES = [
+export const LOCATOR_ENTITY_TYPES = Object.freeze([
   "location",
   "healthcareProfessional",
   "healthcareFacility",
@@ -16,7 +16,7 @@ const LOCATOR_ENTITY_TYPES = [
   "hotel",
   "providerFacility",
   "financialProfessional",
-] as const;
+] as const);
 
 export type LocatorEntityType = (typeof LOCATOR_ENTITY_TYPES)[number];
 export const DEFAULT_ENTITY_TYPE: LocatorEntityType = "location";

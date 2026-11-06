@@ -3,10 +3,22 @@ import type { Config, Fields, Permissions } from "@puckeditor/core";
 import { z } from "zod";
 import { mainContentDisallowedComponents } from "../components/helpers/MainContent.tsx";
 import type { LayoutGenerationMetadata } from "../fields/fields.ts";
+import {
+  inferGenerationSchema,
+  type FieldOmission,
+} from "../internal/layoutGeneration/schema/inferGenerationSchema.ts";
+import {
+  normalizeGenerationFields,
+  validateSingleChildSlots,
+} from "../internal/layoutGeneration/schema/normalizeGenerationFields.ts";
+import {
+  restrictSlottedItemSourceFields,
+  validateSlottedItemSourceContract,
+} from "../internal/layoutGeneration/schema/slottedItemSourceSchema.ts";
 import { mainContentDescription } from "../internal/layoutGeneration/schemaGuidance.ts";
 
 export type GenerationComponent = {
-  generation?: LayoutGenerationMetadata;
+  generation?: LayoutGenerationMetadata & { props: z.ZodObject };
   description?: string;
   fields?: Fields;
   defaultProps?: Record<string, unknown>;
@@ -15,9 +27,11 @@ export type GenerationComponent = {
   permissions?: Partial<Permissions>;
 };
 
-type GenerationComponentInput = GenerationComponent & {
+type GenerationComponentInput = Omit<GenerationComponent, "generation"> & {
   layoutGenerationMetadata?: LayoutGenerationMetadata;
 };
+
+const emptyProps = z.object({});
 
 const puckSchema = defineSchema((s) => ({
   spec: s.object({
@@ -48,7 +62,9 @@ export const createPuckGenerationCatalog = (
 ) => {
   const entries: Record<string, GenerationComponentInput> = {
     MainContent: {
-      generation: { props: z.object({ content: z.array(z.unknown()) }) },
+      layoutGenerationMetadata: {
+        props: z.object({ content: z.array(z.unknown()) }),
+      },
       fields: {
         content: {
           type: "slot",
@@ -65,24 +81,64 @@ export const createPuckGenerationCatalog = (
     },
     ...components,
   };
+
+  const fieldOmissions: FieldOmission[] = [];
+
   const catalog = defineCatalog(puckSchema, {
     components: Object.fromEntries(
       Object.entries(entries).map(
         ([name, { layoutGenerationMetadata, ...component }]) => {
-          const generation = layoutGenerationMetadata ?? component.generation;
+          const metadata = layoutGenerationMetadata;
+
+          const fields = normalizeGenerationFields(component.fields);
+
+          validateSingleChildSlots(name, fields, !!metadata?.slottedItemSource);
+
+          const generation = metadata?.exclude
+            ? undefined
+            : metadata?.props
+              ? (metadata as LayoutGenerationMetadata & { props: z.ZodObject })
+              : {
+                  ...metadata,
+                  props: inferGenerationSchema(
+                    name,
+                    fields,
+                    component.defaultProps,
+                    metadata,
+                    fieldOmissions
+                  ),
+                };
+
           return [
             name,
             {
               ...component,
               generation,
-              props: generation?.props ?? z.object({}),
+              fields,
+              description:
+                [component.description, metadata?.instructions]
+                  .filter(Boolean)
+                  .join("\n") || undefined,
+              // JSON Render adapter; generation.props remains the single schema source.
+              get props(): z.ZodObject {
+                return this.generation?.props ?? emptyProps;
+              },
             },
           ];
         }
       )
     ),
   });
-  return Object.assign(catalog, { puckOptions: options });
+
+  for (const [name, component] of Object.entries(catalog.data.components)) {
+    validateSlottedItemSourceContract(name, component, catalog.data.components);
+    component.fields = restrictSlottedItemSourceFields(
+      component.fields,
+      component.generation?.slottedItemSource
+    );
+  }
+
+  return Object.assign(catalog, { puckOptions: options, fieldOmissions });
 };
 
 export type PuckGenerationCatalog = ReturnType<

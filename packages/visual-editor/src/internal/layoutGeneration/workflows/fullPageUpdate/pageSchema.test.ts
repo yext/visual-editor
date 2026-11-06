@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { expect, it, vi } from "vitest";
 import type { Data } from "@puckeditor/core";
 import type { Content } from "../../shared/authoredValues.ts";
@@ -216,4 +217,128 @@ it("never applies incomplete steps and rejects a final response that rewrites st
       })
     )
   ).toThrow("Clarification cannot follow");
+});
+
+it.each(["replace", "insert"] as const)(
+  "streams and parses a %s into MainContent with restricted page roots",
+  async (kind) => {
+    const catalog = creationCatalog();
+    catalog.puckOptions.rootAllowedComponentIds = ["MainContent"];
+    const baseline = fullPageUpdateLayout();
+    baseline.content = baseline.content.filter(
+      (item) => item.type === "MainContent"
+    );
+    const compiled = compileFullPageUpdateSchema(catalog, ["en"], baseline);
+    const wire = JSON.stringify(
+      fullPageUpdateResponse([
+        {
+          kind,
+          ...(kind === "replace"
+            ? { sectionId: "hero" }
+            : {
+                collection: { ownerId: "main", slotPath: "/content" },
+                anchor: { position: "start" },
+              }),
+          sections: [heading("Updated")],
+        },
+      ])
+    );
+    let streamed = baseline;
+    const onStep = vi.fn(async (step: FullPageUpdateStep) => {
+      streamed = applyFullPageUpdateStep(catalog, streamed, step);
+    });
+    const stream = compiled.streamFullPageUpdate(onStep);
+    await stream.write(wire);
+    stream.finish();
+    expect(onStep).toHaveBeenCalledOnce();
+    const step = compiled.parseResponse(wire).result.steps[0];
+    expect(step).toEqual(onStep.mock.calls[0][0]);
+    expect(applyFullPageUpdateStep(catalog, baseline, step)).toEqual(streamed);
+    expect(bodySections(streamed)[0].props.text).toBe("Updated");
+    expect(streamed.content[0].type).toBe("MainContent");
+
+    // Preparing a section fragment must not relax actual page-root permissions.
+    expect(() =>
+      applyFullPageUpdateStep(catalog, baseline, {
+        kind: "insert",
+        collection: { ownerId: null, slotPath: null },
+        anchor: { position: "end" },
+        sections: step.sections,
+      })
+    ).toThrow("Component type is not permitted in this section collection.");
+  }
+);
+
+it("limits model removal targets to exact existing section Ids while tolerating missing removals at runtime", async () => {
+  const catalog = creationCatalog();
+  const baseline = fullPageUpdateLayout();
+  const compiled = compileFullPageUpdateSchema(catalog, ["en"], baseline);
+  const wireSchema = z.fromJSONSchema(compiled.jsonSchema);
+  const response = (sectionId: string) =>
+    fullPageUpdateResponse([{ kind: "remove", sectionId }]);
+  expect(wireSchema.safeParse(response("hero")).success).toBe(true);
+  expect(wireSchema.safeParse(response("missing")).success).toBe(false);
+  expect(wireSchema.safeParse(response("main")).success).toBe(false);
+  let current = baseline;
+  const onStep = vi.fn(async (step: FullPageUpdateStep) => {
+    current = applyFullPageUpdateStep(catalog, current, step);
+  });
+  const stream = compiled.streamFullPageUpdate(onStep);
+  const wire = JSON.stringify(
+    fullPageUpdateResponse([
+      { kind: "remove", sectionId: "missing" },
+      { kind: "remove", sectionId: "services" },
+      { kind: "keep", sectionId: "hero" },
+    ])
+  );
+  await stream.write(wire);
+  stream.finish();
+  expect(onStep).toHaveBeenCalledTimes(3);
+  expect(compiled.parseResponse(wire).result.steps).toEqual(
+    onStep.mock.calls.map(([step]) => step)
+  );
+  expect(bodySections(current).map((item) => item.props.id)).toEqual([
+    "hero",
+    "testimonials",
+  ]);
+  const unstreamed = compileFullPageUpdateSchema(catalog, ["en"], baseline);
+  expect(
+    unstreamed.parseResponse(JSON.stringify(response("missing"))).result.steps
+  ).toEqual([{ kind: "remove", sectionId: "missing" }]);
+});
+
+it("excludes nested card Ids from model removal targets", () => {
+  const f = slottedFixture();
+  const baseline = f.materialize();
+  const compiled = compileFullPageUpdateSchema(f.catalog, ["en"], baseline);
+  const schema = z.fromJSONSchema(compiled.jsonSchema);
+  const response = (sectionId: string) =>
+    fullPageUpdateResponse([{ kind: "remove", sectionId }]);
+  expect(schema.safeParse(response(baseline.content[0].props.id)).success).toBe(
+    true
+  );
+  expect(
+    schema.safeParse(
+      response(baseline.content[0].props.slots.CardSlot[0].props.id)
+    ).success
+  ).toBe(false);
+  expect(() =>
+    applyFullPageUpdateStep(f.catalog, baseline, {
+      kind: "remove",
+      sectionId: baseline.content[0].props.slots.CardSlot[0].props.id,
+    })
+  ).toThrow("Full-page update must target an existing section");
+});
+
+it("offers no removal operation when the page has no sections", () => {
+  const compiled = compileFullPageUpdateSchema(creationCatalog(), ["en"], {
+    content: [],
+  });
+  const schema = z.fromJSONSchema(compiled.jsonSchema);
+  expect(schema.safeParse(fullPageUpdateResponse([])).success).toBe(true);
+  expect(
+    schema.safeParse(
+      fullPageUpdateResponse([{ kind: "remove", sectionId: "missing" }])
+    ).success
+  ).toBe(false);
 });

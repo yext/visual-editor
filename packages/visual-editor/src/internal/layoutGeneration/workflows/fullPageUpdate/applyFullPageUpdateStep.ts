@@ -38,11 +38,21 @@ export const applyFullPageUpdateStep = <T extends Content>(
     "sectionId" in step
       ? inventory.components.find((item) => item.componentId === step.sectionId)
       : undefined;
-  if ("sectionId" in step && (!section || section.sectionId !== step.sectionId))
+  // A missing removal target is already absent; preserve the remaining page.
+  if (step.kind === "remove" && !section) {
+    return candidate;
+  }
+  if (
+    "sectionId" in step &&
+    (!section || section.sectionId !== step.sectionId)
+  ) {
     throw new Error(
       "Full-page update must target an existing section, not scaffolding or nested components."
     );
-  if (step.kind === "keep") return candidate;
+  }
+  if (step.kind === "keep") {
+    return candidate;
+  }
   const structure = (
     operation: Extract<SectionEditOperation, { kind: "remove" | "reorder" }>
   ) => {

@@ -39,10 +39,17 @@ export const compileFullPageUpdateSchema = (
         config.permissions?.insert !== false
     )
     .map(([name]) => element(name).wire);
+  const existingSectionIds = inventory.components
+    .filter((item) => item.componentId === item.sectionId)
+    .map((item) => item.componentId);
   const sectionId = z.string().min(1);
+  const removalSchema = z.strictObject({
+    kind: z.literal("remove"),
+    sectionId,
+  });
   const alternatives: z.ZodType[] = [
     z.strictObject({ kind: z.literal("keep"), sectionId }),
-    z.strictObject({ kind: z.literal("remove"), sectionId }),
+    removalSchema,
     z.strictObject({
       kind: z.literal("reorder"),
       sectionId,
@@ -70,28 +77,41 @@ export const compileFullPageUpdateSchema = (
     );
   }
   const stepSchema = union(alternatives);
-  const responseSchema = z.strictObject({
-    translationMode: z
-      .enum(["defaultOnly", "translate"])
-      .describe(translationModeGuidance),
-    result: z.union([
-      z.strictObject({
-        action: z.literal("clarification"),
-        question: z.string().min(1),
-      }),
-      z.strictObject({
-        action: z.literal("fullPageUpdate"),
-        steps: z
-          .array(stepSchema)
-          .describe(
-            "Plan all section decisions before generating updated content. Emit all remove steps first, then explicit keep steps for every unchanged section, before any reorder, replace, or insert steps. The canvas is revealed after removals and keeps, before updates begin. Use surviving sections as anchors."
-          ),
-      }),
-    ]),
-    text: z.string(),
-  });
+  const makeResponseSchema = (steps: z.ZodType) =>
+    z.strictObject({
+      translationMode: z
+        .enum(["defaultOnly", "translate"])
+        .describe(translationModeGuidance),
+      result: z.union([
+        z.strictObject({
+          action: z.literal("clarification"),
+          question: z.string().min(1),
+        }),
+        z.strictObject({
+          action: z.literal("fullPageUpdate"),
+          steps: z
+            .array(steps)
+            .describe(
+              "Plan all section decisions before generating updated content. Emit all remove steps first, then explicit keep steps for every unchanged section, before any reorder, replace, or insert steps. The canvas is revealed after removals and keeps, before updates begin. Use surviving sections as anchors."
+            ),
+        }),
+      ]),
+      text: z.string(),
+    });
+  const responseSchema = makeResponseSchema(stepSchema);
+  // Guide the model with exact saved Ids. Runtime parsing stays tolerant so an
+  // unknown removal can be skipped without dropping subsequent streamed work.
+  const modelStepSchema = union(
+    alternatives.flatMap((alternative) =>
+      alternative === removalSchema
+        ? existingSectionIds.length
+          ? [removalSchema.extend({ sectionId: z.enum(existingSectionIds) })]
+          : []
+        : [alternative]
+    )
+  );
   const jsonSchema = deduplicateGenerationDefinitions(
-    exportSchema(responseSchema)
+    exportSchema(makeResponseSchema(modelStepSchema))
   );
   const availableComponentNames = [...nodes.keys()].sort();
   const cache = new Map<number, { wire: string; step: FullPageUpdateStep }>();
@@ -117,6 +137,8 @@ export const compileFullPageUpdateSchema = (
           element(section.type).apply(section, undefined)
         ),
       };
+      // These are section fragments. applyFullPageUpdateStep validates them
+      // in their destination collection after assembling the page.
       finalizeGeneratedContent(catalog, candidate, {
         locales,
         translationMode,

@@ -3,7 +3,6 @@ import { z } from "zod";
 import type { GenerationComponent } from "../../../../utils/createPuckGenerationCatalog.ts";
 import { unwrapZodSchema as unwrap } from "../../../utils/unwrapZodSchema.ts";
 import { clone, type SavedComponent } from "../../shared/authoredValues.ts";
-import { generationFields } from "../../shared/slottedItemSource.ts";
 import type { AuthoredValueEdit } from "./types.ts";
 import { hasSlots } from "./utils.ts";
 
@@ -273,7 +272,7 @@ export const applyAuthoredValueEdits = (
   });
   component.props = changeValues(
     config.generation.props,
-    { type: "object", objectFields: generationFields(config) },
+    { type: "object", objectFields: config.fields ?? {} },
     component.props,
     changes.map((change, index) => ({ parts: paths[index], change })),
     allowIncomplete
@@ -290,7 +289,7 @@ export const editSlot = (
   let schema: z.ZodType = config.generation!.props;
   let field: Fields[string] | undefined = {
     type: "object",
-    objectFields: generationFields(config),
+    objectFields: config.fields ?? {},
   };
   let value = component.props;
   const parts = editPath(path);

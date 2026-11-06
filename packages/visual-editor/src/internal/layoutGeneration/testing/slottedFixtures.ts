@@ -36,7 +36,7 @@ export const slottedFixture = (cardType = "FAQCard") => {
   });
   const components: Record<string, any> = {
     Section: {
-      generation: {
+      layoutGenerationMetadata: {
         props: z.object({
           title: z.string(),
           data: z.object({
@@ -60,7 +60,7 @@ export const slottedFixture = (cardType = "FAQCard") => {
       render: () => null,
     },
     [cardType]: {
-      generation: {
+      layoutGenerationMetadata: {
         props: z.object({
           data: z.object({
             question: z.object({
@@ -84,7 +84,7 @@ export const slottedFixture = (cardType = "FAQCard") => {
       render: () => null,
     },
     Text: {
-      generation: { props: z.object({ text: z.string() }) },
+      layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
       defaultProps: { text: "Text" },
       nestedOnly: true,
       render: () => null,

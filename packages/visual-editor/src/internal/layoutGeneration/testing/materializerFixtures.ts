@@ -10,10 +10,14 @@ import type { SavedComponent } from "../shared/authoredValues.ts";
 
 export const catalog = () =>
   createPuckGenerationCatalog({
-    Header: { generation: { props: z.object({ text: z.string() }) } },
-    Footer: { generation: { props: z.object({ text: z.string() }) } },
+    Header: {
+      layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
+    },
+    Footer: {
+      layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
+    },
     Section: {
-      generation: {
+      layoutGenerationMetadata: {
         props: z.object({ title: z.string(), cards: z.array(z.unknown()) }),
       },
       fields: { cards: { type: "slot", allow: ["Card", "Opaque", "Unknown"] } },
@@ -21,7 +25,7 @@ export const catalog = () =>
     },
     Card: {
       nestedOnly: true,
-      generation: {
+      layoutGenerationMetadata: {
         props: z.object({
           text: z
             .object({ defaultValue: z.string(), fr: z.string().optional() })
@@ -40,7 +44,7 @@ export const catalog = () =>
         links: [],
       },
     },
-    Opaque: {},
+    Opaque: { layoutGenerationMetadata: { exclude: true } },
   });
 export const card = (id: string): SavedComponent => ({
   type: "Card",

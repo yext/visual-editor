@@ -2,21 +2,32 @@ import type { Fields } from "@puckeditor/core";
 import { z } from "zod";
 import type { GenerationComponent } from "../../../utils/createPuckGenerationCatalog.ts";
 import { unwrapZodSchema as unwrap } from "../../utils/unwrapZodSchema.ts";
-import { generationFields } from "./slottedItemSource.ts";
 
 const isLocale = (key: string, locales: string[]) =>
   locales.includes(key) || /^[a-z]{2,3}(?:-[a-z0-9]{2,8})*$/i.test(key);
 
-const isText = (schema: z.ZodType): boolean => {
+/** Recognize serialized rich text, including optional JSON editor state. */
+export const isRichTextSchema = (schema: z.ZodType): boolean => {
   const node = unwrap(schema);
+
+  return (
+    node instanceof z.ZodObject &&
+    Object.keys(node.shape).sort().join(",") === "html,json" &&
+    Object.values(node.shape).every(
+      (child) => unwrap(child as z.ZodType) instanceof z.ZodString
+    )
+  );
+};
+
+/** Text alternatives may be plain strings, serialized rich text, or their union. */
+const isTextSchema = (schema: z.ZodType): boolean => {
+  const node = unwrap(schema);
+
   return (
     node instanceof z.ZodString ||
+    isRichTextSchema(node) ||
     (node instanceof z.ZodUnion &&
-      node.options.every((option) => isText(option as z.ZodType))) ||
-    (node instanceof z.ZodObject &&
-      Object.keys(node.shape).sort().join(",") === "html,json" &&
-      unwrap(node.shape.html) instanceof z.ZodString &&
-      unwrap(node.shape.json) instanceof z.ZodString)
+      node.options.every((option) => isTextSchema(option as z.ZodType)))
   );
 };
 
@@ -29,16 +40,16 @@ export const localizedTextSchema = (
   if (
     !(node instanceof z.ZodObject) ||
     !node.shape.defaultValue ||
-    !isText(node.shape.defaultValue)
+    !isTextSchema(node.shape.defaultValue)
   ) {
     return;
   }
   const catchall = node.def.catchall as z.ZodType | undefined;
   if (catchall && catchall.def.type !== "never") {
-    return isText(catchall) ? node : undefined;
+    return isTextSchema(catchall) ? node : undefined;
   }
   return Object.keys(node.shape).some(
-    (key) => isLocale(key, locales) && isText(node.shape[key])
+    (key) => isLocale(key, locales) && isTextSchema(node.shape[key])
   )
     ? node
     : undefined;
@@ -219,7 +230,7 @@ export const textRecords = (
     mapText(
       props,
       config.generation.props,
-      { type: "object", objectFields: generationFields(config) },
+      { type: "object", objectFields: config.fields ?? {} },
       locales,
       (value, schema, location) => {
         records.push({
