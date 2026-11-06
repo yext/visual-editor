@@ -14,6 +14,7 @@ import {
 } from "../shared/localizedText.ts";
 import { isLinkedSource } from "../shared/slottedItemSource.ts";
 import { exportGenerationSchema } from "./strictSchema.ts";
+import { getEntityGenerationSchema } from "./inferGenerationSchema.ts";
 
 type SchemaNode = {
   /** The strict model-facing schema. */
@@ -54,6 +55,7 @@ export const createGenerationSchemaCompiler = (
     return description ? wire.describe(description) : wire;
   };
   const checks = (schema: z.ZodType, path: string) => {
+    if (getEntityGenerationSchema(schema)) return;
     if (
       ((schema.def as any).checks ?? []).some(
         (check: any) => check._zod.def.check === "custom"
@@ -157,8 +159,11 @@ export const createGenerationSchemaCompiler = (
     checks(schema, path);
     const native = unwrap(schema);
     const colorSchema = getColorGenerationSchema(native);
+    const entitySchema = getEntityGenerationSchema(native);
     let child: SchemaNode;
-    if (colorSchema) {
+    if (entitySchema) {
+      child = value(entitySchema, path, field, defaults, false, textContent);
+    } else if (colorSchema) {
       const generated = value(colorSchema, path, undefined, undefined, false);
       child = {
         wire: generated.wire,

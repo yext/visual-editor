@@ -92,6 +92,17 @@ const optionSchema = (options: unknown): z.ZodType | undefined => {
 const record = (value: unknown): Record<string, any> =>
   value && typeof value === "object" && !Array.isArray(value) ? value : {};
 
+// Saved linked mappings may omit their unused constant. Generation must still
+// supply it so the resulting binding can be recognized by entity resolvers.
+const entityGenerationSchemas = z.registry<{ key: object }>();
+const requiredEntitySchemas = new WeakMap<object, z.ZodType>();
+export const getEntityGenerationSchema = (
+  schema: z.ZodType
+): z.ZodType | undefined => {
+  const key = entityGenerationSchemas.get(schema)?.key;
+  return key ? requiredEntitySchemas.get(key) : undefined;
+};
+
 /** Build authored contracts once, before the existing strict-wire compiler. */
 export const inferGenerationSchema = (
   component: string,
@@ -224,10 +235,23 @@ export const inferGenerationSchema = (
     if (filter.includeListsOnly) {
       constant = z.array(constant);
     }
-    // Resolvers identify entity bindings by the presence of both field and
-    // constantValue, even when constantValueEnabled is false. Keep the constant
-    // required so generation cannot omit it or compile it to an $unset marker.
-    return entityFieldZodSchema(constant);
+    const generated = entityFieldZodSchema(constant);
+    const compatible = generated
+      .extend({ constantValue: generated.shape.constantValue.optional() })
+      .refine(
+        (binding) =>
+          binding.constantValueEnabled !== true ||
+          binding.constantValue !== undefined,
+        {
+          path: ["constantValue"],
+          message: "Manual bindings require a constant",
+        }
+      )
+      .describe(generated.description!);
+    const key = {};
+    entityGenerationSchemas.add(compatible, { key });
+    requiredEntitySchemas.set(key, generated);
+    return compatible;
   };
 
   const build = (

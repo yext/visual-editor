@@ -10,6 +10,7 @@ import { toPuckFields, type YextFields } from "../../../fields/fields.ts";
 import { createPuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
 import { createSlottedItemSource } from "../../../utils/itemSource/createSlottedItemSource.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
+import { DirectoryGrid } from "../../../components/sections/directory/DirectoryWrapper.tsx";
 import { applyAuthoredValueEdits } from "../workflows/edits/applyEditsToComponent.ts";
 import { getEditValueContracts } from "../workflows/edits/getEditValueContracts.ts";
 import { compileFullPageUpdateSchema } from "../workflows/fullPageUpdate/pageSchema.ts";
@@ -382,7 +383,22 @@ describe("standard-library-shaped contracts", () => {
       );
       const binding = { field: "name", constantValueEnabled: false };
 
-      expect(schema.safeParse({ text: binding }).success).toBe(false);
+      expect(schema.parse({ text: binding })).toEqual({ text: binding });
+      expect(schema.parse({ text: { field: "name" } })).toEqual({
+        text: { field: "name" },
+      });
+      expect(
+        schema.safeParse({
+          text: { ...binding, constantValueEnabled: true },
+        }).success
+      ).toBe(false);
+      const existing = {
+        type: "Section",
+        props: { id: "existing", text: binding },
+      };
+      expect(() =>
+        validateAuthored(catalog, { content: [existing] })
+      ).not.toThrow();
       expect(
         node.wire.safeParse({ type: "Section", props: { text: binding } })
           .success
@@ -412,6 +428,25 @@ describe("standard-library-shaped contracts", () => {
       );
     }
   );
+
+  it("accepts DirectoryGrid's existing cardTitle mapping without a constant", () => {
+    const catalog = createPuckGenerationCatalog({ DirectoryGrid });
+    const component = {
+      type: "DirectoryGrid",
+      props: { ...DirectoryGrid.defaultProps, id: "directory" },
+    };
+    expect(component.props.data?.mappings?.cardTitle).toEqual({
+      field: "name",
+      constantValueEnabled: false,
+    });
+    expect(() =>
+      validateAuthored(catalog, { content: [component] })
+    ).not.toThrow();
+    expect(
+      extractAuthored(catalog, { content: [component] }).content[0].props.data
+        .mappings.cardTitle
+    ).toEqual(component.props.data?.mappings?.cardTitle);
+  });
 
   it("preserves editor-authored image-list wrappers through generation", () => {
     const catalog = catalogFor({
