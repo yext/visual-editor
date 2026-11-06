@@ -1,5 +1,6 @@
 import type { Fields } from "@puckeditor/core";
 import { z } from "zod";
+import { getColorGenerationSchema } from "../../../../utils/layoutGenerationSchemas/colorFieldSchemas.ts";
 import type { GenerationComponent } from "../../../../utils/createPuckGenerationCatalog.ts";
 import { unwrapZodSchema as unwrap } from "../../../utils/unwrapZodSchema.ts";
 import { clone, type SavedComponent } from "../../shared/authoredValues.ts";
@@ -82,6 +83,12 @@ const changeValue = (
       fail(change.path);
     }
     return null;
+  }
+  if (getColorGenerationSchema(node)) {
+    if (!schema.safeParse(change.value).success) {
+      fail(change.path);
+    }
+    return clone(change.value);
   }
   if (node instanceof z.ZodUnion) {
     const incomplete: any[] = [];

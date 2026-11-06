@@ -1104,6 +1104,41 @@ describe("card source edit consistency", () => {
     ).toThrow("Resolution changed authored state");
   });
 
+  it("edits an existing editor-linked section without renaming cards or changing its manual backup", async () => {
+    const fixture = slottedFixture();
+    const manual = fixture.materialize();
+    Object.assign(manual.content[0].props.data, {
+      field: "c_items",
+      constantValueEnabled: false,
+    });
+    const document = { locale: "en", c_items: [{ name: "Linked item" }] };
+    const baseline = await fixture.resolve(manual, document);
+    const section = baseline.content[0];
+    const before = clone(section);
+    const editTask = task([section.props.id], [], section.props.id);
+    const candidate = materializeSectionEdit(
+      fixture.catalog,
+      baseline,
+      editTask,
+      {
+        taskId: editTask.taskId,
+        sectionId: editTask.sectionId,
+        operations: [update(section.props.id, "/title", "Updated title")],
+      }
+    );
+    const resolved = await fixture.resolve(candidate, document);
+    const restored = preserveSectionEditResolution(
+      fixture.catalog,
+      resolved,
+      candidate
+    );
+    expect(restored.content[0]).toEqual({
+      ...before,
+      props: { ...before.props, title: "Updated title" },
+    });
+    expect(baseline.content[0]).toEqual(before);
+  });
+
   it("preserves linked backups and applies derived visible cards after a source change", async () => {
     const fixture = slottedFixture();
     const baseline = fixture.materialize([

@@ -74,7 +74,7 @@ export const imageZodSchema = z
 export const ctaTypeZodSchema = z
   .enum(["textAndLink", "getDirections", "presetImage"])
   .describe(
-    "The type of the CTA. Generally use textAndLink. Use presetImage for app icons."
+    "The type of the CTA. Use textAndLink for ordinary links or presetImage for app-store and food-delivery preset icons. Preset icons also require the containing presetImage style; changing the type alone does not select artwork."
   );
 
 export const enhancedCtaZodSchema = z.object({
@@ -98,7 +98,11 @@ export const enhancedCtaZodSchema = z.object({
     .optional()
     .describe("Whether to standardize characters and casing"),
   openInNewTab: z.boolean().optional().describe("Whether to open in a new tab"),
-  ctaType: ctaTypeZodSchema.optional(),
+  ctaType: ctaTypeZodSchema
+    .optional()
+    .describe(
+      "Controls the rendered type for a manual CTA (constantValueEnabled true). To display a preset icon, set this to presetImage and set the containing presetImage style to the requested artwork. selectedType is ignored in manual mode. Keep the existing destination and use actionType link where available."
+    ),
 });
 
 export const richTextZodSchema = z.strictObject({
@@ -171,14 +175,20 @@ export const styledPageSectionZodSchema = z.object({
 export const ctaSelectorZodSchema = entityFieldZodSchema(
   enhancedCtaZodSchema
 ).extend({
-  selectedType: z
-    .enum(["textAndLink", "getDirections", "presetImage"])
-    .optional(),
+  selectedType: ctaTypeZodSchema
+    .optional()
+    .describe(
+      "Controls the rendered type only for an entity-bound CTA (constantValueEnabled false or absent). To display a preset icon, set this to presetImage and set the containing presetImage style to the requested artwork. Manual CTAs instead require constantValue.ctaType. Preserve the existing entity binding and use actionType link where available."
+    ),
 });
 
 export const comprehensiveCtaZodSchema = z.object({
   data: z.object({
-    actionType: z.enum(["link", "button"]),
+    actionType: z
+      .enum(["link", "button"])
+      .describe(
+        "Use link for preset icons. button renders buttonText as an ordinary text button and ignores preset artwork."
+      ),
     cta: ctaSelectorZodSchema,
     openInNewTab: z.boolean(),
     buttonText: translatableStringZodSchema.optional(),
@@ -199,7 +209,10 @@ export const comprehensiveCtaZodSchema = z.object({
         "app-gallery",
         ...FOOD_DELIVERY_SERVICES,
       ])
-      .optional(),
+      .optional()
+      .describe(
+        "Selects preset artwork only. Also set data.actionType to link and the active CTA type to presetImage: data.cta.constantValue.ctaType for manual content (constantValueEnabled true), or data.cta.selectedType for entity-bound content. Preserve the existing source and destination. Changing this field alone does not activate the icon."
+      ),
     color: siteColorZodSchema.optional(),
     button: styledButtonZodSchema.optional(),
     link: styledLinkZodSchema.optional(),

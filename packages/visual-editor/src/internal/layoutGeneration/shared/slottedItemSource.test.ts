@@ -168,6 +168,88 @@ describe("slotted source generation", () => {
     expect(again.content[0].props.manualSlots.CardSlot).toEqual([]);
   });
 
+  it.each(["FAQCard", "EventCard", "ProductCard", "TeamCard"])(
+    "accepts editor-produced %s identities through linking, resizing and switching back",
+    async (cardType) => {
+      const f = slottedFixture(cardType);
+      const manual = f.materialize();
+      const linked = clone(manual);
+      Object.assign(linked.content[0].props.data, {
+        field: "c_items",
+        constantValueEnabled: false,
+        mappings: { question: { field: "name", constantValueEnabled: false } },
+      });
+      const before = clone(linked);
+      for (const count of [2, 4]) {
+        const resolved = await f.resolve(linked, {
+          locale: "en",
+          c_items: Array.from({ length: count }, (_, index) => ({
+            name: `Linked ${index}`,
+          })),
+        });
+        const props = resolved.content[0].props;
+        expect(props.slots.CardSlot).toHaveLength(count);
+        expect(props.slots.CardSlot[0].props.id).toBe(
+          props.manualSlots.CardSlot[0].props.id
+        );
+        expect(() => validateAuthored(f.catalog, resolved)).not.toThrow();
+        assertAuthoredPreserved(f.catalog, resolved, linked);
+        expect(props.manualSlots.CardSlot).toEqual(
+          manual.content[0].props.manualSlots.CardSlot
+        );
+        props.data.constantValueEnabled = true;
+        const restored = await f.resolve(resolved);
+        expect(restored.content[0].props.slots.CardSlot).toEqual(
+          manual.content[0].props.slots.CardSlot
+        );
+        expect(() => validateAuthored(f.catalog, restored)).not.toThrow();
+      }
+      expect(linked).toEqual(before);
+    }
+  );
+
+  it.each([
+    "duplicate card",
+    "duplicate child",
+    "new duplicate",
+    "wrapper",
+    "other backup",
+    "other visible card",
+    "empty",
+  ])("rejects conflicting linked identities: %s", (change) => {
+    const f = slottedFixture();
+    const data = f.materialize([f.section(), f.section()]);
+    const [first, second] = data.content;
+    first.props.data.field = "c_items";
+    first.props.data.constantValueEnabled = false;
+    expect(() => validateAuthored(f.catalog, data)).not.toThrow();
+    const cards = first.props.slots.CardSlot;
+    if (change === "duplicate card") {
+      cards[1].props.id = cards[0].props.id;
+    } else if (change === "duplicate child") {
+      cards[1].props.slots.BodySlot[0].props.id =
+        cards[0].props.slots.BodySlot[0].props.id;
+    } else if (change === "new duplicate") {
+      cards[0].props.id = cards[1].props.id = "new-duplicate";
+    } else if (change === "wrapper") {
+      cards[0].props.id = first.props.id;
+    } else if (change === "other backup") {
+      second.props.data.field = "c_items";
+      second.props.data.constantValueEnabled = false;
+      cards[0].props.id = second.props.manualSlots.CardSlot[0].props.id;
+    } else if (change === "other visible card") {
+      second.props.data.field = "c_items";
+      second.props.data.constantValueEnabled = false;
+      cards[0].props.id = second.props.slots.CardSlot[0].props.id =
+        "shared-derived-card";
+    } else {
+      cards[0].props.id = "";
+    }
+    expect(() => validateAuthored(f.catalog, data)).toThrow(
+      /invalid props\/slots\/CardSlot\/\d+\/props\/(slots\/BodySlot\/0\/props\/)?id/
+    );
+  });
+
   it("preserves an inactive manual backup through linked resolution and switching back", async () => {
     const f = slottedFixture();
     const manual = f.materialize([f.section([f.card("Keep me")])]);
