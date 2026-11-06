@@ -148,16 +148,12 @@ export const validateLinkedCardStructure = (
   component: SavedComponent,
   config: GenerationComponent,
   catalog: PuckGenerationCatalog,
-  seenIds: Set<string>,
-  manualIds: ReadonlySet<string>
+  seenIds: Set<string>
 ) => {
   const source = config.generation?.slottedItemSource;
   if (!source || !isLinkedSource(component.props)) {
     return;
   }
-  // The editor preserves identities when switching from manual to linked data.
-  // Only this wrapper's inactive backup may share identities with its visible tree.
-  const visibleIds = new Set<string>();
   const fail = (path: string): never => {
     throw new Error(
       `${component.type} (${component.props.id}): invalid ${path}`
@@ -210,15 +206,9 @@ export const validateLinkedCardStructure = (
       fail(`${path}/type`);
     }
     const id = card.props.id;
-    if (
-      typeof id !== "string" ||
-      !id.trim() ||
-      visibleIds.has(id) ||
-      (seenIds.has(id) && !manualIds.has(id))
-    ) {
+    if (typeof id !== "string" || !id.trim() || seenIds.has(id)) {
       fail(`${path}/props/id`);
     }
-    visibleIds.add(id);
     seenIds.add(id);
     visitFields(
       card.props,

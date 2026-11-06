@@ -25,25 +25,16 @@ export const exportGenerationSchema = (
 };
 /** Preserve Zod's annotations and narrowed constraints without reference siblings. */
 const normalizeReferenceSiblings = (schema: Record<string, any>) => {
-  const primitiveKeys = new Set([
-    "$ref",
-    "type",
-    "enum",
-    "description",
-    "title",
-  ]);
-  const resolvePrimitive = (
+  const enumKeys = new Set(["$ref", "type", "enum", "description", "title"]);
+  const resolveEnum = (
     node: Record<string, any>,
     active = new Set<string>()
   ): Record<string, any> | undefined => {
-    if (Object.keys(node).some((key) => !primitiveKeys.has(key))) {
+    if (Object.keys(node).some((key) => !enumKeys.has(key))) {
       return;
     }
     if (!node.$ref) {
-      return node.enum ||
-        ["string", "number", "integer", "boolean", "null"].includes(node.type)
-        ? { ...node }
-        : undefined;
+      return node.enum ? { ...node } : undefined;
     }
     if (!node.$ref.startsWith("#/$defs/") || active.has(node.$ref)) {
       return;
@@ -56,7 +47,7 @@ const normalizeReferenceSiblings = (schema: Record<string, any>) => {
     if (!target) {
       return;
     }
-    const resolved = resolvePrimitive(target, new Set([...active, node.$ref]));
+    const resolved = resolveEnum(target, new Set([...active, node.$ref]));
     if (
       !resolved ||
       (node.type && resolved.type && !isDeepEqual(node.type, resolved.type))
@@ -65,7 +56,7 @@ const normalizeReferenceSiblings = (schema: Record<string, any>) => {
     }
     const result = { ...resolved, ...node };
     delete result.$ref;
-    if (node.enum && resolved.enum) {
+    if (node.enum) {
       result.enum = node.enum.filter((value: unknown) =>
         resolved.enum.some((allowed: unknown) => isDeepEqual(value, allowed))
       );
@@ -79,12 +70,12 @@ const normalizeReferenceSiblings = (schema: Record<string, any>) => {
   };
   const visit = (node: Record<string, any>) => {
     if (node.$ref) {
-      const resolvedPrimitive = resolvePrimitive(node);
-      if (resolvedPrimitive) {
-        // Flatten primitive aliases before compaction, preserving annotations
-        // and the intersection of any enum constraints.
+      const resolvedEnum = resolveEnum(node);
+      if (resolvedEnum) {
+        // The provider rejects enum constraints combined with a reference anyOf.
+        // Flatten enum aliases before compaction, preserving their intersection.
         delete node.$ref;
-        Object.assign(node, resolvedPrimitive);
+        Object.assign(node, resolvedEnum);
       } else if (
         Object.keys(node).some((key) => key !== "$ref") &&
         Object.keys(node).every((key) =>

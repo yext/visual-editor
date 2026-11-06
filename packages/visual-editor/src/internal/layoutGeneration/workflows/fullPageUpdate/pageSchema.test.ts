@@ -182,44 +182,6 @@ it("preserves a newly generated entity-linked source through materialization", (
   expect(next.content[0].props.data.mappings.question.field).toBe("name");
 });
 
-it("updates a page containing editor-linked cards while preserving their identities and backup", async () => {
-  const fixture = slottedFixture();
-  const manual = fixture.materialize();
-  Object.assign(manual.content[0].props.data, {
-    field: "c_items",
-    constantValueEnabled: false,
-  });
-  const baseline = await fixture.resolve(manual, {
-    locale: "en",
-    c_items: [{ name: "Linked item" }],
-  });
-  const compiled = compileFullPageUpdateSchema(
-    fixture.catalog,
-    ["en"],
-    baseline
-  );
-  const result = compiled.parseResponse(
-    JSON.stringify(
-      fullPageUpdateResponse([
-        { kind: "keep", sectionId: baseline.content[0].props.id },
-        {
-          kind: "insert",
-          collection: { ownerId: null, slotPath: null },
-          anchor: { position: "end" },
-          sections: [fixture.section([])],
-        },
-      ])
-    )
-  );
-  const next = applyFullPageUpdateStep(
-    fixture.catalog,
-    baseline,
-    result.result.steps[1]
-  );
-  expect(next.content).toHaveLength(2);
-  expect(next.content[0]).toEqual(baseline.content[0]);
-});
-
 it("never applies incomplete steps and rejects a final response that rewrites streamed work", async () => {
   const compiled = compileFullPageUpdateSchema(
     creationCatalog(),

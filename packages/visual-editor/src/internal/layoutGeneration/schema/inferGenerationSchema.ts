@@ -224,10 +224,11 @@ export const inferGenerationSchema = (
     if (filter.includeListsOnly) {
       constant = z.array(constant);
     }
-    // Resolvers identify entity bindings by the presence of both field and
-    // constantValue, even when constantValueEnabled is false. Keep the constant
-    // required so generation cannot omit it or compile it to an $unset marker.
-    return entityFieldZodSchema(constant);
+    return entityFieldZodSchema(
+      constant.description
+        ? constant.optional().describe(constant.description)
+        : constant.optional()
+    );
   };
 
   const build = (

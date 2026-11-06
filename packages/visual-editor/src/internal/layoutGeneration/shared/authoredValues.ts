@@ -333,18 +333,7 @@ export const validateAuthored = (
         throw new Error(`${collection.path}: ${component.type} is not allowed`);
       }
       validateSlottedSource(component, config);
-      if (
-        config.generation?.slottedItemSource &&
-        isLinkedSource(component.props)
-      ) {
-        validateLinkedCardStructure(
-          component,
-          config,
-          catalog,
-          seenIds,
-          collectAuthoredIds(catalog, { content: manualBackup(component) })
-        );
-      }
+      validateLinkedCardStructure(component, config, catalog, seenIds);
       if (
         config.generation?.slottedItemSource &&
         !isLinkedSource(component.props) &&

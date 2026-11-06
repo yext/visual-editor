@@ -23,7 +23,7 @@ const linkSchema = entityFieldZodSchema(translatableStringZodSchema).extend({
   normalizeLink: z.boolean(),
 });
 const mappings = {
-  title: { field: "name", constantValueEnabled: false, constantValue: "" },
+  title: { field: "name", constantValueEnabled: false },
   showAddress: true,
   linkOverride: {
     enabled: true,
@@ -194,7 +194,13 @@ describe("native generation contracts through section-library-support", () => {
   it("compiles fixed-source literals and custom mappings through generation", () => {
     const { catalog } = directoryFixture();
     const compiled = compileGenerationSchema(catalog, ["en"]);
-    const wireData = data();
+    const wireData = {
+      ...data(),
+      mappings: {
+        ...mappings,
+        title: { ...mappings.title, constantValue: { $unset: true } },
+      },
+    };
     const spec = compiled.materialize({
       text: "Created",
       translationMode: "defaultOnly",
@@ -211,11 +217,7 @@ describe("native generation contracts through section-library-support", () => {
     expect(spec.content[0].props.data).toMatchObject({
       field: "dm_directoryChildren",
       constantValueEnabled: false,
-      mappings: {
-        title: { ...mappings.title, constantValue: { defaultValue: "" } },
-        showAddress: true,
-        linkOverride: { enabled: true },
-      },
+      mappings: { showAddress: true, linkOverride: { enabled: true } },
     });
     const wire = createGenerationSchemaCompiler(catalog, ["en"]).element(
       "Directory"
