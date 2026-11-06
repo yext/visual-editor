@@ -2,11 +2,15 @@
 import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import type { Fields } from "@puckeditor/core";
 import { toPuckFields, type YextFields } from "../../../fields/fields.ts";
 import { createPuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
 import { createSlottedItemSource } from "../../../utils/itemSource/createSlottedItemSource.ts";
 import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
+import { DirectoryGrid } from "../../../components/sections/directory/DirectoryWrapper.tsx";
 import { applyAuthoredValueEdits } from "../workflows/edits/applyEditsToComponent.ts";
 import { getEditValueContracts } from "../workflows/edits/getEditValueContracts.ts";
 import { compileFullPageUpdateSchema } from "../workflows/fullPageUpdate/pageSchema.ts";
@@ -366,6 +370,84 @@ it("compiles structured Yext field contracts without resolving render values", (
 });
 
 describe("standard-library-shaped contracts", () => {
+  it.each([false, true])(
+    "requires resolver-compatible entity constants for adapted fields: %s",
+    (adapted) => {
+      const fields: YextFields = {
+        text: { type: "entityField", filter: { types: ["type.string"] } },
+      };
+      const catalog = catalogFor(adapted ? toPuckFields(fields) : fields);
+      const schema = catalog.data.components.Section.generation!.props;
+      const node = createGenerationSchemaCompiler(catalog, ["en"]).element(
+        "Section"
+      );
+      const binding = { field: "name", constantValueEnabled: false };
+
+      expect(schema.parse({ text: binding })).toEqual({ text: binding });
+      expect(schema.parse({ text: { field: "name" } })).toEqual({
+        text: { field: "name" },
+      });
+      expect(
+        schema.safeParse({
+          text: { ...binding, constantValueEnabled: true },
+        }).success
+      ).toBe(false);
+      const existing = {
+        type: "Section",
+        props: { id: "existing", text: binding },
+      };
+      expect(() =>
+        validateAuthored(catalog, { content: [existing] })
+      ).not.toThrow();
+      expect(
+        node.wire.safeParse({ type: "Section", props: { text: binding } })
+          .success
+      ).toBe(false);
+      expect(
+        node.wire.safeParse({
+          type: "Section",
+          props: { text: { ...binding, constantValue: { $unset: true } } },
+        }).success
+      ).toBe(false);
+
+      const props = { text: { ...binding, constantValue: "" } };
+      expect(schema.parse(props)).toEqual(props);
+      const generated = node.apply(
+        node.wire.parse({ type: "Section", props }),
+        undefined
+      );
+      const saved = JSON.parse(JSON.stringify(generated));
+      const document = { name: "Yext" };
+      expect(saved.props.text).toEqual(props.text);
+      expect(resolveYextEntityField(document, saved.props.text, "en")).toBe(
+        "Yext"
+      );
+      const resolved = resolveComponentData(saved.props.text, "en", document);
+      expect(renderToStaticMarkup(createElement("h3", null, resolved))).toBe(
+        "<h3>Yext</h3>"
+      );
+    }
+  );
+
+  it("accepts DirectoryGrid's existing cardTitle mapping without a constant", () => {
+    const catalog = createPuckGenerationCatalog({ DirectoryGrid });
+    const component = {
+      type: "DirectoryGrid",
+      props: { ...DirectoryGrid.defaultProps, id: "directory" },
+    };
+    expect(component.props.data?.mappings?.cardTitle).toEqual({
+      field: "name",
+      constantValueEnabled: false,
+    });
+    expect(() =>
+      validateAuthored(catalog, { content: [component] })
+    ).not.toThrow();
+    expect(
+      extractAuthored(catalog, { content: [component] }).content[0].props.data
+        .mappings.cardTitle
+    ).toEqual(component.props.data?.mappings?.cardTitle);
+  });
+
   it("preserves editor-authored image-list wrappers through generation", () => {
     const catalog = catalogFor({
       photos: {

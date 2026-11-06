@@ -1,5 +1,6 @@
 import type { Fields } from "@puckeditor/core";
 import { z } from "zod";
+import { getColorGenerationSchema } from "../../../utils/layoutGenerationSchemas/colorFieldSchemas.ts";
 import type { PuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
 import { unwrapZodSchema as unwrap } from "../../utils/unwrapZodSchema.ts";
 import {
@@ -13,6 +14,7 @@ import {
 } from "../shared/localizedText.ts";
 import { isLinkedSource } from "../shared/slottedItemSource.ts";
 import { exportGenerationSchema } from "./strictSchema.ts";
+import { getEntityGenerationSchema } from "./inferGenerationSchema.ts";
 
 type SchemaNode = {
   /** The strict model-facing schema. */
@@ -48,9 +50,12 @@ export const createGenerationSchemaCompiler = (
   let componentSchemaId = 0;
   const union = (schemas: z.ZodType[]): z.ZodType =>
     schemas.length === 1 ? schemas[0] : z.union(schemas);
-  const describe = (wire: z.ZodType, original: z.ZodType) =>
-    original.description ? wire.describe(original.description) : wire;
+  const describe = (wire: z.ZodType, original: z.ZodType) => {
+    const description = original.description ?? unwrap(original).description;
+    return description ? wire.describe(description) : wire;
+  };
   const checks = (schema: z.ZodType, path: string) => {
+    if (getEntityGenerationSchema(schema)) return;
     if (
       ((schema.def as any).checks ?? []).some(
         (check: any) => check._zod.def.check === "custom"
@@ -153,8 +158,20 @@ export const createGenerationSchemaCompiler = (
   ): SchemaNode => {
     checks(schema, path);
     const native = unwrap(schema);
+    const colorSchema = getColorGenerationSchema(native);
+    const entitySchema = getEntityGenerationSchema(native);
     let child: SchemaNode;
-    if (field?.type === "slot") {
+    if (entitySchema) {
+      child = value(entitySchema, path, field, defaults, false, textContent);
+    } else if (colorSchema) {
+      const generated = value(colorSchema, path, undefined, undefined, false);
+      child = {
+        wire: generated.wire,
+        // A new selection replaces the whole color. Never inherit flags from
+        // a custom color or a legacy palette value in the baseline.
+        apply: (input) => generated.apply(input, undefined),
+      };
+    } else if (field?.type === "slot") {
       if (!(native instanceof z.ZodArray)) {
         fail(path, "slot must have an array schema");
       }
