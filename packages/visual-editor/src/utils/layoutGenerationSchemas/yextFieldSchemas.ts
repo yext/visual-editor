@@ -42,7 +42,7 @@ export function entityFieldZodSchema<T extends z.ZodType>(constantValue: T) {
         ),
     })
     .describe(
-      "Entity binding: use field for Knowledge Graph data and constantValueEnabled false; use constantValueEnabled true and constantValue for manual content. Preserve existing bindings unless the request changes their source."
+      "Entity binding: use field for Knowledge Graph data and constantValueEnabled false; use constantValueEnabled true and constantValue for static content. Preserve existing bindings unless the request changes their source."
     );
 }
 
@@ -101,7 +101,7 @@ export const enhancedCtaZodSchema = z.object({
   ctaType: ctaTypeZodSchema
     .optional()
     .describe(
-      "Controls the rendered type for a manual CTA (constantValueEnabled true). To display a preset icon, set this to presetImage and set the containing presetImage style to the requested artwork. selectedType is ignored in manual mode. Keep the existing destination and use actionType link where available."
+      "Controls the rendered type for a CTA with constantValueEnabled: true. To display a preset icon, set this to presetImage and set the containing presetImage style to the requested artwork. selectedType is ignored in constant value mode. Keep the existing destination and use actionType link where available."
     ),
 });
 
@@ -178,7 +178,7 @@ export const ctaSelectorZodSchema = entityFieldZodSchema(
   selectedType: ctaTypeZodSchema
     .optional()
     .describe(
-      "Controls the rendered type only for an entity-bound CTA (constantValueEnabled false or absent). To display a preset icon, set this to presetImage and set the containing presetImage style to the requested artwork. Manual CTAs instead require constantValue.ctaType. Preserve the existing entity binding and use actionType link where available."
+      "Controls the rendered type only for an entity-bound CTA (constantValueEnabled false or absent). To display a preset icon, set this to presetImage and set the containing presetImage style to the requested artwork. Constant value CTAs instead require constantValue.ctaType. Preserve the existing entity binding and use actionType link where available."
     ),
 });
 
@@ -211,7 +211,7 @@ export const comprehensiveCtaZodSchema = z.object({
       ])
       .optional()
       .describe(
-        "Selects preset artwork only. Also set data.actionType to link and the active CTA type to presetImage: data.cta.constantValue.ctaType for manual content (constantValueEnabled true), or data.cta.selectedType for entity-bound content. Preserve the existing source and destination. Changing this field alone does not activate the icon."
+        "Selects preset artwork only. Also set data.actionType to link and the active CTA type to presetImage: data.cta.constantValue.ctaType for constantValueEnabled: true content, or data.cta.selectedType for entity-bound content. Preserve the existing source and destination. Changing this field alone does not activate the icon."
       ),
     color: siteColorZodSchema.optional(),
     button: styledButtonZodSchema.optional(),
