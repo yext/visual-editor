@@ -42,8 +42,10 @@ describe("preset CTA generation contracts", () => {
     const json = JSON.stringify(
       compileGenerationSchema(catalog, ["en"]).jsonSchema
     );
-    expect(json).toContain("selectedType is ignored in manual mode");
-    expect(json).toContain("Manual CTAs instead require constantValue.ctaType");
+    expect(json).toContain("selectedType is ignored in constant value mode");
+    expect(json).toContain(
+      "Constant value CTAs instead require constantValue.ctaType"
+    );
     const planning = compileEditPlanningSchema(catalog, ["en"], {
       content: [
         {
@@ -60,7 +62,7 @@ describe("preset CTA generation contracts", () => {
     expect(
       paths.find(({ path }) => path === "/cta/constantValue/ctaType")
         ?.description
-    ).toContain("constantValueEnabled true");
+    ).toContain("constantValueEnabled: true");
     expect(
       paths.find(({ path }) => path === "/cta/selectedType")?.description
     ).toContain("constantValueEnabled false or absent");
