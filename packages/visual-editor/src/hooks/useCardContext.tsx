@@ -28,7 +28,9 @@ export const CardContextProvider = <T extends Record<string, any>>({
   const isGenerationActive =
     useContext(LayoutGenerationChatUiContext)?.chat.isGeneratingPage ?? false;
   const generationActiveRef = React.useRef(isGenerationActive);
-  generationActiveRef.current = isGenerationActive;
+  React.useLayoutEffect(() => {
+    generationActiveRef.current = isGenerationActive;
+  }, [isGenerationActive]);
   const [sharedCardProps, setSharedCardProps] = useState<T | undefined>(
     undefined
   );

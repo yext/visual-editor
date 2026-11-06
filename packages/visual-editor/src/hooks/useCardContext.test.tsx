@@ -45,3 +45,29 @@ it("pauses shared card writes during generation and discards stale shared styles
   act(() => context.setSharedCardProps({ color: "purple" }));
   expect(context.sharedCardProps).toEqual({ color: "purple" });
 });
+
+it("commits the generation flag before child passive effects publish shared styles", () => {
+  const publish = vi.fn(() => ({ color: "red" }));
+  const Consumer = ({ active }: { active: boolean }) => {
+    const { setSharedCardProps } = useCardContext<{ color: string }>();
+    React.useEffect(() => {
+      setSharedCardProps(publish);
+    }, [active, setSharedCardProps]);
+    return null;
+  };
+  const tree = (active: boolean) => (
+    <LayoutGenerationChatUiContext.Provider
+      value={{ chat: { isGeneratingPage: active } } as any}
+    >
+      <CardContextProvider>
+        <Consumer active={active} />
+      </CardContextProvider>
+    </LayoutGenerationChatUiContext.Provider>
+  );
+  const view = render(tree(false));
+  publish.mockClear();
+  view.rerender(tree(true));
+  expect(publish).not.toHaveBeenCalled();
+  view.rerender(tree(false));
+  expect(publish).toHaveBeenCalled();
+});

@@ -82,9 +82,9 @@ describe("excluded slot identities", () => {
     expect(extractAuthored(catalog, data).content[0].props).toEqual({
       id: "section",
     });
-    expect(() => validateAuthored(catalog, data)).toThrow(
-      "missing component Id"
-    );
+    const before = clone(data);
+    expect(() => validateAuthored(catalog, data)).not.toThrow();
+    expect(data).toEqual(before);
     const [child, leaf] = hiddenChildren(data);
     leaf.props.id = child.props.id;
     expect(() => validateAuthored(catalog, data)).toThrow(
@@ -154,4 +154,44 @@ describe("excluded slot identities", () => {
     }
     expect(collectAuthoredIds(catalog, data).size).toBe(3);
   });
+});
+
+it.each(["unknown", "allow", "disallow"])(
+  "validates %s constraints inside generation-excluded slots",
+  (constraint) => {
+    const { catalog, data } = fixture();
+    const [child, leaf] = hiddenChildren(data);
+    leaf.props.id = "leaf";
+    const field = (catalog.data.components.Section.fields!.hidden as any)
+      .arrayFields.slots.objectFields.child;
+    if (constraint === "unknown") child.type = "Unregistered";
+    if (constraint === "allow") field.allow = ["Leaf"];
+    if (constraint === "disallow") field.disallow = ["Hidden"];
+    expect(() => validateAuthored(catalog, data)).toThrow(
+      constraint === "unknown" ? "unknown component" : "is not allowed"
+    );
+  }
+);
+
+it("requires Ids on targetable components without rewriting them", () => {
+  const { catalog, data } = fixture();
+  delete data.content[0].props.id;
+  const before = clone(data);
+  expect(() => validateAuthored(catalog, data)).toThrow("missing component Id");
+  expect(data).toEqual(before);
+});
+
+it("allows excluded parents and leaves to lack Ids without treating nested nodes as page roots", () => {
+  const { catalog, data } = fixture();
+  const [child, leaf] = hiddenChildren(data);
+  delete child.props.id;
+  delete leaf.props.id;
+  const before = clone(data);
+  expect(() => validateAuthored(catalog, data)).not.toThrow();
+  expect(collectAuthoredIds(catalog, data)).toEqual(new Set(["section"]));
+  expect(data).toEqual(before);
+  leaf.props.id = "section";
+  expect(() => validateAuthored(catalog, data)).toThrow(
+    "duplicate component Id"
+  );
 });

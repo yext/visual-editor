@@ -127,3 +127,42 @@ it("keeps generated cards valid after automatic Puck synchronization and allows 
     getPuck().appState.data.content[0].props.slots.CardSlot[0].props.id
   ).toBe(lastCardId);
 });
+
+it("preserves excluded descendants introduced by setData without adding Ids", async () => {
+  const f = slottedFixture();
+  f.components.Section.fields.hidden = {
+    type: "slot",
+    allow: ["Text"],
+    generation: { exclude: true },
+  };
+  let getPuck!: ReturnType<typeof useGetPuck>;
+  f.components.Section.render = () => {
+    getPuck = useGetPuck();
+    return null;
+  };
+  const initialData = {
+    root: { props: { title: "", version: migrationRegistry.length } },
+    content: f.materialize().content,
+  };
+  render(
+    <ChatHarness
+      config={{ components: f.components }}
+      initialData={initialData}
+    />
+  );
+  await waitFor(() => expect(getPuck).toBeDefined());
+  await act(async () => {
+    const data = clone(getPuck().appState.data);
+    data.content[0].props.hidden = [
+      { type: "Text", props: { text: "Pasted without an Id" } },
+    ];
+    getPuck().dispatch({ type: "setData", data });
+  });
+  await waitFor(() => {
+    const data = getPuck().appState.data;
+    expect(data.content[0].props.hidden).toEqual([
+      { type: "Text", props: { text: "Pasted without an Id" } },
+    ]);
+    expect(() => validateAuthored(f.catalog, data)).not.toThrow();
+  });
+});
