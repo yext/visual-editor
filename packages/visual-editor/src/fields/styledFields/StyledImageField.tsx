@@ -6,7 +6,7 @@ import {
   type ImageBorderRadius,
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
-import { imageAspectRatioOptions } from "../../components/contentBlocks/image/aspectRatioOptions.ts";
+import { imageAspectRatioOptions } from "../../components/contentBlocks/image/styling.ts";
 import { withDefaultOption } from "./baseText.tsx";
 
 export type StyledImageValue = {
