@@ -154,6 +154,73 @@ describe("toPuckFields", () => {
 
 describe("field transforms", () => {
   it.each([
+    { value: undefined, transform: true, expected: {} },
+    { value: { borderRadius: "default" }, transform: true, expected: {} },
+    {
+      value: { borderRadius: "8px" },
+      transform: true,
+      expected: { borderRadius: "8px" },
+    },
+    {
+      value: { borderRadius: "8px", aspectRatio: 1.78 },
+      transform: true,
+      expected: { borderRadius: "8px", aspectRatio: 1.78 },
+    },
+    {
+      value: { borderRadius: "default", aspectRatio: 0.75 },
+      transform: true,
+      expected: { aspectRatio: 0.75 },
+    },
+    {
+      value: { borderRadius: "8px", aspectRatio: "default" },
+      transform: true,
+      expected: { borderRadius: "8px" },
+    },
+    {
+      value: { borderRadius: "8px", aspectRatio: 0 },
+      transform: true,
+      expected: { borderRadius: "8px" },
+    },
+    {
+      value: { borderRadius: "8px", aspectRatio: -1 },
+      transform: true,
+      expected: { borderRadius: "8px" },
+    },
+    {
+      value: { borderRadius: "default", aspectRatio: 1.78 },
+      transform: false,
+      expected: { borderRadius: "default", aspectRatio: 1.78 },
+    },
+    {
+      value: { borderRadius: "default", aspectRatio: 1.78 },
+      transform: undefined,
+      expected: { borderRadius: "default", aspectRatio: 1.78 },
+    },
+  ])(
+    "handles styledImage $value with transform=$transform",
+    ({ value, transform, expected }) => {
+      const authored = structuredClone(value);
+      for (const adapted of [false, true]) {
+        const fields = {
+          style: { type: "styledImage", transform },
+        } satisfies YextFieldMap;
+        const field = adapted ? toPuckFields(fields).style : fields.style;
+        const result = createYextFieldTransforms({}, "en")[field.type]({
+          field,
+          value,
+          componentId: "test",
+          propName: "style",
+          propPath: "style",
+          isReadOnly: true,
+        });
+        expect(result).toEqual(expected);
+        expect(value).toEqual(authored);
+        if (!transform) expect(result).toBe(value);
+      }
+    }
+  );
+
+  it.each([
     {
       type: "entityField",
       field: "",

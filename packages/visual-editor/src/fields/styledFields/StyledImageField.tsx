@@ -6,18 +6,23 @@ import {
   type ImageBorderRadius,
   ThemeOptions,
 } from "../../utils/themeConfigOptions.ts";
+import { imageAspectRatioOptions } from "../../components/contentBlocks/image/aspectRatioOptions.ts";
 import { withDefaultOption } from "./baseText.tsx";
 
 export type StyledImageValue = {
   borderRadius: ImageBorderRadius | "default";
+  /** A positive ratio, or "default" to inherit the component's sizing. */
+  aspectRatio?: number | "default";
 };
 
 export type StyledImageField = BaseField & {
   type: "styledImage";
-  /** Converts the authored border radius into CSS styles. */
+  /** Converts the authored border radius and aspect ratio into CSS styles. */
   transform?: boolean;
   label?: string | MsgString;
   visible?: boolean;
+  /** Shows the aspect-ratio control. Defaults to false. */
+  includeAspectRatio?: boolean;
 };
 
 type StyledImageFieldProps = FieldProps<StyledImageField, StyledImageValue>;
@@ -43,6 +48,11 @@ export const StyledImageFieldOverride = ({
     }))
   );
 
+  const aspectRatioOptions = [
+    { label: pt("default", "Default"), value: "default" },
+    ...imageAspectRatioOptions,
+  ];
+
   return (
     <div>
       {field.label && (
@@ -59,11 +69,31 @@ export const StyledImageFieldOverride = ({
                   (option) => option.value === currentValue.borderRadius
                 ) ?? borderRadiusOptions[0]
               }
-              onChange={(nextValue) => onChange({ borderRadius: nextValue })}
+              onChange={(nextValue) =>
+                onChange({ ...currentValue, borderRadius: nextValue })
+              }
               optionGroups={[{ options: borderRadiusOptions }]}
               disableSearch
             />
           </FieldLabel>
+          {field.includeAspectRatio ? (
+            <FieldLabel
+              label={pt("fields.options.aspectRatio", "Aspect Ratio")}
+            >
+              <Combobox
+                selectedOption={
+                  aspectRatioOptions.find(
+                    (option) => option.value === currentValue.aspectRatio
+                  ) ?? aspectRatioOptions[0]
+                }
+                onChange={(nextValue) =>
+                  onChange({ ...currentValue, aspectRatio: nextValue })
+                }
+                optionGroups={[{ options: aspectRatioOptions }]}
+                disableSearch
+              />
+            </FieldLabel>
+          ) : null}
         </div>
       </div>
     </div>

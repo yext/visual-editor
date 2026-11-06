@@ -19,12 +19,15 @@ const styledImageValue = (
   ...overrides,
 });
 
-const renderField = (value?: StyledImageValue) => {
+const renderField = (
+  value?: StyledImageValue,
+  fieldOverrides: Partial<StyledImageField> = {}
+) => {
   const onChange = vi.fn();
 
   render(
     <YextAutoField
-      field={field}
+      field={{ ...field, ...fieldOverrides }}
       id="styled-image"
       onChange={onChange}
       value={value}
@@ -64,5 +67,76 @@ describe("StyledImageField", () => {
     renderField({} as StyledImageValue);
 
     expect(screen.getByText("Default")).toBeDefined();
+  });
+});
+
+describe("StyledImageField aspect ratio", () => {
+  it("keeps the control hidden by default", () => {
+    renderField();
+
+    expect(screen.queryByText("Aspect Ratio")).toBeNull();
+    expect(screen.getAllByRole("combobox")).toHaveLength(1);
+  });
+
+  it("shows Default for a missing ratio without changing the authored value", () => {
+    const value = styledImageValue({ borderRadius: "8px" });
+    const { onChange } = renderField(value, { includeAspectRatio: true });
+
+    expect(screen.getByText("Aspect Ratio")).toBeDefined();
+    expect(screen.getByText("Default")).toBeDefined();
+    expect(value).toEqual({ borderRadius: "8px" });
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it.each([false, true])(
+    "preserves the ratio when changing radius with includeAspectRatio=%s",
+    (includeAspectRatio) => {
+      const value = styledImageValue({
+        borderRadius: "4px",
+        aspectRatio: 1.78,
+      });
+      const { onChange } = renderField(value, { includeAspectRatio });
+
+      fireEvent.click(screen.getByText("SM (4px)"));
+      fireEvent.click(screen.getByText("LG (8px)"));
+
+      expect(onChange).toHaveBeenCalledWith({
+        borderRadius: "8px",
+        aspectRatio: 1.78,
+      });
+      expect(value).toEqual({ borderRadius: "4px", aspectRatio: 1.78 });
+    }
+  );
+
+  it("selects a numeric ratio while preserving the radius", () => {
+    const { onChange } = renderField(
+      styledImageValue({ borderRadius: "8px" }),
+      {
+        includeAspectRatio: true,
+      }
+    );
+
+    fireEvent.click(screen.getByText("Default"));
+    fireEvent.click(screen.getByText("16:9"));
+
+    expect(onChange).toHaveBeenCalledWith({
+      borderRadius: "8px",
+      aspectRatio: 1.78,
+    });
+  });
+
+  it("resets the ratio to Default while preserving the radius", () => {
+    const { onChange } = renderField(
+      styledImageValue({ borderRadius: "8px", aspectRatio: 1.78 }),
+      { includeAspectRatio: true }
+    );
+
+    fireEvent.click(screen.getByText("16:9"));
+    fireEvent.click(screen.getByText("Default"));
+
+    expect(onChange).toHaveBeenCalledWith({
+      borderRadius: "8px",
+      aspectRatio: "default",
+    });
   });
 });
