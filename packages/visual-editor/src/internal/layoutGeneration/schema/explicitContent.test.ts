@@ -50,7 +50,7 @@ const fixture = () => {
   const catalog = createPuckGenerationCatalog(
     {
       BannerSection: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({ data: z.object({ text: source(richText) }) }),
         },
         defaultProps: {
@@ -65,7 +65,7 @@ const fixture = () => {
         },
       },
       PromoSection: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             data: z.object({
               promo: source(
@@ -117,7 +117,7 @@ const fixture = () => {
       },
       TextSlot: {
         nestedOnly: true,
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({
             data: z.object({ text: source(text) }),
             styles: z.object({ align: z.enum(["left", "center"]) }),
@@ -129,7 +129,7 @@ const fixture = () => {
         },
       },
       PlainText: {
-        generation: { props: z.object({ text: z.string() }) },
+        layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
         fields: { text: { type: "text" } },
         defaultProps: { text: "Text" },
       },

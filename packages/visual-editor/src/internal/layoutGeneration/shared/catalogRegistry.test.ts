@@ -12,12 +12,12 @@ it("shares generated restrictions and metadata across the engine and Puck config
     {
       Section: {
         description: "A section",
-        generation: { props: z.object({ title: z.string() }) },
+        layoutGenerationMetadata: { props: z.object({ title: z.string() }) },
         defaultProps: { title: "Default" },
       },
       Child: {
         nestedOnly: true,
-        generation: { props: z.object({ text: z.string() }) },
+        layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
       },
     },
     {
@@ -58,10 +58,13 @@ it("reads public component generation metadata when building a runtime catalog",
   const catalog = getGenerationCatalog(config);
   expect(catalog.data.components.Custom.generation).toBe(metadata);
   expect(
-    catalog.data.components.Custom.props.safeParse({ title: "Valid" }).success
+    catalog.data.components.Custom.generation!.props.safeParse({
+      title: "Valid",
+    }).success
   ).toBe(true);
   expect(
-    catalog.data.components.Custom.props.safeParse({ title: 42 }).success
+    catalog.data.components.Custom.generation!.props.safeParse({ title: 42 })
+      .success
   ).toBe(false);
   expect(getGenerationCatalog({ ...config })).toBe(catalog);
 });

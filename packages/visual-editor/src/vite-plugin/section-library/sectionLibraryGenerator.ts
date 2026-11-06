@@ -403,17 +403,17 @@ const buildJsonRenderSource = (
       const pageSetType = JSON.stringify(layout.metadata.pageSetType);
       return [
         `  ${JSON.stringify(layout.metadata.id)}: createPuckGenerationCatalog({`,
-        "    CustomCodeSection: {},",
+        "    CustomCodeSection: { layoutGenerationMetadata: { exclude: true } },",
         ...sections.flatMap((section, index) =>
           section.pageSetTypes.includes(layout.metadata.pageSetType)
             ? [
-                `    ${JSON.stringify(section.id)}: { generation: Section${index}.layoutGenerationMetadata, description: sectionConfig${index}.description, fields: Section${index}.fields, defaultProps: Section${index}.defaultProps, permissions: Section${index}.permissions },`,
+                `    ${JSON.stringify(section.id)}: { layoutGenerationMetadata: Section${index}.layoutGenerationMetadata, description: sectionConfig${index}.description, fields: Section${index}.fields, defaultProps: Section${index}.defaultProps, permissions: Section${index}.permissions },`,
               ]
             : []
         ),
         ...(hasSharedRegistry
           ? [
-              `    ...Object.fromEntries(sharedComponentMetadata.filter((component) => component.pageSetTypes.includes(${pageSetType})).map((component) => [component.id, { generation: sharedComponentConfigs[component.id]?.layoutGenerationMetadata, fields: sharedComponentConfigs[component.id]?.fields, defaultProps: sharedComponentConfigs[component.id]?.defaultProps, permissions: sharedComponentConfigs[component.id]?.permissions, nestedOnly: true }])),`,
+              `    ...Object.fromEntries(sharedComponentMetadata.filter((component) => component.pageSetTypes.includes(${pageSetType})).map((component) => [component.id, { layoutGenerationMetadata: sharedComponentConfigs[component.id]?.layoutGenerationMetadata, fields: sharedComponentConfigs[component.id]?.fields, defaultProps: sharedComponentConfigs[component.id]?.defaultProps, permissions: sharedComponentConfigs[component.id]?.permissions, nestedOnly: true }])),`,
             ]
           : []),
         `  }, { ${[

@@ -1,6 +1,5 @@
 import type { PuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
 import {
-  validateAuthored,
   walkAuthored,
   type Content,
   type SavedComponent,
@@ -8,11 +7,10 @@ import {
 import { normalizeGeneratedText } from "./localizedText.ts";
 import {
   finalizeSlottedSource,
-  generationFields,
   prepareSlottedSource,
 } from "./slottedItemSource.ts";
 
-/** Prepare generated descendants before visiting them, then finalize identities and source mirrors in place. */
+/** Prepare descendants, identities and source mirrors in place; callers validate the assembled page. */
 export const finalizeGeneratedContent = (
   catalog: PuckGenerationCatalog,
   candidate: Content,
@@ -30,22 +28,29 @@ export const finalizeGeneratedContent = (
     onPrepared?: (component: SavedComponent) => void;
   }
 ) => {
-  walkAuthored(catalog, candidate, ({ component, collection }) => {
+  walkAuthored(catalog, candidate, ({ component }) => {
     const config = catalog.data.components[component.type];
     prepareSlottedSource(component, config, explicitCardLists.has(component));
     onPrepared?.(component);
     component.props = normalizeGeneratedText(
       component.props,
       config.generation!.props,
-      { type: "object", objectFields: generationFields(config) },
+      { type: "object", objectFields: config.fields ?? {} },
       translationMode === "translate",
       locales
     );
-    component.props.id = assignId(
-      component,
-      `${collection.path}/${collection.items.indexOf(component)}`
-    );
   });
+  walkAuthored(
+    catalog,
+    candidate,
+    ({ component, collection }) => {
+      component.props.id = assignId(
+        component,
+        `${collection.path}/${collection.items.indexOf(component)}`
+      );
+    },
+    { identityOnly: true }
+  );
   // Parent-first finalization applies child identity conventions. Copy mirrors
   // again after descendants have finalized their own references.
   const sources: SavedComponent[] = [];
@@ -58,5 +63,4 @@ export const finalizeGeneratedContent = (
   });
   for (const component of sources.reverse())
     finalizeSlottedSource(component, catalog.data.components[component.type]);
-  validateAuthored(catalog, candidate);
 };

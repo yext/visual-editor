@@ -5,6 +5,7 @@ import { createGenerationSchemaCompiler } from "../../schema/compiler.ts";
 import {
   extractAuthored,
   rejectZones,
+  validateAuthored,
   type Content,
 } from "../../shared/authoredValues.ts";
 import { finalizeGeneratedContent } from "../../shared/finalizeGeneratedContent.ts";
@@ -172,6 +173,7 @@ export const compileGenerationSchema = (
     });
     // General counts constrain existing manual collections, not section selection.
     // Only an explicit occurrence requires an owner to be present in the page.
+    validateAuthored(catalog, candidate);
     const unmatchedRequirements = (preparation?.cardCounts ?? []).filter(
       (requirement, index) =>
         requirement.instanceIndex !== null && !matchedCounts.has(index)

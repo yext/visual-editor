@@ -60,6 +60,7 @@ export {
   type YextTransformedProps,
   type ResolvedComprehensiveCTAValue,
   type LayoutGenerationMetadata,
+  type FieldGenerationMetadata,
   type YextArrayField,
   type YextFields,
   type YextFieldMap,

@@ -30,6 +30,8 @@ type ChatMessage = {
   role: "user" | "assistant";
   text: string;
   pending?: boolean;
+  /** Distinguishes the generation prompt from a subsequent user chat turn. */
+  intent?: boolean;
   sections?: SectionTaskProgress[];
 };
 
@@ -168,7 +170,11 @@ export const useLayoutGenerationChat = (
     const previousMessages = previousMessagesRef.current;
     const nextMessages: ChatMessage[] = [
       ...previousMessages,
-      { role: "user", text: user.content },
+      {
+        role: "user",
+        text: user.content,
+        ...(isIntent ? { intent: true } : {}),
+      },
     ];
     const requestMessages =
       mode === "intent" ? [user] : [...history.current, user];

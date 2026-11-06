@@ -1,8 +1,5 @@
 import { z } from "zod";
-import {
-  createPuckGenerationCatalog,
-  type GenerationComponent,
-} from "../../../utils/createPuckGenerationCatalog.ts";
+import { createPuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
 import type {
   PlannedStructureEdit,
   SectionEditTask,
@@ -52,18 +49,18 @@ export const planningResponse = (
 
 /** A repeated-card catalog with bindings, translations and opaque content. */
 export const editGenerationFixture = () => {
-  const components: Record<string, GenerationComponent> = {
+  const components: Parameters<typeof createPuckGenerationCatalog>[0] = {
     Header: {
-      generation: { props: z.object({ text: z.string() }) },
+      layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
       defaultProps: { text: "Header" },
     },
     Footer: {
-      generation: { props: z.object({ text: z.string() }) },
+      layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
       defaultProps: { text: "Footer" },
     },
     Section: {
       description: "A titled group of cards",
-      generation: {
+      layoutGenerationMetadata: {
         props: z.object({ title: z.string(), cards: z.array(z.unknown()) }),
       },
       fields: { cards: { type: "slot", allow: ["Card", "Opaque"] } },
@@ -72,7 +69,7 @@ export const editGenerationFixture = () => {
     Card: {
       nestedOnly: true,
       description: "A card with localized copy and an entity binding",
-      generation: {
+      layoutGenerationMetadata: {
         props: z.object({
           text: z.object({ defaultValue: z.string() }).catchall(z.string()),
           binding: z.object({
@@ -94,9 +91,14 @@ export const editGenerationFixture = () => {
         style: { color: "blue" },
       },
     },
-    Opaque: { description: "Existing opaque content" },
+    Opaque: {
+      layoutGenerationMetadata: { props: z.object({}), exclude: true },
+      description: "Existing opaque content",
+    },
     Unrelated: {
-      generation: { props: z.object({ unrelatedValue: z.string() }) },
+      layoutGenerationMetadata: {
+        props: z.object({ unrelatedValue: z.string() }),
+      },
     },
   };
   const card = (componentId: string, text: string): SavedComponent => ({

@@ -57,7 +57,7 @@ export const componentDiagnostics = (
       let authoredSchemaBytes: number | undefined;
       try {
         authoredSchemaBytes = jsonBytes(
-          z.toJSONSchema(component.props, { io: "input" })
+          z.toJSONSchema(component.generation!.props, { io: "input" })
         );
       } catch {
         // The compiled strict schema diagnostics below still capture total size.
@@ -68,6 +68,7 @@ export const componentDiagnostics = (
         authoredSchemaBytes,
         descriptionBytes: utf8Bytes(component.description ?? ""),
         defaultPropsBytes: jsonBytes(component.defaultProps ?? {}),
-        authoredPropCount: Object.keys(component.props.shape ?? {}).length,
+        authoredPropCount: Object.keys(component.generation!.props.shape ?? {})
+          .length,
       };
     });

@@ -224,10 +224,19 @@ export const materializeSectionEdit = <T extends Content>(
           child === component &&
             input.slots.some((slot) => slot.slotPath === "/slots/CardSlot")
         );
-        child.props.id = allocateId();
-        newComponents.add(child);
       }
     });
+    walkAuthored(
+      catalog,
+      { content: [component] },
+      ({ component: child }) => {
+        if (!newComponents.has(child)) {
+          child.props.id = allocateId();
+          newComponents.add(child);
+        }
+      },
+      { identityOnly: true }
+    );
     return component;
   };
   let insertedSection = false;

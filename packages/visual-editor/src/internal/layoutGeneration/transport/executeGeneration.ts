@@ -95,6 +95,12 @@ export const executeGeneration = async (
     );
   }
   signal.throwIfAborted();
+  if (catalog.fieldOmissions.length) {
+    diagnostics.schemaOmissions?.({
+      correlationId,
+      fields: catalog.fieldOmissions,
+    });
+  }
   const log = diagnostics.log;
   const bodyBytes = jsonBytes(payload);
   const requestDetails = {

@@ -2,7 +2,7 @@
 
 Layout generation is loosely based on [json-render.dev](https://json-render.dev/). However, we use Puck to render and have a custom spec defined in order to natively generate Puck data and support slots.
 
-At a high level, the section library defines Zod types for all supported sections. We render a chat interface as a Puck plugin that has workflows for blank-page generation, follow-up section edits, and intent-driven full-page updates. We take the user prompt and combine it with the schema to form an OpenAI API request. We forward this request to ModelGateway with strict generation
+At a high level, authored Zod contracts are inferred from each component’s static fields, with field-level overrides and an optional complete component schema. Components participate unless explicitly excluded. We render a chat interface as a Puck plugin that has workflows for blank-page generation, follow-up section edits, and intent-driven full-page updates. We take the user prompt and combine it with the schema to form an OpenAI API request. We forward this request to ModelGateway with strict generation
 mode enabled, ensuring we get valid JSON back from the model. We then validate that the data is able to be rendered and push the update into Puck history.
 
 Layout generation is enabled when `templateMetadata.aiPageGeneration.layoutGenerationEnabled` is true and a compatible `aiPageGeneration.prompts` bundle is supplied.
@@ -14,7 +14,7 @@ Prompts can be tested using the local editor's `generationPromptsPath` configura
 
 ## src/internal/layoutGeneration/schema
 
-The section library defines `layoutGenerationMetadata` in each supported `YextComponentConfig`. This metadata is formal Zod prop type, which can include plain text descriptions for the LLM. These are compiled into the generation’s “schema”. The code does some compression on the schema so it’s small enough to send to the model.
+The catalog infers authored Zod prop contracts from static fields and defaults. Fields can define `generation` metadata, including instructions and schema overrides; components can supply `layoutGenerationMetadata` for exclusion, instructions, ownership metadata, or a complete `props` schema. The existing compiler turns those contracts into strict model schemas and compresses them. See [field inference](schema/README.md) for the API and limitations.
 
 ## src/internal/layoutGeneration/transport
 

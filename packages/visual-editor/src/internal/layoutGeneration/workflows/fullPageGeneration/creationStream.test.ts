@@ -69,7 +69,7 @@ describe("incremental creation", () => {
     const catalog = createPuckGenerationCatalog({
       ...creationCatalog().data.components,
       MainContent: {
-        generation: {
+        layoutGenerationMetadata: {
           props: z.object({ content: z.array(z.unknown()), label: z.string() }),
         },
         fields: { content: { type: "slot" } },

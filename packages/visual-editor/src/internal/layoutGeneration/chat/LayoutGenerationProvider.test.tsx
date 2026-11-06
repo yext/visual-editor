@@ -199,6 +199,19 @@ it("reports an already failed intent without a retry button or blocked composer"
   await waitFor(() => expect(ui?.chat.ready).toBe(true));
   expect(ui!.disabled).toBe(false);
   expect(send).not.toHaveBeenCalled();
+  let pending!: Promise<void>;
+  act(() => {
+    pending = ui!.chat.send("Make the heading shorter");
+  });
+  await waitFor(() => {
+    expect(within(chat).getByText("Make the heading shorter")).toBeTruthy();
+    expect(within(chat).queryByText("Page generation failed.")).toBeNull();
+  });
+  await act(async () => {
+    ui!.chat.cancel();
+    await pending;
+  });
+  expect(within(chat).queryByText("Page generation failed.")).toBeNull();
 });
 
 it("releases the chat after a refused intent start without offering generation retry", async () => {
@@ -727,4 +740,58 @@ it("sends the preparation token allowance supplied by ALPHA", async () => {
   expect(request.payload.body.max_output_tokens).toBe(123);
   unmount();
   await pending;
+});
+
+it("shows a refused late intent start even after an earlier regular chat turn", async () => {
+  const send = post();
+  const initial = metadata({ assignment: "ALL" });
+  const panel = (value: TemplateMetadata) => (
+    <LayoutGenerationProvider config={config} metadata={value}>
+      <Probe />
+      <ChatPanel />
+    </LayoutGenerationProvider>
+  );
+  const result = render(panel(initial));
+  await waitFor(() => expect(ui?.chat.ready).toBe(true));
+  let pending!: Promise<void>;
+  act(() => {
+    pending = ui!.chat.send("An earlier chat message");
+  });
+  await waitFor(() =>
+    expect(result.getByText("An earlier chat message")).toBeTruthy()
+  );
+  await act(async () => {
+    ui!.chat.cancel();
+    await pending;
+  });
+  send.mockClear();
+  const late = {
+    ...initial,
+    aiPageGeneration: {
+      ...initial.aiPageGeneration,
+      intentPageGeneration: { prompt: "Late intent", status: "PENDING" },
+    },
+  } as TemplateMetadata;
+  result.rerender(panel(late));
+  await waitFor(() => expect(send).toHaveBeenCalled());
+  const start = send.mock.calls[0][0];
+  act(() =>
+    window.dispatchEvent(
+      new MessageEvent("message", {
+        source: window.parent,
+        origin: "https://dev.yext.com",
+        data: {
+          type: "updateIntentPageGeneration",
+          status: "error",
+          payload: {
+            attemptId: start.payload.attemptId,
+            message: "Start refused",
+          },
+        },
+      })
+    )
+  );
+  await waitFor(() =>
+    expect(result.getByText("Page generation failed.")).toBeTruthy()
+  );
 });

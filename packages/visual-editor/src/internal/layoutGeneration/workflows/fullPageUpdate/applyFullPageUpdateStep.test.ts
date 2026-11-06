@@ -65,7 +65,9 @@ it("reports a root anchor incorrectly used for insertion into MainContent", () =
 
 it.each([
   { kind: "remove", sectionId: "main" },
-  { kind: "remove", sectionId: "missing" },
+  { kind: "keep", sectionId: "missing" },
+  { kind: "replace", sectionId: "missing", sections: [newHeading("new")] },
+  { kind: "reorder", sectionId: "missing", anchor: { position: "end" } },
   {
     kind: "reorder",
     sectionId: "hero",
@@ -137,4 +139,27 @@ it("respects root placement restrictions, read-only slots, and drag permissions"
       (permission) => permission !== "drag"
     )
   ).toThrow("permission denied");
+});
+
+it("ignores missing and repeated removals without mutating the baseline", () => {
+  const catalog = creationCatalog();
+  const baseline = fullPageUpdateLayout();
+  const before = clone(baseline);
+  expect(
+    applyFullPageUpdateStep(catalog, baseline, {
+      kind: "remove",
+      sectionId: "missing",
+    })
+  ).toEqual(before);
+  const removed = applyFullPageUpdateStep(catalog, baseline, {
+    kind: "remove",
+    sectionId: "services",
+  });
+  expect(
+    applyFullPageUpdateStep(catalog, removed, {
+      kind: "remove",
+      sectionId: "services",
+    })
+  ).toEqual(removed);
+  expect(baseline).toEqual(before);
 });

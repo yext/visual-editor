@@ -20,11 +20,15 @@ const section = (id: string, children: SavedComponent[]): SavedComponent => ({
 });
 const catalog = () =>
   createPuckGenerationCatalog({
-    Header: { generation: { props: z.object({ title: z.string() }) } },
-    Footer: { generation: { props: z.object({ title: z.string() }) } },
+    Header: {
+      layoutGenerationMetadata: { props: z.object({ title: z.string() }) },
+    },
+    Footer: {
+      layoutGenerationMetadata: { props: z.object({ title: z.string() }) },
+    },
     Section: {
       description: "A content section",
-      generation: {
+      layoutGenerationMetadata: {
         props: z.object({ title: z.string(), children: z.array(z.unknown()) }),
       },
       fields: {
@@ -36,10 +40,13 @@ const catalog = () =>
       },
     },
     Heading: {
-      generation: { props: z.object({ text: z.string() }) },
+      layoutGenerationMetadata: { props: z.object({ text: z.string() }) },
       nestedOnly: true,
     },
-    Opaque: { fields: { children: { type: "slot" } } },
+    Opaque: {
+      layoutGenerationMetadata: { exclude: true },
+      fields: { children: { type: "slot" } },
+    },
   });
 const page = () => ({
   root: { props: { theme: "unchanged" } },
