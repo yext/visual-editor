@@ -41,6 +41,39 @@ it("accepts valid existing layouts", () => {
   ).not.toThrow();
 });
 
+it.each(["ProductSection", "EventSection", "Header", "Footer"])(
+  "accepts editor-produced linked card mirrors nested in %s",
+  async (sectionType) => {
+    const fixture = slottedFixture();
+    const manual = fixture.materialize();
+    Object.assign(manual.content[0].props.data, {
+      field: "c_items",
+      constantValueEnabled: false,
+    });
+    const linked = await fixture.resolve(manual, {
+      locale: "en",
+      c_items: [{ name: "Linked item" }],
+    });
+    const catalog = createPuckGenerationCatalog({
+      ...fixture.components,
+      [sectionType]: {
+        fields: { content: { type: "slot", allow: ["Section"] } },
+      },
+    });
+    const data = {
+      content: [
+        {
+          type: sectionType,
+          props: { id: "container", content: linked.content },
+        },
+      ],
+    };
+    expect(() =>
+      validateInitialChatLayout(catalog, data, String)
+    ).not.toThrow();
+  }
+);
+
 it("preserves errors when the malformed layout cannot identify a section", () => {
   const fixture = slottedFixture();
   expect(() =>

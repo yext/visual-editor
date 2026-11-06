@@ -2,6 +2,9 @@
 import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import type { Fields } from "@puckeditor/core";
 import { toPuckFields, type YextFields } from "../../../fields/fields.ts";
 import { createPuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
@@ -366,6 +369,50 @@ it("compiles structured Yext field contracts without resolving render values", (
 });
 
 describe("standard-library-shaped contracts", () => {
+  it.each([false, true])(
+    "requires resolver-compatible entity constants for adapted fields: %s",
+    (adapted) => {
+      const fields: YextFields = {
+        text: { type: "entityField", filter: { types: ["type.string"] } },
+      };
+      const catalog = catalogFor(adapted ? toPuckFields(fields) : fields);
+      const schema = catalog.data.components.Section.generation!.props;
+      const node = createGenerationSchemaCompiler(catalog, ["en"]).element(
+        "Section"
+      );
+      const binding = { field: "name", constantValueEnabled: false };
+
+      expect(schema.safeParse({ text: binding }).success).toBe(false);
+      expect(
+        node.wire.safeParse({ type: "Section", props: { text: binding } })
+          .success
+      ).toBe(false);
+      expect(
+        node.wire.safeParse({
+          type: "Section",
+          props: { text: { ...binding, constantValue: { $unset: true } } },
+        }).success
+      ).toBe(false);
+
+      const props = { text: { ...binding, constantValue: "" } };
+      expect(schema.parse(props)).toEqual(props);
+      const generated = node.apply(
+        node.wire.parse({ type: "Section", props }),
+        undefined
+      );
+      const saved = JSON.parse(JSON.stringify(generated));
+      const document = { name: "Yext" };
+      expect(saved.props.text).toEqual(props.text);
+      expect(resolveYextEntityField(document, saved.props.text, "en")).toBe(
+        "Yext"
+      );
+      const resolved = resolveComponentData(saved.props.text, "en", document);
+      expect(renderToStaticMarkup(createElement("h3", null, resolved))).toBe(
+        "<h3>Yext</h3>"
+      );
+    }
+  );
+
   it("preserves editor-authored image-list wrappers through generation", () => {
     const catalog = catalogFor({
       photos: {
