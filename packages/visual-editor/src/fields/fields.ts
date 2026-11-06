@@ -229,6 +229,25 @@ export type LayoutGenerationMetadata = {
   slottedItemSource?: SlottedItemSourceGenerationMetadata;
 };
 
+/**
+ * Puck 0.24's deep slot mapper expands intersections such as CSS's `string & {}`
+ * into string-method objects. Normalize broad primitives before Puck traverses
+ * them, while retaining literal unions, brands, and Puck's built-in leaf types.
+ */
+type NormalizePuckPrimitives<Value> = Value extends string
+  ? string extends Value
+    ? string
+    : Value
+  : Value extends number
+    ? number extends Value
+      ? number
+      : Value
+    : Value extends Date | RegExp | Error | Function
+      ? Value
+      : Value extends object
+        ? { [Key in keyof Value]: NormalizePuckPrimitives<Value[Key]> }
+        : Value;
+
 export type YextComponentConfig<
   Props extends DefaultComponentProps = DefaultComponentProps,
   TransformFields = {},
@@ -240,7 +259,9 @@ export type YextComponentConfig<
   "fields" | "resolveFields" | "render"
 > & {
   render: ComponentConfig<{
-    props: YextTransformedProps<Props, TransformFields>;
+    props: NormalizePuckPrimitives<
+      YextTransformedProps<Props, TransformFields>
+    >;
     fields: YextPuckFields;
   }>["render"];
   fields?: YextFields<Props>;
