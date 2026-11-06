@@ -1,6 +1,5 @@
 import type { PuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
 import {
-  validateAuthored,
   walkAuthored,
   type Content,
   type SavedComponent,
@@ -11,7 +10,7 @@ import {
   prepareSlottedSource,
 } from "./slottedItemSource.ts";
 
-/** Prepare generated descendants before visiting them, then finalize identities and source mirrors in place. */
+/** Prepare descendants, identities and source mirrors in place; callers validate the assembled page. */
 export const finalizeGeneratedContent = (
   catalog: PuckGenerationCatalog,
   candidate: Content,
@@ -64,5 +63,4 @@ export const finalizeGeneratedContent = (
   });
   for (const component of sources.reverse())
     finalizeSlottedSource(component, catalog.data.components[component.type]);
-  validateAuthored(catalog, candidate);
 };

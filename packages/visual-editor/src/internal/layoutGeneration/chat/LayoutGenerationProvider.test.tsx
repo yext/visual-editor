@@ -199,6 +199,19 @@ it("reports an already failed intent without a retry button or blocked composer"
   await waitFor(() => expect(ui?.chat.ready).toBe(true));
   expect(ui!.disabled).toBe(false);
   expect(send).not.toHaveBeenCalled();
+  let pending!: Promise<void>;
+  act(() => {
+    pending = ui!.chat.send("Make the heading shorter");
+  });
+  await waitFor(() => {
+    expect(within(chat).getByText("Make the heading shorter")).toBeTruthy();
+    expect(within(chat).queryByText("Page generation failed.")).toBeNull();
+  });
+  await act(async () => {
+    ui!.chat.cancel();
+    await pending;
+  });
+  expect(within(chat).queryByText("Page generation failed.")).toBeNull();
 });
 
 it("releases the chat after a refused intent start without offering generation retry", async () => {

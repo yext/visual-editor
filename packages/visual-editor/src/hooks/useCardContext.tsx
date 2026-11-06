@@ -1,4 +1,5 @@
 import React, { createContext, useState, useMemo, useContext } from "react";
+import { LayoutGenerationChatUiContext } from "../internal/layoutGeneration/chat/contexts.tsx";
 
 type CardContextType<T extends Record<string, any>> = {
   sharedCardProps: T | undefined;
@@ -24,16 +25,30 @@ export const CardContextProvider = <T extends Record<string, any>>({
   children: React.ReactNode;
   parentStyles?: unknown;
 }) => {
+  const isGenerationActive =
+    useContext(LayoutGenerationChatUiContext)?.chat.isGeneratingPage ?? false;
+  const generationActiveRef = React.useRef(isGenerationActive);
+  generationActiveRef.current = isGenerationActive;
   const [sharedCardProps, setSharedCardProps] = useState<T | undefined>(
     undefined
   );
+  // Mounted cards normally publish and propagate styles from effects. During
+  // generation those writes would race the canvas and invalidate manual backups.
+  const updateSharedCardProps = React.useCallback<
+    React.Dispatch<React.SetStateAction<T | undefined>>
+  >((update) => {
+    if (!generationActiveRef.current) setSharedCardProps(update);
+  }, []);
+  React.useEffect(() => {
+    if (isGenerationActive) setSharedCardProps(undefined);
+  }, [isGenerationActive]);
 
   const contextValue = useMemo(
     () => ({
-      sharedCardProps,
-      setSharedCardProps,
+      sharedCardProps: isGenerationActive ? undefined : sharedCardProps,
+      setSharedCardProps: updateSharedCardProps,
     }),
-    [sharedCardProps]
+    [sharedCardProps, isGenerationActive, updateSharedCardProps]
   );
 
   return (

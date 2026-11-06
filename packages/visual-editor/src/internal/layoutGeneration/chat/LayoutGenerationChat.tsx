@@ -57,9 +57,16 @@ export const LayoutGenerationChat = ({
 }) => {
   const intent = React.useContext(IntentPageGenerationChatContext);
   const logRef = React.useRef<HTMLDivElement>(null);
-  const userMessageCount = chat.messages.filter(
+  const userMessages = chat.messages.filter(
     (message) => message.role === "user"
-  ).length;
+  );
+  const userMessageCount = userMessages.length;
+  const lastUserMessage = userMessages.at(-1);
+  const dismissedIntentFailure =
+    !!lastUserMessage &&
+    !lastUserMessage.intent &&
+    (intent?.state.stage === "failed" ||
+      (intent?.state.stage === "idle" && intent.status === "FAILED"));
   const previousUserMessageCount = React.useRef(userMessageCount);
   const assistantMessageCount = chat.messages.filter(
     (message) => message.role === "assistant" && !message.pending
@@ -220,6 +227,7 @@ export const LayoutGenerationChat = ({
               )
           )}
           {intent?.eligible &&
+            !dismissedIntentFailure &&
             !["generating", "clarification", "saving", "completed"].includes(
               intent.state.stage
             ) &&
