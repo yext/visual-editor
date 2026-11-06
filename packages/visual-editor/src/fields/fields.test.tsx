@@ -1,9 +1,18 @@
 import React from "react";
 import { describe, expect, expectTypeOf, it } from "vitest";
-import type { CustomField, Fields } from "@puckeditor/core";
+import type {
+  ComponentConfig,
+  Config,
+  CustomField,
+  Fields,
+  PuckContext,
+  Slot,
+  SlotComponent,
+} from "@puckeditor/core";
 import type { BasicSelectorField } from "./BasicSelectorField.tsx";
 import {
   toPuckFields,
+  type YextComponentConfig,
   type YextFieldMap,
   type YextTransformedProps,
 } from "./fields.ts";
@@ -12,6 +21,11 @@ import { createYextFieldTransforms } from "./fieldTransforms/index.ts";
 import { createItemSource } from "../utils/itemSource/createItemSource.ts";
 import type { YextEntityField } from "../editor/yextEntityFieldUtils.ts";
 import type { TranslatableString } from "../types/types.ts";
+import type { ComprehensiveCTAValue } from "./styledFields/ComprehensiveCTAField.tsx";
+import type { StyledTextValue } from "./styledFields/StyledTextField.tsx";
+import type { StyledButtonValue } from "./styledFields/StyledButtonField.tsx";
+import type { StyledLinkValue } from "./styledFields/StyledLinkField.tsx";
+import type { StyledImageValue } from "./styledFields/StyledImageField.tsx";
 import type { StyledPageSectionValue } from "./styledFields/StyledPageSection.tsx";
 
 type TestProps = {
@@ -139,6 +153,73 @@ describe("toPuckFields", () => {
 });
 
 describe("field transforms", () => {
+  it.each([
+    { value: undefined, transform: true, expected: {} },
+    { value: { borderRadius: "default" }, transform: true, expected: {} },
+    {
+      value: { borderRadius: "8px" },
+      transform: true,
+      expected: { borderRadius: "8px" },
+    },
+    {
+      value: { borderRadius: "8px", aspectRatio: 1.78 },
+      transform: true,
+      expected: { borderRadius: "8px", aspectRatio: 1.78 },
+    },
+    {
+      value: { borderRadius: "default", aspectRatio: 0.75 },
+      transform: true,
+      expected: { aspectRatio: 0.75 },
+    },
+    {
+      value: { borderRadius: "8px", aspectRatio: "default" },
+      transform: true,
+      expected: { borderRadius: "8px" },
+    },
+    {
+      value: { borderRadius: "8px", aspectRatio: 0 },
+      transform: true,
+      expected: { borderRadius: "8px" },
+    },
+    {
+      value: { borderRadius: "8px", aspectRatio: -1 },
+      transform: true,
+      expected: { borderRadius: "8px" },
+    },
+    {
+      value: { borderRadius: "default", aspectRatio: 1.78 },
+      transform: false,
+      expected: { borderRadius: "default", aspectRatio: 1.78 },
+    },
+    {
+      value: { borderRadius: "default", aspectRatio: 1.78 },
+      transform: undefined,
+      expected: { borderRadius: "default", aspectRatio: 1.78 },
+    },
+  ])(
+    "handles styledImage $value with transform=$transform",
+    ({ value, transform, expected }) => {
+      const authored = structuredClone(value);
+      for (const adapted of [false, true]) {
+        const fields = {
+          style: { type: "styledImage", transform },
+        } satisfies YextFieldMap;
+        const field = adapted ? toPuckFields(fields).style : fields.style;
+        const result = createYextFieldTransforms({}, "en")[field.type]({
+          field,
+          value,
+          componentId: "test",
+          propName: "style",
+          propPath: "style",
+          isReadOnly: true,
+        });
+        expect(result).toEqual(expected);
+        expect(value).toEqual(authored);
+        if (!transform) expect(result).toBe(value);
+      }
+    }
+  );
+
   it.each([
     {
       type: "entityField",
@@ -302,6 +383,19 @@ describe("field transforms", () => {
       expectTypeOf<RenderProps["cards"][number]["rows"]>().toEqualTypeOf<
         { label: string }[]
       >();
+      type ComponentRenderProps = Parameters<
+        YextComponentConfig<
+          { cards: typeof source.value },
+          typeof fields
+        >["render"]
+      >[0];
+      expectTypeOf<
+        ComponentRenderProps["cards"][number]["style"]
+      >().toMatchTypeOf<React.CSSProperties>();
+      expectTypeOf<
+        ComponentRenderProps["cards"][number]["price"]
+      >().toEqualTypeOf<string | undefined>();
+
       const legacySource = createItemSource<{
         title: YextEntityField<TranslatableString>;
       }>({
@@ -366,4 +460,137 @@ describe("field transforms", () => {
       expect(value).toEqual(authored);
     }
   );
+});
+
+describe("YextComponentConfig render types", () => {
+  it("preserves transformed CSS, authored CTA styles, and Puck slots", () => {
+    type StyleProps = {
+      text: StyledTextValue;
+      button: StyledButtonValue;
+      link: StyledLinkValue;
+      image: StyledImageValue;
+      page: StyledPageSectionValue;
+    };
+    type Props = StyleProps & {
+      nested: StyleProps;
+      items: StyleProps[];
+      cta: ComprehensiveCTAValue;
+      content: Slot;
+      slots: { content?: Slot };
+    };
+    const styleFields = {
+      text: { type: "styledText", transform: true },
+      button: { type: "styledButton", transform: true },
+      link: { type: "styledLink", transform: true },
+      image: { type: "styledImage", transform: true },
+      page: { type: "styledPageSection", transform: true },
+    } satisfies YextFieldMap<StyleProps>;
+    const fields = {
+      ...styleFields,
+      nested: { type: "object", objectFields: styleFields },
+      items: { type: "array", arrayFields: styleFields },
+      cta: { type: "comprehensiveCTA" },
+      content: { type: "slot" },
+      slots: {
+        type: "object",
+        objectFields: { content: { type: "slot" } },
+      },
+    } satisfies YextFieldMap<Props>;
+    type Component = YextComponentConfig<Props, typeof fields>;
+    type RenderProps = Parameters<Component["render"]>[0];
+    expectTypeOf<
+      RenderProps[keyof StyleProps]
+    >().toMatchTypeOf<React.CSSProperties>();
+    expectTypeOf<
+      RenderProps["nested"][keyof StyleProps]
+    >().toMatchTypeOf<React.CSSProperties>();
+    expectTypeOf<
+      RenderProps["items"][number][keyof StyleProps]
+    >().toMatchTypeOf<React.CSSProperties>();
+    expectTypeOf<RenderProps["cta"]>().toMatchTypeOf<ComprehensiveCTAValue>();
+    expectTypeOf<RenderProps["content"]>().toEqualTypeOf<SlotComponent>();
+    expectTypeOf<RenderProps["slots"]["content"]>().toEqualTypeOf<
+      SlotComponent | undefined
+    >();
+    expectTypeOf<RenderProps["id"]>().toEqualTypeOf<string>();
+    expectTypeOf<RenderProps["puck"]>().toEqualTypeOf<PuckContext>();
+    expectTypeOf<
+      NonNullable<Component["defaultProps"]>
+    >().toEqualTypeOf<Props>();
+    type ResolvedData = Parameters<NonNullable<Component["resolveData"]>>[0];
+    type PuckResolvedData = Parameters<
+      NonNullable<ComponentConfig<Props>["resolveData"]>
+    >[0];
+    expectTypeOf<ResolvedData>().toEqualTypeOf<PuckResolvedData>();
+
+    // These callbacks are compiled by tsc; no Puck context is needed at runtime.
+    const component: Component = {
+      fields,
+      render: (props) => {
+        // @ts-expect-error CSS values must remain constrained after normalization.
+        const _invalid: typeof props.text = { display: { invalid: true } };
+        return (
+          <div style={props.text}>
+            <div style={props.nested.image} />
+            <div style={props.items[0].link} />
+            <div style={props.cta.sx} />
+            <props.content />
+          </div>
+        );
+      },
+    };
+    const registry: Config["components"] = { Example: component };
+    expect(registry.Example).toBe(component);
+  });
+
+  it("preserves primitive constraints and configs without transform definitions", () => {
+    type Brand = string & { readonly brand: unique symbol };
+    type Props = {
+      cta: ComprehensiveCTAValue;
+      variant?: "primary" | "secondary";
+      size: 1 | 2;
+      count: number & {};
+      label: string & {};
+      branded: Brand;
+      readonlyValues: readonly ("one" | "two")[];
+      callback: (value: string) => number;
+      date: Date;
+      pattern: RegExp;
+      error: Error;
+    };
+    type Component = YextComponentConfig<Props>;
+    type RenderProps = Parameters<Component["render"]>[0];
+    type PuckRenderProps = Parameters<ComponentConfig<Props>["render"]>[0];
+    expectTypeOf<RenderProps["variant"]>().toEqualTypeOf<
+      "primary" | "secondary" | undefined
+    >();
+    expectTypeOf<RenderProps["size"]>().toEqualTypeOf<1 | 2>();
+    expectTypeOf<RenderProps["count"]>().toEqualTypeOf<number>();
+    expectTypeOf<RenderProps["label"]>().toEqualTypeOf<string>();
+    expectTypeOf<RenderProps["branded"]>().toEqualTypeOf<
+      PuckRenderProps["branded"]
+    >();
+    expectTypeOf<RenderProps["readonlyValues"]>().toEqualTypeOf<
+      readonly ("one" | "two")[]
+    >();
+    expectTypeOf<RenderProps["callback"]>().toEqualTypeOf<Props["callback"]>();
+    expectTypeOf<RenderProps["date"]>().toEqualTypeOf<Date>();
+    expectTypeOf<RenderProps["pattern"]>().toEqualTypeOf<RegExp>();
+    expectTypeOf<RenderProps["error"]>().toEqualTypeOf<Error>();
+    expectTypeOf<
+      NonNullable<Component["defaultProps"]>
+    >().toEqualTypeOf<Props>();
+
+    const component: Component = {
+      render: (props) => {
+        // @ts-expect-error Normalization must not widen literal unions.
+        const _invalidVariant: typeof props.variant = "other";
+        // @ts-expect-error Branded primitives must not accept plain strings.
+        const _invalidBrand: typeof props.branded = "unbranded";
+        return <div style={props.cta.sx} />;
+      },
+    };
+    const registry: Config["components"] = { Example: component };
+    expect(registry.Example).toBe(component);
+  });
 });

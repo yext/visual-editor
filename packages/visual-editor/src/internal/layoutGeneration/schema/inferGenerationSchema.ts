@@ -382,7 +382,7 @@ export const inferGenerationSchema = (
       case "styledLink":
         return styledLinkZodSchema;
       case "styledImage":
-        return styledImageZodSchema;
+        return styledImageZodSchema(!!field.includeAspectRatio);
       case "styledPageSection":
         return styledPageSectionZodSchema;
       default:

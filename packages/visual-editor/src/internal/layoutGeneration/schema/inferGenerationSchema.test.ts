@@ -321,6 +321,7 @@ it("compiles structured Yext field contracts without resolving render values", (
     link: { type: "styledLink" },
     section: { type: "styledPageSection" },
     imageStyle: { type: "styledImage" },
+    imageStyleWithRatio: { type: "styledImage", includeAspectRatio: true },
     font: { type: "fontSizeSelector", includeLargeSizes: false },
     size: {
       type: "optionalNumber",
@@ -346,6 +347,25 @@ it("compiles structured Yext field contracts without resolving render values", (
 
   const shape = catalog.data.components.Section.generation!.props.shape;
 
+  expect(shape.imageStyle.parse({ borderRadius: "default" })).toEqual({
+    borderRadius: "default",
+  });
+  expect(z.toJSONSchema(shape.imageStyle)).not.toHaveProperty(
+    "properties.aspectRatio"
+  );
+  expect(shape.imageStyleWithRatio.parse({ borderRadius: "8px" })).toEqual({
+    borderRadius: "8px",
+  });
+  for (const aspectRatio of ["default", 1, 1.78, 0.25]) {
+    const value = { borderRadius: "8px", aspectRatio };
+    expect(shape.imageStyleWithRatio.parse(value)).toEqual(value);
+  }
+  for (const aspectRatio of ["1.78", 0, -1, 1.234]) {
+    expect(
+      shape.imageStyleWithRatio.safeParse({ borderRadius: "8px", aspectRatio })
+        .success
+    ).toBe(false);
+  }
   expect(shape.font.safeParse("9xl").success).toBe(false);
   expect(shape.size.safeParse("__ve_optionalNumber_hide__").success).toBe(true);
   expect(

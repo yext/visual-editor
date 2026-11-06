@@ -63,11 +63,16 @@ export function resolveStyledLink(value?: StyledLinkValue): CSSProperties {
   return style;
 }
 
-/** Converts the authored image radius to CSS styles. */
+/** Converts the authored image radius and aspect ratio to CSS styles. */
 export function resolveStyledImage(value?: StyledImageValue): CSSProperties {
-  return value?.borderRadius && value.borderRadius !== "default"
-    ? { borderRadius: value.borderRadius }
-    : {};
+  const style: CSSProperties = {};
+  if (value?.borderRadius && value.borderRadius !== "default") {
+    style.borderRadius = value.borderRadius;
+  }
+  if (typeof value?.aspectRatio === "number" && value.aspectRatio > 0) {
+    style.aspectRatio = value.aspectRatio;
+  }
+  return style;
 }
 
 /** Converts authored section width and vertical padding to CSS styles. */

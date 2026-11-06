@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
+import { imageAspectRatioOptions } from "../../components/contentBlocks/image/styling.ts";
 import { ThemeOptions } from "../themeConfigOptions.ts";
 import {
   appendSchemaInstructions,
@@ -160,9 +161,20 @@ export const styledTextZodSchema = (includeColor: boolean) =>
     ...(includeColor ? { color: siteColorZodSchema.optional() } : {}),
   });
 
-export const styledImageZodSchema = z.object({
-  borderRadius: choices(ThemeOptions.IMAGE_BORDER_RADIUS),
-});
+export const styledImageZodSchema = (includeAspectRatio: boolean) =>
+  z.object({
+    borderRadius: choices(ThemeOptions.IMAGE_BORDER_RADIUS),
+    ...(includeAspectRatio
+      ? {
+          aspectRatio: z
+            .union([
+              z.literal("default"),
+              ...imageAspectRatioOptions.map(({ value }) => z.literal(value)),
+            ])
+            .optional(),
+        }
+      : {}),
+  });
 
 export const styledPageSectionZodSchema = z.object({
   // Defer access until the shared inference helpers finish initializing.

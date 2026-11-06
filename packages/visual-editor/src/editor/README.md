@@ -145,8 +145,26 @@ Add `transform: true` to a supported field type to receive resolved props in the
 | `video`                                      | Asset video data with interpolated text and preserved metadata                                    |
 | `themeColor`                                 | Authored tokens plus `selectedColorCss` and `contrastingColorCss`, or `undefined`                 |
 | `styledText`, `styledButton`, `styledLink`   | CSS style object with inherited `"default"` choices omitted                                       |
-| `styledImage`, `styledPageSection`           | CSS style object for border radius, width, or vertical padding                                    |
+| `styledImage`                                | CSS style object for border radius and optional aspect ratio                                      |
+| `styledPageSection`                          | CSS style object for width or vertical padding                                                    |
 | `code`                                       | HTML processes Handlebars; JavaScript interpolates embedded fields; other languages stay authored |
+
+For image styling, enable the optional aspect-ratio control on components that
+support it:
+
+```ts
+imageStyles: {
+  type: "styledImage",
+  includeAspectRatio: true,
+  transform: true,
+}
+```
+
+Authored values such as `{ borderRadius: "8px", aspectRatio: 1.78 }` become a CSS
+style object. Missing or `"default"` aspect ratios, and nonpositive ratios, are
+omitted so the component's sizing still applies. `includeAspectRatio` controls
+the editor and generation schema; `transform: true` enables CSS conversion.
+Existing border-radius-only values remain valid.
 
 Entity fields still allow entity bindings and constant values.
 Transforms return resolved data, including translated and interpolated rich-text
