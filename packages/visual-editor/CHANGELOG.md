@@ -1,3 +1,10 @@
+#### 2.0.0-beta.11 (2026-11-06)
+
+##### Bug Fixes
+
+- adjust transforms logic ([#1383](https://github.com/yext/visual-editor/pull/1383)) ([27256d20](https://github.com/yext/visual-editor/commit/27256d20bc560d2fca7bbbd0c1c64bb4bb547824))
+- layout generation edge cases ([#1384](https://github.com/yext/visual-editor/pull/1384)) ([315fa819](https://github.com/yext/visual-editor/commit/315fa81998f2f83ddf9bb3b1c022e99c044a2013))
+
 #### 2.0.0-beta.10 (2026-11-06)
 
 ##### New Features
