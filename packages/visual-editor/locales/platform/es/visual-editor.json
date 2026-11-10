@@ -91,6 +91,7 @@
     "warning": "Esta acción eliminará sus cambios locales. No se puede deshacer."
   },
   "distance": "Distancia",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> de la búsqueda",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> de {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> de ti",
@@ -541,7 +542,7 @@
   "searchThisArea": "Busca esta área",
   "sections": "Secciones",
   "selectAnOption": "Seleccione una opción",
-  "selectDistanceLessThan": "Seleccione una distancia menor que",
+  "selectDistanceLessThan": "Seleccione una distancia menor que {{distance}} {{unit}}",
   "services": "Servicios",
   "showLabels": "Espectáculo de etiquetas",
   "showMoreLocations": "Mostrar más ubicaciones",

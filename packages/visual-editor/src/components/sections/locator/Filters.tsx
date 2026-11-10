@@ -232,7 +232,6 @@ const DistanceFilter = ({
     ? "w-3 text-gray-400"
     : "w-3 text-gray-400 transform rotate-180";
   const distanceOptions = [5, 10, 25, 50];
-  const unit = distanceUnit;
 
   return (
     <div className="flex flex-col gap-4">
@@ -252,8 +251,15 @@ const DistanceFilter = ({
           >
             <button
               className="inline-flex bg-white"
-              onClick={() => onChange(distanceOption, unit)}
-              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${translateDistanceUnit(t, unit, distanceOption)}`}
+              onClick={() => onChange(distanceOption, distanceUnit)}
+              aria-label={t(
+                "selectDistanceLessThan",
+                "Select distance less than {{distance}} {{unit}}",
+                {
+                  distance: distanceOption,
+                  unit: translateDistanceUnit(t, distanceUnit, distanceOption),
+                }
+              )}
             >
               <div style={{ color: accentColorCssValue }}>
                 {selectedDistanceOption === distanceOption ? (
@@ -264,7 +270,10 @@ const DistanceFilter = ({
               </div>
             </button>
             <Body className="inline-flex">
-              {`< ${distanceOption} ${translateDistanceUnit(t, unit, distanceOption)}`}
+              {t("distanceLessThan", "< {{distance}} {{unit}}", {
+                distance: distanceOption,
+                unit: translateDistanceUnit(t, distanceUnit, distanceOption),
+              })}
             </Body>
           </div>
         ))}

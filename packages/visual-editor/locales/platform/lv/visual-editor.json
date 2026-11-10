@@ -91,6 +91,7 @@
     "warning": "Šī darbība noņems jūsu vietējās izmaiņas. To nevar atsaukt."
   },
   "distance": "Attālums",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> no meklēšanas",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> no {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> no jums",
@@ -536,7 +537,7 @@
   "searchThisArea": "Meklējiet šo apgabalu",
   "sections": "Sadaļas",
   "selectAnOption": "Atlasiet opciju",
-  "selectDistanceLessThan": "Izvēlieties attālumu, kas mazāks par",
+  "selectDistanceLessThan": "Izvēlieties attālumu, kas mazāks par {{distance}} {{unit}}",
   "services": "Pakalpojumi",
   "showLabels": "Izrādes etiķetes",
   "showMoreLocations": "Rādīt vairāk atrašanās vietu",

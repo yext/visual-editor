@@ -91,6 +91,7 @@
     "warning": "Tämä toiminto poistaa paikalliset muutokset. Sitä ei voida peruuttaa."
   },
   "distance": "Etäisyys",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> hausta",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> alkaen {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> sinulta",
@@ -529,7 +530,7 @@
   "searchThisArea": "Etsi tätä aluetta",
   "sections": "Osat",
   "selectAnOption": "Valitse vaihtoehto",
-  "selectDistanceLessThan": "Valitse etäisyys pienempi kuin",
+  "selectDistanceLessThan": "Valitse etäisyys, joka on alle {{distance}} {{unit}}",
   "services": "Palvelut",
   "showLabels": "Näyttötarrat",
   "showMoreLocations": "Näytä lisää paikkoja",

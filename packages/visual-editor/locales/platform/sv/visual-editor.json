@@ -91,6 +91,7 @@
     "warning": "Denna åtgärd kommer att ta bort dina lokala förändringar. Det kan inte ångras."
   },
   "distance": "Avstånd",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> från sökning",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> från {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> från dig",
@@ -529,7 +530,7 @@
   "searchThisArea": "Sök på detta område",
   "sections": "Avsnitt",
   "selectAnOption": "Välj ett alternativ",
-  "selectDistanceLessThan": "Välj avstånd mindre än",
+  "selectDistanceLessThan": "Välj ett avstånd som är kortare än {{distance}} {{unit}}",
   "services": "Tjänster",
   "showLabels": "Visa etiketter",
   "showMoreLocations": "Visa fler platser",

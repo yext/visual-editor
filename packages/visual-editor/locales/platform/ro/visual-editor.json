@@ -91,6 +91,7 @@
     "warning": "Această acțiune vă va elimina modificările locale. Nu poate fi anulat."
   },
   "distance": "Distanţă",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> din căutare",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> din {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> de la tine",
@@ -541,7 +542,7 @@
   "searchThisArea": "Căutați în această zonă",
   "sections": "Secțiuni",
   "selectAnOption": "Selectați o opțiune",
-  "selectDistanceLessThan": "Selectați distanța mai mică decât",
+  "selectDistanceLessThan": "Selectați o distanță mai mică de {{distance}} {{unit}}",
   "services": "Servicii",
   "showLabels": "Arată etichete",
   "showMoreLocations": "Afișați mai multe locații",

@@ -91,6 +91,7 @@
     "warning": "Diese Aktion wird Ihre lokalen Änderungen entfernen. Dies kann nicht rückgängig gemacht werden."
   },
   "distance": "Distanz",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> aus der Suche",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> von {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> von Ihnen",
@@ -529,7 +530,7 @@
   "searchThisArea": "In diesem Bereich suchen",
   "sections": "Module",
   "selectAnOption": "Eine Option wählen",
-  "selectDistanceLessThan": "Wähle einen Distanz kleiner als",
+  "selectDistanceLessThan": "Wählen Sie eine Entfernung unter {{distance}} {{unit}}",
   "services": "Leistungen",
   "showLabels": "Labels anzeigen",
   "showMoreLocations": "Weitere Standorte anzeigen",

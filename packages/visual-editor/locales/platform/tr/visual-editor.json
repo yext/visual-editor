@@ -91,6 +91,7 @@
     "warning": "Bu eylem yerel değişikliklerinizi kaldıracaktır. Geri alınamaz."
   },
   "distance": "Mesafe",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "Aramadan <strong>{{distance}}</strong>",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong>, {{searchLocation}}'den",
   "distanceLineFromYou": "<strong>{{distance}}</strong> sizden",
@@ -529,7 +530,7 @@
   "searchThisArea": "Bu alanı arayın",
   "sections": "Bölümler",
   "selectAnOption": "Bir seçenek seçin",
-  "selectDistanceLessThan": "Şundan daha az mesafeyi seçin:",
+  "selectDistanceLessThan": "{{distance}} {{unit}} değerinden kısa bir mesafe seçin",
   "services": "Hizmetler",
   "showLabels": "Etiketleri Göster",
   "showMoreLocations": "Daha fazla konum göster",

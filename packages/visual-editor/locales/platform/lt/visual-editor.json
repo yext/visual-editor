@@ -91,6 +91,7 @@
     "warning": "Šis veiksmas pašalins jūsų vietinius pakeitimus. To negalima panaikinti."
   },
   "distance": "Atstumas",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> iš paieškos",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> nuo {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> nuo jūsų",
@@ -553,7 +554,7 @@
   "searchThisArea": "Ieškokite šioje srityje",
   "sections": "Skyriai",
   "selectAnOption": "Pasirinkite parinktį",
-  "selectDistanceLessThan": "Pasirinkite atstumą, mažesnį nei",
+  "selectDistanceLessThan": "Pasirinkite mažesnį nei {{distance}} {{unit}} atstumą",
   "services": "Paslaugos",
   "showLabels": "Rodyti etiketes",
   "showMoreLocations": "Rodyti daugiau vietų",

@@ -91,6 +91,7 @@
     "warning": "This action will remove your local changes. It cannot be undone."
   },
   "distance": "Distance",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> from search",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> from {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> from you",
@@ -529,7 +530,7 @@
   "searchThisArea": "Search This Area",
   "sections": "Sections",
   "selectAnOption": "Select an option",
-  "selectDistanceLessThan": "Select distance less than",
+  "selectDistanceLessThan": "Select distance less than {{distance}} {{unit}}",
   "services": "Services",
   "showLabels": "Show Labels",
   "showMoreLocations": "Show more locations",

@@ -91,6 +91,7 @@
     "warning": "Deze actie zal uw lokale wijzigingen verwijderen. Het kan niet ongedaan worden gemaakt."
   },
   "distance": "Afstand",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> uit zoekopdracht",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> van {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> van jou",
@@ -529,7 +530,7 @@
   "searchThisArea": "Zoek dit gebied",
   "sections": "Secties",
   "selectAnOption": "Selecteer een optie",
-  "selectDistanceLessThan": "Selecteer afstand kleiner dan",
+  "selectDistanceLessThan": "Selecteer een afstand kleiner dan {{distance}} {{unit}}",
   "services": "Diensten",
   "showLabels": "Toon labels",
   "showMoreLocations": "Toon meer locaties",

@@ -91,6 +91,7 @@
     "warning": "Ta akcja usunie twoje lokalne zmiany. Nie można go cofnąć."
   },
   "distance": "Dystans",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> z wyszukiwania",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> od Ciebie",
@@ -553,7 +554,7 @@
   "searchThisArea": "Przeszukaj ten obszar",
   "sections": "Sekcje",
   "selectAnOption": "Wybierz opcję",
-  "selectDistanceLessThan": "Wybierz odległość mniejszą niż",
+  "selectDistanceLessThan": "Wybierz odległość mniejszą niż {{distance}} {{unit}}",
   "services": "Usługi",
   "showLabels": "Pokaż etykiety",
   "showMoreLocations": "Pokaż więcej lokalizacji",

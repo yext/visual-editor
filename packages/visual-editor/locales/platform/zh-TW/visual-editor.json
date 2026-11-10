@@ -91,6 +91,7 @@
     "warning": "此操作將消除您的本地更改。它不能撤消。"
   },
   "distance": "距離",
+  "distanceLessThan": "< {{distance}}{{unit}}",
   "distanceLineFromSearch": "來自搜尋的 <strong>{{distance}}</strong>",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> 來自 {{searchLocation}}",
   "distanceLineFromYou": "來自您的 <strong>{{distance}}</strong>",
@@ -529,7 +530,7 @@
   "searchThisArea": "搜索此區域",
   "sections": "部分",
   "selectAnOption": "選擇一個選項",
-  "selectDistanceLessThan": "選擇距離小於",
+  "selectDistanceLessThan": "選擇小於 {{distance}}{{unit}} 的距離",
   "services": "服務",
   "showLabels": "顯示標籤",
   "showMoreLocations": "顯示更多地點",

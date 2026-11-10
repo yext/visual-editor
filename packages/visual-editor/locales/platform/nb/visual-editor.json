@@ -91,6 +91,7 @@
     "warning": "Denne handlingen vil fjerne dine lokale endringer. Det kan ikke angre."
   },
   "distance": "Avstand",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> fra søk",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> fra {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> fra deg",
@@ -529,7 +530,7 @@
   "searchThisArea": "Søk i dette området",
   "sections": "Seksjoner",
   "selectAnOption": "Velg et alternativ",
-  "selectDistanceLessThan": "Velg avstand mindre enn",
+  "selectDistanceLessThan": "Velg en avstand på mindre enn {{distance}} {{unit}}",
   "services": "Tjenester",
   "showLabels": "Vis etiketter",
   "showMoreLocations": "Vis flere lokasjoner",

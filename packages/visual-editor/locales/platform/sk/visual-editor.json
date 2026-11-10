@@ -91,6 +91,7 @@
     "warning": "Táto akcia odstráni vaše miestne zmeny. Nedá sa to vrátiť späť."
   },
   "distance": "Vzdialenosť",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> z vyhľadávania",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> od vás",
@@ -553,7 +554,7 @@
   "searchThisArea": "Hľadať túto oblasť",
   "sections": "Sekcie",
   "selectAnOption": "Vyberte možnosť",
-  "selectDistanceLessThan": "Zvoľte vzdialenosť menšiu ako",
+  "selectDistanceLessThan": "Zvoľte vzdialenosť menšiu ako {{distance}} {{unit}}",
   "services": "Služby",
   "showLabels": "Ukazovať štítky",
   "showMoreLocations": "Zobraziť viac miest",

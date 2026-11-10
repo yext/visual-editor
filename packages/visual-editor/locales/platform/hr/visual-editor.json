@@ -91,6 +91,7 @@
     "warning": "Ova će radnja ukloniti vaše lokalne promjene. Ne može se poništiti."
   },
   "distance": "Udaljenost",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> iz pretraživanja",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> od vas",
@@ -541,7 +542,7 @@
   "searchThisArea": "Pretražite ovo područje",
   "sections": "Sekcije",
   "selectAnOption": "Odaberite opciju",
-  "selectDistanceLessThan": "Odaberite udaljenost manju od",
+  "selectDistanceLessThan": "Odaberite udaljenost manju od {{distance}} {{unit}}",
   "services": "Usluge",
   "showLabels": "Prikaži naljepnice",
   "showMoreLocations": "Prikaži više lokacija",

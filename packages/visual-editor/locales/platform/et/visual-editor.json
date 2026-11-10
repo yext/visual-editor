@@ -91,6 +91,7 @@
     "warning": "See toiming eemaldab teie kohalikud muudatused. Seda ei saa teha."
   },
   "distance": "Kaugus",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> otsingust",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> alates {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong> teilt",
@@ -529,7 +530,7 @@
   "searchThisArea": "Otsige sellest piirkonnast",
   "sections": "Sektsioonid",
   "selectAnOption": "Valige suvand",
-  "selectDistanceLessThan": "Valige kaugus väiksem kui",
+  "selectDistanceLessThan": "Valige kaugus, mis on väiksem kui {{distance}} {{unit}}",
   "services": "Teenused",
   "showLabels": "Näita silte",
   "showMoreLocations": "Kuva rohkem asukohti",

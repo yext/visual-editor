@@ -83,7 +83,6 @@ import {
   RESULTS_LIMIT,
   SearchState,
 } from "./Results.tsx";
-import { useLocatorRadiusOnUnitChange } from "./useLocatorRadius.ts";
 
 export const INITIAL_LOCATION_KEY = "initialLocation";
 const LOCATION_QUERY_KEY = "q";
@@ -202,8 +201,8 @@ const LocatorInternal = ({
     typeof navigator === "undefined" ? undefined : navigator.language,
     i18n.language
   );
-  const preferredUnitRef = React.useRef(preferredUnit);
-  preferredUnitRef.current = preferredUnit;
+  const currentUnit = React.useRef(preferredUnit);
+  currentUnit.current = preferredUnit;
   const streamDocument = useDocument();
   const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
   const entityTypes =
@@ -291,9 +290,12 @@ const LocatorInternal = ({
   const [selectedDistanceOption, setSelectedDistanceOption] = React.useState<
     number | null
   >(null);
+  const currentDistanceOption = React.useRef(selectedDistanceOption);
+  currentDistanceOption.current = selectedDistanceOption;
   /** Radius of the current location filter before a distance option is applied */
   const apiFilterRadius = React.useRef<number | null>(null);
-  const generatedRadiusMinimum = React.useRef<number | null>(null);
+  /** Whether the saved radius came from the locator's default distance */
+  const hasGeneratedRadius = React.useRef(false);
 
   const handleDrag: OnDragHandler = (center, bounds) => {
     setMapCenter({
@@ -341,7 +343,7 @@ const LocatorInternal = ({
         },
       };
       apiFilterRadius.current = mapRadius;
-      generatedRadiusMinimum.current = null;
+      hasGeneratedRadius.current = false;
       searchActions.setStaticFilters([locationFilter, openNowFilter]);
       searchActions.executeVerticalQuery();
       setSearchState("loading");
@@ -359,8 +361,7 @@ const LocatorInternal = ({
 
   const handleCurrentLocationClick = (position: GeolocationPosition) => {
     const { latitude, longitude, accuracy } = position.coords;
-    const generatedRadius = toMeters(DEFAULT_RADIUS, preferredUnit);
-    const radius = Math.max(accuracy, generatedRadius);
+    const radius = Math.max(accuracy, toMeters(DEFAULT_RADIUS, preferredUnit));
     const locationFilter = buildNearLocationFilterFromCoords(
       latitude,
       longitude,
@@ -368,7 +369,7 @@ const LocatorInternal = ({
       t("currentLocation", "Current Location")
     );
     apiFilterRadius.current = radius;
-    generatedRadiusMinimum.current = accuracy;
+    hasGeneratedRadius.current = false;
     const nonLocationFilters = (searchFilters.static || []).filter(
       (staticFilter) =>
         staticFilter.filter.kind !== "fieldValue" ||
@@ -415,7 +416,7 @@ const LocatorInternal = ({
       case Matcher.Near: {
         nearFilterValue = filter.value as NearFilterValue;
         apiFilterRadius.current = nearFilterValue.radius;
-        generatedRadiusMinimum.current = null;
+        hasGeneratedRadius.current = false;
         // only overwrite radius from filter if display options are enabled
         const radius =
           showDistanceOptions && selectedDistanceMeters
@@ -430,7 +431,7 @@ const LocatorInternal = ({
       }
       case Matcher.Equals: {
         apiFilterRadius.current = null;
-        generatedRadiusMinimum.current = null;
+        hasGeneratedRadius.current = false;
         locationFilter = buildEqualsLocationFilter(filter, newDisplayName);
         break;
       }
@@ -470,22 +471,54 @@ const LocatorInternal = ({
     }
   }, [searchLoading, searchState]);
 
-  useLocatorRadiusOnUnitChange({
+  const previousUnit = React.useRef(preferredUnit);
+  React.useEffect(() => {
+    if (previousUnit.current === preferredUnit) {
+      return;
+    }
+
+    const generatedRadius = hasGeneratedRadius.current
+      ? toMeters(DEFAULT_RADIUS, preferredUnit)
+      : undefined;
+    if (generatedRadius !== undefined) {
+      apiFilterRadius.current = generatedRadius;
+    }
+    const nextRadius =
+      selectedDistanceOption === null
+        ? generatedRadius
+        : toMeters(selectedDistanceOption, preferredUnit);
+    if (nextRadius === undefined) {
+      previousUnit.current = preferredUnit;
+      return;
+    }
+
+    const nearFilter = searchFilters.static?.find(
+      (staticFilter) =>
+        staticFilter.filter.kind === "fieldValue" &&
+        staticFilter.filter.fieldId === LOCATION_FIELD &&
+        staticFilter.filter.matcher === Matcher.Near
+    );
+    if (!nearFilter || nearFilter.filter.kind !== "fieldValue") {
+      return;
+    }
+    previousUnit.current = preferredUnit;
+    if ((nearFilter.filter.value as NearFilterValue).radius === nextRadius) {
+      return;
+    }
+
+    const updatedFilters = updateRadiusInNearFiltersOnLocationField(
+      searchFilters.static || [],
+      nextRadius
+    );
+    searchActions.setStaticFilters(updatedFilters);
+    searchActions.setOffset(0);
+    executeSearch(searchActions);
+  }, [
     preferredUnit,
+    searchActions,
+    searchFilters.static,
     selectedDistanceOption,
-    defaultRadius: DEFAULT_RADIUS,
-    apiFilterRadius,
-    generatedRadiusMinimum,
-    onRadiusChange: (radius) => {
-      const updatedFilters = updateRadiusInNearFiltersOnLocationField(
-        searchFilters.static || [],
-        radius
-      );
-      searchActions.setStaticFilters(updatedFilters);
-      searchActions.setOffset(0);
-      executeSearch(searchActions);
-    },
-  });
+  ]);
 
   React.useEffect(() => {
     if (selectedDistanceOption === null) {
@@ -681,27 +714,25 @@ const LocatorInternal = ({
         initialMapCenter.longitude,
         radius
       );
-      let initialRadiusIsGenerated = true;
+      let isGeneratedRadius = true;
       const doSearch = () => {
         if (isCancelled) {
           return;
         }
-        if (initialRadiusIsGenerated) {
-          // Country lookup may have changed the unit while the initial search waited.
-          const baseRadius = toMeters(DEFAULT_RADIUS, preferredUnitRef.current);
-          apiFilterRadius.current = baseRadius;
-          generatedRadiusMinimum.current = 0;
-          const selectedRadius =
-            showDistanceOptions && selectedDistanceOption !== null
-              ? toMeters(selectedDistanceOption, preferredUnitRef.current)
-              : baseRadius;
+        hasGeneratedRadius.current = isGeneratedRadius;
+        if (isGeneratedRadius) {
+          const defaultRadius = toMeters(DEFAULT_RADIUS, currentUnit.current);
+          apiFilterRadius.current = defaultRadius;
+          const activeRadius =
+            showDistanceOptions && currentDistanceOption.current !== null
+              ? toMeters(currentDistanceOption.current, currentUnit.current)
+              : defaultRadius;
           initialLocationFilter = updateRadiusInNearFiltersOnLocationField(
             [initialLocationFilter],
-            selectedRadius
+            activeRadius
           )[0];
-        } else {
-          generatedRadiusMinimum.current = null;
         }
+        previousUnit.current = currentUnit.current;
         searchActions.setVerticalLimit(RESULTS_LIMIT);
         searchActions.setOffset(0);
         searchActions.setStaticFilters(
@@ -717,7 +748,7 @@ const LocatorInternal = ({
         ) {
           const filterValue = initialLocationFilter.filter
             .value as NearFilterValue;
-          if (!initialRadiusIsGenerated) {
+          if (!isGeneratedRadius) {
             apiFilterRadius.current = filterValue.radius;
           }
           const nextCenterCoords: Coordinate = {
@@ -770,7 +801,6 @@ const LocatorInternal = ({
                   firstResult.value
                 );
                 apiFilterRadius.current = filterFromResult.radius;
-                initialRadiusIsGenerated = false;
                 return true;
               }
               case Matcher.Equals: {
@@ -779,7 +809,6 @@ const LocatorInternal = ({
                   firstResult.value
                 );
                 apiFilterRadius.current = null;
-                initialRadiusIsGenerated = false;
                 return true;
               }
               default: {
@@ -799,7 +828,7 @@ const LocatorInternal = ({
         ? parseCoordinateQuery(initialLocationParam)
         : undefined;
       if (coordinates) {
-        initialRadiusIsGenerated = false;
+        isGeneratedRadius = false;
         initialLocationFilter = buildNearLocationFilterFromCoords(
           coordinates.lat,
           coordinates.lng,
@@ -813,6 +842,7 @@ const LocatorInternal = ({
         initialLocationParam &&
         (await foundStartingLocationFromQueryParam(initialLocationParam))
       ) {
+        isGeneratedRadius = false;
         doSearch();
         return;
       }

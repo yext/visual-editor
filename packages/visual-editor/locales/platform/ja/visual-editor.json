@@ -91,6 +91,7 @@
     "warning": "このアクションにより、地元の変更が削除されます。元に戻すことはできません。"
   },
   "distance": "距離",
+  "distanceLessThan": "< {{distance}}{{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> 検索から",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> ({{searchLocation}} から)",
   "distanceLineFromYou": "あなたからの<strong>{{distance}}</strong>",
@@ -529,7 +530,7 @@
   "searchThisArea": "このエリアを検索します",
   "sections": "セクション",
   "selectAnOption": "オプションを選択します",
-  "selectDistanceLessThan": "より短い距離を選択してください",
+  "selectDistanceLessThan": "{{distance}}{{unit}}未満の距離を選択してください",
   "services": "サービス",
   "showLabels": "ラベルを表示します",
   "showMoreLocations": "さらに多くの場所を表示",

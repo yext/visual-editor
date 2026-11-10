@@ -91,6 +91,7 @@
     "warning": "Ez a művelet eltávolítja a helyi változtatásokat. Nem lehet visszavonni."
   },
   "distance": "Távolság",
+  "distanceLessThan": "< {{distance}} {{unit}}",
   "distanceLineFromSearch": "<strong>{{distance}}</strong> a keresésből",
   "distanceLineFromSearchLocation": "<strong>{{distance}}</strong> od {{searchLocation}}",
   "distanceLineFromYou": "<strong>{{distance}}</strong>",
@@ -529,7 +530,7 @@
   "searchThisArea": "Keresse meg ezt a területet",
   "sections": "Szakaszok",
   "selectAnOption": "Válasszon egy opciót",
-  "selectDistanceLessThan": "Válasszon kisebb távolságot, mint",
+  "selectDistanceLessThan": "Válasszon {{distance}} {{unit}} alatti távolságot",
   "services": "Szolgáltatások",
   "showLabels": "A címkék megjelenítését",
   "showMoreLocations": "További helyek megjelenítése",
