@@ -13,7 +13,7 @@ import {
 } from "../local-editor/server.ts";
 
 export const GENERATION_GATEWAY_URL =
-  "http://modelgateway.service.us3dev.consul:8008/openai/responses";
+  "https://global-modelgw-us3dev.yext.com/openai/responses";
 const modelRequestSchema = z.object({
   model: z.string().min(1),
   stream: z.literal(true),
@@ -78,6 +78,7 @@ export const handleLocalEditorModelRequest = async (
   try {
     const upstream = await fetch(GENERATION_GATEWAY_URL, {
       method: "POST",
+      redirect: "error",
       signal: controller.signal,
       headers: {
         "Content-Type": "application/json",

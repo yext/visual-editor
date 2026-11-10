@@ -62,9 +62,13 @@ it("forwards prepared requests, existing headers and raw response bytes", async 
   await run(response);
   expect(response.text).toBe(wire);
   expect(response.headers.get("Content-Type")).toBe("text/event-stream");
+  expect(GENERATION_GATEWAY_URL).toBe(
+    "https://global-modelgw-us3dev.yext.com/openai/responses"
+  );
   expect(fetchMock).toHaveBeenCalledWith(
     GENERATION_GATEWAY_URL,
     expect.objectContaining({
+      redirect: "error",
       body: JSON.stringify(body),
       headers: expect.objectContaining({
         "Yext-Business-Id": "1000152098",
