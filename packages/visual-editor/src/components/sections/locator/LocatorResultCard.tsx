@@ -61,11 +61,8 @@ import {
 } from "react-icons/fa";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
 import { FieldTypeData } from "../../../internal/types/templateMetadata.ts";
-import {
-  formatDistance,
-  fromMeters,
-  getPreferredDistanceUnit,
-} from "../../../utils/i18n/distance.ts";
+import { formatDistance, fromMeters } from "../../../utils/i18n/distance.ts";
+import { type DistanceUnit } from "./DistanceUnits.ts";
 import {
   DEFAULT_ENTITY_TYPE,
   LocatorEntityType,
@@ -267,7 +264,10 @@ export interface LocatorResultCardProps {
 }
 
 export type DistanceDisplayOption =
-  "distanceFromUser" | "distanceFromSearch" | "bothDistances" | "hidden";
+  | "distanceFromUser"
+  | "distanceFromSearch"
+  | "bothDistances"
+  | "hidden";
 
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   entityType: DEFAULT_ENTITY_TYPE,
@@ -846,12 +846,14 @@ export const LocatorResultCard = React.memo(
     result,
     resultCardProps: props,
     distanceDisplay = "distanceFromUser",
+    distanceUnit,
     searchLocationName,
     isSelected,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
     distanceDisplay?: DistanceDisplayOption;
+    distanceUnit: DistanceUnit;
     searchLocationName?: string;
     isSelected?: boolean;
   }): React.JSX.Element => {
@@ -869,7 +871,7 @@ export const LocatorResultCard = React.memo(
           ? result.distanceFromFilter
           : undefined;
 
-    const unit = getPreferredDistanceUnit(i18n.language);
+    const unit = distanceUnit;
     const unitLabel = unit === "mile" ? "mi" : "km"; // Abbreviations do not need translation
     const displayDistance =
       typeof distance === "number"

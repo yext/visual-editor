@@ -28,6 +28,7 @@ import {
   DistanceDisplayOption,
   LocatorResultCardProps,
 } from "./LocatorResultCard.tsx";
+import { type DistanceUnitOption } from "./DistanceUnits.ts";
 import { ResultCardPropsField } from "./Results.tsx";
 import { LocatorWrapper } from "./LocatorWrapper.tsx";
 import {
@@ -129,6 +130,8 @@ export interface LocatorProps {
   }>;
   /** Controls which distance value to display on each locator result card. */
   distanceDisplay?: DistanceDisplayOption;
+  /** Controls the units used for distances and distance filters. */
+  distanceUnit?: DistanceUnitOption;
 }
 
 const locatorFields: YextFields<LocatorProps> = {
@@ -408,6 +411,34 @@ const locatorFields: YextFields<LocatorProps> = {
       },
     ],
   },
+  distanceUnit: {
+    type: "basicSelector",
+    label: msg("fields.distanceUnit", "Distance Units"),
+    options: [
+      {
+        label: msg(
+          "fields.options.distanceUnitAuto",
+          "Based on Visitor's Country"
+        ),
+        value: "auto",
+      },
+      {
+        label: msg("fields.options.distanceUnitMiles", "Miles"),
+        value: "mile",
+      },
+      {
+        label: msg("fields.options.distanceUnitKilometers", "Kilometers"),
+        value: "kilometer",
+      },
+      {
+        label: msg(
+          "fields.options.distanceUnitPageLanguage",
+          "Based on Page Language"
+        ),
+        value: "locale",
+      },
+    ],
+  },
 };
 
 /**
@@ -463,6 +494,7 @@ export const LocatorComponent: YextComponentConfig<LocatorProps> = {
       title: { defaultValue: DEFAULT_TITLE },
     },
     distanceDisplay: DEFAULT_DISTANCE_DISPLAY,
+    distanceUnit: "auto",
   },
   label: msg("components.locator", "Locator"),
   /**

@@ -18,12 +18,12 @@ import { useCollapse } from "react-collapsed";
 import { useTranslation } from "react-i18next";
 import { FaChevronUp, FaDotCircle, FaRegCircle, FaTimes } from "react-icons/fa";
 import { type TranslatableString } from "../../../types/types.ts";
-import { getPreferredDistanceUnit } from "../../../utils/i18n/distance.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { LocatorEntityType } from "../../../utils/locatorEntityTypes.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { Body } from "../../atoms/body.tsx";
 import { translateDistanceUnit } from "./Results.tsx";
+import { type DistanceUnit } from "./DistanceUnits.ts";
 
 export const LOCATION_FIELD = "builtin.location";
 export const COUNTRY_CODE_FIELD = "address.countryCode";
@@ -36,12 +36,10 @@ interface FilterModalProps {
   isOpenNowSelected: boolean; // whether the Open Now filter is currently selected by the user
   showDistanceOptions: boolean; // whether to show the Distance filter option
   selectedDistanceOption: number | null;
+  distanceUnit: DistanceUnit;
   handleCloseModalClick: () => void;
   handleOpenNowClick: (selected: boolean) => void;
-  handleDistanceClick: (
-    distance: number,
-    distanceUnit: "mile" | "kilometer"
-  ) => void;
+  handleDistanceClick: (distance: number, distanceUnit: DistanceUnit) => void;
   handleClearFiltersClick: () => void;
   accentColorCssValue: string;
   closeButtonRef: React.Ref<HTMLButtonElement>;
@@ -54,6 +52,7 @@ export const FilterModal = ({
   isOpenNowSelected,
   showDistanceOptions,
   selectedDistanceOption,
+  distanceUnit,
   handleCloseModalClick,
   handleOpenNowClick,
   handleDistanceClick,
@@ -136,6 +135,7 @@ export const FilterModal = ({
             <DistanceFilter
               onChange={handleDistanceClick}
               selectedDistanceOption={selectedDistanceOption}
+              distanceUnit={distanceUnit}
               accentColorCssValue={accentColorCssValue}
             />
           )}
@@ -212,17 +212,19 @@ const OpenNowFilter = ({ isSelected, onChange }: OpenNowFilterProps) => {
 };
 
 interface DistanceFilterProps {
-  onChange: (distance: number, unit: "mile" | "kilometer") => void;
+  onChange: (distance: number, unit: DistanceUnit) => void;
   selectedDistanceOption: number | null;
+  distanceUnit: DistanceUnit;
   accentColorCssValue: string;
 }
 
 const DistanceFilter = ({
   onChange,
   selectedDistanceOption,
+  distanceUnit,
   accentColorCssValue,
 }: DistanceFilterProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
     defaultExpanded: true,
   });
@@ -230,7 +232,7 @@ const DistanceFilter = ({
     ? "w-3 text-gray-400"
     : "w-3 text-gray-400 transform rotate-180";
   const distanceOptions = [5, 10, 25, 50];
-  const unit = getPreferredDistanceUnit(i18n.language);
+  const unit = distanceUnit;
 
   return (
     <div className="flex flex-col gap-4">

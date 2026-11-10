@@ -153,6 +153,7 @@ const locatorDefaultLayout = {
               filters: { openNowButton: false, showDistanceOptions: false },
               resultCard: [],
               distanceDisplay: "distanceFromUser",
+              distanceUnit: "auto",
             },
           },
         ],

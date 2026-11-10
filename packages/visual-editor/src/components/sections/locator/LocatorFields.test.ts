@@ -21,6 +21,15 @@ const getKeywordsDisplayNameVisibility = (facetValues?: string[]) => {
 };
 
 describe("Locator fields", () => {
+  it("offers distance units and defaults new Locators to visitor country", () => {
+    expect(LocatorComponent.defaultProps?.distanceUnit).toBe("auto");
+    expect(
+      (LocatorComponent.fields?.distanceUnit as any).options.map(
+        (option: { value: string }) => option.value
+      )
+    ).toEqual(["auto", "mile", "kilometer", "locale"]);
+  });
+
   it.each([
     {
       name: "shows the display name when Keywords is selected",
