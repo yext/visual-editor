@@ -65,6 +65,7 @@ it("forwards prepared requests, existing headers and raw response bytes", async 
   expect(fetchMock).toHaveBeenCalledWith(
     GENERATION_GATEWAY_URL,
     expect.objectContaining({
+      redirect: "error",
       body: JSON.stringify(body),
       headers: expect.objectContaining({
         "Yext-Business-Id": "1000152098",
