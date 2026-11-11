@@ -202,7 +202,9 @@ const LocatorInternal = ({
     i18n.language
   );
   const currentUnit = React.useRef(preferredUnit);
-  currentUnit.current = preferredUnit;
+  React.useLayoutEffect(() => {
+    currentUnit.current = preferredUnit;
+  }, [preferredUnit]);
   const streamDocument = useDocument();
   const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
   const entityTypes =
@@ -291,7 +293,9 @@ const LocatorInternal = ({
     number | null
   >(null);
   const currentDistanceOption = React.useRef(selectedDistanceOption);
-  currentDistanceOption.current = selectedDistanceOption;
+  React.useLayoutEffect(() => {
+    currentDistanceOption.current = selectedDistanceOption;
+  }, [selectedDistanceOption]);
   /** Radius of the current location filter before a distance option is applied */
   const apiFilterRadius = React.useRef<number | null>(null);
   /** Whether the saved radius came from the locator's default distance */
