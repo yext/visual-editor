@@ -7,6 +7,7 @@ import { FontSizeSelectorFieldOverride } from "./FontSizeSelectorField.tsx";
 import { CTASelectorFieldOverride } from "./CTASelectorField.tsx";
 import { MultiSelectorFieldOverride } from "./MultiSelectorField.tsx";
 import { OptionalNumberFieldOverride } from "./OptionalNumberField.tsx";
+import { OptionalDistanceFieldOverride } from "./OptionalDistanceField.tsx";
 import { ImageFieldOverride } from "./ImageField.tsx";
 import { StyledButtonFieldOverride } from "./styledFields/StyledButtonField.tsx";
 import { StyledImageFieldOverride } from "./styledFields/StyledImageField.tsx";
@@ -29,6 +30,7 @@ export const YextPuckFieldOverrides = {
   fontSizeSelector: FontSizeSelectorFieldOverride,
   image: ImageFieldOverride,
   optionalNumber: OptionalNumberFieldOverride,
+  optionalDistance: OptionalDistanceFieldOverride,
   styledButton: StyledButtonFieldOverride,
   styledImage: StyledImageFieldOverride,
   styledLink: StyledLinkFieldOverride,

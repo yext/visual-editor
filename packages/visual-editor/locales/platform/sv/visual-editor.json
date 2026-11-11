@@ -135,6 +135,7 @@
     "directoryListBackgroundColor": "Kataloglista Bakgrundsfärg",
     "directoryRootLinkLabel": "Katalogrotlänketikett",
     "distanceDisplay": "Avståndsvisning",
+    "distanceUnit": "Avståndsenhet",
     "dynamicFilters": "Dynamiska filter",
     "email": "E-post",
     "entityType": "Enhetstyp",
@@ -174,6 +175,7 @@
     "openInNewTab": "Öppna i ny flik",
     "options": {
       "aspectRatio": "Bildförhållande",
+      "automatic": "Automatisk",
       "base_text size": "Bas",
       "bothDistances": "Båda avstånden",
       "bottom_direction": "Nederst",
@@ -289,6 +291,7 @@
     "presetImage": "Förinställd bild",
     "primaryCTA": "Primär CTA",
     "primaryHeading": "Primär rubrik",
+    "radius": "Radie",
     "resultCard": "Resultatkort",
     "scope": "Omfattning",
     "secondaryCTA": "Sekundär CTA",

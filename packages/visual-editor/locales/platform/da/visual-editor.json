@@ -135,6 +135,7 @@
     "directoryListBackgroundColor": "Directory List Baggrundsfarve",
     "directoryRootLinkLabel": "Directory Root Link Label",
     "distanceDisplay": "Afstandsvisning",
+    "distanceUnit": "Afstandsenhed",
     "dynamicFilters": "Dynamiske filtre",
     "email": "E -mail",
     "entityType": "Enhedstype",
@@ -174,6 +175,7 @@
     "openInNewTab": "Åbn i ny fane",
     "options": {
       "aspectRatio": "Aspektforhold",
+      "automatic": "Automatisk",
       "base_text size": "Basis",
       "bothDistances": "Begge afstande",
       "bottom_direction": "Nederst",
@@ -289,6 +291,7 @@
     "presetImage": "Forudindstillet billede",
     "primaryCTA": "Primær CTA",
     "primaryHeading": "Primær overskrift",
+    "radius": "Radius",
     "resultCard": "Resultatkort",
     "scope": "Omfang",
     "secondaryCTA": "Sekundær CTA",

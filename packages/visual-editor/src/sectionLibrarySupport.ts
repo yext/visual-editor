@@ -90,6 +90,10 @@ export {
   type ImageField,
   type ImagePayload,
 } from "./fields/ImageField.tsx";
+export {
+  type OptionalDistanceField,
+  type OptionalDistanceValue,
+} from "./fields/OptionalDistanceField.tsx";
 export { type BasicSelectorField } from "./fields/BasicSelectorField.tsx";
 export {
   type MultiSelectorOption,

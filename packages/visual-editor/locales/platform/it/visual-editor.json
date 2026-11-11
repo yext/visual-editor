@@ -135,6 +135,7 @@
     "directoryListBackgroundColor": "Colore di sfondo dell'elenco delle directory",
     "directoryRootLinkLabel": "Etichetta del collegamento root directory",
     "distanceDisplay": "Visualizzazione della distanza",
+    "distanceUnit": "Unità di distanza",
     "dynamicFilters": "Filtri dinamici",
     "email": "E-mail",
     "entityType": "Tipo di entità",
@@ -174,6 +175,7 @@
     "openInNewTab": "Apri in una nuova scheda",
     "options": {
       "aspectRatio": "Proporzioni",
+      "automatic": "Automatico",
       "base_text size": "Base",
       "bothDistances": "Entrambe le distanze",
       "bottom_direction": "In basso",
@@ -289,6 +291,7 @@
     "presetImage": "Immagine preimpostata",
     "primaryCTA": "CTA primario",
     "primaryHeading": "Intestazione primaria",
+    "radius": "Raggio",
     "resultCard": "Carta dei risultati",
     "scope": "Portata",
     "secondaryCTA": "CTA secondario",

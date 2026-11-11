@@ -43,6 +43,11 @@ export {
 } from "./MultiSelectorField.tsx";
 
 export {
+  type OptionalDistanceField,
+  type OptionalDistanceValue,
+} from "./OptionalDistanceField.tsx";
+
+export {
   OptionalNumberFieldOverride,
   type OptionalNumberField,
 } from "./OptionalNumberField.tsx";

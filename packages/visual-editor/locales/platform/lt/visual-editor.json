@@ -135,6 +135,7 @@
     "directoryListBackgroundColor": "Katalogų sąrašo fono spalva",
     "directoryRootLinkLabel": "Katalogo šaknies nuorodų etiketė",
     "distanceDisplay": "Atstumo ekranas",
+    "distanceUnit": "Atstumo vienetas",
     "dynamicFilters": "Dinaminiai filtrai",
     "email": "El. Paštas",
     "entityType": "Esybės tipas",
@@ -174,6 +175,7 @@
     "openInNewTab": "Atidaryti naujame skirtuke",
     "options": {
       "aspectRatio": "Kraštinių santykis",
+      "automatic": "Automatinis",
       "base_text size": "Bazė",
       "bothDistances": "Abu atstumai",
       "bottom_direction": "Apačia",
@@ -289,6 +291,7 @@
     "presetImage": "Iš anksto nustatytas vaizdas",
     "primaryCTA": "Pirminė CTA",
     "primaryHeading": "Pirminė antraštė",
+    "radius": "Spindulys",
     "resultCard": "Rezultatų kortelė",
     "scope": "Taikymo sritis",
     "secondaryCTA": "Antrinė CTA",

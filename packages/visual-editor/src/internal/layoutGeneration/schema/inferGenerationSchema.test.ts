@@ -919,3 +919,34 @@ describe("standard-library-shaped contracts", () => {
     validateAuthored(catalog, spec);
   });
 });
+
+it("infers optionalDistance values, units, and numeric bounds without changing saved data", () => {
+  const catalog = catalogFor({
+    distance: {
+      type: "optionalDistance",
+      defaultCustomValue: 25,
+      min: 0,
+      max: 100,
+      step: 1,
+    },
+  });
+  expect(catalog.fieldOmissions).toEqual([]);
+  const schema =
+    catalog.data.components.Section.generation!.props.shape.distance;
+  for (const value of [
+    undefined,
+    { unit: "mile" },
+    { value: 0, unit: "mile" },
+    { value: 50, unit: "kilometer" },
+  ]) {
+    expect(schema.safeParse(value).success).toBe(true);
+  }
+  for (const value of [
+    { value: -1, unit: "mile" },
+    { value: 101, unit: "mile" },
+    { value: "50", unit: "mile" },
+    { value: 5, unit: "meter" },
+  ]) {
+    expect(schema.safeParse(value).success).toBe(false);
+  }
+});

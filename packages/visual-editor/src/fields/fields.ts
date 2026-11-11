@@ -25,6 +25,7 @@ import type { FontSizeSelectorField } from "./FontSizeSelectorField.tsx";
 import type { CTASelectorField } from "./CTASelectorField.tsx";
 import type { MultiSelectorField } from "./MultiSelectorField.tsx";
 import type { OptionalNumberField } from "./OptionalNumberField.tsx";
+import type { OptionalDistanceField } from "./OptionalDistanceField.tsx";
 import type { ImageField } from "./ImageField.tsx";
 import type { StyledButtonField } from "./styledFields/StyledButtonField.tsx";
 import type { StyledImageField } from "./styledFields/StyledImageField.tsx";
@@ -186,6 +187,7 @@ type YextPuckFields = {
   fontSizeSelector: FontSizeSelectorField;
   image: ImageField;
   optionalNumber: OptionalNumberField;
+  optionalDistance: OptionalDistanceField;
   styledButton: StyledButtonField;
   styledImage: StyledImageField;
   styledLink: StyledLinkField;
