@@ -152,19 +152,6 @@ export const LocalEditorShell = ({
     return buildLocalEditorSelection(manifest, componentRegistry, searchParams);
   }, [componentRegistry, manifest, searchParams]);
 
-  const generationEnvironment = useLocalGenerationEnvironment(
-    `${apiBasePath}/generate`,
-    selectedLayoutId,
-    componentRegistry[selectedLayoutId],
-    !!chatEnabled
-  );
-  const chat = useLayoutGenerationChat(generationEnvironment, selectedLayoutId);
-  React.useEffect(() => {
-    if (selectedMode === "theme" || previewContext) {
-      chat.cancel();
-    }
-  }, [selectedMode, previewContext, chat.cancel]);
-
   React.useEffect(() => {
     syncSelectionToUrl(
       selectedLayoutId,
@@ -203,6 +190,30 @@ export const LocalEditorShell = ({
   ]);
   const { documentError, documentResponse, isDocumentLoading } =
     useLocalEditorDocument(documentRequestPath);
+  const generationEntity = React.useMemo(
+    () =>
+      documentResponse?.document
+        ? {
+            fields: documentResponse.entityFields,
+            streamDocument: documentResponse.document,
+            locale: selectedLocale,
+          }
+        : undefined,
+    [documentResponse, selectedLocale]
+  );
+  const generationEnvironment = useLocalGenerationEnvironment(
+    `${apiBasePath}/generate`,
+    selectedLayoutId,
+    componentRegistry[selectedLayoutId],
+    !!chatEnabled,
+    generationEntity
+  );
+  const chat = useLayoutGenerationChat(generationEnvironment, selectedLayoutId);
+  React.useEffect(() => {
+    if (selectedMode === "theme" || previewContext) {
+      chat.cancel();
+    }
+  }, [selectedMode, previewContext, chat.cancel]);
   React.useEffect(() => {
     if (documentError) {
       chat.cancel();

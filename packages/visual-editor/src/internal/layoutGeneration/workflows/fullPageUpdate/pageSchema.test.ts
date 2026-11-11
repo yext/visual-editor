@@ -380,3 +380,148 @@ it("offers no removal operation when the page has no sections", () => {
     ).success
   ).toBe(false);
 });
+
+it.each([
+  {
+    kind: "insert",
+    type: "Header",
+    ownerId: null,
+    sectionId: "header",
+    expected: true,
+  },
+  {
+    kind: "insert",
+    type: "Heading",
+    ownerId: "main",
+    sectionId: "hero",
+    expected: true,
+  },
+  {
+    kind: "insert",
+    type: "Header",
+    ownerId: "main",
+    sectionId: "hero",
+    expected: false,
+  },
+  {
+    kind: "insert",
+    type: "Heading",
+    ownerId: null,
+    sectionId: "header",
+    expected: false,
+  },
+  {
+    kind: "insert",
+    type: "Heading",
+    ownerId: "missing",
+    sectionId: "hero",
+    expected: false,
+  },
+  {
+    kind: "insert",
+    type: "MainContent",
+    ownerId: "main",
+    sectionId: "hero",
+    expected: false,
+  },
+  {
+    kind: "replace",
+    type: "Header",
+    ownerId: null,
+    sectionId: "header",
+    expected: true,
+  },
+  {
+    kind: "replace",
+    type: "Heading",
+    ownerId: "main",
+    sectionId: "hero",
+    expected: true,
+  },
+  {
+    kind: "replace",
+    type: "Header",
+    ownerId: "main",
+    sectionId: "hero",
+    expected: false,
+  },
+  {
+    kind: "replace",
+    type: "Heading",
+    ownerId: null,
+    sectionId: "header",
+    expected: false,
+  },
+])(
+  "when $kind places $type in collection $ownerId then model validity is $expected",
+  ({ kind, type, ownerId, sectionId, expected }) => {
+    const catalog = creationCatalog();
+    catalog.data.components.Header = { ...catalog.data.components.Heading };
+    catalog.puckOptions.rootAllowedComponentIds = ["Header", "MainContent"];
+    const baseline = fullPageUpdateLayout();
+    baseline.content[0].type = "Header";
+    baseline.content[2].type = "Header";
+    const compiled = compileFullPageUpdateSchema(catalog, ["en"], baseline);
+    const response = fullPageUpdateResponse([
+      {
+        kind,
+        ...(kind === "insert"
+          ? {
+              collection: {
+                ownerId,
+                slotPath: ownerId === null ? null : "/content",
+              },
+              anchor: { position: "end" },
+            }
+          : { sectionId }),
+        sections: [
+          {
+            type,
+            props:
+              type === "MainContent"
+                ? { content: [] }
+                : { text: "New section" },
+          },
+        ],
+      },
+    ]);
+    expect(
+      z.fromJSONSchema(compiled.jsonSchema).safeParse(response).success
+    ).toBe(expected);
+  }
+);
+
+it("when a collection permits no section types then the model cannot insert into it", () => {
+  const catalog = creationCatalog();
+  catalog.puckOptions.rootAllowedComponentIds = ["MainContent"];
+  const baseline = fullPageUpdateLayout();
+  baseline.content = baseline.content.filter(
+    (item) => item.type === "MainContent"
+  );
+  const compiled = compileFullPageUpdateSchema(catalog, ["en"], baseline);
+  const schema = z.fromJSONSchema(compiled.jsonSchema);
+  expect(
+    schema.safeParse(
+      fullPageUpdateResponse([
+        {
+          kind: "insert",
+          collection: { ownerId: null, slotPath: null },
+          anchor: { position: "end" },
+          sections: [heading("New section")],
+        },
+      ])
+    ).success
+  ).toBe(false);
+  expect(
+    schema.safeParse(
+      fullPageUpdateResponse([
+        {
+          kind: "insert",
+          collection: { ownerId: "main", slotPath: "/content" },
+          anchor: { position: "end" },
+          sections: [heading("New section")],
+        },
+      ])
+    ).success
+  ).toBe(true);
+});

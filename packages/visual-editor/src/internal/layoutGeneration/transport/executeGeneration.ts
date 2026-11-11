@@ -20,6 +20,90 @@ import {
   type CompiledGenerationRequest,
 } from "./modes.ts";
 import { validateGenerationRequest } from "./requestValidation.ts";
+import type {
+  StreamFields,
+  YextSchemaField,
+} from "../../../types/entityFields.ts";
+import type { YextFieldDefinition } from "../../../fields/fields.ts";
+import { getFieldsForSelector } from "../../../editor/yextEntityFieldUtils.ts";
+import { resolveField } from "../../../utils/resolveYextEntityField.ts";
+
+/** Copy model field metadata without changing the schema used by editor selectors. */
+const compactEntityFields = (
+  entityFields: StreamFields,
+  parentPath = ""
+): {
+  fields: Record<string, unknown>[];
+  displayNames: Record<string, string>;
+} => {
+  const displayNames: Record<string, string> = {};
+  const fields = entityFields.fields.map((field) => {
+    const path = parentPath ? `${parentPath}.${field.name}` : field.name;
+    const displayName = entityFields.displayNames?.[path] ?? field.displayName;
+    if (displayName && displayName !== field.name && displayName !== path) {
+      displayNames[path] = displayName;
+    }
+    const typeName =
+      field.definition.typeName ||
+      field.definition.typeRegistryId ||
+      Object.values(field.definition.type ?? {})[0];
+    const children =
+      field.children?.fields.length &&
+      ![
+        "hours",
+        "image",
+        "price",
+        "rich_text",
+        "rich_text_v2",
+        "option",
+      ].includes(typeName?.replace(/^type\./, "") ?? "")
+        ? compactEntityFields(
+            {
+              fields: field.children.fields,
+              displayNames: entityFields.displayNames,
+            },
+            path
+          )
+        : undefined;
+    if (children) {
+      Object.assign(displayNames, children.displayNames);
+    }
+    return {
+      name: field.name,
+      definition: { typeName, isList: field.definition.isList },
+      ...(children ? { children: { fields: children.fields } } : {}),
+    };
+  });
+  return { fields, displayNames };
+};
+
+/** Select schema-listed sample values, including nested objects and list items. */
+const selectEntityValues = (
+  value: unknown,
+  fields: YextSchemaField[]
+): unknown => {
+  if (Array.isArray(value)) {
+    return value.map((item) => selectEntityValues(item, fields));
+  }
+  if (!value || typeof value !== "object") {
+    return value;
+  }
+  const values: Record<string, unknown> = {};
+  for (const field of fields) {
+    const fieldValue = (value as Record<string, unknown>)[field.name];
+    if (
+      field.name === "__" ||
+      field.name === "_pageset" ||
+      fieldValue === undefined
+    ) {
+      continue;
+    }
+    values[field.name] = field.children?.fields?.length
+      ? selectEntityValues(fieldValue, field.children.fields)
+      : fieldValue;
+  }
+  return values;
+};
 
 const utf8Bytes = (text: string): number =>
   new TextEncoder().encode(text).byteLength;
@@ -59,12 +143,19 @@ const GENERATION_MODES = {
   },
 };
 
+/**
+ * 1. Validate the request and compile the mode-specific response schema.
+ * 2. Build the model request with layout context and entity sample values.
+ * 3. Read the response stream and validate the complete result.
+ * 4. Report errors and release request resources.
+ */
 export const executeGeneration = async (
   payload: LayoutGenerationRequest,
   {
     model,
     catalog,
     locales,
+    entity,
     prompts,
     generationSettings,
     transport,
@@ -243,11 +334,86 @@ export const executeGeneration = async (
             compiled.availableComponentNames
           )
         : [];
+    // Use the editor's source and mapping options without filtering on one sample's values.
+    const listSources: Record<string, unknown> = {};
+    if (entity) {
+      for (const componentType of compiled.availableComponentNames) {
+        const component = catalog.data.components[componentType];
+        const sourceField = component.fields?.data as
+          YextFieldDefinition | undefined;
+        if (
+          !component.generation?.slottedItemSource ||
+          sourceField?.type !== "entityField" ||
+          !sourceField.repeated
+        ) {
+          continue;
+        }
+        listSources[componentType] = {
+          cardType: component.generation.slottedItemSource.cardType,
+          sources: getFieldsForSelector(entity.fields, sourceField.filter)
+            .filter(
+              (source) =>
+                !sourceField.fixedRepeatedField ||
+                source.name === sourceField.fixedRepeatedField
+            )
+            .map((source) => {
+              const sampleValue = resolveField<unknown>(
+                entity.streamDocument,
+                source.name
+              ).value;
+              return {
+                field: source.name,
+                displayName: source.displayName,
+                ...(Array.isArray(sampleValue)
+                  ? { sampleItemCount: sampleValue.length }
+                  : {}),
+                mappings: Object.fromEntries(
+                  Object.entries(sourceField.repeated!.mappingFields).flatMap(
+                    ([name, mapping]) =>
+                      mapping.type === "entityField"
+                        ? [
+                            [
+                              name,
+                              getFieldsForSelector(
+                                entity.fields,
+                                mapping.filter,
+                                undefined,
+                                source.name
+                              ).map((field) => field.name),
+                            ],
+                          ]
+                        : []
+                  )
+                ),
+              };
+            }),
+        };
+      }
+    }
     const latestUserContent = JSON.stringify({
       request: messages.at(-1)!.content,
-      context: recommendedSectionIds.length
-        ? { ...(compiled.context as object), recommendedSectionIds }
-        : compiled.context,
+      context: {
+        ...(compiled.context as object),
+        ...(recommendedSectionIds.length ? { recommendedSectionIds } : {}),
+        ...(entity
+          ? {
+              entity: {
+                fields: compactEntityFields(entity.fields),
+                listSources,
+                previewSample: {
+                  locale:
+                    entity.locale ??
+                    entity.streamDocument.locale ??
+                    entity.streamDocument.meta?.locale,
+                  values: selectEntityValues(
+                    entity.streamDocument,
+                    entity.fields.fields
+                  ),
+                },
+              },
+            }
+          : {}),
+      },
       ...(mode === "create" && context.preparation
         ? { preparation: context.preparation }
         : {}),

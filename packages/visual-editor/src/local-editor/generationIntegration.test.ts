@@ -59,6 +59,65 @@ it("routes preparation, creation, planning, section execution and repair through
       },
     },
     locales: ["en", "fr"],
+    entity: {
+      fields: {
+        fields: [
+          {
+            name: "c_description",
+            displayName: "Description",
+            definition: { name: "c_description", typeName: "string", type: {} },
+          },
+          {
+            name: "c_empty",
+            definition: { name: "c_empty", typeName: "string", type: {} },
+          },
+          {
+            name: "address",
+            definition: { name: "address", typeName: "address", type: {} },
+            children: {
+              fields: [
+                {
+                  name: "city",
+                  definition: { name: "city", typeName: "string", type: {} },
+                },
+              ],
+            },
+          },
+          {
+            name: "c_services",
+            definition: {
+              name: "c_services",
+              typeName: "string",
+              type: {},
+              isList: true,
+            },
+          },
+          {
+            name: "c_team",
+            definition: { name: "c_team", type: {}, isList: true },
+            children: {
+              fields: [
+                {
+                  name: "name",
+                  definition: { name: "name", typeName: "string", type: {} },
+                },
+              ],
+            },
+          },
+        ],
+        displayNames: { "address.city": "City", c_empty: "Empty field" },
+      },
+      streamDocument: {
+        locale: "fr",
+        c_description: "Description locale",
+        address: { city: "Paris", unused: "Exclude" },
+        c_services: ["Delivery", "Collection"],
+        c_team: [{ name: "Alex", unused: "Exclude" }, { name: "Sam" }],
+        __: { layout: "Exclude", theme: "Exclude" },
+        _pageset: "Exclude",
+        unused: "Exclude",
+      },
+    },
     catalog: creationCatalog(),
     transport: createLocalMessageTransport(),
     diagnostics: { log: vi.fn(), report: vi.fn() },
@@ -152,6 +211,51 @@ it("routes preparation, creation, planning, section execution and repair through
   ];
   const expectedBudgets = [111, 777, 777, 222, 333, 333, 333];
   requests.forEach((request, index) => {
+    const context = JSON.parse(
+      request.payload.body.input.at(-1).content
+    ).context;
+    expect(context.entity).toEqual({
+      fields: {
+        fields: [
+          { name: "c_description", definition: { typeName: "string" } },
+          { name: "c_empty", definition: { typeName: "string" } },
+          {
+            name: "address",
+            definition: { typeName: "address" },
+            children: {
+              fields: [{ name: "city", definition: { typeName: "string" } }],
+            },
+          },
+          {
+            name: "c_services",
+            definition: { typeName: "string", isList: true },
+          },
+          {
+            name: "c_team",
+            definition: { isList: true },
+            children: {
+              fields: [{ name: "name", definition: { typeName: "string" } }],
+            },
+          },
+        ],
+        displayNames: {
+          c_description: "Description",
+          "address.city": "City",
+          c_empty: "Empty field",
+        },
+      },
+      listSources: {},
+      previewSample: {
+        locale: "fr",
+        values: {
+          c_description: "Description locale",
+          address: { city: "Paris" },
+          c_services: ["Delivery", "Collection"],
+          c_team: [{ name: "Alex" }, { name: "Sam" }],
+        },
+      },
+    });
+    expect(context.locales).toEqual(["en", "fr"]);
     expect(request.payload.body.max_output_tokens).toBe(expectedBudgets[index]);
     expect(
       request.payload.body.instructions.startsWith(instructionPrefixes[index])

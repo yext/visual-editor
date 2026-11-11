@@ -14,6 +14,8 @@ import type {
 import type { GenerationPreparation } from "../workflows/fullPageGeneration/preparationContracts.ts";
 import type { ModelTransport } from "../transport/modelTransport.ts";
 import type { Content } from "./authoredValues.ts";
+import type { StreamFields } from "../../../types/entityFields.ts";
+import type { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 
 export type GenerationDiagnostics = {
   schemaOmissions?: (details: object) => void;
@@ -27,6 +29,11 @@ export type GenerationEnvironment = {
   model: string;
   catalog: PuckGenerationCatalog;
   locales: string[];
+  entity?: {
+    fields: StreamFields;
+    streamDocument: StreamDocument;
+    locale?: string;
+  };
   transport: ModelTransport;
   diagnostics: GenerationDiagnostics;
 };

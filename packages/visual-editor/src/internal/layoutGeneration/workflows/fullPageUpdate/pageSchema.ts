@@ -18,6 +18,12 @@ import {
   type FullPageUpdateStep,
 } from "./contracts.ts";
 
+/**
+ * 1. Compile the available section schemas and inspect existing page collections.
+ * 2. Restrict model insertions and replacements to each destination's permitted types.
+ * 3. Materialize streamed sections and preserve their generated identities.
+ * 4. Parse the complete response without changing already streamed steps.
+ */
 export const compileFullPageUpdateSchema = (
   catalog: PuckGenerationCatalog,
   locales: string[],
@@ -25,20 +31,32 @@ export const compileFullPageUpdateSchema = (
 ) => {
   validateAuthored(catalog, currentData);
   const inventory = buildEditInventory(catalog, currentData);
+  const collections = inventory.collections.filter(
+    (collection) =>
+      collection.ownerId === null ||
+      (collection.slotPath === "/content" &&
+        inventory.components.some(
+          (item) =>
+            item.componentId === collection.ownerId &&
+            item.type === "MainContent"
+        ))
+  );
   const { element, union, exportSchema, nodes, explicitCardLists } =
     createGenerationSchemaCompiler(catalog, locales, "insert", {
       requireExplicitContent: true,
     });
   // Compile every available section, including those not present on the page.
-  const sections = Object.entries(catalog.data.components)
-    .filter(
-      ([name, config]) =>
-        name !== "MainContent" &&
-        config.generation &&
-        !config.nestedOnly &&
-        config.permissions?.insert !== false
-    )
-    .map(([name]) => element(name).wire);
+  const sections = new Map(
+    Object.entries(catalog.data.components)
+      .filter(
+        ([name, config]) =>
+          name !== "MainContent" &&
+          config.generation &&
+          !config.nestedOnly &&
+          config.permissions?.insert !== false
+      )
+      .map(([name]) => [name, element(name).wire])
+  );
   const existingSectionIds = inventory.components
     .filter((item) => item.componentId === item.sectionId)
     .map((item) => item.componentId);
@@ -56,25 +74,68 @@ export const compileFullPageUpdateSchema = (
       anchor: fullPageUpdateAnchorSchema,
     }),
   ];
-  if (sections.length) {
-    const content = z.array(union(sections)).min(1);
-    alternatives.push(
-      z.strictObject({
-        kind: z.literal("replace"),
-        sectionId,
-        sections: content,
-      }),
-      z.strictObject({
-        kind: z
-          .literal("insert")
-          .describe(
-            "Add new sections where the requested intent needs content that the existing page does not cover. Section types may be absent from the existing layout."
-          ),
-        collection: fullPageUpdateCollectionSchema,
-        anchor: fullPageUpdateAnchorSchema,
-        sections: content,
-      })
-    );
+  // Keep runtime removal parsing tolerant so a missing target does not drop streamed work.
+  const modelAlternatives = alternatives.flatMap((alternative) =>
+    alternative === removalSchema
+      ? existingSectionIds.length
+        ? [removalSchema.extend({ sectionId: z.enum(existingSectionIds) })]
+        : []
+      : [alternative]
+  );
+  if (sections.size) {
+    const content = z.array(union([...sections.values()])).min(1);
+    const replacement = z.strictObject({
+      kind: z.literal("replace"),
+      sectionId,
+      sections: content,
+    });
+    const insertion = z.strictObject({
+      kind: z
+        .literal("insert")
+        .describe(
+          "Add new sections where the requested intent needs content that the existing page does not cover. Section types may be absent from the existing layout."
+        ),
+      collection: fullPageUpdateCollectionSchema,
+      anchor: fullPageUpdateAnchorSchema,
+      sections: content,
+    });
+    alternatives.push(replacement, insertion);
+    for (const collection of collections) {
+      const allowed = collection.allowedInsertionTypes.filter((name) =>
+        sections.has(name)
+      );
+      if (!allowed.length) {
+        continue;
+      }
+      const permittedSections = z
+        .array(union(allowed.map((name) => sections.get(name)!)))
+        .min(1);
+      modelAlternatives.push(
+        insertion.extend({
+          collection: z.strictObject({
+            ownerId: z.literal(collection.ownerId),
+            slotPath: z.literal(collection.slotPath),
+          }),
+          sections: permittedSections,
+        })
+      );
+      const replacementIds = inventory.components
+        .filter(
+          (item) =>
+            item.componentId === item.sectionId &&
+            item.collection.ownerId === collection.ownerId &&
+            item.collection.slotPath === collection.slotPath
+        )
+        .map((item) => item.componentId);
+      if (replacementIds.length) {
+        modelAlternatives.push(
+          replacement.extend({
+            sectionId: z.enum(replacementIds),
+            sections: permittedSections,
+          })
+        );
+      }
+    }
   }
   const stepSchema = union(alternatives);
   const makeResponseSchema = (steps: z.ZodType) =>
@@ -99,17 +160,7 @@ export const compileFullPageUpdateSchema = (
       text: z.string(),
     });
   const responseSchema = makeResponseSchema(stepSchema);
-  // Guide the model with exact saved Ids. Runtime parsing stays tolerant so an
-  // unknown removal can be skipped without dropping subsequent streamed work.
-  const modelStepSchema = union(
-    alternatives.flatMap((alternative) =>
-      alternative === removalSchema
-        ? existingSectionIds.length
-          ? [removalSchema.extend({ sectionId: z.enum(existingSectionIds) })]
-          : []
-        : [alternative]
-    )
-  );
+  const modelStepSchema = union(modelAlternatives);
   const jsonSchema = deduplicateGenerationDefinitions(
     exportSchema(makeResponseSchema(modelStepSchema))
   );
@@ -184,16 +235,7 @@ export const compileFullPageUpdateSchema = (
               canReorder,
             })
           ),
-        collections: inventory.collections.filter(
-          (collection) =>
-            collection.ownerId === null ||
-            (collection.slotPath === "/content" &&
-              inventory.components.some(
-                (item) =>
-                  item.componentId === collection.ownerId &&
-                  item.type === "MainContent"
-              ))
-        ),
+        collections,
       },
     },
     streamFullPageUpdate: (

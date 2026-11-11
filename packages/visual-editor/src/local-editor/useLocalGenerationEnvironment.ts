@@ -19,8 +19,11 @@ export const useLocalGenerationEnvironment = (
   api: string,
   layoutId: string,
   config: Config | undefined,
-  enabled: boolean
+  enabled: boolean,
+  entity?: GenerationEnvironment["entity"]
 ) => {
+  // Keep the transport stable when only the preview sample changes.
+  const transport = React.useMemo(createLocalMessageTransport, [api, layoutId]);
   const [settings, setSettings] = React.useState<{
     layoutId: string;
     api: string;
@@ -87,11 +90,12 @@ export const useLocalGenerationEnvironment = (
             prompts: settings.prompts,
             generationSettings: settings.generationSettings,
             locales: settings.locales,
+            entity,
             catalog: getGenerationCatalog(config),
-            transport: createLocalMessageTransport(),
+            transport,
             diagnostics: createLocalGenerationDiagnostics(api, layoutId),
           }
         : null,
-    [api, layoutId, config, settings, enabled]
+    [api, layoutId, config, settings, enabled, entity, transport]
   );
 };

@@ -8,6 +8,7 @@ import React from "react";
 import { expect, it, vi } from "vitest";
 import { ErrorProvider } from "../../../contexts/ErrorContext.tsx";
 import { TemplatePropsContext } from "../../../hooks/useDocument.tsx";
+import { EntityFieldsContext } from "../../../hooks/useEntityFields.tsx";
 import {
   LayoutPuckOverride,
   LayoutPreviewOverride,
@@ -138,21 +139,23 @@ it.each(["answer", "cancel"] as const)(
     const scrollTop = vi.spyOn(Element.prototype, "scrollTop", "set");
     render(
       <ErrorProvider>
-        <TemplatePropsContext.Provider value={{ document: { locale: "en" } }}>
-          <LayoutGenerationProvider config={chatConfig} metadata={metadata}>
-            <Puck
-              config={chatConfig}
-              data={initial}
-              iframe={{ enabled: false }}
-              plugins={[layoutGenerationChatPlugin]}
-              overrides={{
-                puck: LayoutPuckOverride,
-                preview: LayoutPreviewOverride,
-              }}
-            />
-            <Capture />
-          </LayoutGenerationProvider>
-        </TemplatePropsContext.Provider>
+        <EntityFieldsContext.Provider value={null}>
+          <TemplatePropsContext.Provider value={{ document: { locale: "en" } }}>
+            <LayoutGenerationProvider config={chatConfig} metadata={metadata}>
+              <Puck
+                config={chatConfig}
+                data={initial}
+                iframe={{ enabled: false }}
+                plugins={[layoutGenerationChatPlugin]}
+                overrides={{
+                  puck: LayoutPuckOverride,
+                  preview: LayoutPreviewOverride,
+                }}
+              />
+              <Capture />
+            </LayoutGenerationProvider>
+          </TemplatePropsContext.Provider>
+        </EntityFieldsContext.Provider>
       </ErrorProvider>
     );
     document.querySelector<HTMLElement>(".Puck")!.style.visibility = "visible";

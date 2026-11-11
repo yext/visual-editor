@@ -4,7 +4,12 @@ import {
   readTestPromptComponents,
 } from "../testing/promptFixtures.ts";
 import { GenerationError } from "../shared/generationErrors.ts";
-import { executionHarness, modelResponder } from "../testing/modelFixtures.ts";
+import {
+  completed,
+  executionHarness,
+  modelResponder,
+  responseModelTransport,
+} from "../testing/modelFixtures.ts";
 // @vitest-environment node
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
@@ -15,7 +20,10 @@ import {
   clarificationResponse,
   creationResponse,
 } from "../testing/editFixtures.ts";
-import { completed } from "../testing/modelFixtures.ts";
+import { executeGeneration } from "./executeGeneration.ts";
+import { createSlottedItemSource } from "../../../utils/itemSource/createSlottedItemSource.ts";
+import type { Fields } from "@puckeditor/core";
+import type { GenerationEnvironment } from "../shared/contracts.ts";
 
 const catalog = createPuckGenerationCatalog({
   Heading: {
@@ -315,6 +323,9 @@ describe("strict request execution", () => {
     expect(JSON.stringify(body.text.format.schema).length).toBeLessThan(6000);
     expect(h.events().at(-1)).toEqual({ type: "prepared", preparation });
     expect(body.instructions).toBe(testPrompts.prompts.prepare);
+    expect(JSON.parse(body.input.at(-1)!.content).context).not.toHaveProperty(
+      "entity"
+    );
   });
 
   it("passes page-set locales and prior translation decisions to generation and pauses on a translation question", async () => {
@@ -676,3 +687,359 @@ it.each(["application/json", "text/event-stream"])(
     });
   }
 );
+
+it.each(["prepare", "create", "fullPageUpdate", "plan"] as const)(
+  "when compatible product and FAQ sources exist then %s includes editor source and relative mapping options",
+  async (mode) => {
+    const sources = {
+      FAQSection: createSlottedItemSource({
+        label: "FAQs",
+        itemLabel: "FAQ",
+        cardName: "FAQCard",
+        mappingFields: {
+          question: { type: "entityField", filter: { types: ["type.string"] } },
+          answer: {
+            type: "entityField",
+            filter: { types: ["type.rich_text_v2"] },
+          },
+        },
+      }),
+      ProductCardsWrapper: createSlottedItemSource({
+        label: "Products",
+        itemLabel: "Product",
+        cardName: "ProductCard",
+        mappingFields: {
+          name: { type: "entityField", filter: { types: ["type.string"] } },
+          description: {
+            type: "entityField",
+            filter: { types: ["type.rich_text_v2"] },
+          },
+        },
+      }),
+    };
+    const c = createPuckGenerationCatalog({
+      ...Object.fromEntries(
+        Object.entries(sources).map(([name, source]) => [
+          name,
+          {
+            fields: {
+              data: source.field as Fields[string],
+              slots: {
+                type: "object",
+                objectFields: { CardSlot: { type: "slot" } },
+              },
+            },
+            defaultProps: source.defaultWrapperProps,
+            layoutGenerationMetadata: {
+              slottedItemSource: source.generationMetadata,
+            },
+          },
+        ])
+      ),
+      FAQCard: {
+        nestedOnly: true,
+        fields: { text: { type: "text" } },
+        defaultProps: { text: "FAQ" },
+      },
+      ProductCard: {
+        nestedOnly: true,
+        fields: { text: { type: "text" } },
+        defaultProps: { text: "Product" },
+      },
+    });
+    const entity: NonNullable<GenerationEnvironment["entity"]> = {
+      fields: {
+        fields: [
+          ...["c_faqs", "c_emptyFaqs"].map((name) => ({
+            name,
+            definition: {
+              name,
+              typeRegistryId: "type.object",
+              type: {},
+              isList: true,
+            },
+            children: {
+              fields: ["question", "answer"].map((name) => ({
+                name,
+                definition: {
+                  name,
+                  typeRegistryId:
+                    name === "answer" ? "type.rich_text_v2" : "type.string",
+                  type: {},
+                },
+                ...(name === "answer"
+                  ? {
+                      children: {
+                        fields: [
+                          {
+                            name: "html",
+                            definition: {
+                              name: "html",
+                              typeRegistryId: "type.string",
+                              type: {},
+                            },
+                          },
+                        ],
+                      },
+                    }
+                  : {}),
+              })),
+            },
+          })),
+          {
+            name: "c_catalog",
+            definition: { name: "c_catalog", type: {} },
+            children: {
+              fields: [
+                {
+                  name: "products",
+                  displayName: "Products",
+                  definition: {
+                    name: "products",
+                    typeRegistryId: "type.object",
+                    type: {},
+                    isList: true,
+                  },
+                  children: {
+                    fields: ["name", "details"].map((name) => ({
+                      name,
+                      definition: {
+                        name,
+                        typeRegistryId: "type.string",
+                        type: {},
+                      },
+                    })),
+                  },
+                },
+              ],
+            },
+          },
+          {
+            name: "c_tags",
+            definition: {
+              name: "c_tags",
+              typeRegistryId: "type.string",
+              type: {},
+              isList: true,
+            },
+          },
+          {
+            name: "c_scores",
+            definition: {
+              name: "c_scores",
+              typeRegistryId: "type.integer",
+              type: {},
+              isList: true,
+            },
+          },
+        ],
+      },
+      streamDocument: {
+        locale: "en",
+        c_faqs: [{ question: "Do you deliver?", answer: "Yes." }],
+        c_catalog: {
+          products: [{ name: "Coffee", details: "Roasted coffee" }],
+        },
+        c_tags: ["Delivery"],
+        c_scores: [5],
+      },
+    };
+    modelResponder.mockRejectedValue(new Error("Captured model request."));
+    await expect(
+      executeGeneration(
+        {
+          mode,
+          layoutId: "layout",
+          selectedComponentId: null,
+          currentData: { content: [] },
+          messages: [{ role: "user", content: "Add products and FAQs" }],
+        },
+        {
+          model: "test",
+          prompts: testPrompts,
+          generationSettings: testGenerationSettings,
+          catalog: c,
+          locales: ["en"],
+          entity,
+          transport: responseModelTransport(modelResponder),
+          diagnostics: { log: vi.fn(), report: vi.fn() },
+        },
+        new AbortController().signal,
+        "entity-sources"
+      )
+    ).rejects.toThrow("Captured model request.");
+    expect(modelResponder).toHaveBeenCalledOnce();
+    const context = JSON.parse(
+      modelResponder.mock.calls[0][0].input.at(-1)!.content
+    ).context;
+    expect(context.entity.fields.fields).toContainEqual({
+      name: "c_emptyFaqs",
+      definition: { typeName: "type.object", isList: true },
+      children: {
+        fields: ["question", "answer"].map((name) => ({
+          name,
+          definition: {
+            typeName: name === "answer" ? "type.rich_text_v2" : "type.string",
+          },
+        })),
+      },
+    });
+    expect(context.entity.fields.displayNames).toEqual({
+      "c_catalog.products": "Products",
+    });
+    expect(context.entity.previewSample.values.c_scores).toEqual([5]);
+    const faq = context.entity.listSources.FAQSection;
+    expect(faq.cardType).toBe("FAQCard");
+    expect(faq.sources).toContainEqual(
+      expect.objectContaining({
+        field: "c_faqs",
+        sampleItemCount: 1,
+        mappings: {
+          question: expect.arrayContaining(["question"]),
+          answer: expect.arrayContaining(["answer", "answer.html"]),
+        },
+      })
+    );
+    expect(faq.sources).toContainEqual(
+      expect.objectContaining({ field: "c_emptyFaqs" })
+    );
+    expect(faq.sources).toContainEqual(
+      expect.objectContaining({
+        field: "c_tags",
+        mappings: { question: ["$item"], answer: ["$item"] },
+      })
+    );
+    expect(
+      faq.sources.map((source: { field: string }) => source.field)
+    ).not.toContain("c_scores");
+    expect(
+      context.entity.listSources.ProductCardsWrapper.sources
+    ).toContainEqual(
+      expect.objectContaining({
+        field: "c_catalog.products",
+        displayName: expect.stringContaining("Products"),
+        sampleItemCount: 1,
+        mappings: {
+          name: expect.arrayContaining(["name"]),
+          description: expect.arrayContaining(["details"]),
+        },
+      })
+    );
+  }
+);
+
+it("when field metadata contains type internals then the model receives a compact copy without changing sample values or editor metadata", async () => {
+  const entity: NonNullable<GenerationEnvironment["entity"]> = {
+    fields: {
+      fields: [
+        ...[
+          "hours",
+          "image",
+          "price",
+          "rich_text",
+          "rich_text_v2",
+          "option",
+        ].map((typeName) => ({
+          name: `c_${typeName}`,
+          displayName: `${typeName} label`,
+          definition: {
+            name: `c_${typeName}`,
+            registryId: "REGISTRY_DETAILS",
+            typeRegistryId: `type.${typeName}`,
+            type: { optionTable: "OPTION_TABLE_DETAILS" },
+            isList: typeName === "image",
+          },
+          optionFormat: "OPTION_FORMAT_EXPANDED" as const,
+          children: {
+            fields: [
+              {
+                name: "internal",
+                displayName: "INTERNAL_TYPE_LABEL",
+                definition: {
+                  name: "internal",
+                  registryId: "CHILD_REGISTRY_DETAILS",
+                  type: {},
+                },
+              },
+            ],
+          },
+        })),
+        {
+          name: "c_notes",
+          displayName: "c_notes",
+          definition: {
+            name: "c_notes",
+            type: { stringType: "STRING_TYPE_DEFAULT" },
+            isList: false,
+          },
+        },
+      ],
+      displayNames: {
+        c_hours: "Opening hours",
+        "c_hours.internal": "INTERNAL_TYPE_LABEL",
+        c_image: "image label",
+      },
+    },
+    streamDocument: { locale: "en", c_hours: { internal: "Unchanged sample" } },
+  };
+  const originalFields = structuredClone(entity.fields);
+  modelResponder.mockResolvedValue(completed(proposal));
+  await executeGeneration(
+    {
+      mode: "create",
+      layoutId: "layout",
+      currentData: { content: [] },
+      messages: [{ role: "user", content: "Create a page" }],
+    },
+    {
+      model: "test",
+      catalog,
+      locales: ["en"],
+      prompts: testPrompts,
+      generationSettings: testGenerationSettings,
+      entity,
+      transport: responseModelTransport(modelResponder),
+      diagnostics: { log: vi.fn(), report: vi.fn() },
+    },
+    new AbortController().signal,
+    "compact-entity-context"
+  );
+  const body = modelResponder.mock.calls[0][0];
+  const context = JSON.parse(body.input.at(-1)!.content).context;
+  expect(context.entity.fields).toEqual({
+    fields: [
+      ...["hours", "image", "price", "rich_text", "rich_text_v2", "option"].map(
+        (typeName) => ({
+          name: `c_${typeName}`,
+          definition: {
+            typeName: `type.${typeName}`,
+            isList: typeName === "image",
+          },
+        })
+      ),
+      {
+        name: "c_notes",
+        definition: { typeName: "STRING_TYPE_DEFAULT", isList: false },
+      },
+    ],
+    displayNames: {
+      c_hours: "Opening hours",
+      c_image: "image label",
+      c_price: "price label",
+      c_rich_text: "rich_text label",
+      c_rich_text_v2: "rich_text_v2 label",
+      c_option: "option label",
+    },
+  });
+  expect(JSON.stringify(context.entity.fields).length).toBeLessThan(
+    JSON.stringify(originalFields).length / 2
+  );
+  expect(context.entity.previewSample).toEqual({
+    locale: "en",
+    values: { c_hours: { internal: "Unchanged sample" } },
+  });
+  expect(entity.fields).toEqual(originalFields);
+  expect(body.text.format.schema).toEqual(
+    compileGenerationSchema(catalog, ["en"]).jsonSchema
+  );
+});
