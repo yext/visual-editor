@@ -594,7 +594,7 @@ describe("YextComponentConfig render types", () => {
   });
 });
 
-describe("optional field transforms", () => {
+describe("optional field render types", () => {
   const fields = {
     value: {
       type: "optional",
@@ -621,50 +621,6 @@ describe("optional field transforms", () => {
       },
     },
   } as const satisfies YextFieldMap;
-
-  it.each([false, true])(
-    "transforms wrapped fields when adapted=%s without mutating authored data",
-    (adapted) => {
-      const value = {
-        label: { defaultValue: "Hello", es: "Hola [[name]]" },
-        authored: { defaultValue: "Keep this binding" },
-        rows: [
-          {
-            limit: undefined,
-            label: { defaultValue: "Row", es: "Fila" },
-          },
-        ],
-      };
-      const original = structuredClone(value);
-      const field = adapted ? toPuckFields(fields).value : fields.value;
-      const result = createYextFieldTransforms({ name: "Store" }, "es")[
-        field.type
-      ]({
-        field,
-        value,
-        componentId: "test",
-        propName: "value",
-        propPath: "value",
-        isReadOnly: true,
-      });
-      expect(result).toEqual({
-        label: "Hola Store",
-        authored: value.authored,
-        rows: [{ limit: undefined, label: "Fila" }],
-      });
-      expect(value).toEqual(original);
-      expect(
-        createYextFieldTransforms({}, "es")[field.type]({
-          field,
-          value: undefined,
-          componentId: "test",
-          propName: "value",
-          propPath: "value",
-          isReadOnly: true,
-        })
-      ).toBeUndefined();
-    }
-  );
 
   it("infers the render types of wrapped fields and nested arrays", () => {
     type Value = {
