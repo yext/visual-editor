@@ -132,6 +132,7 @@
     "data": "Data",
     "dataAttributes": "Atributy dat",
     "dayOfWeekFormat": "Formát dne týdne",
+    "defaultSearchRadius": "Výchozí poloměr vyhledávání",
     "directoryListBackgroundColor": "Barva pozadí seznamu adresářů",
     "directoryRootLinkLabel": "Štítek kořenového odkazu na adresář",
     "distanceDisplay": "Zobrazení vzdálenosti",

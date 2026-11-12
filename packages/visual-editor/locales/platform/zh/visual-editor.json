@@ -132,6 +132,7 @@
     "data": "数据",
     "dataAttributes": "数据属性",
     "dayOfWeekFormat": "周的格式",
+    "defaultSearchRadius": "默认搜索半径",
     "directoryListBackgroundColor": "目录列表背景颜色",
     "directoryRootLinkLabel": "目录根链接标签",
     "distanceDisplay": "距离显示",

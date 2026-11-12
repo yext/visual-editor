@@ -132,6 +132,7 @@
     "data": "Data",
     "dataAttributes": "Data Attributes",
     "dayOfWeekFormat": "Day of Week Format",
+    "defaultSearchRadius": "Default Search Radius",
     "directoryListBackgroundColor": "Directory List Background Color",
     "directoryRootLinkLabel": "Directory Root Link Label",
     "distanceDisplay": "Distance Display",

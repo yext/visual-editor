@@ -132,6 +132,7 @@
     "data": "Podaci",
     "dataAttributes": "Atributi podataka",
     "dayOfWeekFormat": "Format Dana tjedna",
+    "defaultSearchRadius": "Zadani radijus pretraživanja",
     "directoryListBackgroundColor": "Boja pozadine popisa imenika",
     "directoryRootLinkLabel": "Oznaka korijenske veze direktorija",
     "distanceDisplay": "Prikaz udaljenosti",

@@ -132,6 +132,7 @@
     "data": "Adat",
     "dataAttributes": "Adatattribútumok",
     "dayOfWeekFormat": "A hét napi formátuma",
+    "defaultSearchRadius": "Alapértelmezett keresési sugár",
     "directoryListBackgroundColor": "Könyvtárlista háttérszíne",
     "directoryRootLinkLabel": "Directory Root Link címke",
     "distanceDisplay": "Távolság kijelző",

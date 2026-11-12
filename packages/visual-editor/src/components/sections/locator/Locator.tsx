@@ -1,4 +1,5 @@
 import { FieldLabel, setDeep } from "@puckeditor/core";
+import type { OptionalDistanceValue } from "../../../fields/OptionalDistanceField.tsx";
 import { type MultiSelectorValue } from "../../../fields/MultiSelectorField.tsx";
 import { YextAutoField } from "../../../fields/YextAutoField.tsx";
 import { TranslatableString } from "../../../types/types.ts";
@@ -34,6 +35,7 @@ import {
   DEFAULT_LOCATION_STYLE,
   DEFAULT_MAKI_ICON_NAME,
   DEFAULT_PIN_ICON_WIDTH,
+  DEFAULT_RADIUS,
   LOCATOR_PIN_ICON_FIELD,
   MAX_PIN_ICON_WIDTH,
   makiIconOptions,
@@ -97,6 +99,14 @@ export interface LocatorProps {
     /** The optional display name for the Keywords facet. */
     keywordsDisplayName?: TranslatableString;
   };
+
+  /**
+   * The default radius for nearby-location searches. Leave unset to use Search's
+   * suggested radius, or 25 in the locale's preferred unit for coordinate searches.
+   * Visitor-selected distances and explicit map/URL search areas take precedence.
+   * Geographic boundary filters are unaffected.
+   */
+  defaultSearchRadius?: OptionalDistanceValue;
 
   /**
    * The starting location for the map.
@@ -335,6 +345,13 @@ const locatorFields: YextFields<LocatorProps> = {
         visible: false,
       },
     },
+  },
+  defaultSearchRadius: {
+    type: "optionalDistance",
+    label: msg("fields.defaultSearchRadius", "Default Search Radius"),
+    defaultCustomValue: DEFAULT_RADIUS,
+    min: 0,
+    step: 1,
   },
   mapStartingLocation: {
     type: "object",

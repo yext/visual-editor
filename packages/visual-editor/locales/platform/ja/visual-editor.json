@@ -132,6 +132,7 @@
     "data": "データ",
     "dataAttributes": "データの属性",
     "dayOfWeekFormat": "曜日の形式",
+    "defaultSearchRadius": "デフォルトの検索半径",
     "directoryListBackgroundColor": "ディレクトリリストの背景色",
     "directoryRootLinkLabel": "ディレクトリルートリンクラベル",
     "distanceDisplay": "距離表示",

@@ -132,6 +132,7 @@
     "data": "Date",
     "dataAttributes": "Atribute de date",
     "dayOfWeekFormat": "Format Day of Week",
+    "defaultSearchRadius": "Raza implicită de căutare",
     "directoryListBackgroundColor": "Culoarea de fundal a listei de director",
     "directoryRootLinkLabel": "Etichetă de legătură rădăcină directoare",
     "distanceDisplay": "Afișarea distanței",

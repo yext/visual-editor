@@ -132,6 +132,7 @@
     "data": "Duomenys",
     "dataAttributes": "Duomenų atributai",
     "dayOfWeekFormat": "Savaitės dienos formatas",
+    "defaultSearchRadius": "Numatytasis paieškos spindulys",
     "directoryListBackgroundColor": "Katalogų sąrašo fono spalva",
     "directoryRootLinkLabel": "Katalogo šaknies nuorodų etiketė",
     "distanceDisplay": "Atstumo ekranas",

@@ -132,6 +132,7 @@
     "data": "Dane",
     "dataAttributes": "Atrybuty danych",
     "dayOfWeekFormat": "Format dnia tygodnia",
+    "defaultSearchRadius": "Domyślny promień wyszukiwania",
     "directoryListBackgroundColor": "Kolor tła listy katalogów",
     "directoryRootLinkLabel": "Director Count Link",
     "distanceDisplay": "Wyświetlanie odległości",

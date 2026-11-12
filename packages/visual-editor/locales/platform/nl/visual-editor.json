@@ -132,6 +132,7 @@
     "data": "Gegevens",
     "dataAttributes": "Gegevensattributen",
     "dayOfWeekFormat": "Dag van de week formaat",
+    "defaultSearchRadius": "Standaardzoekradius",
     "directoryListBackgroundColor": "Achtergrondkleur directorylijst",
     "directoryRootLinkLabel": "Directory root link label",
     "distanceDisplay": "Afstandsweergave",

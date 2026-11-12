@@ -132,6 +132,7 @@
     "data": "Andmed",
     "dataAttributes": "Andmete atribuudid",
     "dayOfWeekFormat": "Nädalapäeva vorming",
+    "defaultSearchRadius": "Otsingu vaikeraadius",
     "directoryListBackgroundColor": "Kataloogiloendi taustavärv",
     "directoryRootLinkLabel": "Kataloogi juurte lingi silt",
     "distanceDisplay": "Kauguse kuvamine",

@@ -132,6 +132,7 @@
     "data": "Data",
     "dataAttributes": "Dataattribut",
     "dayOfWeekFormat": "Veckodagsformat",
+    "defaultSearchRadius": "Standardradie för sökning",
     "directoryListBackgroundColor": "Kataloglista Bakgrundsfärg",
     "directoryRootLinkLabel": "Katalogrotlänketikett",
     "distanceDisplay": "Avståndsvisning",

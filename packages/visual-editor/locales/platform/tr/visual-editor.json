@@ -132,6 +132,7 @@
     "data": "Veri",
     "dataAttributes": "Veri Nitelikleri",
     "dayOfWeekFormat": "Haftanın Günü Biçimi",
+    "defaultSearchRadius": "Varsayılan arama yarıçapı",
     "directoryListBackgroundColor": "Dizin Listesi Arka Plan Rengi",
     "directoryRootLinkLabel": "Dizin kök bağlantı etiketi",
     "distanceDisplay": "Mesafe Göstergesi",

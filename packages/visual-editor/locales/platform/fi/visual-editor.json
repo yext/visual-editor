@@ -132,6 +132,7 @@
     "data": "Tiedot",
     "dataAttributes": "Tietojen attribuutit",
     "dayOfWeekFormat": "Viikonpäivän muoto",
+    "defaultSearchRadius": "Haun oletussäde",
     "directoryListBackgroundColor": "Hakemistoluettelon taustaväri",
     "directoryRootLinkLabel": "Hakemistojuurilinkin tarra",
     "distanceDisplay": "Etäisyyden näyttö",
