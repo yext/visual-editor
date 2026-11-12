@@ -91,9 +91,9 @@ export {
   type ImagePayload,
 } from "./fields/ImageField.tsx";
 export {
-  type OptionalDistanceField,
-  type OptionalDistanceValue,
-} from "./fields/OptionalDistanceField.tsx";
+  type OptionalField,
+  type OptionalFieldContext,
+} from "./fields/OptionalField.tsx";
 export { type BasicSelectorField } from "./fields/BasicSelectorField.tsx";
 export {
   type MultiSelectorOption,

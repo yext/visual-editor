@@ -369,23 +369,8 @@ export const inferGenerationSchema = (
             ({ value }) => value
           ),
         ]);
-      case "optionalDistance": {
-        let distance = z.number();
-        if (field.min !== undefined) distance = distance.min(field.min);
-        if (field.max !== undefined) distance = distance.max(field.max);
-        return z
-          .object({
-            value: distance.optional(),
-            unit: z.enum(["mile", "kilometer"]),
-          })
-          .optional();
-      }
-      case "optionalNumber":
-        return z.union([
-          z.number(),
-          z.literal("__ve_optionalNumber_hide__"),
-          z.null(),
-        ]);
+      case "optional":
+        return infer(field.field, baseline, path)?.optional();
       case "styledText":
         return styledTextZodSchema(!!field.includeColor);
       case "styledButton":

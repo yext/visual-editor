@@ -6,7 +6,7 @@ import {
   type NearFilterValue,
   type SelectableStaticFilter,
 } from "@yext/search-headless-react";
-import type { FilterSearch } from "@yext/search-ui-react";
+import { getUserLocation, type FilterSearch } from "@yext/search-ui-react";
 import type { FilterModal } from "./Filters.tsx";
 import type { LocatorMap } from "./Map.tsx";
 import type { LocatorProps } from "./Locator.tsx";
@@ -144,6 +144,9 @@ const selectSuggestion = async () =>
 
 beforeEach(() => {
   vi.clearAllMocks();
+  vi.mocked(getUserLocation).mockRejectedValue(
+    new Error("Geolocation unavailable")
+  );
   mocks.locale = "en";
   mocks.state.filters = { static: [], facets: [] };
   window.history.replaceState(null, "", "/");
@@ -306,6 +309,73 @@ describe("Locator default search radius", () => {
         })
       );
       expect(mocks.state.filters.static[0].filter).toEqual(filter);
+    }
+  );
+
+  it.each<{
+    radius?: LocatorProps["defaultSearchRadius"];
+    locale: string;
+    accuracy: number;
+    expected: number;
+  }>([
+    {
+      radius: { value: 50, unit: "kilometer" },
+      locale: "en",
+      accuracy: 10,
+      expected: 50000,
+    },
+    {
+      radius: { value: 50, unit: "kilometer" },
+      locale: "en",
+      accuracy: 100000,
+      expected: 100000,
+    },
+    {
+      radius: { value: 50, unit: "mile" },
+      locale: "en",
+      accuracy: 100000,
+      expected: 100000,
+    },
+    { locale: "en", accuracy: 100000, expected: 100000 },
+    { locale: "fr", accuracy: 10, expected: 25000 },
+    { locale: "fr", accuracy: 100000, expected: 100000 },
+  ])(
+    "respects initial geolocation accuracy $accuracy with radius $radius in $locale",
+    async ({ radius, locale, accuracy, expected }) => {
+      mocks.locale = locale;
+      vi.mocked(getUserLocation).mockResolvedValue({
+        coords: { latitude: 38.9, longitude: -77.1, accuracy },
+      } as GeolocationPosition);
+      renderLocator(radius);
+      await waitFor(() => expect(getRadius()).toBeCloseTo(expected));
+      await act(async () =>
+        mocks.filterModal.handleDistanceClick(
+          5,
+          locale === "en" ? "mile" : "kilometer"
+        )
+      );
+      await act(async () => mocks.filterModal.handleClearFiltersClick());
+      expect(getRadius()).toBeCloseTo(expected);
+    }
+  );
+
+  it.each([10, 10000])(
+    "preserves the selected distance and configured base with initial accuracy %s",
+    async (accuracy) => {
+      renderLocator({ value: 50, unit: "kilometer" });
+      await waitFor(() => expect(getRadius()).toBe(50000));
+      await act(async () => mocks.filterModal.handleDistanceClick(5, "mile"));
+      vi.mocked(getUserLocation).mockResolvedValue({
+        coords: { latitude: 38.9, longitude: -77.1, accuracy },
+      } as GeolocationPosition);
+      await act(async () =>
+        window.dispatchEvent(new PopStateEvent("popstate"))
+      );
+      await waitFor(() =>
+        expect(getRadius()).toBeCloseTo(Math.max(accuracy, 8046.72))
+      );
+      await act(async () => mocks.filterModal.handleClearFiltersClick());
+      expect(getRadius()).toBe(50000);
     }
   );
 

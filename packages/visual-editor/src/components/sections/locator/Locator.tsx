@@ -1,5 +1,5 @@
+import { getPreferredDistanceUnit } from "../../../utils/i18n/distance.ts";
 import { FieldLabel, setDeep } from "@puckeditor/core";
-import type { OptionalDistanceValue } from "../../../fields/OptionalDistanceField.tsx";
 import { type MultiSelectorValue } from "../../../fields/MultiSelectorField.tsx";
 import { YextAutoField } from "../../../fields/YextAutoField.tsx";
 import { TranslatableString } from "../../../types/types.ts";
@@ -106,7 +106,10 @@ export interface LocatorProps {
    * Visitor-selected distances and explicit map/URL search areas take precedence.
    * Geographic boundary filters are unaffected.
    */
-  defaultSearchRadius?: OptionalDistanceValue;
+  defaultSearchRadius?: {
+    value?: number;
+    unit: "mile" | "kilometer";
+  };
 
   /**
    * The starting location for the map.
@@ -347,11 +350,35 @@ const locatorFields: YextFields<LocatorProps> = {
     },
   },
   defaultSearchRadius: {
-    type: "optionalDistance",
+    type: "optional",
     label: msg("fields.defaultSearchRadius", "Default Search Radius"),
-    defaultCustomValue: DEFAULT_RADIUS,
-    min: 0,
-    step: 1,
+    defaultCustomValue: ({ locale }) => ({
+      value: DEFAULT_RADIUS,
+      unit: getPreferredDistanceUnit(locale),
+    }),
+    field: {
+      type: "object",
+      objectFields: {
+        value: {
+          type: "number",
+          label: msg("fields.radius", "Radius"),
+          min: 0,
+          step: 1,
+        },
+        unit: {
+          type: "basicSelector",
+          generation: { required: true },
+          label: msg("fields.distanceUnit", "Distance Unit"),
+          options: [
+            { label: msg("mile", "mile", { count: 2 }), value: "mile" },
+            {
+              label: msg("kilometer", "kilometer", { count: 2 }),
+              value: "kilometer",
+            },
+          ],
+        },
+      },
+    },
   },
   mapStartingLocation: {
     type: "object",

@@ -25,6 +25,17 @@ export const resolveItemValue = <TValue>(
   streamDocument: StreamDocument,
   itemDocument?: StreamDocument
 ): ResolvedItemField<TValue> => {
+  if (field.type === "optional") {
+    return value === undefined
+      ? (undefined as ResolvedItemField<TValue>)
+      : (resolveItemValue(
+          field.field,
+          value,
+          streamDocument,
+          itemDocument
+        ) as ResolvedItemField<TValue>);
+  }
+
   if (isEntityFieldDefinition(field)) {
     const entityField = value as Partial<YextEntityField<unknown>> | undefined;
     if (!entityField?.constantValueEnabled && !entityField?.field) {

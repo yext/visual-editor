@@ -58,8 +58,7 @@ const YEXT_FIELD_OVERRIDE_TYPES = new Set([
   "entityField",
   "fontSizeSelector",
   "image",
-  "optionalNumber",
-  "optionalDistance",
+  "optional",
   "translatableString",
   "video",
 ]);

@@ -138,7 +138,7 @@ Add `transform: true` to a supported field type to receive resolved props in the
 | Rich-text list with `includeListsOnly: true` | Array of resolved rich-text objects or strings                                                    |
 | `image`                                      | Localized asset image with resolved alt text and preserved asset metadata                         |
 | `multiSelector`                              | Array of selected values, preserving zero, false, and empty strings                               |
-| `optionalNumber`                             | Number or `undefined` when hidden or unset                                                        |
+| `optional`                                   | Wrapped field’s render value, or `undefined` for Automatic                                        |
 | `ctaSelector`                                | Resolved CTA object with localized label and link; Get Directions includes a generated URL        |
 | `comprehensiveCTA`                           | Resolved nested CTA, button text, and aria label; styles and interaction settings are preserved   |
 | Repeated `entityField`                       | Array of item props resolved against each selected item or manual item                            |
@@ -689,39 +689,37 @@ const myComponentFields: YextFields<MyComponentProps> = {
 };
 ```
 
-## optionalNumber Field
+## optional Field
 
-This registered field type displays a radio group with two options. When one option is selected,
-a number input is also rendered. When the other option is selected, the number input is hidden.
-This could be used for a number field with an "all" or "default" option.
+Wrap an existing field with an Automatic/Custom selector. Automatic stores `undefined`;
+Custom stores the wrapped field's value directly. The editor remembers the previous custom
+value while the control stays mounted, including `0`, `false`, empty strings, and `null`.
 
-### Props
-
-| Name                      | Type                  | Description                                                               |
-| ------------------------- | --------------------- | ------------------------------------------------------------------------- |
-| type                      | `"optionalNumber"`    | The registered field type.                                                |
-| label                     | `string \| MsgString` | The label for the field.                                                  |
-| hideNumberFieldRadioLabel | `string \| MsgString` | The label for the radio option corresponding to hiding the number field.  |
-| showNumberFieldRadioLabel | `string \| MsgString` | The label for the radio option corresponding to showing the number field. |
-| defaultCustomValue        | `number`              | The default number if the number field is shown.                          |
-
-#### Usage
+| Name                 | Type                                                | Description                                                                                                          |
+| -------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `type`               | `"optional"`                                        | The registered field type.                                                                                           |
+| `label?`             | `string \| MsgString`                               | Label for the mode selector.                                                                                         |
+| `field`              | `YextFieldDefinition`                               | Field to display when Custom is selected.                                                                            |
+| `defaultCustomValue` | `Value \| ((context: { locale: string }) => Value)` | Initial value when Custom is first selected. The factory receives the page locale and is evaluated only when needed. |
+| `automaticLabel?`    | `string \| MsgString`                               | Overrides the translated Automatic option label.                                                                     |
+| `customLabel?`       | `string \| MsgString`                               | Overrides the translated Custom option label.                                                                        |
 
 ```tsx
-type MyComponentProps = {
-  limit: number | string;
-};
-
-const myComponentFields: YextFields<MyComponentProps> = {
+const fields: YextFields<{ limit?: number }> = {
   limit: {
-    type: "optionalNumber",
+    type: "optional",
     label: msg("fields.limit", "Limit"),
-    hideNumberFieldRadioLabel: msg("fields.options.all", "All"),
-    showNumberFieldRadioLabel: msg("fields.options.limit", "Limit"),
-    defaultCustomValue: 3,
+    defaultCustomValue: 10,
+    field: { type: "number", min: 0, step: 1 },
   },
 };
 ```
+
+Objects and arrays may contain other Yext fields. Their numeric bounds, selector options,
+translation, and render transformations remain owned by those fields. Mark a wrapped field
+with `transform: true` when its resolved render value is needed, as with an unwrapped field.
+Generation schemas and authored edits follow the wrapped field's contract and permit unsetting
+the optional value. Generation never evaluates the default-value factory.
 
 ## YextFields
 

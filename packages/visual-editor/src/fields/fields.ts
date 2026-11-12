@@ -24,8 +24,7 @@ import type { EntityFieldSelectorField } from "./EntityFieldSelectorField.tsx";
 import type { FontSizeSelectorField } from "./FontSizeSelectorField.tsx";
 import type { CTASelectorField } from "./CTASelectorField.tsx";
 import type { MultiSelectorField } from "./MultiSelectorField.tsx";
-import type { OptionalNumberField } from "./OptionalNumberField.tsx";
-import type { OptionalDistanceField } from "./OptionalDistanceField.tsx";
+import type { OptionalField } from "./OptionalField.tsx";
 import type { ImageField } from "./ImageField.tsx";
 import type { StyledButtonField } from "./styledFields/StyledButtonField.tsx";
 import type { StyledImageField } from "./styledFields/StyledImageField.tsx";
@@ -107,15 +106,19 @@ type ResolvedRepeatedFieldValue<Value, Definition> =
     Definition extends { type: infer FieldType } ? FieldType : never
   )
     ? ResolvedRepeatedValue<Value>
-    : Definition extends { type: "object"; objectFields: infer Fields }
-      ? ResolvedRepeatedItem<Value, Fields>
-      : Definition extends { type: "array"; arrayFields: infer Fields }
+    : Definition extends { type: "optional"; field: infer Wrapped }
+      ? Value extends undefined
+        ? undefined
+        : ResolvedRepeatedFieldValue<Value, Wrapped>
+      : Definition extends { type: "object"; objectFields: infer Fields }
         ? ResolvedRepeatedItem<Value, Fields>
-        : Definition extends { type: infer FieldType }
-          ? FieldType extends keyof TransformedFieldValues<Value, Definition>
-            ? TransformedFieldValues<Value, Definition>[FieldType]
-            : LocalizedRenderValue<Value>
-          : LocalizedRenderValue<Value>;
+        : Definition extends { type: "array"; arrayFields: infer Fields }
+          ? ResolvedRepeatedItem<Value, Fields>
+          : Definition extends { type: infer FieldType }
+            ? FieldType extends keyof TransformedFieldValues<Value, Definition>
+              ? TransformedFieldValues<Value, Definition>[FieldType]
+              : LocalizedRenderValue<Value>
+            : LocalizedRenderValue<Value>;
 
 type TransformedFieldValues<Value, Definition> = {
   themeColor: ResolvedThemeColor | undefined;
@@ -132,7 +135,11 @@ type TransformedFieldValues<Value, Definition> = {
   multiSelector: Value extends { selections: { value: infer Selection }[] }
     ? Exclude<Selection, undefined>[]
     : never;
-  optionalNumber: number | undefined;
+  optional: Definition extends { field: infer Wrapped }
+    ? Value extends undefined
+      ? undefined
+      : TransformedFieldValue<Value, Wrapped>
+    : Value;
   ctaSelector: LocalizedRenderValue<EnhancedTranslatableCTA> | undefined;
   entityField: Definition extends { format: infer Format }
     ? Format extends keyof typeof entityFieldFormatters
@@ -186,8 +193,7 @@ type YextPuckFields = {
   multiSelector: MultiSelectorField;
   fontSizeSelector: FontSizeSelectorField;
   image: ImageField;
-  optionalNumber: OptionalNumberField;
-  optionalDistance: OptionalDistanceField;
+  optional: OptionalField;
   styledButton: StyledButtonField;
   styledImage: StyledImageField;
   styledLink: StyledLinkField;
