@@ -5,14 +5,14 @@ import {
   getFontFamilyFromThemeValue,
   normalizeAssetPath,
 } from "../../utils/fonts/visualEditorFonts.ts";
-import { ThemeConfig } from "../../utils/themeResolver.ts";
+import { readThemeValues } from "./internalThemeResolver.ts";
+import { themeFields, type ThemeFields } from "../theme/themeFields.ts";
 import { ThemeData } from "../types/themeData.ts";
-import { generateCssVariablesFromThemeConfig } from "./internalThemeResolver.ts";
 
 /**
  * Custom font asset flow:
- * 1. Merge default theme values with the current edited theme values.
- * 2. Find each custom font family referenced by the merged theme font-family variables.
+ * 1. Read explicitly selected values from the fixed theme fields.
+ * 2. Find selected font families using field types and explicit field relationships.
  * 3. Collect the matching stylesheet paths for loading.
  * 4. Match each referenced family's style/weight selection to a variant `filePath` for preloading.
  * 5. Save those resolved asset lists back into theme data for runtime use.
@@ -30,14 +30,6 @@ const PRELOAD_MIME_TYPE_BY_EXTENSION: Record<string, string> = {
   ttf: "font/ttf",
   otf: "font/otf",
 };
-
-const getMergedThemeValues = (
-  themeConfig: ThemeConfig,
-  themeValues: ThemeData
-): ThemeData => ({
-  ...generateCssVariablesFromThemeConfig(themeConfig),
-  ...themeValues,
-});
 
 const matchesWeight = (asset: FontVariant | Font, weight: number): boolean => {
   if ("weights" in asset) {
@@ -62,27 +54,22 @@ const findMatchingVariant = (
  * the merged theme values.
  */
 export const buildCustomFontAssets = ({
-  themeConfig,
+  fields = themeFields,
   themeValues,
   customFonts,
 }: {
-  themeConfig: ThemeConfig;
+  fields?: ThemeFields;
   themeValues: ThemeData;
   customFonts: FontRegistry;
 }): CustomFontAssets => {
-  const mergedThemeValues = getMergedThemeValues(themeConfig, themeValues);
+  const mergedThemeValues = readThemeValues(themeValues, fields);
   const stylesheetPaths = new Set<string>();
   const preloads = new Set<string>();
 
-  Object.keys(mergedThemeValues).forEach((key) => {
-    if (!key.startsWith("--fontFamily-") || !key.endsWith("-fontFamily")) {
-      return;
-    }
-
-    const sectionKey = key
-      .replace("--fontFamily-", "")
-      .replace("-fontFamily", "");
-    const fontFamilyValue = mergedThemeValues[key];
+  const fieldEntries = Object.entries(fields);
+  fieldEntries.forEach(([fieldKey, field]) => {
+    if (field.type !== "fontFamily") return;
+    const fontFamilyValue = mergedThemeValues[fieldKey];
     if (typeof fontFamilyValue !== "string") {
       return;
     }
@@ -101,14 +88,26 @@ export const buildCustomFontAssets = ({
     }
 
     const weightValue =
-      mergedThemeValues[`--fontWeight-${sectionKey}-fontWeight`];
+      mergedThemeValues[
+        fieldEntries.find(
+          ([, candidate]) =>
+            candidate.type === "fontWeight" &&
+            candidate.fontFamilyKey === fieldKey
+        )?.[0] ?? ""
+      ];
     const weight = Number.parseInt(String(weightValue), 10);
     if (Number.isNaN(weight)) {
       return;
     }
 
     const fontStyleValue =
-      mergedThemeValues[`--fontStyle-${sectionKey}-fontStyle`];
+      mergedThemeValues[
+        fieldEntries.find(
+          ([, candidate]) =>
+            candidate.type === "fontStyle" &&
+            candidate.fontFamilyKey === fieldKey
+        )?.[0] ?? ""
+      ];
     const style = fontStyleValue === "italic" ? "italic" : "normal";
 
     const variant = findMatchingVariant(customFont, style, weight);
@@ -128,11 +127,11 @@ export const buildCustomFontAssets = ({
  * entirely when no custom font assets are needed.
  */
 export const updateThemeWithCustomFontAssets = ({
-  themeConfig,
+  fields = themeFields,
   themeValues,
   customFonts,
 }: {
-  themeConfig: ThemeConfig;
+  fields?: ThemeFields;
   themeValues: ThemeData;
   customFonts?: FontRegistry;
 }): ThemeData => {
@@ -147,15 +146,20 @@ export const updateThemeWithCustomFontAssets = ({
   }
 
   const customFontAssets = buildCustomFontAssets({
-    themeConfig,
+    fields,
     themeValues,
     customFonts,
   });
 
-  return {
-    ...themeValues,
-    [CUSTOM_FONT_ASSETS_KEY]: customFontAssets,
-  };
+  const next = { ...themeValues };
+  delete next[CUSTOM_FONT_ASSETS_KEY];
+  if (
+    customFontAssets.stylesheetPaths.length ||
+    customFontAssets.preloads.length
+  ) {
+    next[CUSTOM_FONT_ASSETS_KEY] = customFontAssets;
+  }
+  return next;
 };
 
 /**

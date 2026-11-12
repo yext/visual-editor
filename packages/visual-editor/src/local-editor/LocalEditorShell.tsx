@@ -82,7 +82,6 @@ export const LocalEditorShell = ({
   routePath,
   componentRegistry,
   tailwindConfig,
-  themeConfig,
   sectionLibraryMigrationRegistry,
   translationLoaders,
   chatEnabled = true,
@@ -488,7 +487,6 @@ export const LocalEditorShell = ({
         localDevOptions={previewContext.localDevOptions}
         onClose={closePreview}
         tailwindConfig={tailwindConfig}
-        themeConfig={themeConfig}
         sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
         translationLoaders={translationLoaders}
       />
@@ -716,7 +714,6 @@ export const LocalEditorShell = ({
                     key={editorKey}
                     document={streamDocument}
                     componentRegistry={componentRegistry}
-                    themeConfig={themeConfig}
                     localDev={true}
                     localDevOptions={editorLocalDevOptions}
                     forceThemeMode={selectedMode === "theme"}

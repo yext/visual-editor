@@ -273,169 +273,26 @@ Use this helper when the wrapper owns one repeated `CardSlot` and each item
 should become a nested card component. See the `FeaturedItems` / `ItemCard`
 example in [editor/README.md](../editor/README.md#linked-entity-item-sources).
 
-## ThemeConfig
+## Theme fields
 
-The ThemeConfig object defines the styles available for editing in Theme Manager. It is used
-by themeResolver, applyTheme, and Editor.
+Theme Manager uses fixed internal categories. A category can contain fields directly,
+subcategories containing fields, or both. Direct fields appear before subcategories.
+Section libraries cannot override the definitions. Fields use their object property names as stable keys and define a label,
+control type, default value, and explicit CSS variable. Values are saved by key;
+fields without a saved value use their declared default in both the editor and CSS.
 
-### Defining a ThemeConfig
+The initial implementation contains only `placeholderColor`, applied as
+`--ve-placeholder-color`, with a default of `#000000`. Existing components temporarily use frozen legacy defaults;
+old saved theme overrides are ignored and are not migrated.
 
-Each style must specify a label, type, default value, and plugin. The label will be displayed in the
-Theme Manager UI. The type can be "color", "number" or "select". If type "select", an array of options
-must be provided too. The plugin field must contain one of [Tailwind's Theme Extension Keys](https://v3.tailwindcss.com/docs/theme#configuration-reference), which will determine which Tailwind utilities use the style. Styles that share
-a plugin can be nested one level deep together under a shared label.
+The fixed field definitions live in `src/internal/theme/themeFields.ts`. Add shared
+classes to the neighboring `theme.css` file using those variables. `applyTheme`
+includes that CSS alongside the resolved `:root` variables, and the editor applies
+the same styles to its document and preview iframe.
 
-```ts
-export const themeConfig: ThemeConfig = {
-  sectionA: {
-    label: "Section A",
-    styles: {
-      style1: {
-        label: "Style 1",
-        type: "number",
-        default: 0,
-        plugin: "fontSize",
-      },
-      style2: {
-        label: "Style 2",
-        plugin: "colors",
-        styles: {
-          substyleA: {
-            label: "Sub-Style A"
-            type: "color"
-            default: "#000000"
-          },
-          substyleB: {
-            label: "Sub-Style B"
-            type: "color"
-            default: "#FFFFFF"
-          },
-        },
-      },
-    },
-  },
-  sectionB: {
-    label: "Section B"
-    styles: {
-      style3: {
-        label: "Style 3",
-        type: "select",
-        default: "normal",
-        options: [
-          {value: "normal", label: "Normal"}
-          {value: "bold", label: "Bold"}
-        ]
-        plugin: "fontWeight",
-      },
-    },
-  },
-};
-```
-
-The Theme Manager UI will display the theme configuration fields in the order
-and structure specified in the themeConfig.
-
-### Using Theme Manager Classes
-
-Theme Manager uses Tailwind to create classes of the following form: `[tailwindUtility]-[sectionName]-[styleName]-[subStyleName?]` where `tailwindUtility` is the Tailwind Utility class prefix used by the style's core plugin. These classes should be used in components to apply the Theme Manager styles.
-
-For example, in the themeConfig above, the following classes would be available:
-
-- `text-parentA-style1`
-- `text-parentA-style2-substyleA`
-- `text-parentA-style2-substyleB`
-- ... other color utilities such as `bg-parentA-style2-substyleA`
-- `font-parentB-style3`
-
-### Referencing Other Theme Values
-
-Underlying these classes are a set of CSS variables that follow the form `--[pluginName]-[sectionName]-[styleName]-[subStyleName?]`.
-
-The themeConfig above creates the following CSS variables:
-
-- `--fontSize-parentA-style1`
-- `--colors-parentA-style2-substyleA`
-- `--colors-parentA-style2-substyleB`
-- `--fontWeight-parentB-style3`
-
-It is not necessary to directly use these CSS variables. However, they can be used to link styles together.
-
-#### Example
-
-```ts
-export const themeConfig: ThemeConfig = {
-  palette: {
-    label: "Color Palette",
-    styles: {
-      primary: {
-        label: "Primary",
-        type: "color",
-        default: "black",
-        plugin: "colors",
-      },
-      secondary: {
-        label: "Secondary",
-        type: "color",
-        default: "white",
-        plugin: "colors",
-      },
-    },
-  },
-  headings: {
-    label: "Headings"
-    styles: {
-      textColor: {
-        label: "Text Color",
-        type: "select",
-        default: "var(--colors-palette-primary)",
-        options: [
-          {value: "var(--colors-palette-primary)", label: "Primary"}
-          {value: "var(--colors-palette-secondary)", label: "Secondary"}
-        ]
-        plugin: "colors",
-      },
-    },
-  },
-};
-```
-
-This example creates the following classes:
-
-- `text-palette-primary`
-- `text-palette-secondary`
-- ... other color utilities like bg-palette-primary
-- `text-headings-textColor` - can switch between the primary or secondary color
-
-## themeResolver
-
-Used in tailwind.config.ts to combine hard-coded styles with editable Theme Manager styles.
-
-### Props
-
-| Name             | Type                | Description                                             |
-| ---------------- | ------------------- | ------------------------------------------------------- |
-| developerTheming | Record<string, any> | Tailwind theme extensions not editable in Theme Manager |
-| marketerTheming  | ThemeConfig         | The styles to be available in Theme Manager             |
-
-### Usage
-
-```ts
-// tailwind.config.ts
-import type { Config } from "tailwindcss";
-import { themeConfig } from "./theme.config";
-import { themeResolver } from "@yext/visual-editor";
-
-export default {
-  content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
-  theme: {
-    extend: themeResolver(
-      {}, // developer styles
-      themeConfig // Theme Manager styles
-    ),
-  },
-  plugins: [],
-} satisfies Config;
-```
+`ThemeConfig`, `defaultThemeConfig`, `createDefaultThemeConfig`, `themeResolver`,
+and the editor `themeConfig` prop have been removed. Use
+`defaultThemeTailwindExtensions` directly in Tailwind's `theme.extend`.
 
 ## applyTheme
 
@@ -443,11 +300,11 @@ Used as part of the [Head Config Interface](https://github.com/yext/pages/blob/m
 
 ### Props
 
-| Name        | Type                | Description                                  |
-| ----------- | ------------------- | -------------------------------------------- |
-| document    | Record<string, any> | The Yext entity document                     |
-| themeConfig | ThemeConfig         | The styles available in Theme Manager        |
-| base?       | string              | Additional data to be injected into the head |
+| Name                 | Type                | Description                                  |
+| -------------------- | ------------------- | -------------------------------------------- |
+| document             | Record<string, any> | The Yext entity document                     |
+| relativePrefixToRoot | string              | Relative path from the page to the site root |
+| base?                | string              | Additional data to be injected into the head |
 
 ### Usage
 
@@ -459,7 +316,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
 }): HeadConfig => {
   return {
     // -- additional HeadConfig options --
-    other: applyTheme(document, relativePrefixToRoot, themeConfig),
+    other: applyTheme(document, relativePrefixToRoot),
   };
 };
 ```
@@ -500,26 +357,11 @@ const fonts: FontRegistry = {
   ...defaultFonts,
 };
 const fontOptions = constructFontSelectOptions(fonts);
-
-export const themeConfig: ThemeConfig = {
-  heading1: {
-    label: "Heading",
-    styles: {
-      fontFamily: {
-        label: "Font",
-        type: "select",
-        plugin: "fontFamily",
-        options: fontOptions,
-        default: "'Georgia', serif",
-      },
-    },
-  },
-};
 ```
 
 ### getFontWeightOptions
 
-Returns the options for font weight for use in theme.config.
+Returns the options for font weight in component field controls.
 Can filter based on the currently selected font.
 
 #### Params
@@ -533,23 +375,9 @@ Can filter based on the currently selected font.
 #### Usage
 
 ```tsx
-export const themeConfig: ThemeConfig = {
-  heading1: {
-    label: "Heading",
-    styles: {
-      fontWeight: {
-        label: "Font Weight",
-        type: "select",
-        plugin: "fontWeight",
-        options: () =>
-          getFontWeightOptions({
-            fontCssVariable: "--fontFamily-heading1-fontFamily",
-          }),
-        default: "700",
-      },
-    },
-  },
-};
+const options = getFontWeightOptions({
+  fontCssVariable: "--fontFamily-body-fontFamily",
+});
 ```
 
 ### getFontWeightOverrideOptions
@@ -614,11 +442,7 @@ const Edit: () => JSX.Element = () => {
       entityFields={entityFields}
       tailwindConfig={tailwindConfig}
     >
-      <Editor
-        document={entityDocument}
-        componentRegistry={componentRegistry}
-        themeConfig={themeConfig}
-      />
+      <Editor document={entityDocument} componentRegistry={componentRegistry} />
     </VisualEditorProvider>
   );
 };
@@ -675,14 +499,14 @@ Check that the string is a valid slug.
 
 ## defaultThemeTailwindExtensions
 
-A set of Tailwind extensions to complement the default theme.config, including additional auto-generated colors.
+Frozen legacy component mappings and derived colors. These preserve default component styling while components transition to the new theme fields.
 
 #### Usage
 
 ```tsx
 // tailwind.config.ts
 theme: {
-  extend: themeResolver(defaultThemeTailwindExtensions, themeConfig),
+  extend: defaultThemeTailwindExtensions,
 },
 ```
 
@@ -725,7 +549,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
     title: document.name,
     other: [
       applyAnalytics(document),
-      applyTheme(document, relativePrefixToRoot, themeConfig),
+      applyTheme(document, relativePrefixToRoot),
     ].join("\n"),
   };
 };

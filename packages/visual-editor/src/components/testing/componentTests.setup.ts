@@ -8,7 +8,6 @@ import "jest-axe/extend-expect";
 import { expect, vi, beforeEach } from "vitest";
 import { BrowserPage, commands, page } from "@vitest/browser/context";
 import { act } from "@testing-library/react";
-import { defaultThemeConfig } from "../DefaultThemeConfig.ts";
 import { applyTheme } from "../../utils/applyTheme.ts";
 import { ThemeData } from "../../internal/types/themeData.ts";
 
@@ -23,11 +22,7 @@ export const testSetup = (theme: ThemeData) => {
   vi.setSystemTime(new Date(2025, 6, 1, 12, 0, 0).valueOf());
 
   const tag = document.createElement("style");
-  const themeTags = applyTheme(
-    { __: { theme: JSON.stringify(theme) } },
-    "./",
-    defaultThemeConfig
-  );
+  const themeTags = applyTheme({ __: { theme: JSON.stringify(theme) } }, "./");
 
   // don't load fonts
   const matches = [...themeTags.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)];

@@ -11,11 +11,7 @@ import {
   HeadConfig,
 } from "@yext/pages";
 import { type Config } from "@puckeditor/core";
-import {
-  defaultThemeConfig,
-  LocalEditorShell,
-  type MigrationRegistry,
-} from "@yext/visual-editor";
+import { LocalEditorShell, type MigrationRegistry } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
 import { translationLoaders } from "../library/.generated/i18n";
 /* LOCAL_EDITOR_CONFIG_IMPORTS */
@@ -59,7 +55,6 @@ const LocalEditor: Template<TemplateRenderProps> = () => {
       routePath={DEFAULT_LOCAL_EDITOR_ROUTE}
       componentRegistry={componentRegistry}
       tailwindConfig={tailwindConfig}
-      themeConfig={defaultThemeConfig}
       sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
       translationLoaders={translationLoaders}
       chatEnabled={__LOCAL_EDITOR_LAYOUT_GENERATION_ENABLED__}

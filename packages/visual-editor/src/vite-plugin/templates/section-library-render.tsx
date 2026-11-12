@@ -18,7 +18,6 @@ import {
   applyCertifiedFacts,
   applyHeaderScript,
   applyTheme,
-  defaultThemeConfig,
   getCanonicalUrl,
   getPageMetadata,
   getSchema,
@@ -87,7 +86,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
     other: [
       applyAnalytics(data.document),
       applyHeaderScript(data.document),
-      applyTheme(data.document, data.relativePrefixToRoot, defaultThemeConfig),
+      applyTheme(data.document, data.relativePrefixToRoot),
       typeof schema === "string" ? schema : SchemaWrapper(schema),
       applyCertifiedFacts(data.document),
     ].join("\n"),

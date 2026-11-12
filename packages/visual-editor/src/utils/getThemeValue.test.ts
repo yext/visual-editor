@@ -21,23 +21,19 @@ describe("getThemeValue", () => {
   });
 
   it("prefers the preview iframe theme over the editor shell", () => {
-    const editorRoot = document.createElement("div");
-    editorRoot.className = "components";
+    const editorRoot = document.documentElement;
     editorRoot.style.setProperty(
       "--colors-palette-quaternary-contrast",
       "#FFF"
     );
-    document.body.appendChild(editorRoot);
 
     const previewDocument =
       document.implementation.createHTMLDocument("preview");
-    const previewRoot = previewDocument.createElement("div");
-    previewRoot.className = "components";
+    const previewRoot = previewDocument.documentElement;
     previewRoot.style.setProperty(
       "--colors-palette-quaternary-contrast",
       "#000"
     );
-    previewDocument.body.appendChild(previewRoot);
     Object.defineProperty(previewDocument, "defaultView", {
       value: {
         getComputedStyle: createStyleReader(previewDocument),
@@ -57,19 +53,14 @@ describe("getThemeValue", () => {
   });
 
   it("falls back to the current document when the preview iframe has no value", () => {
-    const editorRoot = document.createElement("div");
-    editorRoot.className = "components";
+    const editorRoot = document.documentElement;
     editorRoot.style.setProperty(
       "--colors-palette-quaternary-contrast",
       "#000"
     );
-    document.body.appendChild(editorRoot);
 
     const previewDocument =
       document.implementation.createHTMLDocument("preview");
-    const previewRoot = previewDocument.createElement("div");
-    previewRoot.className = "components";
-    previewDocument.body.appendChild(previewRoot);
     Object.defineProperty(previewDocument, "defaultView", {
       value: {
         getComputedStyle: createStyleReader(previewDocument),
@@ -88,7 +79,16 @@ describe("getThemeValue", () => {
     expect(getThemeValue("--colors-palette-quaternary-contrast")).toBe("#000");
   });
 
-  it("falls back to the published stream theme in the browser", () => {
+  it("reads the document root even when a component has a different value", () => {
+    document.documentElement.style.setProperty("--ve-color-foreground", "red");
+    const component = document.createElement("div");
+    component.className = "components";
+    component.style.setProperty("--ve-color-foreground", "blue");
+    document.body.appendChild(component);
+    expect(getThemeValue("--ve-color-foreground")).toBe("red");
+  });
+
+  it("ignores old published overrides and uses frozen defaults", () => {
     expect(
       getThemeValue("--colors-palette-quaternary-contrast", {
         __: {
@@ -97,12 +97,32 @@ describe("getThemeValue", () => {
           }),
         },
       })
-    ).toBe("#123456");
+    ).toBe("#FFFFFF");
+  });
+
+  it("reads a published new value through its declared variable", () => {
+    expect(
+      getThemeValue("--ve-color-foreground", {
+        __: { theme: JSON.stringify({ colorForeground: "red" }) },
+      })
+    ).toBe("red");
+  });
+
+  it("reads the new field default when there is no saved value", () => {
+    expect(
+      getThemeValue("--ve-color-foreground", { __: { theme: "{}" } })
+    ).toBe("#000000");
+  });
+
+  it("uses legacy defaults when published JSON is malformed", () => {
+    expect(
+      getThemeValue("--colors-palette-primary", { __: { theme: "invalid" } })
+    ).toBe("#CF0A2C");
   });
 
   it("returns undefined when the value is missing from every source", () => {
     expect(
-      getThemeValue("--colors-palette-quaternary-contrast", {
+      getThemeValue("--unknown", {
         __: {
           theme: JSON.stringify({}),
         },

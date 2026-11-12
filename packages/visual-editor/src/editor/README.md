@@ -16,7 +16,6 @@ It is automatically used in the edit pages created by the Section Library Vite p
 | -------------------------------- | ----------------------------------------------------------------------------------------- |
 | document                         | any (json data from [our hook](../hooks/README.md#usePlatformBridgeDocument))             |
 | componentRegistry                | `Record<string, Config<any>>` from [@measuredco/puck](https://github.com/measuredco/puck) |
-| themeConfig?                     | ThemeConfig                                                                               |
 | metadata?                        | Metadata                                                                                  |
 | sectionLibraryMigrationRegistry? | MigrationRegistry                                                                         |
 

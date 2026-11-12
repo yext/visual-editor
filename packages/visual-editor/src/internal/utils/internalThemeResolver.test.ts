@@ -1,229 +1,148 @@
-import { describe, test, expect } from "vitest";
+import { describe, it, expect } from "vitest";
+import { readThemeValues, themeValuesToCss } from "./internalThemeResolver.ts";
 import {
-  generateCssVariablesFromPuckFields,
-  generateCssVariablesFromThemeConfig,
-  internalThemeResolver,
-} from "./internalThemeResolver.ts";
-import { testThemeConfig } from "../../utils/testData.ts";
-import { createDefaultThemeConfig } from "../../components/DefaultThemeConfig.ts";
-
-describe("internalThemeResolver", () => {
-  test("combines saved and default values", () => {
-    const result = internalThemeResolver(testThemeConfig, savedThemeValues);
-    expect(result).toEqual(combinedThemeValues);
-  });
-
-  test("works with undefined saved state", () => {
-    const result = internalThemeResolver(testThemeConfig, undefined);
-    expect(result).toEqual(defaultThemeValues);
-  });
-
-  test("defaults new fontStyle theme values to normal for existing saved themes", () => {
-    const themeConfig = createDefaultThemeConfig();
-
-    const result = internalThemeResolver(themeConfig, {
-      "--fontFamily-body-fontFamily":
-        "'Open Sans', 'Open Sans Fallback', sans-serif",
-      "--fontWeight-body-fontWeight": "400",
+  flattenThemeFields,
+  themeCategories,
+  themeFields,
+  type ThemeCategory,
+  type ThemeFields,
+} from "../theme/themeFields.ts";
+const fields: ThemeFields = {
+  size: {
+    label: "Size",
+    type: "number",
+    variable: "--size",
+    default: 12,
+  },
+  color: {
+    label: "Color",
+    type: "color",
+    variable: "--color",
+    default: "#000000",
+  },
+};
+describe("theme values", () => {
+  it("round trips key-based values including zero", () => {
+    const values = JSON.parse(JSON.stringify({ size: 0, color: "red" }));
+    expect(readThemeValues(values, fields)).toEqual(values);
+    expect(themeValuesToCss(values, fields)).toEqual({
+      "--size": "0px",
+      "--color": "red",
     });
-
-    expect(result["--fontStyle-body-fontStyle"]).toBe("normal");
-    expect(result["--fontStyle-h1-fontStyle"]).toBe("normal");
-    expect(result["--fontStyle-link-fontStyle"]).toBe("normal");
-    expect(result["--fontStyle-button-fontStyle"]).toBe("normal");
+  });
+  it("falls back to field defaults for missing or invalid saved values and ignores old variables", () => {
+    expect(
+      themeValuesToCss(
+        { size: NaN, color: "", "--color": "red", unknown: "blue" },
+        fields
+      )
+    ).toEqual({ "--size": "12px", "--color": "#000000" });
+    expect(readThemeValues({}, fields)).toEqual({ size: 12, color: "#000000" });
+  });
+  it("keeps defaults independent of saved values and resolves partial themes", () => {
+    const saved = { color: "red" };
+    expect(readThemeValues(saved, fields)).toEqual({ size: 12, color: "red" });
+    expect(saved).toEqual({ color: "red" });
+    expect(fields.size.default).toBe(12);
   });
 });
 
-describe("generateCssVariablesFromThemeConfig", () => {
-  test("generates css variables with default values", () => {
-    const result = generateCssVariablesFromThemeConfig(testThemeConfig);
-    expect(result).toEqual(defaultThemeValues);
-  });
-});
-
-describe("generateCssVariablesFromPuckFields", () => {
-  test("generates css variables from Puck field", () => {
-    const result = generateCssVariablesFromPuckFields(
-      { primary: "green" },
-      "palette",
-      {
-        label: "Palette",
-        styles: {
-          primary: {
-            label: "Primary",
-            type: "color",
-            default: "black",
-            plugin: "colors",
-          },
-        },
-      }
-    );
-    expect(result).toEqual({
-      "--colors-palette-primary": "green",
-      "--colors-palette-primary-contrast": "#000000",
-    });
-  });
-
-  test("generates css variables from nested Puck fields", () => {
-    const result = generateCssVariablesFromPuckFields(
-      {
-        primary: {
-          default: "#00FF00",
-          foreground: "#003300",
-        },
+describe("theme category structure", () => {
+  it.each<{ name: string; category: ThemeCategory }>([
+    { name: "direct fields", category: { label: "Category", fields } },
+    {
+      name: "subcategories",
+      category: {
+        label: "Category",
+        subcategories: { group: { label: "Group", fields } },
       },
-      "palette",
-      {
-        label: "Palette",
-        styles: {
-          primary: {
-            label: "Primary",
-            plugin: "colors",
-            styles: {
-              default: {
-                label: "Default",
-                type: "color",
-                default: "black",
-              },
-              foreground: {
-                label: "Foreground",
-                type: "color",
-                default: "white",
-              },
+    },
+    {
+      name: "nested subcategories",
+      category: {
+        label: "Category",
+        subcategories: {
+          button: {
+            label: "Button",
+            fields: { size: fields.size },
+            subcategories: {
+              hover: { label: "Hover", fields: { color: fields.color } },
             },
           },
         },
-      }
-    );
-    expect(result).toEqual({
-      "--colors-palette-primary-default": "#00FF00",
-      "--colors-palette-primary-foreground": "#003300",
-      "--colors-palette-primary-default-contrast": "#000000",
-      "--colors-palette-primary-foreground-contrast": "#FFFFFF",
-    });
-  });
-
-  test("generates css variables from fontStyle select fields", () => {
-    const result = generateCssVariablesFromPuckFields(
-      { fontStyle: "italic" },
-      "body",
-      {
-        label: "Body",
-        styles: {
-          fontStyle: {
-            label: "Font Style",
-            type: "select",
-            default: "normal",
-            plugin: "fontStyle",
-            options: [],
-          },
+      },
+    },
+  ])(
+    "resolves $name with the same saved keys and CSS variables",
+    ({ category }) => {
+      const definitions = flattenThemeFields({ category });
+      expect(readThemeValues({ size: 0 }, definitions)).toEqual({
+        size: 0,
+        color: "#000000",
+      });
+      expect(themeValuesToCss({ color: "red" }, definitions)).toEqual({
+        "--size": "12px",
+        "--color": "red",
+      });
+    }
+  );
+  it("supports direct fields and subcategories together", () => {
+    const definitions = flattenThemeFields({
+      mixed: {
+        label: "Mixed",
+        fields: { size: fields.size },
+        subcategories: {
+          colors: { label: "Colors", fields: { color: fields.color } },
         },
-      }
-    );
-
-    expect(result).toEqual({
-      "--fontStyle-body-fontStyle": "italic",
+      },
+    });
+    expect(Object.keys(definitions)).toEqual(["size", "color"]);
+    expect(themeValuesToCss({}, definitions)).toEqual({
+      "--size": "12px",
+      "--color": "#000000",
     });
   });
 });
 
-const defaultThemeValues = {
-  "--colors-palette-primary": "#D83B18",
-  "--colors-palette-secondary": "#871900",
-  "--colors-palette-accent": "#FFFFFF",
-  "--colors-palette-text": "#000000",
-  "--colors-palette-background-light": "#FFFFFF",
-  "--colors-palette-background-DEFAULT": "#F7F7F7",
-  "--colors-palette-background-dark": "#F0F0F0",
-  "--colors-palette-foreground": "#000000",
-  "--colors-heading1-color": "var(--colors-palette-primary)",
-  "--colors-heading2-color": "var(--colors-palette-primary)",
-  "--colors-heading3-color": "var(--colors-palette-primary)",
-  "--colors-heading4-color": "var(--colors-palette-secondary)",
-  "--colors-heading5-color": "var(--colors-palette-secondary)",
-  "--colors-heading6-color": "var(--colors-palette-secondary)",
-  "--colors-body-color-light": "var(--colors-palette-text)",
-  "--colors-body-color-dark": "var(--colors-palette-text)",
-  "--colors-button-primary": "var(--colors-palette-primary)",
-  "--colors-button-primaryForeground": "var(--colors-palette-foreground)",
-  "--fontSize-heading1-fontSize": "24px",
-  "--fontSize-heading2-fontSize": "24px",
-  "--fontSize-heading3-fontSize": "24px",
-  "--fontSize-heading4-fontSize": "24px",
-  "--fontSize-heading5-fontSize": "24px",
-  "--fontSize-heading6-fontSize": "24px",
-  "--fontSize-body-fontSize": "12px",
-  "--fontSize-button-fontSize": "12px",
-  "--fontWeight-heading1-fontWeight": "700",
-  "--fontWeight-heading2-fontWeight": "700",
-  "--fontWeight-heading3-fontWeight": "700",
-  "--fontWeight-heading4-fontWeight": "700",
-  "--fontWeight-heading5-fontWeight": "700",
-  "--fontWeight-heading6-fontWeight": "700",
-  "--fontWeight-body-fontWeight": "400",
-  "--fontWeight-button-fontWeight": "400",
-  "--gap-pageSection-gap": "8px",
-  "--verticalPadding-pageSection-verticalPadding": "0px",
-  "--horizontalPadding-pageSection-horizontalPadding": "0px",
-  "--backgroundColor-pageSection-backgroundColor":
-    "var(--colors-palette-background)",
-  "--backgroundColor-page-backgroundColor": "var(--colors-palette-background)",
-  "--backgroundColor-page-footer": "#000000",
-  "--maxWidth-pageSection-maxWidth": "1280px",
-  "--borderRadius-button-borderRadius": "20px",
-};
+describe("recommended theme fields", () => {
+  it("retains every field when flattening categories and emits distinct CSS variables", () => {
+    const collectFields = (
+      categories: Readonly<Record<string, ThemeCategory>>
+    ): ThemeFields[string][] =>
+      Object.values(categories).flatMap((category) => [
+        ...Object.values(category.fields ?? {}),
+        ...collectFields(category.subcategories ?? {}),
+      ]);
+    const categorizedFields = collectFields(themeCategories);
+    expect(categorizedFields).toHaveLength(185);
+    expect(Object.values(themeFields)).toHaveLength(categorizedFields.length);
+    expect(new Set(categorizedFields.map((field) => field.variable)).size).toBe(
+      categorizedFields.length
+    );
+    for (const field of categorizedFields) {
+      expect(field.variable).toMatch(/^--ve-[a-z]+(?:-[a-z]+)*$/);
+      if (field.type === "fontWeight" || field.type === "fontStyle") {
+        expect(themeFields[field.fontFamilyKey]?.type).toBe("fontFamily");
+      }
+    }
+  });
 
-const savedThemeValues = {
-  "--colors-palette-text": "grey",
-  "--colors-palette-background-DEFAULT": "#EEEEEE",
-  "--gap-pageSection-gap": "16px",
-  "--fontWeight-heading1-fontWeight": "900",
-  "--backgroundColor-pageSection-backgroundColor":
-    "var(--colors-palette-primary)",
-};
-
-const combinedThemeValues = {
-  "--colors-palette-primary": "#D83B18",
-  "--colors-palette-secondary": "#871900",
-  "--colors-palette-accent": "#FFFFFF",
-  "--colors-palette-text": "grey", // from saved theme
-  "--colors-palette-background-light": "#FFFFFF",
-  "--colors-palette-background-DEFAULT": "#EEEEEE", // from saved theme
-  "--colors-palette-background-dark": "#F0F0F0",
-  "--colors-palette-foreground": "#000000",
-  "--colors-heading1-color": "var(--colors-palette-primary)",
-  "--colors-heading2-color": "var(--colors-palette-primary)",
-  "--colors-heading3-color": "var(--colors-palette-primary)",
-  "--colors-heading4-color": "var(--colors-palette-secondary)",
-  "--colors-heading5-color": "var(--colors-palette-secondary)",
-  "--colors-heading6-color": "var(--colors-palette-secondary)",
-  "--colors-body-color-light": "var(--colors-palette-text)",
-  "--colors-body-color-dark": "var(--colors-palette-text)",
-  "--colors-button-primary": "var(--colors-palette-primary)",
-  "--colors-button-primaryForeground": "var(--colors-palette-foreground)",
-  "--fontSize-heading1-fontSize": "24px",
-  "--fontSize-heading2-fontSize": "24px",
-  "--fontSize-heading3-fontSize": "24px",
-  "--fontSize-heading4-fontSize": "24px",
-  "--fontSize-heading5-fontSize": "24px",
-  "--fontSize-heading6-fontSize": "24px",
-  "--fontSize-body-fontSize": "12px",
-  "--fontSize-button-fontSize": "12px",
-  "--fontWeight-heading1-fontWeight": "900", // from saved theme
-  "--fontWeight-heading2-fontWeight": "700",
-  "--fontWeight-heading3-fontWeight": "700",
-  "--fontWeight-heading4-fontWeight": "700",
-  "--fontWeight-heading5-fontWeight": "700",
-  "--fontWeight-heading6-fontWeight": "700",
-  "--fontWeight-body-fontWeight": "400",
-  "--fontWeight-button-fontWeight": "400",
-  "--gap-pageSection-gap": "16px", // from saved theme
-  "--backgroundColor-pageSection-backgroundColor":
-    "var(--colors-palette-primary)", // from saved theme
-  "--backgroundColor-page-backgroundColor": "var(--colors-palette-background)",
-  "--backgroundColor-page-footer": "#000000",
-  "--maxWidth-pageSection-maxWidth": "1280px",
-  "--verticalPadding-pageSection-verticalPadding": "0px",
-  "--horizontalPadding-pageSection-horizontalPadding": "0px",
-  "--borderRadius-button-borderRadius": "20px",
-};
+  it("serializes responsive lengths, unitless line heights, and interaction states independently", () => {
+    const css = themeValuesToCss({
+      headlineMobileFontSize: 30,
+      headlineLineHeight: "1.25",
+      primaryButtonPadding: "0.5rem 1rem",
+      primaryButtonHoverTextColorOnDark: "#abcdef",
+    });
+    expect(css["--ve-headline-mobile-font-size"]).toBe("30px");
+    expect(css["--ve-headline-line-height"]).toBe("1.25");
+    expect(css["--ve-primary-button-padding"]).toBe("0.5rem 1rem");
+    expect(css["--ve-primary-button-hover-text-color-on-dark"]).toBe("#abcdef");
+    expect(css["--ve-primary-button-default-text-color-on-dark"]).toBe(
+      "#FFFFFF"
+    );
+    expect(css["--ve-primary-button-active-text-color-on-dark"]).toBe(
+      "#FFFFFF"
+    );
+  });
+});

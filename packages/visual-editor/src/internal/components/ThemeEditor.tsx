@@ -9,7 +9,6 @@ import {
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
-import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { InternalThemeEditor } from "./InternalThemeEditor.tsx";
 import { useThemeMessageSenders } from "../hooks/theme/useMessageSenders.ts";
@@ -30,7 +29,6 @@ type ThemeEditorProps = {
   templateMetadata: TemplateMetadata;
   layoutData: Data;
   themeData: ThemeData;
-  themeConfig: ThemeConfig | undefined;
   localDev: boolean;
   metadata?: Metadata;
 };
@@ -41,7 +39,6 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     templateMetadata,
     layoutData,
     themeData,
-    themeConfig,
     localDev,
     metadata,
   } = props;
@@ -206,13 +203,10 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       setThemeHistories({
         histories: histories.map((themeHistory) => ({
           ...themeHistory,
-          data: themeConfig
-            ? updateThemeWithCustomFontAssets({
-                themeConfig,
-                themeValues: themeHistory.data,
-                customFonts: templateMetadata.customFonts,
-              })
-            : themeHistory.data,
+          data: updateThemeWithCustomFontAssets({
+            themeValues: themeHistory.data,
+            customFonts: templateMetadata.customFonts,
+          }),
         })),
         index,
       });
@@ -229,15 +223,14 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   // Log THEME_HISTORIES on load and update theme in editor to reflect save state
   useEffect(() => {
     devLogger.logData("THEME_HISTORIES", themeHistories);
-    if (themeHistories && themeConfig) {
+    if (themeHistories) {
       updateThemeInEditor(
         themeHistories.histories[themeHistories.index]?.data as ThemeData,
-        themeConfig,
         true,
         templateMetadata.customFonts
       );
     }
-  }, [themeHistories, themeConfig]);
+  }, [themeHistories]);
 
   useEffect(() => {
     if (!themeSaveStateFetched) {
@@ -297,7 +290,6 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       isLoading={isLoading}
       templateMetadata={templateMetadata}
       publishTheme={publishTheme}
-      themeConfig={themeConfig}
       saveThemeSaveState={saveThemeSaveState}
       themeHistories={themeHistories}
       setThemeHistories={setThemeHistories}

@@ -1,3 +1,5 @@
+import { legacyThemeTailwindMappings } from "../internal/theme/legacyTheme.ts";
+import { deepMerge } from "./themeResolver.ts";
 import { ComboboxOptionGroup } from "../internal/types/combobox.ts";
 import { msg, pt } from "./i18n/platform.ts";
 import { PresetImageType } from "../types/types.ts";
@@ -245,8 +247,8 @@ const headingLevelOptions: { label: string; value: HeadingLevel }[] = [
 ];
 
 // Tailwind Theme Extensions (https://v3.tailwindcss.com/docs/theme#extending-the-default-theme)
-// to use in the tailwind.config.ts in conjunction with themeResolver and the theme.config
-export const defaultThemeTailwindExtensions = {
+// used directly in tailwind.config.ts while legacy components remain.
+const legacyThemeExtensions = {
   colors: {
     "palette-primary-light": "hsl(from var(--colors-palette-primary) h s 98)",
     "palette-secondary-light":
@@ -565,3 +567,8 @@ export const VisualEditorThemeClassSafelist = [
 // Content path for applying tailwind config to visual-editor components
 export const VisualEditorComponentsContentPath =
   "node_modules/@yext/visual-editor/dist/**/*.js";
+
+export const defaultThemeTailwindExtensions = deepMerge(
+  legacyThemeExtensions,
+  legacyThemeTailwindMappings
+);

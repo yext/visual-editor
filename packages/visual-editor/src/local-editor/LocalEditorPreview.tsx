@@ -13,7 +13,7 @@ import {
 import type { ThemeData } from "../internal/types/themeData.ts";
 import { updateThemeInEditor } from "../utils/applyTheme.ts";
 import { migrate, type MigrationRegistry } from "../utils/migrate.ts";
-import type { TailwindConfig, ThemeConfig } from "../utils/themeResolver.ts";
+import type { TailwindConfig } from "../utils/themeResolver.ts";
 import type { StreamDocument } from "../utils/types/StreamDocument.ts";
 import { SectionLibraryVisualEditorProvider } from "../utils/SectionLibraryVisualEditorProvider.tsx";
 import type { LocalEditorDocumentResponse } from "./types.ts";
@@ -27,7 +27,6 @@ type LocalEditorPreviewProps = {
   localDevOptions: LocalDevOptions;
   onClose: () => void;
   tailwindConfig: TailwindConfig;
-  themeConfig?: ThemeConfig;
   sectionLibraryMigrationRegistry?: MigrationRegistry;
   translationLoaders?: SectionLibraryTranslationLoaders;
 };
@@ -55,7 +54,6 @@ export const LocalEditorPreview = ({
   localDevOptions,
   onClose,
   tailwindConfig,
-  themeConfig,
   sectionLibraryMigrationRegistry,
   translationLoaders,
 }: LocalEditorPreviewProps) => {
@@ -115,9 +113,7 @@ export const LocalEditorPreview = ({
           return;
         }
 
-        if (themeConfig) {
-          await updateThemeInEditor(themeData ?? {}, themeConfig, false, {});
-        }
+        await updateThemeInEditor(themeData ?? {}, false, {});
 
         if (isCurrent) {
           setPreviewState({
@@ -143,7 +139,6 @@ export const LocalEditorPreview = ({
     localDevOptions,
     sectionLibraryMigrationRegistry,
     streamDocument,
-    themeConfig,
   ]);
 
   return (

@@ -289,28 +289,28 @@ describe("getThemeColorHexValue", () => {
     );
   });
 
-  it("resolves base palette tokens from the published theme", () => {
+  it("resolves base palette tokens from frozen defaults, ignoring published overrides", () => {
     expect(getThemeColorHexValue("palette-primary", streamDocument)).toBe(
-      "#341A1F"
+      "#CF0A2C"
     );
     expect(
       getThemeColorHexValue("palette-quaternary-contrast", streamDocument)
-    ).toBe("#F5F5F5");
+    ).toBe("#FFFFFF");
   });
 
-  it("derives light and dark palette tokens from the published theme", () => {
+  it("derives light and dark palette tokens from frozen defaults", () => {
     expect(getThemeColorHexValue("palette-primary-light", streamDocument)).toBe(
-      "#FCF8F9"
+      "#FFF5F7"
     );
     expect(
       getThemeColorHexValue("palette-secondary-dark", streamDocument)
-    ).toBe("#2A323C");
+    ).toBe("#303336");
   });
 
-  it("returns undefined when theme values are unavailable", () => {
+  it("uses frozen defaults when no saved theme exists", () => {
     expect(
       getThemeColorHexValue("palette-primary", { __: { theme: "{}" } })
-    ).toBeUndefined();
+    ).toBe("#CF0A2C");
   });
 });
 

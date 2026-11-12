@@ -1,25 +1,21 @@
+import themeCss from "../internal/theme/theme.css?raw";
 import { ThemeData } from "../internal/types/themeData.ts";
-import {
-  internalThemeResolver,
-  generateCssVariablesFromThemeConfig,
-} from "../internal/utils/internalThemeResolver.ts";
+import { themeValuesToCss } from "../internal/utils/internalThemeResolver.ts";
+import { themeFields } from "../internal/theme/themeFields.ts";
 import { DevLogger } from "./devLogger.ts";
+import { legacyThemeVariables } from "../internal/theme/legacyTheme.ts";
 import {
-  defaultFonts,
-  filterInUseFontRegistries,
+  resolveThemeFonts,
   createFontLinkElements,
   generateGoogleFontLinkData,
   fontLinkDataToHTML,
-  type FontRegistry,
-  type FontLinkData,
   generateCustomFontLinkData,
+  type FontRegistry,
 } from "./fonts/visualEditorFonts.ts";
 import {
   buildFontPreloadTags,
   getCustomFontAssets,
 } from "../internal/utils/customFontAssets.ts";
-import { ThemeConfig } from "./themeResolver.ts";
-import { getContrastingColor } from "./colors.ts";
 import fontFallbackTransformations from "./fonts/fontFallbackTransformations.json" with { type: "json" };
 import { StreamDocument } from "./types/StreamDocument.ts";
 
@@ -27,153 +23,45 @@ export const THEME_STYLE_TAG_ID = "visual-editor-theme";
 export const PUCK_PREVIEW_IFRAME_ID = "preview-frame";
 const devLogger = new DevLogger();
 
-const resolveFontsToLoad = (
-  themeValues: ThemeData,
-  themeConfig: ThemeConfig,
-  customFonts: FontRegistry = {}
-) => {
-  const mergedThemeData = {
-    ...generateCssVariablesFromThemeConfig(themeConfig),
-    ...themeValues,
-  };
-  const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-    mergedThemeData,
-    defaultFonts,
-    customFonts
-  );
-
-  return {
-    inUseGoogleFonts,
-    inUseCustomFonts,
-    googleFontsToLoad:
-      Object.keys(inUseGoogleFonts).length === 0
-        ? { "Open Sans": defaultFonts["Open Sans"] }
-        : inUseGoogleFonts,
-  };
+export const internalApplyTheme = (values: ThemeData = {}): string => {
+  const declarations = { ...legacyThemeVariables, ...themeValuesToCss(values) };
+  return `:root{${Object.entries(declarations)
+    .map(([key, value]) => `${key}:${value} !important`)
+    .join(";")}}\n${themeCss}`;
 };
 
 export const applyTheme = (
   document: StreamDocument,
   relativePrefixToRoot: string,
-  themeConfig: ThemeConfig,
   base?: string
 ): string => {
-  devLogger.logFunc("applyTheme");
-
-  const publishedTheme = document?.__?.theme;
-
-  let overrides: ThemeData | undefined;
-
-  if (publishedTheme) {
-    try {
-      overrides = JSON.parse(publishedTheme);
-
-      devLogger.logData("THEME_DATA", overrides);
-    } catch (error) {
-      console.warn("Failed to parse published theme data:", error);
+  let values: ThemeData = {};
+  try {
+    const parsed = JSON.parse(document?.__?.theme ?? "{}");
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      values = parsed;
     }
+  } catch (error) {
+    console.warn("Failed to parse published theme data:", error);
   }
-
-  // Load only fonts that are actually used in the theme
-  let fontLinkData: FontLinkData[];
-  const fallbackFontFaceDefinitions: string[] = [];
-  const customFontAssets = getCustomFontAssets(overrides);
-  if (!overrides) {
-    // No theme overrides, use only Open Sans (the default font)
-    fontLinkData = generateGoogleFontLinkData({
-      "Open Sans": defaultFonts["Open Sans"],
-    });
-  } else {
-    const { inUseGoogleFonts, googleFontsToLoad } = resolveFontsToLoad(
-      overrides,
-      themeConfig
-    );
-
-    fontLinkData = generateGoogleFontLinkData(googleFontsToLoad);
-    fontLinkData = [
-      ...generateCustomFontLinkData(
-        customFontAssets.stylesheetPaths,
-        relativePrefixToRoot
-      ),
-      ...fontLinkData,
-    ];
-
-    // For each in-use Google Font, look up the corresponding fallback fonts and add to the head
-    Object.keys(inUseGoogleFonts).forEach((fontFamily) => {
-      if (fontFamily in fontFallbackTransformations) {
-        fallbackFontFaceDefinitions.push(
-          (fontFallbackTransformations as Record<string, string[]>)[
-            fontFamily
-          ].join("\n")
-        );
-      }
-    });
-  }
-
-  const fontLinkTags = fontLinkDataToHTML(fontLinkData);
-
-  if (Object.keys(themeConfig).length > 0) {
-    const preloadTags = buildFontPreloadTags(
-      customFontAssets.preloads,
-      relativePrefixToRoot
-    );
-
-    return `${base ?? ""}${preloadTags}${fontLinkTags}<style type="text/css">${fallbackFontFaceDefinitions.join("\n")}</style><style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
-  }
-  return base ?? "";
-};
-
-const internalApplyTheme = (
-  savedThemeValues: ThemeData,
-  themeConfig: ThemeConfig
-): string => {
-  devLogger.logFunc("internalApplyTheme");
-
-  const mergedThemeValues = internalThemeResolver(
-    themeConfig,
-    savedThemeValues
+  const { googleFonts } = resolveThemeFonts(values);
+  // Old metadata must not load assets when the theme contains no new font selections.
+  const hasNewFonts = Object.entries(themeFields).some(
+    ([fieldKey, field]) =>
+      field.type === "fontFamily" &&
+      typeof values[fieldKey] === "string" &&
+      values[fieldKey] !== ""
   );
-
-  if (!mergedThemeValues || Object.keys(mergedThemeValues).length === 0) {
-    return "";
-  }
-
-  const themeValuesToApply = {
-    ...generateContrastingColors(mergedThemeValues),
-    ...mergedThemeValues,
-  };
-
-  devLogger.logData("THEME_VALUES_TO_APPLY", themeValuesToApply);
-
-  return (
-    `.components{` +
-    Object.entries(themeValuesToApply)
-      .filter(([key]) => key.startsWith("--"))
-      .map(([key, value]) => `${key}:${value} !important`)
-      .join(";") +
-    "}"
+  const assets = getCustomFontAssets(hasNewFonts ? values : undefined);
+  const links = [
+    ...generateCustomFontLinkData(assets.stylesheetPaths, relativePrefixToRoot),
+    ...generateGoogleFontLinkData(googleFonts),
+  ];
+  const fallbacks = Object.keys(googleFonts).flatMap(
+    (family) =>
+      (fontFallbackTransformations as Record<string, string[]>)[family] ?? []
   );
-};
-
-/**
- * generateContrastingColors computes whether each color is
- * light or dark and adds a corresponding -contrast value that
- * is either black (for light colors) or white (for dark colors)
- */
-const generateContrastingColors = (themeData: ThemeData) => {
-  const contrastingColors: Record<string, string> = {};
-  Object.entries(themeData).forEach(([cssVariableName, value]) => {
-    if (
-      cssVariableName.includes("--colors") &&
-      !themeData[cssVariableName + "-contrast"] &&
-      value.startsWith("#") &&
-      (value.length === 7 || value.length === 4)
-    ) {
-      const contrastColor = getContrastingColor(value, 12, 400);
-      contrastingColors[cssVariableName + "-contrast"] = contrastColor;
-    }
-  });
-  return contrastingColors;
+  return `${base ?? ""}${buildFontPreloadTags(assets.preloads, relativePrefixToRoot)}${fontLinkDataToHTML(links)}<style type="text/css">${fallbacks.join("\n")}</style><style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(values)}</style>`;
 };
 
 // Helper function to update font links in a document
@@ -214,20 +102,16 @@ let pendingObserver: MutationObserver | null = null;
 
 export const updateThemeInEditor = async (
   newTheme: ThemeData,
-  themeConfig: ThemeConfig,
   isThemeMode: boolean,
   customFonts: FontRegistry = {}
 ) => {
   devLogger.logFunc("updateThemeInEditor");
   pendingObserver?.disconnect();
 
-  const { inUseCustomFonts, googleFontsToLoad } = resolveFontsToLoad(
-    newTheme,
-    themeConfig,
-    customFonts
-  );
+  const { googleFonts: googleFontsToLoad, customFonts: inUseCustomFonts } =
+    resolveThemeFonts(newTheme, customFonts);
 
-  const newThemeTag = internalApplyTheme(newTheme, themeConfig);
+  const newThemeTag = internalApplyTheme(newTheme);
   getOrCreateThemeStyleTag(window.document).textContent = newThemeTag;
 
   // The theme editor loads its parent fonts separately.

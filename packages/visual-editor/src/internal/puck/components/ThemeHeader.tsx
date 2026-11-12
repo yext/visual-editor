@@ -2,7 +2,6 @@ import "../ui/puck.css";
 import React, { useEffect } from "react";
 import { Button } from "../ui/button.tsx";
 import "../../../editor/index.css";
-import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { FontRegistry } from "../../../utils/fonts/visualEditorFonts.ts";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
@@ -29,7 +28,6 @@ type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
   isDevMode: boolean;
   setThemeHistories: (themeHistories: ThemeHistories) => void;
-  themeConfig?: ThemeConfig;
   themeHistories?: ThemeHistories;
   clearThemeHistory: () => void;
   puckInitialHistory: InitialHistory | undefined;
@@ -46,7 +44,6 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     isDevMode,
     setThemeHistories,
     onPublishTheme,
-    themeConfig,
     themeHistories,
     clearThemeHistory,
     puckInitialHistory,
@@ -195,14 +192,11 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
           disabled={themeHistories?.histories?.length === 1}
           onClearLocalChanges={() => {
             clearThemeHistory();
-            if (themeConfig) {
-              updateThemeInEditor(
-                themeHistories?.histories?.[0]?.data as ThemeData,
-                themeConfig,
-                true,
-                customFonts
-              );
-            }
+            updateThemeInEditor(
+              themeHistories?.histories?.[0]?.data as ThemeData,
+              true,
+              customFonts
+            );
             setThemeHistories({
               histories: [
                 {

@@ -1,5 +1,36 @@
+import {
+  cleanup,
+  fireEvent,
+  render as renderComponent,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
+import { Puck } from "@puckeditor/core";
+import {
+  ThemeFieldControl,
+  ThemeFieldsSidebar,
+} from "../internal/puck/components/theme-editor-sidebars/ThemeFieldsSidebar.tsx";
+import { type ThemeField } from "../internal/theme/themeFields.ts";
+import { type FontRegistry } from "../utils/fonts/visualEditorFonts.ts";
+import { InternalThemeEditor } from "../internal/components/InternalThemeEditor.tsx";
+import { TemplatePropsContext } from "../hooks/useDocument.tsx";
+import { generateTemplateMetadata } from "../internal/types/templateMetadata.ts";
+import { type ThemeHistories } from "../internal/types/themeData.ts";
+import {
+  THEME_STYLE_TAG_ID,
+  updateThemeInEditor,
+} from "../utils/applyTheme.ts";
 import React from "react";
-import { describe, expect, expectTypeOf, it } from "vitest";
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  expectTypeOf,
+  it,
+  vi,
+} from "vitest";
 import type {
   ComponentConfig,
   Config,
@@ -592,5 +623,498 @@ describe("YextComponentConfig render types", () => {
     };
     const registry: Config["components"] = { Example: component };
     expect(registry.Example).toBe(component);
+  });
+});
+
+vi.mock("@puckeditor/core", async (importOriginal) => {
+  const original = await importOriginal<typeof import("@puckeditor/core")>();
+  const Puck = (props: React.ComponentProps<typeof original.Puck>) => {
+    const Header = props.overrides?.header;
+    const Fields = props.overrides?.fields;
+    return Header && Fields ? (
+      <original.Puck {...props} iframe={{ enabled: false }}>
+        <Header actions={null} children={null} />
+        <original.Puck.Fields />
+      </original.Puck>
+    ) : (
+      <original.Puck {...props} />
+    );
+  };
+  return { ...original, Puck: Object.assign(Puck, original.Puck) };
+});
+
+describe("theme editor fields", () => {
+  const config = { components: {} };
+  const render = (ui: React.ReactNode) => {
+    const result = renderComponent(
+      <Puck
+        config={config}
+        data={{}}
+        iframe={{ enabled: false }}
+        overrides={{ fields: () => <>{ui}</> }}
+      >
+        <Puck.Fields />
+      </Puck>
+    );
+    (result.container.querySelector(".Puck") as HTMLElement).style.visibility =
+      "visible";
+    return result;
+  };
+  beforeEach(() => {
+    vi.stubGlobal("matchMedia", () => ({
+      matches: true,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    }));
+    const originalError = console.error;
+    vi.spyOn(console, "error").mockImplementation((...args) => {
+      if (!String(args[0]).includes("Could not parse CSS stylesheet"))
+        originalError(...args);
+    });
+    // react-color uses canvas only to paint its checkerboard preview.
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(null);
+  });
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    document.getElementById(THEME_STYLE_TAG_ID)?.remove();
+  });
+  const base = { label: "Test", variable: "--arbitrary" } as const;
+
+  describe("theme field controls", () => {
+    it.each<ThemeField>([
+      { ...base, type: "color", default: "#000000" },
+      { ...base, type: "number", default: 12 },
+      {
+        ...base,
+        type: "select",
+        default: "one",
+        options: [{ label: "One", value: "one" }],
+      },
+      {
+        ...base,
+        type: "fontFamily",
+        default: "'Open Sans', 'Open Sans Fallback', sans-serif",
+      },
+      { ...base, type: "fontWeight", default: "400", fontFamilyKey: "family" },
+      {
+        ...base,
+        type: "fontStyle",
+        default: "normal",
+        fontFamilyKey: "family",
+      },
+    ])("shows the $type default without saving on mount", (field) => {
+      const onChange = vi.fn();
+      render(
+        <ThemeFieldControl
+          fieldKey="test"
+          field={field}
+          values={{}}
+          onChange={onChange}
+        />
+      );
+      expect(onChange).not.toHaveBeenCalled();
+      if (field.type === "number")
+        expect((screen.getByRole("spinbutton") as HTMLInputElement).value).toBe(
+          "12"
+        );
+      if (["select", "fontWeight", "fontStyle"].includes(field.type)) {
+        const select = screen.getByRole("combobox") as HTMLSelectElement;
+        expect(select.selectedOptions[0].label).not.toBe("");
+        expect([...select.options].every((option) => option.value !== "")).toBe(
+          true
+        );
+      }
+    });
+
+    it("selects an option without adding an empty option", () => {
+      const onChange = vi.fn();
+      render(
+        <ThemeFieldControl
+          fieldKey="test"
+          field={{
+            ...base,
+            type: "select",
+            default: "one",
+            options: [
+              { label: "One", value: "one" },
+              { label: "Two", value: "two" },
+            ],
+          }}
+          values={{}}
+          onChange={onChange}
+        />
+      );
+      const select = screen.getByRole("combobox") as HTMLSelectElement;
+      fireEvent.change(select, { target: { value: select.options[1].value } });
+      expect(onChange).toHaveBeenLastCalledWith("two");
+    });
+
+    it("preserves numeric zero instead of replacing it with the default", () => {
+      const onChange = vi.fn();
+      render(
+        <ThemeFieldControl
+          fieldKey="test"
+          field={{ ...base, type: "number", default: 12 }}
+          values={{ test: 0 }}
+          onChange={onChange}
+        />
+      );
+      const input = screen.getByRole("spinbutton") as HTMLInputElement;
+      expect(input.value).toBe("0");
+      fireEvent.change(input, { target: { value: "4" } });
+      expect(onChange).toHaveBeenLastCalledWith(4);
+    });
+
+    it("opens a color picker at its default without saving", () => {
+      const onChange = vi.fn();
+      render(
+        <ThemeFieldControl
+          fieldKey="test"
+          field={{ ...base, type: "color", default: "#000000" }}
+          values={{}}
+          onChange={onChange}
+        />
+      );
+      const trigger = screen.getByRole("button", { name: "Test" });
+      expect((trigger.firstElementChild as HTMLElement).style.background).toBe(
+        "rgb(0, 0, 0)"
+      );
+      fireEvent.click(trigger);
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it("updates dependent font controls from the selected family", () => {
+      const onChange = vi.fn();
+      const customFonts: FontRegistry = {
+        First: { italics: false, weights: [400], fallback: "sans-serif" },
+        Second: { italics: true, weights: [400, 700], fallback: "sans-serif" },
+      };
+      function Harness() {
+        const [family, setFamily] = React.useState("First");
+        return (
+          <>
+            <button onClick={() => setFamily("Second")}>Switch family</button>
+            <ThemeFieldControl
+              fieldKey="test"
+              field={{
+                ...base,
+                type: "fontWeight",
+                default: "400",
+                fontFamilyKey: "family",
+              }}
+              values={{ family }}
+              customFonts={customFonts}
+              onChange={onChange}
+            />
+            <ThemeFieldControl
+              fieldKey="style"
+              field={{
+                ...base,
+                type: "fontStyle",
+                default: "normal",
+                fontFamilyKey: "family",
+              }}
+              values={{ family }}
+              customFonts={customFonts}
+              onChange={onChange}
+            />
+          </>
+        );
+      }
+      render(<Harness />);
+      const [weight, style] = screen.getAllByRole(
+        "combobox"
+      ) as HTMLSelectElement[];
+      expect([...weight.options].map((option) => option.value)).toEqual([
+        "400",
+      ]);
+      expect([...style.options].map((option) => option.value)).toEqual([
+        "normal",
+      ]);
+      fireEvent.click(screen.getByRole("button", { name: "Switch family" }));
+      expect([...weight.options].map((option) => option.value)).toEqual([
+        "400",
+        "700",
+      ]);
+      expect([...style.options].map((option) => option.value)).toEqual([
+        "normal",
+        "italic",
+      ]);
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it("shows the default font and opens its picker without saving", () => {
+      const onChange = vi.fn();
+      render(
+        <ThemeFieldControl
+          fieldKey="test"
+          field={{
+            ...base,
+            type: "fontFamily",
+            default: "'Open Sans', 'Open Sans Fallback', sans-serif",
+          }}
+          values={{}}
+          onChange={onChange}
+        />
+      );
+      fireEvent.click(screen.getByRole("button", { name: "Open Sans" }));
+      expect(screen.getByPlaceholderText("Search fonts...")).toBeTruthy();
+      expect(onChange).not.toHaveBeenCalled();
+      fireEvent.click(screen.getByRole("button", { name: "Roboto" }));
+      expect(onChange).toHaveBeenCalledOnce();
+    });
+
+    it("renders visible input labels and translated font options", async () => {
+      const onThemeChange = vi.fn();
+      render(
+        <ThemeFieldsSidebar themeData={{}} onThemeChange={onThemeChange} />
+      );
+      fireEvent.click(await screen.findByRole("tab", { name: "Typography" }));
+      fireEvent.click(
+        screen.getByRole("button", { name: "Headline / Page Title" })
+      );
+      for (const label of [
+        "Font Size",
+        "Mobile Font Size",
+        "Line Height",
+        "Mobile Line Height",
+        "Letter Spacing",
+        "Text Transform",
+      ]) {
+        const input = screen.getByLabelText(label);
+        expect(input.closest("label")?.textContent).toContain(label);
+      }
+      const options = screen.getAllByRole("option");
+      expect(
+        options.some((option) => option.textContent === "Bold (700)")
+      ).toBe(true);
+      expect(options.some((option) => option.textContent === "Italic")).toBe(
+        true
+      );
+      expect(
+        options.every(
+          (option) => !option.textContent?.includes('"defaultValue"')
+        )
+      ).toBe(true);
+      expect(onThemeChange).not.toHaveBeenCalled();
+    });
+
+    it("renders category tabs and nested groups without saving", async () => {
+      const onThemeChange = vi.fn();
+      const { container } = render(
+        <ThemeFieldsSidebar
+          themeData={{ "--old": "red" }}
+          onThemeChange={onThemeChange}
+        />
+      );
+      expect(
+        (await screen.findAllByRole("tab")).map((tab) => tab.textContent)
+      ).toEqual(["Colors", "Typography", "Buttons and Links", "Page Styles"]);
+      expect(
+        screen
+          .getByRole("tab", { name: "Colors" })
+          .getAttribute("aria-selected")
+      ).toBe("true");
+      expect(
+        screen
+          .getByRole("button", { name: "Page" })
+          .getAttribute("aria-expanded")
+      ).toBe("false");
+      expect(screen.queryByRole("button", { name: "Foreground" })).toBeNull();
+      fireEvent.click(screen.getByRole("button", { name: "Page" }));
+      expect(screen.getByRole("button", { name: "Foreground" })).toBeTruthy();
+      expect(container.querySelectorAll("details")).toHaveLength(0);
+
+      fireEvent.click(screen.getByRole("tab", { name: "Buttons and Links" }));
+      const primaryButton = screen.getByRole("button", {
+        name: "Primary Button",
+      });
+      expect(primaryButton.getAttribute("aria-expanded")).toBe("false");
+      fireEvent.click(primaryButton);
+      const primaryFields = within(primaryButton.parentElement!);
+      expect(
+        primaryFields.queryByRole("button", { name: "Default" })
+      ).toBeNull();
+      expect(
+        primaryFields.getByRole("textbox", { name: "Default Text Decoration" })
+      ).toBeTruthy();
+      expect(
+        primaryFields.getByRole("button", { name: "Default Background Color" })
+      ).toBeTruthy();
+      for (const state of ["Hover", "Active"]) {
+        expect(
+          primaryFields
+            .getByRole("button", { name: state })
+            .getAttribute("aria-expanded")
+        ).toBe("false");
+      }
+      fireEvent.click(primaryFields.getByRole("button", { name: "Hover" }));
+      expect(
+        primaryFields.getByRole("button", { name: "Hover Background Color" })
+      ).toBeTruthy();
+      expect(
+        primaryFields.getByRole("textbox", { name: "Hover Text Decoration" })
+      ).toBeTruthy();
+
+      fireEvent.click(primaryFields.getByRole("button", { name: "Hover" }));
+      expect(
+        primaryFields.queryByRole("button", { name: "Hover Background Color" })
+      ).toBeNull();
+      fireEvent.click(screen.getByRole("tab", { name: "Typography" }));
+      fireEvent.click(screen.getByRole("tab", { name: "Buttons and Links" }));
+      const restoredPrimary = within(
+        screen.getByRole("button", { name: "Primary Button" }).parentElement!
+      );
+      expect(
+        restoredPrimary
+          .getByRole("button", { name: "Hover" })
+          .getAttribute("aria-expanded")
+      ).toBe("false");
+      expect(
+        restoredPrimary
+          .getByRole("button", { name: "Active" })
+          .getAttribute("aria-expanded")
+      ).toBe("false");
+      expect(onThemeChange).not.toHaveBeenCalled();
+    });
+
+    it("saves a nested placeholder field using its existing flat key", async () => {
+      const onThemeChange = vi.fn();
+      render(
+        <ThemeFieldsSidebar
+          themeData={{ colorForeground: "red" }}
+          onThemeChange={onThemeChange}
+        />
+      );
+      fireEvent.click(
+        await screen.findByRole("tab", { name: "Buttons and Links" })
+      );
+      fireEvent.click(screen.getByRole("button", { name: "Primary Button" }));
+      const primaryFields = within(
+        screen.getByRole("button", { name: "Primary Button" }).parentElement!
+      );
+      fireEvent.click(primaryFields.getByRole("button", { name: "Hover" }));
+      fireEvent.change(
+        primaryFields.getByRole("textbox", { name: "Hover Text Decoration" }),
+        { target: { value: "underline" } }
+      );
+      expect(onThemeChange).toHaveBeenCalledOnce();
+      expect(onThemeChange.mock.calls[0][0]).toMatchObject({
+        colorForeground: "red",
+        primaryButtonHoverTextDecoration: "underline",
+        primaryButtonDefaultTextDecoration: "none",
+        primaryButtonActiveTextDecoration: "none",
+      });
+    });
+  });
+
+  const templateProps = { document: {} };
+  const historyConfig = {
+    components: {},
+    root: { fields: { title: { type: "text" as const } } },
+  };
+
+  it("keeps key-based values and default fallbacks through undo, redo, save, and publish", async () => {
+    vi.stubGlobal("matchMedia", () => ({
+      matches: true,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    }));
+    const originalError = console.error;
+    vi.spyOn(console, "error").mockImplementation((...args) => {
+      if (!String(args[0]).includes("Could not parse CSS stylesheet"))
+        originalError(...args);
+    });
+    const save = vi.fn();
+    const publish = vi.fn();
+    const metadata = {
+      ...generateTemplateMetadata(),
+      isDevMode: false,
+      isThemeMode: true,
+      headDeployStatus: "ACTIVE" as const,
+      totalEntityCount: 1,
+    };
+    function Harness() {
+      const [histories, setHistories] = React.useState<ThemeHistories>({
+        histories: [
+          { id: "root", data: {} },
+          { id: "saved", data: JSON.parse('{"colorForeground":"red"}') },
+        ],
+        index: 1,
+      });
+      React.useEffect(() => {
+        void updateThemeInEditor(
+          histories.histories[histories.index].data,
+          true
+        );
+      }, [histories]);
+      return (
+        <TemplatePropsContext.Provider value={templateProps}>
+          <InternalThemeEditor
+            puckConfig={historyConfig}
+            puckInitialHistory={undefined}
+            isLoading={false}
+            templateMetadata={metadata}
+            publishTheme={publish}
+            saveThemeSaveState={save}
+            themeHistories={histories}
+            setThemeHistories={setHistories}
+            clearThemeHistory={vi.fn()}
+            sendDevThemeSaveStateData={vi.fn()}
+            buildThemeLocalStorageKey={() => "theme-history-test"}
+            localDev={false}
+          />
+        </TemplatePropsContext.Provider>
+      );
+    }
+    const { container } = renderComponent(<Harness />);
+    (container.querySelector(".Puck") as HTMLElement).style.visibility =
+      "visible";
+    await screen.findByRole("tab", { name: "Colors" });
+    expect(save).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    await waitFor(() =>
+      expect(
+        document.getElementById(THEME_STYLE_TAG_ID)?.textContent
+      ).toContain("--ve-color-foreground:#000000")
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+    await waitFor(() =>
+      expect(
+        document.getElementById(THEME_STYLE_TAG_ID)?.textContent
+      ).toContain("--ve-color-foreground:red")
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Page" }));
+    fireEvent.click(screen.getByRole("button", { name: "Foreground" }));
+    fireEvent.click(screen.getByTitle("#D0021B"));
+    await waitFor(() => expect(save).toHaveBeenCalledOnce());
+    expect(JSON.parse(save.mock.calls[0][0].payload.history)).toMatchObject({
+      colorForeground: "#d0021b",
+    });
+    fireEvent.keyDown(document, { key: "Escape" });
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    await waitFor(() =>
+      expect(
+        document.getElementById(THEME_STYLE_TAG_ID)?.textContent
+      ).toContain("--ve-color-foreground:red")
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+    await waitFor(() =>
+      expect(
+        document.getElementById(THEME_STYLE_TAG_ID)?.textContent
+      ).toContain("--ve-color-foreground:#d0021b")
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Update 1 Page" }));
+    expect(
+      JSON.parse(publish.mock.calls[0][0].payload.saveThemeData)
+    ).toMatchObject({
+      colorForeground: "#d0021b",
+    });
   });
 });

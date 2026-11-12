@@ -5,13 +5,12 @@ import {
   FieldLabel,
   legacySideBarPlugin,
 } from "@puckeditor/core";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { ThemeEditorRightSidebar } from "../puck/components/theme-editor-sidebars/ThemeEditorRightSidebar.tsx";
-import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
@@ -29,13 +28,21 @@ const devLogger = new DevLogger();
 // Used because we want the sidebar to be hidden
 const legacySidebar = legacySideBarPlugin();
 
+// A stable override component preserves expansion state; context keeps values and callbacks current.
+const ThemeSidebarContext = React.createContext<
+  React.ComponentProps<typeof ThemeEditorRightSidebar> | undefined
+>(undefined);
+const ThemeSidebar = () => {
+  const props = React.useContext(ThemeSidebarContext);
+  return props ? <ThemeEditorRightSidebar {...props} /> : <></>;
+};
+
 type InternalThemeEditorProps = {
   puckConfig: Config;
   puckInitialHistory: InitialHistory | undefined;
   isLoading: boolean;
   templateMetadata: TemplateMetadata;
   publishTheme: (data: any) => void;
-  themeConfig?: ThemeConfig;
   saveThemeSaveState: (data: any) => void;
   themeHistories?: ThemeHistories;
   setThemeHistories: (themeHistory: ThemeHistories) => void;
@@ -53,7 +60,6 @@ export const InternalThemeEditor = ({
   isLoading,
   templateMetadata,
   publishTheme,
-  themeConfig,
   saveThemeSaveState,
   themeHistories,
   setThemeHistories,
@@ -72,15 +78,6 @@ export const InternalThemeEditor = ({
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
     useState<boolean>(false);
-
-  // Puck remounts the sidebar overrides each render so they have to be
-  // wrapped in useCallback to maintain internal state. Refs can be used
-  // to pass parent state into the overrides.
-  const themeHistoriesRef = useRef(themeHistories);
-
-  useEffect(() => {
-    themeHistoriesRef.current = themeHistories;
-  }, [themeHistories]);
 
   useEffect(() => {
     // In theme mode, links should still be hoverable but never navigate.
@@ -109,19 +106,16 @@ export const InternalThemeEditor = ({
   };
 
   const handleThemeChange = (newThemeValues: Record<string, any>) => {
-    if (!themeHistoriesRef.current || !themeConfig) {
+    if (!themeHistories) {
       return;
     }
 
     const newHistory = {
       histories: [
-        ...themeHistoriesRef.current.histories.slice(
-          0,
-          themeHistoriesRef.current.index + 1
-        ),
+        ...themeHistories.histories.slice(0, themeHistories.index + 1),
         { id: uuidv4(), data: newThemeValues },
       ] as ThemeHistory[],
-      index: themeHistoriesRef.current.index + 1,
+      index: themeHistories.index + 1,
     };
 
     if (localDev || templateMetadata.isDevMode) {
@@ -130,12 +124,7 @@ export const InternalThemeEditor = ({
         buildThemeLocalStorageKey(),
         lzstring.compress(JSON.stringify(newHistory.histories))
       );
-      updateThemeInEditor(
-        newThemeValues,
-        themeConfig,
-        true,
-        templateMetadata.customFonts
-      );
+      updateThemeInEditor(newThemeValues, true, templateMetadata.customFonts);
       setThemeHistories(newHistory);
       return;
     }
@@ -159,12 +148,7 @@ export const InternalThemeEditor = ({
       });
     }
 
-    updateThemeInEditor(
-      newThemeValues,
-      themeConfig,
-      true,
-      templateMetadata.customFonts
-    );
+    updateThemeInEditor(newThemeValues, true, templateMetadata.customFonts);
     setThemeHistories(newHistory);
   };
 
@@ -178,63 +162,59 @@ export const InternalThemeEditor = ({
     }
   };
 
-  const fieldsOverride = useCallback(() => {
-    return (
-      <ThemeEditorRightSidebar
-        themeHistoriesRef={themeHistoriesRef}
-        themeConfig={themeConfig}
-        onThemeChange={handleThemeChange}
-        customFonts={templateMetadata.customFonts}
-      />
-    );
-  }, []);
-
   return (
     <EntityTooltipsProvider>
-      <Puck
-        config={puckConfig}
-        fieldTransforms={fieldTransforms}
-        data={{}} // we use puckInitialHistory instead
-        initialHistory={puckInitialHistory}
-        onChange={change}
-        permissions={{
-          drag: false,
-          duplicate: false,
-          delete: false,
-          insert: false,
-          edit: true,
+      <ThemeSidebarContext.Provider
+        value={{
+          themeHistories,
+          onThemeChange: handleThemeChange,
+          customFonts: templateMetadata.customFonts,
         }}
-        plugins={[legacySidebar]}
-        overrides={{
-          componentOverlay: TransformedFieldTooltip,
-          header: () => (
-            <ThemeHeader
-              themeConfig={themeConfig}
-              themeHistories={themeHistories}
-              onPublishTheme={handlePublishTheme}
-              isDevMode={templateMetadata.isDevMode}
-              setThemeHistories={setThemeHistories}
-              clearThemeHistory={clearThemeHistory}
-              puckInitialHistory={puckInitialHistory}
-              clearLocalChangesModalOpen={clearLocalChangesModalOpen}
-              setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
-              totalEntityCount={templateMetadata.totalEntityCount}
-              localDev={localDev}
-              headDeployStatus={templateMetadata.headDeployStatus}
-              customFonts={templateMetadata.customFonts}
-            />
-          ),
-          actionBar: () => <></>,
-          drawer: () => <></>,
-          fields: fieldsOverride,
-          iframe: loadMapboxIntoIframe,
-          // oxlint-disable-next-line no-unused-vars removed all icons from all field labels
-          fieldLabel: ({ icon, children, ...rest }) => (
-            <FieldLabel {...rest}>{children}</FieldLabel>
-          ),
-        }}
-        metadata={metadata}
-      />
+      >
+        <Puck
+          config={puckConfig}
+          fieldTransforms={fieldTransforms}
+          data={{}} // we use puckInitialHistory instead
+          initialHistory={puckInitialHistory}
+          onChange={change}
+          permissions={{
+            drag: false,
+            duplicate: false,
+            delete: false,
+            insert: false,
+            edit: true,
+          }}
+          plugins={[legacySidebar]}
+          overrides={{
+            componentOverlay: TransformedFieldTooltip,
+            header: () => (
+              <ThemeHeader
+                themeHistories={themeHistories}
+                onPublishTheme={handlePublishTheme}
+                isDevMode={templateMetadata.isDevMode}
+                setThemeHistories={setThemeHistories}
+                clearThemeHistory={clearThemeHistory}
+                puckInitialHistory={puckInitialHistory}
+                clearLocalChangesModalOpen={clearLocalChangesModalOpen}
+                setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
+                totalEntityCount={templateMetadata.totalEntityCount}
+                localDev={localDev}
+                headDeployStatus={templateMetadata.headDeployStatus}
+                customFonts={templateMetadata.customFonts}
+              />
+            ),
+            actionBar: () => <></>,
+            drawer: () => <></>,
+            fields: ThemeSidebar,
+            iframe: loadMapboxIntoIframe,
+            // oxlint-disable-next-line no-unused-vars removed all icons from all field labels
+            fieldLabel: ({ icon, children, ...rest }) => (
+              <FieldLabel {...rest}>{children}</FieldLabel>
+            ),
+          }}
+          metadata={metadata}
+        />
+      </ThemeSidebarContext.Provider>
     </EntityTooltipsProvider>
   );
 };

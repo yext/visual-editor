@@ -1,8 +1,14 @@
+import { legacyThemeFontFamilies } from "../../internal/theme/legacyTheme.ts";
+import { readThemeValues } from "../../internal/utils/internalThemeResolver.ts";
+import {
+  themeFields,
+  type ThemeFields,
+} from "../../internal/theme/themeFields.ts";
+import { ThemeData } from "../../internal/types/themeData.ts";
 import { PUCK_PREVIEW_IFRAME_ID, THEME_STYLE_TAG_ID } from "../applyTheme.ts";
 import { StyleSelectOption } from "../themeResolver.ts";
 import { defaultFonts as fontsJs } from "./font_registry.js";
 import { msg } from "../i18n/platform.ts";
-import { ThemeData } from "../../internal/types/themeData.ts";
 import { fontStyleOptions } from "../themeConfigOptions.ts";
 
 const variableFontRegex = /var\((--[^)]+)\)/;
@@ -237,15 +243,13 @@ type getFontWeightParams = {
 };
 
 type getFontStyleParams = {
-  fontCssVariable?: string;
   styleOptions?: StyleSelectOption[];
   fontList?: FontRegistry;
 };
 
 /*
  * getFontWeightOptions returns the available font weights for a CSS variable.
- * It must return synchronously because theme.config processing needs options
- * synchronously.
+ * Component field controls use these options synchronously.
  */
 export const getFontWeightOptions = (options: getFontWeightParams) => {
   const { fontCssVariable, weightOptions = defaultWeightOptions } = options;
@@ -288,39 +292,13 @@ export const getFontWeightOptionsForFontFamily = (
 };
 
 /*
- * getFontStyleOptions returns the available font styles for a CSS variable. It
- * must return synchronously because theme.config processing needs options
- * synchronously.
- */
-export const getFontStyleOptions = (options: getFontStyleParams) => {
-  const { fontCssVariable, styleOptions = fontStyleOptions } = options;
-
-  if (!fontCssVariable || typeof window === "undefined") {
-    return styleOptions;
-  }
-
-  const iframe = document.getElementById(
-    PUCK_PREVIEW_IFRAME_ID
-  ) as HTMLIFrameElement;
-  const styleElement = iframe?.contentDocument?.getElementById(
-    THEME_STYLE_TAG_ID
-  ) as HTMLStyleElement;
-
-  if (!styleElement) {
-    return styleOptions;
-  }
-
-  return filterFontStyles(styleElement, options);
-};
-
-/*
  * getFontStyleOptionsForFontFamily returns the available font styles for a
  * concrete font-family value. It must return synchronously because field
  * rendering needs options synchronously.
  */
 export const getFontStyleOptionsForFontFamily = (
   fontFamilyValue: string | undefined,
-  options: Omit<getFontStyleParams, "fontCssVariable"> = {}
+  options: getFontStyleParams = {}
 ) => {
   const { styleOptions = fontStyleOptions, fontList = defaultFonts } = options;
   const fontName = fontFamilyValue
@@ -402,18 +380,6 @@ const filterFontWeightOptions = (
         Number(weight.value) >= font.minWeight
     );
   }
-};
-
-const filterFontStyles = (
-  styleElement: HTMLStyleElement,
-  {
-    fontCssVariable,
-    styleOptions = fontStyleOptions,
-    fontList = defaultFonts,
-  }: getFontStyleParams
-) => {
-  const fontName = getFontNameFromStyleElement(styleElement, fontCssVariable);
-  return filterFontStyleOptions(fontName, styleOptions, fontList);
 };
 
 const filterFontStyleOptions = (
@@ -502,61 +468,21 @@ const getFontNameFromStyleElement = (
   return fontName;
 };
 
-/**
- * Extracts and parses the font family names from the ThemeData.
- */
-export const extractFontFamiliesFromTheme = (data: ThemeData): string[] => {
-  const fontFamilies = new Set<string>();
-
-  // Iterate over all the keys in the theme data to find font names.
-  for (const key in data) {
-    // searches for keys with "fontFamily" like "--fontFamily-h1-fontFamily"
-    if (typeof key === "string" && key.includes("fontFamily")) {
-      const value = data[key];
-      // key / value looks like "--fontFamily-h1-fontFamily": "'Open Sans', sans-serif"
-      // parses fontName from the value
-      if (typeof value === "string" && value.length > 0) {
-        fontFamilies.add(getFontFamilyFromThemeValue(value, data));
-      }
-    }
-  }
-
-  return [...fontFamilies];
-};
-
-/**
- * Filters the available fonts and custom fonts to only include those actually referenced by the theme.
- * Custom fonts are optional. If provided, the filtered custom fonts are returned.
- *
- * @param data the ThemeData
- * @param availableFonts built-in Google fonts from the repository
- * @param customFonts custom fonts from FontAPIServer
- * @return An object containing two font registries: inUseGoogleFonts and inUseCustomFonts.
- */
-export const filterInUseFontRegistries = (
+export const resolveThemeFonts = (
   data: ThemeData,
-  availableFonts: FontRegistry,
-  customFonts: FontRegistry = {}
-): {
-  inUseGoogleFonts: FontRegistry;
-  inUseCustomFonts: FontRegistry;
-} => {
-  const inUseGoogleFonts: FontRegistry = {};
-  const inUseCustomFonts: FontRegistry = {};
-
-  // For each unique font family found, look it up in the availableFonts map.
-  for (const fontName of extractFontFamiliesFromTheme(data)) {
-    const font = availableFonts[fontName];
-    if (font) {
-      inUseGoogleFonts[fontName] = font;
-      continue;
-    }
-
-    const customFont = customFonts[fontName];
-    if (customFont) {
-      inUseCustomFonts[fontName] = customFont;
-    }
+  customFonts: FontRegistry = {},
+  fields: ThemeFields = themeFields
+) => {
+  const values = readThemeValues(data, fields);
+  const googleFonts: FontRegistry = Object.fromEntries(
+    legacyThemeFontFamilies.map((family) => [family, defaultFonts[family]])
+  );
+  const selectedCustomFonts: FontRegistry = {};
+  for (const [fieldKey, field] of Object.entries(fields)) {
+    if (field.type !== "fontFamily" || !values[fieldKey]) continue;
+    const family = getFontFamilyFromThemeValue(values[fieldKey], {});
+    if (customFonts[family]) selectedCustomFonts[family] = customFonts[family];
+    else if (defaultFonts[family]) googleFonts[family] = defaultFonts[family];
   }
-
-  return { inUseGoogleFonts, inUseCustomFonts };
+  return { googleFonts, customFonts: selectedCustomFonts };
 };

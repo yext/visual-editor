@@ -1,281 +1,103 @@
 import { afterEach, describe, it, expect, vi } from "vitest";
 import {
   applyTheme,
+  internalApplyTheme,
   PUCK_PREVIEW_IFRAME_ID,
   THEME_STYLE_TAG_ID,
   updateThemeInEditor,
 } from "./applyTheme.ts";
-import { ThemeConfig } from "./themeResolver.ts";
-import { StreamDocument } from "./types/StreamDocument.ts";
+import { legacyThemeVariables } from "../internal/theme/legacyTheme.ts";
 
-describe("buildCssOverridesStyle", () => {
-  it("should generate correct CSS with one override in c_theme", () => {
-    const streamDocument: StreamDocument = {
-      siteId: 123,
-      __: {
-        theme: JSON.stringify({ "--colors-palette-text": "red" }),
-      },
-    };
-    const result = applyTheme(streamDocument, "./", themeConfig);
-
-    // Should include Google Font links and the CSS style tag
-    expect(result).toContain("fonts.googleapis.com");
-    expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{'
-    );
-    expect(result).toContain("--colors-palette-text:red !important;");
-    expect(result).toContain(
-      "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;"
-    );
-    expect(result).toContain(
-      "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;"
-    );
-    expect(result).toContain("--borderRadius-border-lg:8px !important;");
-    expect(result).toContain("--borderRadius-border-sm:4px !important");
-  });
-
-  it("should generate correct CSS with multiple overrides in c_theme", () => {
-    const streamDocument: StreamDocument = {
-      siteId: 123,
-      __: {
-        theme: JSON.stringify({
-          "--colors-palette-primary-DEFAULT": "hsl(0 68% 51%)",
-          "--colors-palette-primary-foreground": "hsl(0 0% 100%)",
-          "--fontFamily-h1-fontFamily": "'Roboto', sans-serif",
-          "--fontFamily-h2-fontFamily": "'Yext Custom', serif",
-          __customFontAssets: {
-            stylesheetPaths: ["y-fonts/yextcustom.css"],
-            preloads: [],
-          },
-          "--borderRadius-border-lg": "20px",
-        }),
-      },
-    };
-
-    const result = applyTheme(streamDocument, "./", themeConfig);
-
-    // Should include Google Font links and the CSS style tag
-    expect(result).toContain("fonts.googleapis.com");
-    expect(result).toContain(
-      '<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">'
-    );
-    expect(result).toContain(
-      '<link href="./y-fonts/yextcustom.css" rel="stylesheet">'
-    );
-    expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{'
-    );
-    expect(result).toContain("--colors-palette-text:black !important;");
-    expect(result).toContain(
-      "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;"
-    );
-    expect(result).toContain(
-      "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;"
-    );
-    expect(result).toContain("--borderRadius-border-lg:20px !important;");
-    expect(result).toContain("--borderRadius-border-sm:4px !important");
-  });
-
-  it("should return default values for an empty c_theme field", () => {
-    const result = applyTheme({} as StreamDocument, "./", themeConfig);
-
-    expect(result).toContain("fonts.googleapis.com");
-    expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{' +
-        "--colors-palette-text:black !important;" +
-        "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
-        "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
-        "--borderRadius-border-lg:8px !important;" +
-        "--borderRadius-border-sm:4px !important" +
-        "}</style>"
-    );
-  });
-
-  it("should return font style tag only for fonts in theme", () => {
-    const streamDocument: StreamDocument = {
-      siteId: 123,
-      __: {
-        theme: JSON.stringify({
-          "--fontFamily-button-fontFamily":
-            "'Adamina', 'Adamina Fallback', serif",
-          "--fontFamily-h2-fontFamily":
-            "'Yext Custom', 'Yext Custom Fallback', serif",
-          __customFontAssets: {
-            stylesheetPaths: ["y-fonts/yextcustom.css"],
-            preloads: ["/y-fonts/yextcustom-bold.woff2"],
-          },
-        }),
-      },
-    };
-
-    const result = applyTheme(streamDocument, "./", themeConfig);
-
-    expect(result).toBe(
-      '<link rel="preload" href="/y-fonts/yextcustom-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">\n' +
-        '<link href="./y-fonts/yextcustom.css" rel="stylesheet">\n' +
-        '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
-        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">\n' +
-        '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">' +
-        '<style type="text/css">@font-face {\n  font-family: "Adamina Fallback";\n  src: local(\'Georgia\');\n  ' +
-        "ascent-override: 100.1884%;\n  descent-override: 27.1032%;\n  size-adjust: 106.9985%;\n  font-weight: 400;\n  font-style: regular;\n}</style>" +
-        '<style id="visual-editor-theme" type="text/css">.components{' +
-        "--colors-palette-text:black !important;" +
-        "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
-        "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
-        "--borderRadius-border-lg:8px !important;" +
-        "--borderRadius-border-sm:4px !important;" +
-        "--fontFamily-button-fontFamily:'Adamina', 'Adamina Fallback', serif !important;" +
-        "--fontFamily-h2-fontFamily:'Yext Custom', 'Yext Custom Fallback', serif !important" +
-        "}</style>"
-    );
-  });
-
-  it("should only load custom font stylesheets from __customFontAssets", () => {
-    const streamDocument: StreamDocument = {
-      siteId: 123,
-      __: {
-        theme: JSON.stringify({
-          "--fontFamily-h1-fontFamily":
-            "'EBB_Melvyn_Regular', 'EBB_Melvyn_Regular Fallback', sans-serif",
-          __customFontAssets: {
-            stylesheetPaths: ["y-fonts/ebbmelvynregular.css"],
-            preloads: ["/y-fonts/not-the-right-font-regular.woff2"],
-          },
-        }),
-      },
-    };
-
-    const result = applyTheme(streamDocument, "./", themeConfig);
-
-    expect(result).toContain(
-      '<link href="./y-fonts/ebbmelvynregular.css" rel="stylesheet">'
-    );
-    expect(result).not.toContain("./y-fonts/not-the-right-font.css");
-    expect(result).not.toContain("./y-fonts/ebbmelvynregular-regular.css");
-  });
-
-  it("should not infer custom font stylesheet urls when stylesheetPaths are empty", () => {
-    const streamDocument: StreamDocument = {
-      siteId: 123,
-      __: {
-        theme: JSON.stringify({
-          "--fontFamily-h1-fontFamily":
-            "'EBB_Melvyn_Regular', 'EBB_Melvyn_Regular Fallback', sans-serif",
-          __customFontAssets: {
-            stylesheetPaths: [],
-            preloads: ["/y-fonts/ebbmelvynregular-regular.woff2"],
-          },
-        }),
-      },
-    };
-
-    const result = applyTheme(streamDocument, "./", themeConfig);
-
-    expect(result).not.toContain(
-      '<link href="./y-fonts/ebbmelvynregular.css" rel="stylesheet">'
-    );
-    expect(result).toContain(
-      '<link rel="preload" href="/y-fonts/ebbmelvynregular-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
-    );
-  });
-
-  it("should not include non-css keys in the theme style tag", () => {
-    const streamDocument: StreamDocument = {
-      siteId: 123,
-      __: {
-        theme: JSON.stringify({
-          "--fontFamily-h1-fontFamily": "'Roboto', sans-serif",
-          __customFontAssets: {
-            stylesheetPaths: ["y-fonts/roboto.css"],
-            preloads: ["./y-fonts/roboto-regular.woff2"],
-          },
-        }),
-      },
-    };
-
-    const result = applyTheme(streamDocument, "./", themeConfig);
-
-    expect(result).toContain(
-      '<link rel="preload" href="./y-fonts/roboto-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
-    );
-    expect(result).not.toContain("__customFontAssets");
-  });
-
-  it("should return the base string unmodified when themeConfig is empty", () => {
-    const base = "<style>div{color:blue}</style>";
-    const result = applyTheme({} as StreamDocument, "./", {}, base);
-
-    expect(result).toBe(base);
-  });
-
-  it("should ignore saved values that are no longer in the themeConfig", () => {
-    const streamDocument: StreamDocument = {
-      __: {
-        theme: JSON.stringify({ "--absdag": "red" }),
-      },
-    };
-    const result = applyTheme(streamDocument, "./", themeConfig);
-
-    // Should include Google Font links and the CSS style tag
-    expect(result).toContain("fonts.googleapis.com");
-    expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{'
-    );
-    expect(result).toContain("--colors-palette-text:black !important;");
-    expect(result).toContain(
-      "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;"
-    );
-    expect(result).toContain(
-      "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;"
-    );
-    expect(result).toContain("--borderRadius-border-lg:8px !important;");
-    expect(result).toContain("--borderRadius-border-sm:4px !important");
-  });
-
-  it("should generate contrasting palette colors", () => {
-    const streamDocument: StreamDocument = {
-      __: {
-        theme: JSON.stringify({
-          "--colors-palette-primary": "#7ED321",
-          "--colors-palette-secondary": "#305af3",
-        }),
-      },
-    };
-    const result = applyTheme(streamDocument, "./", {
-      palette: {
-        label: "Colors",
-        styles: {
-          primary: {
-            label: "Primary",
-            plugin: "colors",
-            type: "color",
-            default: "#000000",
-          },
-          secondary: {
-            label: "Secondary",
-            plugin: "colors",
-            type: "color",
-            default: "#000000",
-          },
+describe("fixed theme application", () => {
+  it("applies frozen defaults and only recognized new field values", () => {
+    const result = applyTheme(
+      {
+        __: {
+          theme: JSON.stringify({
+            colorForeground: "#123456",
+            "--colors-palette-primary": "#abcdef",
+            "--unknown": "red",
+          }),
         },
       },
-    });
-
-    // Should include Google Font links and the CSS style tag
+      "./",
+      "base"
+    );
+    expect(result.startsWith("base")).toBe(true);
+    expect(result).toContain("--ve-color-foreground:#123456 !important");
+    expect(result).toContain("--colors-palette-primary:#CF0A2C !important");
+    expect(result).not.toContain("#abcdef");
+    expect(result).not.toContain("--unknown");
+    expect(result).not.toContain("--ve-color-foreground-contrast");
     expect(result).toContain("fonts.googleapis.com");
-    expect(result).toContain(
-      '<style id="visual-editor-theme" type="text/css">.components{'
+  });
+  it("applies variables at the document root and includes the shared CSS", () => {
+    const style = document.createElement("style");
+    style.textContent = internalApplyTheme({ colorForeground: "#123456" });
+    document.head.appendChild(style);
+    try {
+      expect(
+        window
+          .getComputedStyle(document.documentElement)
+          .getPropertyValue("--ve-color-foreground")
+      ).toBe("#123456");
+      const rules = [...style.sheet!.cssRules] as CSSStyleRule[];
+      expect(rules[0].selectorText).toBe(":root");
+      expect(style.textContent).not.toContain(".components{");
+      expect(applyTheme({}, "./")).toContain("--ve-color-foreground:");
+    } finally {
+      style.remove();
+    }
+  });
+  it("emits every frozen declaration, including contrast values", () => {
+    const result = internalApplyTheme();
+    for (const [key, value] of Object.entries(legacyThemeVariables))
+      expect(result).toContain(`${key}:${value} !important`);
+    expect(result).toContain("--colors-palette-primary-contrast:");
+    expect(result).toContain("--ve-color-foreground:#000000 !important");
+  });
+  it("applies the foreground default on published pages without a saved theme", () => {
+    expect(applyTheme({}, "./")).toContain(
+      "--ve-color-foreground:#000000 !important"
     );
-    expect(result).toContain("--colors-palette-primary:#7ED321 !important");
-    expect(result).toContain(
-      "--colors-palette-primary-contrast:#000000 !important"
+  });
+  it("ignores old font assets even when a new color is set", () => {
+    const result = applyTheme(
+      {
+        __: {
+          theme: JSON.stringify({
+            colorForeground: "red",
+            __customFontAssets: {
+              stylesheetPaths: ["old.css"],
+              preloads: ["old.woff2"],
+            },
+          }),
+        },
+      },
+      "./"
     );
-    expect(result).toContain(
-      "--colors-palette-secondary-contrast:#FFFFFF !important"
+    expect(result).not.toContain("old.css");
+    expect(result).not.toContain("old.woff2");
+  });
+  it("handles malformed or non-object published themes", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    for (const theme of ["invalid", "null", "[]"])
+      expect(applyTheme({ __: { theme } }, "./")).toContain(
+        "--colors-palette-primary:#CF0A2C"
+      );
+    warn.mockRestore();
+  });
+  it("restores the field default when reapplying a theme with no saved value", async () => {
+    await updateThemeInEditor({ colorForeground: "red" }, true);
+    expect(document.getElementById(THEME_STYLE_TAG_ID)?.textContent).toContain(
+      "--ve-color-foreground:red"
+    );
+    await updateThemeInEditor({}, true);
+    expect(document.getElementById(THEME_STYLE_TAG_ID)?.textContent).toContain(
+      "--ve-color-foreground:#000000"
     );
   });
 });
-
 describe("updateThemeInEditor", () => {
   afterEach(() => {
     document.getElementById(PUCK_PREVIEW_IFRAME_ID)?.remove();
@@ -296,12 +118,19 @@ describe("updateThemeInEditor", () => {
     iframeStyleTag.id = THEME_STYLE_TAG_ID;
     iframe.contentDocument!.head.appendChild(iframeStyleTag);
 
-    await updateThemeInEditor({}, themeConfig, false);
+    await updateThemeInEditor({ colorForeground: "#123456" }, false);
 
     expect(
       iframe.contentDocument!.querySelectorAll(`#${THEME_STYLE_TAG_ID}`)
     ).toHaveLength(1);
-    expect(iframeStyleTag.textContent).toContain("--colors-palette-text");
+    expect(iframeStyleTag.textContent).toContain(
+      "--ve-color-foreground:#123456"
+    );
+    expect(iframeStyleTag.textContent).toContain(":root{");
+    expect(iframeStyleTag.textContent).toContain("--ve-color-foreground:");
+    expect(document.getElementById(THEME_STYLE_TAG_ID)?.textContent).toBe(
+      iframeStyleTag.textContent
+    );
   });
 
   it("waits for the real iframe theme style tag", async () => {
@@ -309,7 +138,7 @@ describe("updateThemeInEditor", () => {
     iframe.id = PUCK_PREVIEW_IFRAME_ID;
     document.body.appendChild(iframe);
 
-    await updateThemeInEditor({}, themeConfig, false);
+    await updateThemeInEditor({ colorForeground: "#123456" }, false);
 
     expect(
       iframe.contentDocument!.getElementById(THEME_STYLE_TAG_ID)
@@ -322,55 +151,10 @@ describe("updateThemeInEditor", () => {
     document.body.appendChild(mutationTarget);
 
     await vi.waitFor(() => {
-      expect(iframeStyleTag.textContent).toContain("--colors-palette-text");
+      expect(iframeStyleTag.textContent).toContain(
+        "--ve-color-foreground:#123456"
+      );
     });
     mutationTarget.remove();
   });
 });
-
-const themeConfig: ThemeConfig = {
-  palette: {
-    label: "Colors",
-    styles: {
-      text: {
-        label: "Text",
-        plugin: "colors",
-        type: "color",
-        default: "black",
-      },
-      primary: {
-        label: "Primary",
-        plugin: "colors",
-        styles: {
-          DEFAULT: {
-            label: "Default",
-            type: "color",
-            default: "hsl(0 68% 51%)",
-          },
-          foreground: {
-            label: "Default",
-            type: "color",
-            default: "hsl(0 0% 100%)",
-          },
-        },
-      },
-    },
-  },
-  border: {
-    label: "Border Radius",
-    styles: {
-      lg: {
-        label: "Large Border Radius",
-        plugin: "borderRadius",
-        type: "number",
-        default: 8,
-      },
-      sm: {
-        label: "Small Border Radius",
-        plugin: "borderRadius",
-        type: "number",
-        default: 4,
-      },
-    },
-  },
-};

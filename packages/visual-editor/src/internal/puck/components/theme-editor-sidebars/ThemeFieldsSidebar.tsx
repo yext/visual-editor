@@ -1,175 +1,189 @@
 import React from "react";
-import { AutoField } from "@puckeditor/core";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import {
-  ThemeConfig,
-  ThemeConfigSection,
-} from "../../../../utils/themeResolver.ts";
-import { OnThemeChangeFunc, ThemeData } from "../../../types/themeData.ts";
-import {
-  constructThemePuckFields,
-  constructThemePuckValues,
-} from "../../../utils/constructThemePuckFields.ts";
-import { generateCssVariablesFromPuckFields } from "../../../utils/internalThemeResolver.ts";
+  AutoField,
+  FieldGroup,
+  FieldLabel,
+  FieldTab,
+  type Field,
+} from "@puckeditor/core";
 import { pt } from "../../../../utils/i18n/platform.ts";
+import { readThemeValues } from "../../../utils/internalThemeResolver.ts";
+import {
+  themeCategories,
+  type ThemeCategory,
+  type ThemeField,
+  type ThemeFields,
+} from "../../../theme/themeFields.ts";
+import { OnThemeChangeFunc, ThemeData } from "../../../types/themeData.ts";
 import { updateThemeWithCustomFontAssets } from "../../../utils/customFontAssets.ts";
-import { FontRegistry } from "../../../../utils/fonts/visualEditorFonts.ts";
+import {
+  defaultFonts,
+  constructFontSelectOptions,
+  getFontWeightOptionsForFontFamily,
+  getFontStyleOptionsForFontFamily,
+  type FontRegistry,
+} from "../../../../utils/fonts/visualEditorFonts.ts";
+import { ColorSelector } from "../../../../fields/ColorSelector.tsx";
+import { FontSelector } from "../FontSelector.tsx";
+import { FontWeightSelector } from "../FontWeightSelector.tsx";
+import { FontStyleSelector } from "../FontStyleSelector.tsx";
 
 type ThemeFieldsSidebarProps = {
-  themeConfig: ThemeConfig;
   themeData: ThemeData;
   onThemeChange: OnThemeChangeFunc;
   customFonts?: FontRegistry;
 };
 
 export const ThemeFieldsSidebar = ({
-  themeConfig,
   themeData,
   onThemeChange,
   customFonts,
 }: ThemeFieldsSidebarProps) => {
-  const headerSectionKeys = ["h1", "h2", "h3", "h4", "h5", "h6"];
-  const hasHeadersSection = "headers" in themeConfig;
-
-  const handleThemeChange = (
-    themeSectionKey: string,
-    themeSection: ThemeConfigSection,
-    newValue: Record<string, unknown>
-  ) => {
-    let newThemeValues: ThemeData = {
-      ...themeData,
-      ...generateCssVariablesFromPuckFields(
-        newValue,
-        themeSectionKey,
-        themeSection
-      ),
-    };
-
-    newThemeValues = updateThemeWithCustomFontAssets({
-      themeConfig,
-      themeValues: newThemeValues,
-      customFonts,
+  const values = readThemeValues(themeData);
+  const changeField = (key: string, value: string | number) => {
+    if (values[key] === value) return;
+    const next = { ...values, [key]: value };
+    onThemeChange(
+      updateThemeWithCustomFontAssets({ themeValues: next, customFonts })
+    );
+  };
+  const renderFields = (fields: ThemeFields = {}) =>
+    Object.entries(fields).map(([fieldKey, field]) => (
+      <FieldGroup.Item key={fieldKey}>
+        <ThemeFieldControl
+          fieldKey={fieldKey}
+          field={field}
+          values={values}
+          customFonts={customFonts}
+          onChange={(value) => changeField(fieldKey, value)}
+        />
+      </FieldGroup.Item>
+    ));
+  const renderGroups = (
+    categories: Readonly<Record<string, ThemeCategory>>,
+    parentKey: string,
+    nested = false
+  ): React.ReactNode =>
+    Object.entries(categories).map(([categoryKey, category]) => {
+      const groupKey = `${parentKey}.${categoryKey}`;
+      return (
+        <FieldGroup
+          key={categoryKey}
+          id={groupKey}
+          label={pt(category.label)}
+          variant={nested ? "flush" : "card"}
+        >
+          {renderFields(category.fields)}
+          {renderGroups(category.subcategories ?? {}, groupKey, true)}
+        </FieldGroup>
+      );
     });
-
-    onThemeChange(newThemeValues);
-  };
-  const [collapsedSections, setCollapsedSections] = React.useState<{
-    [x: string]: boolean;
-  }>(
-    Object.keys(themeConfig).reduce((acc, key) => ({ ...acc, [key]: true }), {})
+  return (
+    <>
+      {Object.entries(themeCategories).map(([categoryKey, category]) => (
+        <FieldTab
+          key={categoryKey}
+          value={categoryKey}
+          label={pt(category.label)}
+        >
+          <div className="theme-fields">
+            {renderFields(category.fields)}
+            {renderGroups(category.subcategories ?? {}, `theme.${categoryKey}`)}
+          </div>
+        </FieldTab>
+      ))}
+    </>
   );
+};
 
-  const toggleSection = (key: string) => {
-    setCollapsedSections((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
-
-  const renderThemeSection = (
-    themeSectionKey: string,
-    themeSection: ThemeConfigSection,
-    extraClassName: string = ""
-  ) => {
-    const field = constructThemePuckFields(themeSection, pt);
-    const values = constructThemePuckValues(
-      themeData,
-      themeSection,
-      themeSectionKey
-    );
-
-    const isCollapsed = collapsedSections[themeSectionKey];
-
-    return (
-      <div
-        key={themeSectionKey}
-        className={`theme-field${extraClassName ? ` ${extraClassName}` : ""}`}
-      >
-        <button
-          className="ve-flex ve-items-center ve-w-full ve-justify-between"
-          onClick={() => toggleSection(themeSectionKey)}
-        >
-          {`${field.label ?? ""}`}
-          <div>
-            {isCollapsed ? <ChevronDown size={12} /> : <ChevronUp size={12} />}
-          </div>
-        </button>
-        {!isCollapsed && (
-          <AutoField
-            field={field}
-            onChange={(value) =>
-              handleThemeChange(themeSectionKey, themeSection, value)
-            }
-            value={values}
-          />
-        )}
-      </div>
-    );
-  };
-
-  // Avoid rendering H1-H6 twice when we also show them nested under Headers.
-  // If the themeConfig has a "headers" section (which it usually will),
-  // we will render H1-H6 as part of that section and skip them in the main loop below.
-  const sectionsToSkip = new Set<string>();
-  if (hasHeadersSection) {
-    headerSectionKeys.forEach((key) => sectionsToSkip.add(key));
-  }
-
-  const headerSection = themeConfig.headers;
-  const renderedSections: JSX.Element[] = [];
-
-  if (hasHeadersSection && headerSection) {
-    const isHeadersCollapsed = collapsedSections.headers;
-    const headerField = constructThemePuckFields(headerSection, pt);
-    const headerValues = constructThemePuckValues(
-      themeData,
-      headerSection,
-      "headers"
-    );
-
-    renderedSections.push(
-      <div key="headers" className="theme-field">
-        <button
-          className="ve-flex ve-items-center ve-w-full ve-justify-between"
-          onClick={() => toggleSection("headers")}
-        >
-          {`${headerField.label ?? ""}`}
-          <div>
-            {isHeadersCollapsed ? (
-              <ChevronDown size={12} />
-            ) : (
-              <ChevronUp size={12} />
-            )}
-          </div>
-        </button>
-        {!isHeadersCollapsed && (
-          <div className="ve-mt-2">
-            <AutoField
-              field={headerField}
-              onChange={(value) =>
-                handleThemeChange("headers", headerSection, value)
-              }
-              value={headerValues}
-            />
-            <div className="ve-mt-3">
-              {headerSectionKeys
-                .filter((key) => key in themeConfig)
-                .map((key) =>
-                  renderThemeSection(key, themeConfig[key], "ve-mt-2")
-                )}
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  Object.entries(themeConfig).forEach(([themeSectionKey, themeSection]) => {
-    if (themeSectionKey === "headers" || sectionsToSkip.has(themeSectionKey)) {
-      return;
+export const ThemeFieldControl = ({
+  fieldKey,
+  field,
+  values,
+  onChange,
+  customFonts = {},
+}: {
+  fieldKey: string;
+  field: ThemeField;
+  values: ThemeData;
+  onChange: (value: string | number) => void;
+  customFonts?: FontRegistry;
+}) => {
+  const value = values[fieldKey] ?? field.default;
+  const fonts = { ...defaultFonts, ...customFonts };
+  const label = pt(field.label);
+  let control: React.ReactNode;
+  switch (field.type) {
+    case "fontFamily":
+      control = (
+        <FontSelector
+          label={label}
+          value={value}
+          onChange={onChange}
+          options={constructFontSelectOptions(fonts)}
+        />
+      );
+      break;
+    case "fontWeight":
+    case "fontStyle": {
+      const family = values[field.fontFamilyKey];
+      const options =
+        field.type === "fontWeight"
+          ? getFontWeightOptionsForFontFamily(family, { fontList: fonts })
+          : getFontStyleOptionsForFontFamily(family, { fontList: fonts });
+      const Selector =
+        field.type === "fontWeight" ? FontWeightSelector : FontStyleSelector;
+      control = (
+        <Selector
+          label={label}
+          value={value}
+          onChange={onChange}
+          options={options.map((option) => ({
+            ...option,
+            label: pt(option.label),
+          }))}
+        />
+      );
+      break;
     }
-    renderedSections.push(renderThemeSection(themeSectionKey, themeSection));
-  });
-
-  return renderedSections;
+    default: {
+      const puckField: Field =
+        field.type === "color"
+          ? {
+              type: "custom",
+              label,
+              render: ColorSelector,
+            }
+          : field.type === "select"
+            ? {
+                type: "select",
+                label,
+                options: field.options.map((option) => ({
+                  ...option,
+                  label: pt(option.label),
+                })),
+              }
+            : field.type === "placeholder"
+              ? { type: "text", label }
+              : { type: "number", label };
+      const input = (
+        <AutoField
+          field={puckField}
+          value={value}
+          onChange={(next) =>
+            onChange(next === "" || next == null ? field.default : next)
+          }
+        />
+      );
+      // AutoField's public API renders inputs without a visible label.
+      // Custom color controls already render their own label.
+      control =
+        field.type === "color" ? (
+          input
+        ) : (
+          <FieldLabel label={label}>{input}</FieldLabel>
+        );
+    }
+  }
+  return control;
 };
