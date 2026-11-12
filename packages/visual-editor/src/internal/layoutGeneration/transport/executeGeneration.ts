@@ -29,6 +29,28 @@ import { getFieldsForSelector } from "../../../editor/yextEntityFieldUtils.ts";
 import { resolveField } from "../../../utils/resolveYextEntityField.ts";
 import { DEFAULT_DISALLOWED_ENTITY_FIELDS } from "../../utils/getFilteredEntityFields.ts";
 
+// For these known types, the model needs the parent field and type,
+// but not the internal child fields.
+const ENTITY_TYPES_WITHOUT_MODEL_CHILDREN = [
+  "hours",
+  "image",
+  "price",
+  "rich_text",
+  "rich_text_v2",
+  "option",
+];
+
+// Runtime configuration and generated metadata are not content for the model.
+// This includes layout/theme data, page-set settings, API configuration,
+// and the signed certified facts payload.
+const ENTITY_FIELDS_EXCLUDED_FROM_MODEL = [
+  "__",
+  "_pageset",
+  "_env",
+  "_yext",
+  "__certified_facts",
+];
+
 /**
  * Create a smaller field schema for the model without changing the full schema
  * used by editor selectors. Sample values are handled separately.
@@ -61,14 +83,9 @@ const compactEntityFields = (
       Object.values(field.definition.type ?? {})[0];
     const children =
       field.children?.fields.length &&
-      ![
-        "hours",
-        "image",
-        "price",
-        "rich_text",
-        "rich_text_v2",
-        "option",
-      ].includes(typeName?.replace(/^type\./, "") ?? "")
+      !ENTITY_TYPES_WITHOUT_MODEL_CHILDREN.includes(
+        typeName?.replace(/^type\./, "") ?? ""
+      )
         ? compactEntityFields(
             {
               fields: field.children.fields,
@@ -104,8 +121,7 @@ const selectEntityValues = (
   for (const field of fields) {
     const fieldValue = (value as Record<string, unknown>)[field.name];
     if (
-      field.name === "__" ||
-      field.name === "_pageset" ||
+      ENTITY_FIELDS_EXCLUDED_FROM_MODEL.includes(field.name) ||
       fieldValue === undefined
     ) {
       continue;
@@ -346,18 +362,20 @@ export const executeGeneration = async (
             compiled.availableComponentNames
           )
         : [];
-    // Apply the picker's root exclusions without changing nested custom fields.
+    // Apply picker exclusions and remove runtime data without changing editor metadata.
     const modelEntityFields = entity
       ? {
           ...entity.fields,
           fields: entity.fields.fields.filter(
-            (field) => !DEFAULT_DISALLOWED_ENTITY_FIELDS.includes(field.name)
+            (field) =>
+              !DEFAULT_DISALLOWED_ENTITY_FIELDS.includes(field.name) &&
+              !ENTITY_FIELDS_EXCLUDED_FROM_MODEL.includes(field.name)
           ),
         }
       : undefined;
     // Use the editor's source and mapping options without filtering on one sample's values.
     const listSources: Record<string, unknown> = {};
-    if (entity) {
+    if (entity && modelEntityFields) {
       for (const componentType of compiled.availableComponentNames) {
         const component = catalog.data.components[componentType];
         const sourceField = component.fields?.data as
@@ -371,7 +389,7 @@ export const executeGeneration = async (
         }
         listSources[componentType] = {
           cardType: component.generation.slottedItemSource.cardType,
-          sources: getFieldsForSelector(entity.fields, sourceField.filter)
+          sources: getFieldsForSelector(modelEntityFields, sourceField.filter)
             .filter(
               (source) =>
                 !sourceField.fixedRepeatedField ||
@@ -396,7 +414,7 @@ export const executeGeneration = async (
                             [
                               name,
                               getFieldsForSelector(
-                                entity.fields,
+                                modelEntityFields,
                                 mapping.filter,
                                 undefined,
                                 source.name

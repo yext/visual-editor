@@ -1044,10 +1044,22 @@ it("when field metadata contains type internals then the model receives a compac
   );
 });
 
-it("when the picker excludes root fields then the model receives only selectable field metadata and sample values", async () => {
+it("when fields are excluded by the picker or contain runtime data then the model omits their metadata and sample values", async () => {
   const entity: NonNullable<GenerationEnvironment["entity"]> = {
     fields: {
-      fields: ["uid", "meta", "slug", "c_product", "c_faqs"].map((name) => ({
+      fields: [
+        "uid",
+        "meta",
+        "slug",
+        "__",
+        "_pageset",
+        "_env",
+        "_yext",
+        "__certified_facts",
+        "c_product",
+        "c_faqs",
+        "pgs_example_Url",
+      ].map((name) => ({
         name,
         displayName: `${name} label`,
         definition: { name, type: {} },
@@ -1066,7 +1078,14 @@ it("when the picker excludes root fields then the model receives only selectable
       uid: "entity-id",
       meta: { locale: "fr" },
       slug: "entity-slug",
+      __: { layout: "Saved layout", theme: "Saved theme" },
+      _pageset: JSON.stringify({ writebackUrlField: "pgs_example_Url" }),
+      _env: { YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: "test-key" },
+      _yext: { contentDeliveryAPIDomain: "https://example.com" },
+      __certified_facts: { signature: "test-signature" },
       c_product: { slug: "product-slug" },
+      pgs_example_Url: "https://example.com/location",
+      notInSchema: "Not sent to the model",
     },
   };
   const originalEntity = structuredClone(entity);
@@ -1102,12 +1121,20 @@ it("when the picker excludes root fields then the model receives only selectable
         children: { fields: [{ name: "slug", definition: {} }] },
       },
       { name: "c_faqs", definition: {} },
+      { name: "pgs_example_Url", definition: {} },
     ],
-    displayNames: { c_product: "c_product label", c_faqs: "c_faqs label" },
+    displayNames: {
+      c_product: "c_product label",
+      c_faqs: "c_faqs label",
+      pgs_example_Url: "pgs_example_Url label",
+    },
   });
   expect(context.entity.previewSample).toEqual({
     locale: "fr",
-    values: { c_product: { slug: "product-slug" } },
+    values: {
+      c_product: { slug: "product-slug" },
+      pgs_example_Url: "https://example.com/location",
+    },
   });
   expect(entity).toEqual(originalEntity);
 });
