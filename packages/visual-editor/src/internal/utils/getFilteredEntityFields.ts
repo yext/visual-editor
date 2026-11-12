@@ -63,7 +63,7 @@ export type EntityFieldTypes =
 
 export type ConstantValueTypes = EntityFieldTypes | "imageOrVideo";
 
-const DEFAULT_DISALLOWED_ENTITY_FIELDS = ["uid", "meta", "slug"];
+export const DEFAULT_DISALLOWED_ENTITY_FIELDS = ["uid", "meta", "slug"];
 const ENTITY_FIELD_TYPE_COMPATIBILITY: Partial<
   Record<EntityFieldTypes, EntityFieldTypes[]>
 > = {

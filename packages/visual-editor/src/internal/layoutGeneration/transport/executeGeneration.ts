@@ -27,8 +27,20 @@ import type {
 import type { YextFieldDefinition } from "../../../fields/fields.ts";
 import { getFieldsForSelector } from "../../../editor/yextEntityFieldUtils.ts";
 import { resolveField } from "../../../utils/resolveYextEntityField.ts";
+import { DEFAULT_DISALLOWED_ENTITY_FIELDS } from "../../utils/getFilteredEntityFields.ts";
 
-/** Copy model field metadata without changing the schema used by editor selectors. */
+/**
+ * Create a smaller field schema for the model without changing the full schema
+ * used by editor selectors. Sample values are handled separately.
+ *
+ * Keep field names, type names, list status, and nested custom fields. Keep useful
+ * labels once in `displayNames`, keyed by full field path. Omit labels that only
+ * repeat the field name or path.
+ *
+ * Omit registry identifiers, full type definitions, option tables, and option
+ * formatting details. For known types such as hours, images, prices, rich text,
+ * and options, keep the parent field and type but omit their internal children.
+ */
 const compactEntityFields = (
   entityFields: StreamFields,
   parentPath = ""
@@ -334,6 +346,15 @@ export const executeGeneration = async (
             compiled.availableComponentNames
           )
         : [];
+    // Apply the picker's root exclusions without changing nested custom fields.
+    const modelEntityFields = entity
+      ? {
+          ...entity.fields,
+          fields: entity.fields.fields.filter(
+            (field) => !DEFAULT_DISALLOWED_ENTITY_FIELDS.includes(field.name)
+          ),
+        }
+      : undefined;
     // Use the editor's source and mapping options without filtering on one sample's values.
     const listSources: Record<string, unknown> = {};
     if (entity) {
@@ -395,10 +416,10 @@ export const executeGeneration = async (
       context: {
         ...(compiled.context as object),
         ...(recommendedSectionIds.length ? { recommendedSectionIds } : {}),
-        ...(entity
+        ...(entity && modelEntityFields
           ? {
               entity: {
-                fields: compactEntityFields(entity.fields),
+                fields: compactEntityFields(modelEntityFields),
                 listSources,
                 previewSample: {
                   locale:
@@ -407,7 +428,7 @@ export const executeGeneration = async (
                     entity.streamDocument.meta?.locale,
                   values: selectEntityValues(
                     entity.streamDocument,
-                    entity.fields.fields
+                    modelEntityFields.fields
                   ),
                 },
               },

@@ -212,14 +212,14 @@ it("blocks editor actions during generation, then restores them on cancellation"
   expect(generationSignal?.aborted).toBe(true);
 });
 
-it("cancels when entity changes and clears chat when layout changes", async () => {
+it("continues when the preview entity changes and cancels when the layout changes", async () => {
   setup();
   await submit();
   fireEvent.change(screen.getByLabelText("Entity"), {
     target: { value: "two" },
   });
   await screen.findByText("Entity: two");
-  await waitFor(() => expect(generationSignal?.aborted).toBe(true));
+  expect(generationSignal?.aborted).toBe(false);
   expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
   fireEvent.change(screen.getByLabelText("Layout"), {
     target: { value: "other" },

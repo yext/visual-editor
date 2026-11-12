@@ -258,7 +258,9 @@ it("keeps shared card effects from racing streamed updates and resumes manual ba
     <ErrorProvider>
       <TemplatePropsContext.Provider value={{ document: streamDocument }}>
         <LayoutGenerationChatUiContext.Provider
-          value={{ chat: { isGeneratingPage: active } } as any}
+          value={
+            { chat: { isGeneratingPage: active, isStreaming: active } } as any
+          }
         >
           <LayoutGenerationChatContext.Provider value={canvas}>
             <Puck

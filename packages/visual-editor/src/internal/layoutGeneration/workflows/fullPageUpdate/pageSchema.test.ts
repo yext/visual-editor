@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { expect, it, vi } from "vitest";
 import type { Data } from "@puckeditor/core";
+import { createPuckGenerationCatalog } from "../../../../utils/createPuckGenerationCatalog.ts";
 import type { Content } from "../../shared/authoredValues.ts";
 import { creationCatalog, heading } from "../../testing/creationFixtures.ts";
 import { slottedFixture } from "../../testing/slottedFixtures.ts";
@@ -525,3 +526,109 @@ it("when a collection permits no section types then the model cannot insert into
     ).success
   ).toBe(true);
 });
+
+it.each(["insert", "replace"])(
+  "when MainContent is read-only then the model excludes %s in its content",
+  (kind) => {
+    const baseline = fullPageUpdateLayout() as Content;
+    baseline.content[1].readOnly = { content: true };
+    const compiled = compileFullPageUpdateSchema(
+      creationCatalog(),
+      ["en"],
+      baseline
+    );
+    const schema = z.fromJSONSchema(compiled.jsonSchema);
+    expect(
+      compiled.context.inventory.collections.find(
+        (collection) => collection.ownerId === "main"
+      )?.allowedInsertionTypes
+    ).toEqual([]);
+    expect(
+      schema.safeParse(
+        fullPageUpdateResponse([
+          {
+            kind,
+            ...(kind === "insert"
+              ? {
+                  collection: { ownerId: "main", slotPath: "/content" },
+                  anchor: { position: "end" },
+                }
+              : { sectionId: "hero" }),
+            sections: [heading("New section")],
+          },
+        ])
+      ).success
+    ).toBe(false);
+    expect(
+      schema.safeParse(
+        fullPageUpdateResponse([
+          {
+            kind,
+            ...(kind === "insert"
+              ? {
+                  collection: { ownerId: null, slotPath: null },
+                  anchor: { position: "end" },
+                }
+              : { sectionId: "header" }),
+            sections: [heading("New section")],
+          },
+        ])
+      ).success
+    ).toBe(true);
+  }
+);
+
+it.each([false, true])(
+  "when a section has protected descendants then replacement is excluded, with editable sibling: %s",
+  (withSibling) => {
+    const catalog = createPuckGenerationCatalog({
+      Section: {
+        fields: { children: { type: "slot", allow: ["Opaque"] } },
+        layoutGenerationMetadata: {
+          props: z.object({ children: z.array(z.unknown()) }),
+        },
+        defaultProps: { children: [] },
+      },
+      Opaque: {
+        fields: { text: { type: "text" } },
+        layoutGenerationMetadata: { exclude: true },
+      },
+    });
+    const baseline: Content = {
+      content: [
+        {
+          type: "Section",
+          props: {
+            id: "protected",
+            children: [
+              { type: "Opaque", props: { id: "opaque", text: "Protected" } },
+            ],
+          },
+        },
+        ...(withSibling
+          ? [{ type: "Section", props: { id: "editable", children: [] } }]
+          : []),
+      ],
+    };
+    const compiled = compileFullPageUpdateSchema(catalog, ["en"], baseline);
+    const schema = z.fromJSONSchema(compiled.jsonSchema);
+    for (const sectionId of ["protected", "editable"]) {
+      expect(
+        schema.safeParse(
+          fullPageUpdateResponse([
+            {
+              kind: "replace",
+              sectionId,
+              sections: [{ type: "Section", props: { children: [] } }],
+            },
+          ])
+        ).success
+      ).toBe(withSibling && sectionId === "editable");
+    }
+    expect(
+      schema.safeParse(
+        fullPageUpdateResponse([{ kind: "keep", sectionId: "protected" }])
+      ).success
+    ).toBe(true);
+  }
+);

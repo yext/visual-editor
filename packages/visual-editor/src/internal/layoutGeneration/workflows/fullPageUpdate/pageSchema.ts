@@ -7,6 +7,7 @@ import {
   clone,
   extractAuthored,
   validateAuthored,
+  walkAuthored,
   type Content,
 } from "../../shared/authoredValues.ts";
 import { finalizeGeneratedContent } from "../../shared/finalizeGeneratedContent.ts";
@@ -31,16 +32,28 @@ export const compileFullPageUpdateSchema = (
 ) => {
   validateAuthored(catalog, currentData);
   const inventory = buildEditInventory(catalog, currentData);
-  const collections = inventory.collections.filter(
-    (collection) =>
-      collection.ownerId === null ||
-      (collection.slotPath === "/content" &&
-        inventory.components.some(
-          (item) =>
-            item.componentId === collection.ownerId &&
-            item.type === "MainContent"
-        ))
-  );
+  const readOnlyContentIds = new Set<string>();
+  walkAuthored(catalog, currentData, ({ component }) => {
+    if (component.type === "MainContent" && component.readOnly?.content) {
+      readOnlyContentIds.add(component.props.id);
+    }
+  });
+  const collections = inventory.collections
+    .filter(
+      (collection) =>
+        collection.ownerId === null ||
+        (collection.slotPath === "/content" &&
+          inventory.components.some(
+            (item) =>
+              item.componentId === collection.ownerId &&
+              item.type === "MainContent"
+          ))
+    )
+    .map((collection) =>
+      collection.ownerId !== null && readOnlyContentIds.has(collection.ownerId)
+        ? { ...collection, allowedInsertionTypes: [] }
+        : collection
+    );
   const { element, union, exportSchema, nodes, explicitCardLists } =
     createGenerationSchemaCompiler(catalog, locales, "insert", {
       requireExplicitContent: true,
@@ -123,6 +136,7 @@ export const compileFullPageUpdateSchema = (
         .filter(
           (item) =>
             item.componentId === item.sectionId &&
+            item.canRemove &&
             item.collection.ownerId === collection.ownerId &&
             item.collection.slotPath === collection.slotPath
         )

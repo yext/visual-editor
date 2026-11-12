@@ -1043,3 +1043,71 @@ it("when field metadata contains type internals then the model receives a compac
     compileGenerationSchema(catalog, ["en"]).jsonSchema
   );
 });
+
+it("when the picker excludes root fields then the model receives only selectable field metadata and sample values", async () => {
+  const entity: NonNullable<GenerationEnvironment["entity"]> = {
+    fields: {
+      fields: ["uid", "meta", "slug", "c_product", "c_faqs"].map((name) => ({
+        name,
+        displayName: `${name} label`,
+        definition: { name, type: {} },
+        ...(name === "c_product"
+          ? {
+              children: {
+                fields: [
+                  { name: "slug", definition: { name: "slug", type: {} } },
+                ],
+              },
+            }
+          : {}),
+      })),
+    },
+    streamDocument: {
+      uid: "entity-id",
+      meta: { locale: "fr" },
+      slug: "entity-slug",
+      c_product: { slug: "product-slug" },
+    },
+  };
+  const originalEntity = structuredClone(entity);
+  modelResponder.mockResolvedValue(completed(proposal));
+  await executeGeneration(
+    {
+      mode: "create",
+      layoutId: "layout",
+      currentData: { content: [] },
+      messages: [{ role: "user", content: "Create a page" }],
+    },
+    {
+      model: "test",
+      catalog,
+      locales: ["fr"],
+      prompts: testPrompts,
+      generationSettings: testGenerationSettings,
+      entity,
+      transport: responseModelTransport(modelResponder),
+      diagnostics: { log: vi.fn(), report: vi.fn() },
+    },
+    new AbortController().signal,
+    "selectable-entity-context"
+  );
+  const context = JSON.parse(
+    modelResponder.mock.calls[0][0].input.at(-1)!.content
+  ).context;
+  expect(context.entity.fields).toEqual({
+    fields: [
+      {
+        name: "c_product",
+        definition: {},
+        children: { fields: [{ name: "slug", definition: {} }] },
+      },
+      { name: "c_faqs", definition: {} },
+    ],
+    displayNames: { c_product: "c_product label", c_faqs: "c_faqs label" },
+  });
+  expect(context.entity.previewSample).toEqual({
+    locale: "fr",
+    values: { c_product: { slug: "product-slug" } },
+  });
+  expect(entity).toEqual(originalEntity);
+});
