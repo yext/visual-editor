@@ -162,13 +162,13 @@ Available on Locator templates.
 
 #### Other Props
 
-The default radius for nearby-location searches. Leave unset to use Search's
-suggested radius, or 25 in the locale's preferred unit for coordinate searches.
-Visitor-selected distances and explicit map/URL search areas take precedence.
-Geographic boundary filters are unaffected.
+Search the visible map area 500 ms after the user stops a pan or zoom.
+If enabled, hide the Search This Area button.
 
 | Prop                                                                                         | Type                                                                                                                                                                                                                | Description                                                                         | Default                                |
 | :------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------- | :------------------------------------- |
+| `autoSearchOnMapMove`                                                                        | `boolean`                                                                                                                                                                                                           | Search the visible map area 500 ms after the user stops a pan or zoom.              |
+| If enabled, hide the Search This Area button.                                                | `false`                                                                                                                                                                                                             |
 | `defaultSearchRadius`                                                                        | `{ value?: number; unit: "mile" \| "kilometer"; }`                                                                                                                                                                  | The default radius for nearby-location searches. Leave unset to use Search's        |
 | suggested radius, or 25 in the locale's preferred unit for coordinate searches.              |
 | Visitor-selected distances and explicit map/URL search areas take precedence.                |

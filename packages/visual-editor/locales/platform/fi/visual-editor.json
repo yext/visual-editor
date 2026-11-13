@@ -113,6 +113,7 @@
     "align": "Kohdista",
     "analytics": "Analytiikka",
     "ariaLabel": "Aria-merkki",
+    "autoSearchOnMapMove": "Hae automaattisesti kartan liikkeestä",
     "backgroundColor": "Taustaväri",
     "buttonStyles": "Painikkeiden tyylit",
     "buttonText": "Painikkeen teksti",

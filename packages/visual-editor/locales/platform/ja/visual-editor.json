@@ -113,6 +113,7 @@
     "align": "整列",
     "analytics": "分析",
     "ariaLabel": "アリアレーベル",
+    "autoSearchOnMapMove": "地図移動時に自動検索",
     "backgroundColor": "背景色",
     "buttonStyles": "ボタンのスタイル",
     "buttonText": "ボタンのテキスト",
