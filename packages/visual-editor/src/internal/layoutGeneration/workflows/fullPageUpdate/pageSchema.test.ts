@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { expect, it, vi } from "vitest";
 import type { Data } from "@puckeditor/core";
+import { createPuckGenerationCatalog } from "../../../../utils/createPuckGenerationCatalog.ts";
 import type { Content } from "../../shared/authoredValues.ts";
 import { creationCatalog, heading } from "../../testing/creationFixtures.ts";
 import { slottedFixture } from "../../testing/slottedFixtures.ts";
@@ -380,3 +381,254 @@ it("offers no removal operation when the page has no sections", () => {
     ).success
   ).toBe(false);
 });
+
+it.each([
+  {
+    kind: "insert",
+    type: "Header",
+    ownerId: null,
+    sectionId: "header",
+    expected: true,
+  },
+  {
+    kind: "insert",
+    type: "Heading",
+    ownerId: "main",
+    sectionId: "hero",
+    expected: true,
+  },
+  {
+    kind: "insert",
+    type: "Header",
+    ownerId: "main",
+    sectionId: "hero",
+    expected: false,
+  },
+  {
+    kind: "insert",
+    type: "Heading",
+    ownerId: null,
+    sectionId: "header",
+    expected: false,
+  },
+  {
+    kind: "insert",
+    type: "Heading",
+    ownerId: "missing",
+    sectionId: "hero",
+    expected: false,
+  },
+  {
+    kind: "insert",
+    type: "MainContent",
+    ownerId: "main",
+    sectionId: "hero",
+    expected: false,
+  },
+  {
+    kind: "replace",
+    type: "Header",
+    ownerId: null,
+    sectionId: "header",
+    expected: true,
+  },
+  {
+    kind: "replace",
+    type: "Heading",
+    ownerId: "main",
+    sectionId: "hero",
+    expected: true,
+  },
+  {
+    kind: "replace",
+    type: "Header",
+    ownerId: "main",
+    sectionId: "hero",
+    expected: false,
+  },
+  {
+    kind: "replace",
+    type: "Heading",
+    ownerId: null,
+    sectionId: "header",
+    expected: false,
+  },
+])(
+  "when $kind places $type in collection $ownerId then model validity is $expected",
+  ({ kind, type, ownerId, sectionId, expected }) => {
+    const catalog = creationCatalog();
+    catalog.data.components.Header = { ...catalog.data.components.Heading };
+    catalog.puckOptions.rootAllowedComponentIds = ["Header", "MainContent"];
+    const baseline = fullPageUpdateLayout();
+    baseline.content[0].type = "Header";
+    baseline.content[2].type = "Header";
+    const compiled = compileFullPageUpdateSchema(catalog, ["en"], baseline);
+    const response = fullPageUpdateResponse([
+      {
+        kind,
+        ...(kind === "insert"
+          ? {
+              collection: {
+                ownerId,
+                slotPath: ownerId === null ? null : "/content",
+              },
+              anchor: { position: "end" },
+            }
+          : { sectionId }),
+        sections: [
+          {
+            type,
+            props:
+              type === "MainContent"
+                ? { content: [] }
+                : { text: "New section" },
+          },
+        ],
+      },
+    ]);
+    expect(
+      z.fromJSONSchema(compiled.jsonSchema).safeParse(response).success
+    ).toBe(expected);
+  }
+);
+
+it("when a collection permits no section types then the model cannot insert into it", () => {
+  const catalog = creationCatalog();
+  catalog.puckOptions.rootAllowedComponentIds = ["MainContent"];
+  const baseline = fullPageUpdateLayout();
+  baseline.content = baseline.content.filter(
+    (item) => item.type === "MainContent"
+  );
+  const compiled = compileFullPageUpdateSchema(catalog, ["en"], baseline);
+  const schema = z.fromJSONSchema(compiled.jsonSchema);
+  expect(
+    schema.safeParse(
+      fullPageUpdateResponse([
+        {
+          kind: "insert",
+          collection: { ownerId: null, slotPath: null },
+          anchor: { position: "end" },
+          sections: [heading("New section")],
+        },
+      ])
+    ).success
+  ).toBe(false);
+  expect(
+    schema.safeParse(
+      fullPageUpdateResponse([
+        {
+          kind: "insert",
+          collection: { ownerId: "main", slotPath: "/content" },
+          anchor: { position: "end" },
+          sections: [heading("New section")],
+        },
+      ])
+    ).success
+  ).toBe(true);
+});
+
+it.each(["insert", "replace"])(
+  "when MainContent is read-only then the model excludes %s in its content",
+  (kind) => {
+    const baseline = fullPageUpdateLayout() as Content;
+    baseline.content[1].readOnly = { content: true };
+    const compiled = compileFullPageUpdateSchema(
+      creationCatalog(),
+      ["en"],
+      baseline
+    );
+    const schema = z.fromJSONSchema(compiled.jsonSchema);
+    expect(
+      compiled.context.inventory.collections.find(
+        (collection) => collection.ownerId === "main"
+      )?.allowedInsertionTypes
+    ).toEqual([]);
+    expect(
+      schema.safeParse(
+        fullPageUpdateResponse([
+          {
+            kind,
+            ...(kind === "insert"
+              ? {
+                  collection: { ownerId: "main", slotPath: "/content" },
+                  anchor: { position: "end" },
+                }
+              : { sectionId: "hero" }),
+            sections: [heading("New section")],
+          },
+        ])
+      ).success
+    ).toBe(false);
+    expect(
+      schema.safeParse(
+        fullPageUpdateResponse([
+          {
+            kind,
+            ...(kind === "insert"
+              ? {
+                  collection: { ownerId: null, slotPath: null },
+                  anchor: { position: "end" },
+                }
+              : { sectionId: "header" }),
+            sections: [heading("New section")],
+          },
+        ])
+      ).success
+    ).toBe(true);
+  }
+);
+
+it.each([false, true])(
+  "when a section has protected descendants then replacement is excluded, with editable sibling: %s",
+  (withSibling) => {
+    const catalog = createPuckGenerationCatalog({
+      Section: {
+        fields: { children: { type: "slot", allow: ["Opaque"] } },
+        layoutGenerationMetadata: {
+          props: z.object({ children: z.array(z.unknown()) }),
+        },
+        defaultProps: { children: [] },
+      },
+      Opaque: {
+        fields: { text: { type: "text" } },
+        layoutGenerationMetadata: { exclude: true },
+      },
+    });
+    const baseline: Content = {
+      content: [
+        {
+          type: "Section",
+          props: {
+            id: "protected",
+            children: [
+              { type: "Opaque", props: { id: "opaque", text: "Protected" } },
+            ],
+          },
+        },
+        ...(withSibling
+          ? [{ type: "Section", props: { id: "editable", children: [] } }]
+          : []),
+      ],
+    };
+    const compiled = compileFullPageUpdateSchema(catalog, ["en"], baseline);
+    const schema = z.fromJSONSchema(compiled.jsonSchema);
+    for (const sectionId of ["protected", "editable"]) {
+      expect(
+        schema.safeParse(
+          fullPageUpdateResponse([
+            {
+              kind: "replace",
+              sectionId,
+              sections: [{ type: "Section", props: { children: [] } }],
+            },
+          ])
+        ).success
+      ).toBe(withSibling && sectionId === "editable");
+    }
+    expect(
+      schema.safeParse(
+        fullPageUpdateResponse([{ kind: "keep", sectionId: "protected" }])
+      ).success
+    ).toBe(true);
+  }
+);

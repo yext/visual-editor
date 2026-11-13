@@ -24,6 +24,7 @@ import {
 import { layoutGenerationChatPlugin } from "../chat/LayoutGenerationChatPlugin.tsx";
 import { useLayoutGenerationChat } from "../chat/useLayoutGenerationChat.ts";
 import { testGenerationEnvironment } from "./executorFixtures.ts";
+import type { GenerationEnvironment } from "../shared/contracts.ts";
 
 export const layout = (text = "Original"): Data<any, Record<string, any>> => ({
   root: { props: { version: migrationRegistry.length } },
@@ -126,6 +127,7 @@ export const ChatHarness = ({
   entityId = "one",
   config = chatConfig,
   initialData = layout(),
+  entity,
   children,
 }: {
   layoutId?: string;
@@ -133,10 +135,11 @@ export const ChatHarness = ({
   entityId?: string;
   config?: Config;
   initialData?: Data;
+  entity?: GenerationEnvironment["entity"];
   children?: React.ReactNode;
 }) => {
   const chat = useLayoutGenerationChat(
-    testGenerationEnvironment("/local/generate", config),
+    { ...testGenerationEnvironment("/local/generate", config), entity },
     layoutId
   );
   return (

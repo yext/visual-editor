@@ -6,6 +6,7 @@ import React from "react";
 import { act, cleanup, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { useLocalGenerationEnvironment } from "./useLocalGenerationEnvironment.ts";
+import type { GenerationEnvironment } from "../internal/layoutGeneration/shared/contracts.ts";
 import {
   createPuckGenerationCatalog,
   withGenerationCatalog,
@@ -210,3 +211,51 @@ it.each([undefined, { ...testGenerationSettings, attemptTimeoutMs: 0 }])(
     expect(result.current).toBeNull();
   }
 );
+
+it("when the preview sample changes then the environment updates without loading settings again", async () => {
+  const fetchMock = vi.fn(
+    async () =>
+      new Response(
+        JSON.stringify({
+          model: "test",
+          locales: ["en", "fr"],
+          prompts: testPrompts,
+          generationSettings: testGenerationSettings,
+        })
+      )
+  );
+  vi.stubGlobal("fetch", fetchMock);
+  const { result, rerender } = renderHook(
+    ({ entity }: { entity?: GenerationEnvironment["entity"] }) =>
+      useLocalGenerationEnvironment(
+        "/generate",
+        "layout",
+        config,
+        true,
+        entity
+      ),
+    { initialProps: { entity: undefined as GenerationEnvironment["entity"] } }
+  );
+  await waitFor(() => expect(result.current).not.toBeNull());
+  expect(result.current!.entity).toBeUndefined();
+  const transport = result.current!.transport;
+  for (const entity of [
+    { fields: { fields: [] }, streamDocument: { name: "First", locale: "en" } },
+    {
+      fields: {
+        fields: [
+          {
+            name: "name",
+            definition: { name: "name", typeName: "string", type: {} },
+          },
+        ],
+      },
+      streamDocument: { name: "Second", locale: "fr" },
+    },
+  ]) {
+    rerender({ entity });
+    expect(result.current!.entity).toEqual(entity);
+    expect(result.current!.transport).toBe(transport);
+  }
+  expect(fetchMock).toHaveBeenCalledOnce();
+});

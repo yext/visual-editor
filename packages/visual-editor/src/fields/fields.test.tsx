@@ -341,7 +341,7 @@ describe("field transforms", () => {
       type ItemProps = {
         price: YextEntityField<{ value: number; currencyCode: string }>;
         style: StyledPageSectionValue;
-        limit: number | string;
+        limit: number | undefined;
         rows: { label: TranslatableString }[];
       };
       const mappingFields = {
@@ -352,10 +352,9 @@ describe("field transforms", () => {
         },
         style: { type: "styledPageSection" },
         limit: {
-          type: "optionalNumber",
-          hideNumberFieldRadioLabel: "All",
-          showNumberFieldRadioLabel: "Limit",
+          type: "optional",
           defaultCustomValue: 1,
+          field: { type: "number" },
         },
         rows: {
           type: "array",
@@ -419,7 +418,7 @@ describe("field transforms", () => {
           constantValueEnabled: mode !== "linked",
         },
         style: { contentWidth: "960px", verticalPadding: "24px" },
-        limit: "all",
+        limit: undefined,
         rows: [{ label: { defaultValue: "Hello [[name]]" } }],
       };
       const value = {
@@ -592,5 +591,54 @@ describe("YextComponentConfig render types", () => {
     };
     const registry: Config["components"] = { Example: component };
     expect(registry.Example).toBe(component);
+  });
+});
+
+describe("optional field render types", () => {
+  const fields = {
+    value: {
+      type: "optional",
+      defaultCustomValue: {},
+      field: {
+        type: "object",
+        objectFields: {
+          label: { type: "translatableString", transform: true },
+          authored: { type: "translatableString" },
+          rows: {
+            type: "array",
+            arrayFields: {
+              limit: {
+                type: "optional",
+                defaultCustomValue: 5,
+                field: {
+                  type: "number",
+                },
+              },
+              label: { type: "translatableString", transform: true },
+            },
+          },
+        },
+      },
+    },
+  } as const satisfies YextFieldMap;
+
+  it("infers the render types of wrapped fields and nested arrays", () => {
+    type Value = {
+      label: TranslatableString;
+      authored: TranslatableString;
+      rows: { limit?: number; label: TranslatableString }[];
+    };
+    type RenderValue = YextTransformedProps<
+      { value?: Value },
+      typeof fields
+    >["value"];
+    expectTypeOf<RenderValue>().toEqualTypeOf<
+      | {
+          label: string;
+          authored: TranslatableString;
+          rows: { limit?: number; label: string }[];
+        }
+      | undefined
+    >();
   });
 });

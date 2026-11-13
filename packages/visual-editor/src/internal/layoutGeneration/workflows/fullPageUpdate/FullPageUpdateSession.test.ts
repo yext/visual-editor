@@ -299,3 +299,37 @@ it("continues after missing and repeated removals without extra history or resol
   current.session.finish();
   expect(current.commit).toHaveBeenCalledOnce();
 });
+
+it("when an inserted type is prohibited then the session reports placement details and retains completed work", async () => {
+  const current = fullPageUpdateSessionFixture();
+  const signal = new AbortController().signal;
+  await current.session.apply(
+    { kind: "remove", sectionId: "services" },
+    0,
+    signal
+  );
+  const before = clone(current.data());
+  await expect(
+    current.session.apply(
+      {
+        kind: "insert",
+        collection: { ownerId: "main", slotPath: "/content" },
+        anchor: { position: "after", componentId: "hero" },
+        sections: [
+          {
+            type: "Footer",
+            props: { id: "new-footer", text: "Private authored content" },
+          },
+        ],
+      },
+      1,
+      signal
+    )
+  ).rejects.toThrow(
+    'FullPageUpdate step 1 failed: Component type is not permitted in this section collection. Component type: "Footer". Destination: {"ownerId":"main","slotPath":"/content"}. Allowed component types: ["Heading"]. Step references: {"kind":"insert","collection":{"ownerId":"main","slotPath":"/content"},"anchor":{"position":"after","componentId":"hero"}}.'
+  );
+  expect(current.data()).toEqual(before);
+  expect(current.session.stepCount).toBe(1);
+  current.session.finish();
+  expect(current.commit).toHaveBeenCalledOnce();
+});

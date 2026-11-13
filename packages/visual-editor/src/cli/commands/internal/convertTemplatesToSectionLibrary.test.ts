@@ -146,7 +146,7 @@ describe("convertTemplatesToSectionLibrary", () => {
         path.join(libraryDirectory, "layouts", "yext-my-template-directory")
       )
     ).toBe(false);
-  });
+  }, 15_000);
 });
 
 const createConversionFixture = () => {

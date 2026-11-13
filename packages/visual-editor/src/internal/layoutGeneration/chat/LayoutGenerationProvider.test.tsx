@@ -6,7 +6,7 @@ import {
   act,
   cleanup,
   fireEvent,
-  render,
+  render as renderWithoutContext,
   waitFor,
   within,
 } from "@testing-library/react";
@@ -16,12 +16,26 @@ import type { TemplateMetadata } from "../../types/templateMetadata.ts";
 import { LayoutGenerationChatCanvas } from "./LayoutGenerationChatCanvas.ts";
 import { LayoutGenerationProvider } from "./LayoutGenerationProvider.tsx";
 import { LayoutGenerationChat } from "./LayoutGenerationChat.tsx";
+import { EntityFieldsContext } from "../../../hooks/useEntityFields.tsx";
+import { TemplatePropsContext } from "../../../hooks/useDocument.tsx";
 import {
   LayoutGenerationChatContext,
   LayoutGenerationChatUiContext,
 } from "./contexts.tsx";
 
 let ui: React.ContextType<typeof LayoutGenerationChatUiContext>;
+const render = (
+  element: React.ReactNode
+): ReturnType<typeof renderWithoutContext> =>
+  renderWithoutContext(element, {
+    wrapper: ({ children }: { children: React.ReactNode }) => (
+      <EntityFieldsContext.Provider value={null}>
+        <TemplatePropsContext.Provider value={{ document: {} }}>
+          {children}
+        </TemplatePropsContext.Provider>
+      </EntityFieldsContext.Provider>
+    ),
+  });
 const config = { components: {} };
 const metadata = (overrides: Partial<TemplateMetadata> = {}) =>
   ({
@@ -794,4 +808,72 @@ it("shows a refused late intent start even after an earlier regular chat turn", 
   await waitFor(() =>
     expect(result.getByText("Page generation failed.")).toBeTruthy()
   );
+});
+
+it("when entity fields and preview locale change then the next request uses the current sample", async () => {
+  const send = post();
+  vi.spyOn(console, "debug").mockImplementation(() => {});
+  const value = metadata();
+  const panel = (
+    field: string,
+    text: string,
+    locale: string
+  ): React.ReactNode => (
+    <EntityFieldsContext.Provider
+      value={{
+        fields: [
+          {
+            name: field,
+            displayName: "Description",
+            definition: { name: field, typeName: "string", type: {} },
+          },
+        ],
+      }}
+    >
+      <TemplatePropsContext.Provider
+        value={{ document: { [field]: text, locale } }}
+      >
+        {view(value)}
+      </TemplatePropsContext.Provider>
+    </EntityFieldsContext.Provider>
+  );
+  const result = render(panel("c_description", "First sample", "en"));
+  for (const sample of [
+    { field: "c_description", text: "First sample", locale: "en" },
+    { field: "c_summary", text: "Second sample", locale: "fr" },
+  ]) {
+    result.rerender(panel(sample.field, sample.text, sample.locale));
+    await waitFor(() => expect(ui?.chat.ready).toBe(true));
+    send.mockClear();
+    let pending!: Promise<void>;
+    act(() => {
+      pending = ui!.chat.send("Create page");
+    });
+    await waitFor(() => expect(send).toHaveBeenCalled());
+    const request = send.mock.calls
+      .map(([message]) => message)
+      .find((message) => message.type === "aiPageGenerationRequest");
+    expect(
+      JSON.parse(request.payload.body.input.at(-1).content).context.entity
+    ).toEqual({
+      fields: {
+        fields: [
+          {
+            name: sample.field,
+            definition: { typeName: "string" },
+          },
+        ],
+        displayNames: { [sample.field]: "Description" },
+      },
+      previewSample: {
+        locale: sample.locale,
+        values: { [sample.field]: sample.text },
+      },
+      listSources: {},
+    });
+    await act(async () => {
+      ui!.chat.cancel();
+      await pending;
+    });
+  }
 });

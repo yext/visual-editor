@@ -63,6 +63,10 @@ const LayoutGenerationChatCanvasBridge = ({
   streamDocument: StreamDocument;
 }) => {
   const getPuck = useGetPuck();
+  // Update preview resolution without detaching generation when the entity changes.
+  const streamDocumentRef = React.useRef(streamDocument);
+  streamDocumentRef.current = streamDocument;
+  const locale = streamDocument.locale ?? streamDocument.meta?.locale;
   const intent = React.useContext(IntentPageGenerationContext);
   const intentChat = React.useContext(IntentPageGenerationChatContext);
 
@@ -86,7 +90,7 @@ const LayoutGenerationChatCanvasBridge = ({
 
   const follower = React.useMemo(
     () => createPreviewSectionFollower(window.document),
-    [canvas, getPuck, streamDocument, intent]
+    [canvas, getPuck, locale, intent]
   );
 
   const observedData = useDiagnosticPuck((puck) => puck.appState.data);
@@ -214,7 +218,7 @@ const LayoutGenerationChatCanvasBridge = ({
             clonePuckResolveData(data),
             { ...config, components },
             {
-              streamDocument,
+              streamDocument: streamDocumentRef.current,
             }
           );
         },
@@ -288,7 +292,7 @@ const LayoutGenerationChatCanvasBridge = ({
           canvas.readySections(appState.data, data);
         },
       }),
-    [canvas, getPuck, streamDocument, intent, follower]
+    [canvas, getPuck, locale, intent, follower]
   );
   // Detaching the canvas can finalize a preview; cancel its pending scroll too.
   React.useEffect(() => () => follower.stop(), [follower]);

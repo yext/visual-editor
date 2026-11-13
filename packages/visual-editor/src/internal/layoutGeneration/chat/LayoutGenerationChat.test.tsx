@@ -10,7 +10,11 @@ import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { reportChatDiagnostic } from "../../../local-editor/generationDiagnostics.ts";
 import type { SectionEditTask } from "../workflows/edits/types.ts";
-import type { GenerationResult } from "../shared/contracts.ts";
+import type {
+  GenerationEnvironment,
+  GenerationResult,
+  LayoutGenerationRequest,
+} from "../shared/contracts.ts";
 import { GenerationError } from "../shared/generationErrors.ts";
 import {
   ChatHarness,
@@ -241,7 +245,7 @@ describe("strict generation in the editor", () => {
     attach.mockRestore();
   });
 
-  it.each(["entity", "locale"])(
+  it.each(["layout", "locale"])(
     "still cancels a request when the actual %s changes",
     async (context) => {
       const pending = deferredGeneration();
@@ -259,7 +263,7 @@ describe("strict generation in the editor", () => {
       editor.rerender(
         <ChatHarness
           initialData={{ root: {}, content: [] }}
-          entityId={context === "entity" ? "two" : "one"}
+          layoutId={context === "layout" ? "other" : "location"}
           locale={context === "locale" ? "fr" : "en"}
         />
       );
@@ -461,4 +465,94 @@ it("does not rerender editor context consumers when typing a draft", async () =>
   }
   expect((prompt as HTMLTextAreaElement).value).toBe("Next message");
   expect(editorRender).not.toHaveBeenCalled();
+});
+
+it("when the preview entity changes then generation completes with its original sample and follow-up prompts use the current sample", async () => {
+  const firstEntity: NonNullable<GenerationEnvironment["entity"]> = {
+    fields: { fields: [] },
+    streamDocument: { id: "one", name: "First entity", locale: "en" },
+  };
+  const secondEntity: NonNullable<GenerationEnvironment["entity"]> = {
+    fields: { fields: [] },
+    streamDocument: { id: "two", name: "Second entity", locale: "en" },
+  };
+  const preparation = deferredGeneration();
+  const pending = deferredGeneration();
+  const followup = deferredGeneration();
+  let generationSignal!: AbortSignal;
+  const respond = vi.fn(
+    (request: LayoutGenerationRequest, signal: AbortSignal) => {
+      generationSignal = signal;
+      return request.mode === "prepare"
+        ? preparation.promise
+        : request.mode === "create"
+          ? pending.promise
+          : followup.promise;
+    }
+  );
+  stubGenerationExecutor(respond);
+  const resolvedEntity = vi.fn();
+  const config: typeof chatConfig = {
+    ...chatConfig,
+    components: {
+      ...chatConfig.components,
+      Heading: {
+        ...chatConfig.components.Heading,
+        resolveData: (data, params) => {
+          resolvedEntity(params.metadata?.streamDocument?.id);
+          return data;
+        },
+      },
+    },
+  };
+  const initialData = { root: {}, content: [] };
+  const editor = render(
+    <ChatHarness
+      config={config}
+      initialData={initialData}
+      entity={firstEntity}
+    />
+  );
+  await submit();
+  await waitFor(() => expect(respond).toHaveBeenCalledOnce());
+  editor.rerender(
+    <ChatHarness
+      config={config}
+      initialData={initialData}
+      entityId="two"
+      entity={secondEntity}
+    />
+  );
+  expect(generationSignal.aborted).toBe(false);
+  expect(respond).toHaveBeenCalledOnce();
+  await act(async () =>
+    preparation.resolve({
+      type: "prepared",
+      preparation: {
+        question: null,
+        translationMode: "defaultOnly",
+        cardCounts: [],
+      },
+    })
+  );
+  await waitFor(() => expect(respond).toHaveBeenCalledTimes(2));
+  expect(
+    vi
+      .mocked(executeGeneration)
+      .mock.calls.find(([request]) => request.mode === "create")![1].entity
+  ).toBe(firstEntity);
+  await act(async () =>
+    pending.resolve(accepted("Generated heading", "Created"))
+  );
+  await screen.findByText("Generated heading", { selector: "h2" });
+  expect(resolvedEntity).toHaveBeenLastCalledWith("two");
+  await submit();
+  await waitFor(() => expect(respond).toHaveBeenCalledTimes(3));
+  expect(
+    vi
+      .mocked(executeGeneration)
+      .mock.calls.findLast(([request]) => request.mode === "plan")![1].entity
+  ).toBe(secondEntity);
+  editor.unmount();
+  await act(async () => followup.resolve(accepted("Ignored")));
 });

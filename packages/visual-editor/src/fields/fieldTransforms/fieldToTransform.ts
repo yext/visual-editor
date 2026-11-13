@@ -1,4 +1,8 @@
-import type { YextFieldMap, YextPuckField } from "../fields.ts";
+import type {
+  YextFieldDefinition,
+  YextFieldMap,
+  YextPuckField,
+} from "../fields.ts";
 import type { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { resolveField } from "../../utils/resolveYextEntityField.ts";
 import { entityFieldFormatters } from "./entityFieldFormats.ts";
@@ -21,6 +25,7 @@ import {
 export const alwaysTransformedFieldTypes = [
   "code",
   "themeColor",
+  "optional",
 ] as const satisfies readonly YextPuckField["type"][];
 
 export type TransformableField = Extract<
@@ -38,6 +43,14 @@ function resolveItemFields(
   return Object.fromEntries(
     Object.entries(fields).map(([key, field]) => {
       const itemValue = value?.[key];
+      if (field.type === "optional") {
+        return [
+          key,
+          itemValue === undefined
+            ? undefined
+            : transformWrappedField(field.field, itemValue, context, true),
+        ];
+      }
       if (field.type === "object") {
         return [key, resolveItemFields(field.objectFields, itemValue, context)];
       }
@@ -61,6 +74,67 @@ function resolveItemFields(
       ];
     })
   );
+}
+
+/** Apply the wrapped field's own transformation rules without changing saved data. */
+function transformWrappedField(
+  field: YextFieldDefinition,
+  value: any,
+  context: FieldTransformContext,
+  force = false
+): any {
+  if (value === undefined) return undefined;
+  if (field.type === "custom" && field.metadata?.yextField) {
+    return transformWrappedField(
+      field.metadata.yextField,
+      value,
+      context,
+      force
+    );
+  }
+  if (field.type === "object") {
+    if (value === null) return value;
+    return Object.fromEntries(
+      Object.entries(value).map(([key, child]) => [
+        key,
+        field.objectFields[key]
+          ? transformWrappedField(
+              field.objectFields[key],
+              child,
+              context,
+              force
+            )
+          : child,
+      ])
+    );
+  }
+  if (field.type === "array") {
+    if (value === null) return value;
+    return value.map((item: any) =>
+      transformWrappedField(
+        { type: "object", objectFields: field.arrayFields },
+        item,
+        context,
+        force
+      )
+    );
+  }
+  if (field.type === "optional")
+    return transformWrappedField(field.field, value, context, force);
+  if (
+    Object.hasOwn(fieldToTransform, field.type) &&
+    (force ||
+      ("transform" in field && field.transform === true) ||
+      alwaysTransformedFieldTypes.some((type) => type === field.type))
+  ) {
+    const transformField = field as TransformableField;
+    return fieldToTransform[transformField.type](
+      transformField,
+      value,
+      context
+    );
+  }
+  return force ? resolveValue(value, context) : value;
 }
 
 /** Each supported authored field owns its source selection and render-value contract. */
@@ -113,8 +187,10 @@ export const fieldToTransform: Record<
       value === undefined ? [] : [value]
     ),
   ctaSelector: (_field, value, context) => resolveCTAValue(value, context),
-  optionalNumber: (_field, value) =>
-    typeof value === "number" ? value : undefined,
+  optional: (field, value, context) =>
+    field.type === "optional"
+      ? transformWrappedField(field.field, value, context)
+      : value,
   styledText: (_field, value) => resolveStyledText(value),
   styledButton: (_field, value) => resolveStyledButton(value),
   styledLink: (_field, value) => resolveStyledLink(value),

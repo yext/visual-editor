@@ -163,3 +163,41 @@ it("ignores missing and repeated removals without mutating the baseline", () => 
   ).toEqual(removed);
   expect(baseline).toEqual(before);
 });
+
+it.each([
+  { type: "Header", ownerId: "main", expectedAllowed: ["Heading"] },
+  { type: "Heading", ownerId: null, expectedAllowed: ["Header"] },
+  { type: "MainContent", ownerId: "main", expectedAllowed: ["Heading"] },
+])(
+  "when $type is prohibited in collection $ownerId then the error identifies the type and permitted alternatives",
+  ({ type, ownerId, expectedAllowed }) => {
+    const catalog = creationCatalog();
+    catalog.data.components.Header = { ...catalog.data.components.Heading };
+    catalog.puckOptions.rootAllowedComponentIds = ["Header", "MainContent"];
+    const baseline = fullPageUpdateLayout();
+    const before = clone(baseline);
+    const collection = {
+      ownerId,
+      slotPath: ownerId === null ? null : "/content",
+    };
+    expect(() =>
+      applyFullPageUpdateStep(catalog, baseline, {
+        kind: "insert",
+        collection,
+        anchor: { position: "end" },
+        sections: [
+          {
+            type,
+            props: {
+              id: "new-section",
+              text: "Do not include this content in the error",
+            },
+          },
+        ],
+      })
+    ).toThrow(
+      `Component type is not permitted in this section collection. Component type: ${JSON.stringify(type)}. Destination: ${JSON.stringify(collection)}. Allowed component types: ${JSON.stringify(expectedAllowed)}.`
+    );
+    expect(baseline).toEqual(before);
+  }
+);

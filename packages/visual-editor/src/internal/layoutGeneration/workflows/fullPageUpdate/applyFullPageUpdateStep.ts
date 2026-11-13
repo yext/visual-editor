@@ -144,7 +144,7 @@ export const applyFullPageUpdateStep = <T extends Content>(
       !destination.allowedInsertionTypes.includes(component.type)
     )
       throw new Error(
-        "Component type is not permitted in this section collection."
+        `Component type is not permitted in this section collection. Component type: ${JSON.stringify(component.type)}. Destination: ${JSON.stringify(collection)}. Allowed component types: ${JSON.stringify(destination.allowedInsertionTypes)}.`
       );
   }
   const reserved = new Set(
