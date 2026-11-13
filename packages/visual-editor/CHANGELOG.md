@@ -1,3 +1,14 @@
+#### 2.0.0-beta.12 (2026-11-13)
+
+##### Chores
+
+- upgrade playwrite and adjust local layout gen ([#1387](https://github.com/yext/visual-editor/pull/1387)) ([5a337716](https://github.com/yext/visual-editor/commit/5a337716170dd684b7b69ebc27ee992bff3eedbd))
+
+##### New Features
+
+- add optional field type ([#1389](https://github.com/yext/visual-editor/pull/1389)) ([72bb1ee3](https://github.com/yext/visual-editor/commit/72bb1ee36179702cf03db64c209f19e06958c7ce))
+- add new tab option to Locator ([#1385](https://github.com/yext/visual-editor/pull/1385)) ([9bc4e0fb](https://github.com/yext/visual-editor/commit/9bc4e0fb79ac1d17349b6282b904bd9cb55a9768))
+
 #### 2.0.0-beta.11 (2026-11-06)
 
 ##### Bug Fixes
