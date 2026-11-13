@@ -1,4 +1,5 @@
 import { photoGalleryItemSource } from "./0083_photo_gallery_item_source.ts";
+import { locatorDistanceUnit } from "./0084_locator_distance_unit.ts";
 import { MigrationRegistry } from "../../utils/migrate.ts";
 import { adjustPropObjectsMigration } from "./0001_adjust_prop_objects.ts";
 import { addHeadingAlignmentMigration } from "./0002_add_heading_alignment.ts";
@@ -172,4 +173,5 @@ export const migrationRegistry: MigrationRegistry = [
   headerFooterImageFillTypeMigration,
   heroPhoneSlotMigration,
   photoGalleryItemSource,
+  locatorDistanceUnit,
 ];
