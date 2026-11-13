@@ -113,6 +113,7 @@
     "align": "Justera",
     "analytics": "Analys",
     "ariaLabel": "Aria-etikett",
+    "autoSearchOnMapMove": "Sök automatiskt på kartrörelse",
     "backgroundColor": "Bakgrundsfärg",
     "buttonStyles": "Knappstilar",
     "buttonText": "Knapptext",

@@ -113,6 +113,7 @@
     "align": "Allineare",
     "analytics": "Analisi",
     "ariaLabel": "Etichetta Aria",
+    "autoSearchOnMapMove": "Cerca automaticamente sul movimento della mappa",
     "backgroundColor": "Colore di sfondo",
     "buttonStyles": "Stili dei pulsanti",
     "buttonText": "Testo del pulsante",

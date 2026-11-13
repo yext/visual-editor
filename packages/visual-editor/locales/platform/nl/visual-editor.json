@@ -113,6 +113,7 @@
     "align": "Uitlijnen",
     "analytics": "Analyse",
     "ariaLabel": "Aria-label",
+    "autoSearchOnMapMove": "Automatisch zoeken op kaartbeweging",
     "backgroundColor": "Achtergrondkleur",
     "buttonStyles": "Knopstijlen",
     "buttonText": "Knoptekst",

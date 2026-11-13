@@ -113,6 +113,7 @@
     "align": "Zarovnať",
     "analytics": "Analytika",
     "ariaLabel": "Značka Aria",
+    "autoSearchOnMapMove": "Automaticky hľadať pri pohybe mapy",
     "backgroundColor": "Farba pozadia",
     "buttonStyles": "Štýly tlačidiel",
     "buttonText": "Text tlačidla",

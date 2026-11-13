@@ -113,6 +113,7 @@
     "align": "Joonda",
     "analytics": "Analüütika",
     "ariaLabel": "Aria silt",
+    "autoSearchOnMapMove": "Otsige automaatselt kaardil liikumist",
     "backgroundColor": "Taustvärv",
     "buttonStyles": "Nuppude stiilid",
     "buttonText": "Nupu tekst",
