@@ -20,7 +20,7 @@ export const useLocalEditorDocument = (documentRequestPath: string | null) => {
 
       setIsDocumentLoading(true);
       setDocumentError(null);
-      setDocumentResponse(null);
+      // Keep the editor mounted while a different preview entity loads.
 
       try {
         const response = await fetch(documentRequestPath);
@@ -34,6 +34,7 @@ export const useLocalEditorDocument = (documentRequestPath: string | null) => {
         }
       } catch (error) {
         if (isCurrent) {
+          setDocumentResponse(null);
           setDocumentError(
             error instanceof Error ? error.message : String(error)
           );

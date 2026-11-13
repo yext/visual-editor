@@ -17,6 +17,9 @@ import {
   useIntentPageGeneration,
 } from "./useIntentPageGeneration.ts";
 import { useLayoutGenerationChat } from "./useLayoutGenerationChat.ts";
+import { useEntityFields } from "../../../hooks/useEntityFields.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import type { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 
 const generationConfigSchema = z.object({
   prompts: generationPromptBundleSchema,
@@ -37,6 +40,8 @@ export const LayoutGenerationProvider = ({
   localDev = false,
   children,
 }: LayoutGenerationProviderProps) => {
+  const entityFields = useEntityFields();
+  const streamDocument = useDocument<StreamDocument>();
   const scopeKey = JSON.stringify([
     metadata.siteId,
     metadata.templateId,
@@ -96,11 +101,23 @@ export const LayoutGenerationProvider = ({
             generationSettings: generationSettings!,
             catalog: getGenerationCatalog(config),
             locales: metadata.locales,
+            entity: entityFields
+              ? { fields: entityFields, streamDocument }
+              : undefined,
             transport: iframeModelTransport,
             diagnostics: consoleGenerationDiagnostics,
           }
         : null,
-    [enabled, model, config, metadata.locales, prompts, generationSettings]
+    [
+      enabled,
+      model,
+      config,
+      metadata.locales,
+      prompts,
+      generationSettings,
+      entityFields,
+      streamDocument,
+    ]
   );
 
   const chat = useLayoutGenerationChat(

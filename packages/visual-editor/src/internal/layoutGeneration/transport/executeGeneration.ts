@@ -20,6 +20,118 @@ import {
   type CompiledGenerationRequest,
 } from "./modes.ts";
 import { validateGenerationRequest } from "./requestValidation.ts";
+import type {
+  StreamFields,
+  YextSchemaField,
+} from "../../../types/entityFields.ts";
+import type { YextFieldDefinition } from "../../../fields/fields.ts";
+import { getFieldsForSelector } from "../../../editor/yextEntityFieldUtils.ts";
+import { resolveField } from "../../../utils/resolveYextEntityField.ts";
+import { DEFAULT_DISALLOWED_ENTITY_FIELDS } from "../../utils/getFilteredEntityFields.ts";
+
+// For these known types, the model needs the parent field and type,
+// but not the internal child fields.
+const ENTITY_TYPES_WITHOUT_MODEL_CHILDREN = [
+  "hours",
+  "image",
+  "price",
+  "rich_text",
+  "rich_text_v2",
+  "option",
+];
+
+// Runtime configuration and generated metadata are not content for the model.
+// This includes layout/theme data, page-set settings, API configuration,
+// and the signed certified facts payload.
+const ENTITY_FIELDS_EXCLUDED_FROM_MODEL = [
+  "__",
+  "_pageset",
+  "_env",
+  "_yext",
+  "__certified_facts",
+];
+
+/**
+ * Create a smaller field schema for the model without changing the full schema
+ * used by editor selectors. Sample values are handled separately.
+ *
+ * Keep field names, type names, list status, and nested custom fields. Keep useful
+ * labels once in `displayNames`, keyed by full field path. Omit labels that only
+ * repeat the field name or path.
+ *
+ * Omit registry identifiers, full type definitions, option tables, and option
+ * formatting details. For known types such as hours, images, prices, rich text,
+ * and options, keep the parent field and type but omit their internal children.
+ */
+const compactEntityFields = (
+  entityFields: StreamFields,
+  parentPath = ""
+): {
+  fields: Record<string, unknown>[];
+  displayNames: Record<string, string>;
+} => {
+  const displayNames: Record<string, string> = {};
+  const fields = entityFields.fields.map((field) => {
+    const path = parentPath ? `${parentPath}.${field.name}` : field.name;
+    const displayName = entityFields.displayNames?.[path] ?? field.displayName;
+    if (displayName && displayName !== field.name && displayName !== path) {
+      displayNames[path] = displayName;
+    }
+    const typeName =
+      field.definition.typeName ||
+      field.definition.typeRegistryId ||
+      Object.values(field.definition.type ?? {})[0];
+    const children =
+      field.children?.fields.length &&
+      !ENTITY_TYPES_WITHOUT_MODEL_CHILDREN.includes(
+        typeName?.replace(/^type\./, "") ?? ""
+      )
+        ? compactEntityFields(
+            {
+              fields: field.children.fields,
+              displayNames: entityFields.displayNames,
+            },
+            path
+          )
+        : undefined;
+    if (children) {
+      Object.assign(displayNames, children.displayNames);
+    }
+    return {
+      name: field.name,
+      definition: { typeName, isList: field.definition.isList },
+      ...(children ? { children: { fields: children.fields } } : {}),
+    };
+  });
+  return { fields, displayNames };
+};
+
+/** Select schema-listed sample values, including nested objects and list items. */
+const selectEntityValues = (
+  value: unknown,
+  fields: YextSchemaField[]
+): unknown => {
+  if (Array.isArray(value)) {
+    return value.map((item) => selectEntityValues(item, fields));
+  }
+  if (!value || typeof value !== "object") {
+    return value;
+  }
+  const values: Record<string, unknown> = {};
+  for (const field of fields) {
+    const fieldValue = (value as Record<string, unknown>)[field.name];
+    if (
+      ENTITY_FIELDS_EXCLUDED_FROM_MODEL.includes(field.name) ||
+      fieldValue === undefined
+    ) {
+      continue;
+    }
+    values[field.name] = field.children?.fields?.length
+      ? selectEntityValues(fieldValue, field.children.fields)
+      : fieldValue;
+  }
+  return values;
+};
 
 const utf8Bytes = (text: string): number =>
   new TextEncoder().encode(text).byteLength;
@@ -59,12 +171,19 @@ const GENERATION_MODES = {
   },
 };
 
+/**
+ * 1. Validate the request and compile the mode-specific response schema.
+ * 2. Build the model request with layout context and entity sample values.
+ * 3. Read the response stream and validate the complete result.
+ * 4. Report errors and release request resources.
+ */
 export const executeGeneration = async (
   payload: LayoutGenerationRequest,
   {
     model,
     catalog,
     locales,
+    entity,
     prompts,
     generationSettings,
     transport,
@@ -243,11 +362,97 @@ export const executeGeneration = async (
             compiled.availableComponentNames
           )
         : [];
+    // Apply picker exclusions and remove runtime data without changing editor metadata.
+    const modelEntityFields = entity
+      ? {
+          ...entity.fields,
+          fields: entity.fields.fields.filter(
+            (field) =>
+              !DEFAULT_DISALLOWED_ENTITY_FIELDS.includes(field.name) &&
+              !ENTITY_FIELDS_EXCLUDED_FROM_MODEL.includes(field.name)
+          ),
+        }
+      : undefined;
+    // Use the editor's source and mapping options without filtering on one sample's values.
+    const listSources: Record<string, unknown> = {};
+    if (entity && modelEntityFields) {
+      for (const componentType of compiled.availableComponentNames) {
+        const component = catalog.data.components[componentType];
+        const sourceField = component.fields?.data as
+          YextFieldDefinition | undefined;
+        if (
+          !component.generation?.slottedItemSource ||
+          sourceField?.type !== "entityField" ||
+          !sourceField.repeated
+        ) {
+          continue;
+        }
+        listSources[componentType] = {
+          cardType: component.generation.slottedItemSource.cardType,
+          sources: getFieldsForSelector(modelEntityFields, sourceField.filter)
+            .filter(
+              (source) =>
+                !sourceField.fixedRepeatedField ||
+                source.name === sourceField.fixedRepeatedField
+            )
+            .map((source) => {
+              const sampleValue = resolveField<unknown>(
+                entity.streamDocument,
+                source.name
+              ).value;
+              return {
+                field: source.name,
+                displayName: source.displayName,
+                ...(Array.isArray(sampleValue)
+                  ? { sampleItemCount: sampleValue.length }
+                  : {}),
+                mappings: Object.fromEntries(
+                  Object.entries(sourceField.repeated!.mappingFields).flatMap(
+                    ([name, mapping]) =>
+                      mapping.type === "entityField"
+                        ? [
+                            [
+                              name,
+                              getFieldsForSelector(
+                                modelEntityFields,
+                                mapping.filter,
+                                undefined,
+                                source.name
+                              ).map((field) => field.name),
+                            ],
+                          ]
+                        : []
+                  )
+                ),
+              };
+            }),
+        };
+      }
+    }
     const latestUserContent = JSON.stringify({
       request: messages.at(-1)!.content,
-      context: recommendedSectionIds.length
-        ? { ...(compiled.context as object), recommendedSectionIds }
-        : compiled.context,
+      context: {
+        ...(compiled.context as object),
+        ...(recommendedSectionIds.length ? { recommendedSectionIds } : {}),
+        ...(entity && modelEntityFields
+          ? {
+              entity: {
+                fields: compactEntityFields(modelEntityFields),
+                listSources,
+                previewSample: {
+                  locale:
+                    entity.locale ??
+                    entity.streamDocument.locale ??
+                    entity.streamDocument.meta?.locale,
+                  values: selectEntityValues(
+                    entity.streamDocument,
+                    modelEntityFields.fields
+                  ),
+                },
+              },
+            }
+          : {}),
+      },
       ...(mode === "create" && context.preparation
         ? { preparation: context.preparation }
         : {}),

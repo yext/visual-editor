@@ -26,6 +26,7 @@ import {
 } from "../internal/layoutGeneration/testing/executorFixtures.ts";
 import { executeGeneration } from "../internal/layoutGeneration/transport/executeGeneration.ts";
 import { LocalEditorShell } from "./LocalEditorShell.tsx";
+import type { GenerationEnvironment } from "../internal/layoutGeneration/shared/contracts.ts";
 
 vi.mock("../internal/layoutGeneration/transport/executeGeneration.ts", () => ({
   executeGeneration: vi.fn(),
@@ -34,8 +35,10 @@ vi.mock("./useLocalGenerationEnvironment.ts", () => ({
   useLocalGenerationEnvironment: (
     api: string,
     _layoutId: string,
-    config: any
-  ) => testGenerationEnvironment(api, config),
+    config: any,
+    _enabled: boolean,
+    entity: GenerationEnvironment["entity"]
+  ) => ({ ...testGenerationEnvironment(api, config), entity }),
 }));
 vi.mock("../editor/Editor.tsx", () => {
   const ShellPuckOverride = ({ children }: { children: React.ReactNode }) => {
@@ -209,14 +212,14 @@ it("blocks editor actions during generation, then restores them on cancellation"
   expect(generationSignal?.aborted).toBe(true);
 });
 
-it("cancels when entity changes and clears chat when layout changes", async () => {
+it("continues when the preview entity changes and cancels when the layout changes", async () => {
   setup();
   await submit();
   fireEvent.change(screen.getByLabelText("Entity"), {
     target: { value: "two" },
   });
   await screen.findByText("Entity: two");
-  await waitFor(() => expect(generationSignal?.aborted).toBe(true));
+  expect(generationSignal?.aborted).toBe(false);
   expect(screen.getByText("Original", { selector: "h2" })).toBeTruthy();
   fireEvent.change(screen.getByLabelText("Layout"), {
     target: { value: "other" },
@@ -308,4 +311,15 @@ it("allows plugin navigation and cancellation while generation keeps the canvas 
   const restored = new MouseEvent("click", { bubbles: true, cancelable: true });
   input.dispatchEvent(restored);
   expect(restored.defaultPrevented).toBe(false);
+});
+
+it("when preview test data is added then generation uses the loaded entity values", async () => {
+  setup();
+  await submit();
+  const environment = vi.mocked(executeGeneration).mock.calls[0][1];
+  expect(environment.entity).toEqual({
+    fields: { fields: [], displayNames: {} },
+    streamDocument: { name: "one", locale: "en" },
+    locale: "en",
+  });
 });

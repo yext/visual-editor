@@ -49,7 +49,7 @@ export const LayoutPuckOverride = ({
   const document = useDocument();
 
   const isGenerationActive = React.useContext(LayoutGenerationChatUiContext)
-    ?.chat.isGeneratingPage;
+    ?.chat.isStreaming;
   const isGenerationActiveRef = React.useRef(isGenerationActive);
   isGenerationActiveRef.current = isGenerationActive;
 
@@ -103,7 +103,7 @@ export const LayoutPuckOverride = ({
     return () => {
       active = false;
     };
-  }, [getPuck, streamDocument]);
+  }, [getPuck, streamDocument, isGenerationActive]);
 
   return (
     <>
