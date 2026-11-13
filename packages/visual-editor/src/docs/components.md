@@ -162,15 +162,13 @@ Available on Locator templates.
 
 #### Other Props
 
-The default radius for nearby-location searches. Leave unset to use Search's
-suggested radius, or 25 in the locale's preferred unit for coordinate searches.
-Visitor-selected distances and explicit map/URL search areas take precedence.
-Geographic boundary filters are unaffected.
+Unit used before a visitor selects one. Defaults to the page language.
 
 | Prop                                                                                         | Type                                                                                                                                                                                                                | Description                                                                         | Default                                |
 | :------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------- | :------------------------------------- |
+| `defaultDistanceUnit`                                                                        | `DefaultDistanceUnit`                                                                                                                                                                                               | Unit used before a visitor selects one. Defaults to the page language.              |                                        |
 | `defaultSearchRadius`                                                                        | `{ value?: number; unit: "mile" \| "kilometer"; }`                                                                                                                                                                  | The default radius for nearby-location searches. Leave unset to use Search's        |
-| suggested radius, or 25 in the locale's preferred unit for coordinate searches.              |
+| suggested radius, or 25 in the configured default distance unit for coordinate searches.     |
 | Visitor-selected distances and explicit map/URL search areas take precedence.                |
 | Geographic boundary filters are unaffected.                                                  |                                                                                                                                                                                                                     |
 | `distanceDisplay`                                                                            | `DistanceDisplayOption`                                                                                                                                                                                             | Controls which distance value to display on each locator result card.               |                                        |
@@ -185,6 +183,7 @@ Geographic boundary filters are unaffected.
 | `resultCard`                                                                                 | `Array<{ props: LocatorResultCardProps; }>`                                                                                                                                                                         | Props to customize the locator result card component.                               |
 | Controls which fields are displayed and their styling depending on the result's entity type. |
 | The number of entries is locked to the locator entity types for the page set.                |                                                                                                                                                                                                                     |
+| `showDistanceUnitToggle`                                                                     | `boolean`                                                                                                                                                                                                           | Whether visitors can switch the locator between miles and kilometers.               |                                        |
 
 ---
 
