@@ -1,4 +1,2 @@
 @import "@yext/pages-components/style.css";
 @import "./atoms/hours.css";
-@import "./helpers/maybeRTF.css";
-@import "./atoms/fontStyle.css";

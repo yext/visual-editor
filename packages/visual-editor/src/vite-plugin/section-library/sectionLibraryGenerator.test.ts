@@ -196,7 +196,7 @@ describe("generateSectionLibraryFiles", () => {
           })
         )
       ).toBe(
-        '<div><main id="main-content"><div><h2>First</h2><h2>Second</h2></div></main></div>'
+        '<div><main id="main-content" class="ve-theme-page ve-theme-body"><div><h2>First</h2><h2>Second</h2></div></main></div>'
       );
       expect(
         renderToStaticMarkup(

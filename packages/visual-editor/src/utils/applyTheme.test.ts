@@ -8,8 +8,8 @@ import {
 } from "./applyTheme.ts";
 import { legacyThemeVariables } from "../internal/theme/legacyTheme.ts";
 
-describe("fixed theme application", () => {
-  it("applies frozen defaults and only recognized new field values", () => {
+describe("semantic theme application", () => {
+  it("applies semantic defaults and compatibility aliases and only recognized new field values", () => {
     const result = applyTheme(
       {
         __: {
@@ -25,7 +25,9 @@ describe("fixed theme application", () => {
     );
     expect(result.startsWith("base")).toBe(true);
     expect(result).toContain("--ve-color-foreground:#123456 !important");
-    expect(result).toContain("--colors-palette-primary:#CF0A2C !important");
+    expect(result).toContain(
+      "--colors-palette-primary:var(--ve-color-primary) !important"
+    );
     expect(result).not.toContain("#abcdef");
     expect(result).not.toContain("--unknown");
     expect(result).not.toContain("--ve-color-foreground-contrast");
@@ -49,7 +51,7 @@ describe("fixed theme application", () => {
       style.remove();
     }
   });
-  it("emits every frozen declaration, including contrast values", () => {
+  it("emits every compatibility declaration, including contrast values", () => {
     const result = internalApplyTheme();
     for (const [key, value] of Object.entries(legacyThemeVariables))
       expect(result).toContain(`${key}:${value} !important`);
@@ -83,7 +85,7 @@ describe("fixed theme application", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     for (const theme of ["invalid", "null", "[]"])
       expect(applyTheme({ __: { theme } }, "./")).toContain(
-        "--colors-palette-primary:#CF0A2C"
+        "--colors-palette-primary:var(--ve-color-primary)"
       );
     warn.mockRestore();
   });

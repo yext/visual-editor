@@ -43,7 +43,15 @@
   "closesAtTime": "{{time}} itibarıyla kapanıyor",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} itibarıyla kapanıyor",
   "colorPicker": {
-    "open": "Renk seçiciyi aç"
+    "angle": "Açı",
+    "end": "Bitiş rengi",
+    "fill": "Dolgu",
+    "linear": "Doğrusal gradyan",
+    "open": "Renk seçiciyi aç",
+    "radial": "Radyal gradyan",
+    "solid": "Düz renk",
+    "start": "Başlangıç rengi",
+    "stops": "Gradyan renkleri"
   },
   "comingSoon": "Yakında gelecek",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Veri",
     "dataAttributes": "Veri Nitelikleri",
     "dayOfWeekFormat": "Haftanın Günü Biçimi",
+    "defaultForPlacement": "Yerleşim için Varsayılan",
     "directoryListBackgroundColor": "Dizin Listesi Arka Plan Rengi",
     "directoryRootLinkLabel": "Dizin kök bağlantı etiketi",
     "distanceDisplay": "Mesafe Göstergesi",
@@ -145,20 +154,22 @@
     "fontStyle": "Yazı Tipi Stili",
     "headingAlign": "Başlık hizası",
     "headingBackgroundColor": "Başlık Arka Plan Rengi",
-    "headingLevel": "Başlık",
     "hours": "Saat",
     "hoursColumn": "Saat sütunu",
     "html": "HTML",
     "icon": "Simge",
+    "iconColor": "Simge Rengi",
     "icons": "Simgeler",
     "image": "İmaj",
     "imageConstrain": "Görüntü Kısıtlaması",
     "imageFillType": "Görüntü Doldurma Türü",
     "includePhoneHyperlink": "Telefon Köprüsü Ekle",
+    "inheritSurface": "Üst Öğeden Devral",
     "javascript": "JavaScript",
     "key": "Anahtar",
     "keywordsDisplayName": "Anahtar Kelimeler Görünen Ad",
     "label": "Etiket",
+    "labelColor": "Etiket Rengi",
     "latitude": "Enlem",
     "link": "Bağlantı",
     "linkColor": "Bağlantı Rengi",
@@ -307,11 +318,14 @@
     "showRegion": "Bölgeyi Göster",
     "startOfTheWeek": "Haftanın başlangıcı",
     "styles": "Stiller",
+    "surface": "Renk Varyantı",
     "tag": "Etiket",
     "tertiaryHeading": "Üçüncül Başlık",
     "text": "Metin",
+    "textColor": "Metin Rengi",
     "timeFormat": "Zaman biçimi",
     "title": "Başlık",
+    "typographyRole": "Tipografi Stili",
     "value": "Değer",
     "variant": "Varyant",
     "video": "Video",
@@ -557,17 +571,10 @@
       "color3": "Renk 3",
       "color4": "Renk 4"
     },
-    "bodyText": "Gövde metni",
     "borderRadius": "Sınır yarıçapı",
-    "button": "Düğme",
     "colors": {
-      "colors": "Renk",
-      "primary": "Öncelik",
-      "quaternary": "Kuaterner",
       "recommendedColorDescription": "Dinamik varsayılanı kullanarak erişilebilirlik için renk kontrastını optimize edin.",
-      "recommendedDescription": "Bu arka planlarla erişilebilirlik için renk kontrastını optimize edin.",
-      "secondary": "İkincil",
-      "tertiary": "Üçüncül"
+      "recommendedDescription": "Bu arka planlarla erişilebilirlik için renk kontrastını optimize edin."
     },
     "contentWidth": {
       "compact": "Kompakt (768px)",
@@ -577,25 +584,20 @@
       "standard": "Standart (1024px)",
       "wide": "Geniş (1280px)"
     },
-    "defaultFont": "Varsayılan yazı tipi",
     "font": "Yazı tipi",
     "fontSize": "Yazı tipi boyutu",
     "fontWeight": {
       "fontWeight": "Yazı tipi ağırlığı"
     },
-    "headers": "Başlıklar",
-    "image": "İmaj",
     "includeCaret": "Caret dahil",
     "letterSpacing": {
       "letterSpacing": "Mektup aralığı"
     },
-    "links": "Bağlar",
     "options": {
       "circle": "Daire",
       "none": "Hiçbiri",
       "pill": "Hap"
     },
-    "pageSection": "Sayfa bölümü",
     "textTransform": {
       "capitalize": "Baştan çıkarmak",
       "lowercase": "Küçük harf",
@@ -605,8 +607,12 @@
     },
     "topBottomPadding": "Üst/Alt Dolgu"
   },
+  "themeDataEditor": {
+    "description": "Temayı bir JSON nesnesiyle değiştirin. Eksik alanlarda temanın varsayılan değerleri kullanılır.",
+    "invalid": "Tanınan tema alanları ve geçerli değer türleri içeren bir JSON nesnesi girin.",
+    "title": "Tema Verilerini Ayarla"
+  },
   "themeSidebar": {
-    "noTheme": "Tema yönetimi kurmak için lütfen geliştiricinizle iletişime geçin.",
     "warning": "Değişiklikler, tüm site için tüm sayfa kümelerini ve düzenleri etkileyecektir."
   },
   "thursday": "Perşembe",

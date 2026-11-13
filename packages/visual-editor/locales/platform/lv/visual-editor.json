@@ -43,7 +43,15 @@
   "closesAtTime": "Tiek slēgts plkst. {{time}}",
   "closesAtTimeWeek": "Tiek slēgts plkst. {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Atveriet krāsu atlasītāju"
+    "angle": "Leņķis",
+    "end": "Beigu krāsa",
+    "fill": "Aizpildījums",
+    "linear": "Lineāra krāsu pāreja",
+    "open": "Atveriet krāsu atlasītāju",
+    "radial": "Radiāla krāsu pāreja",
+    "solid": "Vienkrāsains",
+    "start": "Sākuma krāsa",
+    "stops": "Pārejas krāsas"
   },
   "comingSoon": "Drīzumā",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Dati",
     "dataAttributes": "Datu atribūti",
     "dayOfWeekFormat": "Nedēļas dienas formāts",
+    "defaultForPlacement": "Izvietojuma noklusējums",
     "directoryListBackgroundColor": "Katalogu saraksta fona krāsa",
     "directoryRootLinkLabel": "Direktorija sakņu saites etiķete",
     "distanceDisplay": "Attāluma displejs",
@@ -145,20 +154,22 @@
     "fontStyle": "Fonta stils",
     "headingAlign": "Virzīšanās izlīdzināšana",
     "headingBackgroundColor": "Virsraksta fona krāsa",
-    "headingLevel": "Virsraksta līmenis",
     "hours": "Laiks",
     "hoursColumn": "Stundu kolonna",
     "html": "HTML",
     "icon": "Ikona",
+    "iconColor": "Ikonas krāsa",
     "icons": "Ikonas",
     "image": "Attēls",
     "imageConstrain": "Attēla ierobežojums",
     "imageFillType": "Attēla aizpildījuma veids",
     "includePhoneHyperlink": "Iekļaujiet tālruņa hipersaiti",
+    "inheritSurface": "Mantot no vecākelementa",
     "javascript": "JavaScript",
     "key": "Atslēga",
     "keywordsDisplayName": "Atslēgvārdi Parādāmais nosaukums",
     "label": "Etiķete",
+    "labelColor": "Etiķetes krāsa",
     "latitude": "Platums",
     "link": "Saite",
     "linkColor": "Saites krāsa",
@@ -307,11 +318,14 @@
     "showRegion": "Rādīt reģionu",
     "startOfTheWeek": "Nedēļas sākums",
     "styles": "Stils",
+    "surface": "Krāsu variants",
     "tag": "Tag",
     "tertiaryHeading": "Terciārā pozīcija",
     "text": "Teksts",
+    "textColor": "Teksta krāsa",
     "timeFormat": "Laika formāts",
     "title": "Nosaukums",
+    "typographyRole": "Tipogrāfijas stils",
     "value": "Vērtība",
     "variant": "Variants",
     "video": "Video",
@@ -564,17 +578,10 @@
       "color3": "3. krāsa",
       "color4": "4. krāsa"
     },
-    "bodyText": "Ķermeņa teksts",
     "borderRadius": "Robežas rādiuss",
-    "button": "Pogas",
     "colors": {
-      "colors": "Krāsas",
-      "primary": "Primārs",
-      "quaternary": "Kvartāra",
       "recommendedColorDescription": "Optimizējiet krāsu kontrastu pieejamībai, izmantojot dinamisko noklusējuma iestatījumu.",
-      "recommendedDescription": "Optimizējiet krāsu kontrastu ar šo fonu.",
-      "secondary": "Sekundārs",
-      "tertiary": "Terciārs"
+      "recommendedDescription": "Optimizējiet krāsu kontrastu ar šo fonu."
     },
     "contentWidth": {
       "compact": "Kompakts (768 pikseļi)",
@@ -584,25 +591,20 @@
       "standard": "Standarts (1024 pikseļi)",
       "wide": "Plats (1280 pikseļi)"
     },
-    "defaultFont": "Noklusējuma fonts",
     "font": "Fonts",
     "fontSize": "Fonta lielums",
     "fontWeight": {
       "fontWeight": "Fonta svars"
     },
-    "headers": "Virsraksti",
-    "image": "Attēls",
     "includeCaret": "Iekļaujiet Caret",
     "letterSpacing": {
       "letterSpacing": "Burtu atstatums"
     },
-    "links": "Saites",
     "options": {
       "circle": "Riņķot",
       "none": "Neviens",
       "pill": "Tablete"
     },
-    "pageSection": "Lapas sadaļa",
     "textTransform": {
       "capitalize": "Izmantot lielo burtu",
       "lowercase": "Mazie burti",
@@ -612,8 +614,12 @@
     },
     "topBottomPadding": "Augšējais/apakšējais polsterējums"
   },
+  "themeDataEditor": {
+    "description": "Aizstājiet motīvu ar JSON objektu. Trūkstošajiem laukiem tiek izmantotas motīva noklusējuma vērtības.",
+    "invalid": "Ievadiet JSON objektu ar atpazītiem motīva laukiem un derīgiem vērtību tipiem.",
+    "title": "Iestatīt motīva datus"
+  },
   "themeSidebar": {
-    "noTheme": "Lūdzu, sazinieties ar savu izstrādātāju, lai iestatītu motīvu pārvaldību.",
     "warning": "Izmaiņas ietekmēs visas lapu kopas un izkārtojumus visai vietnei."
   },
   "thursday": "Ceturtdiena",

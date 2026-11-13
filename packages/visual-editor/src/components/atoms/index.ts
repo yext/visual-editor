@@ -5,9 +5,9 @@ export {
   AccordionTrigger,
 } from "./accordion.tsx";
 export { Background, type BackgroundProps } from "./background.tsx";
-export { Body, type BodyProps, bodyVariants } from "./body.tsx";
-export { Button, type ButtonProps, buttonVariants } from "./button.tsx";
-export { CTA, type CTAVariant } from "./cta.tsx";
+export { Body, type BodyProps } from "./body.tsx";
+export { Button, type ButtonProps, buttonLayoutVariants } from "./button.tsx";
+export { CTA, type CTAProps, type CTAVariant } from "./cta.tsx";
 export {
   DropdownMenu,
   DropdownMenuContent,

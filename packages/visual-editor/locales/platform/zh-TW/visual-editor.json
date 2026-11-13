@@ -43,7 +43,15 @@
   "closesAtTime": "於 {{time}} 關閉",
   "closesAtTimeWeek": "於 {{time}} {{dayOfWeek}} 關閉",
   "colorPicker": {
-    "open": "打開顏色選擇器"
+    "angle": "角度",
+    "end": "結束顏色",
+    "fill": "填滿",
+    "linear": "線性漸層",
+    "open": "打開顏色選擇器",
+    "radial": "放射狀漸層",
+    "solid": "純色",
+    "start": "起始顏色",
+    "stops": "漸層顏色"
   },
   "comingSoon": "即將推出",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "數據",
     "dataAttributes": "數據屬性",
     "dayOfWeekFormat": "週的格式",
+    "defaultForPlacement": "使用位置預設值",
     "directoryListBackgroundColor": "目錄列表背景顏色",
     "directoryRootLinkLabel": "目錄根鏈接標籤",
     "distanceDisplay": "距離顯示",
@@ -145,20 +154,22 @@
     "fontStyle": "字體樣式",
     "headingAlign": "標題對齊",
     "headingBackgroundColor": "標題背景顏色",
-    "headingLevel": "標題水平",
     "hours": "小時",
     "hoursColumn": "小時列",
     "html": "HTML",
     "icon": "圖示",
+    "iconColor": "圖示顏色",
     "icons": "圖示",
     "image": "圖像",
     "imageConstrain": "圖像約束",
     "imageFillType": "影像填充類型",
     "includePhoneHyperlink": "包括電話超鏈接",
+    "inheritSurface": "繼承父層",
     "javascript": "JavaScript",
     "key": "鍵",
     "keywordsDisplayName": "關鍵字顯示名稱",
     "label": "標籤",
+    "labelColor": "標籤顏色",
     "latitude": "緯度",
     "link": "鏈接",
     "linkColor": "連結顏色",
@@ -307,11 +318,14 @@
     "showRegion": "顯示地區",
     "startOfTheWeek": "一周開始",
     "styles": "樣式",
+    "surface": "色彩變體",
     "tag": "標籤",
     "tertiaryHeading": "第三標題",
     "text": "文字",
+    "textColor": "文字顏色",
     "timeFormat": "時間格式",
     "title": "標題",
+    "typographyRole": "排版樣式",
     "value": "值",
     "variant": "變體",
     "video": "影片",
@@ -557,17 +571,10 @@
       "color3": "顏色3",
       "color4": "顏色4"
     },
-    "bodyText": "正文",
     "borderRadius": "邊界半徑",
-    "button": "按鈕",
     "colors": {
-      "colors": "顏色",
-      "primary": "基本的",
-      "quaternary": "第四紀",
       "recommendedColorDescription": "使用動態默認值優化顏色對比度以實現可訪問性。",
-      "recommendedDescription": "優化使用這些背景的可訪問性的顏色對比度。",
-      "secondary": "次要",
-      "tertiary": "第三"
+      "recommendedDescription": "優化使用這些背景的可訪問性的顏色對比度。"
     },
     "contentWidth": {
       "compact": "緊湊（768px）",
@@ -577,25 +584,20 @@
       "standard": "標準（1024px）",
       "wide": "寬（1280px）"
     },
-    "defaultFont": "預設字體",
     "font": "字體",
     "fontSize": "字體大小",
     "fontWeight": {
       "fontWeight": "字體重量"
     },
-    "headers": "標題",
-    "image": "圖像",
     "includeCaret": "包括商店",
     "letterSpacing": {
       "letterSpacing": "字母間距"
     },
-    "links": "鏈接",
     "options": {
       "circle": "圓圈",
       "none": "沒有任何",
       "pill": "丸"
     },
-    "pageSection": "頁面部分",
     "textTransform": {
       "capitalize": "大寫",
       "lowercase": "小寫",
@@ -605,8 +607,12 @@
     },
     "topBottomPadding": "頂部/底部填充"
   },
+  "themeDataEditor": {
+    "description": "以 JSON 物件取代佈景主題。缺少的欄位將使用佈景主題預設值。",
+    "invalid": "請輸入包含可辨識的佈景主題欄位和有效值類型的 JSON 物件。",
+    "title": "設定佈景主題資料"
+  },
   "themeSidebar": {
-    "noTheme": "請聯繫您的開發人員以設置主題管理。",
     "warning": "更改將影響整個站點的所有頁面集和佈局。"
   },
   "thursday": "週四",

@@ -43,7 +43,15 @@
   "closesAtTime": "Suljetaan {{time}}",
   "closesAtTimeWeek": "Suljetaan klo {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Avaa värivalitsin"
+    "angle": "Kulma",
+    "end": "Loppuväri",
+    "fill": "Täyttö",
+    "linear": "Lineaarinen liukuväri",
+    "open": "Avaa värivalitsin",
+    "radial": "Säteittäinen liukuväri",
+    "solid": "Yksivärinen",
+    "start": "Alkuväri",
+    "stops": "Liukuvärin värit"
   },
   "comingSoon": "Tulossa pian",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Tiedot",
     "dataAttributes": "Tietojen attribuutit",
     "dayOfWeekFormat": "Viikonpäivän muoto",
+    "defaultForPlacement": "Sijoittelun oletus",
     "directoryListBackgroundColor": "Hakemistoluettelon taustaväri",
     "directoryRootLinkLabel": "Hakemistojuurilinkin tarra",
     "distanceDisplay": "Etäisyyden näyttö",
@@ -145,20 +154,22 @@
     "fontStyle": "Fonttityyli",
     "headingAlign": "Suuntaviiva",
     "headingBackgroundColor": "Otsikon taustaväri",
-    "headingLevel": "Päätaso",
     "hours": "Tuntia",
     "hoursColumn": "Tuntiasarake",
     "html": "HTML",
     "icon": "Kuvake",
+    "iconColor": "Kuvakkeen väri",
     "icons": "Kuvakkeet",
     "image": "Kuva",
     "imageConstrain": "Kuvarajoitus",
     "imageFillType": "Kuvan täyttötyyppi",
     "includePhoneHyperlink": "Sisällytä puhelimen hyperlinkki",
+    "inheritSurface": "Peri ylätasolta",
     "javascript": "JavaScript",
     "key": "Avain",
     "keywordsDisplayName": "Avainsanat Näyttönimi",
     "label": "Merkitä",
+    "labelColor": "Merkinnän väri",
     "latitude": "Leveysaste",
     "link": "Linkki",
     "linkColor": "Linkin väri",
@@ -307,11 +318,14 @@
     "showRegion": "Näytä alue",
     "startOfTheWeek": "Viikon alku",
     "styles": "Tyylit",
+    "surface": "Värivaihtoehto",
     "tag": "Tag",
     "tertiaryHeading": "Kolmannen asteen otsikko",
     "text": "Teksti",
+    "textColor": "Tekstin väri",
     "timeFormat": "Aikamuoto",
     "title": "Otsikko",
+    "typographyRole": "Typografiatyyli",
     "value": "Arvo",
     "variant": "Variantti",
     "video": "Video",
@@ -557,17 +571,10 @@
       "color3": "Väri 3",
       "color4": "Väri 4"
     },
-    "bodyText": "Kehon teksti",
     "borderRadius": "Reunasäde",
-    "button": "Painike",
     "colors": {
-      "colors": "Värit",
-      "primary": "Ensisijainen",
-      "quaternary": "Kvaternäärinen",
       "recommendedColorDescription": "Optimoi värikontrasti käytettävyyttä varten käyttämällä dynaamista oletusasetusta.",
-      "recommendedDescription": "Optimoi värikontrasti saavutettavuuden saavuttamiseksi näiden taustojen kanssa.",
-      "secondary": "Toissijainen",
-      "tertiary": "Korkea -asteen"
+      "recommendedDescription": "Optimoi värikontrasti saavutettavuuden saavuttamiseksi näiden taustojen kanssa."
     },
     "contentWidth": {
       "compact": "Kompakti (768px)",
@@ -577,25 +584,20 @@
       "standard": "Standardi (1024px)",
       "wide": "Leveä (1280px)"
     },
-    "defaultFont": "Oletusfontti",
     "font": "Fontti",
     "fontSize": "Fontin koko",
     "fontWeight": {
       "fontWeight": "Fonttipaino"
     },
-    "headers": "Otsikot",
-    "image": "Kuva",
     "includeCaret": "Sisällytä caret",
     "letterSpacing": {
       "letterSpacing": "Kirjeväli"
     },
-    "links": "Linkit",
     "options": {
       "circle": "Ympyrä",
       "none": "Ei yhtään",
       "pill": "Pilleri"
     },
-    "pageSection": "Sivuosio",
     "textTransform": {
       "capitalize": "Päällekkäistä",
       "lowercase": "Pienet kirjaimet",
@@ -605,8 +607,12 @@
     },
     "topBottomPadding": "Ylä-/alahyllytys"
   },
+  "themeDataEditor": {
+    "description": "Korvaa teema JSON-objektilla. Puuttuvat kentät käyttävät teeman oletusarvoja.",
+    "invalid": "Anna JSON-objekti, jossa on tunnetut teemakentät ja kelvolliset arvotyypit.",
+    "title": "Aseta teeman tiedot"
+  },
   "themeSidebar": {
-    "noTheme": "Ota yhteyttä kehittäjään asettaaksesi teeman hallinnan.",
     "warning": "Muutokset vaikuttavat kaikkiin sivusarjoihin ja asetteluihin koko sivustolle."
   },
   "thursday": "torstai",

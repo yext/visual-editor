@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { BaseTextStyles } from "../fields/styledFields/baseText.tsx";
 import { getResolvedTextColorStyle } from "./colors.ts";
-import type { ThemeColor } from "./themeConfigOptions.ts";
+import type { ThemeColor } from "./themeOptions.ts";
 
 const RICH_TEXT_TYPOGRAPHY_VARIABLES = {
   fontFamily: "--fontFamily-body-fontFamily",
@@ -41,10 +41,15 @@ export const getRichTextStyle = ({
 
     richTextTypographyStyle[property] = resolvedValue;
     richTextTypographyStyle[cssVariable] = resolvedValue;
+    richTextTypographyStyle[
+      `--ve-rich-text-${property.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`
+    ] = resolvedValue;
   }
 
+  const colorStyle = getResolvedTextColorStyle(color);
   const richTextStyle = {
-    ...getResolvedTextColorStyle(color),
+    ...colorStyle,
+    ...(colorStyle?.color ? { "--ve-rich-text-color": colorStyle.color } : {}),
     ...richTextTypographyStyle,
   };
 

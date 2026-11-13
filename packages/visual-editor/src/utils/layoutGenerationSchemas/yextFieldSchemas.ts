@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { imageAspectRatioOptions } from "../../components/contentBlocks/image/styling.ts";
-import { ThemeOptions } from "../themeConfigOptions.ts";
+import { ThemeOptions } from "../themeOptions.ts";
 import {
   appendSchemaInstructions,
   widthZodSchema,

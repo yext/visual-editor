@@ -3,7 +3,7 @@ import { BaseField, FieldLabel, type FieldProps } from "@puckeditor/core";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { Combobox } from "../internal/puck/ui/Combobox.tsx";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
-import { fontSizeOptions } from "../utils/themeConfigOptions.ts";
+import { fontSizeOptions } from "../utils/themeOptions.ts";
 import { type TailwindConfig } from "../utils/themeResolver.ts";
 
 export const convertToPixels = (fontSize: string): number => {

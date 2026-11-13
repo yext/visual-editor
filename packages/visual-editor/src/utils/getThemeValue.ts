@@ -3,17 +3,39 @@ import { legacyThemeVariables } from "../internal/theme/legacyTheme.ts";
 import { PUCK_PREVIEW_IFRAME_ID } from "./applyTheme.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
 
+const resolveThemeVariables = (
+  variableName: string,
+  read: (name: string) => string | undefined,
+  seen = new Set<string>()
+): string | undefined => {
+  if (seen.has(variableName)) {
+    return undefined;
+  }
+
+  seen.add(variableName);
+
+  const value = read(variableName)?.replace("!important", "").trim();
+  if (!value) {
+    return undefined;
+  }
+  return (
+    value.replace(
+      /var\((--[\w-]+)\)/g,
+      (_, name) => resolveThemeVariables(name, read, new Set(seen)) ?? ""
+    ) || undefined
+  );
+};
+
 const getThemeValueFromDocument = (
   targetDocument: Document,
   variableName: string
 ): string | undefined => {
   const styleReader = targetDocument.defaultView?.getComputedStyle;
   if (!styleReader) return undefined;
-  const value = styleReader(targetDocument.documentElement)
-    .getPropertyValue(variableName)
-    .replace("!important", "")
-    .trim();
-  return value || undefined;
+  const styles = styleReader(targetDocument.documentElement);
+  return resolveThemeVariables(variableName, (name) =>
+    styles.getPropertyValue(name)
+  );
 };
 
 const getThemeValueFromPublishedTheme = (
@@ -26,10 +48,11 @@ const getThemeValueFromPublishedTheme = (
   } catch {
     // Match applyTheme: malformed published data still uses legacy defaults.
   }
-  const publishedValue =
-    themeValuesToCss(values ?? {})[variableName] ??
-    legacyThemeVariables[variableName];
-  return publishedValue?.replace("!important", "").trim();
+  const variables = {
+    ...legacyThemeVariables,
+    ...themeValuesToCss(values ?? {}),
+  };
+  return resolveThemeVariables(variableName, (name) => variables[name]);
 };
 
 /**

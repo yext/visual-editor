@@ -3,7 +3,7 @@ import type {
   ComboboxOptionGroup,
 } from "../internal/types/combobox.ts";
 import { msg } from "./i18n/platform.ts";
-import { ThemeOptions } from "./themeConfigOptions.ts";
+import { ThemeOptions } from "./themeOptions.ts";
 
 /** Stable saved width values used by generation and canonical selector groups. */
 export const canonicalWidthOptions = [

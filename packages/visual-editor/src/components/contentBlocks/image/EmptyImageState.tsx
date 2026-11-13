@@ -140,8 +140,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
         <div className="w-full relative">
           <div
             className={themeManagerCn(
-              containerClassName ||
-                "max-w-full rounded-image-borderRadius w-full",
+              containerClassName || "max-w-full ve-theme-image w-full",
               "border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
             )}
             style={containerStyle}

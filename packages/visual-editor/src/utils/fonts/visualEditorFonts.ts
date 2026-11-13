@@ -9,7 +9,7 @@ import { PUCK_PREVIEW_IFRAME_ID, THEME_STYLE_TAG_ID } from "../applyTheme.ts";
 import { StyleSelectOption } from "../themeResolver.ts";
 import { defaultFonts as fontsJs } from "./font_registry.js";
 import { msg } from "../i18n/platform.ts";
-import { fontStyleOptions } from "../themeConfigOptions.ts";
+import { fontStyleOptions } from "../themeOptions.ts";
 
 const variableFontRegex = /var\((--[^)]+)\)/;
 

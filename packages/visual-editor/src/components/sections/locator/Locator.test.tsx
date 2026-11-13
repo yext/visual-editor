@@ -20,7 +20,7 @@ import { LocatorComponent } from "./Locator.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { getUserLocation } from "@yext/search-ui-react";
-import { backgroundColors } from "../../../utils/themeConfigOptions.ts";
+import { backgroundColors } from "../../../utils/themeOptions.ts";
 import { MainContent } from "../../helpers/MainContent.tsx";
 
 vi.mock("@yext/search-ui-react", async () => {
@@ -518,14 +518,14 @@ const tests: ComponentTest[] = [
               field: "name",
               constantValue: { en: "", hasLocalizedValue: "true" },
               constantValueEnabled: false,
-              variant: "base",
+              typographyRole: "body",
               liveVisibility: false,
             },
             tertiaryHeading: {
               field: "name",
               constantValue: { en: "", hasLocalizedValue: "true" },
               constantValueEnabled: false,
-              variant: "base",
+              typographyRole: "body",
               liveVisibility: false,
             },
             icons: true,
@@ -620,12 +620,12 @@ const tests: ComponentTest[] = [
         },
         secondaryHeading: {
           field: "name",
-          variant: "base",
+          typographyRole: "body",
           liveVisibility: false,
         },
         tertiaryHeading: {
           field: "name",
-          variant: "base",
+          typographyRole: "body",
           liveVisibility: false,
         },
         icons: true,
@@ -721,12 +721,12 @@ const tests: ComponentTest[] = [
         },
         secondaryHeading: {
           field: "name",
-          variant: "base",
+          typographyRole: "body",
           liveVisibility: false,
         },
         tertiaryHeading: {
           field: "name",
-          variant: "base",
+          typographyRole: "body",
           liveVisibility: false,
         },
         icons: true,
@@ -817,12 +817,12 @@ const tests: ComponentTest[] = [
         },
         secondaryHeading: {
           field: "name",
-          variant: "base",
+          typographyRole: "body",
           liveVisibility: false,
         },
         tertiaryHeading: {
           field: "name",
-          variant: "base",
+          typographyRole: "body",
           liveVisibility: false,
         },
         icons: true,
@@ -913,12 +913,12 @@ const tests: ComponentTest[] = [
         },
         secondaryHeading: {
           field: "name",
-          variant: "base",
+          typographyRole: "body",
           liveVisibility: false,
         },
         tertiaryHeading: {
           field: "name",
-          variant: "base",
+          typographyRole: "body",
           liveVisibility: false,
         },
         icons: true,
@@ -1012,14 +1012,14 @@ const tests: ComponentTest[] = [
             hasLocalizedValue: "true",
           },
           constantValueEnabled: true,
-          variant: "base",
+          typographyRole: "body",
           liveVisibility: true,
         },
         tertiaryHeading: {
           field: "name",
           constantValue: { en: "Tertiary Static", hasLocalizedValue: "true" },
           constantValueEnabled: true,
-          variant: "base",
+          typographyRole: "body",
           liveVisibility: true,
         },
         icons: true,
@@ -1120,14 +1120,14 @@ const tests: ComponentTest[] = [
           field: "name",
           constantValue: { en: "", hasLocalizedValue: "true" },
           constantValueEnabled: false,
-          variant: "base",
+          typographyRole: "body",
           liveVisibility: false,
         },
         tertiaryHeading: {
           field: "name",
           constantValue: { en: "", hasLocalizedValue: "true" },
           constantValueEnabled: false,
-          variant: "base",
+          typographyRole: "body",
           liveVisibility: false,
         },
         icons: true,
@@ -1245,14 +1245,14 @@ const wrappedSelectorValuesMigrationFixture = {
                         field: { selection: { value: "name" } },
                         constantValue: { en: "", hasLocalizedValue: "true" },
                         constantValueEnabled: false,
-                        variant: "base",
+                        typographyRole: "body",
                         liveVisibility: false,
                       },
                       tertiaryHeading: {
                         field: { selection: { value: "name" } },
                         constantValue: { en: "", hasLocalizedValue: "true" },
                         constantValueEnabled: false,
-                        variant: "base",
+                        typographyRole: "body",
                         liveVisibility: false,
                       },
                       icons: true,

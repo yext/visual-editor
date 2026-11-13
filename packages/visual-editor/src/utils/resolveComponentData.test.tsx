@@ -323,18 +323,20 @@ describe("resolveComponentData", () => {
   });
 
   describe("handles options prop", () => {
-    it("applies variant to the className of the returned element", () => {
+    it("applies the selected typography role", () => {
       const data: TranslatableRichText = {
         hasLocalizedValue: "true",
         en: { html: "Hello <b>World</b>" },
       };
       const result = resolveComponentData(data, "en", mockDocument, {
-        variant: "lg",
+        typographyRole: "body-large",
       });
       expect(React.isValidElement(result)).toBe(true);
       if (React.isValidElement(result)) {
-        const element = result as React.ReactElement<{ className: string }>;
-        expect(element.props.className).toContain("rtf-body-lg");
+        const element = result as React.ReactElement<{
+          typographyRole: string;
+        }>;
+        expect(element.props.typographyRole).toBe("body-large");
       }
     });
 
@@ -354,7 +356,7 @@ describe("resolveComponentData", () => {
       }
     });
 
-    it("applies explicit rich text color via inline style when provided", () => {
+    it("forwards explicit colors to the shared rich text renderer", () => {
       const data: TranslatableRichText = {
         hasLocalizedValue: "true",
         en: { html: "Hello <a href='https://yext.com'>World</a>" },
@@ -368,10 +370,10 @@ describe("resolveComponentData", () => {
       expect(React.isValidElement(result)).toBe(true);
       if (React.isValidElement(result)) {
         const element = result as React.ReactElement<{
-          style?: React.CSSProperties;
+          richTextStyleOverrides?: { color?: { selectedColor: string } };
         }>;
-        expect(element.props.style?.color).toBe(
-          "var(--colors-palette-quaternary)"
+        expect(element.props.richTextStyleOverrides?.color?.selectedColor).toBe(
+          "palette-quaternary"
         );
       }
     });

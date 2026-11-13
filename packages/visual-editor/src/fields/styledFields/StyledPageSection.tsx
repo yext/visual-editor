@@ -1,7 +1,7 @@
 import { BaseField, FieldLabel, FieldProps } from "@puckeditor/core";
 import { MsgString, pt } from "../../utils/i18n/platform.ts";
 import { Combobox } from "../../internal/puck/ui/Combobox.tsx";
-import { ThemeOptions } from "../../utils/themeConfigOptions.ts";
+import { ThemeOptions } from "../../utils/themeOptions.ts";
 import { withDefaultOption } from "./baseText.tsx";
 
 export type StyledPageSectionValue = {

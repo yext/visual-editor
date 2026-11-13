@@ -6,7 +6,7 @@ export {
 export { Body, type BodyProps } from "./components/atoms/body.tsx";
 export {
   Button,
-  buttonVariants,
+  buttonLayoutVariants,
   type ButtonProps,
 } from "./components/atoms/button.tsx";
 export {
@@ -111,7 +111,19 @@ export {
   type YextPuckField,
 } from "./fields/fields.ts";
 export { YextAutoField } from "./fields/YextAutoField.tsx";
-export { MaybeRTF } from "./components/helpers/maybeRTF.tsx";
+export {
+  MaybeRTF,
+  type MaybeRTFProps,
+  type RichTextStyleOverrides,
+} from "./components/helpers/maybeRTF.tsx";
+export {
+  getStyledTextStyle,
+  renderStyledRichText,
+  StyledTextElement,
+  type StyledTextElementProps,
+  type StyledTextTag,
+  type StyledTextAlignment,
+} from "./components/helpers/styledFields/styledText.tsx";
 export { createYextFieldTransforms } from "./fields/fieldTransforms/index.ts";
 export { BackgroundProvider, useBackground } from "./hooks/useBackground.tsx";
 export {
@@ -182,7 +194,14 @@ export {
   ThemeOptions,
   type HeadingLevel,
   type ThemeColor,
-} from "./utils/themeConfigOptions.ts";
+  type SurfaceRole,
+  type SurfaceValue,
+  type TypographyRole,
+  type InteractionRole,
+  surfaceRoleOptions,
+  typographyRoleOptions,
+  interactionRoleOptions,
+} from "./utils/themeOptions.ts";
 export { getThemeValue } from "./utils/getThemeValue.ts";
 export { themeManagerCn } from "./utils/cn.ts";
 export {
@@ -191,6 +210,7 @@ export {
   getTextColorClass,
   getTextColorStyle,
   getThemeColorCssValue,
+  getThemeColorHexValue,
   isColorContrastWcagCompliant,
   hexToRGB,
 } from "./utils/colors.ts";
@@ -275,3 +295,6 @@ export {
   backgroundColorZodSchema,
   siteColorZodSchema,
 } from "./utils/layoutGenerationSchemas/colorFieldSchemas.ts";
+export { useThemeValue } from "./hooks/useThemeValue.ts";
+export type { SurfaceField } from "./fields/SurfaceField.tsx";
+export type { TypographyRoleField } from "./fields/TypographyRoleField.tsx";

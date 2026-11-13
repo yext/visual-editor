@@ -1,29 +1,28 @@
-import { ThemeColor, HeadingLevel } from "../../utils/themeConfigOptions.ts";
+import {
+  ThemeColor,
+  HeadingLevel,
+  type TypographyRole,
+  fontSizeOptions,
+} from "../../utils/themeOptions.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { getTextColorClass, getTextColorStyle } from "../../utils/colors.ts";
 
-// Define the variants for the heading component
+const headingLevelToTypographyRole = (level?: HeadingLevel): TypographyRole =>
+  level === 1 ? "headline" : level === 2 ? "section-title" : "card-title";
+
+// Default size and weight inherit the selected typography role.
 export const headingVariants = cva("components", {
   variants: {
-    level: {
-      1:
-        "font-h2-fontWeight text-h2-fontSize font-h2-fontFamily " +
-        "sm:font-h1-fontWeight sm:text-h1-fontSize sm:font-h1-fontFamily",
-      2:
-        "font-h3-fontWeight text-h3-fontSize font-h3-fontFamily " +
-        "sm:font-h2-fontWeight sm:text-h2-fontSize sm:font-h2-fontFamily",
-      3:
-        "font-h4-fontWeight text-h4-fontSize font-h4-fontFamily " +
-        "sm:font-h3-fontWeight sm:text-h3-fontSize sm:font-h3-fontFamily",
-      4:
-        "font-h5-fontWeight text-h5-fontSize font-h5-fontFamily " +
-        "sm:font-h4-fontWeight sm:text-h4-fontSize sm:font-h4-fontFamily",
-      5:
-        "font-h6-fontWeight text-h6-fontSize font-h6-fontFamily " +
-        "sm:font-h5-fontWeight sm:text-h5-fontSize sm:font-h5-fontFamily",
-      6: "font-h6-fontWeight text-h6-fontSize font-h6-fontFamily",
+    typographyRole: {
+      headline: "ve-theme-headline",
+      "section-title": "ve-theme-section-title",
+      "card-title": "ve-theme-card-title",
+      eyebrow: "ve-theme-eyebrow",
+      "body-small": "ve-theme-body-small",
+      body: "ve-theme-body",
+      "body-large": "ve-theme-body-large",
     },
     fontSize: {
       default: "",
@@ -65,8 +64,9 @@ export interface HeadingProps
   extends
     Omit<React.HTMLAttributes<HTMLHeadingElement>, "color">,
     VariantProps<typeof headingVariants> {
-  level: HeadingLevel;
-  semanticLevelOverride?: HeadingLevel | "span";
+  level?: HeadingLevel;
+  typographyRole?: TypographyRole;
+  semanticLevelOverride?: HeadingLevel | "span" | "p";
   color?: ThemeColor;
 }
 
@@ -75,8 +75,9 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
     {
       className,
       level = 1,
-      weight,
-      fontSize,
+      typographyRole,
+      fontSize = "default",
+      weight = "default",
       semanticLevelOverride,
       style,
       color,
@@ -92,26 +93,28 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
         : `h${level}`
     ) as keyof Pick<
       JSX.IntrinsicElements,
-      "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span"
+      "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span" | "p"
     >;
+    const role = typographyRole ?? headingLevelToTypographyRole(level);
     const textColorClass = getTextColorClass(color);
+    const fontSizePx =
+      fontSize && fontSize !== "default"
+        ? fontSizeOptions().find((option) => option.value === fontSize)?.px
+        : undefined;
 
     return (
       <Tag
         className={themeManagerCn(
-          headingVariants({
-            fontSize,
-            weight,
-            level,
-          }),
+          headingVariants({ typographyRole: role, fontSize, weight }),
           textColorClass,
           Tag === "span" && "block",
           className
         )}
         style={{
           ...getTextColorStyle(color),
-          // @ts-ignore: the css variable here resolves to a valid enum value
-          textTransform: `var(--textTransform-h${level}-textTransform)`,
+          // Authored overrides must win even when the live theme is injected last.
+          ...(fontSizePx ? { fontSize: `${fontSizePx}px` } : {}),
+          ...(weight && weight !== "default" ? { fontWeight: weight } : {}),
           ...style,
         }}
         ref={ref}

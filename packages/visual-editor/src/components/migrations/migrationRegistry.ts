@@ -1,3 +1,4 @@
+import { semanticThemeRoles } from "./0084_semantic_theme_roles.ts";
 import { photoGalleryItemSource } from "./0083_photo_gallery_item_source.ts";
 import { MigrationRegistry } from "../../utils/migrate.ts";
 import { adjustPropObjectsMigration } from "./0001_adjust_prop_objects.ts";
@@ -88,6 +89,8 @@ import { heroPhoneSlotMigration } from "./0082_hero_phone_slot.ts";
 // Import it in this file and add it to this array.
 // The migrations are run in the order of this array
 // and the data's version number indicates the last applied index.
+import { unifiedBackgrounds } from "./0085_unified_backgrounds.ts";
+
 export const migrationRegistry: MigrationRegistry = [
   adjustPropObjectsMigration,
   addHeadingAlignmentMigration,
@@ -172,4 +175,6 @@ export const migrationRegistry: MigrationRegistry = [
   headerFooterImageFillTypeMigration,
   heroPhoneSlotMigration,
   photoGalleryItemSource,
+  semanticThemeRoles,
+  unifiedBackgrounds,
 ];

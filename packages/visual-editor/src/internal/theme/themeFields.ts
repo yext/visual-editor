@@ -1,4 +1,4 @@
-import { ThemeOptions } from "../../utils/themeConfigOptions.ts";
+import { ThemeOptions } from "../../utils/themeOptions.ts";
 
 export type ThemeOption = { readonly label: string; readonly value: string };
 
@@ -320,66 +320,129 @@ export const themeCategories: Readonly<Record<string, ThemeCategory>> = {
           },
         },
       },
-      lead: {
-        label: "Lead",
+      eyebrow: {
+        label: "Eyebrow",
         fields: {
-          leadFontFamily: {
+          eyebrowFontFamily: {
             label: "Font Family",
             type: "fontFamily",
             default: "'Open Sans', 'Open Sans Fallback', sans-serif",
-            variable: "--ve-lead-font-family",
+            variable: "--ve-eyebrow-font-family",
           },
-          leadFontSize: {
+          eyebrowFontSize: {
             label: "Font Size",
             type: "number",
             default: 20,
-            variable: "--ve-lead-font-size",
+            variable: "--ve-eyebrow-font-size",
           },
-          leadMobileFontSize: {
+          eyebrowMobileFontSize: {
             label: "Mobile Font Size",
             type: "number",
             default: 18,
-            variable: "--ve-lead-mobile-font-size",
+            variable: "--ve-eyebrow-mobile-font-size",
           },
-          leadFontWeight: {
+          eyebrowFontWeight: {
             label: "Font Weight",
             type: "fontWeight",
             default: "400",
-            fontFamilyKey: "leadFontFamily",
-            variable: "--ve-lead-font-weight",
+            fontFamilyKey: "eyebrowFontFamily",
+            variable: "--ve-eyebrow-font-weight",
           },
-          leadFontStyle: {
+          eyebrowFontStyle: {
             label: "Font Style",
             type: "fontStyle",
             default: "normal",
-            fontFamilyKey: "leadFontFamily",
-            variable: "--ve-lead-font-style",
+            fontFamilyKey: "eyebrowFontFamily",
+            variable: "--ve-eyebrow-font-style",
           },
-          leadLineHeight: {
+          eyebrowLineHeight: {
             label: "Line Height",
             type: "placeholder",
             default: "1.5",
-            variable: "--ve-lead-line-height",
+            variable: "--ve-eyebrow-line-height",
           },
-          leadMobileLineHeight: {
+          eyebrowMobileLineHeight: {
             label: "Mobile Line Height",
             type: "placeholder",
             default: "1.5",
-            variable: "--ve-lead-mobile-line-height",
+            variable: "--ve-eyebrow-mobile-line-height",
           },
-          leadLetterSpacing: {
+          eyebrowLetterSpacing: {
             label: "Letter Spacing",
             type: "select",
             default: "0em",
             options: ThemeOptions.LETTER_SPACING,
-            variable: "--ve-lead-letter-spacing",
+            variable: "--ve-eyebrow-letter-spacing",
           },
-          leadTextTransform: {
+          eyebrowTextTransform: {
             label: "Text Transform",
             type: "select",
             default: "none",
             options: ThemeOptions.TEXT_TRANSFORM,
-            variable: "--ve-lead-text-transform",
+            variable: "--ve-eyebrow-text-transform",
+          },
+        },
+      },
+      bodySmall: {
+        label: "Body Small",
+        fields: {
+          bodySmallFontFamily: {
+            label: "Font Family",
+            type: "fontFamily",
+            default: "'Open Sans', 'Open Sans Fallback', sans-serif",
+            variable: "--ve-body-small-font-family",
+          },
+          bodySmallFontSize: {
+            label: "Font Size",
+            type: "number",
+            default: 14,
+            variable: "--ve-body-small-font-size",
+          },
+          bodySmallMobileFontSize: {
+            label: "Mobile Font Size",
+            type: "number",
+            default: 14,
+            variable: "--ve-body-small-mobile-font-size",
+          },
+          bodySmallFontWeight: {
+            label: "Font Weight",
+            type: "fontWeight",
+            default: "400",
+            fontFamilyKey: "bodySmallFontFamily",
+            variable: "--ve-body-small-font-weight",
+          },
+          bodySmallFontStyle: {
+            label: "Font Style",
+            type: "fontStyle",
+            default: "normal",
+            fontFamilyKey: "bodySmallFontFamily",
+            variable: "--ve-body-small-font-style",
+          },
+          bodySmallLineHeight: {
+            label: "Line Height",
+            type: "placeholder",
+            default: "1.5",
+            variable: "--ve-body-small-line-height",
+          },
+          bodySmallMobileLineHeight: {
+            label: "Mobile Line Height",
+            type: "placeholder",
+            default: "1.5",
+            variable: "--ve-body-small-mobile-line-height",
+          },
+          bodySmallLetterSpacing: {
+            label: "Letter Spacing",
+            type: "select",
+            default: "0em",
+            options: ThemeOptions.LETTER_SPACING,
+            variable: "--ve-body-small-letter-spacing",
+          },
+          bodySmallTextTransform: {
+            label: "Text Transform",
+            type: "select",
+            default: "none",
+            options: ThemeOptions.TEXT_TRANSFORM,
+            variable: "--ve-body-small-text-transform",
           },
         },
       },
@@ -446,66 +509,66 @@ export const themeCategories: Readonly<Record<string, ThemeCategory>> = {
           },
         },
       },
-      finePrint: {
-        label: "Fine Print / Body Small",
+      bodyLarge: {
+        label: "Body Large",
         fields: {
-          finePrintFontFamily: {
+          bodyLargeFontFamily: {
             label: "Font Family",
             type: "fontFamily",
             default: "'Open Sans', 'Open Sans Fallback', sans-serif",
-            variable: "--ve-fine-print-font-family",
+            variable: "--ve-body-large-font-family",
           },
-          finePrintFontSize: {
+          bodyLargeFontSize: {
             label: "Font Size",
             type: "number",
-            default: 14,
-            variable: "--ve-fine-print-font-size",
+            default: 18,
+            variable: "--ve-body-large-font-size",
           },
-          finePrintMobileFontSize: {
+          bodyLargeMobileFontSize: {
             label: "Mobile Font Size",
             type: "number",
-            default: 14,
-            variable: "--ve-fine-print-mobile-font-size",
+            default: 18,
+            variable: "--ve-body-large-mobile-font-size",
           },
-          finePrintFontWeight: {
+          bodyLargeFontWeight: {
             label: "Font Weight",
             type: "fontWeight",
             default: "400",
-            fontFamilyKey: "finePrintFontFamily",
-            variable: "--ve-fine-print-font-weight",
+            fontFamilyKey: "bodyLargeFontFamily",
+            variable: "--ve-body-large-font-weight",
           },
-          finePrintFontStyle: {
+          bodyLargeFontStyle: {
             label: "Font Style",
             type: "fontStyle",
             default: "normal",
-            fontFamilyKey: "finePrintFontFamily",
-            variable: "--ve-fine-print-font-style",
+            fontFamilyKey: "bodyLargeFontFamily",
+            variable: "--ve-body-large-font-style",
           },
-          finePrintLineHeight: {
+          bodyLargeLineHeight: {
             label: "Line Height",
             type: "placeholder",
             default: "1.5",
-            variable: "--ve-fine-print-line-height",
+            variable: "--ve-body-large-line-height",
           },
-          finePrintMobileLineHeight: {
+          bodyLargeMobileLineHeight: {
             label: "Mobile Line Height",
             type: "placeholder",
             default: "1.5",
-            variable: "--ve-fine-print-mobile-line-height",
+            variable: "--ve-body-large-mobile-line-height",
           },
-          finePrintLetterSpacing: {
+          bodyLargeLetterSpacing: {
             label: "Letter Spacing",
             type: "select",
             default: "0em",
             options: ThemeOptions.LETTER_SPACING,
-            variable: "--ve-fine-print-letter-spacing",
+            variable: "--ve-body-large-letter-spacing",
           },
-          finePrintTextTransform: {
+          bodyLargeTextTransform: {
             label: "Text Transform",
             type: "select",
             default: "none",
             options: ThemeOptions.TEXT_TRANSFORM,
-            variable: "--ve-fine-print-text-transform",
+            variable: "--ve-body-large-text-transform",
           },
         },
       },

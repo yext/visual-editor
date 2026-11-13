@@ -43,7 +43,15 @@
   "closesAtTime": "Ferme à {{time}}",
   "closesAtTimeWeek": "Ferme à {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Ouvrir le sélecteur de couleurs"
+    "angle": "Angle",
+    "end": "Couleur de fin",
+    "fill": "Remplissage",
+    "linear": "Dégradé linéaire",
+    "open": "Ouvrir le sélecteur de couleurs",
+    "radial": "Dégradé radial",
+    "solid": "Couleur unie",
+    "start": "Couleur de début",
+    "stops": "Couleurs du dégradé"
   },
   "comingSoon": "À venir",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Données",
     "dataAttributes": "Attributs des données",
     "dayOfWeekFormat": "Format du jour de la semaine",
+    "defaultForPlacement": "Valeur par défaut selon l’emplacement",
     "directoryListBackgroundColor": "Couleur d’arrière-plan de la liste des répertoires",
     "directoryRootLinkLabel": "Étiquette du lien racine du répertoire",
     "distanceDisplay": "Affichage des distances",
@@ -145,20 +154,22 @@
     "fontStyle": "Style de police",
     "headingAlign": "Alignement de la rubrique",
     "headingBackgroundColor": "Couleur d’arrière-plan du titre",
-    "headingLevel": "Niveau de cap",
     "hours": "Heures",
     "hoursColumn": "Colonne d'heures",
     "html": "HTML",
     "icon": "Icône",
+    "iconColor": "Couleur de l'icône",
     "icons": "Icônes",
     "image": "Image",
     "imageConstrain": "Contrainte d'image",
     "imageFillType": "Type de remplissage de l'image",
     "includePhoneHyperlink": "Inclure l'hyperlien de téléphone",
+    "inheritSurface": "Hériter du parent",
     "javascript": "JavaScript",
     "key": "Clé",
     "keywordsDisplayName": "Nom d'affichage des mots clés",
     "label": "Étiquette",
+    "labelColor": "Couleur de l'étiquette",
     "latitude": "Latitude",
     "link": "Lien",
     "linkColor": "Couleur du lien",
@@ -307,11 +318,14 @@
     "showRegion": "Afficher la région",
     "startOfTheWeek": "Début de la semaine",
     "styles": "Styles",
+    "surface": "Variante de couleur",
     "tag": "Étiqueter",
     "tertiaryHeading": "Rubrique Tertiaire",
     "text": "Texte",
+    "textColor": "Couleur du texte",
     "timeFormat": "Format de temps",
     "title": "Titre",
+    "typographyRole": "Style typographique",
     "value": "Valeur",
     "variant": "Variante",
     "video": "Vidéo",
@@ -569,17 +583,10 @@
       "color3": "Couleur 3",
       "color4": "Couleur 4"
     },
-    "bodyText": "Texte du corps",
     "borderRadius": "Rayon de frontière",
-    "button": "Bouton",
     "colors": {
-      "colors": "Couleurs",
-      "primary": "Primaire",
-      "quaternary": "Quaternaire",
       "recommendedColorDescription": "Optimisez le contraste des couleurs pour l’accessibilité en utilisant la valeur dynamique par défaut.",
-      "recommendedDescription": "Optimiser le contraste des couleurs pour l'accessibilité avec ces arrière-plans.",
-      "secondary": "Secondaire",
-      "tertiary": "Tertiaire"
+      "recommendedDescription": "Optimiser le contraste des couleurs pour l'accessibilité avec ces arrière-plans."
     },
     "contentWidth": {
       "compact": "Compact (768px)",
@@ -589,25 +596,20 @@
       "standard": "Standard (1024px)",
       "wide": "Large (1280px)"
     },
-    "defaultFont": "Police par défaut",
     "font": "Fonte",
     "fontSize": "Taille de la police",
     "fontWeight": {
       "fontWeight": "Poids de la police"
     },
-    "headers": "En-têtes",
-    "image": "Image",
     "includeCaret": "Inclure le care-",
     "letterSpacing": {
       "letterSpacing": "Espacement des lettres"
     },
-    "links": "Links",
     "options": {
       "circle": "Cercle",
       "none": "Aucun",
       "pill": "Pilule"
     },
-    "pageSection": "Section de page",
     "textTransform": {
       "capitalize": "Capitaliser",
       "lowercase": "Minuscule",
@@ -617,8 +619,12 @@
     },
     "topBottomPadding": "Rembourrage supérieur / inférieur"
   },
+  "themeDataEditor": {
+    "description": "Remplacez le thème par un objet JSON. Les champs manquants utilisent les valeurs par défaut du thème.",
+    "invalid": "Saisissez un objet JSON contenant des champs de thème reconnus et des types de valeurs valides.",
+    "title": "Définir les données du thème"
+  },
   "themeSidebar": {
-    "noTheme": "Veuillez contacter votre développeur pour configurer la gestion du thème.",
     "warning": "Les modifications affecteront tous les ensembles de pages et dispositions pour l'ensemble du site."
   },
   "thursday": "Jeudi",

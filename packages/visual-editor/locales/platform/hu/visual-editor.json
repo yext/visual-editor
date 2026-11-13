@@ -43,7 +43,15 @@
   "closesAtTime": "Zárás: {{time}}",
   "closesAtTimeWeek": "Zárás: {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Nyissa meg a színválasztót"
+    "angle": "Szög",
+    "end": "Zárószín",
+    "fill": "Kitöltés",
+    "linear": "Lineáris színátmenet",
+    "open": "Nyissa meg a színválasztót",
+    "radial": "Sugaras színátmenet",
+    "solid": "Egyszínű",
+    "start": "Kezdőszín",
+    "stops": "Színátmenet színei"
   },
   "comingSoon": "Hamarosan",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Adat",
     "dataAttributes": "Adatattribútumok",
     "dayOfWeekFormat": "A hét napi formátuma",
+    "defaultForPlacement": "Elhelyezés szerinti alapértelmezés",
     "directoryListBackgroundColor": "Könyvtárlista háttérszíne",
     "directoryRootLinkLabel": "Directory Root Link címke",
     "distanceDisplay": "Távolság kijelző",
@@ -145,20 +154,22 @@
     "fontStyle": "Betűstílus",
     "headingAlign": "Fejjel igazítás",
     "headingBackgroundColor": "Címsor háttérszíne",
-    "headingLevel": "Irányszint",
     "hours": "Órák",
     "hoursColumn": "Órás oszlop",
     "html": "HTML",
     "icon": "Ikon",
+    "iconColor": "Ikon színe",
     "icons": "Ikonok",
     "image": "Kép",
     "imageConstrain": "Képkorlátozás",
     "imageFillType": "Képkitöltés típusa",
     "includePhoneHyperlink": "Tartalmazza a telefon hiperhivatkozását",
+    "inheritSurface": "Öröklés a szülőtől",
     "javascript": "JavaScript",
     "key": "Kulcsfontosságú",
     "keywordsDisplayName": "Kulcsszavak Megjelenített név",
     "label": "Címke",
+    "labelColor": "Címke színe",
     "latitude": "Szélesség",
     "link": "Link",
     "linkColor": "Link színe",
@@ -307,11 +318,14 @@
     "showRegion": "Régió megjelenítése",
     "startOfTheWeek": "A hét kezdete",
     "styles": "Stílusok",
+    "surface": "Színváltozat",
     "tag": "Címke",
     "tertiaryHeading": "Harmadlagos rovat",
     "text": "Szöveg",
+    "textColor": "Szöveg színe",
     "timeFormat": "Időformátum",
     "title": "Cím",
+    "typographyRole": "Tipográfiai stílus",
     "value": "Érték",
     "variant": "Változat",
     "video": "Videó",
@@ -557,17 +571,10 @@
       "color3": "3. szín",
       "color4": "4. szín"
     },
-    "bodyText": "Testszöveg",
     "borderRadius": "Sorrendi sugár",
-    "button": "Gomb",
     "colors": {
-      "colors": "Színek",
-      "primary": "Elsődleges",
-      "quaternary": "Kvaterner",
       "recommendedColorDescription": "Optimalizálja a színkontrasztot a hozzáférhetőség érdekében a dinamikus alapértelmezés használatával.",
-      "recommendedDescription": "Optimalizálja a színkontrasztot az ilyen háttérrel való hozzáféréshez.",
-      "secondary": "Másodlagos",
-      "tertiary": "Harmadlagos"
+      "recommendedDescription": "Optimalizálja a színkontrasztot az ilyen háttérrel való hozzáféréshez."
     },
     "contentWidth": {
       "compact": "Compact (768px)",
@@ -577,25 +584,20 @@
       "standard": "Standard (1024PX)",
       "wide": "Széles (1280px)"
     },
-    "defaultFont": "Alapértelmezett betűtípus",
     "font": "Betűtípus",
     "fontSize": "Betűkészlet",
     "fontWeight": {
       "fontWeight": "Betűtípus súlya"
     },
-    "headers": "Fejlécek",
-    "image": "Kép",
     "includeCaret": "Tartalmazza a Caret -t",
     "letterSpacing": {
       "letterSpacing": "Levél távolság"
     },
-    "links": "Linkek",
     "options": {
       "circle": "Kör",
       "none": "Egyik sem",
       "pill": "Tabletta"
     },
-    "pageSection": "Oldal szakasz",
     "textTransform": {
       "capitalize": "Nagyít",
       "lowercase": "Kisbetűs",
@@ -605,8 +607,12 @@
     },
     "topBottomPadding": "Felső/alsó párnás"
   },
+  "themeDataEditor": {
+    "description": "Cserélje le a témát egy JSON-objektumra. A hiányzó mezők a téma alapértelmezett értékeit használják.",
+    "invalid": "Adjon meg egy JSON-objektumot ismert témamezőkkel és érvényes értéktípusokkal.",
+    "title": "Témaadatok beállítása"
+  },
   "themeSidebar": {
-    "noTheme": "Kérjük, vegye fel a kapcsolatot fejlesztőjével a témakezelés beállításához.",
     "warning": "A változások befolyásolják az összes oldalkészletet és elrendezést a teljes webhelyre."
   },
   "thursday": "csütörtök",

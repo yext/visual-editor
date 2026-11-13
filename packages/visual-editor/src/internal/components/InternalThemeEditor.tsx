@@ -37,6 +37,34 @@ const ThemeSidebar = () => {
   return props ? <ThemeEditorRightSidebar {...props} /> : <></>;
 };
 
+// Puck renders this override as a component around field contents. Keep its
+// identity stable so theme history updates preserve open popovers and focus.
+const ThemeFieldLabel = (props: React.ComponentProps<typeof FieldLabel>) => (
+  <FieldLabel {...props} icon={undefined} />
+);
+
+const ThemeHeaderContext = React.createContext<
+  React.ComponentProps<typeof ThemeHeader> | undefined
+>(undefined);
+const ThemeHeaderOverride = () => {
+  const props = React.useContext(ThemeHeaderContext);
+  return props ? <ThemeHeader {...props} /> : <></>;
+};
+const EmptyOverride = () => <></>;
+
+// Puck composes override/plugin components. Recreating this configuration can
+// remount the editor even when the individual sidebar component is stable.
+const themeEditorPlugins = [legacySidebar];
+const themeEditorOverrides = {
+  componentOverlay: TransformedFieldTooltip,
+  header: ThemeHeaderOverride,
+  actionBar: EmptyOverride,
+  drawer: EmptyOverride,
+  fields: ThemeSidebar,
+  iframe: loadMapboxIntoIframe,
+  fieldLabel: ThemeFieldLabel,
+};
+
 type InternalThemeEditorProps = {
   puckConfig: Config;
   puckInitialHistory: InitialHistory | undefined;
@@ -171,49 +199,41 @@ export const InternalThemeEditor = ({
           customFonts: templateMetadata.customFonts,
         }}
       >
-        <Puck
-          config={puckConfig}
-          fieldTransforms={fieldTransforms}
-          data={{}} // we use puckInitialHistory instead
-          initialHistory={puckInitialHistory}
-          onChange={change}
-          permissions={{
-            drag: false,
-            duplicate: false,
-            delete: false,
-            insert: false,
-            edit: true,
+        <ThemeHeaderContext.Provider
+          value={{
+            themeHistories,
+            onPublishTheme: handlePublishTheme,
+            onThemeChange: handleThemeChange,
+            isDevMode: templateMetadata.isDevMode,
+            setThemeHistories,
+            clearThemeHistory,
+            puckInitialHistory,
+            clearLocalChangesModalOpen,
+            setClearLocalChangesModalOpen,
+            totalEntityCount: templateMetadata.totalEntityCount,
+            localDev,
+            headDeployStatus: templateMetadata.headDeployStatus,
+            customFonts: templateMetadata.customFonts,
           }}
-          plugins={[legacySidebar]}
-          overrides={{
-            componentOverlay: TransformedFieldTooltip,
-            header: () => (
-              <ThemeHeader
-                themeHistories={themeHistories}
-                onPublishTheme={handlePublishTheme}
-                isDevMode={templateMetadata.isDevMode}
-                setThemeHistories={setThemeHistories}
-                clearThemeHistory={clearThemeHistory}
-                puckInitialHistory={puckInitialHistory}
-                clearLocalChangesModalOpen={clearLocalChangesModalOpen}
-                setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
-                totalEntityCount={templateMetadata.totalEntityCount}
-                localDev={localDev}
-                headDeployStatus={templateMetadata.headDeployStatus}
-                customFonts={templateMetadata.customFonts}
-              />
-            ),
-            actionBar: () => <></>,
-            drawer: () => <></>,
-            fields: ThemeSidebar,
-            iframe: loadMapboxIntoIframe,
-            // oxlint-disable-next-line no-unused-vars removed all icons from all field labels
-            fieldLabel: ({ icon, children, ...rest }) => (
-              <FieldLabel {...rest}>{children}</FieldLabel>
-            ),
-          }}
-          metadata={metadata}
-        />
+        >
+          <Puck
+            config={puckConfig}
+            fieldTransforms={fieldTransforms}
+            data={{}} // we use puckInitialHistory instead
+            initialHistory={puckInitialHistory}
+            onChange={change}
+            permissions={{
+              drag: false,
+              duplicate: false,
+              delete: false,
+              insert: false,
+              edit: true,
+            }}
+            plugins={themeEditorPlugins}
+            overrides={themeEditorOverrides}
+            metadata={metadata}
+          />
+        </ThemeHeaderContext.Provider>
       </ThemeSidebarContext.Provider>
     </EntityTooltipsProvider>
   );

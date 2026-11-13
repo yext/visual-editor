@@ -43,7 +43,15 @@
   "closesAtTime": "Zatvara se u {{time}}",
   "closesAtTimeWeek": "Zatvara se u {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Otvori birač boja"
+    "angle": "Kut",
+    "end": "Završna boja",
+    "fill": "Ispuna",
+    "linear": "Linearni gradijent",
+    "open": "Otvori birač boja",
+    "radial": "Radijalni gradijent",
+    "solid": "Jednobojno",
+    "start": "Početna boja",
+    "stops": "Boje gradijenta"
   },
   "comingSoon": "Dolazi uskoro",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Podaci",
     "dataAttributes": "Atributi podataka",
     "dayOfWeekFormat": "Format Dana tjedna",
+    "defaultForPlacement": "Zadano prema položaju",
     "directoryListBackgroundColor": "Boja pozadine popisa imenika",
     "directoryRootLinkLabel": "Oznaka korijenske veze direktorija",
     "distanceDisplay": "Prikaz udaljenosti",
@@ -145,20 +154,22 @@
     "fontStyle": "Stil fonta",
     "headingAlign": "Poravnavanje naslova",
     "headingBackgroundColor": "Boja pozadine naslova",
-    "headingLevel": "Razina naslova",
     "hours": "Sati",
     "hoursColumn": "Sati stupaca",
     "html": "HTML",
     "icon": "Ikona",
+    "iconColor": "Boja ikone",
     "icons": "Ikone",
     "image": "Slika",
     "imageConstrain": "Ograničenje slike",
     "imageFillType": "Vrsta ispune slike",
     "includePhoneHyperlink": "Uključite hipervezu telefona",
+    "inheritSurface": "Naslijedi od nadređenog elementa",
     "javascript": "JavaScript",
     "key": "Ključ",
     "keywordsDisplayName": "Naziv za prikaz ključnih riječi",
     "label": "Označiti",
+    "labelColor": "Boja oznake",
     "latitude": "Širina",
     "link": "Link",
     "linkColor": "Boja veze",
@@ -307,11 +318,14 @@
     "showRegion": "Prikaži regiju",
     "startOfTheWeek": "Početak tjedna",
     "styles": "Stil",
+    "surface": "Varijanta boje",
     "tag": "Označiti",
     "tertiaryHeading": "Tercijarni naslov",
     "text": "Tekst",
+    "textColor": "Boja teksta",
     "timeFormat": "Format vremena",
     "title": "Titula",
+    "typographyRole": "Tipografski stil",
     "value": "Vrijednost",
     "variant": "Varijanta",
     "video": "Video",
@@ -569,17 +583,10 @@
       "color3": "Boja 3",
       "color4": "Boja 4"
     },
-    "bodyText": "Tekst tijela",
     "borderRadius": "Polumjer",
-    "button": "Gumb",
     "colors": {
-      "colors": "Boja",
-      "primary": "Osnovan",
-      "quaternary": "Kvartarni",
       "recommendedColorDescription": "Optimizirajte kontrast boja za pristupačnost pomoću dinamičke zadane postavke.",
-      "recommendedDescription": "Optimizirajte kontrast boje za pristupačnost s tim pozadinama.",
-      "secondary": "Sekundarni",
-      "tertiary": "Tercijarni"
+      "recommendedDescription": "Optimizirajte kontrast boje za pristupačnost s tim pozadinama."
     },
     "contentWidth": {
       "compact": "Kompaktni (768px)",
@@ -589,25 +596,20 @@
       "standard": "Standard (1024px)",
       "wide": "Široko (1280px)"
     },
-    "defaultFont": "Zadani font",
     "font": "Font",
     "fontSize": "Veličina fonta",
     "fontWeight": {
       "fontWeight": "Težina fonta"
     },
-    "headers": "Zaglavlja",
-    "image": "Slika",
     "includeCaret": "Uključite Caret",
     "letterSpacing": {
       "letterSpacing": "Razmak slova"
     },
-    "links": "Veze",
     "options": {
       "circle": "Krug",
       "none": "Nijedan",
       "pill": "Pilula"
     },
-    "pageSection": "Odjeljak",
     "textTransform": {
       "capitalize": "Iskoristiti",
       "lowercase": "Malim slovima",
@@ -617,8 +619,12 @@
     },
     "topBottomPadding": "Gornji/donji oblog"
   },
+  "themeDataEditor": {
+    "description": "Zamijenite temu JSON objektom. Polja koja nedostaju koriste zadane vrijednosti teme.",
+    "invalid": "Unesite JSON objekt s prepoznatim poljima teme i valjanim vrstama vrijednosti.",
+    "title": "Postavi podatke teme"
+  },
   "themeSidebar": {
-    "noTheme": "Molimo kontaktirajte svog programera kako biste postavili upravljanje temama.",
     "warning": "Promjene će utjecati na sve skupove stranica i izgled za cijelu stranicu."
   },
   "thursday": "četvrtak",

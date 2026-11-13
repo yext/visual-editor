@@ -43,7 +43,15 @@
   "closesAtTime": "Stänger kl. {{time}}",
   "closesAtTimeWeek": "Stänger kl. {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Öppna färgväljaren"
+    "angle": "Vinkel",
+    "end": "Slutfärg",
+    "fill": "Fyllning",
+    "linear": "Linjär övertoning",
+    "open": "Öppna färgväljaren",
+    "radial": "Radiell övertoning",
+    "solid": "Enfärgad",
+    "start": "Startfärg",
+    "stops": "Övertoningsfärger"
   },
   "comingSoon": "Kommer snart",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Data",
     "dataAttributes": "Dataattribut",
     "dayOfWeekFormat": "Veckodagsformat",
+    "defaultForPlacement": "Standard för placering",
     "directoryListBackgroundColor": "Kataloglista Bakgrundsfärg",
     "directoryRootLinkLabel": "Katalogrotlänketikett",
     "distanceDisplay": "Avståndsvisning",
@@ -145,20 +154,22 @@
     "fontStyle": "Typsnittsstil",
     "headingAlign": "Rubriken justera",
     "headingBackgroundColor": "Rubrik Bakgrundsfärg",
-    "headingLevel": "Rubriknivå",
     "hours": "Timme",
     "hoursColumn": "Time -kolumn",
     "html": "HTML",
     "icon": "Ikon",
+    "iconColor": "Ikon Färg",
     "icons": "Ikoner",
     "image": "Bild",
     "imageConstrain": "Bildbegränsning",
     "imageFillType": "Bildfyllningstyp",
     "includePhoneHyperlink": "Inkludera telefonhyperlänk",
+    "inheritSurface": "Ärv från överordnat element",
     "javascript": "JavaScript",
     "key": "Nyckel",
     "keywordsDisplayName": "Sökord Visningsnamn",
     "label": "Märka",
+    "labelColor": "Etikettfärg",
     "latitude": "Latitud",
     "link": "Länk",
     "linkColor": "Länkfärg",
@@ -307,11 +318,14 @@
     "showRegion": "Visa region",
     "startOfTheWeek": "Veckans början",
     "styles": "Stilar",
+    "surface": "Färgvariant",
     "tag": "Tagg",
     "tertiaryHeading": "Tertiär rubrik",
     "text": "Text",
+    "textColor": "Textfärg",
     "timeFormat": "Tidsformat",
     "title": "Titel",
+    "typographyRole": "Typografistil",
     "value": "Värde",
     "variant": "Variant",
     "video": "Video",
@@ -557,17 +571,10 @@
       "color3": "Färg 3",
       "color4": "Färg 4"
     },
-    "bodyText": "Kroppstext",
     "borderRadius": "Gränsradie",
-    "button": "Knapp",
     "colors": {
-      "colors": "Färger",
-      "primary": "Primär",
-      "quaternary": "Kvartär",
       "recommendedColorDescription": "Optimera färgkontrasten för tillgänglighet genom att använda den dynamiska standarden.",
-      "recommendedDescription": "Optimera färgkontrasten för tillgänglighet med dessa bakgrunder.",
-      "secondary": "Sekundär",
-      "tertiary": "Tertiär"
+      "recommendedDescription": "Optimera färgkontrasten för tillgänglighet med dessa bakgrunder."
     },
     "contentWidth": {
       "compact": "Kompakt (768px)",
@@ -577,25 +584,20 @@
       "standard": "Standard (1024px)",
       "wide": "Wide (1280px)"
     },
-    "defaultFont": "Standardteckensnitt",
     "font": "Font",
     "fontSize": "Fontstorlek",
     "fontWeight": {
       "fontWeight": "Teckensnittsvikt"
     },
-    "headers": "Rubriker",
-    "image": "Bild",
     "includeCaret": "Inkludera caret",
     "letterSpacing": {
       "letterSpacing": "Brevavstånd"
     },
-    "links": "Länkar",
     "options": {
       "circle": "Cirkel",
       "none": "Ingen",
       "pill": "Piller"
     },
-    "pageSection": "Sidavsnitt",
     "textTransform": {
       "capitalize": "Kapitalisera",
       "lowercase": "Gemen",
@@ -605,8 +607,12 @@
     },
     "topBottomPadding": "Topp/bottenstoppning"
   },
+  "themeDataEditor": {
+    "description": "Ersätt temat med ett JSON-objekt. Saknade fält använder temats standardvärden.",
+    "invalid": "Ange ett JSON-objekt med kända temafält och giltiga värdetyper.",
+    "title": "Ange temadata"
+  },
   "themeSidebar": {
-    "noTheme": "Kontakta din utvecklare för att ställa in temalantering.",
     "warning": "Ändringar kommer att påverka alla siduppsättningar och layouter för hela webbplatsen."
   },
   "thursday": "Torsdag",

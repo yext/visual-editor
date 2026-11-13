@@ -568,7 +568,6 @@ Contains preset options to be used when defining a component's fields.
 | CTA_VARIANT      | [`ctaVariantOptions`](#ctaVariantOptions)           |
 | ALIGNMENT        | [`alignmentOptions`](#alignmentOptions)             |
 | JUSTIFY_CONTENT  | [`justifyContentOptions`](#justifyContentOptions)   |
-| BODY_VARIANT     | [`bodyVariantOptions`](#bodyVariantOptions)         |
 | BORDER_RADIUS    | [`borderRadiusOptions`](#borderRadiusOptions)       |
 | SPACING          | [`spacingOptions`](#spacingOptions)                 |
 | FONT_SIZE        | [`fontSizeOptions`](#fontSizeOptions)               |
@@ -643,14 +642,6 @@ Contains preset options to be used when defining a component's fields.
 | Start  | "start"  |
 | Center | "center" |
 | End    | "end"    |
-
-#### bodyVariantOptions
-
-| Label | Value  |
-| ----- | ------ |
-| Small | "sm"   |
-| Base  | "base" |
-| Large | "lg"   |
 
 #### fontSizeOptions
 

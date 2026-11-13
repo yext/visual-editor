@@ -43,7 +43,15 @@
   "closesAtTime": "Stenger kl. {{time}}",
   "closesAtTimeWeek": "Stenger kl. {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Åpne fargevelgeren"
+    "angle": "Vinkel",
+    "end": "Sluttfarge",
+    "fill": "Fyll",
+    "linear": "Lineær gradering",
+    "open": "Åpne fargevelgeren",
+    "radial": "Radiell gradering",
+    "solid": "Ensfarget",
+    "start": "Startfarge",
+    "stops": "Graderingsfarger"
   },
   "comingSoon": "Kommer snart",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Data",
     "dataAttributes": "Dataattributter",
     "dayOfWeekFormat": "Dag i ukens format",
+    "defaultForPlacement": "Standard for plassering",
     "directoryListBackgroundColor": "Katalogliste Bakgrunnsfarge",
     "directoryRootLinkLabel": "Directory Root Link Label",
     "distanceDisplay": "Avstandsvisning",
@@ -145,20 +154,22 @@
     "fontStyle": "Skriftstil",
     "headingAlign": "Overskrift justeres",
     "headingBackgroundColor": "Overskrift Bakgrunnsfarge",
-    "headingLevel": "Overskriftsnivå",
     "hours": "Timer",
     "hoursColumn": "Timer kolonne",
     "html": "HTML",
     "icon": "Ikon",
+    "iconColor": "Ikon farge",
     "icons": "Ikoner",
     "image": "Bilde",
     "imageConstrain": "Bildebegrensning",
     "imageFillType": "Bildefyllingstype",
     "includePhoneHyperlink": "Inkluder telefonhyperkobling",
+    "inheritSurface": "Arv fra overordnet element",
     "javascript": "JavaScript",
     "key": "Nøkkel",
     "keywordsDisplayName": "Visningsnavn for søkeord",
     "label": "Merkelapp",
+    "labelColor": "Merkelappfarge",
     "latitude": "Breddegrad",
     "link": "Lenke",
     "linkColor": "Link farge",
@@ -307,11 +318,14 @@
     "showRegion": "Vis region",
     "startOfTheWeek": "Ukens start",
     "styles": "Stiler",
+    "surface": "Fargevariant",
     "tag": "Tag",
     "tertiaryHeading": "Tertiær overskrift",
     "text": "Tekst",
+    "textColor": "Tekstfarge",
     "timeFormat": "Tidsformat",
     "title": "Tittel",
+    "typographyRole": "Typografistil",
     "value": "Verdi",
     "variant": "Variant",
     "video": "Video",
@@ -557,17 +571,10 @@
       "color3": "Farge 3",
       "color4": "Farge 4"
     },
-    "bodyText": "Kroppstekst",
     "borderRadius": "Grensradius",
-    "button": "Knapp",
     "colors": {
-      "colors": "Farger",
-      "primary": "Primær",
-      "quaternary": "Kvartær",
       "recommendedColorDescription": "Optimaliser fargekontrasten for tilgjengelighet ved å bruke den dynamiske standarden.",
-      "recommendedDescription": "Optimaliser fargekontrast for tilgjengelighet med denne bakgrunnen.",
-      "secondary": "Sekundær",
-      "tertiary": "Tertiær"
+      "recommendedDescription": "Optimaliser fargekontrast for tilgjengelighet med denne bakgrunnen."
     },
     "contentWidth": {
       "compact": "Kompakt (768px)",
@@ -577,25 +584,20 @@
       "standard": "Standard (1024px)",
       "wide": "Bred (1280px)"
     },
-    "defaultFont": "Standard font",
     "font": "Font",
     "fontSize": "Fontstørrelse",
     "fontWeight": {
       "fontWeight": "Fontvekt"
     },
-    "headers": "Overskrifter",
-    "image": "Bilde",
     "includeCaret": "Inkluderer Caret",
     "letterSpacing": {
       "letterSpacing": "Brevavstand"
     },
-    "links": "Lenker",
     "options": {
       "circle": "Sirkel",
       "none": "Ingen",
       "pill": "Pille"
     },
-    "pageSection": "Sideseksjon",
     "textTransform": {
       "capitalize": "Kapitalisere",
       "lowercase": "Små bokstaver",
@@ -605,8 +607,12 @@
     },
     "topBottomPadding": "Topp/nedre polstring"
   },
+  "themeDataEditor": {
+    "description": "Erstatt temaet med et JSON-objekt. Manglende felt bruker temaets standardverdier.",
+    "invalid": "Skriv inn et JSON-objekt med kjente temafelt og gyldige verdityper.",
+    "title": "Angi temadata"
+  },
   "themeSidebar": {
-    "noTheme": "Kontakt utvikleren din for å sette opp temadyring.",
     "warning": "Endringer vil påvirke alle sidesett og oppsett for hele nettstedet."
   },
   "thursday": "torsdag",

@@ -43,7 +43,15 @@
   "closesAtTime": "Suletakse {{time}}",
   "closesAtTimeWeek": "Suletakse kell {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Ava värvivalija"
+    "angle": "Nurk",
+    "end": "Lõppvärv",
+    "fill": "Täide",
+    "linear": "Lineaarne üleminek",
+    "open": "Ava värvivalija",
+    "radial": "Radiaalne üleminek",
+    "solid": "Ühevärviline",
+    "start": "Algusvärv",
+    "stops": "Ülemineku värvid"
   },
   "comingSoon": "Varsti",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Andmed",
     "dataAttributes": "Andmete atribuudid",
     "dayOfWeekFormat": "Nädalapäeva vorming",
+    "defaultForPlacement": "Paigutuse vaikeväärtus",
     "directoryListBackgroundColor": "Kataloogiloendi taustavärv",
     "directoryRootLinkLabel": "Kataloogi juurte lingi silt",
     "distanceDisplay": "Kauguse kuvamine",
@@ -145,20 +154,22 @@
     "fontStyle": "Fondi stiil",
     "headingAlign": "Juhid joondama",
     "headingBackgroundColor": "Pealkirja taustavärv",
-    "headingLevel": "Pealkirjade tase",
     "hours": "Tööaeg",
     "hoursColumn": "Töötundide veerg",
     "html": "HTML",
     "icon": "Ikoon",
+    "iconColor": "Ikooni värv",
     "icons": "Ikoonid",
     "image": "Pilt",
     "imageConstrain": "Pildi piiramine",
     "imageFillType": "Pildi täitmise tüüp",
     "includePhoneHyperlink": "Lisage telefoni hüperlink",
+    "inheritSurface": "Päri ülemelemendilt",
     "javascript": "JavaScript",
     "key": "Võti",
     "keywordsDisplayName": "Märksõnad Kuvatav nimi",
     "label": "Silt",
+    "labelColor": "Sildi värv",
     "latitude": "Laius",
     "link": "Link",
     "linkColor": "Lingi värv",
@@ -307,11 +318,14 @@
     "showRegion": "Näita piirkonda",
     "startOfTheWeek": "Nädala algus",
     "styles": "Stiilid",
+    "surface": "Värvivariant",
     "tag": "Tag",
     "tertiaryHeading": "Kolmanda taseme rubriik",
     "text": "Tekst",
+    "textColor": "Teksti värv",
     "timeFormat": "Ajavorm",
     "title": "Pealkiri",
+    "typographyRole": "Tüpograafia stiil",
     "value": "Väärtus",
     "variant": "Variant",
     "video": "Video",
@@ -557,17 +571,10 @@
       "color3": "Värv 3",
       "color4": "Värv 4"
     },
-    "bodyText": "Keretekst",
     "borderRadius": "Piiriraadius",
-    "button": "Nupp",
     "colors": {
-      "colors": "Värvid",
-      "primary": "Alg-",
-      "quaternary": "Kvaternaarne",
       "recommendedColorDescription": "Dünaamilise vaikeseadete abil optimeerige juurdepääsetavuse tagamiseks värvikontrastsust.",
-      "recommendedDescription": "Optimeerige värvikontrastiks nende taustaga juurdepääsetavuse tagamiseks.",
-      "secondary": "Teisene",
-      "tertiary": "Kolmanda astme"
+      "recommendedDescription": "Optimeerige värvikontrastiks nende taustaga juurdepääsetavuse tagamiseks."
     },
     "contentWidth": {
       "compact": "Kompaktne (768px)",
@@ -577,25 +584,20 @@
       "standard": "Standard (1024px)",
       "wide": "Lai (1280px)"
     },
-    "defaultFont": "Vaikimisi font",
     "font": "Font",
     "fontSize": "Fondi suurus",
     "fontWeight": {
       "fontWeight": "Fondi kaal"
     },
-    "headers": "Päised",
-    "image": "Pilt",
     "includeCaret": "Kaasake Caret",
     "letterSpacing": {
       "letterSpacing": "Kirjavahemik"
     },
-    "links": "Lingid",
     "options": {
       "circle": "Ring",
       "none": "Mitte ükski",
       "pill": "Pill"
     },
-    "pageSection": "Leheosa",
     "textTransform": {
       "capitalize": "Suurtähendama",
       "lowercase": "Väikekapp",
@@ -605,8 +607,12 @@
     },
     "topBottomPadding": "Ülemine/alumine polster"
   },
+  "themeDataEditor": {
+    "description": "Asendage kujundus JSON-objektiga. Puuduvad väljad kasutavad kujunduse vaikeväärtusi.",
+    "invalid": "Sisestage JSON-objekt tuntud kujundusväljade ja sobivate väärtustüüpidega.",
+    "title": "Määra kujunduse andmed"
+  },
   "themeSidebar": {
-    "noTheme": "Teemahalduse seadistamiseks pöörduge oma arendaja poole.",
     "warning": "Muudatused mõjutavad kõiki lehekomplekte ja paigutusi kogu saidi jaoks."
   },
   "thursday": "Neljapäev",

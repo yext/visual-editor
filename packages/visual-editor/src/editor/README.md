@@ -19,6 +19,43 @@ It is automatically used in the edit pages created by the Section Library Vite p
 | metadata?                        | Metadata                                                                                  |
 | sectionLibraryMigrationRegistry? | MigrationRegistry                                                                         |
 
+## Semantic theme fields
+
+Use the built-in `surface` and `typographyRole` field types in a consuming
+Section Library. Visual Editor supplies their labels, canonical options, and
+surface color swatches; libraries do not need to duplicate selector definitions.
+
+```ts
+import type {
+  SurfaceValue,
+  TypographyRole,
+  YextFields,
+} from "@yext/visual-editor";
+
+type Styles = {
+  backgroundColor?: SurfaceValue;
+  typographyRole?: TypographyRole;
+};
+
+const styleFields = {
+  backgroundColor: { type: "surface", allowInherit: false },
+  typographyRole: { type: "typographyRole" },
+} satisfies YextFields<Styles>;
+```
+
+`surface` presents a single **Background Color** control with `page`, `primary`,
+`secondary`, `accent`, and `muted` variants, plus **Other** for a custom color or
+gradient. Custom values retain the `ThemeColor` object shape and contrast metadata.
+Set `allowInherit: false` on section backgrounds. Nested content can retain the
+**Inherit Parent** choice (the default). Pass the value directly to
+`Background` or `PageSection` as `background`.
+`typographyRole` saves a semantic typography role; selecting **Default for
+Placement** clears it to `undefined`. Existing saved role values remain valid.
+Both fields support an optional `label` and `disableSearch` setting and work
+inside object and array fields, through `YextAutoField`, and in generation schemas.
+Their `SurfaceField` and `TypographyRoleField` types are exported from both
+`@yext/visual-editor` and `@yext/visual-editor/section-library-support`.
+
 ## EntityField
 
 Use this to wrap areas which use an entity field to populate data within components. This will
@@ -168,7 +205,7 @@ Existing border-radius-only values remain valid.
 Entity fields still allow entity bindings and constant values.
 Transforms return resolved data, including translated and interpolated rich-text
 HTML and JSON. `MaybeRTF` renders that data, with optional `className`, `style`,
-`bodyVariant`, and `richTextStyleOverrides`. CTAs keep their existing field and
+`typographyRole`, and `richTextStyleOverrides`. CTAs keep their existing field and
 renderer API. The shared `Image` component accepts resolved image data; missing
 URLs and images that fail to load render nothing.
 

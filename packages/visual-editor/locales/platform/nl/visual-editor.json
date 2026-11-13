@@ -43,7 +43,15 @@
   "closesAtTime": "Sluit om {{time}}",
   "closesAtTimeWeek": "Sluit om {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Kleurkiezer openen"
+    "angle": "Hoek",
+    "end": "Eindkleur",
+    "fill": "Vulling",
+    "linear": "Lineair kleurverloop",
+    "open": "Kleurkiezer openen",
+    "radial": "Radiaal kleurverloop",
+    "solid": "Effen",
+    "start": "Beginkleur",
+    "stops": "Verloopkleuren"
   },
   "comingSoon": "Binnenkort beschikbaar",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Gegevens",
     "dataAttributes": "Gegevensattributen",
     "dayOfWeekFormat": "Dag van de week formaat",
+    "defaultForPlacement": "Standaard voor plaatsing",
     "directoryListBackgroundColor": "Achtergrondkleur directorylijst",
     "directoryRootLinkLabel": "Directory root link label",
     "distanceDisplay": "Afstandsweergave",
@@ -145,20 +154,22 @@
     "fontStyle": "Lettertypestijl",
     "headingAlign": "Regeloplossing",
     "headingBackgroundColor": "Achtergrondkleur van de kop",
-    "headingLevel": "Regelniveau",
     "hours": "Uren",
     "hoursColumn": "Uren kolom",
     "html": "HTML",
     "icon": "Icon",
+    "iconColor": "Pictogramkleur",
     "icons": "Pictogrammen",
     "image": "Afbeelding",
     "imageConstrain": "Beeldbeperking",
     "imageFillType": "Type afbeeldingsvulling",
     "includePhoneHyperlink": "Telefoonhyperlink opnemen",
+    "inheritSurface": "Overnemen van bovenliggend element",
     "javascript": "JavaScript",
     "key": "Sleutel",
     "keywordsDisplayName": "Trefwoorden Weergavenaam",
     "label": "Label",
+    "labelColor": "Labelkleur",
     "latitude": "Breedte",
     "link": "Link",
     "linkColor": "Linkkleur",
@@ -307,11 +318,14 @@
     "showRegion": "Toon regio",
     "startOfTheWeek": "Begin van de week",
     "styles": "Stijlen",
+    "surface": "Kleurvariant",
     "tag": "Label",
     "tertiaryHeading": "Tertiaire rubriek",
     "text": "Tekst",
+    "textColor": "Tekstkleur",
     "timeFormat": "Tijdformaat",
     "title": "Titel",
+    "typographyRole": "Typografiestijl",
     "value": "Waarde",
     "variant": "Variant",
     "video": "Video",
@@ -557,17 +571,10 @@
       "color3": "Kleur 3",
       "color4": "Kleur 4"
     },
-    "bodyText": "Lijftekst",
     "borderRadius": "Randradius",
-    "button": "Knop",
     "colors": {
-      "colors": "Kleuren",
-      "primary": "Primair",
-      "quaternary": "Quaternair",
       "recommendedColorDescription": "Optimaliseer het kleurcontrast voor toegankelijkheid door de dynamische standaard te gebruiken.",
-      "recommendedDescription": "Optimaliseer het kleurcontrast voor toegankelijkheid met deze achtergronden.",
-      "secondary": "Secundair",
-      "tertiary": "Tertiair"
+      "recommendedDescription": "Optimaliseer het kleurcontrast voor toegankelijkheid met deze achtergronden."
     },
     "contentWidth": {
       "compact": "Compact (768px)",
@@ -577,25 +584,20 @@
       "standard": "Standaard (1024px)",
       "wide": "Breed (1280px)"
     },
-    "defaultFont": "Standaardlettertype",
     "font": "Lettertype",
     "fontSize": "Lettergrootte",
     "fontWeight": {
       "fontWeight": "Lettergewicht"
     },
-    "headers": "Kopteksten",
-    "image": "Afbeelding",
     "includeCaret": "Bevat Caret",
     "letterSpacing": {
       "letterSpacing": "Letterafstand"
     },
-    "links": "Links",
     "options": {
       "circle": "Cirkel",
       "none": "Geen",
       "pill": "Pil"
     },
-    "pageSection": "Paginagectie",
     "textTransform": {
       "capitalize": "Hoofd",
       "lowercase": "Kleine letters",
@@ -605,8 +607,12 @@
     },
     "topBottomPadding": "Bovenste/onderste vulling"
   },
+  "themeDataEditor": {
+    "description": "Vervang het thema door een JSON-object. Ontbrekende velden gebruiken de standaardwaarden van het thema.",
+    "invalid": "Voer een JSON-object in met herkende themavelden en geldige waardetypen.",
+    "title": "Themagegevens instellen"
+  },
   "themeSidebar": {
-    "noTheme": "Neem contact op met uw ontwikkelaar om themabeheer in te stellen.",
     "warning": "Wijzigingen hebben invloed op alle paginasets en lay -outs voor de hele site."
   },
   "thursday": "Donderdag",

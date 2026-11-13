@@ -43,7 +43,15 @@
   "closesAtTime": "Zatvára sa o {{time}}",
   "closesAtTimeWeek": "Zatvára sa o {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Otvorte výber farieb"
+    "angle": "Uhol",
+    "end": "Koncová farba",
+    "fill": "Výplň",
+    "linear": "Lineárny prechod",
+    "open": "Otvorte výber farieb",
+    "radial": "Radiálny prechod",
+    "solid": "Jednofarebná",
+    "start": "Počiatočná farba",
+    "stops": "Farby prechodu"
   },
   "comingSoon": "Už čoskoro",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Údaje",
     "dataAttributes": "Atribúty údajov",
     "dayOfWeekFormat": "Formát dňa v týždni",
+    "defaultForPlacement": "Predvolené podľa umiestnenia",
     "directoryListBackgroundColor": "Farba pozadia zoznamu adresárov",
     "directoryRootLinkLabel": "Štítok s koreňom adresára",
     "distanceDisplay": "Zobrazenie vzdialenosti",
@@ -145,20 +154,22 @@
     "fontStyle": "Štýl písma",
     "headingAlign": "Vyrovnanie",
     "headingBackgroundColor": "Farba pozadia nadpisu",
-    "headingLevel": "Úroveň",
     "hours": "Hodiny",
     "hoursColumn": "Stĺp",
     "html": "HTML",
     "icon": "Ikona",
+    "iconColor": "Farba ikony",
     "icons": "ikony",
     "image": "Predstavovať",
     "imageConstrain": "Obmedzenie obrázka",
     "imageFillType": "Typ výplne obrázka",
     "includePhoneHyperlink": "Zahrňte hypertextový odkaz na telefón",
+    "inheritSurface": "Zdediť od nadradeného prvku",
     "javascript": "JavaScript",
     "key": "kľúč",
     "keywordsDisplayName": "Zobrazovaný názov kľúčových slov",
     "label": "Štítok",
+    "labelColor": "Farba štítka",
     "latitude": "Šírka",
     "link": "Prepojiť",
     "linkColor": "Farba odkazu",
@@ -307,11 +318,14 @@
     "showRegion": "Zobraziť región",
     "startOfTheWeek": "Začiatok týždňa",
     "styles": "Štýl",
+    "surface": "Farebný variant",
     "tag": "Tag",
     "tertiaryHeading": "Terciárny nadpis",
     "text": "Text",
+    "textColor": "Farba textu",
     "timeFormat": "Časový formát",
     "title": "Názov",
+    "typographyRole": "Typografický štýl",
     "value": "Hodnota",
     "variant": "Variant",
     "video": "Video",
@@ -581,17 +595,10 @@
       "color3": "Farba 3",
       "color4": "Farba 4"
     },
-    "bodyText": "Text tela",
     "borderRadius": "Okrajový polomer",
-    "button": "Tlačidlo",
     "colors": {
-      "colors": "Farby",
-      "primary": "Primárny",
-      "quaternary": "Kvartérny",
       "recommendedColorDescription": "Optimalizujte farebný kontrast pre prístupnosť pomocou dynamického predvoleného nastavenia.",
-      "recommendedDescription": "Optimalizujte farebný kontrast pre prístupnosť s týmito pozadím.",
-      "secondary": "Druhoradý",
-      "tertiary": "Terciárny"
+      "recommendedDescription": "Optimalizujte farebný kontrast pre prístupnosť s týmito pozadím."
     },
     "contentWidth": {
       "compact": "Kompaktné (768px)",
@@ -601,25 +608,20 @@
       "standard": "Štandard (1024px)",
       "wide": "Široký (1280px)"
     },
-    "defaultFont": "Predvolené písmo",
     "font": "Písmo",
     "fontSize": "Veľkosť písma",
     "fontWeight": {
       "fontWeight": "Váha"
     },
-    "headers": "Hlavičky",
-    "image": "Predstavovať",
     "includeCaret": "Zahrnúť karet",
     "letterSpacing": {
       "letterSpacing": "Rozloženie listov"
     },
-    "links": "Odkazy",
     "options": {
       "circle": "Kruh",
       "none": "Žiadne",
       "pill": "Tabletka"
     },
-    "pageSection": "Sekcia",
     "textTransform": {
       "capitalize": "Zarábať",
       "lowercase": "Malé písmená",
@@ -629,8 +631,12 @@
     },
     "topBottomPadding": "Vypchávka zhora/spodnej časti"
   },
+  "themeDataEditor": {
+    "description": "Nahraďte motív objektom JSON. Chýbajúce polia použijú predvolené hodnoty motívu.",
+    "invalid": "Zadajte objekt JSON so známymi poľami motívu a platnými typmi hodnôt.",
+    "title": "Nastaviť údaje motívu"
+  },
   "themeSidebar": {
-    "noTheme": "Ak chcete nastaviť správu témy, kontaktujte svojho vývojára.",
     "warning": "Zmeny ovplyvnia všetky sady stránok a rozloženia pre celú stránku."
   },
   "thursday": "Štvrtok",

@@ -50,7 +50,7 @@ export {
   type HeadingLevel,
   VisualEditorComponentsContentPath,
   VisualEditorThemeClassSafelist,
-} from "./themeConfigOptions.ts";
+} from "./themeOptions.ts";
 export { deepMerge } from "./themeResolver.ts";
 export { type StreamDocument } from "./types/StreamDocument.ts";
 export {

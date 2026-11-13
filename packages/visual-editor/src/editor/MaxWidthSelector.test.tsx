@@ -1,4 +1,4 @@
-import { ThemeOptions } from "../utils/themeConfigOptions.ts";
+import { ThemeOptions } from "../utils/themeOptions.ts";
 import { msg } from "../utils/i18n/platform.ts";
 import { filterMaxWidths, getMaxWidthOptions } from "./MaxWidthSelector.tsx";
 

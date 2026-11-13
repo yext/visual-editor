@@ -2,27 +2,16 @@ import * as React from "react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
-import { Button, ButtonProps } from "./button.js";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { Button, ButtonProps, variantToInteractionRole } from "./button.js";
+import { ThemeColor } from "../../utils/themeOptions.ts";
 import { normalizeLink } from "../../utils/normalizeLink.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
-import { useBackground } from "../../hooks/useBackground.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
-import {
-  getThemeColorCssValue,
-  getThemeColorHexValue,
-  hexToRGB,
-  isColorContrastWcagCompliant,
-} from "../../utils/colors.ts";
-
-const LINK_TEXT_TRANSFORM_CSS_VAR =
-  "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"];
-const BUTTON_TEXT_TRANSFORM_CSS_VAR =
-  "var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"];
+import { getThemeColorCssValue } from "../../utils/colors.ts";
 
 export type CTAProps = {
   // Core props
@@ -53,6 +42,9 @@ export type CTAProps = {
   ) => void;
   disabled?: boolean;
   color?: ThemeColor;
+  labelColor?: ThemeColor;
+  interactionRole?: ButtonProps["interactionRole"];
+  typographyRole?: ButtonProps["typographyRole"];
   openInNewTab?: boolean;
   /**
    * When true and variant is "link", applies vertical padding (py-3) to the CTA.
@@ -117,7 +109,6 @@ const useResolvedCtaProps = (props: CTAProps) => {
   } = props;
   const { t } = useTranslation();
   const streamDocument = useDocument();
-  const background = useBackground();
 
   const resolvedDynamicProps = useMemo(() => {
     const resolvedLink = shouldNormalizeLink
@@ -164,12 +155,9 @@ const useResolvedCtaProps = (props: CTAProps) => {
           ) &&
           React.isValidElement(label)
         ) {
-          const buttonBackgroundColor = background?.isDarkColor
-            ? "#FFFFFF"
-            : "#F9F9F9";
-
           label = React.cloneElement(label as React.ReactElement, {
-            backgroundColor: buttonBackgroundColor,
+            backgroundColor:
+              "var(--ve-surface-preset-image-background, #F9F9F9)",
           });
         }
 
@@ -193,7 +181,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
           ariaLabel: ariaLabel ?? "",
         };
     }
-  }, [props, streamDocument, background, shouldNormalizeLink, ariaLabel, t]);
+  }, [props, streamDocument, shouldNormalizeLink, ariaLabel, t]);
 
   if (!resolvedDynamicProps) {
     return null;
@@ -229,7 +217,6 @@ const useResolvedCtaProps = (props: CTAProps) => {
     buttonVariant,
     buttonClassName,
     showCaret,
-    background,
   };
 };
 
@@ -243,6 +230,9 @@ export const CTA = (props: CTAProps) => {
     onClick,
     disabled = false,
     color,
+    labelColor,
+    interactionRole,
+    typographyRole,
     openInNewTab = false,
     setPadding = false,
     actionType = "link",
@@ -251,9 +241,9 @@ export const CTA = (props: CTAProps) => {
   } = props;
 
   const { t } = useTranslation();
-  const streamDocument = useDocument();
   const resolvedProps = useResolvedCtaProps(props);
   const isButton = actionType === "button";
+  const resolvedRole = interactionRole ?? variantToInteractionRole(variant);
 
   if (!resolvedProps) {
     return null;
@@ -267,64 +257,28 @@ export const CTA = (props: CTAProps) => {
     buttonVariant,
     buttonClassName,
     showCaret,
-    background,
   } = resolvedProps;
-  const isDarkBackground = background?.isDarkColor;
-  const resolvedCtaColorHex = React.useMemo(
-    () => getThemeColorHexValue(color?.selectedColor, streamDocument),
-    [color?.selectedColor, streamDocument]
-  );
-  const resolvedBackgroundColorHex = React.useMemo(
-    () => getThemeColorHexValue(background?.selectedColor, streamDocument),
-    [background?.selectedColor, streamDocument]
-  );
-  const resolvedCtaColorRgb = resolvedCtaColorHex
-    ? hexToRGB(resolvedCtaColorHex)
-    : undefined;
-  const resolvedBackgroundColorRgb = resolvedBackgroundColorHex
-    ? hexToRGB(resolvedBackgroundColorHex)
-    : undefined;
-  const shouldUseConfiguredSecondaryColor =
-    !!color?.selectedColor &&
-    !!resolvedCtaColorHex &&
-    (!isDarkBackground ||
-      (!!resolvedCtaColorRgb &&
-        !!resolvedBackgroundColorRgb &&
-        isColorContrastWcagCompliant(
-          resolvedCtaColorRgb,
-          resolvedBackgroundColorRgb,
-          12,
-          400
-        )));
   const dynamicStyle: React.CSSProperties = (() => {
     const bg = getThemeColorCssValue(color?.selectedColor);
     const textColor = getThemeColorCssValue(color?.contrastingColor);
     const border = bg;
 
-    if (variant === "primary") {
+    if (resolvedRole === "primary-button") {
       return {
-        backgroundColor: bg,
+        background: bg,
         color: textColor,
         borderColor: border,
       };
     }
 
-    if (
-      variant === "secondary" &&
-      (shouldUseConfiguredSecondaryColor || !isDarkBackground)
-    ) {
+    if (resolvedRole === "secondary-button") {
       return {
         borderColor: border,
         color: border,
       };
     }
 
-    if (
-      variant === "link" ||
-      variant === "directoryLink" ||
-      variant === "headerFooterMainLink" ||
-      variant === "headerFooterSecondaryLink"
-    ) {
+    if (resolvedRole === "link" || resolvedRole === "navigation-link") {
       return {
         color: bg,
       };
@@ -364,8 +318,12 @@ export const CTA = (props: CTAProps) => {
     return (
       <Button
         type="button"
+        disabled
         className={buttonClassName}
         variant={buttonVariant}
+        interactionRole={interactionRole}
+        typographyRole={typographyRole}
+        labelColor={labelColor}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -380,9 +338,7 @@ export const CTA = (props: CTAProps) => {
         }}
         style={{
           ...disabledStyle,
-          textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? LINK_TEXT_TRANSFORM_CSS_VAR
-            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
+          ...(labelColor ? { color: getThemeColorCssValue(labelColor) } : {}),
           ...style,
         }}
       >
@@ -409,13 +365,14 @@ export const CTA = (props: CTAProps) => {
         type="button"
         style={{
           ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
-          textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? LINK_TEXT_TRANSFORM_CSS_VAR
-            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
+          ...(labelColor ? { color: getThemeColorCssValue(labelColor) } : {}),
           ...style,
         }}
         className={buttonClassName}
         variant={buttonVariant}
+        interactionRole={interactionRole}
+        typographyRole={typographyRole}
+        labelColor={labelColor}
         linkPadding={linkPadding}
         aria-label={computedAriaLabel}
         onClick={onClick}
@@ -430,11 +387,15 @@ export const CTA = (props: CTAProps) => {
     <Button
       style={{
         ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
+        ...(labelColor ? { color: getThemeColorCssValue(labelColor) } : {}),
         ...style,
       }}
       asChild
       className={buttonClassName}
       variant={buttonVariant}
+      interactionRole={interactionRole}
+      typographyRole={typographyRole}
+      labelColor={labelColor}
       linkPadding={linkPadding}
     >
       <Link
@@ -444,13 +405,9 @@ export const CTA = (props: CTAProps) => {
         aria-label={computedAriaLabel}
         rel={openInNewTab ? "noopener noreferrer" : undefined}
         onClick={onClick}
-        // textTransform has to be applied via styles because there is no custom tailwind utility
         style={{
           ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
-          // @ts-ignore: the css variable here resolves to a valid enum value
-          textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? LINK_TEXT_TRANSFORM_CSS_VAR
-            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
+          ...(labelColor ? { color: getThemeColorCssValue(labelColor) } : {}),
           ...style,
         }}
       >

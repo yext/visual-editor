@@ -22,6 +22,11 @@
 - Treat `lint`, `prettier`, `autofix`, `i18n:update`, and docs-generation commands as mutating commands. Run them only when the task calls for those changes.
 - If locale strings change, run `pnpm --dir packages/visual-editor run i18n:update`.
 
+## Repo Conventions
+
+- Always use `{}` blocks for if statements and try/catch statements.
+- Don't leave empty lines between export or import statements.
+
 ## Package Structure
 
 - `packages/visual-editor` is the primary package and the default place for library code changes.
@@ -36,3 +41,4 @@
 - Add a migration when a component is renamed, when component props change, when component fields or field options change in a way that could invalidate existing saved data, or when removing a component and existing layouts still need to be handled.
 - If a migration is needed, add a new migration file and append it to `packages/visual-editor/src/components/migrations/migrationRegistry.ts`.
 - Existing migrations are append-only and immutable. Do not rewrite or repurpose old migration files; add a new migration instead.
+- Always add the migration import to the bottom of the existing imports

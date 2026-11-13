@@ -43,7 +43,15 @@
   "closesAtTime": "Zavírá v {{time}}",
   "closesAtTimeWeek": "Zavírá v {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Otevřete výběr barvy"
+    "angle": "Úhel",
+    "end": "Koncová barva",
+    "fill": "Výplň",
+    "linear": "Lineární přechod",
+    "open": "Otevřete výběr barvy",
+    "radial": "Radiální přechod",
+    "solid": "Jednobarevná",
+    "start": "Počáteční barva",
+    "stops": "Barvy přechodu"
   },
   "comingSoon": "Již brzy",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Data",
     "dataAttributes": "Atributy dat",
     "dayOfWeekFormat": "Formát dne týdne",
+    "defaultForPlacement": "Výchozí podle umístění",
     "directoryListBackgroundColor": "Barva pozadí seznamu adresářů",
     "directoryRootLinkLabel": "Štítek kořenového odkazu na adresář",
     "distanceDisplay": "Zobrazení vzdálenosti",
@@ -145,20 +154,22 @@
     "fontStyle": "Styl písma",
     "headingAlign": "Sladění nadpisu",
     "headingBackgroundColor": "Barva pozadí nadpisu",
-    "headingLevel": "Úroveň nadpisu",
     "hours": "Hodiny",
     "hoursColumn": "Sloupec hodin",
     "html": "HTML",
     "icon": "Ikona",
+    "iconColor": "Barva ikony",
     "icons": "ikony",
     "image": "Obraz",
     "imageConstrain": "Omezení obrázku",
     "imageFillType": "Typ výplně obrázku",
     "includePhoneHyperlink": "Zahrňte hypertextový odkaz na telefon",
+    "inheritSurface": "Zdědit od rodiče",
     "javascript": "JavaScript",
     "key": "Klíč",
     "keywordsDisplayName": "Zobrazovaný název klíčových slov",
     "label": "Označení",
+    "labelColor": "Barva označení",
     "latitude": "Zeměpisná šířka",
     "link": "Odkaz",
     "linkColor": "Barva odkazu",
@@ -307,11 +318,14 @@
     "showRegion": "Zobrazit region",
     "startOfTheWeek": "Začátek týdne",
     "styles": "Styly",
+    "surface": "Barevná varianta",
     "tag": "Štítek",
     "tertiaryHeading": "Terciární nadpis",
     "text": "Text",
+    "textColor": "Barva textu",
     "timeFormat": "Formát času",
     "title": "Titul",
+    "typographyRole": "Styl typografie",
     "value": "Hodnota",
     "variant": "Varianta",
     "video": "Video",
@@ -581,17 +595,10 @@
       "color3": "Barva 3",
       "color4": "Barva 4"
     },
-    "bodyText": "Text těla",
     "borderRadius": "Poloměr hranic",
-    "button": "Tlačítko",
     "colors": {
-      "colors": "Barvy",
-      "primary": "Primární",
-      "quaternary": "Kvartérní",
       "recommendedColorDescription": "Optimalizujte barevný kontrast pro usnadnění přístupu pomocí dynamického výchozího nastavení.",
-      "recommendedDescription": "Optimalizujte barevný kontrast pro přístupnost s těmito pozabami.",
-      "secondary": "Sekundární",
-      "tertiary": "Terciární"
+      "recommendedDescription": "Optimalizujte barevný kontrast pro přístupnost s těmito pozabami."
     },
     "contentWidth": {
       "compact": "Kompaktní (768px)",
@@ -601,25 +608,20 @@
       "standard": "Standard (1024px)",
       "wide": "Široký (1280px)"
     },
-    "defaultFont": "Výchozí písmo",
     "font": "Písmo",
     "fontSize": "Velikost písma",
     "fontWeight": {
       "fontWeight": "Hmotnost písma"
     },
-    "headers": "Záhlaví",
-    "image": "Obraz",
     "includeCaret": "Zahrnout Caret",
     "letterSpacing": {
       "letterSpacing": "Rozestup dopisů"
     },
-    "links": "Odkazy",
     "options": {
       "circle": "Kruh",
       "none": "Žádný",
       "pill": "Pilulka"
     },
-    "pageSection": "Sekce stránky",
     "textTransform": {
       "capitalize": "Kapitalizovat",
       "lowercase": "Malá písmena",
@@ -629,8 +631,12 @@
     },
     "topBottomPadding": "Vycpávání nahoře/dolního množství"
   },
+  "themeDataEditor": {
+    "description": "Nahraďte motiv objektem JSON. Chybějící pole použijí výchozí hodnoty motivu.",
+    "invalid": "Zadejte objekt JSON se známými poli motivu a platnými typy hodnot.",
+    "title": "Nastavit data motivu"
+  },
   "themeSidebar": {
-    "noTheme": "Obraťte se na svého vývojáře a nastavte správu témat.",
     "warning": "Změny ovlivní všechny sady a rozvržení stránek pro celý web."
   },
   "thursday": "čtvrtek",

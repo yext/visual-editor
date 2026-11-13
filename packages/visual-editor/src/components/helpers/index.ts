@@ -11,6 +11,9 @@ export {
   createStyledTextConfig,
 } from "./styledFields/createStyledTextConfig.tsx";
 export {
+  type StyledTextElementProps,
+  type StyledTextTag,
+  type StyledTextAlignment,
   getStyledTextStyle,
   renderStyledRichText,
   StyledTextElement,

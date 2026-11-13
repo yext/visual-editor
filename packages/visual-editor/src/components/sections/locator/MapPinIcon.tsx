@@ -1,33 +1,10 @@
+import { getThemeColorHexValue } from "../../../utils/colors.ts";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../../utils/themeOptions.ts";
+import { useThemeValue } from "../../../hooks/useThemeValue.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 import { getThemeColorCssValue } from "../../../utils/colors.ts";
-
-const resolveCssVarColor = (
-  element: Element,
-  varName: string
-): string | undefined => {
-  return window.getComputedStyle(element).getPropertyValue(varName).trim();
-};
-
-const resolveContrastColor = (
-  element: Element,
-  textToken: string
-): string | undefined => {
-  if (textToken === "black") {
-    return "#000000";
-  }
-
-  if (textToken === "white") {
-    return "#FFFFFF";
-  }
-
-  if (textToken) {
-    return resolveCssVarColor(element, `--colors-${textToken}`);
-  }
-
-  return undefined;
-};
 
 // Renders a Mapbox-style pin with theme-aware fill and contrast-aware icon/number in the center.
 export const MapPinIcon = ({
@@ -56,28 +33,24 @@ export const MapPinIcon = ({
   const centerY = 13.5;
   const iconHeight = aspectRatio ? iconWidth / aspectRatio : iconWidth;
 
-  const backgroundToken = color?.selectedColor;
-  const textToken = color?.contrastingColor;
-  const svgRef = React.useRef<SVGSVGElement>(null);
-  const [contrastColor, setContrastColor] = React.useState<string | undefined>(
-    undefined
+  const streamDocument = useDocument();
+  const role = selected ? "accent" : "primary";
+  const fill = getThemeColorCssValue(color);
+  const contrastToken =
+    color?.selectedColor === "default" ? undefined : color?.contrastingColor;
+  const contrastCss = getThemeColorCssValue(contrastToken);
+  const contrastVariable = contrastCss?.match(/var\((--[\w-]+)/)?.[1];
+  const rawContrast = useThemeValue(
+    contrastVariable ?? `--ve-color-${role}-foreground`,
+    streamDocument
   );
-
-  React.useLayoutEffect(() => {
-    // Resolve icon/text contrast color using the theme's text token
-    if (svgRef.current && textToken) {
-      setContrastColor(resolveContrastColor(svgRef.current, textToken));
-    }
-  }, [textToken]);
-
-  // SVG children use currentColor for the pin fill; apply contrast for text/icon.
-  const svgStyle = React.useMemo<React.CSSProperties | undefined>(
-    () =>
-      backgroundToken
-        ? { color: getThemeColorCssValue(backgroundToken) }
-        : undefined,
-    [backgroundToken]
+  const contrastColor = getThemeColorHexValue(
+    contrastToken ?? (rawContrast ? `[${rawContrast}]` : undefined),
+    streamDocument
   );
+  const svgStyle: React.CSSProperties = {
+    color: fill ?? `var(--ve-color-${role})`,
+  };
 
   const ariaLabel =
     typeof resultIndex === "number"
@@ -96,7 +69,6 @@ export const MapPinIcon = ({
       className="components block cursor-pointer appearance-none border-0 bg-transparent p-0"
     >
       <svg
-        ref={svgRef}
         style={svgStyle}
         display="block"
         height={selected ? pinScale * pinHeight : pinHeight}

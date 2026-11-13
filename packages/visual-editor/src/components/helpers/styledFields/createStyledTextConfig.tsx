@@ -1,3 +1,7 @@
+import {
+  type TypographyRole,
+  ThemeOptions,
+} from "../../../utils/themeOptions.ts";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
@@ -7,7 +11,6 @@ import {
   type YextFields,
 } from "../../../fields/fields.ts";
 import { type StyledTextValue } from "../../../fields/styledFields/StyledTextField.tsx";
-import { useBackground } from "../../../hooks/useBackground.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import {
   type TranslatableRichText,
@@ -15,7 +18,6 @@ import {
 } from "../../../types/types.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import {
   renderStyledRichText,
   StyledTextElement,
@@ -29,6 +31,7 @@ type StyledTextConfigProps<TText> = {
     text: YextEntityField<TText>;
   };
   alignment?: StyledTextAlignment;
+  typographyRole?: TypographyRole;
   fontOptions: StyledTextValue;
   tag?: StyledTextTag;
 };
@@ -96,6 +99,7 @@ const buildFields = <TText,>({
         },
       },
     },
+    typographyRole: { type: "typographyRole" },
     fontOptions: {
       label:
         fontOptionsLabelOverride ?? msg("fields.fontOptions", "Font Options"),
@@ -147,7 +151,6 @@ export const StyledTextComponent = <
   const { data, alignment, fontOptions, kind } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  const background = useBackground();
   const sourceData = data.text;
 
   if (kind === "plain") {
@@ -165,6 +168,7 @@ export const StyledTextComponent = <
       >
         <StyledTextElement
           as={props.tag}
+          typographyRole={props.typographyRole}
           align={alignment}
           color={fontOptions.color}
           style={getStyledTextStyle(fontOptions)}
@@ -178,9 +182,7 @@ export const StyledTextComponent = <
   }
 
   const resolvedData = sourceData
-    ? resolveComponentData(sourceData, i18n.language, streamDocument, {
-        isDarkBackground: background?.isDarkColor,
-      })
+    ? resolveComponentData(sourceData, i18n.language, streamDocument)
     : undefined;
 
   return React.isValidElement(resolvedData) ||
@@ -192,6 +194,7 @@ export const StyledTextComponent = <
     >
       {renderStyledRichText({
         content: resolvedData,
+        typographyRole: props.typographyRole,
         align: alignment,
         text: fontOptions,
       })}

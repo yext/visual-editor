@@ -12,8 +12,10 @@ import type {
 } from "../../../types/layoutGeneration.ts";
 import {
   fontSizeOptions,
+  surfaceRoleOptions,
+  typographyRoleOptions,
   ThemeOptions,
-} from "../../../utils/themeConfigOptions.ts";
+} from "../../../utils/themeOptions.ts";
 import {
   backgroundColorZodSchema,
   siteColorZodSchema,
@@ -346,6 +348,16 @@ export const inferGenerationSchema = (
             })
           : undefined;
       }
+      case "surface":
+        return z.union([
+          z.enum([
+            ...(field.allowInherit !== false ? ["inherit"] : []),
+            ...surfaceRoleOptions.map(({ value }) => value),
+          ]),
+          backgroundColorZodSchema,
+        ]);
+      case "typographyRole":
+        return z.enum(typographyRoleOptions.map(({ value }) => value));
       case "themeColor":
         return field.options === "BACKGROUND_COLOR"
           ? backgroundColorZodSchema

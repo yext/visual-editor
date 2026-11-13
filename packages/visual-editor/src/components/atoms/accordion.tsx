@@ -5,7 +5,13 @@ export const Accordion = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(function Accordion({ className = "", ...props }, ref) {
-  return <div ref={ref} className={`flex flex-col ${className}`} {...props} />;
+  return (
+    <div
+      ref={ref}
+      className={`ve-theme-body flex flex-col ${className}`}
+      {...props}
+    />
+  );
 });
 
 export const AccordionItem = React.forwardRef<
@@ -16,7 +22,7 @@ export const AccordionItem = React.forwardRef<
     <details
       ref={ref}
       className={themeManagerCn(
-        "group border-b py-4 last:border-none",
+        "ve-theme-border group border-b py-4 last:border-none",
         className
       )}
       {...props}
@@ -32,7 +38,7 @@ export const AccordionTrigger = React.forwardRef<
     <summary
       ref={ref}
       className={themeManagerCn(
-        "flex cursor-pointer list-none items-center justify-between",
+        "ve-theme-control flex cursor-pointer list-none items-center justify-between",
         className
       )}
       {...props}

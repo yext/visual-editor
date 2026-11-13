@@ -5,7 +5,7 @@ import { pt, type MsgString } from "../../utils/i18n/platform.ts";
 import {
   type ImageBorderRadius,
   ThemeOptions,
-} from "../../utils/themeConfigOptions.ts";
+} from "../../utils/themeOptions.ts";
 import { imageAspectRatioOptions } from "../../components/contentBlocks/image/styling.ts";
 import { withDefaultOption } from "./baseText.tsx";
 

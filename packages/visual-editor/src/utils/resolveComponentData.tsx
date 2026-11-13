@@ -1,4 +1,3 @@
-import { BodyProps } from "../components/atoms/body.tsx";
 import { MaybeRTF } from "../components/helpers/maybeRTF.tsx";
 import {
   type RichText,
@@ -17,12 +16,10 @@ import {
   isRichText,
   richTextToPlainText,
 } from "./plainText.ts";
-import { ThemeColor } from "./themeConfigOptions.ts";
-import { getThemeColorCssValue } from "./colors.ts";
+import { ThemeColor, type TypographyRole } from "./themeOptions.ts";
 
-type ResolveComponentDataOptions = {
-  variant?: BodyProps["variant"];
-  isDarkBackground?: boolean;
+export type ResolveComponentDataOptions = {
+  typographyRole?: TypographyRole;
   className?: string;
   color?: ThemeColor;
   output?: "render" | "plainText";
@@ -44,6 +41,17 @@ export function resolveComponentData(
   locale: string,
   streamDocument?: any
 ): string;
+
+export function resolveComponentData(
+  data:
+    | TranslatableString
+    | TranslatableRichText
+    | YextEntityField<TranslatableString | TranslatableRichText>
+    | undefined,
+  locale: string,
+  streamDocument: Record<string, any> | undefined,
+  options: Omit<ResolveComponentDataOptions, "output"> & { output?: "render" }
+): string | React.ReactElement;
 
 // 2. Handles TranslatableRichText directly or via a YextEntityField
 export function resolveComponentData(
@@ -100,24 +108,26 @@ export function resolveComponentData<T>(
   // objects into their final string or React element form.
   const resolved = resolveTranslatableType(rawValue, locale);
 
-  // If the resolved value is a RTF react element, wrap it in a div with tailwind classes
-  if (React.isValidElement(resolved)) {
-    let rtfClass = "rtf-theme";
-    if (options?.variant && options.variant !== "base") {
-      rtfClass += ` rtf-body-${options.variant}`;
-    }
-    if (options?.className) {
-      rtfClass += ` ${options.className}`;
-    }
-    const rtfColor = getThemeColorCssValue(options?.color?.selectedColor);
-
+  // MaybeRTF is the single renderer for rich text. Pass the role directly so
+  // an inner default body role cannot defeat the requested typography.
+  if (React.isValidElement(resolved) && resolved.type === MaybeRTF) {
+    return React.cloneElement(resolved as React.ReactElement<any>, {
+      typographyRole: options?.typographyRole ?? "body",
+      className: options?.className,
+      richTextStyleOverrides: { color: options?.color },
+    });
+  }
+  if (
+    typeof resolved === "string" &&
+    (options?.typographyRole || options?.color || options?.className)
+  ) {
     return (
-      <div
-        className={rtfClass}
-        style={rtfColor ? { color: rtfColor } : undefined}
-      >
-        {resolved}
-      </div>
+      <MaybeRTF
+        data={resolved}
+        typographyRole={options.typographyRole}
+        className={options.className}
+        richTextStyleOverrides={{ color: options.color }}
+      />
     );
   }
 

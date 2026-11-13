@@ -43,7 +43,15 @@
   "closesAtTime": "Schließt um {{time}} Uhr",
   "closesAtTimeWeek": "Schließt am {{dayOfWeek}} um {{time}} Uhr",
   "colorPicker": {
-    "open": "Farbauswahl öffnen"
+    "angle": "Winkel",
+    "end": "Endfarbe",
+    "fill": "Füllung",
+    "linear": "Linearer Farbverlauf",
+    "open": "Farbauswahl öffnen",
+    "radial": "Radialer Farbverlauf",
+    "solid": "Einfarbig",
+    "start": "Startfarbe",
+    "stops": "Verlaufsfarben"
   },
   "comingSoon": "Demnächst erhältlich",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Daten",
     "dataAttributes": "Datenattribute",
     "dayOfWeekFormat": "Wochentagsformat",
+    "defaultForPlacement": "Standard für die Platzierung",
     "directoryListBackgroundColor": "Hintergrundfarbe der Verzeichnisliste",
     "directoryRootLinkLabel": "Link-Label für Directory-Root",
     "distanceDisplay": "Entfernungsanzeige",
@@ -145,20 +154,22 @@
     "fontStyle": "Schriftstil",
     "headingAlign": "Überschrift ausrichten",
     "headingBackgroundColor": "Hintergrundfarbe der Überschrift",
-    "headingLevel": "Überschrift-Ebene",
     "hours": "Öffnungszeiten",
     "hoursColumn": "Spalte für Öffnungszeiten",
     "html": "HTML",
     "icon": "Symbol",
+    "iconColor": "Symbolfarbe",
     "icons": "Icons",
     "image": "Bild",
     "imageConstrain": "Bildbegrenzung",
     "imageFillType": "Bildfülltyp",
     "includePhoneHyperlink": "Telefonhyperlink anzeigen",
+    "inheritSurface": "Vom übergeordneten Element übernehmen",
     "javascript": "JavaScript",
     "key": "Schlüssel",
     "keywordsDisplayName": "Anzeigename der Schlüsselwörter",
     "label": "Bezeichnung",
+    "labelColor": "Bezeichnungsfarbe",
     "latitude": "Breitengrad",
     "link": "Link",
     "linkColor": "Link-Farbe",
@@ -307,11 +318,14 @@
     "showRegion": "Region anzeigen",
     "startOfTheWeek": "Wochenbeginn",
     "styles": "Styles",
+    "surface": "Farbvariante",
     "tag": "Etikett",
     "tertiaryHeading": "Tertiäre Überschrift",
     "text": "Text",
+    "textColor": "Textfarbe",
     "timeFormat": "Zeitformat",
     "title": "Titel",
+    "typographyRole": "Typografiestil",
     "value": "Wert",
     "variant": "Variante",
     "video": "Video",
@@ -557,17 +571,10 @@
       "color3": "Farbe 3",
       "color4": "Farbe 4"
     },
-    "bodyText": "Beschreibungstext",
     "borderRadius": "Eckenradius",
-    "button": "Button",
     "colors": {
-      "colors": "Farben",
-      "primary": "Primär",
-      "quaternary": "Quartär",
       "recommendedColorDescription": "Barrierefreie Kontraste durch dynamische Standardwerte sicherstellen",
-      "recommendedDescription": "Optimale Kontraste für Barrierefreiheit mit diesen Hintergründen erzielen",
-      "secondary": "Sekundär",
-      "tertiary": "Tertiär"
+      "recommendedDescription": "Optimale Kontraste für Barrierefreiheit mit diesen Hintergründen erzielen"
     },
     "contentWidth": {
       "compact": "Kompakt (768px)",
@@ -577,25 +584,20 @@
       "standard": "Standard (1024px)",
       "wide": "Breit (1280px)"
     },
-    "defaultFont": "Standardschriftart",
     "font": "Schriftart",
     "fontSize": "Schriftgröße",
     "fontWeight": {
       "fontWeight": "Schriftgewicht"
     },
-    "headers": "Überschriften",
-    "image": "Bild",
     "includeCaret": "Caret einbeziehen",
     "letterSpacing": {
       "letterSpacing": "Zeichenabstand"
     },
-    "links": "Links",
     "options": {
       "circle": "Kreis",
       "none": "Keine",
       "pill": "Pille"
     },
-    "pageSection": "Seiten Modul",
     "textTransform": {
       "capitalize": "Großschreibung",
       "lowercase": "Kleinschreibung",
@@ -605,8 +607,12 @@
     },
     "topBottomPadding": "Padding (Oben/Unten)"
   },
+  "themeDataEditor": {
+    "description": "Ersetzen Sie das Theme durch ein JSON-Objekt. Fehlende Felder verwenden die Standardwerte des Themes.",
+    "invalid": "Geben Sie ein JSON-Objekt mit bekannten Theme-Feldern und gültigen Werttypen ein.",
+    "title": "Theme-Daten festlegen"
+  },
   "themeSidebar": {
-    "noTheme": "Theme-Management nicht konfiguriert. Bitte kontaktieren Sie Ihren Administrator für die Einrichtung.",
     "warning": "Diese Änderungen wirken sich global auf alle Page-Sets und Layouts der gesamten Website aus."
   },
   "thursday": "Donnerstag",

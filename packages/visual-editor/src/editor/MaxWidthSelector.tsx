@@ -1,5 +1,5 @@
 import { msg } from "../utils/i18n/platform.ts";
-import { ThemeOptions } from "../utils/themeConfigOptions.ts";
+import { ThemeOptions } from "../utils/themeOptions.ts";
 
 /**
  * getMaxWidthOptions returns a list of options including the theme max width,

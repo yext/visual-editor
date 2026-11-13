@@ -1,3 +1,5 @@
+import { type ThemeColor } from "../../utils/themeOptions.ts";
+import { getTextColorClass, getTextColorStyle } from "../../utils/colors.ts";
 import { useTranslation } from "react-i18next";
 import { PuckComponent } from "@puckeditor/core";
 import { DayOfWeekNames, HoursType } from "@yext/pages-components";
@@ -29,6 +31,8 @@ export interface HoursTableProps {
     showAdditionalHoursText: boolean;
     /** Alignment of the text in the hours table */
     alignment: "items-start" | "items-center";
+    /** The color of the hours text. */
+    textColor?: ThemeColor;
   };
 }
 
@@ -96,6 +100,11 @@ export const hoursTableFields: YextFields<HoursTableProps> = {
           },
         ],
       },
+      textColor: {
+        type: "basicSelector",
+        label: msg("fields.textColor", "Text Color"),
+        options: "SITE_COLOR",
+      },
     },
   },
 };
@@ -112,7 +121,10 @@ const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {
   };
 
   return hours || comingSoon ? (
-    <div className={`flex flex-col ${styles.alignment}`}>
+    <div
+      className={`flex flex-col ${styles.alignment} ${getTextColorClass(styles.textColor) ?? ""}`}
+      style={getTextColorStyle(styles.textColor)}
+    >
       <EntityField
         displayName={pt("hours", "Hours")}
         fieldId="hours"
@@ -130,7 +142,7 @@ const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {
           displayName={pt("hoursText", "Hours Text")}
           fieldId="additionalHoursText"
         >
-          <Body variant="sm" className="mt-4">
+          <Body typographyRole="body-small" className="mt-4">
             {additionalHoursText}
           </Body>
         </EntityField>

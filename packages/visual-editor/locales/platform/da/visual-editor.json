@@ -43,7 +43,15 @@
   "closesAtTime": "Lukker kl. {{time}}",
   "closesAtTimeWeek": "Lukker kl. {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Åbn farvevælgeren"
+    "angle": "Vinkel",
+    "end": "Slutfarve",
+    "fill": "Fyld",
+    "linear": "Lineær gradient",
+    "open": "Åbn farvevælgeren",
+    "radial": "Radial gradient",
+    "solid": "Ensfarvet",
+    "start": "Startfarve",
+    "stops": "Gradientfarver"
   },
   "comingSoon": "Kommer snart",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Data",
     "dataAttributes": "Dataattributter",
     "dayOfWeekFormat": "Ugeformat",
+    "defaultForPlacement": "Standard for placering",
     "directoryListBackgroundColor": "Directory List Baggrundsfarve",
     "directoryRootLinkLabel": "Directory Root Link Label",
     "distanceDisplay": "Afstandsvisning",
@@ -145,20 +154,22 @@
     "fontStyle": "Skriftstil",
     "headingAlign": "Overskriften justeres",
     "headingBackgroundColor": "Overskrift baggrundsfarve",
-    "headingLevel": "Overskriftsniveau",
     "hours": "Timer",
     "hoursColumn": "Timersøjle",
     "html": "HTML",
     "icon": "Ikon",
+    "iconColor": "Ikon farve",
     "icons": "Ikoner",
     "image": "Billede",
     "imageConstrain": "Billedbegrænsning",
     "imageFillType": "Billedfyldtype",
     "includePhoneHyperlink": "Medtag telefonhyperlink",
+    "inheritSurface": "Arv fra overordnet",
     "javascript": "JavaScript",
     "key": "Nøgle",
     "keywordsDisplayName": "Søgeord Vist navn",
     "label": "Mærke",
+    "labelColor": "Mærkefarve",
     "latitude": "Breddegrad",
     "link": "Forbindelse",
     "linkColor": "Link farve",
@@ -307,11 +318,14 @@
     "showRegion": "Vis region",
     "startOfTheWeek": "Ugens start",
     "styles": "Stilarter",
+    "surface": "Farvevariant",
     "tag": "Tag",
     "tertiaryHeading": "Tertiær overskrift",
     "text": "Tekst",
+    "textColor": "Tekstfarve",
     "timeFormat": "Tidsformat",
     "title": "Titel",
+    "typographyRole": "Typografistil",
     "value": "Værdi",
     "variant": "Variant",
     "video": "Video",
@@ -557,17 +571,10 @@
       "color3": "Farve 3",
       "color4": "Farve 4"
     },
-    "bodyText": "Kropstekst",
     "borderRadius": "Grænseadius",
-    "button": "Knap",
     "colors": {
-      "colors": "Farver",
-      "primary": "Primær",
-      "quaternary": "Kvartær",
       "recommendedColorDescription": "Optimer farvekontrasten for tilgængelighed ved at bruge den dynamiske standard.",
-      "recommendedDescription": "Optimer farvekontrast for tilgængelighed med disse baggrunde.",
-      "secondary": "Sekundær",
-      "tertiary": "Tertiær"
+      "recommendedDescription": "Optimer farvekontrast for tilgængelighed med disse baggrunde."
     },
     "contentWidth": {
       "compact": "Kompakt (768px)",
@@ -577,25 +584,20 @@
       "standard": "Standard (1024px)",
       "wide": "Bred (1280px)"
     },
-    "defaultFont": "Standard skrifttype",
     "font": "Skrifttype",
     "fontSize": "Skrifttypestørrelse",
     "fontWeight": {
       "fontWeight": "Skrifttypevægt"
     },
-    "headers": "Overskrifter",
-    "image": "Billede",
     "includeCaret": "Inkluder Caret",
     "letterSpacing": {
       "letterSpacing": "Brevafstand"
     },
-    "links": "Links",
     "options": {
       "circle": "Cirkel",
       "none": "Ingen",
       "pill": "Pille"
     },
-    "pageSection": "Sideafsnit",
     "textTransform": {
       "capitalize": "Kapitalisere",
       "lowercase": "Små bogstaver",
@@ -605,8 +607,12 @@
     },
     "topBottomPadding": "Top/bund polstring"
   },
+  "themeDataEditor": {
+    "description": "Erstat temaet med et JSON-objekt. Manglende felter bruger temaets standardværdier.",
+    "invalid": "Indtast et JSON-objekt med kendte temafelter og gyldige værdityper.",
+    "title": "Angiv temadata"
+  },
   "themeSidebar": {
-    "noTheme": "Kontakt din udvikler for at konfigurere temadministration.",
     "warning": "Ændringer vil påvirke alle sidesæt og layouts for hele webstedet."
   },
   "thursday": "torsdag",

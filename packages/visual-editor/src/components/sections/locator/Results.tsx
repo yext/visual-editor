@@ -141,6 +141,16 @@ export const ResultCardPropsField = ({
       "objectFields.image.objectFields.constantValue.visible",
       imageConstantValueEnabled
     );
+    fields = setDeep(
+      fields,
+      "objectFields.primaryCTA.objectFields.textColor.visible",
+      value.primaryCTA?.variant === "primary"
+    );
+    fields = setDeep(
+      fields,
+      "objectFields.secondaryCTA.objectFields.textColor.visible",
+      value.secondaryCTA?.variant === "primary"
+    );
 
     return fields;
   }, [entityTypeSourceMap, entityTypeScopes, templateMetadata, value]);

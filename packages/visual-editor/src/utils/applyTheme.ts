@@ -1,3 +1,4 @@
+import { surfaceInteractionCss } from "../internal/theme/surfaceInteractions.ts";
 import themeCss from "../internal/theme/theme.css?raw";
 import { ThemeData } from "../internal/types/themeData.ts";
 import { themeValuesToCss } from "../internal/utils/internalThemeResolver.ts";
@@ -27,7 +28,7 @@ export const internalApplyTheme = (values: ThemeData = {}): string => {
   const declarations = { ...legacyThemeVariables, ...themeValuesToCss(values) };
   return `:root{${Object.entries(declarations)
     .map(([key, value]) => `${key}:${value} !important`)
-    .join(";")}}\n${themeCss}`;
+    .join(";")}}\n${surfaceInteractionCss(declarations)}\n${themeCss}`;
 };
 
 export const applyTheme = (

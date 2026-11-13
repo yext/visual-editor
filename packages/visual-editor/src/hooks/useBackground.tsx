@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext } from "react";
-import { ThemeColor } from "../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../utils/themeOptions.ts";
 
 const BackgroundContext = createContext<Required<ThemeColor> | undefined>(
   undefined

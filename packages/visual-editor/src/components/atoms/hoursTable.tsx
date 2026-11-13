@@ -1,3 +1,4 @@
+import type { TypographyRole } from "../../utils/themeOptions.ts";
 import "./hours.css";
 import { HoursTable, HoursTableProps } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
@@ -8,11 +9,13 @@ export interface HoursTableAtomProps extends Omit<
   "dayOfWeekNames" | "intervalStringsBuilderFn" | "intervalTranslations"
 > {
   className?: string;
+  typographyRole?: TypographyRole;
 }
 
 export const HoursTableAtom = (props: HoursTableAtomProps) => {
   const {
     hours,
+    typographyRole = "body",
     className,
     startOfWeek,
     collapseDays,
@@ -46,10 +49,7 @@ export const HoursTableAtom = (props: HoursTableAtomProps) => {
         reopenDate: t("reopenDate", "Reopen Date"),
         timeFormatLocale: i18n.language,
       }}
-      className={themeManagerCn(
-        "text-body-fontSize font-body-fontWeight font-body-fontFamily",
-        className ?? ""
-      )}
+      className={themeManagerCn(`ve-theme-${typographyRole}`, className ?? "")}
     />
   );
 };

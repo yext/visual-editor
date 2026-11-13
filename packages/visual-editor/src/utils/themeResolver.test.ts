@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { deepMerge } from "./themeResolver.ts";
-import { defaultThemeTailwindExtensions } from "./themeConfigOptions.ts";
+import { defaultThemeTailwindExtensions } from "./themeOptions.ts";
 import { legacyThemeTailwindMappings } from "../internal/theme/legacyTheme.ts";
 
 describe("Tailwind compatibility", () => {

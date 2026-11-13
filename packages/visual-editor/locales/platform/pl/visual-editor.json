@@ -43,7 +43,15 @@
   "closesAtTime": "Zamyka się o {{time}}",
   "closesAtTimeWeek": "Zamyka się o {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Otwórz selektor kolorów"
+    "angle": "Kąt",
+    "end": "Kolor końcowy",
+    "fill": "Wypełnienie",
+    "linear": "Gradient liniowy",
+    "open": "Otwórz selektor kolorów",
+    "radial": "Gradient radialny",
+    "solid": "Jednolity kolor",
+    "start": "Kolor początkowy",
+    "stops": "Kolory gradientu"
   },
   "comingSoon": "Już wkrótce",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Dane",
     "dataAttributes": "Atrybuty danych",
     "dayOfWeekFormat": "Format dnia tygodnia",
+    "defaultForPlacement": "Wartość domyślna dla położenia",
     "directoryListBackgroundColor": "Kolor tła listy katalogów",
     "directoryRootLinkLabel": "Director Count Link",
     "distanceDisplay": "Wyświetlanie odległości",
@@ -145,20 +154,22 @@
     "fontStyle": "Styl czcionki",
     "headingAlign": "Nagłówek wyrównany",
     "headingBackgroundColor": "Kolor tła nagłówka",
-    "headingLevel": "Poziom nagłówka",
     "hours": "Godziny",
     "hoursColumn": "Kolumna godzin",
     "html": "HTML",
     "icon": "Ikona",
+    "iconColor": "Kolor ikony",
     "icons": "Ikony",
     "image": "Obraz",
     "imageConstrain": "Ograniczenie obrazu",
     "imageFillType": "Typ wypełnienia obrazem",
     "includePhoneHyperlink": "Dołącz hiperłącze telefonu",
+    "inheritSurface": "Dziedzicz z elementu nadrzędnego",
     "javascript": "JavaScript",
     "key": "Klucz",
     "keywordsDisplayName": "Nazwa wyświetlana słów kluczowych",
     "label": "Etykieta",
+    "labelColor": "Kolor etykiety",
     "latitude": "Szerokość",
     "link": "Link",
     "linkColor": "Kolor łącza",
@@ -307,11 +318,14 @@
     "showRegion": "Pokaż region",
     "startOfTheWeek": "Początek tygodnia",
     "styles": "Style",
+    "surface": "Wariant koloru",
     "tag": "Etykietka",
     "tertiaryHeading": "Tytuł trzeciorzędny",
     "text": "Tekst",
+    "textColor": "Kolor tekstu",
     "timeFormat": "Format czasu",
     "title": "Tytuł",
+    "typographyRole": "Styl typografii",
     "value": "Wartość",
     "variant": "Wariant",
     "video": "Wideo",
@@ -581,17 +595,10 @@
       "color3": "Kolor 3",
       "color4": "Kolor 4"
     },
-    "bodyText": "Tekst nadwozia",
     "borderRadius": "Promień graniczny",
-    "button": "Przycisk",
     "colors": {
-      "colors": "Zabarwienie",
-      "primary": "Podstawowy",
-      "quaternary": "Czwartorzędowy",
       "recommendedColorDescription": "Zoptymalizuj kontrast kolorów pod kątem dostępności, korzystając z dynamicznych ustawień domyślnych.",
-      "recommendedDescription": "Optymalizuj kontrast kolorów dla dostępności z tymi tłem.",
-      "secondary": "Wtórny",
-      "tertiary": "Trzeciorzędowy"
+      "recommendedDescription": "Optymalizuj kontrast kolorów dla dostępności z tymi tłem."
     },
     "contentWidth": {
       "compact": "Kompaktowy (768px)",
@@ -601,25 +608,20 @@
       "standard": "Standard (1024px)",
       "wide": "Szeroki (1280px)"
     },
-    "defaultFont": "Domyślna czcionka",
     "font": "Chrzcielnica",
     "fontSize": "Rozmiar czcionki",
     "fontWeight": {
       "fontWeight": "Waga czcionki"
     },
-    "headers": "Nagłówki",
-    "image": "Obraz",
     "includeCaret": "Uwzględnij CareT",
     "letterSpacing": {
       "letterSpacing": "Odstępy listu"
     },
-    "links": "Spinki do mankietów",
     "options": {
       "circle": "Koło",
       "none": "Nic",
       "pill": "Pigułka"
     },
-    "pageSection": "Sekcja strony",
     "textTransform": {
       "capitalize": "Skapitalizować",
       "lowercase": "Małe litery",
@@ -629,8 +631,12 @@
     },
     "topBottomPadding": "Wyściełku górna/dolna"
   },
+  "themeDataEditor": {
+    "description": "Zastąp motyw obiektem JSON. Brakujące pola używają domyślnych wartości motywu.",
+    "invalid": "Wprowadź obiekt JSON z rozpoznawanymi polami motywu i prawidłowymi typami wartości.",
+    "title": "Ustaw dane motywu"
+  },
   "themeSidebar": {
-    "noTheme": "Skontaktuj się z programistą, aby skonfigurować zarządzanie tematami.",
     "warning": "Zmiany wpłyną na wszystkie zestawy stron i układy dla całej witryny."
   },
   "thursday": "Czwartek",

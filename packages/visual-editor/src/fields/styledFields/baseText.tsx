@@ -10,7 +10,7 @@ import {
   getFontWeightOptionsForFontFamily,
 } from "../../utils/fonts/visualEditorFonts.ts";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers.ts";
-import { ThemeOptions } from "../../utils/themeConfigOptions.ts";
+import { ThemeOptions } from "../../utils/themeOptions.ts";
 import { FontSelector } from "../../internal/puck/components/FontSelector.tsx";
 import { Combobox } from "../../internal/puck/ui/Combobox.tsx";
 import { FontWeightSelector } from "../../internal/puck/components/FontWeightSelector.tsx";

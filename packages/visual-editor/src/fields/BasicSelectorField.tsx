@@ -4,7 +4,7 @@ import {
   type ComboboxOption,
   type ComboboxOptionGroup,
 } from "../internal/types/combobox.ts";
-import { ThemeOptions } from "../utils/themeConfigOptions.ts";
+import { ThemeOptions } from "../utils/themeOptions.ts";
 import { type MsgString } from "../utils/i18n/platform.ts";
 import { BasicSelectorCombobox } from "./BasicSelectorCombobox.tsx";
 import { ThemeColorFieldOverride } from "./ThemeColorField.tsx";

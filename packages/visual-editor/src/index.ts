@@ -10,8 +10,17 @@ export {
   generationPromptBundleSchema,
   type GenerationPromptBundle,
 } from "./types/generationPrompts.ts";
-
 export {
   generationSettingsSchema,
   type GenerationSettings,
 } from "./types/generationSettings.ts";
+export {
+  type SurfaceRole,
+  type SurfaceValue,
+  type TypographyRole,
+  type InteractionRole,
+  surfaceRoleOptions,
+  typographyRoleOptions,
+  interactionRoleOptions,
+} from "./utils/themeOptions.ts";
+export { useThemeValue } from "./hooks/useThemeValue.ts";

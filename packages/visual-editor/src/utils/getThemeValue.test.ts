@@ -88,7 +88,7 @@ describe("getThemeValue", () => {
     expect(getThemeValue("--ve-color-foreground")).toBe("red");
   });
 
-  it("ignores old published overrides and uses frozen defaults", () => {
+  it("resolves compatibility aliases through semantic defaults, ignoring old variable-key overrides", () => {
     expect(
       getThemeValue("--colors-palette-quaternary-contrast", {
         __: {
@@ -97,7 +97,7 @@ describe("getThemeValue", () => {
           }),
         },
       })
-    ).toBe("#FFFFFF");
+    ).toBe("#2B2B2B");
   });
 
   it("reads a published new value through its declared variable", () => {

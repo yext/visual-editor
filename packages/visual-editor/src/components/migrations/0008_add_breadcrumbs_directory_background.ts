@@ -1,5 +1,5 @@
 import { Migration } from "../../utils/migrate.ts";
-import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import { backgroundColors } from "../../utils/themeOptions.ts";
 
 export const addBreadcrumbsDirectoryBackgroundMigration: Migration = {
   // Update Breadcrumbs - add backgroundColor

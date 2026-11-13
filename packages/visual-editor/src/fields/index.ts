@@ -74,3 +74,5 @@ export { YextPuckFieldOverrides } from "./fieldOverrides.ts";
 
 export { YextAutoField } from "./YextAutoField.tsx";
 export { createYextFieldTransforms } from "./fieldTransforms/index.ts";
+export type { SurfaceField } from "./SurfaceField.tsx";
+export type { TypographyRoleField } from "./TypographyRoleField.tsx";

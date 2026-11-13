@@ -43,7 +43,15 @@
   "closesAtTime": "于 {{time}} 关闭",
   "closesAtTimeWeek": "于 {{time}} {{dayOfWeek}} 关闭",
   "colorPicker": {
-    "open": "打开颜色选择器"
+    "angle": "角度",
+    "end": "结束颜色",
+    "fill": "填充",
+    "linear": "线性渐变",
+    "open": "打开颜色选择器",
+    "radial": "径向渐变",
+    "solid": "纯色",
+    "start": "起始颜色",
+    "stops": "渐变颜色"
   },
   "comingSoon": "即将推出",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "数据",
     "dataAttributes": "数据属性",
     "dayOfWeekFormat": "周的格式",
+    "defaultForPlacement": "使用位置默认值",
     "directoryListBackgroundColor": "目录列表背景颜色",
     "directoryRootLinkLabel": "目录根链接标签",
     "distanceDisplay": "距离显示",
@@ -145,20 +154,22 @@
     "fontStyle": "字体样式",
     "headingAlign": "标题对齐",
     "headingBackgroundColor": "标题背景颜色",
-    "headingLevel": "标题水平",
     "hours": "小时",
     "hoursColumn": "小时列",
     "html": "HTML",
     "icon": "图标",
+    "iconColor": "图标颜色",
     "icons": "图标",
     "image": "图像",
     "imageConstrain": "图像约束",
     "imageFillType": "图像填充类型",
     "includePhoneHyperlink": "包括电话超链接",
+    "inheritSurface": "继承父级",
     "javascript": "JavaScript",
     "key": "钥匙",
     "keywordsDisplayName": "关键词显示名称",
     "label": "标签",
+    "labelColor": "标签颜色",
     "latitude": "纬度",
     "link": "关联",
     "linkColor": "链接颜色",
@@ -307,11 +318,14 @@
     "showRegion": "显示地区",
     "startOfTheWeek": "一周开始",
     "styles": "样式",
+    "surface": "颜色变体",
     "tag": "标签",
     "tertiaryHeading": "第三标题",
     "text": "文本",
+    "textColor": "文字颜色",
     "timeFormat": "时间格式",
     "title": "标题",
+    "typographyRole": "排版样式",
     "value": "价值",
     "variant": "变体",
     "video": "视频",
@@ -557,17 +571,10 @@
       "color3": "颜色3",
       "color4": "颜色4"
     },
-    "bodyText": "正文",
     "borderRadius": "边界半径",
-    "button": "按钮",
     "colors": {
-      "colors": "颜色",
-      "primary": "基本的",
-      "quaternary": "第四纪",
       "recommendedColorDescription": "使用动态默认值优化颜色对比度以实现可访问性。",
-      "recommendedDescription": "优化使用这些背景的可访问性的颜色对比度。",
-      "secondary": "次要",
-      "tertiary": "第三"
+      "recommendedDescription": "优化使用这些背景的可访问性的颜色对比度。"
     },
     "contentWidth": {
       "compact": "紧凑（768px）",
@@ -577,25 +584,20 @@
       "standard": "标准（1024px）",
       "wide": "宽（1280px）"
     },
-    "defaultFont": "默认字体",
     "font": "字体",
     "fontSize": "字体大小",
     "fontWeight": {
       "fontWeight": "字体重量"
     },
-    "headers": "标头",
-    "image": "图像",
     "includeCaret": "包括商店",
     "letterSpacing": {
       "letterSpacing": "字母间距"
     },
-    "links": "链接",
     "options": {
       "circle": "圆圈",
       "none": "没有任何",
       "pill": "丸"
     },
-    "pageSection": "页面部分",
     "textTransform": {
       "capitalize": "大写",
       "lowercase": "小写",
@@ -605,8 +607,12 @@
     },
     "topBottomPadding": "顶部/底部填充"
   },
+  "themeDataEditor": {
+    "description": "用 JSON 对象替换主题。缺失的字段将使用主题默认值。",
+    "invalid": "请输入包含已识别主题字段和有效值类型的 JSON 对象。",
+    "title": "设置主题数据"
+  },
   "themeSidebar": {
-    "noTheme": "请联系您的开发人员以设置主题管理。",
     "warning": "更改将影响整个站点的所有页面集和布局。"
   },
   "thursday": "周四",

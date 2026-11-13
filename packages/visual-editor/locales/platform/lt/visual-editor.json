@@ -43,7 +43,15 @@
   "closesAtTime": "Uždaroma {{time}}",
   "closesAtTimeWeek": "Uždaroma {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Atidarykite spalvų rinkiklį"
+    "angle": "Kampas",
+    "end": "Pabaigos spalva",
+    "fill": "Užpildas",
+    "linear": "Linijinis gradientas",
+    "open": "Atidarykite spalvų rinkiklį",
+    "radial": "Spindulinis gradientas",
+    "solid": "Vientisa spalva",
+    "start": "Pradžios spalva",
+    "stops": "Gradiento spalvos"
   },
   "comingSoon": "Netrukus",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Duomenys",
     "dataAttributes": "Duomenų atributai",
     "dayOfWeekFormat": "Savaitės dienos formatas",
+    "defaultForPlacement": "Numatytoji reikšmė pagal vietą",
     "directoryListBackgroundColor": "Katalogų sąrašo fono spalva",
     "directoryRootLinkLabel": "Katalogo šaknies nuorodų etiketė",
     "distanceDisplay": "Atstumo ekranas",
@@ -145,20 +154,22 @@
     "fontStyle": "Šrifto stilius",
     "headingAlign": "Antraštės derinimas",
     "headingBackgroundColor": "Antraštės fono spalva",
-    "headingLevel": "Antraštės lygis",
     "hours": "Valandos",
     "hoursColumn": "Valandų stulpelis",
     "html": "HTML",
     "icon": "Piktograma",
+    "iconColor": "Piktogramos spalva",
     "icons": "Piktogramos",
     "image": "Vaizdas",
     "imageConstrain": "Vaizdo apribojimas",
     "imageFillType": "Vaizdo užpildymo tipas",
     "includePhoneHyperlink": "Įtraukite telefono hipersaitą",
+    "inheritSurface": "Paveldėti iš pirminio elemento",
     "javascript": "„JavaScript“",
     "key": "Raktas",
     "keywordsDisplayName": "Raktiniai žodžiai Rodomas pavadinimas",
     "label": "Etiketė",
+    "labelColor": "Etiketės spalva",
     "latitude": "Platuma",
     "link": "Nuoroda",
     "linkColor": "Nuorodos spalva",
@@ -307,11 +318,14 @@
     "showRegion": "Rodyti regioną",
     "startOfTheWeek": "Savaitės pradžia",
     "styles": "Stiliai",
+    "surface": "Spalvos variantas",
     "tag": "Žyma",
     "tertiaryHeading": "Tretinė antraštė",
     "text": "Tekstas",
+    "textColor": "Teksto spalva",
     "timeFormat": "Laiko formatas",
     "title": "Pavadinimas",
+    "typographyRole": "Tipografijos stilius",
     "value": "Vertė",
     "variant": "Variantas",
     "video": "Vaizdo įrašas",
@@ -581,17 +595,10 @@
       "color3": "3 spalva",
       "color4": "4 spalva"
     },
-    "bodyText": "Kūno tekstas",
     "borderRadius": "Pasienio spindulys",
-    "button": "Mygtukas",
     "colors": {
-      "colors": "Spalvos",
-      "primary": "Pirminis",
-      "quaternary": "Kvartero",
       "recommendedColorDescription": "Optimizuokite spalvų kontrastą, kad būtų lengviau pasiekti, naudodami dinaminius numatytuosius nustatymus.",
-      "recommendedDescription": "Optimizuokite spalvų kontrastą prieinamumui su šiais fonu.",
-      "secondary": "Antrinis",
-      "tertiary": "Tretinis"
+      "recommendedDescription": "Optimizuokite spalvų kontrastą prieinamumui su šiais fonu."
     },
     "contentWidth": {
       "compact": "Kompaktiškas (768 pikselių)",
@@ -601,25 +608,20 @@
       "standard": "Standartas (1024 pikselių)",
       "wide": "Platus (1280 pikselių)"
     },
-    "defaultFont": "Numatytasis šriftas",
     "font": "Šriftas",
     "fontSize": "Šrifto dydis",
     "fontWeight": {
       "fontWeight": "Šrifto svoris"
     },
-    "headers": "Antraštės",
-    "image": "Vaizdas",
     "includeCaret": "Įtraukite Caret",
     "letterSpacing": {
       "letterSpacing": "Tarpas tarp raidžių"
     },
-    "links": "Nuorodos",
     "options": {
       "circle": "Ratas",
       "none": "Nėra",
       "pill": "Piliulė"
     },
-    "pageSection": "Puslapio skyrius",
     "textTransform": {
       "capitalize": "Kapitalizuoti",
       "lowercase": "Mažosios raidės",
@@ -629,8 +631,12 @@
     },
     "topBottomPadding": "Viršutinė/apatinė paminkštinimas"
   },
+  "themeDataEditor": {
+    "description": "Pakeiskite temą JSON objektu. Trūkstamiems laukams naudojamos numatytosios temos reikšmės.",
+    "invalid": "Įveskite JSON objektą su atpažįstamais temos laukais ir tinkamais reikšmių tipais.",
+    "title": "Nustatyti temos duomenis"
+  },
   "themeSidebar": {
-    "noTheme": "Norėdami nustatyti temos valdymą, susisiekite su savo kūrėju.",
     "warning": "Pakeitimai paveiks visus puslapių rinkinius ir visos svetainės išdėstymus."
   },
   "thursday": "Ketvirtadienis",

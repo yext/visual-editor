@@ -8,6 +8,22 @@ export const adaptYextField = (
   field: YextFieldDefinition<any>,
   renderYextField: YextFieldRender
 ): Field<any> => {
+  // Native selects cannot show swatches. Reuse the existing rich selector
+  // when options provide color samples, preserving their labels and saved values.
+  if (
+    field.type === "select" &&
+    field.options.some(
+      (option) =>
+        ("color" in option && !!option.color) ||
+        ("colorStyle" in option && !!option.colorStyle)
+    )
+  ) {
+    return adaptYextField(
+      { ...field, type: "basicSelector", options: [...field.options] },
+      renderYextField
+    );
+  }
+
   if (isYextOverrideType(field.type)) {
     return {
       ...renderYextField(field as YextPuckField),

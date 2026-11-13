@@ -152,7 +152,16 @@ export const ThemeFieldControl = ({
           ? {
               type: "custom",
               label,
-              render: ColorSelector,
+              render: (props) => (
+                <ColorSelector
+                  {...props}
+                  allowGradient={
+                    /^--ve-color-(background|primary|secondary|accent|muted)$/.test(
+                      field.variable
+                    ) || field.variable.includes("-background-color")
+                  }
+                />
+              ),
             }
           : field.type === "select"
             ? {

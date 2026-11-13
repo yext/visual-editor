@@ -6,7 +6,7 @@ import {
   type ComboboxOption,
   type ComboboxOptionGroup,
 } from "../internal/types/combobox.ts";
-import { ThemeOptions } from "../utils/themeConfigOptions.ts";
+import { ThemeOptions } from "../utils/themeOptions.ts";
 import { pt } from "../utils/i18n/platform.ts";
 import type { BasicSelectorField } from "./BasicSelectorField.tsx";
 

@@ -1,22 +1,28 @@
+import {
+  type TypographyRole,
+  type InteractionRole,
+  ThemeColor,
+  type SurfaceValue,
+} from "../../utils/themeOptions.ts";
+import { Background } from "./background.tsx";
 import { FaPhone } from "react-icons/fa";
 import { CTA } from "./cta.tsx";
 import { Body } from "./body.tsx";
 import { parsePhoneNumber } from "awesome-phonenumber";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
-import {
-  getBackgroundColorClasses,
-  getBackgroundColorStyle,
-} from "../../utils/colors.ts";
-
 export type PhoneAtomProps = {
   phoneNumber: string;
+  typographyRole?: TypographyRole;
+  interactionRole?: InteractionRole;
   label?: string;
   eventName?: string;
-  backgroundColor?: ThemeColor;
+  backgroundColor?: SurfaceValue;
+  surface?: SurfaceValue;
   format: "domestic" | "international" | undefined;
   includeHyperlink: boolean;
   includeIcon: boolean;
   linkColor?: ThemeColor;
+  labelColor?: ThemeColor;
+  iconColor?: ThemeColor;
   onClick?: () => void;
 };
 
@@ -35,20 +41,25 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
 
   return (
     <div className={"components flex gap-2 items-center"}>
-      {props.includeIcon &&
-        (props.backgroundColor ? (
-          <div
-            className={`h-10 w-10 flex justify-center rounded-full items-center ${getBackgroundColorClasses(
-              props.backgroundColor
-            )}`}
-            style={getBackgroundColorStyle(props.backgroundColor)}
-          >
-            <FaPhone className="w-4 h-4" />
-          </div>
-        ) : (
+      {props.includeIcon && (
+        <Background
+          surfaceRole="muted"
+          background={props.backgroundColor ?? props.surface}
+          color={props.iconColor}
+          className="h-10 w-10 flex justify-center rounded-full items-center"
+        >
           <FaPhone className="w-4 h-4" />
-        ))}
-      {props.label && <Body className="font-bold">{props.label}</Body>}
+        </Background>
+      )}
+      {props.label && (
+        <Body
+          typographyRole={props.typographyRole}
+          color={props.labelColor}
+          className="font-bold"
+        >
+          {props.label}
+        </Body>
+      )}
       {props.includeHyperlink ? (
         <CTA
           link={phoneNumberLink}
@@ -56,13 +67,17 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
           linkType="PHONE"
           normalizeLink={false}
           variant="link"
-          eventName={props.eventName}
+          typographyRole={props.typographyRole}
+          interactionRole={props.interactionRole}
           color={props.linkColor}
+          eventName={props.eventName}
           onClick={props.onClick}
           alwaysHideCaret={true}
         />
       ) : (
-        <Body>{formattedPhoneNumber}</Body>
+        <Body typographyRole={props.typographyRole} color={props.linkColor}>
+          {formattedPhoneNumber}
+        </Body>
       )}
     </div>
   );

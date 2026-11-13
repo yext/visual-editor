@@ -43,7 +43,15 @@
   "closesAtTime": "Se închide la {{time}}",
   "closesAtTimeWeek": "Se închide la {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Deschideți selectorul de culori"
+    "angle": "Unghi",
+    "end": "Culoare finală",
+    "fill": "Umplere",
+    "linear": "Degrade liniar",
+    "open": "Deschideți selectorul de culori",
+    "radial": "Degrade radial",
+    "solid": "Culoare uniformă",
+    "start": "Culoare inițială",
+    "stops": "Culorile degradeului"
   },
   "comingSoon": "În curând",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Date",
     "dataAttributes": "Atribute de date",
     "dayOfWeekFormat": "Format Day of Week",
+    "defaultForPlacement": "Implicit pentru poziționare",
     "directoryListBackgroundColor": "Culoarea de fundal a listei de director",
     "directoryRootLinkLabel": "Etichetă de legătură rădăcină directoare",
     "distanceDisplay": "Afișarea distanței",
@@ -145,20 +154,22 @@
     "fontStyle": "Stilul fontului",
     "headingAlign": "Se îndreaptă alinierea",
     "headingBackgroundColor": "Culoarea fundalului titlului",
-    "headingLevel": "Nivel de rubrică",
     "hours": "Ore",
     "hoursColumn": "Coloană de ore",
     "html": "HTML",
     "icon": "Pictogramă",
+    "iconColor": "Culoarea pictogramei",
     "icons": "Pictograme",
     "image": "Imagine",
     "imageConstrain": "Constrângere imagine",
     "imageFillType": "Tip de umplere a imaginii",
     "includePhoneHyperlink": "Includeți hyperlink -ul telefonului",
+    "inheritSurface": "Moștenește de la elementul părinte",
     "javascript": "JavaScript",
     "key": "Cheie",
     "keywordsDisplayName": "Nume afișat pentru cuvinte cheie",
     "label": "Eticheta",
+    "labelColor": "Culoarea etichetei",
     "latitude": "Latitudine",
     "link": "Legătură",
     "linkColor": "Culoare link",
@@ -307,11 +318,14 @@
     "showRegion": "Arată regiunea",
     "startOfTheWeek": "Începutul săptămânii",
     "styles": "Stiluri",
+    "surface": "Variantă de culoare",
     "tag": "Etichetă",
     "tertiaryHeading": "Direcție terțiară",
     "text": "Text",
+    "textColor": "Culoare text",
     "timeFormat": "Format de timp",
     "title": "Titlu",
+    "typographyRole": "Stil tipografic",
     "value": "Valoare",
     "variant": "Variantă",
     "video": "Video",
@@ -569,17 +583,10 @@
       "color3": "Culoare 3",
       "color4": "Culoare 4"
     },
-    "bodyText": "Text corporal",
     "borderRadius": "Raza de frontieră",
-    "button": "Buton",
     "colors": {
-      "colors": "Culori",
-      "primary": "Primar",
-      "quaternary": "Cuaternar",
       "recommendedColorDescription": "Optimizați contrastul de culoare pentru accesibilitate utilizând valoarea implicită dinamică.",
-      "recommendedDescription": "Optimizați contrastul de culoare pentru accesibilitate cu aceste fundaluri.",
-      "secondary": "Secundar",
-      "tertiary": "Terţiar"
+      "recommendedDescription": "Optimizați contrastul de culoare pentru accesibilitate cu aceste fundaluri."
     },
     "contentWidth": {
       "compact": "Compact (768px)",
@@ -589,25 +596,20 @@
       "standard": "Standard (1024px)",
       "wide": "Lat (1280px)"
     },
-    "defaultFont": "Font implicit",
     "font": "Font",
     "fontSize": "Dimensiunea fontului",
     "fontWeight": {
       "fontWeight": "Greutatea fontului"
     },
-    "headers": "Anteturi",
-    "image": "Imagine",
     "includeCaret": "Include îngrijire",
     "letterSpacing": {
       "letterSpacing": "Distanțare a scrisorilor"
     },
-    "links": "Link -uri",
     "options": {
       "circle": "Cerc",
       "none": "Nici unul",
       "pill": "Pastilă"
     },
-    "pageSection": "Secțiunea Pagina",
     "textTransform": {
       "capitalize": "Valorifica",
       "lowercase": "Minuscule",
@@ -617,8 +619,12 @@
     },
     "topBottomPadding": "Padding superior/inferior"
   },
+  "themeDataEditor": {
+    "description": "Înlocuiți tema cu un obiect JSON. Câmpurile lipsă folosesc valorile implicite ale temei.",
+    "invalid": "Introduceți un obiect JSON cu câmpuri de temă recunoscute și tipuri de valori valide.",
+    "title": "Setează datele temei"
+  },
   "themeSidebar": {
-    "noTheme": "Vă rugăm să contactați dezvoltatorul dvs. pentru a configura gestionarea temelor.",
     "warning": "Modificările vor afecta toate seturile de pagini și machete pentru întregul site."
   },
   "thursday": "joi",

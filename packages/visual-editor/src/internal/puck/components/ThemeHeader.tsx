@@ -1,4 +1,5 @@
 import "../ui/puck.css";
+import { SetThemeDataButton } from "./SetThemeDataButton.tsx";
 import React, { useEffect } from "react";
 import { Button } from "../ui/button.tsx";
 import "../../../editor/index.css";
@@ -26,6 +27,7 @@ const usePuck = createUsePuck();
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
+  onThemeChange: (values: ThemeData) => void;
   isDevMode: boolean;
   setThemeHistories: (themeHistories: ThemeHistories) => void;
   themeHistories?: ThemeHistories;
@@ -44,6 +46,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     isDevMode,
     setThemeHistories,
     onPublishTheme,
+    onThemeChange,
     themeHistories,
     clearThemeHistory,
     puckInitialHistory,
@@ -162,6 +165,14 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       {localDev && <LocalDevOverrideButtons showSetLayoutData={false} />}
       <div className="header-center"></div>
       <div className="actions">
+        <SetThemeDataButton
+          themeData={
+            themeHistories?.histories[themeHistories.index]?.data ?? {}
+          }
+          onThemeChange={onThemeChange}
+          customFonts={customFonts}
+          disabled={!themeHistories}
+        />
         <Button
           variant="ghost"
           size="icon"

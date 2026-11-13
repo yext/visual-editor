@@ -114,7 +114,7 @@ describe("recommended theme fields", () => {
         ...collectFields(category.subcategories ?? {}),
       ]);
     const categorizedFields = collectFields(themeCategories);
-    expect(categorizedFields).toHaveLength(185);
+    expect(categorizedFields).toHaveLength(194);
     expect(Object.values(themeFields)).toHaveLength(categorizedFields.length);
     expect(new Set(categorizedFields.map((field) => field.variable)).size).toBe(
       categorizedFields.length
@@ -144,5 +144,49 @@ describe("recommended theme fields", () => {
     expect(css["--ve-primary-button-active-text-color-on-dark"]).toBe(
       "#FFFFFF"
     );
+  });
+});
+
+describe("typography role settings", () => {
+  it("drops obsolete typography keys instead of treating them as current role settings", () => {
+    const saved = {
+      leadFontFamily: "serif",
+      leadFontSize: 19,
+      leadTextTransform: "uppercase",
+      finePrintMobileFontSize: 11,
+      finePrintFontWeight: "600",
+    };
+    expect(readThemeValues(saved)).toEqual(readThemeValues());
+    expect(themeValuesToCss(saved)).toEqual(themeValuesToCss());
+    expect(
+      readThemeValues({ ...saved, eyebrowFontSize: 17 }).eyebrowFontSize
+    ).toBe(17);
+    expect(
+      readThemeValues({ ...saved, bodySmallMobileFontSize: 13 })
+        .bodySmallMobileFontSize
+    ).toBe(13);
+  });
+
+  it("configures all three body roles independently for desktop and mobile", () => {
+    const css = themeValuesToCss({
+      bodySmallFontSize: 13,
+      bodySmallMobileFontSize: 12,
+      bodyFontSize: 17,
+      bodyMobileFontSize: 15,
+      bodyLargeFontSize: 21,
+      bodyLargeMobileFontSize: 19,
+      bodyLargeFontFamily: "serif",
+      bodyLargeLineHeight: "1.7",
+    });
+    expect(css).toMatchObject({
+      "--ve-body-small-font-size": "13px",
+      "--ve-body-small-mobile-font-size": "12px",
+      "--ve-body-font-size": "17px",
+      "--ve-body-mobile-font-size": "15px",
+      "--ve-body-large-font-size": "21px",
+      "--ve-body-large-mobile-font-size": "19px",
+      "--ve-body-large-font-family": "serif",
+      "--ve-body-large-line-height": "1.7",
+    });
   });
 });

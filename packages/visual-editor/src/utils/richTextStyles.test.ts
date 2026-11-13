@@ -20,14 +20,19 @@ describe("getRichTextStyle", () => {
     ).toStrictEqual({
       fontFamily: "'Editorial', serif",
       "--fontFamily-body-fontFamily": "'Editorial', serif",
+      "--ve-rich-text-font-family": "'Editorial', serif",
       fontSize: "20px",
       "--fontSize-body-fontSize": "20px",
+      "--ve-rich-text-font-size": "20px",
       fontWeight: "700",
       "--fontWeight-body-fontWeight": "700",
+      "--ve-rich-text-font-weight": "700",
       fontStyle: "italic",
       "--fontStyle-body-fontStyle": "italic",
+      "--ve-rich-text-font-style": "italic",
       textTransform: "uppercase",
       "--textTransform-body-textTransform": "uppercase",
+      "--ve-rich-text-text-transform": "uppercase",
     });
   });
 
@@ -52,6 +57,7 @@ describe("getRichTextStyle", () => {
       })
     ).toStrictEqual({
       color: "#123456",
+      "--ve-rich-text-color": "#123456",
     });
 
     expect(
@@ -60,6 +66,7 @@ describe("getRichTextStyle", () => {
       })
     ).toStrictEqual({
       color: "rgb(1, 2, 3)",
+      "--ve-rich-text-color": "rgb(1, 2, 3)",
     });
   });
 });

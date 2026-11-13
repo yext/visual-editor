@@ -43,7 +43,15 @@
   "closesAtTime": "Chiude alle {{time}}",
   "closesAtTimeWeek": "Chiude alle {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Apri il selettore colori"
+    "angle": "Angolo",
+    "end": "Colore finale",
+    "fill": "Riempimento",
+    "linear": "Sfumatura lineare",
+    "open": "Apri il selettore colori",
+    "radial": "Sfumatura radiale",
+    "solid": "Tinta unita",
+    "start": "Colore iniziale",
+    "stops": "Colori della sfumatura"
   },
   "comingSoon": "Prossimamente",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Dati",
     "dataAttributes": "Attributi dei dati",
     "dayOfWeekFormat": "Formato giorno della settimana",
+    "defaultForPlacement": "Predefinito per la posizione",
     "directoryListBackgroundColor": "Colore di sfondo dell'elenco delle directory",
     "directoryRootLinkLabel": "Etichetta del collegamento root directory",
     "distanceDisplay": "Visualizzazione della distanza",
@@ -145,20 +154,22 @@
     "fontStyle": "Stile carattere",
     "headingAlign": "Intestazione allineamento",
     "headingBackgroundColor": "Colore di sfondo dell'intestazione",
-    "headingLevel": "Livello di intestazione",
     "hours": "Ore",
     "hoursColumn": "Colonna delle ore",
     "html": "HTML",
     "icon": "Icona",
+    "iconColor": "Colore dell'icona",
     "icons": "Icone",
     "image": "Immagine",
     "imageConstrain": "Vincolo immagine",
     "imageFillType": "Tipo di riempimento immagine",
     "includePhoneHyperlink": "Includere il telefono ipertestuale",
+    "inheritSurface": "Eredita dal contenitore",
     "javascript": "JavaScript",
     "key": "Chiave",
     "keywordsDisplayName": "Nome visualizzato delle parole chiave",
     "label": "Etichetta",
+    "labelColor": "Colore dell'etichetta",
     "latitude": "Latitudine",
     "link": "Collegamento",
     "linkColor": "Colore collegamento",
@@ -307,11 +318,14 @@
     "showRegion": "Mostra regione",
     "startOfTheWeek": "Inizio della settimana",
     "styles": "Stili",
+    "surface": "Variante di colore",
     "tag": "Etichetta",
     "tertiaryHeading": "Titolo terziario",
     "text": "Testo",
+    "textColor": "Colore del testo",
     "timeFormat": "Formato tempo",
     "title": "Titolo",
+    "typographyRole": "Stile tipografico",
     "value": "Valore",
     "variant": "Variante",
     "video": "Video",
@@ -569,17 +583,10 @@
       "color3": "Colore 3",
       "color4": "Colore 4"
     },
-    "bodyText": "Testo del corpo",
     "borderRadius": "Raggio di confine",
-    "button": "Pulsante",
     "colors": {
-      "colors": "Colori",
-      "primary": "Primario",
-      "quaternary": "Quaternario",
       "recommendedColorDescription": "Ottimizza il contrasto del colore per l'accessibilità utilizzando l'impostazione dinamica predefinita.",
-      "recommendedDescription": "Ottimizza il contrasto del colore per l'accessibilità con questi sfondi.",
-      "secondary": "Secondario",
-      "tertiary": "Terziario"
+      "recommendedDescription": "Ottimizza il contrasto del colore per l'accessibilità con questi sfondi."
     },
     "contentWidth": {
       "compact": "Compatto (768px)",
@@ -589,25 +596,20 @@
       "standard": "Standard (1024px)",
       "wide": "Largo (1280px)"
     },
-    "defaultFont": "Carattere predefinito",
     "font": "Font",
     "fontSize": "Dimensione del carattere",
     "fontWeight": {
       "fontWeight": "Peso del carattere"
     },
-    "headers": "Intestazioni",
-    "image": "Immagine",
     "includeCaret": "Includi il CULET",
     "letterSpacing": {
       "letterSpacing": "Spaziatura delle lettere"
     },
-    "links": "Link",
     "options": {
       "circle": "Cerchio",
       "none": "Nessuno",
       "pill": "Pillola"
     },
-    "pageSection": "Sezione Pagina",
     "textTransform": {
       "capitalize": "Capitalizzare",
       "lowercase": "Minuscolo",
@@ -617,8 +619,12 @@
     },
     "topBottomPadding": "Imbottitura superiore/inferiore"
   },
+  "themeDataEditor": {
+    "description": "Sostituisci il tema con un oggetto JSON. I campi mancanti utilizzano i valori predefiniti del tema.",
+    "invalid": "Inserisci un oggetto JSON con campi del tema riconosciuti e tipi di valore validi.",
+    "title": "Imposta dati del tema"
+  },
   "themeSidebar": {
-    "noTheme": "Si prega di contattare il tuo sviluppatore per impostare la gestione dei temi.",
     "warning": "Le modifiche influenzeranno tutti i set di pagine e i layout per l'intero sito."
   },
   "thursday": "Giovedì",

@@ -94,7 +94,7 @@ export const FilterModal = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="locator-filter-modal-title"
-      className="absolute md:top-4 -top-20 z-50 md:w-80 w-full flex flex-col bg-white md:left-full md:ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
+      className="absolute md:top-4 -top-20 z-50 md:w-80 w-full flex flex-col ve-theme-page md:left-full md:ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
       style={
         {
           "--locator-filter-accent-color": accentColorCssValue,
@@ -115,7 +115,7 @@ export const FilterModal = ({
           <FaTimes />
         </button>
       </div>
-      <div className="px-6 border-b border-gray-300">
+      <div className="px-6 border-b ve-theme-border">
         <AppliedFilters
           hiddenFields={[LOCATION_FIELD, COUNTRY_CODE_FIELD]}
           customCssClasses={{
@@ -141,21 +141,21 @@ export const FilterModal = ({
           )}
           <Facets
             customCssClasses={{
-              divider: "bg-white",
-              titleLabel: "font-bold text-md font-body-fontFamily",
+              divider: "ve-theme-page",
+              titleLabel: "font-bold text-md ve-theme-body",
               optionInput:
                 "h-4 w-4 [accent-color:var(--locator-filter-accent-color)]",
-              optionLabel: "text-md font-body-fontFamily font-body-fontWeight",
-              option: "space-x-4 font-body-fontFamily",
+              optionLabel: "text-md ve-theme-body",
+              option: "space-x-4 ve-theme-body",
             }}
           >
             {facetOverrides}
           </Facets>
         </div>
       </div>
-      <div className="border-y border-gray-300 justify-center align-middle">
+      <div className="border-y ve-theme-border justify-center align-middle">
         <button
-          className="w-full py-4 text-center font-bold font-body-fontFamily text-body-fontSize"
+          className="ve-theme-control w-full py-4 text-center font-bold ve-theme-body"
           style={{ color: accentColorCssValue }}
           onClick={handleClearFiltersClick}
         >
@@ -177,14 +177,14 @@ const OpenNowFilter = ({ isSelected, onChange }: OpenNowFilterProps) => {
     defaultExpanded: true,
   });
   const iconClassName = isExpanded
-    ? "w-3 text-gray-400"
-    : "w-3 text-gray-400 transform rotate-180";
+    ? "w-3 opacity-60"
+    : "w-3 opacity-60 transform rotate-180";
 
   const openNowCheckBoxId = "openNowCheckBox";
   return (
     <div className="flex flex-col gap-4">
       <button
-        className="w-full flex justify-between items-center font-bold font-body-fontFamily text-body-fontSize"
+        className="ve-theme-control w-full flex justify-between items-center font-bold ve-theme-body"
         {...getToggleProps()}
       >
         {t("hours", "Hours")}
@@ -197,7 +197,7 @@ const OpenNowFilter = ({ isSelected, onChange }: OpenNowFilterProps) => {
             id={openNowCheckBoxId}
             checked={isSelected}
             className={
-              "w-4 h-4 form-checkbox cursor-pointer border border-gray-300" +
+              "ve-theme-check w-4 h-4 form-checkbox cursor-pointer border ve-theme-border" +
               " rounded-sm text-primary focus:ring-primary [accent-color:var(--locator-filter-accent-color)]"
             }
             onChange={() => onChange(!isSelected)}
@@ -227,15 +227,15 @@ const DistanceFilter = ({
     defaultExpanded: true,
   });
   const iconClassName = isExpanded
-    ? "w-3 text-gray-400"
-    : "w-3 text-gray-400 transform rotate-180";
+    ? "w-3 opacity-60"
+    : "w-3 opacity-60 transform rotate-180";
   const distanceOptions = [5, 10, 25, 50];
   const unit = getPreferredDistanceUnit(i18n.language);
 
   return (
     <div className="flex flex-col gap-4">
       <button
-        className="w-full flex justify-between items-center font-bold font-body-fontFamily text-body-fontSize"
+        className="ve-theme-control w-full flex justify-between items-center font-bold ve-theme-body"
         {...getToggleProps()}
       >
         {t("distance", "Distance")}
@@ -249,7 +249,7 @@ const DistanceFilter = ({
             key={distanceOption}
           >
             <button
-              className="inline-flex bg-white"
+              className="inline-flex ve-theme-page"
               onClick={() => onChange(distanceOption, unit)}
               aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${translateDistanceUnit(t, unit, distanceOption)}`}
             >

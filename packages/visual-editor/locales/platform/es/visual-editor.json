@@ -43,7 +43,15 @@
   "closesAtTime": "Cierra a las {{time}}",
   "closesAtTimeWeek": "Cierra a las {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Abrir selector de color"
+    "angle": "Ángulo",
+    "end": "Color final",
+    "fill": "Relleno",
+    "linear": "Degradado lineal",
+    "open": "Abrir selector de color",
+    "radial": "Degradado radial",
+    "solid": "Color sólido",
+    "start": "Color inicial",
+    "stops": "Colores del degradado"
   },
   "comingSoon": "Muy pronto",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Datos",
     "dataAttributes": "Atributos de datos",
     "dayOfWeekFormat": "Formato de día de semana",
+    "defaultForPlacement": "Predeterminado según la ubicación",
     "directoryListBackgroundColor": "Color de fondo de la lista de directorios",
     "directoryRootLinkLabel": "Etiqueta de enlace de raíz del directorio",
     "distanceDisplay": "Visualización de distancia",
@@ -145,20 +154,22 @@
     "fontStyle": "Estilo de fuente",
     "headingAlign": "Encabezado alinearse",
     "headingBackgroundColor": "Color de fondo del encabezado",
-    "headingLevel": "Nivel de rumbo",
     "hours": "Horas",
     "hoursColumn": "Columna de horas",
     "html": "HTML",
     "icon": "Icono",
+    "iconColor": "Color del icono",
     "icons": "Iconos",
     "image": "Imagen",
     "imageConstrain": "Restricción de imagen",
     "imageFillType": "Tipo de relleno de imagen",
     "includePhoneHyperlink": "Incluir hipervínculo del teléfono",
+    "inheritSurface": "Heredar del elemento superior",
     "javascript": "JavaScript",
     "key": "Clave",
     "keywordsDisplayName": "Palabras clave Nombre para mostrar",
     "label": "Etiqueta",
+    "labelColor": "Color de la etiqueta",
     "latitude": "Latitud",
     "link": "Enlace",
     "linkColor": "Color del enlace",
@@ -307,11 +318,14 @@
     "showRegion": "Mostrar región",
     "startOfTheWeek": "Comienzo de la semana",
     "styles": "Estilos",
+    "surface": "Variante de color",
     "tag": "Etiqueta",
     "tertiaryHeading": "Título terciario",
     "text": "Texto",
+    "textColor": "Color del texto",
     "timeFormat": "Formato de tiempo",
     "title": "Título",
+    "typographyRole": "Estilo tipográfico",
     "value": "Valor",
     "variant": "Variante",
     "video": "Video",
@@ -569,17 +583,10 @@
       "color3": "Color 3",
       "color4": "Color 4"
     },
-    "bodyText": "Texto del cuerpo",
     "borderRadius": "Radio fronterizo",
-    "button": "Botón",
     "colors": {
-      "colors": "Bandera",
-      "primary": "Primario",
-      "quaternary": "Cuaternario",
       "recommendedColorDescription": "Optimice el contraste de color para la accesibilidad utilizando el valor predeterminado dinámico.",
-      "recommendedDescription": "Optimizar el contraste de color para la accesibilidad con estos fondos.",
-      "secondary": "Secundario",
-      "tertiary": "Terciario"
+      "recommendedDescription": "Optimizar el contraste de color para la accesibilidad con estos fondos."
     },
     "contentWidth": {
       "compact": "Compacto (768px)",
@@ -589,25 +596,20 @@
       "standard": "Estándar (1024px)",
       "wide": "Ancho (1280px)"
     },
-    "defaultFont": "Fuente predeterminada",
     "font": "Fuente",
     "fontSize": "Tamaño de fuente",
     "fontWeight": {
       "fontWeight": "Peso de la fuente"
     },
-    "headers": "Encabezados",
-    "image": "Imagen",
     "includeCaret": "Incluir caret",
     "letterSpacing": {
       "letterSpacing": "Espaciado de letras"
     },
-    "links": "Campo de golf",
     "options": {
       "circle": "Círculo",
       "none": "Ninguno",
       "pill": "Píldora"
     },
-    "pageSection": "Sección de la página",
     "textTransform": {
       "capitalize": "Capitalizar",
       "lowercase": "Minúscula",
@@ -617,8 +619,12 @@
     },
     "topBottomPadding": "Relleno superior/inferior"
   },
+  "themeDataEditor": {
+    "description": "Reemplace el tema con un objeto JSON. Los campos que falten usarán los valores predeterminados del tema.",
+    "invalid": "Introduzca un objeto JSON con campos de tema reconocidos y tipos de valores válidos.",
+    "title": "Establecer datos del tema"
+  },
   "themeSidebar": {
-    "noTheme": "Póngase en contacto con su desarrollador para configurar la gestión de temas.",
     "warning": "Los cambios afectarán todos los conjuntos y diseños de página para todo el sitio."
   },
   "thursday": "Jueves",

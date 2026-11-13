@@ -1,7 +1,7 @@
 import {
   defaultThemeTailwindExtensions,
   VisualEditorThemeClassSafelist,
-} from "../../utils/themeConfigOptions.ts";
+} from "../../utils/themeOptions.ts";
 
 // This Tailwind Config applies Theme Editor styles to our components
 // during playwright testing

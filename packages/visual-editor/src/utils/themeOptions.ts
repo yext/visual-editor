@@ -1,9 +1,78 @@
+import type { CSSProperties } from "react";
 import { legacyThemeTailwindMappings } from "../internal/theme/legacyTheme.ts";
 import { deepMerge } from "./themeResolver.ts";
 import { ComboboxOptionGroup } from "../internal/types/combobox.ts";
 import { msg, pt } from "./i18n/platform.ts";
 import { PresetImageType } from "../types/types.ts";
 
+/** Semantic roles map directly to the existing `ve-theme-${role}` classes.
+ * Roles describe appearance only; consumers choose HTML tags and placement.
+ */
+export type SurfaceRole = "page" | "primary" | "secondary" | "accent" | "muted";
+/** A semantic surface or an authored custom background color. */
+export type SurfaceValue = SurfaceRole | "inherit" | ThemeColor;
+export type TypographyRole =
+  | "headline"
+  | "section-title"
+  | "card-title"
+  | "eyebrow"
+  | "body-small"
+  | "body"
+  | "body-large";
+export type InteractionRole =
+  "primary-button" | "secondary-button" | "link" | "navigation-link";
+
+/** Reusable Puck select/radio options. No per-component variable overrides. */
+export const surfaceRoleOptions: {
+  label: string;
+  value: SurfaceRole;
+  colorStyle: CSSProperties;
+}[] = [
+  {
+    label: "Page",
+    value: "page",
+    colorStyle: { background: "var(--ve-color-background)" },
+  },
+  {
+    label: "Primary",
+    value: "primary",
+    colorStyle: { background: "var(--ve-color-primary)" },
+  },
+  {
+    label: "Secondary",
+    value: "secondary",
+    colorStyle: { background: "var(--ve-color-secondary)" },
+  },
+  {
+    label: "Accent",
+    value: "accent",
+    colorStyle: { background: "var(--ve-color-accent)" },
+  },
+  {
+    label: "Muted",
+    value: "muted",
+    colorStyle: { background: "var(--ve-color-muted)" },
+  },
+];
+export const typographyRoleOptions: { label: string; value: TypographyRole }[] =
+  [
+    { label: "Headline", value: "headline" },
+    { label: "Section title", value: "section-title" },
+    { label: "Card title", value: "card-title" },
+    { label: "Eyebrow", value: "eyebrow" },
+    { label: "Body small", value: "body-small" },
+    { label: "Body", value: "body" },
+    { label: "Body large", value: "body-large" },
+  ];
+export const interactionRoleOptions: {
+  label: string;
+  value: InteractionRole;
+}[] = [
+  { label: "Primary", value: "primary-button" },
+  { label: "Secondary", value: "secondary-button" },
+  { label: "Link", value: "link" },
+  { label: "Navigation link", value: "navigation-link" },
+];
 export const spacingOptions = [
   { label: "0", value: "0", px: "0" },
   { label: "0.5", value: "0.5", px: "2" },
@@ -27,7 +96,6 @@ export const spacingOptions = [
   { label: "20", value: "20", px: "80" },
   { label: "24", value: "24", px: "96" },
 ];
-
 export const fontSizeOptions = (includeLargeSizes = true) => {
   const fontSizeOptions = [
     { label: "XS", value: "xs", px: "12" },
@@ -82,7 +150,6 @@ export type ThemeColor = {
    */
   isDarkColor?: boolean;
 };
-
 export const backgroundColors: Record<
   string,
   {
@@ -201,7 +268,6 @@ const backgroundColorOptions: ComboboxOptionGroup[] = [
       .filter((o) => !!o),
   },
 ];
-
 export const siteColorOptions: ComboboxOptionGroup[] = [
   {
     title: msg("recommendedColor", "Recommended Color"),
@@ -309,7 +375,6 @@ const textTransformOptions = [
     value: "capitalize",
   },
 ];
-
 export const fontStyleOptions = [
   { label: msg("fields.options.normal", "Normal"), value: "normal" },
   { label: msg("fields.options.italic", "Italic"), value: "italic" },
@@ -351,7 +416,6 @@ const imageBorderRadiusOptions = defineBorderRadiusOptions([
     value: "9999px",
   },
 ] satisfies readonly BorderRadiusOption[]);
-
 export type ImageBorderRadius =
   (typeof imageBorderRadiusOptions)[number]["value"];
 
@@ -428,27 +492,6 @@ const justifyContentOptions = [
   { label: msg("fields.options.end", "End"), value: "end" },
 ];
 
-const bodyVariantOptions = [
-  {
-    label: msg("fields.options.extraSmall", "Extra Small", {
-      context: "text size",
-    }),
-    value: "xs",
-  },
-  {
-    label: msg("fields.options.small", "Small", { context: "text size" }),
-    value: "sm",
-  },
-  {
-    label: msg("fields.options.base", "Base", { context: "text size" }),
-    value: "base",
-  },
-  {
-    label: msg("fields.options.large", "Large", { context: "text size" }),
-    value: "lg",
-  },
-];
-
 const hoursOptions = [
   { label: msg("fields.options.monday", "Monday"), value: "monday" },
   { label: msg("fields.options.tuesday", "Tuesday"), value: "tuesday" },
@@ -502,7 +545,6 @@ const showHideOptions = [
   { label: msg("fields.options.show", "Show"), value: true },
   { label: msg("fields.options.hide", "Hide"), value: false },
 ];
-
 export const ThemeOptions = {
   HEADING_LEVEL: headingLevelOptions,
   TEXT_TRANSFORM: textTransformOptions,
@@ -515,7 +557,6 @@ export const ThemeOptions = {
   ALIGNMENT: alignmentOptions,
   VERTICAL_POSITION: verticalPositionOptions,
   JUSTIFY_CONTENT: justifyContentOptions,
-  BODY_VARIANT: bodyVariantOptions,
   BUTTON_BORDER_RADIUS: buttonBorderRadiusOptions,
   IMAGE_BORDER_RADIUS: imageBorderRadiusOptions,
   SPACING: getSpacingOptions,
@@ -567,7 +608,6 @@ export const VisualEditorThemeClassSafelist = [
 // Content path for applying tailwind config to visual-editor components
 export const VisualEditorComponentsContentPath =
   "node_modules/@yext/visual-editor/dist/**/*.js";
-
 export const defaultThemeTailwindExtensions = deepMerge(
   legacyThemeExtensions,
   legacyThemeTailwindMappings

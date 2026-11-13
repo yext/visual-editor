@@ -1110,11 +1110,42 @@ describe("theme editor fields", () => {
         document.getElementById(THEME_STYLE_TAG_ID)?.textContent
       ).toContain("--ve-color-foreground:#d0021b")
     );
+    // Import uses the same history/save path as individual field edits.
+    fireEvent.click(screen.getByRole("button", { name: "Set Theme Data" }));
+    fireEvent.change(screen.getByRole("textbox", { name: "Data" }), {
+      target: {
+        value: JSON.stringify({ colorForeground: "#abcdef", bodyFontSize: 20 }),
+      },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Confirm" }));
+    await waitFor(() => expect(save).toHaveBeenCalledTimes(2));
+    expect(JSON.parse(save.mock.calls[1][0].payload.history)).toMatchObject({
+      colorForeground: "#abcdef",
+      bodyFontSize: 20,
+    });
+    await waitFor(() =>
+      expect(
+        document.getElementById(THEME_STYLE_TAG_ID)?.textContent
+      ).toContain("--ve-color-foreground:#abcdef")
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    await waitFor(() =>
+      expect(
+        document.getElementById(THEME_STYLE_TAG_ID)?.textContent
+      ).toContain("--ve-color-foreground:#d0021b")
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+    await waitFor(() =>
+      expect(
+        document.getElementById(THEME_STYLE_TAG_ID)?.textContent
+      ).toContain("--ve-color-foreground:#abcdef")
+    );
     fireEvent.click(screen.getByRole("button", { name: "Update 1 Page" }));
     expect(
       JSON.parse(publish.mock.calls[0][0].payload.saveThemeData)
     ).toMatchObject({
-      colorForeground: "#d0021b",
+      colorForeground: "#abcdef",
+      bodyFontSize: 20,
     });
   });
 });

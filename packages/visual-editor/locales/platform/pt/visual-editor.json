@@ -43,7 +43,15 @@
   "closesAtTime": "Fecha às {{time}}",
   "closesAtTimeWeek": "Fecha às {{time}} {{dayOfWeek}}",
   "colorPicker": {
-    "open": "Abrir seletor de cores"
+    "angle": "Ângulo",
+    "end": "Cor final",
+    "fill": "Preenchimento",
+    "linear": "Gradiente linear",
+    "open": "Abrir seletor de cores",
+    "radial": "Gradiente radial",
+    "solid": "Cor sólida",
+    "start": "Cor inicial",
+    "stops": "Cores do gradiente"
   },
   "comingSoon": "Em breve",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "Dados",
     "dataAttributes": "Atributos de dados",
     "dayOfWeekFormat": "Formato do dia da semana",
+    "defaultForPlacement": "Predefinição para a posição",
     "directoryListBackgroundColor": "Cor de fundo da lista de diretórios",
     "directoryRootLinkLabel": "Etiqueta de link raiz de diretório",
     "distanceDisplay": "Exibição de distância",
@@ -145,20 +154,22 @@
     "fontStyle": "Estilo da fonte",
     "headingAlign": "Cabeçalho alinhado",
     "headingBackgroundColor": "Cor de fundo do título",
-    "headingLevel": "Nível de cabeçalho",
     "hours": "Horas",
     "hoursColumn": "Coluna de horas",
     "html": "HTML",
     "icon": "Ícone",
+    "iconColor": "Cor do ícone",
     "icons": "Ícones",
     "image": "Imagem",
     "imageConstrain": "Restrição de imagem",
     "imageFillType": "Tipo de preenchimento de imagem",
     "includePhoneHyperlink": "Inclua hiperlink telefônico",
+    "inheritSurface": "Herdar do elemento superior",
     "javascript": "JavaScript",
     "key": "Chave",
     "keywordsDisplayName": "Nome de exibição de palavras-chave",
     "label": "Rótulo",
+    "labelColor": "Cor do rótulo",
     "latitude": "Latitude",
     "link": "Link",
     "linkColor": "Cor do link",
@@ -307,11 +318,14 @@
     "showRegion": "Mostrar região",
     "startOfTheWeek": "Começo da semana",
     "styles": "Estilos",
+    "surface": "Variante de cor",
     "tag": "Marcação",
     "tertiaryHeading": "Título Terciário",
     "text": "Texto",
+    "textColor": "Cor do texto",
     "timeFormat": "Formato de tempo",
     "title": "Título",
+    "typographyRole": "Estilo tipográfico",
     "value": "Valor",
     "variant": "Variante",
     "video": "Vídeo",
@@ -569,17 +583,10 @@
       "color3": "Cor 3",
       "color4": "Cor 4"
     },
-    "bodyText": "Texto corporal",
     "borderRadius": "Raio de fronteira",
-    "button": "Botão",
     "colors": {
-      "colors": "Cores",
-      "primary": "Primário",
-      "quaternary": "Quaternário",
       "recommendedColorDescription": "Otimize o contraste de cores para acessibilidade usando o padrão dinâmico.",
-      "recommendedDescription": "Otimize o contraste de cores para acessibilidade com esses fundos.",
-      "secondary": "Secundário",
-      "tertiary": "Terciário"
+      "recommendedDescription": "Otimize o contraste de cores para acessibilidade com esses fundos."
     },
     "contentWidth": {
       "compact": "Compacto (768px)",
@@ -589,25 +596,20 @@
       "standard": "Padrão (1024px)",
       "wide": "Largo (1280px)"
     },
-    "defaultFont": "Fonte padrão",
     "font": "Fonte",
     "fontSize": "Tamanho da fonte",
     "fontWeight": {
       "fontWeight": "Peso da fonte"
     },
-    "headers": "Cabeçalhos",
-    "image": "Imagem",
     "includeCaret": "Inclua Caret",
     "letterSpacing": {
       "letterSpacing": "Espaçamento de carta"
     },
-    "links": "Links",
     "options": {
       "circle": "Círculo",
       "none": "Nenhum",
       "pill": "Pílula"
     },
-    "pageSection": "Seção de página",
     "textTransform": {
       "capitalize": "Capitalizar",
       "lowercase": "Minúsculo",
@@ -617,8 +619,12 @@
     },
     "topBottomPadding": "Preenchimento superior/inferior"
   },
+  "themeDataEditor": {
+    "description": "Substitua o tema por um objeto JSON. Os campos em falta usam os valores predefinidos do tema.",
+    "invalid": "Introduza um objeto JSON com campos de tema reconhecidos e tipos de valores válidos.",
+    "title": "Definir dados do tema"
+  },
   "themeSidebar": {
-    "noTheme": "Entre em contato com seu desenvolvedor para configurar o gerenciamento de temas.",
     "warning": "As alterações afetarão todos os conjuntos de páginas e layouts para todo o site."
   },
   "thursday": "Quinta-feira",

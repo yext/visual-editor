@@ -1,39 +1,40 @@
 /* Shared theme classes, included by applyTheme in published pages and editor previews.
  * Apply these classes explicitly; they do not target elements by tag name.
- * Add ve-theme-on-dark to an interactive element or an ancestor for dark surfaces.
+ * Surfaces establish nearest-boundary interaction colors.
+ * Use ve-theme-on-dark for image overlays without a semantic surface.
  */
 
 /* Colors */
-.ve-theme-page {
+:where(.ve-theme-page) {
   background: var(--ve-color-background);
   color: var(--ve-color-foreground);
 }
 
-.ve-theme-primary {
+:where(.ve-theme-primary) {
   background: var(--ve-color-primary);
   color: var(--ve-color-primary-foreground);
 }
 
-.ve-theme-secondary {
+:where(.ve-theme-secondary) {
   background: var(--ve-color-secondary);
   color: var(--ve-color-secondary-foreground);
 }
 
-.ve-theme-accent {
+:where(.ve-theme-accent) {
   background: var(--ve-color-accent);
   color: var(--ve-color-accent-foreground);
 }
 
-.ve-theme-muted {
+:where(.ve-theme-muted) {
   background: var(--ve-color-muted);
   color: var(--ve-color-muted-foreground);
 }
 
-.ve-theme-border {
+:where(.ve-theme-border) {
   border-color: var(--ve-color-border);
 }
 
-/* Typography: mobile values apply below the shared 640px breakpoint. */
+/* Typography classes outrank element resets; mobile values apply below 640px. */
 
 .ve-theme-headline {
   font-family: var(--ve-headline-font-family);
@@ -65,14 +66,14 @@
   text-transform: var(--ve-card-title-text-transform);
 }
 
-.ve-theme-lead {
-  font-family: var(--ve-lead-font-family);
-  font-size: var(--ve-lead-mobile-font-size);
-  font-weight: var(--ve-lead-font-weight);
-  font-style: var(--ve-lead-font-style);
-  line-height: var(--ve-lead-mobile-line-height);
-  letter-spacing: var(--ve-lead-letter-spacing);
-  text-transform: var(--ve-lead-text-transform);
+.ve-theme-eyebrow {
+  font-family: var(--ve-eyebrow-font-family);
+  font-size: var(--ve-eyebrow-mobile-font-size);
+  font-weight: var(--ve-eyebrow-font-weight);
+  font-style: var(--ve-eyebrow-font-style);
+  line-height: var(--ve-eyebrow-mobile-line-height);
+  letter-spacing: var(--ve-eyebrow-letter-spacing);
+  text-transform: var(--ve-eyebrow-text-transform);
 }
 
 .ve-theme-body {
@@ -85,16 +86,27 @@
   text-transform: var(--ve-body-text-transform);
 }
 
-.ve-theme-fine-print {
-  font-family: var(--ve-fine-print-font-family);
-  font-size: var(--ve-fine-print-mobile-font-size);
-  font-weight: var(--ve-fine-print-font-weight);
-  font-style: var(--ve-fine-print-font-style);
-  line-height: var(--ve-fine-print-mobile-line-height);
-  letter-spacing: var(--ve-fine-print-letter-spacing);
-  text-transform: var(--ve-fine-print-text-transform);
+.ve-theme-body-large {
+  font-family: var(--ve-body-large-font-family);
+  font-size: var(--ve-body-large-mobile-font-size);
+  font-weight: var(--ve-body-large-font-weight);
+  font-style: var(--ve-body-large-font-style);
+  line-height: var(--ve-body-large-mobile-line-height);
+  letter-spacing: var(--ve-body-large-letter-spacing);
+  text-transform: var(--ve-body-large-text-transform);
 }
 
+.ve-theme-body-small {
+  font-family: var(--ve-body-small-font-family);
+  font-size: var(--ve-body-small-mobile-font-size);
+  font-weight: var(--ve-body-small-font-weight);
+  font-style: var(--ve-body-small-font-style);
+  line-height: var(--ve-body-small-mobile-line-height);
+  letter-spacing: var(--ve-body-small-letter-spacing);
+  text-transform: var(--ve-body-small-text-transform);
+}
+
+/* Button and link classes must outrank element resets such as Tailwind preflight. */
 /* Buttons and links */
 
 .ve-theme-primary-button {
@@ -106,51 +118,30 @@
   letter-spacing: var(--ve-primary-button-letter-spacing);
   text-transform: var(--ve-primary-button-text-transform);
   text-decoration: var(--ve-primary-button-default-text-decoration);
-  color: var(--ve-primary-button-default-text-color);
+  color: var(--ve-surface-primary-button-default-text-color);
   transition: var(--ve-primary-button-transition);
   padding: var(--ve-primary-button-padding);
   border-radius: var(--ve-primary-button-border-radius);
   border-style: solid;
   border-width: var(--ve-primary-button-border-width);
-  border-color: var(--ve-primary-button-default-border-color);
-  background: var(--ve-primary-button-default-background-color);
+  border-color: var(--ve-surface-primary-button-default-border-color);
+  background: var(--ve-surface-primary-button-default-background-color);
 }
 
 .ve-theme-primary-button:hover {
   font-weight: var(--ve-primary-button-hover-font-weight);
   text-decoration: var(--ve-primary-button-hover-text-decoration);
-  color: var(--ve-primary-button-hover-text-color);
-  border-color: var(--ve-primary-button-hover-border-color);
-  background: var(--ve-primary-button-hover-background-color);
+  color: var(--ve-surface-primary-button-hover-text-color);
+  border-color: var(--ve-surface-primary-button-hover-border-color);
+  background: var(--ve-surface-primary-button-hover-background-color);
 }
 
 .ve-theme-primary-button:active {
   font-weight: var(--ve-primary-button-active-font-weight);
   text-decoration: var(--ve-primary-button-active-text-decoration);
-  color: var(--ve-primary-button-active-text-color);
-  border-color: var(--ve-primary-button-active-border-color);
-  background: var(--ve-primary-button-active-background-color);
-}
-
-:where(.ve-theme-on-dark) .ve-theme-primary-button,
-.ve-theme-primary-button:where(.ve-theme-on-dark) {
-  color: var(--ve-primary-button-default-text-color-on-dark);
-  border-color: var(--ve-primary-button-default-border-color-on-dark);
-  background: var(--ve-primary-button-default-background-color-on-dark);
-}
-
-:where(.ve-theme-on-dark) .ve-theme-primary-button:hover,
-.ve-theme-primary-button:where(.ve-theme-on-dark):hover {
-  color: var(--ve-primary-button-hover-text-color-on-dark);
-  border-color: var(--ve-primary-button-hover-border-color-on-dark);
-  background: var(--ve-primary-button-hover-background-color-on-dark);
-}
-
-:where(.ve-theme-on-dark) .ve-theme-primary-button:active,
-.ve-theme-primary-button:where(.ve-theme-on-dark):active {
-  color: var(--ve-primary-button-active-text-color-on-dark);
-  border-color: var(--ve-primary-button-active-border-color-on-dark);
-  background: var(--ve-primary-button-active-background-color-on-dark);
+  color: var(--ve-surface-primary-button-active-text-color);
+  border-color: var(--ve-surface-primary-button-active-border-color);
+  background: var(--ve-surface-primary-button-active-background-color);
 }
 
 .ve-theme-secondary-button {
@@ -162,54 +153,34 @@
   letter-spacing: var(--ve-secondary-button-letter-spacing);
   text-transform: var(--ve-secondary-button-text-transform);
   text-decoration: var(--ve-secondary-button-default-text-decoration);
-  color: var(--ve-secondary-button-default-text-color);
+  color: var(--ve-surface-secondary-button-default-text-color);
   transition: var(--ve-secondary-button-transition);
   padding: var(--ve-secondary-button-padding);
   border-radius: var(--ve-secondary-button-border-radius);
   border-style: solid;
   border-width: var(--ve-secondary-button-border-width);
-  border-color: var(--ve-secondary-button-default-border-color);
-  background: var(--ve-secondary-button-default-background-color);
+  border-color: var(--ve-surface-secondary-button-default-border-color);
+  background: var(--ve-surface-secondary-button-default-background-color);
 }
 
 .ve-theme-secondary-button:hover {
   font-weight: var(--ve-secondary-button-hover-font-weight);
   text-decoration: var(--ve-secondary-button-hover-text-decoration);
-  color: var(--ve-secondary-button-hover-text-color);
-  border-color: var(--ve-secondary-button-hover-border-color);
-  background: var(--ve-secondary-button-hover-background-color);
+  color: var(--ve-surface-secondary-button-hover-text-color);
+  border-color: var(--ve-surface-secondary-button-hover-border-color);
+  background: var(--ve-surface-secondary-button-hover-background-color);
 }
 
 .ve-theme-secondary-button:active {
   font-weight: var(--ve-secondary-button-active-font-weight);
   text-decoration: var(--ve-secondary-button-active-text-decoration);
-  color: var(--ve-secondary-button-active-text-color);
-  border-color: var(--ve-secondary-button-active-border-color);
-  background: var(--ve-secondary-button-active-background-color);
+  color: var(--ve-surface-secondary-button-active-text-color);
+  border-color: var(--ve-surface-secondary-button-active-border-color);
+  background: var(--ve-surface-secondary-button-active-background-color);
 }
 
-:where(.ve-theme-on-dark) .ve-theme-secondary-button,
-.ve-theme-secondary-button:where(.ve-theme-on-dark) {
-  color: var(--ve-secondary-button-default-text-color-on-dark);
-  border-color: var(--ve-secondary-button-default-border-color-on-dark);
-  background: var(--ve-secondary-button-default-background-color-on-dark);
-}
-
-:where(.ve-theme-on-dark) .ve-theme-secondary-button:hover,
-.ve-theme-secondary-button:where(.ve-theme-on-dark):hover {
-  color: var(--ve-secondary-button-hover-text-color-on-dark);
-  border-color: var(--ve-secondary-button-hover-border-color-on-dark);
-  background: var(--ve-secondary-button-hover-background-color-on-dark);
-}
-
-:where(.ve-theme-on-dark) .ve-theme-secondary-button:active,
-.ve-theme-secondary-button:where(.ve-theme-on-dark):active {
-  color: var(--ve-secondary-button-active-text-color-on-dark);
-  border-color: var(--ve-secondary-button-active-border-color-on-dark);
-  background: var(--ve-secondary-button-active-background-color-on-dark);
-}
-
-.ve-theme-link {
+.ve-theme-link,
+.rtf-wrapper a {
   font-family: var(--ve-link-font-family);
   font-size: var(--ve-link-mobile-font-size);
   font-weight: var(--ve-link-default-font-weight);
@@ -218,35 +189,22 @@
   letter-spacing: var(--ve-link-letter-spacing);
   text-transform: var(--ve-link-text-transform);
   text-decoration: var(--ve-link-default-text-decoration);
-  color: var(--ve-link-default-text-color);
+  color: var(--ve-surface-link-default-text-color);
   transition: var(--ve-link-transition);
 }
 
-.ve-theme-link:hover {
+.ve-theme-link:hover,
+.rtf-wrapper a:hover {
   font-weight: var(--ve-link-hover-font-weight);
   text-decoration: var(--ve-link-hover-text-decoration);
-  color: var(--ve-link-hover-text-color);
+  color: var(--ve-surface-link-hover-text-color);
 }
 
-.ve-theme-link:active {
+.ve-theme-link:active,
+.rtf-wrapper a:active {
   font-weight: var(--ve-link-active-font-weight);
   text-decoration: var(--ve-link-active-text-decoration);
-  color: var(--ve-link-active-text-color);
-}
-
-:where(.ve-theme-on-dark) .ve-theme-link,
-.ve-theme-link:where(.ve-theme-on-dark) {
-  color: var(--ve-link-default-text-color-on-dark);
-}
-
-:where(.ve-theme-on-dark) .ve-theme-link:hover,
-.ve-theme-link:where(.ve-theme-on-dark):hover {
-  color: var(--ve-link-hover-text-color-on-dark);
-}
-
-:where(.ve-theme-on-dark) .ve-theme-link:active,
-.ve-theme-link:where(.ve-theme-on-dark):active {
-  color: var(--ve-link-active-text-color-on-dark);
+  color: var(--ve-surface-link-active-text-color);
 }
 
 .ve-theme-navigation-link {
@@ -258,41 +216,28 @@
   letter-spacing: var(--ve-navigation-link-letter-spacing);
   text-transform: var(--ve-navigation-link-text-transform);
   text-decoration: var(--ve-navigation-link-default-text-decoration);
-  color: var(--ve-navigation-link-default-text-color);
+  color: var(--ve-surface-navigation-link-default-text-color);
   transition: var(--ve-navigation-link-transition);
 }
 
-.ve-theme-navigation-link:hover {
+.ve-theme-navigation-link:hover,
+.ve-theme-navigation-link[data-highlighted] {
   font-weight: var(--ve-navigation-link-hover-font-weight);
   text-decoration: var(--ve-navigation-link-hover-text-decoration);
-  color: var(--ve-navigation-link-hover-text-color);
+  color: var(--ve-surface-navigation-link-hover-text-color);
 }
 
 .ve-theme-navigation-link:active {
   font-weight: var(--ve-navigation-link-active-font-weight);
   text-decoration: var(--ve-navigation-link-active-text-decoration);
-  color: var(--ve-navigation-link-active-text-color);
-}
-
-:where(.ve-theme-on-dark) .ve-theme-navigation-link,
-.ve-theme-navigation-link:where(.ve-theme-on-dark) {
-  color: var(--ve-navigation-link-default-text-color-on-dark);
-}
-
-:where(.ve-theme-on-dark) .ve-theme-navigation-link:hover,
-.ve-theme-navigation-link:where(.ve-theme-on-dark):hover {
-  color: var(--ve-navigation-link-hover-text-color-on-dark);
-}
-
-:where(.ve-theme-on-dark) .ve-theme-navigation-link:active,
-.ve-theme-navigation-link:where(.ve-theme-on-dark):active {
-  color: var(--ve-navigation-link-active-text-color-on-dark);
+  color: var(--ve-surface-navigation-link-active-text-color);
 }
 
 /* Keyboard focus remains visible across all interactive styles. */
 .ve-theme-primary-button:focus-visible,
 .ve-theme-secondary-button:focus-visible,
 .ve-theme-link:focus-visible,
+.rtf-wrapper a:focus-visible,
 .ve-theme-navigation-link:focus-visible {
   outline: 2px solid var(--ve-color-focus-ring);
   outline-offset: 2px;
@@ -312,17 +257,21 @@
     font-size: var(--ve-card-title-font-size);
     line-height: var(--ve-card-title-line-height);
   }
-  .ve-theme-lead {
-    font-size: var(--ve-lead-font-size);
-    line-height: var(--ve-lead-line-height);
+  .ve-theme-eyebrow {
+    font-size: var(--ve-eyebrow-font-size);
+    line-height: var(--ve-eyebrow-line-height);
   }
   .ve-theme-body {
     font-size: var(--ve-body-font-size);
     line-height: var(--ve-body-line-height);
   }
-  .ve-theme-fine-print {
-    font-size: var(--ve-fine-print-font-size);
-    line-height: var(--ve-fine-print-line-height);
+  .ve-theme-body-large {
+    font-size: var(--ve-body-large-font-size);
+    line-height: var(--ve-body-large-line-height);
+  }
+  .ve-theme-body-small {
+    font-size: var(--ve-body-small-font-size);
+    line-height: var(--ve-body-small-line-height);
   }
   .ve-theme-primary-button {
     font-size: var(--ve-primary-button-font-size);
@@ -332,7 +281,8 @@
     font-size: var(--ve-secondary-button-font-size);
     line-height: var(--ve-secondary-button-line-height);
   }
-  .ve-theme-link {
+  .ve-theme-link,
+  .rtf-wrapper a {
     font-size: var(--ve-link-font-size);
     line-height: var(--ve-link-line-height);
   }
@@ -343,7 +293,7 @@
 }
 
 /* Page styles */
-.ve-theme-image {
+:where(.ve-theme-image) {
   border-radius: var(--ve-image-border-radius);
 }
 
@@ -354,11 +304,123 @@
   border-color: var(--ve-color-border);
 }
 
-.ve-theme-content {
+:where(.ve-theme-content) {
   max-width: var(--ve-page-content-max-width);
   margin-inline: auto;
 }
 
-.ve-theme-section {
+:where(.ve-theme-section) {
   padding-block: var(--ve-page-section-vertical-spacing);
+}
+
+/* Rich text preserves authored structure; visual typography comes from its role. */
+.rtf-wrapper :where(p, h1, h2, h3, h4, h5, h6, li, blockquote) {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+.rtf-wrapper :where(ul) {
+  list-style-type: disc;
+  padding-inline-start: 1.5em;
+}
+.rtf-wrapper :where(ol) {
+  list-style-type: decimal;
+  padding-inline-start: 1.5em;
+}
+.rtf-wrapper :where(p, ul, ol, blockquote) {
+  margin-block: 0 1em;
+}
+.rtf-wrapper > :last-child {
+  margin-bottom: 0;
+}
+.rtf-wrapper :where(strong, b) {
+  font-weight: bolder;
+}
+.rtf-wrapper :where(em, i) {
+  font-style: italic;
+}
+
+/* Explicit typography roles override an interaction role's typography. */
+.ve-theme-typography-override {
+  font-size: var(--ve-typography-mobile-size);
+  line-height: var(--ve-typography-mobile-line-height);
+}
+@media (min-width: 640px) {
+  .ve-theme-typography-override {
+    font-size: var(--ve-typography-size);
+    line-height: var(--ve-typography-line-height);
+  }
+}
+
+/* Inherit control fonts unless an explicit typography role is selected. */
+:where(.ve-theme-input) {
+  font: inherit;
+}
+
+/* Shared native form styling. Error borders retain their functional distinction. */
+.ve-theme-input {
+  background: var(--ve-color-background);
+  color: var(--ve-color-foreground);
+  border: 1px solid var(--ve-color-border);
+  border-radius: var(--ve-primary-button-border-radius);
+  padding: 0.5em 0.75em;
+}
+.ve-theme-input::placeholder {
+  color: var(--ve-color-muted-foreground);
+}
+.ve-theme-check {
+  accent-color: var(--ve-color-primary);
+}
+.ve-theme-input[aria-invalid="true"] {
+  border-color: #b91c1c;
+}
+.ve-theme-input:focus-visible,
+.ve-theme-check:focus-visible,
+.ve-theme-control:focus-visible {
+  outline: 2px solid var(--ve-color-focus-ring);
+  outline-offset: 2px;
+}
+.ve-theme-input:disabled,
+.ve-theme-check:disabled,
+.ve-theme-control:disabled,
+.ve-theme-primary-button:disabled,
+.ve-theme-secondary-button:disabled,
+.ve-theme-link:disabled,
+.ve-theme-navigation-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rtf-wrapper a {
+  color: var(--ve-rich-text-color, var(--ve-surface-link-default-text-color));
+  font-family: var(--ve-rich-text-font-family, var(--ve-link-font-family));
+  font-size: var(--ve-rich-text-font-size, var(--ve-link-mobile-font-size));
+  font-weight: var(
+    --ve-rich-text-font-weight,
+    var(--ve-link-default-font-weight)
+  );
+  font-style: var(--ve-rich-text-font-style, var(--ve-link-font-style));
+  text-transform: var(
+    --ve-rich-text-text-transform,
+    var(--ve-link-text-transform)
+  );
+}
+.rtf-wrapper a:hover {
+  color: var(--ve-rich-text-color, var(--ve-surface-link-hover-text-color));
+  font-weight: var(
+    --ve-rich-text-font-weight,
+    var(--ve-link-hover-font-weight)
+  );
+}
+.rtf-wrapper a:active {
+  color: var(--ve-rich-text-color, var(--ve-surface-link-active-text-color));
+  font-weight: var(
+    --ve-rich-text-font-weight,
+    var(--ve-link-active-font-weight)
+  );
+}
+@media (min-width: 640px) {
+  .rtf-wrapper a {
+    font-size: var(--ve-rich-text-font-size, var(--ve-link-font-size));
+  }
 }

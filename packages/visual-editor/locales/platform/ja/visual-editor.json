@@ -43,7 +43,15 @@
   "closesAtTime": "{{time}}に閉まります",
   "closesAtTimeWeek": "{{time}} {{dayOfWeek}} に閉店",
   "colorPicker": {
-    "open": "カラーピッカーを開く"
+    "angle": "角度",
+    "end": "終了色",
+    "fill": "塗りつぶし",
+    "linear": "線形グラデーション",
+    "open": "カラーピッカーを開く",
+    "radial": "放射状グラデーション",
+    "solid": "単色",
+    "start": "開始色",
+    "stops": "グラデーションの色"
   },
   "comingSoon": "近日公開",
   "componentErrorBoundary": {
@@ -132,6 +140,7 @@
     "data": "データ",
     "dataAttributes": "データの属性",
     "dayOfWeekFormat": "曜日の形式",
+    "defaultForPlacement": "配置に応じたデフォルト",
     "directoryListBackgroundColor": "ディレクトリリストの背景色",
     "directoryRootLinkLabel": "ディレクトリルートリンクラベル",
     "distanceDisplay": "距離表示",
@@ -145,20 +154,22 @@
     "fontStyle": "フォントスタイル",
     "headingAlign": "見出し揃え",
     "headingBackgroundColor": "見出しの背景色",
-    "headingLevel": "見出しレベル",
     "hours": "時間",
     "hoursColumn": "時間列",
     "html": "HTML",
     "icon": "アイコン",
+    "iconColor": "アイコンの色",
     "icons": "アイコン",
     "image": "画像",
     "imageConstrain": "画像の制約",
     "imageFillType": "画像塗りつぶしタイプ",
     "includePhoneHyperlink": "電話ハイパーリンクを含めます",
+    "inheritSurface": "親から継承",
     "javascript": "JavaScript",
     "key": "キー",
     "keywordsDisplayName": "キーワードの表示名",
     "label": "ラベル",
+    "labelColor": "ラベルの色",
     "latitude": "緯度",
     "link": "リンク",
     "linkColor": "リンクの色",
@@ -307,11 +318,14 @@
     "showRegion": "地域を表示",
     "startOfTheWeek": "今週の始まり",
     "styles": "スタイル",
+    "surface": "カラーバリエーション",
     "tag": "タグ",
     "tertiaryHeading": "第 3 見出し",
     "text": "文章",
+    "textColor": "文字の色",
     "timeFormat": "時間形式",
     "title": "タイトル",
+    "typographyRole": "タイポグラフィスタイル",
     "value": "値",
     "variant": "変異体",
     "video": "ビデオ",
@@ -557,17 +571,10 @@
       "color3": "色3",
       "color4": "色4"
     },
-    "bodyText": "ボディテキスト",
     "borderRadius": "境界半径",
-    "button": "ボタン",
     "colors": {
-      "colors": "色",
-      "primary": "主要な",
-      "quaternary": "第四紀",
       "recommendedColorDescription": "動的なデフォルトを使用して、アクセシビリティのために色のコントラストを最適化します。",
-      "recommendedDescription": "これらの背景を使用したアクセシビリティの色のコントラストを最適化します。",
-      "secondary": "二次",
-      "tertiary": "三次"
+      "recommendedDescription": "これらの背景を使用したアクセシビリティの色のコントラストを最適化します。"
     },
     "contentWidth": {
       "compact": "コンパクト（768px）",
@@ -577,25 +584,20 @@
       "standard": "標準（1024px）",
       "wide": "ワイド（1280px）"
     },
-    "defaultFont": "デフォルトのフォント",
     "font": "フォント",
     "fontSize": "フォントサイズ",
     "fontWeight": {
       "fontWeight": "フォント重量"
     },
-    "headers": "ヘッダー",
-    "image": "画像",
     "includeCaret": "CARETを含めます",
     "letterSpacing": {
       "letterSpacing": "文字間隔"
     },
-    "links": "リンク",
     "options": {
       "circle": "丸",
       "none": "なし",
       "pill": "ピル"
     },
-    "pageSection": "ページセクション",
     "textTransform": {
       "capitalize": "大文字になります",
       "lowercase": "小文字",
@@ -605,8 +607,12 @@
     },
     "topBottomPadding": "上/下のパディング"
   },
+  "themeDataEditor": {
+    "description": "テーマをJSONオブジェクトに置き換えます。省略されたフィールドにはテーマのデフォルト値が使用されます。",
+    "invalid": "認識されるテーマフィールドと有効な値の型を含むJSONオブジェクトを入力してください。",
+    "title": "テーマデータを設定"
+  },
   "themeSidebar": {
-    "noTheme": "開発者に連絡して、テーマ管理をセットアップしてください。",
     "warning": "変更は、サイト全体のすべてのページセットとレイアウトに影響します。"
   },
   "thursday": "木曜日",

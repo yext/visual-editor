@@ -1,3 +1,4 @@
+import { getTextColorClass, getTextColorStyle } from "../../utils/colors.ts";
 import { useTranslation } from "react-i18next";
 import {
   ComponentData,
@@ -16,11 +17,7 @@ import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { CTA, CTAVariant, isCtaVariantWithColor } from "../atoms/cta.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
-import {
-  ThemeColor,
-  ThemeOptions,
-  backgroundColors,
-} from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
@@ -51,6 +48,12 @@ export interface AddressProps {
     ctaVariant: CTAVariant;
 
     color?: ThemeColor;
+
+    /** The color of the address text. */
+    textColor?: ThemeColor;
+
+    /** The text and icon color for a primary get directions CTA. */
+    ctaTextColor?: ThemeColor;
   };
 
   /** @internal */
@@ -103,6 +106,16 @@ export const AddressStyleFields: YextFields<AddressProps["styles"]> = {
   color: {
     type: "basicSelector",
     label: msg("fields.linkColor", "Link Color"),
+    options: "SITE_COLOR",
+  },
+  textColor: {
+    type: "basicSelector",
+    label: msg("fields.textColor", "Text Color"),
+    options: "SITE_COLOR",
+  },
+  ctaTextColor: {
+    type: "basicSelector",
+    label: msg("fields.textColor", "Text Color"),
     options: "SITE_COLOR",
   },
 };
@@ -163,7 +176,10 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
   );
 
   return showAddress ? (
-    <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
+    <div
+      className={`flex flex-col gap-2 ve-theme-body ${getTextColorClass(styles.textColor) ?? ""}`}
+      style={getTextColorStyle(styles.textColor)}
+    >
       <EntityField
         displayName={parentData ? parentData.field : pt("address", "Address")}
         fieldId={data.address.field}
@@ -188,6 +204,7 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
             target="_blank"
             variant={styles.ctaVariant}
             color={resolvedColor}
+            labelColor={styles.ctaTextColor}
           />
         )}
     </div>
@@ -218,6 +235,11 @@ export const resolveAddressFields = (
     "styles.objectFields.color.visible",
     showGetDirectionsLink && showColor
   );
+  updatedFields = setDeep(
+    updatedFields,
+    "styles.objectFields.ctaTextColor.visible",
+    showGetDirectionsLink && ctaVariant === "primary"
+  );
 
   return updatedFields;
 };
@@ -243,7 +265,6 @@ export const Address: YextComponentConfig<AddressProps> = {
       showCountry: false,
       showGetDirectionsLink: true,
       ctaVariant: "link",
-      color: backgroundColors.color1.value,
     },
   },
   resolveFields: resolveAddressFields,

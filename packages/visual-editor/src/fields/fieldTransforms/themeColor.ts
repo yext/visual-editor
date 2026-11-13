@@ -1,4 +1,4 @@
-import type { ThemeColor } from "../../utils/themeConfigOptions.ts";
+import type { ThemeColor } from "../../utils/themeOptions.ts";
 import {
   getDefaultForegroundColor,
   getThemeColorCssValue,
