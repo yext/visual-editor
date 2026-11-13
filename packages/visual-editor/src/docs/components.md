@@ -162,10 +162,17 @@ Available on Locator templates.
 
 #### Other Props
 
-Controls which distance value to display on each locator result card.
+The default radius for nearby-location searches. Leave unset to use Search's
+suggested radius, or 25 in the locale's preferred unit for coordinate searches.
+Visitor-selected distances and explicit map/URL search areas take precedence.
+Geographic boundary filters are unaffected.
 
 | Prop                                                                                         | Type                                                                                                                                                                                                                | Description                                                                         | Default                                |
 | :------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------- | :------------------------------------- |
+| `defaultSearchRadius`                                                                        | `{ value?: number; unit: "mile" \| "kilometer"; }`                                                                                                                                                                  | The default radius for nearby-location searches. Leave unset to use Search's        |
+| suggested radius, or 25 in the locale's preferred unit for coordinate searches.              |
+| Visitor-selected distances and explicit map/URL search areas take precedence.                |
+| Geographic boundary filters are unaffected.                                                  |                                                                                                                                                                                                                     |
 | `distanceDisplay`                                                                            | `DistanceDisplayOption`                                                                                                                                                                                             | Controls which distance value to display on each locator result card.               |                                        |
 | `filters`                                                                                    | `{ openNowButton: boolean; showDistanceOptions: boolean; accentColor?: ThemeColor; facetFields?: MultiSelectorValue<string>; keywordsDisplayName?: TranslatableString; }`                                           | Configuration for the filters available in the locator search experience.           |                                        |
 | `locationStyles`                                                                             | `Array<{ entityType: LocatorEntityType; pinIcon?: { type: "none" \| "icon" \| "customImage"; iconName?: string; image?: TranslatableAssetImage; width?: number; aspectRatio?: number; }; pinColor?: ThemeColor; }>` | Props to customize the locator map pin styles.                                      |

@@ -29,6 +29,10 @@ export function getMappingItemField<TValue>(
     } as YextFieldDefinition<TValue>;
   }
 
+  if (field.type === "optional") {
+    return { ...field, field: getMappingItemField(field.field) };
+  }
+
   if (field.type === "object" && "objectFields" in field) {
     return {
       ...field,
@@ -70,6 +74,10 @@ export function getManualItemField<TValue>(
     } = field;
 
     return rest as YextFieldDefinition<TValue>;
+  }
+
+  if (field.type === "optional") {
+    return { ...field, field: getManualItemField(field.field) };
   }
 
   if (field.type === "object" && "objectFields" in field) {
@@ -196,6 +204,8 @@ export function getDefaultValueForField(
 function getNestedItemSourceTypes(
   field: YextFieldDefinition<any>
 ): EntityFieldTypes[][] {
+  if (field.type === "optional") return getNestedItemSourceTypes(field.field);
+
   if (isEntityFieldDefinition(field)) {
     return field.filter.types?.length ? [field.filter.types] : [];
   }

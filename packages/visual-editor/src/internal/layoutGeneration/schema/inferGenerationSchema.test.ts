@@ -324,10 +324,9 @@ it("compiles structured Yext field contracts without resolving render values", (
     imageStyleWithRatio: { type: "styledImage", includeAspectRatio: true },
     font: { type: "fontSizeSelector", includeLargeSizes: false },
     size: {
-      type: "optionalNumber",
+      type: "optional",
       defaultCustomValue: 20,
-      hideNumberFieldRadioLabel: "Hide",
-      showNumberFieldRadioLabel: "Show",
+      field: { type: "number" },
     },
     palette: { type: "basicSelector", options: "SITE_COLOR" },
     multi: {
@@ -367,7 +366,7 @@ it("compiles structured Yext field contracts without resolving render values", (
     ).toBe(false);
   }
   expect(shape.font.safeParse("9xl").success).toBe(false);
-  expect(shape.size.safeParse("__ve_optionalNumber_hide__").success).toBe(true);
+  expect(shape.size.safeParse(undefined).success).toBe(true);
   expect(
     shape.multi.safeParse({ selections: [{ value: true }, { value: 2 }] })
       .success
@@ -918,4 +917,100 @@ describe("standard-library-shaped contracts", () => {
     }
     validateAuthored(catalog, spec);
   });
+});
+
+it("infers optional wrapped values, units, and numeric bounds without changing saved data", () => {
+  const catalog = catalogFor({
+    distance: {
+      type: "optional",
+      defaultCustomValue: { value: 25, unit: "mile" },
+      field: {
+        type: "object",
+        objectFields: {
+          value: { type: "number", min: 0, max: 100, step: 1 },
+          unit: {
+            type: "basicSelector",
+            generation: { required: true },
+            options: [
+              { label: "Miles", value: "mile" },
+              { label: "Kilometers", value: "kilometer" },
+            ],
+          },
+        },
+      },
+    },
+  });
+  expect(catalog.fieldOmissions).toEqual([]);
+  const schema =
+    catalog.data.components.Section.generation!.props.shape.distance;
+  for (const value of [
+    undefined,
+    { unit: "mile" },
+    { value: 0, unit: "mile" },
+    { value: 50, unit: "kilometer" },
+  ]) {
+    expect(schema.safeParse(value).success).toBe(true);
+  }
+  for (const value of [
+    { value: -1, unit: "mile" },
+    { value: 101, unit: "mile" },
+    { value: "50", unit: "mile" },
+    { value: 5, unit: "meter" },
+  ]) {
+    expect(schema.safeParse(value).success).toBe(false);
+  }
+});
+
+it("normalizes optional numbers, text, and arrays without evaluating defaults", () => {
+  const defaults = vi.fn(() => 3);
+  const catalog = catalogFor(
+    {
+      limit: {
+        type: "optional",
+        defaultCustomValue: defaults,
+        field: { type: "number", min: 1, max: 10 },
+      },
+      heading: {
+        type: "optional",
+        defaultCustomValue: "Hello",
+        field: { type: "text" },
+      },
+      items: {
+        type: "optional",
+        defaultCustomValue: [],
+        field: {
+          type: "array",
+          min: 1,
+          arrayFields: {
+            choice: {
+              type: "basicSelector",
+              generation: { required: true },
+              options: [{ label: "One", value: "one" }],
+            },
+          },
+        },
+      },
+    },
+    { limit: 5 }
+  );
+  expect(defaults).not.toHaveBeenCalled();
+  expect(catalog.fieldOmissions).toEqual([]);
+  const shape = catalog.data.components.Section.generation!.props.shape;
+  expect(shape.limit.safeParse(undefined).success).toBe(true);
+  expect(shape.limit.safeParse(0).success).toBe(false);
+  expect(shape.limit.safeParse(5).success).toBe(true);
+  expect(shape.heading.safeParse(undefined).success).toBe(true);
+  expect(shape.heading.safeParse(5).success).toBe(false);
+  expect(shape.items.safeParse(undefined).success).toBe(true);
+  expect(shape.items.safeParse([{ choice: "one" }]).success).toBe(true);
+  expect(shape.items.safeParse([]).success).toBe(false);
+  expect(shape.items.safeParse([{ choice: "two" }]).success).toBe(false);
+  expect(catalog.data.components.Section.fields!.items.type).toBe("array");
+  const compiler = createGenerationSchemaCompiler(catalog, ["en"]);
+  const contracts = getEditValueContracts(
+    compiler,
+    catalog.data.components.Section
+  );
+  expect(contracts.find(({ path }) => path === "/limit")?.unset).toBe(true);
+  expect(contracts.find(({ path }) => path === "/items")?.unset).toBe(true);
 });

@@ -43,9 +43,9 @@ export {
 } from "./MultiSelectorField.tsx";
 
 export {
-  OptionalNumberFieldOverride,
-  type OptionalNumberField,
-} from "./OptionalNumberField.tsx";
+  type OptionalField,
+  type OptionalFieldContext,
+} from "./OptionalField.tsx";
 
 export {
   TranslatableStringFieldOverride,

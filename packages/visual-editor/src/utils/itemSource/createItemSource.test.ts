@@ -647,3 +647,67 @@ describe("createItemSource", () => {
     }
   );
 });
+
+it("preserves optional wrappers around repeated-item entity mappings", () => {
+  const source = createItemSource<{
+    title?: {
+      field: string;
+      constantValueEnabled?: boolean;
+      constantValue: TranslatableString;
+    };
+  }>({
+    label: "Items",
+    mappingFields: {
+      title: {
+        type: "optional",
+        defaultCustomValue: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: { defaultValue: "" },
+        },
+        field: {
+          type: "entityField",
+          filter: { types: ["type.string"] },
+          sourceFieldPath: "name",
+        },
+      },
+    },
+  });
+  expect(source.field.filter.itemSourceTypes).toEqual([["type.string"]]);
+  expect(
+    (source.field.repeated.mappingFields.title as any).field
+      .disableConstantValueToggle
+  ).toBe(false);
+  expect(
+    (source.field.repeated.manualItemFields.title as any).field.sourceFieldPath
+  ).toBeUndefined();
+  expect(source.defaultValue.mappings?.title).toBeUndefined();
+  const value = {
+    field: "items",
+    constantValueEnabled: false,
+    constantValue: [],
+    mappings: {
+      title: {
+        field: "name",
+        constantValueEnabled: false,
+        constantValue: { defaultValue: "" },
+      },
+    },
+  };
+  const document = { locale: "en", items: [{ name: "First" }] };
+  expect(source.resolveItems(value, document)).toEqual([{ title: "First" }]);
+  expect(
+    source.resolveItems({ ...value, mappings: { title: undefined } }, document)
+  ).toEqual([{ title: undefined }]);
+  expect(
+    createYextFieldTransforms(document, "en").custom({
+      field: toPuckFields({ items: { ...source.field, transform: true } })
+        .items,
+      value,
+      componentId: "test",
+      propName: "items",
+      propPath: "items",
+      isReadOnly: true,
+    })
+  ).toEqual([{ title: "First" }]);
+});

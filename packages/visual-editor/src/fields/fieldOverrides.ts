@@ -6,7 +6,7 @@ import { EntityFieldSelectorFieldOverride } from "./EntityFieldSelectorField.tsx
 import { FontSizeSelectorFieldOverride } from "./FontSizeSelectorField.tsx";
 import { CTASelectorFieldOverride } from "./CTASelectorField.tsx";
 import { MultiSelectorFieldOverride } from "./MultiSelectorField.tsx";
-import { OptionalNumberFieldOverride } from "./OptionalNumberField.tsx";
+import { OptionalFieldOverride } from "./OptionalField.tsx";
 import { ImageFieldOverride } from "./ImageField.tsx";
 import { StyledButtonFieldOverride } from "./styledFields/StyledButtonField.tsx";
 import { StyledImageFieldOverride } from "./styledFields/StyledImageField.tsx";
@@ -28,7 +28,7 @@ export const YextPuckFieldOverrides = {
   multiSelector: MultiSelectorFieldOverride,
   fontSizeSelector: FontSizeSelectorFieldOverride,
   image: ImageFieldOverride,
-  optionalNumber: OptionalNumberFieldOverride,
+  optional: OptionalFieldOverride,
   styledButton: StyledButtonFieldOverride,
   styledImage: StyledImageFieldOverride,
   styledLink: StyledLinkFieldOverride,

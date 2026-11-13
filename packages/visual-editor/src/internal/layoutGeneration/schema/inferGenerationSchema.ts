@@ -369,12 +369,8 @@ export const inferGenerationSchema = (
             ({ value }) => value
           ),
         ]);
-      case "optionalNumber":
-        return z.union([
-          z.number(),
-          z.literal("__ve_optionalNumber_hide__"),
-          z.null(),
-        ]);
+      case "optional":
+        return infer(field.field, baseline, path)?.optional();
       case "styledText":
         return styledTextZodSchema(!!field.includeColor);
       case "styledButton":

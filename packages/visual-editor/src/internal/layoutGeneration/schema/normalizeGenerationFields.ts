@@ -23,6 +23,22 @@ export const normalizeGenerationFields = (
         generation: input.generation ?? original.generation,
       };
 
+      if (field.type === "optional") {
+        const wrapped = normalizeGenerationFields({ value: field.field }).value;
+        return [
+          name,
+          {
+            ...wrapped,
+            label: field.label ?? wrapped.label,
+            generation: {
+              ...wrapped.generation,
+              ...field.generation,
+              required: field.generation?.required ?? false,
+            },
+          },
+        ];
+      }
+
       if (field.type === "object") {
         return [
           name,

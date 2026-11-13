@@ -1471,7 +1471,7 @@ describe("Locator", async () => {
           String(input).includes("/search/filtersearch")
         )
       ).toBe(false);
-      expect(screen.getByText(/Custom Search Area/)).toBeInTheDocument();
+      expect(await screen.findByText(/Custom Search Area/)).toBeInTheDocument();
     } finally {
       window.history.replaceState(window.history.state, "", originalUrl);
     }
