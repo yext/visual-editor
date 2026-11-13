@@ -120,28 +120,33 @@ const getLocationFilter = () =>
   )?.filter;
 const getRadius = () =>
   (getLocationFilter() as { value: NearFilterValue } | undefined)?.value.radius;
-const renderLocator = (
+const createLocator = (
   radius?: LocatorProps["defaultSearchRadius"],
   distanceProps?: Pick<
     LocatorProps,
     "defaultDistanceUnit" | "showDistanceUnitToggle"
   >
 ) =>
-  render(
-    React.createElement(LocatorWrapper, {
-      locationStyles: [],
-      resultCard: [],
-      filters: { openNowButton: false, showDistanceOptions: true },
-      defaultSearchRadius: radius,
-      ...distanceProps,
-      puck: {
-        metadata: {},
-        isEditing: false,
-        dragRef: null,
-        renderDropZone: () => null,
-      },
-    })
-  );
+  React.createElement(LocatorWrapper, {
+    locationStyles: [],
+    resultCard: [],
+    filters: { openNowButton: false, showDistanceOptions: true },
+    defaultSearchRadius: radius,
+    ...distanceProps,
+    puck: {
+      metadata: {},
+      isEditing: false,
+      dragRef: null,
+      renderDropZone: () => null,
+    },
+  });
+const renderLocator = (
+  radius?: LocatorProps["defaultSearchRadius"],
+  distanceProps?: Pick<
+    LocatorProps,
+    "defaultDistanceUnit" | "showDistanceUnitToggle"
+  >
+) => render(createLocator(radius, distanceProps));
 const selectSuggestion = async () =>
   act(async () => {
     mocks.filterSearch.onSelect?.({
@@ -195,6 +200,47 @@ afterEach(() => {
 });
 
 describe("Locator default search radius", () => {
+  it.each<{
+    name: string;
+    radius?: LocatorProps["defaultSearchRadius"];
+    expectedInitialRadius: number;
+  }>([
+    {
+      name: "with a configured search radius",
+      radius: { value: 50, unit: "mile" },
+      expectedInitialRadius: 80467.2,
+    },
+    {
+      name: "with an automatic search radius",
+      expectedInitialRadius: 40233.6,
+    },
+  ])(
+    "updates the applied distance filter when the configured unit changes $name",
+    async ({ radius, expectedInitialRadius }) => {
+      const { rerender } = renderLocator(radius, {
+        defaultDistanceUnit: "mile",
+      });
+      await waitFor(() =>
+        expect(getRadius()).toBeCloseTo(expectedInitialRadius)
+      );
+      await selectSuggestion();
+      await act(async () => mocks.filterModal.handleDistanceClick(5, "mile"));
+      expect(getRadius()).toBeCloseTo(8046.72);
+      const searchesBeforeChange =
+        mocks.actions.executeVerticalQuery.mock.calls.length;
+
+      await act(async () =>
+        rerender(createLocator(radius, { defaultDistanceUnit: "kilometer" }))
+      );
+      expect(mocks.filterModal.distanceUnit).toBe("kilometer");
+      expect(mocks.filterModal.selectedDistanceOption).toBe(5);
+      expect(mocks.actions.executeVerticalQuery.mock.calls.length).toBe(
+        searchesBeforeChange + 1
+      );
+      expect(getRadius()).toBeCloseTo(5000);
+    }
+  );
+
   it("uses the configured unit and updates an active distance filter when switched", async () => {
     renderLocator(undefined, {
       defaultDistanceUnit: "kilometer",

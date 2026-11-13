@@ -277,6 +277,7 @@ const LocatorInternal = ({
   const [selectedDistanceOption, setSelectedDistanceOption] = React.useState<
     number | null
   >(null);
+  const previousDistanceUnit = React.useRef(distanceUnit);
   /** Radius of the current location filter before a distance option is applied */
   const baseFilterRadius = React.useRef<number | null>(null);
 
@@ -462,13 +463,31 @@ const LocatorInternal = ({
   }, [searchLoading, searchState]);
 
   React.useEffect(() => {
+    const unitChanged = previousDistanceUnit.current !== distanceUnit;
+    previousDistanceUnit.current = distanceUnit;
     if (selectedDistanceOption === null) {
       setSelectedDistanceMeters(null);
       return;
     }
 
-    setSelectedDistanceMeters(toMeters(selectedDistanceOption, distanceUnit));
-  }, [distanceUnit, selectedDistanceOption]);
+    const radius = toMeters(selectedDistanceOption, distanceUnit);
+    setSelectedDistanceMeters(radius);
+    if (unitChanged) {
+      const updatedFilters = updateRadiusInNearFiltersOnLocationField(
+        searchFilters.static || [],
+        radius
+      );
+      searchActions.setStaticFilters(updatedFilters);
+      searchActions.setOffset(0);
+      executeSearch(searchActions);
+      setSearchState("loading");
+    }
+  }, [
+    distanceUnit,
+    selectedDistanceOption,
+    searchActions,
+    searchFilters.static,
+  ]);
 
   const resultsRef = React.useRef<Array<HTMLDivElement | null>>([]);
   const resultsContainer = React.useRef<HTMLDivElement>(null);
@@ -633,8 +652,42 @@ const LocatorInternal = ({
     ]
   );
 
+  const initializationInputsRef = React.useRef({
+    urlNavigationVersion,
+    initialMapCenter,
+    searchActions,
+    configuredRadiusMeters,
+    initialDefaultRadiusMeters,
+  });
   React.useEffect(() => {
+    const previousInputs = initializationInputsRef.current;
+    initializationInputsRef.current = {
+      urlNavigationVersion,
+      initialMapCenter,
+      searchActions,
+      configuredRadiusMeters,
+      initialDefaultRadiusMeters,
+    };
+    // Changing only the default unit should update the active distance filter
+    // without restarting location initialization.
+    if (
+      selectedDistanceOption !== null &&
+      previousInputs.urlNavigationVersion === urlNavigationVersion &&
+      previousInputs.initialMapCenter === initialMapCenter &&
+      previousInputs.searchActions === searchActions &&
+      previousInputs.configuredRadiusMeters === configuredRadiusMeters &&
+      previousInputs.initialDefaultRadiusMeters !== initialDefaultRadiusMeters
+    ) {
+      return;
+    }
+
     let isCancelled = false;
+    // Use the current unit when initialization runs, without restarting it
+    // solely because a visitor changes the distance option.
+    const activeDistanceMeters =
+      selectedDistanceOption === null
+        ? null
+        : toMeters(selectedDistanceOption, distanceUnit);
     const queryParams = new URLSearchParams(window.location.search);
     const initialLocationParam = queryParams.has(LOCATION_QUERY_KEY)
       ? queryParams.get(LOCATION_QUERY_KEY)
@@ -646,8 +699,8 @@ const LocatorInternal = ({
       setMapCenter(initialMapCenter);
 
       const radius =
-        showDistanceOptions && selectedDistanceMeters
-          ? selectedDistanceMeters
+        showDistanceOptions && activeDistanceMeters
+          ? activeDistanceMeters
           : initialDefaultRadiusMeters;
       baseFilterRadius.current = initialDefaultRadiusMeters;
       // default location filter to configured starting location or NYC
@@ -725,8 +778,8 @@ const LocatorInternal = ({
                 initialLocationFilter = buildNearLocationFilterFromPrevious(
                   filterFromResult,
                   firstResult.value,
-                  showDistanceOptions && selectedDistanceMeters
-                    ? selectedDistanceMeters
+                  showDistanceOptions && activeDistanceMeters
+                    ? activeDistanceMeters
                     : baseFilterRadius.current
                 );
                 return true;
@@ -952,18 +1005,6 @@ const LocatorInternal = ({
   const handleDistanceUnitChange = (nextUnit: DistanceUnit) => {
     if (nextUnit === distanceUnit) return;
     setDistanceUnitOverride(nextUnit);
-
-    if (selectedDistanceOption !== null) {
-      const radius = toMeters(selectedDistanceOption, nextUnit);
-      const updatedFilters = updateRadiusInNearFiltersOnLocationField(
-        searchFilters.static || [],
-        radius
-      );
-      searchActions.setStaticFilters(updatedFilters);
-      searchActions.setOffset(0);
-      executeSearch(searchActions);
-      setSearchState("loading");
-    }
   };
 
   const handleClearFiltersClick = () => {
