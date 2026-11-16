@@ -268,6 +268,47 @@ describe("Locator default search radius", () => {
     expect(getRadius()).toBeCloseTo(30000);
   });
 
+  it.each<{
+    name: string;
+    radius?: LocatorProps["defaultSearchRadius"];
+    expectedRadius: number;
+  }>([
+    { name: "automatic radius", expectedRadius: 25000 },
+    {
+      name: "configured radius",
+      radius: { value: 50, unit: "mile" },
+      expectedRadius: 80467.2,
+    },
+  ])(
+    "uses the current unit after pending geolocation with $name",
+    async ({ radius, expectedRadius }) => {
+      let finishGeolocation!: (position: GeolocationPosition) => void;
+      vi.mocked(getUserLocation).mockImplementationOnce(
+        () =>
+          new Promise<GeolocationPosition>((resolve) => {
+            finishGeolocation = resolve;
+          })
+      );
+      renderLocator(radius, {
+        defaultDistanceUnit: "mile",
+        showDistanceUnitToggle: true,
+      });
+      await waitFor(() => expect(getUserLocation).toHaveBeenCalledTimes(1));
+      await act(async () => fireEvent.click(screen.getByText("km")));
+      await act(async () =>
+        finishGeolocation({
+          coords: { latitude: 38.9, longitude: -77.1, accuracy: 10 },
+        } as GeolocationPosition)
+      );
+      await waitFor(() => expect(getRadius()).toBeCloseTo(expectedRadius));
+      await act(async () =>
+        mocks.filterModal.handleDistanceClick(5, "kilometer")
+      );
+      await act(async () => mocks.filterModal.handleClearFiltersClick());
+      expect(getRadius()).toBeCloseTo(expectedRadius);
+    }
+  );
+
   it("restarts a cancelled initialization after a unit change", async () => {
     window.history.replaceState(null, "", "/?q=Arlington");
     let finishFirstSearch!: (response: typeof searchResponse) => void;

@@ -870,11 +870,6 @@ const LocatorInternal = ({
         }
         const lat = location.coords.latitude;
         const lng = location.coords.longitude;
-        baseFilterRadius.current = Math.max(
-          location.coords.accuracy,
-          initialDefaultRadiusMeters
-        );
-        automaticBaseRadiusAccuracy.current = location.coords.accuracy;
         setShowCurrentLocationButton(true);
 
         // Try to reverse-geocode the coordinates to a human-readable place name using Mapbox
@@ -900,20 +895,33 @@ const LocatorInternal = ({
           }
         } catch (e) {
           console.warn("Reverse geocoding failed:", e);
-        } finally {
-          const activeDistanceMeters = getActiveDistanceMeters();
-          initialLocationFilter = buildNearLocationFilterFromCoords(
-            lat,
-            lng,
-            Math.max(
-              location.coords.accuracy,
-              showDistanceOptions && activeDistanceMeters
-                ? activeDistanceMeters
-                : initialDefaultRadiusMeters
-            ),
-            displayName
-          );
         }
+        if (isCancelled) {
+          return;
+        }
+        const activeDistanceMeters = getActiveDistanceMeters();
+        const currentDefaultRadiusMeters =
+          configuredRadiusMeters ??
+          toMeters(
+            DEFAULT_RADIUS,
+            currentDistanceSelection.current.distanceUnit
+          );
+        baseFilterRadius.current = Math.max(
+          location.coords.accuracy,
+          currentDefaultRadiusMeters
+        );
+        automaticBaseRadiusAccuracy.current = location.coords.accuracy;
+        initialLocationFilter = buildNearLocationFilterFromCoords(
+          lat,
+          lng,
+          Math.max(
+            location.coords.accuracy,
+            showDistanceOptions && activeDistanceMeters
+              ? activeDistanceMeters
+              : currentDefaultRadiusMeters
+          ),
+          displayName
+        );
       } catch {
         // Fall back to configured starting location or default center.
       }
