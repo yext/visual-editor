@@ -113,6 +113,23 @@ vi.mock("./LocatorResultCard.tsx", () => ({
 }));
 
 const suggestedValue = { lat: 38.9, lng: -77.1, radius: 12000 };
+const searchResponse = {
+  sections: [
+    {
+      results: [
+        {
+          value: "Arlington",
+          filter: {
+            kind: "fieldValue" as const,
+            fieldId: "builtin.location",
+            matcher: Matcher.Near,
+            value: suggestedValue,
+          },
+        },
+      ],
+    },
+  ],
+};
 const getLocationFilter = () =>
   mocks.state.filters.static.find(
     ({ filter }) =>
@@ -176,23 +193,7 @@ beforeEach(() => {
       mocks.state.filters = { ...mocks.state.filters, static: filters };
     }
   );
-  mocks.actions.executeFilterSearch.mockResolvedValue({
-    sections: [
-      {
-        results: [
-          {
-            value: "Arlington",
-            filter: {
-              kind: "fieldValue",
-              fieldId: "builtin.location",
-              matcher: Matcher.Near,
-              value: suggestedValue,
-            },
-          },
-        ],
-      },
-    ],
-  });
+  mocks.actions.executeFilterSearch.mockResolvedValue(searchResponse);
 });
 afterEach(() => {
   cleanup();
@@ -200,6 +201,99 @@ afterEach(() => {
 });
 
 describe("Locator default search radius", () => {
+  it("uses the latest selection when a pending location lookup resolves", async () => {
+    window.history.replaceState(null, "", "/?q=Arlington");
+    let finishSearch!: (response: typeof searchResponse) => void;
+    mocks.actions.executeFilterSearch.mockImplementationOnce(
+      () =>
+        new Promise<typeof searchResponse>((resolve) => {
+          finishSearch = resolve;
+        })
+    );
+    const radius = { value: 50, unit: "mile" } as const;
+    const { rerender } = renderLocator(radius, { defaultDistanceUnit: "mile" });
+    await waitFor(() =>
+      expect(mocks.actions.executeFilterSearch).toHaveBeenCalledTimes(1)
+    );
+    await act(async () => mocks.filterModal.handleDistanceClick(5, "mile"));
+    await act(async () =>
+      rerender(createLocator(radius, { defaultDistanceUnit: "kilometer" }))
+    );
+    await act(async () => finishSearch(searchResponse));
+    expect(getRadius()).toBeCloseTo(5000);
+  });
+
+  it.each([
+    { name: "automatic coordinates", query: "", expectedBase: 25000 },
+    { name: "Search suggestion", query: "?q=Arlington", expectedBase: 12000 },
+    {
+      name: "explicit map area",
+      query: "?q=38.9,-77.1,40233.6",
+      expectedBase: 40233.6,
+    },
+  ])(
+    "restores the $name base radius after a unit change",
+    async ({ query, expectedBase }) => {
+      window.history.replaceState(null, "", `/${query}`);
+      const { rerender } = renderLocator(undefined, {
+        defaultDistanceUnit: "mile",
+      });
+      await waitFor(() => expect(getRadius()).toBeDefined());
+      await act(async () => mocks.filterModal.handleDistanceClick(5, "mile"));
+      await act(async () =>
+        rerender(createLocator(undefined, { defaultDistanceUnit: "kilometer" }))
+      );
+      await act(async () =>
+        mocks.filterModal.handleDistanceClick(5, "kilometer")
+      );
+      expect(getRadius()).toBeCloseTo(expectedBase);
+    }
+  );
+
+  it("keeps geolocation accuracy as the minimum automatic base radius", async () => {
+    vi.mocked(getUserLocation).mockResolvedValue({
+      coords: { latitude: 38.9, longitude: -77.1, accuracy: 30000 },
+    } as GeolocationPosition);
+    const { rerender } = renderLocator(undefined, {
+      defaultDistanceUnit: "mile",
+    });
+    await waitFor(() => expect(getRadius()).toBeCloseTo(40233.6));
+    await act(async () => mocks.filterModal.handleDistanceClick(5, "mile"));
+    await act(async () =>
+      rerender(createLocator(undefined, { defaultDistanceUnit: "kilometer" }))
+    );
+    await act(async () =>
+      mocks.filterModal.handleDistanceClick(5, "kilometer")
+    );
+    expect(getRadius()).toBeCloseTo(30000);
+  });
+
+  it("restarts a cancelled initialization after a unit change", async () => {
+    window.history.replaceState(null, "", "/?q=Arlington");
+    let finishFirstSearch!: (response: typeof searchResponse) => void;
+    mocks.actions.executeFilterSearch.mockImplementationOnce(
+      () =>
+        new Promise<typeof searchResponse>((resolve) => {
+          finishFirstSearch = resolve;
+        })
+    );
+    const { rerender } = renderLocator(undefined, {
+      defaultDistanceUnit: "mile",
+    });
+    await waitFor(() =>
+      expect(mocks.actions.executeFilterSearch).toHaveBeenCalledTimes(1)
+    );
+    await act(async () => mocks.filterModal.handleDistanceClick(5, "mile"));
+    await act(async () =>
+      rerender(createLocator(undefined, { defaultDistanceUnit: "kilometer" }))
+    );
+    await act(async () => finishFirstSearch(searchResponse));
+    await waitFor(() =>
+      expect(mocks.actions.executeFilterSearch).toHaveBeenCalledTimes(2)
+    );
+    expect(getRadius()).toBeCloseTo(5000);
+  });
+
   it.each<{
     name: string;
     radius?: LocatorProps["defaultSearchRadius"];
