@@ -23,3 +23,7 @@ export {
 } from "./EmbeddedFieldStringInput.tsx";
 export { getMaxWidthOptions, filterMaxWidths } from "./MaxWidthSelector.tsx";
 export { resolveDataFromParent } from "./ParentData.tsx";
+
+export { inspectorSessionPlugin } from "./inspectorSessionPlugin.tsx";
+
+export { blockSearchPlugin } from "./blockSearchPlugin.tsx";

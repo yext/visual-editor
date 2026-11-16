@@ -147,13 +147,87 @@ export type PuckGenerationCatalog = ReturnType<
 
 export const generationCatalogs = new WeakMap<object, PuckGenerationCatalog>();
 
-/** Associate generated contracts with a config without adding saved layout data. */
+/** Associate contracts with a config. Optional root page-area metadata constrains
+ * MainContent identically in the editor and generator, without changing saved data. */
 export const withGenerationCatalog = <T extends Config>(
   config: T,
   catalog: PuckGenerationCatalog
 ): T => {
-  generationCatalogs.set(config, catalog);
+  const pageContent = config.root?.metadata?.pageContentAllowedComponentIds;
+  let configured = config;
+  let configuredCatalog = catalog;
+  if (
+    Array.isArray(pageContent) &&
+    pageContent.every((id) => typeof id === "string")
+  ) {
+    const allow = [...new Set<string>(pageContent)].filter(
+      (id) =>
+        Object.hasOwn(config.components, id) &&
+        !mainContentDisallowedComponents.includes(id)
+    );
+    const constrainContent = (fields: Fields | undefined): Fields => {
+      if (fields?.content?.type !== "slot") return fields ?? {};
+      // Puck treats allow as exceptions to disallow when both are present.
+      // A page-area whitelist must replace the original blacklist entirely.
+      return {
+        ...fields,
+        content: { ...fields.content, allow, disallow: undefined },
+      };
+    };
+    if (config.components.MainContent) {
+      configured = {
+        ...config,
+        components: {
+          ...config.components,
+          MainContent: {
+            ...config.components.MainContent,
+            fields: constrainContent(config.components.MainContent.fields),
+          },
+        },
+      } as T;
+    }
+    const mainContent = catalog.data.components.MainContent;
+    const rootAllowed = config.root?.metadata?.rootAllowedComponentIds;
+    // Preserve catalog type-inference getters without evaluating them while copying.
+    configuredCatalog = Object.create(Object.getPrototypeOf(catalog), {
+      ...Object.getOwnPropertyDescriptors(catalog),
+      data: {
+        value: {
+          ...catalog.data,
+          components: {
+            ...catalog.data.components,
+            ...(mainContent
+              ? {
+                  MainContent: {
+                    ...mainContent,
+                    fields: constrainContent(mainContent.fields),
+                  },
+                }
+              : {}),
+          },
+        },
+        enumerable: true,
+        configurable: true,
+      },
+      puckOptions: {
+        value: {
+          ...catalog.puckOptions,
+          ...(Array.isArray(rootAllowed) &&
+          rootAllowed.every((id) => typeof id === "string")
+            ? {
+                rootAllowedComponentIds: rootAllowed.filter((id) =>
+                  Object.hasOwn(catalog.data.components, id)
+                ),
+              }
+            : {}),
+        },
+        enumerable: true,
+        configurable: true,
+      },
+    });
+  }
+  generationCatalogs.set(configured, configuredCatalog);
   // Puck may copy Config while preserving its component map.
-  generationCatalogs.set(config.components, catalog);
-  return config;
+  generationCatalogs.set(configured.components, configuredCatalog);
+  return configured;
 };

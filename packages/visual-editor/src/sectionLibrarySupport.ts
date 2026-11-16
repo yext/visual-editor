@@ -249,6 +249,7 @@ export { loadTranslationDictionary } from "./utils/i18n/translationResources.ts"
 export { isVisualEditorTestEnv } from "./components/testing/utils.ts";
 export { fetchLocalesToPathsForEntity } from "./utils/api/fetchLocalesToPathsForEntity.ts";
 export { presetImageIcons } from "./utils/presetImageIcons.tsx";
+export { translatedPuckFieldOverrides } from "./fields/translatedPuckFieldOverrides.tsx";
 export {
   createPuckGenerationCatalog,
   withGenerationCatalog,

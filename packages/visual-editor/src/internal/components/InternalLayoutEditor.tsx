@@ -1,3 +1,8 @@
+import { translatedPuckFieldOverrides } from "../../fields/translatedPuckFieldOverrides.tsx";
+import { withGenerationCatalog } from "../../utils/createPuckGenerationCatalog.ts";
+import { getGenerationCatalog } from "../layoutGeneration/shared/catalogRegistry.ts";
+import { inspectorSessionPlugin } from "../../editor/inspectorSessionPlugin.tsx";
+import { blockSearchPlugin } from "../../editor/blockSearchPlugin.tsx";
 import {
   ActionBar,
   AppState,
@@ -146,6 +151,8 @@ export const InternalLayoutEditor = ({
   // Keep plugin sidebar fields mounted when saved state changes.
   const plugins = React.useMemo(
     () => [
+      inspectorSessionPlugin,
+      blockSearchPlugin,
       { ...blocks, label: pt("sections", "Sections") },
       outline,
       ...(!!chatUi ? [layoutGenerationChatPlugin] : []),
@@ -272,7 +279,7 @@ export const InternalLayoutEditor = ({
       render: () => <></>,
     };
 
-    return {
+    const translatedConfig = {
       categories: puckConfig.categories,
       components: translatedComponents,
       root: {
@@ -307,6 +314,14 @@ export const InternalLayoutEditor = ({
         },
       },
     };
+    return Array.isArray(
+      puckConfig.root?.metadata?.pageContentAllowedComponentIds
+    )
+      ? withGenerationCatalog(
+          translatedConfig,
+          getGenerationCatalog(puckConfig)
+        )
+      : translatedConfig;
   }, [puckConfig, i18n.language]);
 
   // Prevent setPointerCapture errors by wrapping the native method, this is a workaround for a bug in the Puck library where the pointer gets stuck in a drag state when it is no longer active.
@@ -402,6 +417,7 @@ export const InternalLayoutEditor = ({
       >
         <Puck
           config={translatedPuckConfigWithRootFields}
+          dnd={{ enableDragHandle: true }}
           fieldTransforms={fieldTransforms}
           data={{}} // we use puckInitialHistory instead
           initialHistory={puckInitialHistory}
@@ -427,16 +443,10 @@ export const InternalLayoutEditor = ({
             ),
             iframe: loadMapboxIntoIframe,
             fieldTypes: {
-              array: TranslatePuckArrayFieldLabels,
-              number: TranslatePuckFieldLabels,
-              object: TranslatePuckFieldLabels,
-              radio: TranslatePuckFieldLabels,
-              select: TranslatePuckFieldLabels,
-              text: TranslatePuckFieldLabels,
-              textarea: TranslatePuckFieldLabels,
+              ...translatedPuckFieldOverrides,
               ...YextPuckFieldOverrides,
             },
-            actionBar: ({ children, label, parentAction }) => {
+            actionBar: ({ children, label, parentAction, dragHandle }) => {
               const getPuck = useGetPuck();
               const { appState } = getPuck();
               const itemSelectorState = usePuck(
@@ -598,6 +608,7 @@ export const InternalLayoutEditor = ({
                 <ActionBar>
                   <ActionBar.Group>
                     {parentAction}
+                    {dragHandle}
                     {label && <ActionBar.Label label={label} />}
                   </ActionBar.Group>
                   <ActionBar.Group>
@@ -616,89 +627,4 @@ export const InternalLayoutEditor = ({
       </div>
     </EntityTooltipsProvider>
   );
-};
-
-// TranslatePuckFieldLabels recursively walks the React component tree
-// created by Puck fields and replaces labels with their translations.
-const TranslatePuckFieldLabels = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const replaceText = (child: React.ReactNode): React.ReactNode => {
-    if (React.isValidElement(child)) {
-      if (typeof child.props.children === "string") {
-        return React.cloneElement(
-          child as React.ReactElement<{
-            children?: React.ReactNode;
-          }>,
-          {
-            ...child.props,
-            children: pt(child.props.children),
-          }
-        );
-      }
-
-      if ("label" in child.props || "title" in child.props) {
-        const newChildren = {
-          ...child.props,
-          children: React.Children.map(child.props.children, replaceText),
-          label: child.props.label ? pt(child.props.label) : undefined,
-          title: child.props.title ? pt(child.props.title) : undefined,
-        };
-
-        // Radio and Select options need to be translated as well
-        if (
-          child.props.field?.type === "radio" ||
-          child.props.field?.type === "select"
-        ) {
-          const originalField = child.props.field;
-          const originalOptions = originalField.options || [];
-
-          const translatedOptions = originalOptions.map((option: any) => ({
-            ...option,
-            label: pt(option.label),
-          }));
-
-          newChildren.field = {
-            ...originalField,
-            options: translatedOptions,
-          };
-        }
-
-        return React.cloneElement(
-          child as React.ReactElement<{
-            children?: React.ReactNode;
-          }>,
-          newChildren
-        );
-      } else {
-        return React.cloneElement(
-          child as React.ReactElement<{ children?: React.ReactNode }>,
-          {
-            children: React.Children.map(child.props.children, replaceText),
-          }
-        );
-      }
-    }
-
-    return child;
-  };
-
-  return <>{React.Children.map(children, replaceText)}</>;
-};
-
-// Array fields are mostly handled by the children
-// field types but need an override for the array label.
-const TranslatePuckArrayFieldLabels = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  if (React.isValidElement(children)) {
-    return React.cloneElement(children, {
-      ...children.props,
-      label: pt(children.props.label),
-    });
-  }
 };

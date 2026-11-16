@@ -1,11 +1,15 @@
 import * as React from "react";
 import { PUCK_PREVIEW_IFRAME_ID } from "../utils/applyTheme.ts";
 
+/** Internal override for renders in a separate preview frame. */
+export const PreviewWindowContext = React.createContext<Window | null>(null);
+
 /**
  * Returns the preview iframe's window when available, otherwise the main window.
  * Safe to use on live pages without the preview iframe.
  */
 export const usePreviewWindow = (): Window | null => {
+  const scopedWindow = React.useContext(PreviewWindowContext);
   const [previewWindow, setPreviewWindow] = React.useState<Window | null>(
     () => {
       if (typeof window === "undefined") {
@@ -17,6 +21,7 @@ export const usePreviewWindow = (): Window | null => {
   );
 
   React.useEffect(() => {
+    if (scopedWindow) return;
     if (typeof window === "undefined") {
       return;
     }
@@ -38,7 +43,7 @@ export const usePreviewWindow = (): Window | null => {
 
     iframe.addEventListener("load", handleLoad);
     return () => iframe.removeEventListener("load", handleLoad);
-  }, []);
+  }, [scopedWindow]);
 
-  return previewWindow;
+  return scopedWindow ?? previewWindow;
 };

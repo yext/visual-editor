@@ -70,7 +70,7 @@ export const VisualEditorProviderCore = <T extends Record<string, any>>({
       <I18nextProvider i18n={i18nPageInstance}>
         <QueryClientProvider client={queryClient}>
           <TemplatePropsContext.Provider value={templateProps}>
-            <EntityFieldsContext.Provider value={entityFields}>
+            <EntityFieldsContext.Provider value={entityFields ?? null}>
               <TailwindConfigContext.Provider value={tailwindConfig}>
                 <TranslationRuntimeContext.Provider value={translationRuntime}>
                   {renderChildren ? children : null}

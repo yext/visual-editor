@@ -102,9 +102,9 @@ type EntityTooltipsContext = {
   toggleTooltips: () => void;
 };
 
-const EntityTooltipsContext = createContext<EntityTooltipsContext | undefined>(
-  undefined
-);
+export const EntityTooltipsContext = createContext<
+  EntityTooltipsContext | undefined
+>(undefined);
 
 export const EntityTooltipsProvider = ({
   children,

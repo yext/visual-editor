@@ -4,25 +4,12 @@ import { YextComponentConfig } from "../../fields/fields.ts";
 
 /** Components that cannot be placed directly in the main page content. */
 export const mainContentDisallowedComponents = [
-  "Address",
-  "BodyText",
-  "CTAGroup",
-  "CTAWrapper",
-  "Emails",
-  "GetDirections",
-  "HeadingText",
-  "HoursTable",
-  "HoursStatus",
-  "ImageWrapper",
-  "MapboxStaticMap",
-  "Phone",
-  "TextList",
-  "Text",
   "ExpandedHeader",
   "ExpandedFooter",
   "Header",
   "Footer",
   "MainContent",
+  "ListItem",
 ];
 
 export interface MainContentProps {
@@ -42,9 +29,8 @@ const MainContentComponent: PuckComponent<MainContentProps> = ({
     >
       {/* Puck replaces the slot callback when children change. Invoke it as a
           render callback so React retains the underlying section tree. */}
-      {Content({
-        disallow: mainContentDisallowedComponents,
-      })}
+      {/* Use the slot field's constraints, including any library page-area policy. */}
+      {Content({})}
     </main>
   );
 };

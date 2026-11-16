@@ -480,44 +480,41 @@ describe("fresh page creation schema", () => {
     "Phone",
     "TextList",
     "Text",
-  ])(
-    "allows %s inside Grid but rejects it directly inside MainContent",
-    (type) => {
-      const c = createPuckGenerationCatalog({
-        [type]: { layoutGenerationMetadata: { props: z.object({}) } },
-        Grid: {
-          layoutGenerationMetadata: {
-            props: z.object({
-              slots: z.array(z.object({ Column: z.array(z.unknown()) })),
-            }),
-          },
-          fields: {
-            slots: {
-              type: "array",
-              arrayFields: { Column: { type: "slot", allow: [type] } },
-            },
+  ])("allows %s inside Grid and directly inside MainContent", (type) => {
+    const c = createPuckGenerationCatalog({
+      [type]: { layoutGenerationMetadata: { props: z.object({}) } },
+      Grid: {
+        layoutGenerationMetadata: {
+          props: z.object({
+            slots: z.array(z.object({ Column: z.array(z.unknown()) })),
+          }),
+        },
+        fields: {
+          slots: {
+            type: "array",
+            arrayFields: { Column: { type: "slot", allow: [type] } },
           },
         },
-      });
-      const compiled = compileGenerationSchema(c, ["en"]);
-      const atom = { type, props: {} };
-      const main = (content: any[]) => ({
-        type: "MainContent",
-        props: { content },
-      });
-      const grid = {
-        type: "Grid",
-        props: { slots: [{ Column: [atom] }] },
-      };
-      const spec = compiled.materialize(create([main([grid])])).spec!;
-      const generatedAtom =
-        spec.content[0].props.content[0].props.slots[0].Column[0];
-      expect(generatedAtom.type).toBe(type);
-      expect(() => compiled.materialize(create([main([atom])]))).toThrow();
-      spec.content[0].props.content = [generatedAtom];
-      expect(() => validateAuthored(c, spec)).toThrow(`${type} is not allowed`);
-    }
-  );
+      },
+    });
+    const compiled = compileGenerationSchema(c, ["en"]);
+    const atom = { type, props: {} };
+    const main = (content: any[]) => ({
+      type: "MainContent",
+      props: { content },
+    });
+    const grid = {
+      type: "Grid",
+      props: { slots: [{ Column: [atom] }] },
+    };
+    const spec = compiled.materialize(create([main([grid])])).spec!;
+    const generatedAtom =
+      spec.content[0].props.content[0].props.slots[0].Column[0];
+    expect(generatedAtom.type).toBe(type);
+    expect(() => compiled.materialize(create([main([atom])]))).not.toThrow();
+    spec.content[0].props.content = [generatedAtom];
+    expect(() => validateAuthored(c, spec)).not.toThrow();
+  });
 
   it.each([
     ["Header", "Footer"],
