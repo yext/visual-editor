@@ -1,3 +1,13 @@
+import { createElement } from "react";
+import {
+  dynamicThemeMigration,
+  migrateDynamicThemeSelections,
+} from "../components/migrations/0084_dynamic_theme.ts";
+import {
+  migrateThemeData,
+  migrateThemeHistories,
+} from "../components/migrations/themeDataLabels.ts";
+import { validateThemeData } from "../types/themeData.ts";
 import { describe, expect, it, vi } from "vitest";
 import type { Data } from "@puckeditor/core";
 import { Migration, MigrationRegistry, migrate } from "./migrate.ts";
@@ -2482,5 +2492,139 @@ describe("component rename migrations", () => {
         [{ "*": { action: "renamed", newType: "HoursStatus" } }]
       )
     ).toThrow("Cannot apply rename migration to all components.");
+  });
+});
+
+describe("coordinated dynamic theme migration", () => {
+  const config = {
+    components: { Example: { fields: {}, render: () => createElement("div") } },
+  };
+  const document = {
+    __: { theme: JSON.stringify({ "--colors-palette-primary": "#173B62" }) },
+  };
+  const makePage = (pageId: string): Data => ({
+    root: { props: { version: 0 } as any },
+    content: [
+      {
+        type: "Example",
+        props: {
+          id: pageId,
+          styles: {
+            level: 2,
+            backgroundColor: {
+              selectedColor: "palette-primary-dark",
+              contrastingColor: "white",
+            },
+            cta: {
+              variant: "secondary",
+              button: { fontSize: "23px", fontWeight: "500" },
+            },
+            custom: {
+              selectedColor: "[#ABCDEF80]",
+              contrastingColor: "[#123456]",
+            },
+          },
+        },
+      },
+    ],
+  });
+  it("gives independently migrated pages the same site-wide entry identifiers", () => {
+    const first = migrate(config, makePage("one"), document, [
+      dynamicThemeMigration,
+    ]);
+    const second = migrate(config, makePage("two"), document, [
+      dynamicThemeMigration,
+    ]);
+    const firstStyles = first.content[0].props.styles;
+    expect(firstStyles).toEqual(second.content[0].props.styles);
+    expect(firstStyles.typographyId).toBe("main-h2");
+    expect(firstStyles.backgroundColor).toEqual({
+      colorId: "main-primary-dark",
+      channel: "background",
+    });
+    expect(firstStyles.cta.actionId).toBe("main-secondary-inverse");
+    expect(firstStyles.cta.button).toEqual({
+      fontSize: "23px",
+      fontWeight: "500",
+    });
+    expect(firstStyles.custom).toEqual({
+      selectedColor: "[#ABCDEF80]",
+      contrastingColor: "[#123456]",
+    });
+    const theme = migrateThemeData(JSON.parse(document.__.theme));
+    expect(validateThemeData(theme)).toMatchObject({
+      success: true,
+      errors: [],
+      warnings: [],
+    });
+    expect(
+      theme.actions.some((entry) => entry.id === firstStyles.cta.actionId)
+    ).toBe(true);
+    expect(
+      theme.typography.some((entry) => entry.id === firstStyles.typographyId)
+    ).toBe(true);
+    expect(migrate(config, first, document, [dynamicThemeMigration])).toEqual(
+      first
+    );
+    expect(makePage("one").content[0].props.styles).not.toHaveProperty(
+      "typographyId"
+    );
+  });
+  it("converts selections inside nested components and legacy zones", () => {
+    const page = makePage("outer");
+    page.zones = {
+      legacy: [
+        {
+          type: "Example",
+          props: { id: "legacy", styles: { level: 4, variant: "link" } },
+        },
+      ],
+    };
+    page.content[0].props.nested = [
+      { type: "Example", props: { id: "inner", styles: { level: 3 } } },
+    ];
+    const migrated = migrate(config, page, document, [dynamicThemeMigration]);
+    expect(migrated.zones!.legacy[0].props.styles).toMatchObject({
+      typographyId: "main-h4",
+      actionId: "main-link",
+    });
+    expect(migrated.content[0].props.nested[0].props.styles.typographyId).toBe(
+      "main-h3"
+    );
+  });
+  it("materializes implicit composed links as ordinary action selections", () => {
+    const convert = migrateDynamicThemeSelections;
+    const content = [
+      { type: "Directory", props: { styles: {} } },
+      { type: "PhoneSlot", props: { styles: {} } },
+      {
+        type: "LocatorResultCard",
+        props: { address: {}, phone: {}, email: {} },
+      },
+    ];
+    const migrated = convert(content as any) as any;
+    expect(migrated[0].props.styles.actionId).toBe("main-directoryLink");
+    expect(migrated[1].props.styles.actionId).toBe("main-link");
+    for (const key of ["address", "phone", "email"]) {
+      expect(migrated[2].props[key].actionId).toBe("main-link");
+    }
+    expect(convert(migrated)).toEqual(migrated);
+  });
+  it("upgrades all theme history entries without changing undo identities or their order", () => {
+    const histories = [
+      { id: "first", data: {} },
+      { id: "second", data: { "--fontSize-h1-fontSize": "60px" } },
+    ];
+    const migrated = migrateThemeHistories(histories);
+    expect(migrated.map((entry) => entry.id)).toEqual(["first", "second"]);
+    expect(
+      migrated.every((entry) => validateThemeData(entry.data).success)
+    ).toBe(true);
+    expect(
+      migrated[1].data.typography.find((entry) => entry.id === "main-h1")
+        ?.fontSize
+    ).toBe(60);
+    expect(migrateThemeHistories(migrated)).toEqual(migrated);
+    expect(histories[0].data).toEqual({});
   });
 });

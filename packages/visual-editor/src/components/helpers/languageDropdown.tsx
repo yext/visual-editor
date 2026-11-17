@@ -148,7 +148,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
                 <DropdownMenuItem
                   onSelect={() => handleLocaleSelected(locale, path)}
                   className={themeManagerCn(
-                    "components font-body-fontFamily font-normal bg-white py-4 px-6 text-body-sm-fontSize",
+                    "components  font-normal bg-white py-4 px-6 text-sm",
                     "hover:bg-[#EDEDED] active:bg-[#EDEDED] cursor-pointer data-[highlighted]:outline-none data-[highlighted]:shadow-none",
                     selected === locale && "font-bold"
                   )}
@@ -167,7 +167,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
           onValueChange={(value) => handleOpenChange(!!value)}
         >
           <AccordionItem value="language-selector">
-            <AccordionTrigger className="group flex w-full items-center justify-between text-body-sm-fontSize font-medium text-gray-900 py-6 md:pb-4 ">
+            <AccordionTrigger className="group flex w-full items-center justify-between text-sm font-medium text-gray-900 py-6 md:pb-4 ">
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4" />
                 <Body variant="xs">{getLanguageName(selected)}</Body>
@@ -185,8 +185,8 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
                       key={locale}
                       onClick={() => handleLocaleSelected(locale, path)}
                       className={themeManagerCn(
-                        "text-left py-3 px-2 rounded text-body-sm-fontSize",
-                        selected === locale && "font-body-fontWeight"
+                        "text-left py-3 px-2 rounded text-sm",
+                        selected === locale && ""
                       )}
                     >
                       {getLanguageName(locale)}
@@ -219,7 +219,9 @@ function getLanguageName(locale: string): string | undefined {
 
 // If first character of language name is Latin letter, capitalize it.
 function normalizeLanguageName(name: string | undefined): string | undefined {
-  if (!name) return undefined;
+  if (!name) {
+    return undefined;
+  }
 
   // Check if first character is Latin letter
   if (/^[a-zA-Z]/.test(name.charAt(0))) {

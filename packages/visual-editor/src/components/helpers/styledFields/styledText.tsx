@@ -1,3 +1,5 @@
+import { useThemeData } from "../../../hooks/useThemeData.ts";
+import { resolveThemeEntry } from "../../../utils/dynamicTheme.ts";
 import * as React from "react";
 import { MaybeRTF } from "../maybeRTF.tsx";
 import { type StyledTextValue } from "../../../fields/styledFields/StyledTextField.tsx";
@@ -87,7 +89,7 @@ const getStyledTextRenderProps = ({
  * Applies shared alignment, color, and typography styling to resolved rich text
  * output without changing the content source.
  */
-export const renderStyledRichText = ({
+const renderRichTextContent = ({
   content,
   align,
   className,
@@ -130,6 +132,7 @@ export const renderStyledRichText = ({
         as="div"
         align={align}
         color={text?.color}
+        typographyId={text?.typographyId}
         className={className}
         style={getStyledTextStyle(text)}
       >
@@ -195,11 +198,20 @@ export const renderStyledRichText = ({
   });
 };
 
+export const renderStyledRichText = (
+  props: Parameters<typeof renderRichTextContent>[0]
+): React.ReactNode => (
+  <StyledTextElement as="div" typographyId={props.text?.typographyId}>
+    {renderRichTextContent(props)}
+  </StyledTextElement>
+);
+
 type StyledTextElementProps = {
   align?: StyledTextAlignment;
   as?: StyledTextTag;
   children: React.ReactNode;
   className?: string;
+  typographyId?: string;
   color?: ThemeColor;
   style?: React.CSSProperties;
 };
@@ -211,30 +223,38 @@ type StyledTextElementProps = {
 export const StyledTextElement = React.forwardRef<
   HTMLElement,
   StyledTextElementProps
->(({ align, as = "span", children, className, color, style }, ref) => {
-  const Tag = as;
-  const textColorClassName = getTextColorClass(color);
-  const renderProps = getStyledTextRenderProps({
-    align,
-    className: themeManagerCn(
-      textColorClassName,
-      as === "span" && "block",
-      className
-    ),
-    color,
-  });
+>(
+  (
+    { align, as = "span", children, className, color, style, typographyId },
+    ref
+  ) => {
+    const theme = useThemeData();
+    const typography = resolveThemeEntry(theme.typography, typographyId);
+    const Tag = as;
+    const textColorClassName = getTextColorClass(color);
+    const renderProps = getStyledTextRenderProps({
+      align,
+      className: themeManagerCn(
+        textColorClassName,
+        as === "span" && "block",
+        className
+      ),
+      color,
+    });
 
-  return (
-    <Tag
-      className={renderProps.className}
-      style={{
-        ...renderProps.style,
-        ...style,
-      }}
-      ref={ref as never}
-    >
-      {children}
-    </Tag>
-  );
-});
+    return (
+      <Tag
+        data-ve-typography={typography.id}
+        className={renderProps.className}
+        style={{
+          ...renderProps.style,
+          ...style,
+        }}
+        ref={ref as never}
+      >
+        {children}
+      </Tag>
+    );
+  }
+);
 StyledTextElement.displayName = "StyledTextElement";

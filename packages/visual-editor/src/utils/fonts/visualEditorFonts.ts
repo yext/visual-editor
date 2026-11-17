@@ -1,8 +1,8 @@
+import { migrateThemeData } from "../../components/migrations/themeDataLabels.ts";
 import { PUCK_PREVIEW_IFRAME_ID, THEME_STYLE_TAG_ID } from "../applyTheme.ts";
-import { StyleSelectOption } from "../themeResolver.ts";
+import { StyleSelectOption } from "../../types/types.ts";
 import { defaultFonts as fontsJs } from "./font_registry.js";
 import { msg } from "../i18n/platform.ts";
-import { ThemeData } from "../../internal/types/themeData.ts";
 import { fontStyleOptions } from "../themeConfigOptions.ts";
 
 const variableFontRegex = /var\((--[^)]+)\)/;
@@ -33,14 +33,7 @@ export const defaultFonts: FontRegistry = fontsJs as FontRegistry;
  * font-family value are both derived from the font family name so theme data
  * remains human-readable.
  */
-export const constructFontSelectOptions = (
-  fonts: FontRegistry
-): { label: string; value: string }[] => {
-  return Object.entries(fonts).map(([fontFamily, fontDetails]) => ({
-    label: fontFamily,
-    value: `'${fontFamily}', '${fontFamily} Fallback', ${fontDetails.fallback}`,
-  }));
-};
+export { constructFontSelectOptions } from "./fontSelectOptions.ts";
 
 /*
  * generateGoogleFontsURL takes a list of fonts and the available values for
@@ -505,22 +498,15 @@ const getFontNameFromStyleElement = (
 /**
  * Extracts and parses the font family names from the ThemeData.
  */
-export const extractFontFamiliesFromTheme = (data: ThemeData): string[] => {
+export const extractFontFamiliesFromTheme = (
+  data: Record<string, any>
+): string[] => {
   const fontFamilies = new Set<string>();
 
-  // Iterate over all the keys in the theme data to find font names.
-  for (const key in data) {
-    // searches for keys with "fontFamily" like "--fontFamily-h1-fontFamily"
-    if (typeof key === "string" && key.includes("fontFamily")) {
-      const value = data[key];
-      // key / value looks like "--fontFamily-h1-fontFamily": "'Open Sans', sans-serif"
-      // parses fontName from the value
-      if (typeof value === "string" && value.length > 0) {
-        fontFamilies.add(getFontFamilyFromThemeValue(value, data));
-      }
-    }
+  const theme = migrateThemeData(data);
+  for (const entry of [...theme.typography, ...theme.actions]) {
+    fontFamilies.add(getFontFamilyFromThemeValue(entry.fontFamily, {}));
   }
-
   return [...fontFamilies];
 };
 
@@ -534,7 +520,7 @@ export const extractFontFamiliesFromTheme = (data: ThemeData): string[] => {
  * @return An object containing two font registries: inUseGoogleFonts and inUseCustomFonts.
  */
 export const filterInUseFontRegistries = (
-  data: ThemeData,
+  data: Record<string, any>,
   availableFonts: FontRegistry,
   customFonts: FontRegistry = {}
 ): {

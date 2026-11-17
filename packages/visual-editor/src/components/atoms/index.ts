@@ -7,7 +7,7 @@ export {
 export { Background, type BackgroundProps } from "./background.tsx";
 export { Body, type BodyProps, bodyVariants } from "./body.tsx";
 export { Button, type ButtonProps, buttonVariants } from "./button.tsx";
-export { CTA, type CTAVariant } from "./cta.tsx";
+export { CTA } from "./cta.tsx";
 export {
   DropdownMenu,
   DropdownMenuContent,

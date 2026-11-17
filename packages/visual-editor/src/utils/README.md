@@ -5,6 +5,64 @@ outline: deep
 
 # Utils
 
+## Versioned theme payload
+
+`themeDataSchema`, `ThemeData`, `validateThemeData`, `ThemeColorReference`,
+`defaultThemeData`, `resolveThemeEntry`, and `resolveThemeColor` are available
+from `@yext/visual-editor`. The validation implementation has no browser dependency.
+
+```ts
+import { defaultThemeData, validateThemeData } from "@yext/visual-editor";
+
+const theme = structuredClone(defaultThemeData);
+theme.colors[0].label = "Paper";
+theme.colors[0].background = "linear-gradient(90deg, #FFFFFF, #EAF2FF80)";
+const result = validateThemeData(theme);
+if (!result.success) {
+  console.error(result.errors); // severity, code, path, message
+}
+console.log(result.warnings); // recoverable missing/incompatible references
+```
+
+The version 1 payload has ordered, nonempty `colors`, `typography`, and `actions`
+collections, plus fixed `page` settings. Entries have immutable `id` values and
+editable `label` values. Labels never become CSS names. Reordering changes the
+default option while existing selections keep their identifiers.
+
+Typography entries own explicit desktop and mobile sizes and line heights.
+Action entries own independent typography, a `button` or `link` presentation,
+and complete `default`, `hover`, and `active` states. Button entries additionally
+own padding, radius, border width, and state backgrounds and borders. State
+colors are `{ colorId, channel: "background" | "foreground" }` references.
+Validation never fills missing properties. `defaultThemeData` contains complete
+entries materialized from the recorded `main` baseline; clone it before editing.
+
+Supported shared colors are hex (including alpha), RGB/RGBA, HSL/HSLA,
+`transparent`, `black`, and `white`. Backgrounds also support linear and radial
+gradients with those colors. Foregrounds are solid colors. Missing references
+fall back to the first compatible color without changing saved selections. A
+gradient cannot supply a text or border color; if every background is a gradient,
+the first foreground supplies the solid fallback.
+
+Versioned payloads use the same CSS builder for published output and both editor
+documents. Shared atoms accept `typographyId`, `actionId`, and `backgroundId`
+selections; heading semantics remain separate. `ThemeCollectionField` exposes
+the live ordered collections to custom section controls. Pass `themeData` to
+`createPuckGenerationCatalog` to infer theme collection schemas, retaining each
+option's label in JSON Schema.
+
+Theme loading converts unversioned saved data before rendering. The append-only
+layout migration converts palette, heading, and action selections to deterministic
+site-wide identifiers while retaining component literals and overrides. Theme
+undo/redo entries are upgraded independently, preserving their identities and order.
+The theme editor saves only complete validated payloads. Its collection controls
+support adding, renaming, reordering, and deleting entries; the final entry cannot
+be deleted. Set Theme Data uses the same public validation contract.
+
+Baseline fixtures and source commits are recorded under
+`src/internal/theme/fixtures/main`. The conversion uses those frozen defaults,
+not the current theme or the first page opened.
+
 ## getPageMetadata
 
 Returns an object containing the key/value pairs from the root/page level configuration.
@@ -273,181 +331,17 @@ Use this helper when the wrapper owns one repeated `CardSlot` and each item
 should become a nested card component. See the `FeaturedItems` / `ItemCard`
 example in [editor/README.md](../editor/README.md#linked-entity-item-sources).
 
-## ThemeConfig
-
-The ThemeConfig object defines the styles available for editing in Theme Manager. It is used
-by themeResolver, applyTheme, and Editor.
-
-### Defining a ThemeConfig
-
-Each style must specify a label, type, default value, and plugin. The label will be displayed in the
-Theme Manager UI. The type can be "color", "number" or "select". If type "select", an array of options
-must be provided too. The plugin field must contain one of [Tailwind's Theme Extension Keys](https://v3.tailwindcss.com/docs/theme#configuration-reference), which will determine which Tailwind utilities use the style. Styles that share
-a plugin can be nested one level deep together under a shared label.
-
-```ts
-export const themeConfig: ThemeConfig = {
-  sectionA: {
-    label: "Section A",
-    styles: {
-      style1: {
-        label: "Style 1",
-        type: "number",
-        default: 0,
-        plugin: "fontSize",
-      },
-      style2: {
-        label: "Style 2",
-        plugin: "colors",
-        styles: {
-          substyleA: {
-            label: "Sub-Style A"
-            type: "color"
-            default: "#000000"
-          },
-          substyleB: {
-            label: "Sub-Style B"
-            type: "color"
-            default: "#FFFFFF"
-          },
-        },
-      },
-    },
-  },
-  sectionB: {
-    label: "Section B"
-    styles: {
-      style3: {
-        label: "Style 3",
-        type: "select",
-        default: "normal",
-        options: [
-          {value: "normal", label: "Normal"}
-          {value: "bold", label: "Bold"}
-        ]
-        plugin: "fontWeight",
-      },
-    },
-  },
-};
-```
-
-The Theme Manager UI will display the theme configuration fields in the order
-and structure specified in the themeConfig.
-
-### Using Theme Manager Classes
-
-Theme Manager uses Tailwind to create classes of the following form: `[tailwindUtility]-[sectionName]-[styleName]-[subStyleName?]` where `tailwindUtility` is the Tailwind Utility class prefix used by the style's core plugin. These classes should be used in components to apply the Theme Manager styles.
-
-For example, in the themeConfig above, the following classes would be available:
-
-- `text-parentA-style1`
-- `text-parentA-style2-substyleA`
-- `text-parentA-style2-substyleB`
-- ... other color utilities such as `bg-parentA-style2-substyleA`
-- `font-parentB-style3`
-
-### Referencing Other Theme Values
-
-Underlying these classes are a set of CSS variables that follow the form `--[pluginName]-[sectionName]-[styleName]-[subStyleName?]`.
-
-The themeConfig above creates the following CSS variables:
-
-- `--fontSize-parentA-style1`
-- `--colors-parentA-style2-substyleA`
-- `--colors-parentA-style2-substyleB`
-- `--fontWeight-parentB-style3`
-
-It is not necessary to directly use these CSS variables. However, they can be used to link styles together.
-
-#### Example
-
-```ts
-export const themeConfig: ThemeConfig = {
-  palette: {
-    label: "Color Palette",
-    styles: {
-      primary: {
-        label: "Primary",
-        type: "color",
-        default: "black",
-        plugin: "colors",
-      },
-      secondary: {
-        label: "Secondary",
-        type: "color",
-        default: "white",
-        plugin: "colors",
-      },
-    },
-  },
-  headings: {
-    label: "Headings"
-    styles: {
-      textColor: {
-        label: "Text Color",
-        type: "select",
-        default: "var(--colors-palette-primary)",
-        options: [
-          {value: "var(--colors-palette-primary)", label: "Primary"}
-          {value: "var(--colors-palette-secondary)", label: "Secondary"}
-        ]
-        plugin: "colors",
-      },
-    },
-  },
-};
-```
-
-This example creates the following classes:
-
-- `text-palette-primary`
-- `text-palette-secondary`
-- ... other color utilities like bg-palette-primary
-- `text-headings-textColor` - can switch between the primary or secondary color
-
-## themeResolver
-
-Used in tailwind.config.ts to combine hard-coded styles with editable Theme Manager styles.
-
-### Props
-
-| Name             | Type                | Description                                             |
-| ---------------- | ------------------- | ------------------------------------------------------- |
-| developerTheming | Record<string, any> | Tailwind theme extensions not editable in Theme Manager |
-| marketerTheming  | ThemeConfig         | The styles to be available in Theme Manager             |
-
-### Usage
-
-```ts
-// tailwind.config.ts
-import type { Config } from "tailwindcss";
-import { themeConfig } from "./theme.config";
-import { themeResolver } from "@yext/visual-editor";
-
-export default {
-  content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
-  theme: {
-    extend: themeResolver(
-      {}, // developer styles
-      themeConfig // Theme Manager styles
-    ),
-  },
-  plugins: [],
-} satisfies Config;
-```
-
 ## applyTheme
 
 Used as part of the [Head Config Interface](https://github.com/yext/pages/blob/main/packages/pages/docs/api/pages.headconfig.md) to apply the styles set in Theme Manager to a template.
 
 ### Props
 
-| Name        | Type                | Description                                  |
-| ----------- | ------------------- | -------------------------------------------- |
-| document    | Record<string, any> | The Yext entity document                     |
-| themeConfig | ThemeConfig         | The styles available in Theme Manager        |
-| base?       | string              | Additional data to be injected into the head |
+| Name                 | Type                | Description                                  |
+| -------------------- | ------------------- | -------------------------------------------- |
+| document             | Record<string, any> | The Yext entity document                     |
+| relativePrefixToRoot | string              | Prefix used to load font assets              |
+| base?                | string              | Additional data to be injected into the head |
 
 ### Usage
 
@@ -459,134 +353,24 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
 }): HeadConfig => {
   return {
     // -- additional HeadConfig options --
-    other: applyTheme(document, relativePrefixToRoot, themeConfig),
+    other: applyTheme(document, relativePrefixToRoot),
   };
 };
 ```
 
 ## Fonts
 
-### Type FontRegistry
+The existing Google font catalog and `FontRegistry` custom-font metadata remain
+supported. Every typography group and action preset has its own `fontFamily`.
+The editor filters weight and style choices against that font. Action default,
+hover, and active weights are inspected when collecting custom-font preloads.
+Published pages load fonts used by any group or action; live replacement updates
+both editor documents.
 
-An object that map font names to FontSpecifications.
-
-### Type FontSpecification
-
-| Name      | Type    | Description                              |
-| --------- | ------- | ---------------------------------------- |
-| italics   | boolean | Whether the font supports italics        |
-| minWeight | number  | The minimum weight supported by the font |
-| maxWeight | number  | The maximum weight support by the font   |
-| fallback  | string  | The fallback font                        |
-
-### defaultFonts
-
-A FontRegistry of default fonts for use in Visual Editor.
-
-### constructFontSelectOptions
-
-Transforms a FontRegistry into a list of StyleSelectOptions.
-
-#### Usage
-
-```tsx
-const fonts: FontRegistry = {
-  Georgia: {
-    italics: true,
-    minWeight: 400,
-    maxWeight: 900,
-    fallback: "serif",
-  }, // other developer-defined fonts
-  ...defaultFonts,
-};
-const fontOptions = constructFontSelectOptions(fonts);
-
-export const themeConfig: ThemeConfig = {
-  heading1: {
-    label: "Heading",
-    styles: {
-      fontFamily: {
-        label: "Font",
-        type: "select",
-        plugin: "fontFamily",
-        options: fontOptions,
-        default: "'Georgia', serif",
-      },
-    },
-  },
-};
-```
-
-### getFontWeightOptions
-
-Returns the options for font weight for use in theme.config.
-Can filter based on the currently selected font.
-
-#### Params
-
-| Name            | Type              | Description                                                                                                        |
-| --------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------ |
-| fontCssVariable | string?           | The CSS variable of a font. Determines which weights are available. If not provided, all weights will be returned. |
-| weightOptions   | StyleSelectOption | The available font options. Defaults to weights 100-900 in increments of 100.                                      |
-| fontList        | FontRegistry      | Provides the available weights for each font. If not provided, uses defaultFonts.                                  |
-
-#### Usage
-
-```tsx
-export const themeConfig: ThemeConfig = {
-  heading1: {
-    label: "Heading",
-    styles: {
-      fontWeight: {
-        label: "Font Weight",
-        type: "select",
-        plugin: "fontWeight",
-        options: () =>
-          getFontWeightOptions({
-            fontCssVariable: "--fontFamily-heading1-fontFamily",
-          }),
-        default: "700",
-      },
-    },
-  },
-};
-```
-
-### getFontWeightOverrideOptions
-
-Returns the options for font weight for use in components.
-Can filter based on the currently selected font.
-
-#### Params
-
-| Name            | Type              | Description                                                                                                        |
-| --------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------ |
-| fontCssVariable | string?           | The CSS variable of a font. Determines which weights are available. If not provided, all weights will be returned. |
-| weightOptions   | StyleSelectOption | The available font options. Defaults to weights 100-900 in increments of 100.                                      |
-| fontList        | FontRegistry      | Provides the available weights for each font. If not provided, uses defaultFonts.                                  |
-
-#### Usage
-
-```tsx
-export const MyComponent: ComponentConfig<MyComponentProps> = {
-  label: "Component",
-  fields: myComponentFields,
-  resolveFields: async () => {
-    const fontWeightOptions = await getFontWeightOverrideOptions({
-      fontCssVariable: "--fontFamily-body-fontFamily",
-    });
-    return {
-      ...myComponentFields,
-      fontWeight: {
-        label: "Font Weight",
-        type: "select",
-        options: fontWeightOptions,
-      },
-    };
-  },
-  render: (props) => <Component {...props} />,
-};
-```
+`constructFontSelectOptions(customFonts)` converts a registry into selector
+options. `getFontWeightOptionsForFontFamily` and
+`getFontStyleOptionsForFontFamily` accept concrete font-family values, so controls
+need no role-specific CSS variable names.
 
 ## VisualEditorProvider
 
@@ -614,11 +398,7 @@ const Edit: () => JSX.Element = () => {
       entityFields={entityFields}
       tailwindConfig={tailwindConfig}
     >
-      <Editor
-        document={entityDocument}
-        componentRegistry={componentRegistry}
-        themeConfig={themeConfig}
-      />
+      <Editor document={entityDocument} componentRegistry={componentRegistry} />
     </VisualEditorProvider>
   );
 };
@@ -636,7 +416,7 @@ tailwind-merge extension.
 import { themeManagerCn } from "@yext/visual-editor";
 import { cva } from "class-variance-authority";
 
-const componentVariants = cva("components font-body-fontWeight", {
+const componentVariants = cva("components", {
   variants: {
     fontWeight: {
       default: "",
@@ -675,39 +455,9 @@ Check that the string is a valid slug.
 
 ## defaultThemeTailwindExtensions
 
-A set of Tailwind extensions to complement the default theme.config, including additional auto-generated colors.
-
-#### Usage
-
-```tsx
-// tailwind.config.ts
-theme: {
-  extend: themeResolver(defaultThemeTailwindExtensions, themeConfig),
-},
-```
-
-## backgroundColors
-
-An object of the following shape containing the seven auto-generated background styles.
-
-```js
-{
-  backgroundKey: {
-    label: "Background Label",
-    value: {selectedColor: "Tailwind class", contrastingColor: "Tailwind class"}
-  }
-}
-```
-
-| Key         | Label        | Background Color | Text Color |
-| ----------- | ------------ | ---------------- | ---------- |
-| background1 | Background 1 | white            | black      |
-| background2 | Background 2 | primary-light    | black      |
-| background3 | Background 3 | secondary-light  | black      |
-| background4 | Background 4 | tertiary-light   | black      |
-| background5 | Background 5 | quaternary-light | black      |
-| background6 | Background 6 | primary-dark     | white      |
-| background7 | Background 7 | secondary-dark   | white      |
+Use `defaultThemeTailwindExtensions` for the library's ordinary utility sizes and
+gray palette. Theme entry styles are generated directly from the payload and need
+no Tailwind theme resolver or per-entry safelist.
 
 ## applyAnalytics
 
@@ -725,7 +475,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
     title: document.name,
     other: [
       applyAnalytics(document),
-      applyTheme(document, relativePrefixToRoot, themeConfig),
+      applyTheme(document, relativePrefixToRoot),
     ].join("\n"),
   };
 };
@@ -741,10 +491,8 @@ Contains preset options to be used when defining a component's fields.
 | TEXT_TRANSFORM   | [`textTransformOptions`](#textTransformOptions)     |
 | LETTER_SPACING   | [`letterSpacingOptions`](#letterSpacingOptions)     |
 | BACKGROUND_COLOR | [`backgroundColorOptions`](#backgroundColorOptions) |
-| CTA_VARIANT      | [`ctaVariantOptions`](#ctaVariantOptions)           |
 | ALIGNMENT        | [`alignmentOptions`](#alignmentOptions)             |
 | JUSTIFY_CONTENT  | [`justifyContentOptions`](#justifyContentOptions)   |
-| BODY_VARIANT     | [`bodyVariantOptions`](#bodyVariantOptions)         |
 | BORDER_RADIUS    | [`borderRadiusOptions`](#borderRadiusOptions)       |
 | SPACING          | [`spacingOptions`](#spacingOptions)                 |
 | FONT_SIZE        | [`fontSizeOptions`](#fontSizeOptions)               |
@@ -775,18 +523,6 @@ Contains preset options to be used when defining a component's fields.
 | Wider (0.05em)    | "0.05em"   |
 | Widest (0.1em)    | "0.1em"    |
 
-#### backgroundColorOptions
-
-| Label        | Value                         |
-| ------------ | ----------------------------- |
-| Background 1 | `bg-white`                    |
-| Background 2 | `bg-palette-primary-light`    |
-| Background 3 | `bg-palette-secondary-light`  |
-| Background 4 | `bg-palette-tertiary-light`   |
-| Background 5 | `bg-palette-quaternary-light` |
-| Background 6 | `bg-palette-primary-dark`     |
-| Background 7 | `bg-palette-secondary-dark`   |
-
 #### textTransformOptions
 
 | Label      | Value        |
@@ -795,14 +531,6 @@ Contains preset options to be used when defining a component's fields.
 | Uppercase  | "uppercase"  |
 | Lowercase  | "lowercase"  |
 | Capitalize | "capitalize" |
-
-#### ctaVariantOptions
-
-| Label     | Value       |
-| --------- | ----------- |
-| Primary   | "primary"   |
-| Secondary | "secondary" |
-| Link      | "link"      |
 
 #### alignmentOptions
 
@@ -819,14 +547,6 @@ Contains preset options to be used when defining a component's fields.
 | Start  | "start"  |
 | Center | "center" |
 | End    | "end"    |
-
-#### bodyVariantOptions
-
-| Label | Value  |
-| ----- | ------ |
-| Small | "sm"   |
-| Base  | "base" |
-| Large | "lg"   |
 
 #### fontSizeOptions
 
@@ -885,10 +605,10 @@ const myComponentFields: Fields<MyComponentProps> = {
     type: "object",
     label: "Call to Action",
     objectFields: {
-      variant: {
-        label: "Variant",
-        type: "radio",
-        options: ThemeOptions.CTA_VARIANT,
+      actionId: {
+        label: "Action preset",
+        type: "themeCollection",
+        collection: "actions",
       },
     },
   },

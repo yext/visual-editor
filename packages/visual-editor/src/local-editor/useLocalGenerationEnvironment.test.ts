@@ -40,7 +40,10 @@ it("uses Vite's configured model and full locale union with the associated brows
   await waitFor(() => expect(result.current).not.toBeNull());
   expect(result.current!.model).toBe("local-model");
   expect(result.current!.locales).toEqual(["en", "fr", "es"]);
-  expect(result.current!.catalog).toBe(catalog);
+  expect(result.current!.catalog.sourceComponents).toBe(
+    catalog.sourceComponents
+  );
+  expect(result.current!.catalog.puckOptions.themeData?.version).toBe(1);
   expect(result.current!.generationSettings).toEqual(testGenerationSettings);
   expect(fetchMock).toHaveBeenCalledWith(
     "/generate/context?layoutId=layout",
@@ -88,13 +91,17 @@ it("disposes the host on scope changes and Strict Mode remounts", async () => {
   const remove = window.removeEventListener.bind(window);
   vi.spyOn(window, "addEventListener").mockImplementation(
     (type, listener, options) => {
-      if (type === "message") listeners.add(listener);
+      if (type === "message") {
+        listeners.add(listener);
+      }
       add(type, listener, options);
     }
   );
   vi.spyOn(window, "removeEventListener").mockImplementation(
     (type, listener, options) => {
-      if (type === "message") listeners.delete(listener);
+      if (type === "message") {
+        listeners.delete(listener);
+      }
       remove(type, listener, options);
     }
   );

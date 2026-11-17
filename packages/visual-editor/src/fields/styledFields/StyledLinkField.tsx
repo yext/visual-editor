@@ -1,4 +1,3 @@
-import React from "react";
 import { BaseField, FieldLabel, type FieldProps } from "@puckeditor/core";
 import {
   BaseTextStyles,
@@ -21,6 +20,7 @@ export type StyledLinkField = BaseField & {
   /** Converts authored link typography and caret choice into CSS styles. */
   transform?: boolean;
   label?: string | MsgString;
+  inheritedFontFamily?: string;
   visible?: boolean;
   showIncludeCaretField?: boolean;
 };
@@ -47,7 +47,11 @@ export const StyledLinkFieldOverride = ({
     ...value,
   };
 
-  const typographyOptions = useTypographyOptions(currentValue, onChange);
+  const typographyOptions = useTypographyOptions(
+    currentValue,
+    onChange,
+    field.inheritedFontFamily
+  );
   const { updateValue } = typographyOptions;
 
   const letterSpacingOptions = withDefaultOption(ThemeOptions.LETTER_SPACING);

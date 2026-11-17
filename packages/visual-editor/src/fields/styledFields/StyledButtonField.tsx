@@ -1,4 +1,3 @@
-import React from "react";
 import { BaseField, FieldLabel, type FieldProps } from "@puckeditor/core";
 import { Combobox } from "../../internal/puck/ui/Combobox.tsx";
 import { ThemeOptions } from "../../utils/themeConfigOptions.ts";
@@ -21,6 +20,7 @@ export type StyledButtonField = BaseField & {
   /** Converts authored button typography into CSS styles. */
   transform?: boolean;
   label?: string | MsgString;
+  inheritedFontFamily?: string;
   visible?: boolean;
 };
 
@@ -42,7 +42,11 @@ export const StyledButtonFieldOverride = ({
     ...value,
   };
 
-  const typographyOptions = useTypographyOptions(currentValue, onChange);
+  const typographyOptions = useTypographyOptions(
+    currentValue,
+    onChange,
+    field.inheritedFontFamily
+  );
   const { updateValue } = typographyOptions;
 
   const borderRadiusOptions = withDefaultOption(

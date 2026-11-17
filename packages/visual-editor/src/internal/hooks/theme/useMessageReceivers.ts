@@ -1,3 +1,4 @@
+import { migrateThemeData } from "../../../components/migrations/themeDataLabels.ts";
 import { useEffect, useState } from "react";
 import { DevLogger } from "../../../utils/devLogger.ts";
 import { ThemeSaveState } from "../../types/themeData.ts";
@@ -26,7 +27,10 @@ export const useThemeMessageReceivers = (localDev: boolean) => {
     if (payload?.history) {
       receivedThemeSaveState = {
         hash: payload.hash,
-        history: { data: JSON.parse(payload.history) },
+        history: {
+          id: payload.hash,
+          data: migrateThemeData(JSON.parse(payload.history)),
+        },
       } as ThemeSaveState;
     }
     devLogger.logData("THEME_SAVE_STATE", receivedThemeSaveState);

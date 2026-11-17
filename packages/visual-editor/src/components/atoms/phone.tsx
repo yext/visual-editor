@@ -9,6 +9,7 @@ import {
 } from "../../utils/colors.ts";
 
 export type PhoneAtomProps = {
+  actionId?: string;
   phoneNumber: string;
   label?: string;
   eventName?: string;
@@ -51,11 +52,11 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
       {props.label && <Body className="font-bold">{props.label}</Body>}
       {props.includeHyperlink ? (
         <CTA
+          actionId={props.actionId}
           link={phoneNumberLink}
           label={formattedPhoneNumber}
           linkType="PHONE"
           normalizeLink={false}
-          variant="link"
           eventName={props.eventName}
           color={props.linkColor}
           onClick={props.onClick}

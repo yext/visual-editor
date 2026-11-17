@@ -1,3 +1,4 @@
+import type { ThemeData } from "../../../types/themeData.ts";
 import type { Config } from "@puckeditor/core";
 import {
   createPuckGenerationCatalog,
@@ -5,8 +6,17 @@ import {
   type PuckGenerationCatalog,
 } from "../../../utils/createPuckGenerationCatalog.ts";
 
-export const getGenerationCatalog = (config: Config): PuckGenerationCatalog => {
+export const getGenerationCatalog = (
+  config: Config,
+  themeData?: ThemeData
+): PuckGenerationCatalog => {
   const catalog = catalogs.get(config) ?? catalogs.get(config.components);
+  if (themeData) {
+    return createPuckGenerationCatalog(
+      catalog?.sourceComponents ?? config.components,
+      { ...catalog?.puckOptions, themeData }
+    );
+  }
   if (catalog) {
     return catalog;
   }

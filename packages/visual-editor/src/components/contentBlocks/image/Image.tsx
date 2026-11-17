@@ -81,6 +81,11 @@ export const ImageWrapperFields: YextFields<ImageWrapperProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       ...ImageStylingFields,
+      actionId: {
+        type: "themeCollection",
+        collection: "actions",
+        label: "Action preset",
+      },
     },
   },
   showImageConstrain: {
@@ -194,6 +199,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     >
       <div className="w-full">
         <MaybeLink
+          actionId={styles.actionId}
           className="w-auto"
           eventName="logoLink"
           href={resolvedLink}

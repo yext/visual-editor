@@ -90,7 +90,7 @@ describe("getThemeValue", () => {
 
   it("falls back to the published stream theme in the browser", () => {
     expect(
-      getThemeValue("--colors-palette-quaternary-contrast", {
+      getThemeValue("--ve-colors-15-main-quaternary-foreground", {
         __: {
           theme: JSON.stringify({
             "--colors-palette-quaternary-contrast": "#123456",

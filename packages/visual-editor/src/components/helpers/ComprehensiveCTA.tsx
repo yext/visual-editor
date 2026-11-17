@@ -13,6 +13,8 @@ import { FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import type { ResolvedComprehensiveCTAValue } from "../../fields/fields.ts";
 import { type StyledButtonValue } from "../../fields/styledFields/StyledButtonField.tsx";
 import { type StyledLinkValue } from "../../fields/styledFields/StyledLinkField.tsx";
+import { useThemeData } from "../../hooks/useThemeData.ts";
+import { resolveThemeEntry } from "../../utils/dynamicTheme.ts";
 
 export type ComprehensiveCTARenderProps = {
   value?: Partial<ComprehensiveCTAValue> | ResolvedComprehensiveCTAValue;
@@ -30,7 +32,8 @@ const resolveTextStyleValue = (value: string | undefined) =>
   value && value !== "default" ? value : undefined;
 
 const getComprehensiveCTAStyle = (
-  value: ResolvedComprehensiveCTAValue
+  value: ResolvedComprehensiveCTAValue,
+  presentation: "button" | "link"
 ): React.CSSProperties | undefined => {
   const ctaType =
     value.data.actionType === "button"
@@ -41,13 +44,26 @@ const getComprehensiveCTAStyle = (
     return value.sx;
   }
 
-  const typographyStyles: StyledButtonValue | StyledLinkValue =
-    value.styles.variant === "link"
-      ? (value.styles.link ?? value.styles.button ?? defaultLinkStyleValue)
-      : (value.styles.button ?? defaultButtonStyleValue);
+  const preferred =
+    presentation === "link" ? value.styles.link : value.styles.button;
+  const other =
+    presentation === "link" ? value.styles.button : value.styles.link;
+  const typographyStyles = {
+    ...defaultButtonStyleValue,
+    ...defaultLinkStyleValue,
+  } as StyledButtonValue & StyledLinkValue;
+  for (const key of Object.keys(
+    typographyStyles
+  ) as (keyof typeof typographyStyles)[]) {
+    const chosen = preferred?.[key as keyof typeof preferred];
+    const fallback = other?.[key as keyof typeof other];
+    Object.assign(typographyStyles, {
+      [key]: chosen && chosen !== "default" ? chosen : (fallback ?? "default"),
+    });
+  }
 
   const style: React.CSSProperties & {
-    "--display-link-caret"?: string;
+    "--ve-action-caret"?: string;
   } = {
     ...value.sx,
   };
@@ -88,7 +104,7 @@ const getComprehensiveCTAStyle = (
   if ("includeCaret" in typographyStyles) {
     const includeCaret = resolveTextStyleValue(typographyStyles.includeCaret);
     if (includeCaret) {
-      style["--display-link-caret"] = includeCaret;
+      style["--ve-action-caret"] = includeCaret;
     }
   }
 
@@ -143,6 +159,7 @@ export const ComprehensiveCTA = ({
   onClick,
 }: ComprehensiveCTARenderProps) => {
   const streamDocument = useDocument();
+  const theme = useThemeData();
   const { i18n } = useTranslation();
   // Authored values retain field/constant bindings or localized text objects.
   // Partial authored values also need defaults before they can be rendered.
@@ -202,7 +219,11 @@ export const ComprehensiveCTA = ({
   );
 
   const resolvedStyle = {
-    ...getComprehensiveCTAStyle(currentValue),
+    ...getComprehensiveCTAStyle(
+      currentValue,
+      resolveThemeEntry(theme.actions, currentValue.styles.actionId)
+        .presentation
+    ),
     ...style,
   };
 
@@ -216,6 +237,7 @@ export const ComprehensiveCTA = ({
 
   return (
     <CTA
+      actionId={currentValue.styles.actionId}
       actionType={actionType}
       ariaLabel={resolvedAriaLabel}
       alwaysHideCaret={alwaysHideCaret}
@@ -246,7 +268,6 @@ export const ComprehensiveCTA = ({
       setPadding={true}
       style={resolvedStyle}
       target={target}
-      variant={currentValue.styles.variant}
     />
   );
 };

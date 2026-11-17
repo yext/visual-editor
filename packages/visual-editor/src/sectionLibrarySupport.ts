@@ -9,12 +9,7 @@ export {
   buttonVariants,
   type ButtonProps,
 } from "./components/atoms/button.tsx";
-export {
-  CTA,
-  isCtaVariantWithColor,
-  type CTAProps,
-  type CTAVariant,
-} from "./components/atoms/cta.tsx";
+export { CTA, type CTAProps } from "./components/atoms/cta.tsx";
 export {
   Heading,
   headingVariants,
@@ -178,7 +173,6 @@ export {
   createSearchHeadlessConfig,
 } from "./utils/searchHeadlessConfig.ts";
 export {
-  backgroundColors,
   ThemeOptions,
   type HeadingLevel,
   type ThemeColor,
@@ -191,12 +185,13 @@ export {
   getTextColorClass,
   getTextColorStyle,
   getThemeColorCssValue,
+  getDefaultForegroundColor,
   isColorContrastWcagCompliant,
   hexToRGB,
 } from "./utils/colors.ts";
 export { getValueFromQueryString } from "./utils/urlQueryString.tsx";
 export { normalizeSlug } from "./utils/slugifier.ts";
-export { deepMerge } from "./utils/themeResolver.ts";
+export { deepMerge } from "./utils/deepMerge.ts";
 export { bindSlots } from "./utils/cardSlots/bindSlots.ts";
 export { type SlotMappedCardWrapperType } from "./utils/cardSlots/cardWrapperHelpers.ts";
 export { forwardHeadingLevel } from "./utils/cardSlots/forwardHeadingLevel.ts";
@@ -275,3 +270,17 @@ export {
   backgroundColorZodSchema,
   siteColorZodSchema,
 } from "./utils/layoutGenerationSchemas/colorFieldSchemas.ts";
+
+export { useThemeData } from "./hooks/useThemeData.ts";
+export {
+  resolveThemeEntry,
+  resolveThemeColor,
+  themeVariable,
+} from "./utils/dynamicTheme.ts";
+export { defaultThemeData } from "./utils/defaultThemeData.ts";
+export {
+  themeDataSchema,
+  validateThemeData,
+  type ThemeData,
+  type ThemeColorReference,
+} from "./types/themeData.ts";

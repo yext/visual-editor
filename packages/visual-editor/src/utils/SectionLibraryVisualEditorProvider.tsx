@@ -9,7 +9,7 @@ import {
   type SectionLibraryTranslationLoaders,
 } from "./i18n/translationResources.ts";
 import { useVisualEditorTranslations } from "./i18n/useVisualEditorTranslations.ts";
-import type { TailwindConfig } from "./themeResolver.ts";
+import type { TailwindConfig } from "../types/types.ts";
 import { VisualEditorProviderCore } from "./VisualEditorProviderCore.tsx";
 
 type SectionLibraryVisualEditorProviderProps<T> = {

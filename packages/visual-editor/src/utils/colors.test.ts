@@ -1,3 +1,5 @@
+import { migrateThemeData } from "../components/migrations/themeDataLabels.ts";
+import { migrateDynamicThemeSelections } from "../components/migrations/0084_dynamic_theme.ts";
 import { describe, it, expect } from "vitest";
 import {
   getContrastingColor,
@@ -10,10 +12,9 @@ import {
   getDefaultForegroundColor,
   getThemeColorCssValue,
   getThemeColorHexValue,
-  isDarkColor,
   getTextColorClass,
   getTextColorStyle,
-  isCustomThemeColorToken,
+  isDarkColor,
 } from "./colors.ts";
 
 describe("getContrastingColor", () => {
@@ -143,287 +144,102 @@ describe("isColorContrastWcagCompliant", () => {
   });
 });
 
-describe("getBackgroundColorClasses", () => {
-  it("returns background and contrasting classes from stored tokens", () => {
-    expect(
-      getBackgroundColorClasses({
-        selectedColor: "palette-primary-light",
-        contrastingColor: "black",
-      })
-    ).toBe("bg-palette-primary-light text-black");
+describe("dynamic theme colors", () => {
+  const theme = migrateThemeData({
+    "--colors-palette-primary": "#341A1F",
+    "--colors-palette-secondary": "#111418",
   });
-
-  it("returns an empty string when color is undefined", () => {
-    expect(getBackgroundColorClasses(undefined)).toBe("");
+  const document = { __: { theme: JSON.stringify(theme) } };
+  it("uses channel-specific dynamic variables and keeps fallback in CSS", () => {
+    const reference = { colorId: "ocean", channel: "foreground" as const };
+    expect(getThemeColorCssValue(reference)).toBe(
+      "var(--ve-colors-5-ocean-foreground, var(--ve-default-color-foreground))"
+    );
+    expect(getTextColorStyle(reference)?.color).toContain(
+      "ocean-foreground-solid"
+    );
+    expect(getBackgroundColorClasses(reference)).toBe("");
+    expect(getTextColorClass(reference)).toBeUndefined();
   });
-
-  it("omits custom selected color tokens from class output", () => {
-    expect(
-      getBackgroundColorClasses({
-        selectedColor: "[#FF6D66]",
-        contrastingColor: "black",
-      })
-    ).toBe("text-black");
-  });
-});
-
-describe("getBackgroundColorStyle", () => {
-  it("returns inline styles for custom selected color tokens", () => {
+  it("preserves both halves of custom colors including transparency", () => {
     expect(
       getBackgroundColorStyle({
-        selectedColor: "[#FF6D66]",
-        contrastingColor: "black",
+        selectedColor: "[#FF6D6680]",
+        contrastingColor: "[#123456]",
       })
-    ).toStrictEqual({ backgroundColor: "#FF6D66" });
-  });
-
-  it("returns undefined for theme colors", () => {
-    expect(
-      getBackgroundColorStyle({
-        selectedColor: "palette-primary",
-        contrastingColor: "palette-primary-contrast",
-      })
-    ).toBeUndefined();
-  });
-});
-
-describe("getTextColorClass", () => {
-  it("returns text class from selected color token", () => {
-    expect(
-      getTextColorClass({
-        selectedColor: "palette-primary",
-        contrastingColor: "white",
-      })
-    ).toBe("text-palette-primary");
-  });
-
-  it("returns undefined when color is undefined", () => {
-    expect(getTextColorClass(undefined)).toBeUndefined();
-  });
-
-  it("returns undefined for custom selected color tokens", () => {
-    expect(
-      getTextColorClass({
-        selectedColor: "[#00E5FF]",
-        contrastingColor: "black",
-      })
-    ).toBeUndefined();
-  });
-});
-
-describe("getTextColorStyle", () => {
-  it("returns inline styles for custom selected color tokens", () => {
+    ).toEqual({ background: "#FF6D6680", color: "#123456" });
     expect(
       getTextColorStyle({
         selectedColor: "[#00E5FF]",
         contrastingColor: "black",
       })
-    ).toStrictEqual({ color: "#00E5FF" });
+    ).toEqual({ color: "#00E5FF" });
   });
-
-  it("returns undefined for theme colors", () => {
+  it("resolves concrete colors in a Node-compatible way after migration", () => {
     expect(
-      getTextColorStyle({
-        selectedColor: "palette-secondary",
-        contrastingColor: "palette-secondary-contrast",
-      })
-    ).toBeUndefined();
+      getThemeColorHexValue(
+        { colorId: "main-primary", channel: "background" },
+        document
+      )
+    ).toBe("#341A1F");
+    expect(
+      getThemeColorHexValue(
+        { colorId: "main-primary-light", channel: "background" },
+        document
+      )
+    ).toBe("#FCF8F9");
+    expect(
+      getThemeColorHexValue(
+        { colorId: "main-secondary-dark", channel: "background" },
+        document
+      )
+    ).toBe("#2A323C");
+    expect(
+      isDarkColor({ colorId: "main-primary", channel: "background" }, document)
+    ).toBe(true);
+    expect(getThemeColorHexValue("hsl(0 100% 50%)")).toBe("#FF0000");
+    expect(getThemeColorHexValue("rgb(0 128 255)")).toBe("#0080FF");
+    expect(getThemeColorHexValue("#F008")).toBe("#FF0000");
+    expect(getThemeColorHexValue("hsl(720 100% 50%)")).toBe("#FF0000");
+    expect(getThemeColorHexValue("hsl(-120 100% 50%)")).toBe("#0000FF");
   });
-});
-
-describe("isCustomThemeColorToken", () => {
-  it("identifies bracketed custom color tokens", () => {
-    expect(isCustomThemeColorToken("[#FF6D66]")).toBe(true);
-    expect(isCustomThemeColorToken("palette-primary")).toBe(false);
-    expect(isCustomThemeColorToken(undefined)).toBe(false);
+  it("keeps the chosen channel and falls back for an unavailable identifier", () => {
+    expect(
+      getThemeColorHexValue(
+        { colorId: "removed", channel: "foreground" },
+        document
+      )
+    ).toBe("#000000");
+    expect(
+      getDefaultForegroundColor({ colorId: "ocean", channel: "background" })
+    ).toEqual({ colorId: "ocean", channel: "foreground" });
   });
-});
-
-describe("getThemeColorCssValue", () => {
-  it("returns direct css variables for base palette tokens", () => {
-    expect(getThemeColorCssValue("palette-primary")).toBe(
-      "var(--colors-palette-primary)"
-    );
-    expect(getThemeColorCssValue("palette-quaternary-contrast")).toBe(
-      "var(--colors-palette-quaternary-contrast)"
-    );
+  it("preserves authored contrast overrides during layout conversion", () => {
+    const converted = migrateDynamicThemeSelections({
+      selectedColor: "palette-primary",
+      contrastingColor: "[#123456]",
+    });
+    expect(converted).toMatchObject({
+      colorId: "main-primary",
+      contrastingColor: "[#123456]",
+    });
+    expect(getBackgroundColorStyle(converted)?.color).toBe("#123456");
   });
-
-  it("resolves derived light/dark palette tokens", () => {
-    expect(getThemeColorCssValue("palette-primary-light")).toBe(
-      "hsl(from var(--colors-palette-primary) h s 98)"
-    );
-    expect(getThemeColorCssValue("palette-secondary-dark")).toBe(
-      "hsl(from var(--colors-palette-secondary) h s 20)"
-    );
-  });
-
-  it("supports white/black and bracketed custom values", () => {
+  it("does not resolve old palette tokens in the final runtime", () => {
+    expect(getThemeColorCssValue("palette-primary")).toBeUndefined();
+    expect(getThemeColorCssValue("palette-primary-light")).toBeUndefined();
     expect(getThemeColorCssValue("white")).toBe("white");
-    expect(getThemeColorCssValue("black")).toBe("black");
     expect(getThemeColorCssValue("[#00000099]")).toBe("#00000099");
-  });
-
-  it("returns undefined for empty values", () => {
     expect(getThemeColorCssValue(undefined)).toBeUndefined();
   });
-});
-
-describe("getThemeColorHexValue", () => {
-  const streamDocument = {
-    __: {
-      theme: JSON.stringify({
-        "--colors-palette-primary": "#341A1F",
-        "--colors-palette-secondary": "#111418",
-        "--colors-palette-quaternary-contrast": "#F5F5F5",
-      }),
-    },
-  };
-
-  it("supports literal and bracketed colors", () => {
-    expect(getThemeColorHexValue("white", streamDocument)).toBe("#FFFFFF");
-    expect(getThemeColorHexValue("black", streamDocument)).toBe("#000000");
-    expect(getThemeColorHexValue("[#ff6d66]", streamDocument)).toBe("#FF6D66");
-    expect(getThemeColorHexValue("[#00000099]", streamDocument)).toBe(
-      "#000000"
-    );
-  });
-
-  it("resolves base palette tokens from the published theme", () => {
-    expect(getThemeColorHexValue("palette-primary", streamDocument)).toBe(
-      "#341A1F"
-    );
-    expect(
-      getThemeColorHexValue("palette-quaternary-contrast", streamDocument)
-    ).toBe("#F5F5F5");
-  });
-
-  it("derives light and dark palette tokens from the published theme", () => {
-    expect(getThemeColorHexValue("palette-primary-light", streamDocument)).toBe(
-      "#FCF8F9"
-    );
-    expect(
-      getThemeColorHexValue("palette-secondary-dark", streamDocument)
-    ).toBe("#2A323C");
-  });
-
-  it("returns undefined when theme values are unavailable", () => {
-    expect(
-      getThemeColorHexValue("palette-primary", { __: { theme: "{}" } })
-    ).toBeUndefined();
-  });
-});
-
-describe("isDarkColor", () => {
-  it("uses explicit contrast before resolving a theme token", () => {
-    expect(
-      isDarkColor({
-        selectedColor: "palette-tertiary",
-        contrastingColor: "white",
-      })
-    ).toBe(true);
-  });
-});
-
-describe("getDefaultForegroundColor", () => {
-  const streamDocument = {
-    __: {
-      theme: JSON.stringify({
-        "--colors-palette-primary-contrast": "#FFFFFF",
-        "--colors-palette-secondary-contrast": "#000000",
-      }),
-    },
-  };
-
-  it("preserves a light configured contrast token", () => {
-    expect(
-      getDefaultForegroundColor(
-        {
-          selectedColor: "palette-primary",
-          contrastingColor: "palette-primary-contrast",
-        },
-        streamDocument
-      )
-    ).toStrictEqual({
-      selectedColor: "palette-primary-contrast",
-      contrastingColor: "black",
-    });
-  });
-
-  it("preserves a dark configured contrast token", () => {
-    expect(
-      getDefaultForegroundColor(
-        {
-          selectedColor: "palette-secondary",
-          contrastingColor: "palette-secondary-contrast",
-        },
-        streamDocument
-      )
-    ).toStrictEqual({
-      selectedColor: "palette-secondary-contrast",
-      contrastingColor: "white",
-    });
-  });
-
-  it("retains literal contrast handling", () => {
-    expect(
-      getDefaultForegroundColor({
-        selectedColor: "palette-primary",
-        contrastingColor: "black",
-      })
-    ).toStrictEqual({ selectedColor: "black", contrastingColor: "white" });
-    expect(
-      getDefaultForegroundColor({
-        selectedColor: "palette-primary",
-        contrastingColor: "white",
-      })
-    ).toStrictEqual({ selectedColor: "white", contrastingColor: "black" });
-  });
-
-  it("falls back to the surface darkness without a configured contrast", () => {
-    expect(getDefaultForegroundColor("palette-primary")).toStrictEqual({
-      selectedColor: "white",
-      contrastingColor: "black",
-    });
-  });
-});
-
-describe("getBackgroundColorStyle with resolved values", () => {
-  it("when resolved CSS values are available then they take precedence over authored tokens", () => {
-    expect(
-      getBackgroundColorStyle({
-        selectedColor: "palette-primary",
-        contrastingColor: "white",
-        selectedColorCss: "var(--colors-palette-primary)",
-        contrastingColorCss: "#FFFFFF",
-      })
-    ).toStrictEqual({
-      backgroundColor: "var(--colors-palette-primary)",
-      color: "#FFFFFF",
-    });
-  });
-
-  it.each([
-    {
-      name: "when background CSS is unavailable then its custom token is used",
-      selectedColorCss: "",
-      contrastingColorCss: "#FAEBCD",
-      expected: { backgroundColor: "#123ABC", color: "#FAEBCD" },
-    },
-    {
-      name: "when text CSS is unavailable then its custom token is used",
-      selectedColorCss: "#123ABC",
-      contrastingColorCss: "",
-      expected: { backgroundColor: "#123ABC", color: "#FAEBCD" },
-    },
-  ])("$name", ({ selectedColorCss, contrastingColorCss, expected }) => {
+  it("retains resolved values from field transforms", () => {
     expect(
       getBackgroundColorStyle({
         selectedColor: "[#123ABC]",
         contrastingColor: "[#FAEBCD]",
-        selectedColorCss,
-        contrastingColorCss,
+        selectedColorCss: "#112233",
+        contrastingColorCss: "#445566",
       })
-    ).toStrictEqual(expected);
+    ).toEqual({ background: "#112233", color: "#445566" });
   });
 });

@@ -1,3 +1,5 @@
+import type { ThemeData } from "../../types/themeData.ts";
+import { migrateThemeData } from "../../components/migrations/themeDataLabels.ts";
 import {
   Puck,
   Config,
@@ -11,7 +13,6 @@ import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { ThemeEditorRightSidebar } from "../puck/components/theme-editor-sidebars/ThemeEditorRightSidebar.tsx";
-import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
@@ -35,7 +36,6 @@ type InternalThemeEditorProps = {
   isLoading: boolean;
   templateMetadata: TemplateMetadata;
   publishTheme: (data: any) => void;
-  themeConfig?: ThemeConfig;
   saveThemeSaveState: (data: any) => void;
   themeHistories?: ThemeHistories;
   setThemeHistories: (themeHistory: ThemeHistories) => void;
@@ -53,7 +53,6 @@ export const InternalThemeEditor = ({
   isLoading,
   templateMetadata,
   publishTheme,
-  themeConfig,
   saveThemeSaveState,
   themeHistories,
   setThemeHistories,
@@ -108,11 +107,12 @@ export const InternalThemeEditor = ({
     });
   };
 
-  const handleThemeChange = (newThemeValues: Record<string, any>) => {
-    if (!themeHistoriesRef.current || !themeConfig) {
+  const handleThemeChange = (newThemeValues: ThemeData) => {
+    if (!themeHistoriesRef.current) {
       return;
     }
 
+    newThemeValues = migrateThemeData(newThemeValues);
     const newHistory = {
       histories: [
         ...themeHistoriesRef.current.histories.slice(
@@ -130,12 +130,7 @@ export const InternalThemeEditor = ({
         buildThemeLocalStorageKey(),
         lzstring.compress(JSON.stringify(newHistory.histories))
       );
-      updateThemeInEditor(
-        newThemeValues,
-        themeConfig,
-        true,
-        templateMetadata.customFonts
-      );
+      updateThemeInEditor(newThemeValues, true, templateMetadata.customFonts);
       setThemeHistories(newHistory);
       return;
     }
@@ -159,12 +154,7 @@ export const InternalThemeEditor = ({
       });
     }
 
-    updateThemeInEditor(
-      newThemeValues,
-      themeConfig,
-      true,
-      templateMetadata.customFonts
-    );
+    updateThemeInEditor(newThemeValues, true, templateMetadata.customFonts);
     setThemeHistories(newHistory);
   };
 
@@ -182,7 +172,6 @@ export const InternalThemeEditor = ({
     return (
       <ThemeEditorRightSidebar
         themeHistoriesRef={themeHistoriesRef}
-        themeConfig={themeConfig}
         onThemeChange={handleThemeChange}
         customFonts={templateMetadata.customFonts}
       />
@@ -209,7 +198,6 @@ export const InternalThemeEditor = ({
           componentOverlay: TransformedFieldTooltip,
           header: () => (
             <ThemeHeader
-              themeConfig={themeConfig}
               themeHistories={themeHistories}
               onPublishTheme={handlePublishTheme}
               isDevMode={templateMetadata.isDevMode}

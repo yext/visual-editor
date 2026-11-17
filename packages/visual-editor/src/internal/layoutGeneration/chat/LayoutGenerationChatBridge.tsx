@@ -1,3 +1,4 @@
+import { useThemeData } from "../../../hooks/useThemeData.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
 import {
   createUsePuck,
@@ -63,14 +64,19 @@ const LayoutGenerationChatCanvasBridge = ({
   streamDocument: StreamDocument;
 }) => {
   const getPuck = useGetPuck();
+  const theme = useThemeData();
   const intent = React.useContext(IntentPageGenerationContext);
   const intentChat = React.useContext(IntentPageGenerationChatContext);
 
   React.useEffect(() => {
-    if (!intentChat?.eligible || intentChat.status !== "PENDING") return;
+    if (!intentChat?.eligible || intentChat.status !== "PENDING") {
+      return;
+    }
     let cancelled = false;
     queueMicrotask(() => {
-      if (cancelled || !intentChat.workflow.openAssistantOnce()) return;
+      if (cancelled || !intentChat.workflow.openAssistantOnce()) {
+        return;
+      }
       getPuck().dispatch({
         type: "setUi",
         ui: {
@@ -102,7 +108,7 @@ const LayoutGenerationChatCanvasBridge = ({
         },
         inspect: (data) => {
           const catalog =
-            canvas.catalog ?? getGenerationCatalog(getPuck().config);
+            canvas.catalog ?? getGenerationCatalog(getPuck().config, theme);
           const manualSlotDifferences: {
             componentId: string;
             type: string;
@@ -145,7 +151,7 @@ const LayoutGenerationChatCanvasBridge = ({
         validateInitial: (data) => {
           const { config } = getPuck();
           validateInitialChatLayout(
-            canvas.catalog ?? getGenerationCatalog(config),
+            canvas.catalog ?? getGenerationCatalog(config, theme),
             data as any,
             (type) => config.components[type]?.label ?? type
           );
@@ -156,7 +162,7 @@ const LayoutGenerationChatCanvasBridge = ({
         readSectionLabels: () => {
           const puck = getPuck();
           const inventory = buildEditInventory(
-            canvas.catalog ?? getGenerationCatalog(puck.config),
+            canvas.catalog ?? getGenerationCatalog(puck.config, theme),
             puck.appState.data as any
           );
           return Object.fromEntries(
@@ -220,13 +226,13 @@ const LayoutGenerationChatCanvasBridge = ({
         },
         validate: (data, candidate) => {
           const catalog =
-            canvas.catalog ?? getGenerationCatalog(getPuck().config);
+            canvas.catalog ?? getGenerationCatalog(getPuck().config, theme);
           assertAuthoredPreserved(catalog, data as any, candidate as any);
         },
         materializeFullPageUpdate: (baseline, step) => {
           const puck = getPuck();
           return applyFullPageUpdateStep(
-            canvas.catalog ?? getGenerationCatalog(puck.config),
+            canvas.catalog ?? getGenerationCatalog(puck.config, theme),
             baseline,
             step,
             (permission, component) =>
@@ -237,7 +243,8 @@ const LayoutGenerationChatCanvasBridge = ({
         },
         materializeSection: (baseline, task, result) => {
           const puck = getPuck();
-          const catalog = canvas.catalog ?? getGenerationCatalog(puck.config);
+          const catalog =
+            canvas.catalog ?? getGenerationCatalog(puck.config, theme);
           return materializeSectionEdit(catalog, baseline, task, result, {
             can: (permission, component) =>
               puck.getPermissions(
@@ -247,13 +254,15 @@ const LayoutGenerationChatCanvasBridge = ({
         },
         preserveSectionResolution: (resolved, candidate) =>
           preserveSectionEditResolution(
-            canvas.catalog ?? getGenerationCatalog(getPuck().config),
+            canvas.catalog ?? getGenerationCatalog(getPuck().config, theme),
             resolved,
             candidate
           ),
         preview: (data, options) => {
           const before = getPuck().appState.data;
-          if (options?.follow !== false) follower.follow(before, data);
+          if (options?.follow !== false) {
+            follower.follow(before, data);
+          }
           getPuck().dispatch({
             type: "setData",
             data: (previous) => reusePreviewData(previous, data),
@@ -288,7 +297,7 @@ const LayoutGenerationChatCanvasBridge = ({
           canvas.readySections(appState.data, data);
         },
       }),
-    [canvas, getPuck, streamDocument, intent, follower]
+    [canvas, getPuck, streamDocument, intent, follower, theme]
   );
   // Detaching the canvas can finalize a preview; cancel its pending scroll too.
   React.useEffect(() => () => follower.stop(), [follower]);

@@ -165,6 +165,7 @@ export const StyledTextComponent = <
       >
         <StyledTextElement
           as={props.tag}
+          typographyId={fontOptions.typographyId}
           align={alignment}
           color={fontOptions.color}
           style={getStyledTextStyle(fontOptions)}

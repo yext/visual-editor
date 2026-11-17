@@ -1,3 +1,4 @@
+import { themeVariable } from "./dynamicTheme.ts";
 import { getThemeValue } from "./getThemeValue.ts";
 import { type ThemeColor } from "./themeConfigOptions.ts";
 import { type StreamDocument } from "./types/StreamDocument.ts";
@@ -187,13 +188,19 @@ export const getContrastingColor = (
 };
 
 /**
- * Resolves a ThemeColor token to a concrete CSS color value.
- * Supports base palette/contrast tokens, derived dark/light palette tokens,
- * literal white/black, and bracketed custom colors.
+ * Resolves a shared color reference or a component-authored literal to CSS.
  */
 export const getThemeColorCssValue = (
-  colorToken?: ThemeColor | string
+  colorToken?: ThemeColor | string,
+  solid = false
 ): string | undefined => {
+  if (
+    colorToken &&
+    typeof colorToken === "object" &&
+    colorToken.colorId !== undefined
+  ) {
+    return `var(${themeVariable("colors", colorToken.colorId, `${colorToken.channel}${solid ? "-solid" : ""}`)}, var(--ve-default-${solid ? "solid" : "color"}-${colorToken.channel}))`;
+  }
   const normalizedColorToken = normalizeThemeColorToken(colorToken);
   if (!normalizedColorToken) {
     return undefined;
@@ -210,16 +217,9 @@ export const getThemeColorCssValue = (
     return normalizedColorToken.slice(1, -1);
   }
 
-  const paletteMatch = normalizedColorToken.match(
-    /^palette-(primary|secondary|tertiary|quaternary)-(light|dark)$/
-  );
-  if (paletteMatch) {
-    const [, palette, tone] = paletteMatch;
-    const lightness = tone === "light" ? "98" : "20";
-    return `hsl(from var(--colors-palette-${palette}) h s ${lightness})`;
-  }
-
-  return `var(--colors-${normalizedColorToken})`;
+  return isResolvedCssColor(normalizedColorToken)
+    ? normalizedColorToken
+    : undefined;
 };
 
 export const isCustomThemeColorToken = (colorToken?: string): boolean => {
@@ -237,6 +237,9 @@ export const normalizeThemeColorToken = (
     return color === "default" ? undefined : color;
   }
 
+  if (color.colorId !== undefined) {
+    return getThemeColorCssValue(color);
+  }
   return color.selectedColor === "default" ? undefined : color.selectedColor;
 };
 
@@ -257,7 +260,7 @@ export const getResolvedTextColorStyle = (
     return { color };
   }
 
-  const resolvedColor = getThemeColorCssValue(color);
+  const resolvedColor = getThemeColorCssValue(color, true);
   return resolvedColor ? { color: resolvedColor } : undefined;
 };
 
@@ -289,46 +292,41 @@ const normalizeHexColor = (colorValue?: string): string | undefined => {
     return normalizedHex;
   }
 
-  if (/^#[0-9A-F]{3}$/.test(normalizedHex)) {
+  if (/^#[0-9A-F]{3,4}$/.test(normalizedHex)) {
     return `#${normalizedHex[1]}${normalizedHex[1]}${normalizedHex[2]}${normalizedHex[2]}${normalizedHex[3]}${normalizedHex[3]}`;
   }
 
+  const hsl = /^hsla?\(([^)]+)\)$/.exec(colorValue);
+  if (hsl) {
+    const parts = hsl[1]
+      .trim()
+      .split(/\s*[,/]\s*|\s+/)
+      .map(Number.parseFloat);
+    if (parts.length >= 3 && parts.every(Number.isFinite)) {
+      return hslToHex(parts[0], parts[1], parts[2]);
+    }
+  }
+  const rgb = /^rgba?\(([^)]+)\)$/.exec(colorValue);
+  if (rgb) {
+    const parts = rgb[1]
+      .trim()
+      .split(/\s*[,/]\s*|\s+/)
+      .slice(0, 3);
+    if (parts.length === 3) {
+      const numbers = parts.map(
+        (part) => Number.parseFloat(part) * (part.endsWith("%") ? 2.55 : 1)
+      );
+      if (
+        numbers.every(
+          (number) => Number.isFinite(number) && number >= 0 && number <= 255
+        )
+      ) {
+        return `#${numbers.map((number) => Math.round(number).toString(16).padStart(2, "0")).join("")}`.toUpperCase();
+      }
+    }
+  }
   const computedStyleHex = convertComputedStyleColorToHex(colorValue);
   return computedStyleHex || undefined;
-};
-
-const rgbToHsl = (rgb: number[]) => {
-  const [r, g, b] = rgb.map((value) => value / 255);
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const lightness = (max + min) / 2;
-  const delta = max - min;
-
-  if (delta === 0) {
-    return { hue: 0, saturation: 0, lightness: lightness * 100 };
-  }
-
-  const saturation =
-    lightness > 0.5 ? delta / (2 - max - min) : delta / (max + min);
-
-  let hue = 0;
-  switch (max) {
-    case r:
-      hue = (g - b) / delta + (g < b ? 6 : 0);
-      break;
-    case g:
-      hue = (b - r) / delta + 2;
-      break;
-    default:
-      hue = (r - g) / delta + 4;
-      break;
-  }
-
-  return {
-    hue: hue * 60,
-    saturation: saturation * 100,
-    lightness: lightness * 100,
-  };
 };
 
 const hueToRgb = (p: number, q: number, t: number) => {
@@ -354,7 +352,7 @@ const hueToRgb = (p: number, q: number, t: number) => {
 };
 
 const hslToHex = (hue: number, saturation: number, lightness: number) => {
-  const normalizedHue = hue / 360;
+  const normalizedHue = (((hue % 360) + 360) % 360) / 360;
   const normalizedSaturation = saturation / 100;
   const normalizedLightness = lightness / 100;
 
@@ -386,29 +384,6 @@ const hslToHex = (hue: number, saturation: number, lightness: number) => {
 };
 
 /**
- * Derives a concrete hex color for palette light/dark variants by reading the
- * base palette token, preserving its hue and saturation, and replacing only
- * the lightness component.
- */
-const getDerivedPaletteHexColor = (
-  baseColorToken: string,
-  lightness: number,
-  streamDocument?: StreamDocument | Record<string, any>
-): string | undefined => {
-  const baseColorHex = normalizeHexColor(
-    getThemeValue(`--colors-${baseColorToken}`, streamDocument)
-  );
-  const baseColorRgb = baseColorHex ? hexToRGB(baseColorHex) : undefined;
-
-  if (!baseColorRgb) {
-    return undefined;
-  }
-
-  const { hue, saturation } = rgbToHsl(baseColorRgb);
-  return hslToHex(hue, saturation, lightness);
-};
-
-/**
  * Resolves a ThemeColor token to a concrete hex color value in both browser and SSR contexts.
  */
 export const getThemeColorHexValue = (
@@ -432,21 +407,20 @@ export const getThemeColorHexValue = (
     return directHex;
   }
 
-  const derivedPaletteMatch = normalizedColorToken.match(
-    /^palette-(primary|secondary|tertiary|quaternary)-(light|dark)$/
-  );
-  if (derivedPaletteMatch) {
-    const [, paletteName, tone] = derivedPaletteMatch;
-    return getDerivedPaletteHexColor(
-      `palette-${paletteName}`,
-      tone === "light" ? 98 : 20,
-      streamDocument
-    );
+  if (
+    colorToken &&
+    typeof colorToken === "object" &&
+    colorToken.colorId !== undefined
+  ) {
+    const resolved =
+      getThemeValue(
+        themeVariable("colors", colorToken.colorId, colorToken.channel),
+        streamDocument
+      ) ??
+      getThemeValue(`--ve-default-color-${colorToken.channel}`, streamDocument);
+    return normalizeHexColor(resolved);
   }
-
-  return normalizeHexColor(
-    getThemeValue(`--colors-${normalizedColorToken}`, streamDocument)
-  );
+  return normalizeHexColor(normalizedColorToken);
 };
 
 /** Returns true when the color needs a white foreground for readable text. */
@@ -473,26 +447,14 @@ export const isDarkColor = (
     return false;
   }
 
-  const colorHex = getThemeColorHexValue(normalizedColorToken, streamDocument);
+  const colorHex = getThemeColorHexValue(color, streamDocument);
   const rgb = colorHex ? hexToRGB(colorHex) : undefined;
   const luminance = rgb ? luminanceFromRGB(rgb) : undefined;
   if (luminance !== undefined) {
     return 1.05 / (luminance + 0.05) >= (luminance + 0.05) / 0.05;
   }
 
-  const contrastColor = getThemeValue(
-    `--colors-${normalizedColorToken}-contrast`,
-    streamDocument
-  );
-  if (contrastColor) {
-    return contrastColor.toUpperCase() === "#FFFFFF";
-  }
-
-  return (
-    normalizedColorToken === "palette-primary" ||
-    normalizedColorToken === "palette-secondary" ||
-    normalizedColorToken === "palette-quaternary"
-  );
+  return false;
 };
 
 /** Returns a readable foreground color for a themed surface. */
@@ -500,6 +462,23 @@ export const getDefaultForegroundColor = (
   surfaceColor?: ThemeColor | string,
   streamDocument?: StreamDocument | Record<string, any>
 ): ThemeColor | undefined => {
+  if (
+    surfaceColor &&
+    typeof surfaceColor === "object" &&
+    surfaceColor.contrastingColor?.startsWith("[")
+  ) {
+    return {
+      selectedColor: surfaceColor.contrastingColor,
+      contrastingColor: "black",
+    };
+  }
+  if (
+    surfaceColor &&
+    typeof surfaceColor === "object" &&
+    surfaceColor.colorId !== undefined
+  ) {
+    return { colorId: surfaceColor.colorId, channel: "foreground" };
+  }
   if (!normalizeThemeColorToken(surfaceColor)) {
     return undefined;
   }
@@ -539,7 +518,9 @@ export const getSurfaceColorStyle = (
     fallbackBackgroundColor?: string;
     fallbackTextColor?: string;
   }
-): { backgroundColor?: string; color?: string } | undefined => {
+):
+  | { background?: string; backgroundColor?: string; color?: string }
+  | undefined => {
   const backgroundColor = getThemeColorCssValue(surfaceColor);
   const foregroundColor = getThemeColorCssValue(
     getDefaultForegroundColor(surfaceColor, streamDocument)
@@ -553,9 +534,7 @@ export const getSurfaceColorStyle = (
   }
 
   return {
-    ...(resolvedBackgroundColor
-      ? { backgroundColor: resolvedBackgroundColor }
-      : {}),
+    ...(resolvedBackgroundColor ? { background: resolvedBackgroundColor } : {}),
     ...(resolvedTextColor ? { color: resolvedTextColor } : {}),
   };
 };
@@ -565,72 +544,34 @@ export const getSurfaceColorStyle = (
  * @param color a ThemeColor object
  * @returns a class string containing the selected background class and contrasting text class.
  */
-export const getBackgroundColorClasses = (color?: ThemeColor): string => {
-  return [
-    color?.selectedColor && !isCustomThemeColorToken(color.selectedColor)
-      ? `bg-${color.selectedColor}`
-      : undefined,
-    color?.contrastingColor && !isCustomThemeColorToken(color.contrastingColor)
-      ? `text-${color.contrastingColor}`
-      : undefined,
-  ]
-    .filter((value): value is string => !!value)
-    .join(" ");
-};
+export const getBackgroundColorClasses = (_color?: ThemeColor): string => "";
 
-/**
- * Resolves inline styles for resolved colors and bracketed custom colors in background contexts.
- * @param color a ThemeColor or ResolvedThemeColor object
- * @returns inline background/text color styles, e.g. `{ backgroundColor: "#FF6D66" }`
- */
 export const getBackgroundColorStyle = (
   color?: ThemeColor | ResolvedThemeColor
-): { backgroundColor?: string; color?: string } | undefined => {
-  const backgroundColor =
-    (color && "selectedColorCss" in color && color.selectedColorCss) ||
-    (isCustomThemeColorToken(color?.selectedColor)
-      ? getThemeColorCssValue(color?.selectedColor)
-      : undefined);
-  const textColor =
-    (color && "contrastingColorCss" in color && color.contrastingColorCss) ||
-    (isCustomThemeColorToken(color?.contrastingColor)
-      ? getThemeColorCssValue(color?.contrastingColor)
-      : undefined);
-
-  if (!backgroundColor && !textColor) {
+): { background?: string; color?: string } | undefined => {
+  if (!color) {
     return undefined;
   }
-
   return {
-    ...(backgroundColor ? { backgroundColor } : {}),
-    ...(textColor ? { color: textColor } : {}),
+    background:
+      "selectedColorCss" in color
+        ? color.selectedColorCss
+        : getThemeColorCssValue(color),
+    color:
+      "contrastingColorCss" in color
+        ? color.contrastingColorCss
+        : getThemeColorCssValue(getDefaultForegroundColor(color)),
   };
 };
 
-/**
- * Resolves ThemeColor class for text contexts.
- * @param color a ThemeColor object
- * @returns the selected text color class, if present.
- */
-export const getTextColorClass = (color?: ThemeColor): string | undefined => {
-  if (!color?.selectedColor || isCustomThemeColorToken(color.selectedColor)) {
-    return undefined;
-  }
+export const getTextColorClass = (_color?: ThemeColor): string | undefined =>
+  undefined;
 
-  return `text-${color.selectedColor}`;
-};
-
-/**
- * Resolves inline styles for bracketed custom colors in text contexts.
- * @param color a ThemeColor object
- * @returns inline text color styles, e.g. `{ color: "#FF6D66" }`
- */
 export const getTextColorStyle = (
   color?: ThemeColor
 ): { color?: string } | undefined => {
-  if (!isCustomThemeColorToken(color?.selectedColor)) {
+  if (!color) {
     return undefined;
   }
-
-  return { color: getThemeColorCssValue(color?.selectedColor) };
+  return { color: getThemeColorCssValue(color, true) };
 };

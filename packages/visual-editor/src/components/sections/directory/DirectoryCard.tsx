@@ -7,11 +7,8 @@ import {
 } from "../../../hooks/useDocument.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
-import {
-  backgroundColors,
-  ThemeColor,
-} from "../../../utils/themeConfigOptions.ts";
-import { deepMerge } from "../../../utils/themeResolver.ts";
+import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
+import { deepMerge } from "../../../utils/deepMerge.ts";
 import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
 import {
   mergeMeta,
@@ -102,9 +99,7 @@ export const defaultDirectoryCardSlotData = (
         showPhoneNumber: true,
       },
       styles: {
-        backgroundColor:
-          existingCardStyle?.backgroundColor ??
-          backgroundColors.background1.value,
+        backgroundColor: existingCardStyle?.backgroundColor ?? undefined,
       },
       slots: {
         HeadingSlot: [
@@ -201,7 +196,7 @@ export const defaultDirectoryCardSlotData = (
                   existingHoursStyles?.showCurrentStatus ?? true,
                 className:
                   existingHoursStyles?.className ??
-                  "mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full",
+                  "mb-2 font-semibold   h-full",
               },
               parentData: {
                 field: "profile.hours",
@@ -237,6 +232,7 @@ export type DirectoryCardProps = {
   styles: {
     /** The background color of each directory card */
     backgroundColor?: ThemeColor;
+    actionId?: string;
   };
 
   /** @internal */
@@ -380,8 +376,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
           data: props.data,
           styles: {
             backgroundColor:
-              sharedCardProps?.cardStyles.backgroundColor ||
-              backgroundColors.background1.value,
+              sharedCardProps?.cardStyles.backgroundColor || undefined,
           },
           slots: newSlotData,
         } satisfies DirectoryCardProps,
@@ -411,12 +406,13 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
 
   return (
     <Background
-      className="h-full flex flex-col p-8 border border-gray-400 rounded gap-4"
+      className="h-full flex flex-col p-8 border-[length:var(--ve-card-border-width)] border-gray-400 rounded-[var(--ve-card-border-radius)] gap-4"
       background={styles.backgroundColor}
     >
       <TemplatePropsContext.Provider value={childDocumentContext}>
         <div className="mb-2 max-w-full w-full">
           <MaybeLink
+            actionId={styles.actionId}
             eventName={`link${index}`}
             alwaysHideCaret={true}
             className="text-wrap break-words block w-full"
@@ -433,7 +429,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
           <slots.PhoneSlot style={{ height: "auto" }} />
         )}
         {data.showAddress && resolvedChild?.address && (
-          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
+          <div className="  ">
             <slots.AddressSlot style={{ height: "auto" }} />
           </div>
         )}
@@ -453,6 +449,11 @@ const directoryCardFields: YextFields<DirectoryCardProps> = {
     type: "object",
     label: msg("fields.styles", "Styles"),
     objectFields: {
+      actionId: {
+        type: "themeCollection",
+        collection: "actions",
+        label: "Action preset",
+      },
       backgroundColor: {
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
@@ -484,7 +485,7 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
       showPhoneNumber: true,
     },
     styles: {
-      backgroundColor: backgroundColors.background1.value,
+      backgroundColor: undefined,
     },
     slots: {
       HeadingSlot: [],

@@ -1,4 +1,3 @@
-import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
@@ -126,7 +125,7 @@ const comprehensiveCTAValue = (
       ...overrides.data,
     },
     styles: {
-      variant: "primary",
+      actionId: "main-primary",
       presetImage: "app-store",
       color: undefined,
       ...otherStyleOverrides,
@@ -282,11 +281,11 @@ describe("ComprehensiveCTAField", () => {
     expect(screen.queryByText("Link Styles")).toBeNull();
   });
 
-  it("shows link style controls when variant is link", () => {
+  it("shows link style controls when the action preset presents a link", () => {
     renderField(
       comprehensiveCTAValue({
         styles: {
-          variant: "link",
+          actionId: "main-link",
         },
       })
     );
@@ -319,7 +318,7 @@ describe("ComprehensiveCTAField", () => {
         ariaLabel: { defaultValue: "Button Aria" },
       },
       styles: {
-        variant: "secondary",
+        actionId: "main-secondary",
         presetImage: "app-store",
         button: {
           fontFamily: "default",

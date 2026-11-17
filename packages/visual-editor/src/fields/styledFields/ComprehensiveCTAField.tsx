@@ -1,12 +1,10 @@
 import React from "react";
+import { useThemeData } from "../../hooks/useThemeData.ts";
+import { resolveThemeEntry } from "../../utils/dynamicTheme.ts";
 import { BaseField, FieldLabel, type FieldProps } from "@puckeditor/core";
-import {
-  isCtaVariantWithColor,
-  type CTAVariant,
-} from "../../components/atoms/cta.tsx";
 import { getCTAType } from "../../internal/utils/ctaFieldUtils.ts";
 import { type MsgString, pt } from "../../utils/i18n/platform.ts";
-import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { PresetImageType, TranslatableString } from "../../types/types.ts";
 import { type YextCTAField } from "../CTASelectorField.tsx";
 import { type YextObjectField } from "../fields.ts";
@@ -39,15 +37,14 @@ export type ComprehensiveCTAValue = {
     ariaLabel?: TranslatableString;
   };
   styles: {
-    /** The visual variant of the CTA. */
-    variant: CTAVariant;
+    actionId?: string;
     /** The preset image to use when cta.selectedType is "presetImage". */
     presetImage?: PresetImageType;
     /** The color of the button or link when cta.selectedType is not "presetImage". */
     color?: ThemeColor;
-    /** The theme styling when the variant is "primary" or "secondary" */
+    /** Local overrides for button presentation. */
     button?: StyledButtonValue;
-    /** The theme styling when the variant is "link". */
+    /** Local overrides for link presentation. */
     link?: StyledLinkValue;
   };
   /** @internal Additional class names to pass to the underlying component. */
@@ -106,7 +103,6 @@ export const defaultComprehensiveCTAValue: ComprehensiveCTAValue = {
     ariaLabel: { defaultValue: "Button" },
   },
   styles: {
-    variant: "primary",
     presetImage: "app-store",
     button: defaultButtonStyleValue,
     link: defaultLinkStyleValue,
@@ -154,18 +150,21 @@ export function ComprehensiveCTAFieldOverride({
   onChange,
 }: ComprehensiveCTAFieldProps) {
   const currentValue = normalizeComprehensiveCTAValue(value);
+  const theme = useThemeData();
+  const presentation = resolveThemeEntry(
+    theme.actions,
+    currentValue.styles.actionId
+  ).presentation;
 
   const actionType = currentValue.data.actionType;
   const ctaType = getCTAType(currentValue.data.cta).ctaType;
   const effectiveCtaType = actionType === "button" ? "textAndLink" : ctaType;
   const showButtonFields = actionType === "button";
   const showPresetImageField = effectiveCtaType === "presetImage";
-  const showColorField =
-    isCtaVariantWithColor(currentValue.styles.variant) && !showPresetImageField;
+  const showColorField = !showPresetImageField;
   const showButtonStyleFields =
-    !showPresetImageField && currentValue.styles.variant !== "link";
-  const showLinkStyleFields =
-    !showPresetImageField && currentValue.styles.variant === "link";
+    !showPresetImageField && presentation === "button";
+  const showLinkStyleFields = !showPresetImageField && presentation === "link";
 
   const dataField = React.useMemo<
     YextObjectField<ComprehensiveCTAValue["data"]>
@@ -252,10 +251,10 @@ export function ComprehensiveCTAFieldOverride({
     () => ({
       type: "object",
       objectFields: {
-        variant: {
-          type: "radio",
-          label: pt("fields.variant", "Variant"),
-          options: ThemeOptions.CTA_VARIANT,
+        actionId: {
+          type: "themeCollection",
+          collection: "actions",
+          label: "Action preset",
           visible: !showPresetImageField,
         },
         presetImage: {
@@ -272,17 +271,27 @@ export function ComprehensiveCTAFieldOverride({
         },
         button: {
           type: "styledButton",
+          inheritedFontFamily: resolveThemeEntry(
+            theme.actions,
+            currentValue.styles.actionId
+          ).fontFamily,
           label: pt("fields.buttonStyles", "Button Styles"),
           visible: showButtonStyleFields,
         },
         link: {
           type: "styledLink",
+          inheritedFontFamily: resolveThemeEntry(
+            theme.actions,
+            currentValue.styles.actionId
+          ).fontFamily,
           label: pt("fields.linkStyles", "Link Styles"),
           visible: showLinkStyleFields,
         },
       },
     }),
     [
+      theme,
+      currentValue.styles.actionId,
       showButtonStyleFields,
       showColorField,
       showLinkStyleFields,
@@ -319,7 +328,49 @@ export function ComprehensiveCTAFieldOverride({
                 onChange(
                   {
                     ...currentValue,
-                    styles: nextValue,
+                    styles: (() => {
+                      const next = { ...nextValue };
+                      const changed =
+                        JSON.stringify(next.button) !==
+                        JSON.stringify(currentValue.styles.button)
+                          ? "button"
+                          : JSON.stringify(next.link) !==
+                              JSON.stringify(currentValue.styles.link)
+                            ? "link"
+                            : undefined;
+                      if (changed && next[changed]) {
+                        const {
+                          fontFamily,
+                          fontSize,
+                          fontWeight,
+                          fontStyle,
+                          textTransform,
+                          letterSpacing,
+                        } = next[changed]!;
+                        const shared = {
+                          fontFamily,
+                          fontSize,
+                          fontWeight,
+                          fontStyle,
+                          textTransform,
+                          letterSpacing,
+                        };
+                        if (changed === "button") {
+                          next.link = {
+                            ...defaultLinkStyleValue,
+                            ...currentValue.styles.link,
+                            ...shared,
+                          };
+                        } else {
+                          next.button = {
+                            ...defaultButtonStyleValue,
+                            ...currentValue.styles.button,
+                            ...shared,
+                          };
+                        }
+                      }
+                      return next;
+                    })(),
                   },
                   uiState
                 )

@@ -46,10 +46,7 @@ export const HoursTableAtom = (props: HoursTableAtomProps) => {
         reopenDate: t("reopenDate", "Reopen Date"),
         timeFormatLocale: i18n.language,
       }}
-      className={themeManagerCn(
-        "text-body-fontSize font-body-fontWeight font-body-fontFamily",
-        className ?? ""
-      )}
+      className={themeManagerCn("  ", className ?? "")}
     />
   );
 };

@@ -1,4 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { migrate, type MigrationRegistry } from "../../utils/migrate.ts";
+import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { v4 as uuidv4 } from "uuid";
+import {
+  migrateThemeData,
+  migrateThemeHistories,
+} from "../../components/migrations/themeDataLabels.ts";
+import { useCallback, useEffect, useState } from "react";
 import {
   InitialHistory,
   Config,
@@ -9,13 +17,13 @@ import {
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
-import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { InternalThemeEditor } from "./InternalThemeEditor.tsx";
 import { useThemeMessageSenders } from "../hooks/theme/useMessageSenders.ts";
 import { useThemeMessageReceivers } from "../hooks/theme/useMessageReceivers.ts";
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
-import { ThemeHistories, ThemeHistory, ThemeData } from "../types/themeData.ts";
+import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
+import { ThemeData } from "../../types/themeData.ts";
 import { useLayoutLocalStorage } from "../hooks/layout/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
@@ -30,9 +38,9 @@ type ThemeEditorProps = {
   templateMetadata: TemplateMetadata;
   layoutData: Data;
   themeData: ThemeData;
-  themeConfig: ThemeConfig | undefined;
   localDev: boolean;
   metadata?: Metadata;
+  sectionLibraryMigrationRegistry?: MigrationRegistry;
 };
 
 export const ThemeEditor = (props: ThemeEditorProps) => {
@@ -41,10 +49,11 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     templateMetadata,
     layoutData,
     themeData,
-    themeConfig,
     localDev,
     metadata,
+    sectionLibraryMigrationRegistry,
   } = props;
+  const streamDocument = useDocument();
 
   const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
     useCommonMessageSenders();
@@ -101,7 +110,18 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
         .filter((h) => h?.state)
         .map((h) => {
           // strip ui state
-          return { id: h.id, state: { data: { ...h.state.data } } };
+          return {
+            id: h.id,
+            state: {
+              data: migrate(
+                puckConfig,
+                h.state.data,
+                streamDocument,
+                migrationRegistry,
+                sectionLibraryMigrationRegistry
+              ),
+            },
+          };
         });
       const localHistoryIndex = histories.length - 1;
       if (localHistoryIndex >= 0) {
@@ -202,20 +222,42 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       index = themeData ? 1 : 0;
     }
 
-    if (histories) {
-      setThemeHistories({
-        histories: histories.map((themeHistory) => ({
-          ...themeHistory,
-          data: themeConfig
-            ? updateThemeWithCustomFontAssets({
-                themeConfig,
-                themeValues: themeHistory.data,
-                customFonts: templateMetadata.customFonts,
-              })
-            : themeHistory.data,
-        })),
-        index,
-      });
+    if (histories?.length) {
+      const needsMigration =
+        histories[index]?.data?.version !== 1 ||
+        (index === 0 &&
+          !themeSaveState &&
+          JSON.parse(metadata?.streamDocument?.__?.theme ?? "{}").version !==
+            1);
+      const migratedHistories = migrateThemeHistories(histories).map(
+        (entry) => ({
+          ...entry,
+          data: updateThemeWithCustomFontAssets({
+            themeValues: migrateThemeData(entry.data),
+            customFonts: templateMetadata.customFonts,
+          }),
+        })
+      );
+
+      if (needsMigration) {
+        const migrated = { id: uuidv4(), data: migratedHistories[index].data };
+        migratedHistories.splice(index + 1, 0, migrated);
+        index += 1;
+        if (localDev || templateMetadata.isDevMode) {
+          window.localStorage.setItem(
+            buildThemeLocalStorageKey(),
+            lzstring.compress(JSON.stringify(migratedHistories))
+          );
+        } else {
+          saveThemeSaveState({
+            payload: {
+              history: JSON.stringify(migrated.data),
+              hash: migrated.id,
+            },
+          });
+        }
+      }
+      setThemeHistories({ histories: migratedHistories, index });
     }
 
     setThemeHistoryFetched(true);
@@ -229,15 +271,14 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
   // Log THEME_HISTORIES on load and update theme in editor to reflect save state
   useEffect(() => {
     devLogger.logData("THEME_HISTORIES", themeHistories);
-    if (themeHistories && themeConfig) {
+    if (themeHistories) {
       updateThemeInEditor(
         themeHistories.histories[themeHistories.index]?.data as ThemeData,
-        themeConfig,
         true,
         templateMetadata.customFonts
       );
     }
-  }, [themeHistories, themeConfig]);
+  }, [themeHistories]);
 
   useEffect(() => {
     if (!themeSaveStateFetched) {
@@ -297,7 +338,6 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       isLoading={isLoading}
       templateMetadata={templateMetadata}
       publishTheme={publishTheme}
-      themeConfig={themeConfig}
       saveThemeSaveState={saveThemeSaveState}
       themeHistories={themeHistories}
       setThemeHistories={setThemeHistories}

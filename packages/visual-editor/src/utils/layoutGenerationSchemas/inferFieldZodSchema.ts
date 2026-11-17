@@ -1,3 +1,4 @@
+import type { ThemeData } from "../../types/themeData.ts";
 import { z } from "zod";
 import { canonicalWidthOptions } from "../selectorOptions.ts";
 import type { YextFieldDefinition } from "../../fields/fields.ts";
@@ -33,7 +34,7 @@ export function appendSchemaInstructions<T extends z.ZodType>(
  */
 export const inferFieldZodSchema = (
   field: YextFieldDefinition,
-  options: { defaultValue?: unknown } = {}
+  options: { defaultValue?: unknown; themeData?: ThemeData } = {}
 ): z.ZodType => {
   const fields = normalizeGenerationFields({ value: field });
   validateSingleChildSlots("Field", fields, false);
@@ -43,7 +44,8 @@ export const inferFieldZodSchema = (
     fields,
     { value: options.defaultValue },
     undefined,
-    omissions
+    omissions,
+    options.themeData
   ).shape.value as z.ZodType | undefined;
 
   if (!schema || omissions.length) {

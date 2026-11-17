@@ -1,9 +1,11 @@
-import React, { createContext, ReactNode, useContext } from "react";
-import { ThemeColor } from "../utils/themeConfigOptions.ts";
+import { createContext, ReactNode, useContext } from "react";
+type BackgroundColor = {
+  selectedColor: string;
+  contrastingColor: string;
+  isDarkColor: boolean;
+};
 
-const BackgroundContext = createContext<Required<ThemeColor> | undefined>(
-  undefined
-);
+const BackgroundContext = createContext<BackgroundColor | undefined>(undefined);
 
 export const useBackground = () => useContext(BackgroundContext);
 
@@ -12,7 +14,7 @@ export const BackgroundProvider = ({
   value,
 }: {
   children: ReactNode;
-  value: Required<ThemeColor>;
+  value: BackgroundColor;
 }) => {
   return (
     <BackgroundContext.Provider value={value}>

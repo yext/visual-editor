@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { ThemeData } from "../../internal/types/themeData.ts";
+type ThemeData = Record<string, any>;
 import {
   constructFontSelectOptions,
   filterInUseFontRegistries,
@@ -35,13 +35,16 @@ describe("filterInUseFontRegistries", () => {
       themeData,
       defaultFonts
     );
-    expect(inUseGoogleFonts).toEqual(expected);
+    expect(inUseGoogleFonts).toEqual({
+      ...expected,
+      "Open Sans": defaultFonts["Open Sans"],
+    });
     expect(inUseCustomFonts).toEqual({});
   });
 
   it("returns empty registries when theme data is empty", () => {
     expect(filterInUseFontRegistries({}, defaultFonts)).toEqual({
-      inUseGoogleFonts: {},
+      inUseGoogleFonts: { "Open Sans": defaultFonts["Open Sans"] },
       inUseCustomFonts: {},
     });
   });
@@ -56,7 +59,9 @@ describe("filterInUseFontRegistries", () => {
       themeData,
       defaultFonts
     );
-    expect(inUseGoogleFonts).toEqual({});
+    expect(inUseGoogleFonts).toEqual({
+      "Open Sans": defaultFonts["Open Sans"],
+    });
     expect(inUseCustomFonts).toEqual({});
   });
 
@@ -85,6 +90,7 @@ describe("filterInUseFontRegistries", () => {
       defaultFonts
     );
     expect(inUseGoogleFonts).toEqual({
+      "Open Sans": defaultFonts["Open Sans"],
       Adamina: {
         italics: false,
         weights: [400],

@@ -11,7 +11,7 @@ describe("filterMaxWidths", () => {
     const styleEl = document.createElement("style");
     styleEl.textContent = `
       .components {
-        --maxWidth-pageSection-contentWidth:1024px !important;
+        --ve-page-content-max-width:1024px !important;
       }
     `;
 
@@ -24,7 +24,7 @@ describe("filterMaxWidths", () => {
     const styleEl2 = document.createElement("style");
     styleEl2.textContent = `
       .components {
-        --maxWidth-pageSection-contentWidth:100px !important;
+        --ve-page-content-max-width:100px !important;
       }
     `;
 
@@ -37,7 +37,7 @@ describe("filterMaxWidths", () => {
     const styleEl3 = document.createElement("style");
     styleEl3.textContent = `
       .components {
-        --maxWidth-pageSection-contentWidth:2000px !important;
+        --ve-page-content-max-width:2000px !important;
       }
     `;
 
@@ -66,7 +66,7 @@ describe("getMaxWidthOptions", () => {
     themeStyle.id = "visual-editor-theme";
     themeStyle.textContent = `
       .components {
-        --maxWidth-pageSection-contentWidth:1024px !important;
+        --ve-page-content-max-width:1024px !important;
       }
     `;
     document.head.appendChild(themeStyle);

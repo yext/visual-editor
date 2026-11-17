@@ -1,3 +1,4 @@
+import type { ThemeData } from "../../types/themeData.ts";
 export type ThemeSaveState = {
   history: ThemeHistory;
   hash: string;
@@ -7,8 +8,6 @@ export type ThemeHistories = {
   histories: ThemeHistory[];
   index: number;
 };
-
-export type ThemeData = Record<string, any>;
 
 export type ThemeHistory = {
   data: ThemeData;

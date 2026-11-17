@@ -31,7 +31,7 @@ function resolveTypography(value?: Partial<BaseTextStyles>): CSSProperties {
 /** Converts authored text styling to a CSS object for its render component. */
 export function resolveStyledText(value?: StyledTextValue): CSSProperties {
   const style = resolveTypography(value);
-  const color = getThemeColorCssValue(value?.color);
+  const color = getThemeColorCssValue(value?.color, true);
   if (color) {
     style.color = color;
   }
@@ -52,13 +52,13 @@ export function resolveStyledButton(value?: StyledButtonValue): CSSProperties {
 
 /** Converts authored link typography and caret choice to CSS styles. */
 export function resolveStyledLink(value?: StyledLinkValue): CSSProperties {
-  const style: CSSProperties & { "--display-link-caret"?: string } =
+  const style: CSSProperties & { "--ve-action-caret"?: string } =
     resolveTypography(value);
   if (value?.letterSpacing && value.letterSpacing !== "default") {
     style.letterSpacing = value.letterSpacing;
   }
   if (value?.includeCaret && value.includeCaret !== "default") {
-    style["--display-link-caret"] = value.includeCaret;
+    style["--ve-action-caret"] = value.includeCaret;
   }
   return style;
 }

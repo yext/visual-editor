@@ -1,5 +1,3 @@
-import { themeResolver } from "../../utils/themeResolver.ts";
-import { defaultThemeConfig } from "../DefaultThemeConfig.ts";
 import {
   defaultThemeTailwindExtensions,
   VisualEditorThemeClassSafelist,
@@ -10,7 +8,7 @@ import {
 export default {
   content: ["./src/components/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
-    extend: themeResolver(defaultThemeTailwindExtensions, defaultThemeConfig),
+    extend: defaultThemeTailwindExtensions,
   },
   safelist: VisualEditorThemeClassSafelist,
   plugins: [],

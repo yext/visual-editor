@@ -1,5 +1,6 @@
 import { ThemeOptions } from "./themeConfigOptions.ts";
-import { TailwindConfig, ThemeConfig } from "./themeResolver.ts";
+import { TailwindConfig } from "../types/types.ts";
+import { ThemeConfig } from "../components/migrations/themeData.ts";
 
 const getColorOptions = () => {
   return [

@@ -1,3 +1,4 @@
+import { useThemeData } from "../../../hooks/useThemeData.ts";
 import { z } from "zod";
 import { generationSettingsSchema } from "../../../types/generationSettings.ts";
 import { generationPromptBundleSchema } from "../../../types/generationPrompts.ts";
@@ -37,6 +38,7 @@ export const LayoutGenerationProvider = ({
   localDev = false,
   children,
 }: LayoutGenerationProviderProps) => {
+  const theme = useThemeData();
   const scopeKey = JSON.stringify([
     metadata.siteId,
     metadata.templateId,
@@ -94,13 +96,21 @@ export const LayoutGenerationProvider = ({
             model,
             prompts: prompts!,
             generationSettings: generationSettings!,
-            catalog: getGenerationCatalog(config),
+            catalog: getGenerationCatalog(config, theme),
             locales: metadata.locales,
             transport: iframeModelTransport,
             diagnostics: consoleGenerationDiagnostics,
           }
         : null,
-    [enabled, model, config, metadata.locales, prompts, generationSettings]
+    [
+      enabled,
+      model,
+      config,
+      metadata.locales,
+      prompts,
+      generationSettings,
+      theme,
+    ]
   );
 
   const chat = useLayoutGenerationChat(

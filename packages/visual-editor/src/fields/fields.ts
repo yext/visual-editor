@@ -18,6 +18,7 @@ import type {
 } from "@puckeditor/core";
 import type { BasicSelectorField } from "./BasicSelectorField.tsx";
 import type { ThemeColorField } from "./ThemeColorField.tsx";
+import type { ThemeCollectionField } from "./ThemeCollectionField.tsx";
 import type { CodeField } from "./CodeField.tsx";
 import type { DateTimeSelectorField } from "./DateTimeSelectorField.tsx";
 import type { EntityFieldSelectorField } from "./EntityFieldSelectorField.tsx";
@@ -175,6 +176,7 @@ export type YextTransformedProps<Props, Definitions> = {
 };
 
 type YextPuckFields = {
+  themeCollection: ThemeCollectionField;
   basicSelector: BasicSelectorField;
   themeColor: ThemeColorField;
   ctaSelector: CTASelectorField;

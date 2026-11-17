@@ -43,7 +43,6 @@ export {
 } from "./searchHeadlessConfig.ts";
 export { normalizeSlug } from "./slugifier.ts";
 export {
-  backgroundColors,
   defaultThemeTailwindExtensions,
   ThemeOptions,
   type ThemeColor,
@@ -51,7 +50,7 @@ export {
   VisualEditorComponentsContentPath,
   VisualEditorThemeClassSafelist,
 } from "./themeConfigOptions.ts";
-export { type ThemeConfig, themeResolver, deepMerge } from "./themeResolver.ts";
+export { deepMerge } from "./deepMerge.ts";
 export { type StreamDocument } from "./types/StreamDocument.ts";
 export {
   mergeMeta,

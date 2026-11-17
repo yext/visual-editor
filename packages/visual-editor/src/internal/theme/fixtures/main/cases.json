@@ -1,0 +1,101 @@
+{
+  "sources": {
+    "main": "5a337716170dd684b7b69ebc27ee992bff3eedbd",
+    "theme-overhaul": "ba18b15a2ee6bf778a63b31db2f42a730594c9bb"
+  },
+  "themes": {
+    "default": {},
+    "customized": {
+      "--colors-palette-primary": "#173B62",
+      "--colors-palette-secondary": "#FFC857",
+      "--fontFamily-headers-defaultFont": "'Roboto', sans-serif",
+      "--fontSize-h1-fontSize": "60px",
+      "--fontSize-h2-fontSize": "36px",
+      "--fontFamily-body-fontFamily": "'Lato', sans-serif",
+      "--fontWeight-button-fontWeight": "700"
+    }
+  },
+  "layouts": {
+    "mobileHeadings": [
+      {
+        "level": 1,
+        "semanticLevelOverride": 6
+      },
+      {
+        "level": 2,
+        "semanticLevelOverride": 2
+      },
+      {
+        "level": 3,
+        "semanticLevelOverride": 3
+      },
+      {
+        "level": 4,
+        "semanticLevelOverride": 4
+      },
+      {
+        "level": 5,
+        "semanticLevelOverride": 5
+      },
+      {
+        "level": 6,
+        "semanticLevelOverride": 6
+      }
+    ],
+    "actions": [
+      {
+        "variant": "primary"
+      },
+      {
+        "variant": "secondary"
+      },
+      {
+        "variant": "link"
+      },
+      {
+        "variant": "directoryLink"
+      },
+      {
+        "variant": "headerFooterMainLink"
+      },
+      {
+        "variant": "headerFooterSecondaryLink"
+      }
+    ],
+    "nestedBackgrounds": {
+      "background": {
+        "selectedColor": "palette-primary",
+        "contrastingColor": "palette-primary-contrast"
+      },
+      "children": [
+        {
+          "background": {
+            "selectedColor": "[#FFFFFF80]",
+            "contrastingColor": "black",
+            "isDarkColor": false
+          }
+        }
+      ]
+    },
+    "overrides": {
+      "heading": {
+        "level": 2,
+        "fontSize": "3xl",
+        "weight": "500",
+        "color": {
+          "selectedColor": "[#123456]",
+          "contrastingColor": "white",
+          "isDarkColor": true
+        }
+      },
+      "button": {
+        "variant": "secondary",
+        "className": "rounded-none px-8"
+      },
+      "body": {
+        "fontSize": "lg",
+        "fontWeight": "600"
+      }
+    }
+  }
+}

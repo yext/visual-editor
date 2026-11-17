@@ -14,3 +14,5 @@ export {
 } from "./useTailwindConfig.tsx";
 export { useBackground, BackgroundProvider } from "./useBackground.tsx";
 export { useOverflow } from "./useOverflow.ts";
+
+export { useThemeData } from "./useThemeData.ts";

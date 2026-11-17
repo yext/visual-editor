@@ -1,4 +1,7 @@
-import React from "react";
+import { useThemeData } from "../../hooks/useThemeData.ts";
+import { resolveThemeEntry } from "../../utils/dynamicTheme.ts";
+import { ThemeCollectionFieldOverride } from "../ThemeCollectionField.tsx";
+
 import { BaseField, type FieldProps } from "@puckeditor/core";
 import { pt, type MsgString } from "../../utils/i18n/platform.ts";
 import { ThemeColorFieldOverride } from "../ThemeColorField.tsx";
@@ -11,6 +14,7 @@ import {
 } from "./baseText.tsx";
 
 export type StyledTextValue = BaseTextStyles & {
+  typographyId?: string;
   color?: ThemeColor;
 };
 
@@ -39,13 +43,17 @@ export const StyledTextFieldOverride = ({
   const handleTextChange = (nextValue: BaseTextStyles): void => {
     onChange({
       ...nextValue,
+      typographyId: value?.typographyId,
       ...(value?.color ? { color: value.color } : {}),
     });
   };
 
+  const theme = useThemeData();
+  const typography = resolveThemeEntry(theme.typography, value?.typographyId);
   const typographyOptions = useTypographyOptions(
     currentTextValue,
-    handleTextChange
+    handleTextChange,
+    typography.fontFamily
   );
 
   return (
@@ -57,6 +65,20 @@ export const StyledTextFieldOverride = ({
       )}
       <div className="ObjectField">
         <div className="ObjectField-fieldset ve-flex ve-flex-col ve-gap-3">
+          <ThemeCollectionFieldOverride
+            field={{
+              type: "themeCollection",
+              collection: "typography",
+              label: "Typography",
+            }}
+            value={value?.typographyId}
+            onChange={(typographyId) =>
+              onChange({
+                ...currentTextValue,
+                typographyId: String(typographyId),
+              })
+            }
+          />
           <BaseTypographyFields
             currentValue={currentTextValue}
             typographyOptions={typographyOptions}

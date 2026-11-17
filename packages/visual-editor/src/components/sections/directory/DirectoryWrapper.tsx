@@ -1,10 +1,6 @@
 import React from "react";
 import { FieldLabel, PuckComponent, Slot } from "@puckeditor/core";
-import {
-  backgroundColors,
-  ThemeColor,
-  ThemeOptions,
-} from "../../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../../utils/themeConfigOptions.ts";
 import { Body } from "../../atoms/body.tsx";
 import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
@@ -21,7 +17,6 @@ import {
 } from "./DirectoryCard.tsx";
 import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import { resolveDirectoryListChildren } from "../../../utils/urls/resolveDirectoryListChildren.ts";
-import { getThemeValue } from "../../../utils/getThemeValue.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import {
   createDirectoryChildReference,
@@ -240,6 +235,7 @@ export const DirectoryList = ({
   relativePrefixToRoot,
   backgroundColor,
   linkColor,
+  actionId,
   textTransform = "default",
 }: {
   streamDocument: StreamDocument;
@@ -256,25 +252,17 @@ export const DirectoryList = ({
     dm_addressRegionDisplayName?: string;
   }[];
   relativePrefixToRoot: string;
-  backgroundColor: ThemeColor;
+  backgroundColor?: ThemeColor;
   linkColor?: ThemeColor;
+  actionId?: string;
   textTransform?: DirectoryStyles["textTransform"];
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(
     [...directoryChildren],
     "name"
   );
-  const linkTextTransformValue = (
-    getThemeValue("--textTransform-link-textTransform", streamDocument) ?? ""
-  ).toLowerCase();
   const resolvedTextTransform =
-    textTransform === "default"
-      ? !linkTextTransformValue ||
-        linkTextTransformValue === "none" ||
-        linkTextTransformValue === "normal"
-        ? "capitalize"
-        : "var(--textTransform-link-textTransform)"
-      : textTransform;
+    textTransform === "default" ? undefined : textTransform;
 
   return (
     <PageSection verticalPadding="sm" background={backgroundColor}>
@@ -299,8 +287,8 @@ export const DirectoryList = ({
           return (
             <li key={idx}>
               <MaybeLink
+                actionId={actionId}
                 eventName={`child${idx}`}
-                variant="directoryLink"
                 color={linkColor}
                 href={
                   relativePrefixToRoot
@@ -393,7 +381,7 @@ export const DirectoryGrid: YextComponentConfig<DirectoryGridProps> = {
     ...directoryCardsSource.defaultWrapperProps,
     data: getNormalizedDirectoryGridData(directoryCardsSource.defaultValue),
     styles: {
-      backgroundColor: backgroundColors.background1.value,
+      backgroundColor: undefined,
     },
   },
   resolveData: (data, params) => {

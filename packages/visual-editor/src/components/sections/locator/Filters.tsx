@@ -142,11 +142,11 @@ export const FilterModal = ({
           <Facets
             customCssClasses={{
               divider: "bg-white",
-              titleLabel: "font-bold text-md font-body-fontFamily",
+              titleLabel: "font-bold text-md ",
               optionInput:
                 "h-4 w-4 [accent-color:var(--locator-filter-accent-color)]",
-              optionLabel: "text-md font-body-fontFamily font-body-fontWeight",
-              option: "space-x-4 font-body-fontFamily",
+              optionLabel: "text-md  ",
+              option: "space-x-4 ",
             }}
           >
             {facetOverrides}
@@ -155,7 +155,7 @@ export const FilterModal = ({
       </div>
       <div className="border-y border-gray-300 justify-center align-middle">
         <button
-          className="w-full py-4 text-center font-bold font-body-fontFamily text-body-fontSize"
+          className="w-full py-4 text-center font-bold  "
           style={{ color: accentColorCssValue }}
           onClick={handleClearFiltersClick}
         >
@@ -184,7 +184,7 @@ const OpenNowFilter = ({ isSelected, onChange }: OpenNowFilterProps) => {
   return (
     <div className="flex flex-col gap-4">
       <button
-        className="w-full flex justify-between items-center font-bold font-body-fontFamily text-body-fontSize"
+        className="w-full flex justify-between items-center font-bold  "
         {...getToggleProps()}
       >
         {t("hours", "Hours")}
@@ -235,7 +235,7 @@ const DistanceFilter = ({
   return (
     <div className="flex flex-col gap-4">
       <button
-        className="w-full flex justify-between items-center font-bold font-body-fontFamily text-body-fontSize"
+        className="w-full flex justify-between items-center font-bold  "
         {...getToggleProps()}
       >
         {t("distance", "Distance")}

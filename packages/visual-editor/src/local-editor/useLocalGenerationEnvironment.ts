@@ -1,3 +1,4 @@
+import { useThemeData } from "../hooks/useThemeData.ts";
 import {
   generationSettingsSchema,
   type GenerationSettings,
@@ -21,6 +22,7 @@ export const useLocalGenerationEnvironment = (
   config: Config | undefined,
   enabled: boolean
 ) => {
+  const theme = useThemeData();
   const [settings, setSettings] = React.useState<{
     layoutId: string;
     api: string;
@@ -87,11 +89,11 @@ export const useLocalGenerationEnvironment = (
             prompts: settings.prompts,
             generationSettings: settings.generationSettings,
             locales: settings.locales,
-            catalog: getGenerationCatalog(config),
+            catalog: getGenerationCatalog(config, theme),
             transport: createLocalMessageTransport(),
             diagnostics: createLocalGenerationDiagnostics(api, layoutId),
           }
         : null,
-    [api, layoutId, config, settings, enabled]
+    [api, layoutId, config, settings, enabled, theme]
   );
 };

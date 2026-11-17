@@ -13,7 +13,7 @@ import {
 import { migrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { migrate } from "../../utils/migrate.ts";
-import { ThemeData } from "../../internal/types/themeData.ts";
+
 import { MainContent } from "../helpers/MainContent.tsx";
 import {
   testHours,
@@ -76,7 +76,7 @@ interface RootProps extends DefaultRootProps {
 type ThemeTest = {
   name: string;
   document: Record<string, any>;
-  theme: ThemeData;
+  theme: Record<string, any>;
   data: Data<DefaultComponentProps, RootProps>;
 };
 

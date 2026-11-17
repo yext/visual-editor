@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FieldLabel } from "@puckeditor/core";
-import { StyleSelectOption } from "../../../utils/themeResolver.ts";
+import { StyleSelectOption } from "../../../types/types.ts";
 import "../ui/puck.css";
 import { Search } from "lucide-react";
 import { pt } from "../../../utils/i18n/platform.ts";

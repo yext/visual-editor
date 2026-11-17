@@ -11,10 +11,10 @@ Props for the Address component
 
 #### Other Props
 
-| Prop     | Type                                                                                                                           | Description | Default |
-| :------- | :----------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ address: YextEntityField<AddressType>; }`                                                                                   |             |         |
-| `styles` | `{ showRegion?: boolean; showCountry?: boolean; showGetDirectionsLink: boolean; ctaVariant: CTAVariant; color?: ThemeColor; }` |             |         |
+| Prop     | Type                                                                                                                      | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
+| `data`   | `{ address: YextEntityField<AddressType>; }`                                                                              |             |         |
+| `styles` | `{ showRegion?: boolean; showCountry?: boolean; showGetDirectionsLink: boolean; actionId?: string; color?: ThemeColor; }` |             |         |
 
 ---
 
@@ -44,6 +44,7 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                     | Type         | Description                                                                  | Default              |
 | :----------------------- | :----------- | :--------------------------------------------------------------------------- | :------------------- |
+| `styles.actionId`        | `string`     |                                                                              |                      |
 | `styles.backgroundColor` | `ThemeColor` | The background color of the section.                                         | `Background Color 1` |
 | `styles.linkColor`       | `ThemeColor` | The link color of breadcrumbs.                                               |                      |
 | `styles.showCurrentPage` | `boolean`    | Whether to show the current page's link in the breadcrumb trail (last link). | `true`               |
@@ -100,6 +101,7 @@ This object contains properties for customizing the component's appearance.
 
 | Prop                         | Type                                                                | Description                                                                 | Default              |
 | :--------------------------- | :------------------------------------------------------------------ | :-------------------------------------------------------------------------- | :------------------- |
+| `styles.actionId`            | `string`                                                            |                                                                             |                      |
 | `styles.backgroundColor`     | `ThemeColor`                                                        | The background color for the directory page heading area.                   | `Background Color 1` |
 | `styles.linkColor`           | `ThemeColor`                                                        | The color of links in the directory list layout.                            |                      |
 | `styles.listBackgroundColor` | `ThemeColor`                                                        | The background color for the directory list area.                           | `Background Color 1` |
@@ -114,10 +116,10 @@ This object contains properties for customizing the component's appearance.
 
 #### Other Props
 
-| Prop     | Type                                                                                                                                                                                   | Description | Default |
-| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                                                               |             |         |
-| `styles` | `{ showCurrentStatus?: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; className?: string; bodyVariant?: "lg" \| "base" \| "sm"; }` |             |         |
+| Prop     | Type                                                                                                                                                                                                          | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
+| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                                                                                      |             |         |
+| `styles` | `{ showCurrentStatus?: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; className?: string; typographyId?: string; bodyVariant?: "lg" \| "base" \| "sm"; }` |             |         |
 
 ---
 
@@ -173,7 +175,7 @@ Controls which distance value to display on each locator result card.
 | The number of entries is locked to the locator entity types for the page set.                |                                                                                                                                                                                                                     |
 | `mapStartingLocation`                                                                        | `{ latitude: string; longitude: string; }`                                                                                                                                                                          | The starting location for the map.                                                  |                                        |
 | `mapStyle`                                                                                   | `string`                                                                                                                                                                                                            | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles. | `'mapbox://styles/mapbox/streets-v12'` |
-| `pageHeading`                                                                                | `{ title: TranslatableString; color?: ThemeColor; }`                                                                                                                                                                | Configuration for the locator page heading.                                         |
+| `pageHeading`                                                                                | `{ typographyId?: string; title: TranslatableString; color?: ThemeColor; }`                                                                                                                                         | Configuration for the locator page heading.                                         |
 | Allows customizing the title text and its color.                                             |                                                                                                                                                                                                                     |
 | `resultCard`                                                                                 | `Array<{ props: LocatorResultCardProps; }>`                                                                                                                                                                         | Props to customize the locator result card component.                               |
 | Controls which fields are displayed and their styling depending on the result's entity type. |
@@ -201,9 +203,9 @@ The props for the Phone component
 
 #### Other Props
 
-| Prop     | Type                                                                                                                         | Description | Default |
-| :------- | :--------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                                                            |             |         |
-| `styles` | `{ phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; includeIcon?: boolean; color?: ThemeColor; }` |             |         |
+| Prop     | Type                                                                                                                                            | Description | Default |
+| :------- | :---------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                                                                               |             |         |
+| `styles` | `{ actionId?: string; phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; includeIcon?: boolean; color?: ThemeColor; }` |             |         |
 
 ---

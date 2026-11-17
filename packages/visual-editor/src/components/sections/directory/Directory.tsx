@@ -1,8 +1,5 @@
 import { useTemplateProps } from "../../../hooks/useDocument.tsx";
-import {
-  backgroundColors,
-  ThemeColor,
-} from "../../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { Background } from "../../atoms/background.tsx";
@@ -19,17 +16,18 @@ import {
 } from "../../../fields/fields.ts";
 
 export interface DirectoryStyles {
+  actionId?: string;
   /**
    * The background color for the directory page heading area.
    * @defaultValue Background Color 1
    */
-  backgroundColor: ThemeColor;
+  backgroundColor?: ThemeColor;
 
   /**
    * The background color for the directory list area.
    * @defaultValue Background Color 1
    */
-  listBackgroundColor: ThemeColor;
+  listBackgroundColor?: ThemeColor;
 
   /**
    * The color of links in the directory list layout.
@@ -82,6 +80,11 @@ const directoryFields: YextFields<DirectoryProps> = {
           "Directory List Background Color"
         ),
         options: "BACKGROUND_COLOR",
+      },
+      actionId: {
+        type: "themeCollection",
+        collection: "actions",
+        label: "Action preset",
       },
       linkColor: {
         type: "basicSelector",
@@ -157,6 +160,7 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
             directoryChildren={streamDocument.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot ?? ""}
             linkColor={styles.linkColor}
+            actionId={styles.actionId}
             textTransform={styles.textTransform}
             backgroundColor={styles.listBackgroundColor}
           />
@@ -202,8 +206,8 @@ export const Directory: YextComponentConfig<DirectoryProps> = {
   },
   defaultProps: {
     styles: {
-      backgroundColor: backgroundColors.background1.value,
-      listBackgroundColor: backgroundColors.background1.value,
+      backgroundColor: undefined,
+      listBackgroundColor: undefined,
       textTransform: "default",
     },
     slots: {
@@ -250,7 +254,7 @@ export const Directory: YextComponentConfig<DirectoryProps> = {
               },
             },
             styles: {
-              backgroundColor: backgroundColors.background1.value,
+              backgroundColor: undefined,
               showCurrentPage: true,
             },
             analytics: {
@@ -277,7 +281,7 @@ export const Directory: YextComponentConfig<DirectoryProps> = {
               },
             },
             styles: {
-              backgroundColor: backgroundColors.background1.value,
+              backgroundColor: undefined,
             },
             slots: {
               CardSlot: [],

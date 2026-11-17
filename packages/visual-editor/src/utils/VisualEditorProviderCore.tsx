@@ -1,3 +1,4 @@
+import { migrateThemeData } from "../components/migrations/themeDataLabels.ts";
 import React from "react";
 import { useAnalytics } from "@yext/pages-components";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -8,7 +9,7 @@ import { TailwindConfigContext } from "../hooks/useTailwindConfig.tsx";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import type { StreamFields } from "../types/entityFields.ts";
 import { i18nPageInstance } from "./i18n/i18nInstances.ts";
-import type { TailwindConfig } from "./themeResolver.ts";
+import type { TailwindConfig } from "../types/types.ts";
 import {
   TranslationRuntimeContext,
   type TranslationRuntimeContextValue,
@@ -51,6 +52,20 @@ export const VisualEditorProviderCore = <T extends Record<string, any>>({
   renderChildren,
   children,
 }: VisualEditorProviderCoreProps<T>) => {
+  const normalizedProps = React.useMemo(() => {
+    const document = templateProps.document;
+    if (!document) {
+      return templateProps;
+    }
+    const theme = migrateThemeData(JSON.parse(document.__?.theme ?? "{}"));
+    return {
+      ...templateProps,
+      document: {
+        ...document,
+        __: { ...document.__, theme: JSON.stringify(theme) },
+      },
+    };
+  }, [templateProps]);
   const pagesAnalytics = useAnalytics();
   const queryClient = React.useMemo(() => new QueryClient(), []);
 
@@ -69,7 +84,7 @@ export const VisualEditorProviderCore = <T extends Record<string, any>>({
     <ErrorProvider>
       <I18nextProvider i18n={i18nPageInstance}>
         <QueryClientProvider client={queryClient}>
-          <TemplatePropsContext.Provider value={templateProps}>
+          <TemplatePropsContext.Provider value={normalizedProps}>
             <EntityFieldsContext.Provider value={entityFields}>
               <TailwindConfigContext.Provider value={tailwindConfig}>
                 <TranslationRuntimeContext.Provider value={translationRuntime}>

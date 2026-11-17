@@ -30,10 +30,12 @@ export const ColorPickerInput = ({
   ariaLabel,
   value,
   onChange,
+  alpha = false,
 }: {
   ariaLabel: string;
   value?: Color;
   onChange: (color: string) => void;
+  alpha?: boolean;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [draftColor, setDraftColor] = useState<Color>(value ?? "#000000");
@@ -43,11 +45,17 @@ export const ColorPickerInput = ({
   }, [value]);
 
   const handlePickerChange = (colorResult: ColorResult) => {
-    setDraftColor(colorResult.hex);
+    setDraftColor(
+      alpha
+        ? `rgba(${colorResult.rgb.r}, ${colorResult.rgb.g}, ${colorResult.rgb.b}, ${colorResult.rgb.a ?? 1})`
+        : colorResult.hex
+    );
   };
 
   const handlePickerChangeComplete = (colorResult: ColorResult) => {
-    const nextColor = colorResult.hex;
+    const nextColor = alpha
+      ? `rgba(${colorResult.rgb.r}, ${colorResult.rgb.g}, ${colorResult.rgb.b}, ${colorResult.rgb.a ?? 1})`
+      : colorResult.hex;
     setDraftColor(nextColor);
     if (nextColor !== value) {
       onChange(nextColor);
@@ -69,7 +77,7 @@ export const ColorPickerInput = ({
         className="ve-w-auto ve-border-0 ve-bg-transparent ve-p-0 ve-shadow-none"
       >
         <SketchPicker
-          disableAlpha={true}
+          disableAlpha={!alpha}
           color={draftColor}
           onChange={handlePickerChange}
           onChangeComplete={handlePickerChangeComplete}

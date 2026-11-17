@@ -4,11 +4,11 @@ import { getResolvedTextColorStyle } from "./colors.ts";
 import type { ThemeColor } from "./themeConfigOptions.ts";
 
 const RICH_TEXT_TYPOGRAPHY_VARIABLES = {
-  fontFamily: "--fontFamily-body-fontFamily",
-  fontSize: "--fontSize-body-fontSize",
-  fontWeight: "--fontWeight-body-fontWeight",
-  fontStyle: "--fontStyle-body-fontStyle",
-  textTransform: "--textTransform-body-textTransform",
+  fontFamily: "--ve-text-font-family",
+  fontSize: "--ve-text-font-size",
+  fontWeight: "--ve-text-font-weight",
+  fontStyle: "--ve-text-font-style",
+  textTransform: "--ve-text-text-transform",
 } satisfies Record<keyof BaseTextStyles, string>;
 
 const resolveTextStyleValue = (value?: string): string | undefined =>

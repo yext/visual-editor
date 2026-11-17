@@ -55,7 +55,9 @@ export const createGenerationSchemaCompiler = (
     return description ? wire.describe(description) : wire;
   };
   const checks = (schema: z.ZodType, path: string) => {
-    if (getEntityGenerationSchema(schema)) return;
+    if (getEntityGenerationSchema(schema)) {
+      return;
+    }
     if (
       ((schema.def as any).checks ?? []).some(
         (check: any) => check._zod.def.check === "custom"
@@ -119,8 +121,9 @@ export const createGenerationSchemaCompiler = (
       field?.type === "slot" ||
       localizedTextSchema(schema, locales) ||
       isRichTextSchema(schema)
-    )
+    ) {
       return true;
+    }
     if (node instanceof z.ZodString) {
       return (
         field?.type === "text" ||
@@ -128,24 +131,27 @@ export const createGenerationSchemaCompiler = (
         field?.type === "richtext"
       );
     }
-    if (node instanceof z.ZodUnion)
+    if (node instanceof z.ZodUnion) {
       return node.options.some((option) =>
         containsContent(option as z.ZodType, field)
       );
-    if (node instanceof z.ZodArray)
+    }
+    if (node instanceof z.ZodArray) {
       return containsContent(
         node.element as z.ZodType,
         field?.type === "array"
           ? { type: "object", objectFields: field.arrayFields }
           : undefined
       );
-    if (node instanceof z.ZodObject)
+    }
+    if (node instanceof z.ZodObject) {
       return Object.entries(node.shape).some(([key, child]) =>
         containsContent(
           child as z.ZodType,
           field?.type === "object" ? field.objectFields[key] : undefined
         )
       );
+    }
     return false;
   };
   const value = (
@@ -158,7 +164,10 @@ export const createGenerationSchemaCompiler = (
   ): SchemaNode => {
     checks(schema, path);
     const native = unwrap(schema);
-    const colorSchema = getColorGenerationSchema(native);
+    const colorSchema = getColorGenerationSchema(
+      native,
+      catalog.puckOptions.themeData
+    );
     const entitySchema = getEntityGenerationSchema(native);
     let child: SchemaNode;
     if (entitySchema) {
@@ -326,7 +335,9 @@ export const createGenerationSchemaCompiler = (
                 const other = unwrap(schema);
                 if (other instanceof z.ZodObject) {
                   for (const key of Object.keys(other.shape)) {
-                    if (!Object.hasOwn(branch.shape, key)) delete baseline[key];
+                    if (!Object.hasOwn(branch.shape, key)) {
+                      delete baseline[key];
+                    }
                   }
                 }
               }

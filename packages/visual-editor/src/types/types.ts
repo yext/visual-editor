@@ -2,6 +2,12 @@ import { ImageType, CTA as CTAType } from "@yext/pages-components";
 import { AssetImageType } from "./images.ts";
 import { AssetVideo } from "./videos.ts";
 
+/** Display options shared by font and styling controls. */
+export type StyleSelectOption = { label: string; value: string };
+
+/** Tailwind configuration supplied by a consuming site. */
+export type TailwindConfig = Record<string, Record<string, any>>;
+
 /**
  * A pages-components CTA with a translatable label and link
  */

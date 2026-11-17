@@ -6,6 +6,7 @@ import { type ThemeColor } from "../../utils/themeConfigOptions.ts";
 import "./maybeRTF.css";
 
 export type RichTextStyleOverrides = Partial<BaseTextStyles> & {
+  typographyId?: string;
   color?: ThemeColor | string;
 };
 
@@ -44,6 +45,7 @@ export const MaybeRTF = ({
   if (typeof data === "string") {
     return (
       <Body
+        typographyId={richTextStyleOverrides?.typographyId}
         {...props}
         className={className}
         style={mergedStyle}

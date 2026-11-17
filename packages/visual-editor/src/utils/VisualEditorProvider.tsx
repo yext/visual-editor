@@ -3,7 +3,7 @@ import type { StreamFields } from "../types/entityFields.ts";
 import { loadVEPageTranslations } from "./i18n/page.ts";
 import { loadVEPlatformTranslations } from "./i18n/platformLoader.ts";
 import { useVisualEditorTranslations } from "./i18n/useVisualEditorTranslations.ts";
-import type { TailwindConfig } from "./themeResolver.ts";
+import type { TailwindConfig } from "../types/types.ts";
 import { VisualEditorProviderCore } from "./VisualEditorProviderCore.tsx";
 
 type AllOrNothing<T extends Record<string, any>> =

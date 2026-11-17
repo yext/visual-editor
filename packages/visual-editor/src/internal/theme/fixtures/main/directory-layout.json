@@ -1,0 +1,159 @@
+{
+  "root": {
+    "props": {
+      "version": 82
+    }
+  },
+  "content": [
+    {
+      "type": "MainContent",
+      "props": {
+        "content": [
+          {
+            "type": "Directory",
+            "props": {
+              "id": "Directory-d21d6943-0a81-4a8e-b76b-cecb5b157c14",
+              "slots": {
+                "TitleSlot": [
+                  {
+                    "type": "HeadingTextSlot",
+                    "props": {
+                      "id": "HeadingTextSlot-1a871989-a34d-426c-b24a-a1888c1a46ea",
+                      "data": {
+                        "text": {
+                          "field": "name",
+                          "constantValue": {
+                            "defaultValue": ""
+                          },
+                          "constantValueEnabled": false
+                        }
+                      },
+                      "styles": {
+                        "align": "center",
+                        "level": 2
+                      }
+                    }
+                  }
+                ],
+                "SiteNameSlot": [
+                  {
+                    "type": "HeadingTextSlot",
+                    "props": {
+                      "id": "HeadingTextSlot-9a120ff6-d494-4ec8-9ab8-e43017d77c03",
+                      "data": {
+                        "text": {
+                          "field": "name",
+                          "constantValue": {
+                            "defaultValue": ""
+                          },
+                          "constantValueEnabled": true
+                        }
+                      },
+                      "styles": {
+                        "align": "center",
+                        "level": 4
+                      }
+                    }
+                  }
+                ],
+                "DirectoryGrid": [
+                  {
+                    "type": "DirectoryGrid",
+                    "props": {
+                      "id": "DirectoryGrid-dab8e202-600a-47da-b5c7-971df3f504fb",
+                      "slots": {
+                        "CardSlot": []
+                      },
+                      "styles": {
+                        "backgroundColor": {
+                          "selectedColor": "palette-quaternary-light",
+                          "contrastingColor": "black"
+                        }
+                      },
+                      "data": {
+                        "field": "dm_directoryChildren",
+                        "constantValueEnabled": false,
+                        "constantValue": [],
+                        "mappings": {
+                          "cardTitle": {
+                            "field": "name",
+                            "constantValueEnabled": true,
+                            "constantValue": {
+                              "defaultValue": "[[name]]"
+                            }
+                          },
+                          "linkOverride": {
+                            "enabled": false,
+                            "normalizeLink": false,
+                            "field": "",
+                            "constantValue": {
+                              "defaultValue": "",
+                              "hasLocalizedValue": "true"
+                            },
+                            "constantValueEnabled": false
+                          },
+                          "showAddress": true,
+                          "showHoursStatus": true,
+                          "showPhoneNumber": true
+                        }
+                      },
+                      "manualSlots": {
+                        "CardSlot": []
+                      }
+                    }
+                  }
+                ],
+                "BreadcrumbsSlot": [
+                  {
+                    "type": "BreadcrumbsSlot",
+                    "props": {
+                      "id": "BreadcrumbsSlot-13dba298-abd1-4f75-a7e9-b19779a4fc5b",
+                      "data": {
+                        "currentPage": {
+                          "field": "name",
+                          "constantValue": {
+                            "defaultValue": "[[name]]"
+                          },
+                          "constantValueEnabled": false
+                        },
+                        "directoryRoot": {
+                          "defaultValue": "Directory Root"
+                        }
+                      },
+                      "styles": {
+                        "backgroundColor": {
+                          "selectedColor": "white",
+                          "contrastingColor": "black"
+                        },
+                        "showCurrentPage": true
+                      },
+                      "analytics": {
+                        "scope": "directory"
+                      },
+                      "liveVisibility": true
+                    }
+                  }
+                ]
+              },
+              "styles": {
+                "backgroundColor": {
+                  "selectedColor": "palette-primary-dark",
+                  "contrastingColor": "white"
+                },
+                "listBackgroundColor": {
+                  "selectedColor": "white",
+                  "contrastingColor": "black"
+                }
+              },
+              "analytics": {
+                "scope": "directory"
+              }
+            }
+          }
+        ],
+        "id": "MainContent-76dbbc2c-0ca1-479c-ac6b-5e6b4bd82be7"
+      }
+    }
+  ],
+  "zones": {}
+}

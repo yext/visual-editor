@@ -1,4 +1,5 @@
 export * from "./styledFields/index.ts";
+export { type ThemeCollectionField } from "./ThemeCollectionField.tsx";
 
 export {
   BasicSelectorFieldOverride,

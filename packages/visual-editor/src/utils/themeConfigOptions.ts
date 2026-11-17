@@ -70,166 +70,26 @@ const getSpacingOptions = () => {
 /**
  * An object representing a color based on the theme specified by the user.
  */
-export type ThemeColor = {
-  /** The theme color token selected by the user. */
-  selectedColor: string;
-  /** The theme color token that contrasts with the selectedColor. */
-  contrastingColor: string;
-  /**
-   * Whether the user-selected color is dark.
-   */
-  isDarkColor?: boolean;
-};
+export type ThemeColor =
+  | {
+      colorId: string;
+      channel: "background" | "foreground";
+      selectedColor?: never;
+      contrastingColor?: string;
+      isDarkColor?: boolean;
+    }
+  | {
+      selectedColor: string;
+      contrastingColor: string;
+      isDarkColor?: boolean;
+      colorId?: never;
+      channel?: never;
+    };
 
-export const backgroundColors: Record<
-  string,
-  {
-    label: string;
-    value: ThemeColor;
-  }
-> = {
-  background1: {
-    label: msg("theme.bg.bg1", "Background 1"),
-    value: { selectedColor: "white", contrastingColor: "black" },
-  },
-  background2: {
-    label: msg("theme.bg.bg2", "Background 2"),
-    value: {
-      selectedColor: "palette-primary-light",
-      contrastingColor: "black",
-    },
-  },
-  background3: {
-    label: msg("theme.bg.bg3", "Background 3"),
-    value: {
-      selectedColor: "palette-secondary-light",
-      contrastingColor: "black",
-    },
-  },
-  background4: {
-    label: msg("theme.bg.bg4", "Background 4"),
-    value: {
-      selectedColor: "palette-tertiary-light",
-      contrastingColor: "black",
-    },
-  },
-  background5: {
-    label: msg("theme.bg.bg5", "Background 5"),
-    value: {
-      selectedColor: "palette-quaternary-light",
-      contrastingColor: "black",
-    },
-  },
-  background6: {
-    label: msg("theme.bg.bg6", "Background 6"),
-    value: {
-      selectedColor: "palette-primary-dark",
-      contrastingColor: "white",
-    },
-  },
-  background7: {
-    label: msg("theme.bg.bg7", "Background 7"),
-    value: {
-      selectedColor: "palette-secondary-dark",
-      contrastingColor: "white",
-    },
-  },
-  color1: {
-    label: msg("theme.bg.color1", "Color 1"),
-    value: {
-      selectedColor: "palette-primary",
-      contrastingColor: "palette-primary-contrast",
-    },
-  },
-  color2: {
-    label: msg("theme.bg.color2", "Color 2"),
-    value: {
-      selectedColor: "palette-secondary",
-      contrastingColor: "palette-secondary-contrast",
-    },
-  },
-  color3: {
-    label: msg("theme.bg.color3", "Color 3"),
-    value: {
-      selectedColor: "palette-tertiary",
-      contrastingColor: "palette-tertiary-contrast",
-    },
-  },
-  color4: {
-    label: msg("theme.bg.color4", "Color 4"),
-    value: {
-      selectedColor: "palette-quaternary",
-      contrastingColor: "palette-quaternary-contrast",
-    },
-  },
-};
-
-// When used in themeColor or existing basicSelector fields, the color is displayed in the dropdown.
-const backgroundColorOptions: ComboboxOptionGroup[] = [
-  {
-    title: msg("recommendedColors", "Recommended Colors"),
-    description: msg(
-      "theme.colors.recommendedDescription",
-      "Optimize color contrast for accessibility with these backgrounds."
-    ),
-    options: Object.entries(backgroundColors)
-      .map(([key, { label, value }]) => {
-        if (key.includes("background")) {
-          return {
-            label,
-            value,
-            color: `bg-${value.selectedColor}`,
-          };
-        }
-      })
-      .filter((o) => !!o),
-  },
-  {
-    title: msg("siteColors", "Site Colors"),
-    options: Object.entries(backgroundColors)
-      .map(([key, { label, value }]) => {
-        if (key.includes("color")) {
-          return {
-            label,
-            value,
-            color: `bg-${value.selectedColor}`,
-          };
-        }
-      })
-      .filter((o) => !!o),
-  },
-];
-
-export const siteColorOptions: ComboboxOptionGroup[] = [
-  {
-    title: msg("recommendedColor", "Recommended Color"),
-    description: msg(
-      "theme.colors.recommendedColorDescription",
-      "Optimize color contrast for accessibility by using the dynamic default."
-    ),
-    options: [
-      {
-        label: msg("default", "Default"),
-        value: undefined,
-        color: undefined,
-      },
-    ],
-  },
-  {
-    title: msg("siteColors", "Site Colors"),
-    options: Object.entries(backgroundColors)
-      .map(([key, { label, value }]) => {
-        if (key.includes("color")) {
-          return {
-            label,
-            value,
-            color: `bg-${value.selectedColor}`,
-          };
-        }
-      })
-      .filter((o) => !!o),
-  },
-];
+// Historical migrations retain this import path; runtime selectors use saved collections.
+export { backgroundColors } from "../components/migrations/legacyThemeColors.ts";
+const backgroundColorOptions: ComboboxOptionGroup[] = [];
+export const siteColorOptions: ComboboxOptionGroup[] = [];
 
 /** Corresponds to the different semantic heading levels */
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
@@ -245,22 +105,9 @@ const headingLevelOptions: { label: string; value: HeadingLevel }[] = [
 ];
 
 // Tailwind Theme Extensions (https://v3.tailwindcss.com/docs/theme#extending-the-default-theme)
-// to use in the tailwind.config.ts in conjunction with themeResolver and the theme.config
+// Ordinary utility tokens; theme entries generate their CSS directly.
 export const defaultThemeTailwindExtensions = {
   colors: {
-    "palette-primary-light": "hsl(from var(--colors-palette-primary) h s 98)",
-    "palette-secondary-light":
-      "hsl(from var(--colors-palette-secondary) h s 98)",
-    "palette-tertiary-light": "hsl(from var(--colors-palette-tertiary) h s 98)",
-    "palette-quaternary-light":
-      "hsl(from var(--colors-palette-quaternary) h s 98)",
-    "palette-primary-dark": "hsl(from var(--colors-palette-primary) h s 20)",
-    "palette-secondary-dark":
-      "hsl(from var(--colors-palette-secondary) h s 20)",
-    "palette-primary-contrast": "var(--colors-palette-primary-contrast)",
-    "palette-secondary-contrast": "var(--colors-palette-secondary-contrast)",
-    "palette-tertiary-contrast": "var(--colors-palette-tertiary-contrast)",
-    "palette-quaternary-contrast": "var(--colors-palette-quaternary-contrast)",
     gray: {
       100: "#F9F9F9",
       200: "#EDEDED",
@@ -272,15 +119,7 @@ export const defaultThemeTailwindExtensions = {
       900: "#121212",
     },
   },
-  fontSize: {
-    "body-xs-fontSize": "calc(var(--fontSize-body-fontSize) - 4px)",
-    "body-sm-fontSize": "calc(var(--fontSize-body-fontSize) - 2px)",
-    "body-lg-fontSize": "calc(var(--fontSize-body-fontSize) + 2px)",
-    "link-xs-fontSize": "calc(var(--fontSize-link-fontSize) - 4px)",
-    "link-sm-fontSize": "calc(var(--fontSize-link-fontSize) - 2px)",
-    "3xl": "32px",
-    "4xl": "40px",
-  },
+  fontSize: { "3xl": "32px", "4xl": "40px" },
 };
 
 const letterSpacingOptions = [
@@ -353,18 +192,6 @@ const imageBorderRadiusOptions = defineBorderRadiusOptions([
 export type ImageBorderRadius =
   (typeof imageBorderRadiusOptions)[number]["value"];
 
-const ctaVariantOptions = [
-  {
-    label: msg("fields.options.ctaVariant.primary", "Solid"),
-    value: "primary",
-  },
-  {
-    label: msg("fields.options.ctaVariant.secondary", "Outline"),
-    value: "secondary",
-  },
-  { label: msg("fields.options.ctaVariant.link", "Link"), value: "link" },
-];
-
 const presetImageTypeOptions: {
   label: string;
   value: PresetImageType;
@@ -424,27 +251,6 @@ const justifyContentOptions = [
   { label: msg("fields.options.start", "Start"), value: "start" },
   { label: msg("fields.options.center", "Center"), value: "center" },
   { label: msg("fields.options.end", "End"), value: "end" },
-];
-
-const bodyVariantOptions = [
-  {
-    label: msg("fields.options.extraSmall", "Extra Small", {
-      context: "text size",
-    }),
-    value: "xs",
-  },
-  {
-    label: msg("fields.options.small", "Small", { context: "text size" }),
-    value: "sm",
-  },
-  {
-    label: msg("fields.options.base", "Base", { context: "text size" }),
-    value: "base",
-  },
-  {
-    label: msg("fields.options.large", "Large", { context: "text size" }),
-    value: "lg",
-  },
 ];
 
 const hoursOptions = [
@@ -508,12 +314,10 @@ export const ThemeOptions = {
   LETTER_SPACING: letterSpacingOptions,
   BACKGROUND_COLOR: backgroundColorOptions,
   SITE_COLOR: siteColorOptions,
-  CTA_VARIANT: ctaVariantOptions,
   PRESET_IMAGE: presetImageTypeOptions,
   ALIGNMENT: alignmentOptions,
   VERTICAL_POSITION: verticalPositionOptions,
   JUSTIFY_CONTENT: justifyContentOptions,
-  BODY_VARIANT: bodyVariantOptions,
   BUTTON_BORDER_RADIUS: buttonBorderRadiusOptions,
   IMAGE_BORDER_RADIUS: imageBorderRadiusOptions,
   SPACING: getSpacingOptions,
@@ -529,36 +333,8 @@ export const ThemeOptions = {
 export const VisualEditorThemeClassSafelist = [
   "bg-white",
   "bg-black",
-  "bg-palette-primary-light",
-  "bg-palette-secondary-light",
-  "bg-palette-tertiary-light",
-  "bg-palette-quaternary-light",
-  "bg-palette-primary-dark",
-  "bg-palette-secondary-dark",
-  "bg-palette-primary",
-  "bg-palette-secondary",
-  "bg-palette-tertiary",
-  "bg-palette-quaternary",
-  "bg-palette-primary-contrast",
-  "bg-palette-secondary-contrast",
-  "bg-palette-tertiary-contrast",
-  "bg-palette-quaternary-contrast",
   "text-white",
   "text-black",
-  "text-palette-primary-light",
-  "text-palette-secondary-light",
-  "text-palette-tertiary-light",
-  "text-palette-quaternary-light",
-  "text-palette-primary-dark",
-  "text-palette-secondary-dark",
-  "text-palette-primary",
-  "text-palette-secondary",
-  "text-palette-tertiary",
-  "text-palette-quaternary",
-  "text-palette-primary-contrast",
-  "text-palette-secondary-contrast",
-  "text-palette-tertiary-contrast",
-  "text-palette-quaternary-contrast",
   "bg-[#00000099]",
 ];
 

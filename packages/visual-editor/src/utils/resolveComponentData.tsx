@@ -109,7 +109,7 @@ export function resolveComponentData<T>(
     if (options?.className) {
       rtfClass += ` ${options.className}`;
     }
-    const rtfColor = getThemeColorCssValue(options?.color?.selectedColor);
+    const rtfColor = getThemeColorCssValue(options?.color, true);
 
     return (
       <div

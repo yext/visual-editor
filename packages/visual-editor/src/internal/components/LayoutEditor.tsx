@@ -1,4 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import {
+  migrateThemeData,
+  migrateThemeHistories,
+} from "../../components/migrations/themeDataLabels.ts";
+import { useCallback, useEffect, useState } from "react";
 import * as lzstring from "lz-string";
 import {
   InitialHistory,
@@ -14,8 +18,8 @@ import { DevLogger } from "../../utils/devLogger.ts";
 import { useLayoutMessageSenders } from "../hooks/layout/useMessageSenders.ts";
 import { useLayoutMessageReceivers } from "../hooks/layout/useMessageReceivers.ts";
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
-import { ThemeData, ThemeHistory } from "../types/themeData.ts";
-import { ThemeConfig } from "../../utils/themeResolver.ts";
+import { ThemeData } from "../../types/themeData.ts";
+import { ThemeHistory } from "../types/themeData.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
@@ -36,7 +40,6 @@ type LayoutEditorProps = {
   templateMetadata: TemplateMetadata;
   layoutData: Data;
   themeData: ThemeData;
-  themeConfig: ThemeConfig | undefined;
   localDev: boolean;
   metadata?: Metadata;
   streamDocument: StreamDocument;
@@ -49,7 +52,6 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     templateMetadata,
     layoutData,
     themeData,
-    themeConfig,
     localDev,
     metadata,
     streamDocument,
@@ -124,27 +126,32 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
    * Apply the themes from Content
    */
   useEffect(() => {
-    if (!themeConfig) {
-      return;
-    }
-
     // use theme from localStorage when in dev mode
     if (templateMetadata.isDevMode) {
       const localHistoryArray = lzstring.decompress(
         window.localStorage.getItem(buildThemeLocalStorageKey()) || ""
       );
-      const localHistories = (
-        localHistoryArray ? JSON.parse(localHistoryArray) : []
-      ) as ThemeHistory[];
+      const localHistories = migrateThemeHistories(
+        (localHistoryArray
+          ? JSON.parse(localHistoryArray)
+          : []) as ThemeHistory[]
+      );
       if (localHistories.length > 0) {
-        const localThemeData = localHistories[localHistories.length - 1].data;
+        window.localStorage.setItem(
+          buildThemeLocalStorageKey(),
+          lzstring.compress(JSON.stringify(localHistories))
+        );
+      }
+      if (localHistories.length > 0) {
+        const localThemeData = migrateThemeData(
+          localHistories[localHistories.length - 1].data
+        );
         devLogger.log("Layout Dev Mode - Using theme data from local storage");
         sendDevThemeSaveStateData({
           payload: { devThemeSaveStateData: JSON.stringify(localThemeData) },
         });
         updateThemeInEditor(
           localThemeData,
-          themeConfig,
           false,
           templateMetadata.customFonts
         );
@@ -154,13 +161,12 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
 
     if (themeData) {
       updateThemeInEditor(
-        themeData as ThemeData,
-        themeConfig,
+        migrateThemeData(themeData),
         false,
         templateMetadata.customFonts
       );
     }
-  }, [themeData, themeConfig, templateMetadata]);
+  }, [themeData, templateMetadata]);
 
   /**
    * Determines the initialHistory to send to Puck. It is based on a combination

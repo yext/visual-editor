@@ -1,3 +1,7 @@
+import { compileSectionEditSchema } from "../../internal/layoutGeneration/workflows/edits/compileSectionEditSchema.ts";
+import { editTask } from "../../internal/layoutGeneration/testing/editFixtures.ts";
+import { getGenerationCatalog } from "../../internal/layoutGeneration/shared/catalogRegistry.ts";
+import { withGenerationCatalog } from "../createPuckGenerationCatalog.ts";
 // @vitest-environment node
 import { describe, expect, it, vi } from "vitest";
 import { createElement } from "react";
@@ -24,6 +28,127 @@ import {
 } from "../../sectionLibrarySupport.ts";
 import { compileGenerationSchema } from "../../internal/layoutGeneration/workflows/fullPageGeneration/pageSchema.ts";
 import { compileFullPageUpdateSchema } from "../../internal/layoutGeneration/workflows/fullPageUpdate/pageSchema.ts";
+import { createThemeChoiceSchema } from "./colorFieldSchemas.ts";
+import { migrateThemeData } from "../../components/migrations/themeDataLabels.ts";
+import { themeDataSchema, validateThemeData } from "../../types/themeData.ts";
+
+describe("theme-specific generation contracts in Node", () => {
+  it("uses the public validation contract without a DOM", () => {
+    expect(typeof window).toBe("undefined");
+    const theme = migrateThemeData();
+    expect(themeDataSchema.safeParse(theme).success).toBe(true);
+    theme.actions[0].active.textColor.colorId = "gone";
+    expect(validateThemeData(theme)).toMatchObject({
+      success: true,
+      errors: [],
+      warnings: [
+        {
+          code: "missing_reference",
+          path: ["actions", 0, "active", "textColor"],
+        },
+      ],
+    });
+  });
+
+  it("keeps per-option display names in model-facing JSON Schema and never reuses another theme", () => {
+    const first = migrateThemeData();
+    first.colors = [
+      {
+        id: "ocean",
+        label: "Ocean / blue",
+        background: "#123456",
+        foreground: "#FFFFFF",
+      },
+      {
+        id: "sand",
+        label: "Warm sand",
+        background: "#FFEEDD",
+        foreground: "#000000",
+      },
+    ];
+    const second = migrateThemeData();
+    second.colors = [
+      {
+        id: "forest",
+        label: "Forest green",
+        background: "#123456",
+        foreground: "#FFFFFF",
+      },
+    ];
+    const schema = createThemeChoiceSchema(first, "colors", true);
+    const json = z.toJSONSchema(schema);
+    expect(JSON.stringify(json)).toContain(
+      '"const":"ocean","description":"Ocean / blue"'
+    );
+    expect(JSON.stringify(json)).toContain(
+      '"const":"sand","description":"Warm sand"'
+    );
+    expect(
+      schema.safeParse({ colorId: "ocean", channel: "foreground" }).success
+    ).toBe(true);
+    expect(schema.safeParse({ colorId: "ocean" }).success).toBe(false);
+    expect(
+      schema.safeParse({ colorId: "ocean", channel: "invalid" }).success
+    ).toBe(false);
+    expect(
+      JSON.stringify(
+        z.toJSONSchema(createThemeChoiceSchema(second, "colors", true))
+      )
+    ).not.toContain("ocean");
+    const catalog = createPuckGenerationCatalog(
+      {
+        ThemeExample: {
+          fields: toPuckFields({
+            color: {
+              type: "themeCollection",
+              collection: "colors",
+              channel: true,
+            },
+          }),
+          defaultProps: { color: { colorId: "ocean", channel: "background" } },
+        },
+      },
+      { themeData: first }
+    );
+    expect(catalog.fieldOmissions).toEqual([]);
+    expect(
+      JSON.stringify(z.toJSONSchema(catalog.data.components.ThemeExample.props))
+    ).toContain("Ocean / blue");
+    const data = {
+      content: [
+        {
+          type: "ThemeExample",
+          props: {
+            id: "example",
+            color: { colorId: "ocean", channel: "background" },
+          },
+        },
+      ],
+    };
+    const creation = compileGenerationSchema(catalog, ["en"]);
+    const update = compileFullPageUpdateSchema(catalog, ["en"], data);
+    const edit = compileSectionEditSchema(
+      catalog,
+      ["en"],
+      data,
+      editTask("example", ["example"])
+    );
+    for (const compiled of [creation, update, edit]) {
+      const serialized = JSON.stringify(compiled.jsonSchema);
+      expect(serialized).toContain("Ocean / blue");
+      expect(serialized).toContain("Warm sand");
+      expect(serialized).not.toContain("Forest green");
+    }
+    const config = withGenerationCatalog({ components: {} }, catalog);
+    const replaced = getGenerationCatalog(config, second);
+    const replacement = JSON.stringify(
+      compileGenerationSchema(replaced, ["en"]).jsonSchema
+    );
+    expect(replacement).toContain("Forest green");
+    expect(replacement).not.toContain("Ocean / blue");
+    expect(replacement).not.toContain('"const":"ocean"');
+  });
+});
 
 const custom = (schema: z.ZodType): YextFieldDefinition => ({
   type: "custom",

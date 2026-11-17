@@ -53,7 +53,7 @@ export const filterMaxWidths = (
   themeValue: string | undefined;
   options: typeof ThemeOptions.MAX_WIDTH;
 } => {
-  const cssVariable = "--maxWidth-pageSection-contentWidth";
+  const cssVariable = "--ve-page-content-max-width";
   const maxWidthOptions = ThemeOptions.MAX_WIDTH;
   const styleContent = styleElement?.textContent || styleElement?.innerHTML;
 

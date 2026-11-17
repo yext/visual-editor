@@ -1,14 +1,11 @@
-import React from "react";
-import { BaseField, FieldLabel, type FieldProps } from "@puckeditor/core";
-import { ThemeOptions, type ThemeColor } from "../utils/themeConfigOptions.ts";
-import { msg, pt, type MsgString } from "../utils/i18n/platform.ts";
+import { useThemeData } from "../hooks/useThemeData.ts";
+
+import { BaseField, type FieldProps } from "@puckeditor/core";
+import { type ThemeColor } from "../utils/themeConfigOptions.ts";
+import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { ColorPickerInput } from "./ColorSelector.tsx";
-import {
-  getContrastingColor,
-  getThemeColorHexValue,
-  isCustomThemeColorToken,
-} from "../utils/colors.ts";
-import { TemplatePropsContext } from "../hooks/useDocument.tsx";
+import { getContrastingColor } from "../utils/colors.ts";
+
 import { BasicSelectorCombobox } from "./BasicSelectorCombobox.tsx";
 
 /** Theme colors always retain authored tokens and resolve both CSS colors. */
@@ -24,100 +21,95 @@ export type ThemeColorField = BaseField & {
   disableSearch?: boolean;
 };
 
-// The combobox returns only option.value, so use a marker value to detect
-// the Other option before converting it to a ThemeColor.
-const CUSTOM_COLOR_OPTION_VALUE = "__visual_editor_custom_color__";
-
-const isThemeColorValue = (value: unknown): value is ThemeColor => {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "selectedColor" in value &&
-    typeof (value as ThemeColor).selectedColor === "string"
-  );
-};
-
-const isCustomThemeColorValue = (value: unknown): value is ThemeColor => {
-  return (
-    isThemeColorValue(value) && isCustomThemeColorToken(value.selectedColor)
-  );
-};
-
-const toCustomThemeColor = (hexColor: string): ThemeColor => {
-  const selectedColor = hexColor.toUpperCase();
-  const contrastingColor =
-    getContrastingColor(selectedColor, 12, 400) === "#FFFFFF"
-      ? "white"
-      : "black";
-
-  return {
-    selectedColor: `[${selectedColor}]`,
-    contrastingColor,
-    isDarkColor: contrastingColor === "white",
-  };
-};
-
-/** Edits palette and custom ThemeColor values without changing their authored shape. */
 export const ThemeColorFieldOverride = ({
   field,
   value,
   onChange,
 }: FieldProps<ThemeColorField, ThemeColor | undefined>) => {
-  const templateProps = React.useContext(TemplatePropsContext);
-  const customColorHex =
-    getThemeColorHexValue(
-      isThemeColorValue(value) ? value.selectedColor : undefined,
-      templateProps?.document
-    ) ?? "#000000";
-
+  const theme = useThemeData();
+  const isBackground = field.options === "BACKGROUND_COLOR";
+  const custom = value?.selectedColor?.startsWith("[") === true;
+  const customColor = custom ? value!.selectedColor!.slice(1, -1) : "#000000";
+  const options = theme.colors.flatMap((entry) =>
+    (isBackground
+      ? ["background" as const]
+      : ["background" as const, "foreground" as const]
+    ).map((channel) => ({
+      label: isBackground ? entry.label : `${entry.label} — ${channel}`,
+      value: { colorId: entry.id, channel },
+      colorStyle: { background: entry[channel] },
+    }))
+  );
+  // Match shared references by identity/channel, independently of property order
+  // or additional authored contrast metadata. This only normalizes the display.
+  const selectedColor =
+    options.find(
+      (option) =>
+        option.value.colorId === value?.colorId &&
+        option.value.channel === value?.channel
+    )?.value ?? value;
+  const missing =
+    value?.colorId !== undefined &&
+    !theme.colors.some((entry) => entry.id === value.colorId);
+  const selectedEntry = theme.colors.find(
+    (entry) => entry.id === value?.colorId
+  );
+  const incompatible =
+    !isBackground &&
+    value?.channel &&
+    selectedEntry?.[value.channel].includes("gradient(");
   return (
     <>
       <BasicSelectorCombobox
         field={{
           ...field,
           type: "basicSelector",
-          optionGroups: [
-            ...ThemeOptions[field.options],
-            {
-              title:
-                field.translateOptions === false
-                  ? pt("fields.customColor", "Custom Color")
-                  : msg("fields.customColor", "Custom Color"),
-              options: [
-                {
-                  label:
-                    field.translateOptions === false
-                      ? pt("fields.options.other", "Other")
-                      : msg("fields.options.other", "Other"),
-                  value: CUSTOM_COLOR_OPTION_VALUE,
-                  colorStyle: { backgroundColor: customColorHex },
-                },
-              ],
-            },
+          translateOptions: false,
+          options: [
+            ...(!isBackground
+              ? [{ label: pt("default", "Default"), value: undefined }]
+              : []),
+            ...options,
+            ...(missing
+              ? [{ label: `${value.colorId} (unavailable)`, value }]
+              : []),
+            { label: "Custom color", value: "__custom__" },
           ],
-          options: undefined,
+          optionGroups: undefined,
         }}
         value={
-          isCustomThemeColorValue(value) ? CUSTOM_COLOR_OPTION_VALUE : value
+          custom
+            ? "__custom__"
+            : (selectedColor ?? (isBackground ? options[0]?.value : undefined))
         }
-        onChange={(nextValue) =>
+        onChange={(next) =>
           onChange(
-            nextValue === CUSTOM_COLOR_OPTION_VALUE
-              ? toCustomThemeColor(customColorHex)
-              : (nextValue as ThemeColor)
+            next === "__custom__"
+              ? {
+                  selectedColor: `[${customColor}]`,
+                  contrastingColor: getContrastingColor(customColor, 12, 400),
+                }
+              : (next as ThemeColor | undefined)
           )
         }
       />
-      {isCustomThemeColorValue(value) && (
-        <div className="ve-mt-3">
-          <FieldLabel label={pt("fields.customColor", "Custom Color")} el="div">
-            <ColorPickerInput
-              ariaLabel={pt("colorPicker.open", "Open color picker")}
-              value={customColorHex}
-              onChange={(nextColor) => onChange(toCustomThemeColor(nextColor))}
-            />
-          </FieldLabel>
-        </div>
+      {(missing || incompatible) && (
+        <p role="status">
+          This color is unavailable. Rendering uses the first compatible color.
+        </p>
+      )}
+      {custom && (
+        <ColorPickerInput
+          ariaLabel="Custom color"
+          value={customColor}
+          alpha
+          onChange={(next) =>
+            onChange({
+              selectedColor: `[${next}]`,
+              contrastingColor: value?.contrastingColor ?? "#000000",
+            })
+          }
+        />
       )}
     </>
   );

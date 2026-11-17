@@ -11,10 +11,7 @@ import { useTranslation } from "react-i18next";
 import { ImageField } from "../../../fields/ImageField.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
-import {
-  backgroundColors,
-  ThemeColor,
-} from "../../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
 import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import { Body } from "../../atoms/body.tsx";
 import { MapPinIcon } from "./MapPinIcon.tsx";
@@ -29,7 +26,7 @@ export const DEFAULT_RADIUS = 25;
 export const DEFAULT_PIN_ICON_WIDTH = 14;
 export const DEFAULT_LOCATION_STYLE = {
   pinIcon: { type: "none" },
-  pinColor: backgroundColors.background6.value,
+  pinColor: undefined,
 };
 export const MAX_PIN_ICON_WIDTH = 27;
 const PIN_ICON_MAX_FILE_SIZE_BYTES = 128 * 1024;

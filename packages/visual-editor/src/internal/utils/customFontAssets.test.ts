@@ -1,10 +1,69 @@
+import { generateCssVariablesFromThemeConfig } from "../../components/migrations/themeDataLabels.ts";
 import { describe, it, expect } from "vitest";
 import {
-  buildCustomFontAssets,
+  buildCustomFontAssets as buildDynamicCustomFontAssets,
   buildFontPreloadTags,
 } from "./customFontAssets.ts";
-import { ThemeConfig } from "../../utils/themeResolver.ts";
+import { ThemeConfig } from "../../components/migrations/themeDataLabels.ts";
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
+import { migrateThemeData } from "../../components/migrations/themeDataLabels.ts";
+
+describe("dynamic theme custom fonts", () => {
+  it("loads typography and every action state's weight with the selected style", () => {
+    const theme = migrateThemeData();
+    theme.typography[0].fontFamily = "'Dynamic', sans-serif";
+    theme.typography[0].fontWeight = "400";
+    theme.actions[0].fontFamily = "'Dynamic', sans-serif";
+    theme.actions[0].fontStyle = "italic";
+    theme.actions[0].default.fontWeight = "400";
+    theme.actions[0].hover.fontWeight = "600";
+    theme.actions[0].active.fontWeight = "700";
+    const variants = [400, 600, 700].flatMap((weight) =>
+      (["normal", "italic"] as const).map((style) => ({
+        weights: [weight],
+        style,
+        filePath: `/fonts/${weight}-${style}.woff2`,
+      }))
+    );
+    const assets = buildCustomFontAssets({
+      themeConfig: {},
+      themeValues: theme,
+      customFonts: {
+        Dynamic: {
+          weights: [400, 600, 700],
+          italics: true,
+          fallback: "sans-serif",
+          facePath: "/fonts/dynamic.css",
+          variants,
+        },
+      },
+    });
+    expect(assets.stylesheetPaths).toEqual(["/fonts/dynamic.css"]);
+    expect(assets.preloads).toEqual([
+      "/fonts/400-normal.woff2",
+      "/fonts/400-italic.woff2",
+      "/fonts/600-italic.woff2",
+      "/fonts/700-italic.woff2",
+    ]);
+  });
+});
+
+// Materialize historical config fixtures before exercising the dynamic asset pipeline.
+const buildCustomFontAssets = (
+  options: Parameters<typeof buildDynamicCustomFontAssets>[0] & {
+    themeConfig: ThemeConfig;
+  }
+) =>
+  buildDynamicCustomFontAssets({
+    customFonts: options.customFonts,
+    themeValues:
+      options.themeValues.version === 1
+        ? options.themeValues
+        : migrateThemeData({
+            ...generateCssVariablesFromThemeConfig(options.themeConfig),
+            ...options.themeValues,
+          }),
+  });
 
 const createTextThemeConfig = (
   fontFamilyDefault: string,
@@ -148,11 +207,11 @@ describe("buildCustomFontAssets", () => {
       customFonts,
     });
 
-    expect(assets.stylesheetPaths).toEqual([
+    expect([...assets.stylesheetPaths].sort()).toEqual([
       "y-fonts/alpha.css",
       "y-fonts/beta.css",
     ]);
-    expect(assets.preloads).toEqual([
+    expect([...assets.preloads].sort()).toEqual([
       "/y-fonts/alpha-bold.woff2",
       "/y-fonts/beta-regular.woff2",
     ]);

@@ -1,7 +1,7 @@
 import React from "react";
 import { FieldLabel } from "@puckeditor/core";
 import { pt } from "../../utils/i18n/platform.ts";
-import { StyleSelectOption } from "../../utils/themeResolver.ts";
+import { StyleSelectOption } from "../../types/types.ts";
 import {
   constructFontSelectOptions,
   defaultFonts,
@@ -106,7 +106,8 @@ const correctTypographyValues = <T extends BaseTextStyles>(
  */
 export function useTypographyOptions<T extends BaseTextStyles>(
   currentValue: T,
-  onChange: (value: T) => void
+  onChange: (value: T) => void,
+  inheritedFontFamily?: string
 ) {
   const templateMetadata = useTemplateMetadata();
   const customFonts = templateMetadata.customFonts ?? {};
@@ -122,11 +123,15 @@ export function useTypographyOptions<T extends BaseTextStyles>(
   );
 
   const fontWeightOptions = getFontWeightOptionsForFontFamily(
-    currentValue.fontFamily,
+    currentValue.fontFamily === "default"
+      ? inheritedFontFamily
+      : currentValue.fontFamily,
     { fontList }
   );
   const fontStyleOptions = getFontStyleOptionsForFontFamily(
-    currentValue.fontFamily,
+    currentValue.fontFamily === "default"
+      ? inheritedFontFamily
+      : currentValue.fontFamily,
     { fontList }
   );
 
@@ -137,11 +142,29 @@ export function useTypographyOptions<T extends BaseTextStyles>(
     fontStyleOptions.map((option) => ({ ...option, label: pt(option.label) }))
   );
 
-  const correctedValue = correctTypographyValues(
-    currentValue,
-    fontWeightOptions,
-    fontStyleOptions
-  );
+  // A preset's font change must not discard an authored local weight or style.
+  if (currentValue.fontFamily === "default") {
+    for (const [options, value] of [
+      [translatedFontWeightOptions, currentValue.fontWeight],
+      [translatedFontStyleOptions, currentValue.fontStyle],
+    ] as const) {
+      if (
+        value !== "default" &&
+        !options.some((option) => option.value === value)
+      ) {
+        options.push({ label: value, value });
+      }
+    }
+  }
+
+  const correctedValue =
+    currentValue.fontFamily === "default"
+      ? currentValue
+      : correctTypographyValues(
+          currentValue,
+          fontWeightOptions,
+          fontStyleOptions
+        );
 
   React.useEffect(() => {
     if (
@@ -164,11 +187,13 @@ export function useTypographyOptions<T extends BaseTextStyles>(
     );
 
     onChange(
-      correctTypographyValues(
-        nextStyledValue,
-        nextFontWeightOptions,
-        nextFontStyleOptions
-      )
+      key === "fontFamily"
+        ? correctTypographyValues(
+            nextStyledValue,
+            nextFontWeightOptions,
+            nextFontStyleOptions
+          )
+        : nextStyledValue
     );
   };
 

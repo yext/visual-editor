@@ -1,7 +1,10 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
-import { getThemeColorCssValue } from "../../../utils/colors.ts";
+import {
+  getThemeColorCssValue,
+  getDefaultForegroundColor,
+} from "../../../utils/colors.ts";
 
 const resolveCssVarColor = (
   element: Element,
@@ -56,8 +59,8 @@ export const MapPinIcon = ({
   const centerY = 13.5;
   const iconHeight = aspectRatio ? iconWidth / aspectRatio : iconWidth;
 
-  const backgroundToken = color?.selectedColor;
-  const textToken = color?.contrastingColor;
+  const backgroundToken = getThemeColorCssValue(color);
+  const textToken = getThemeColorCssValue(getDefaultForegroundColor(color));
   const svgRef = React.useRef<SVGSVGElement>(null);
   const [contrastColor, setContrastColor] = React.useState<string | undefined>(
     undefined

@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FieldLabel } from "@puckeditor/core";
-import { StyleSelectOption } from "../../../utils/themeResolver.ts";
+import { StyleSelectOption } from "../../../types/types.ts";
 import {
   PUCK_PREVIEW_IFRAME_ID,
   THEME_STYLE_TAG_ID,
@@ -37,6 +37,8 @@ export const FontWeightSelector = ({
   const updateOptions = useCallback(() => {
     setAvailableOptions(resolveOptions(options));
   }, [options]);
+
+  useEffect(updateOptions, [updateOptions]);
 
   useEffect(() => {
     if (!availableOptions.length) {

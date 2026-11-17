@@ -19,15 +19,15 @@ describe("getRichTextStyle", () => {
       })
     ).toStrictEqual({
       fontFamily: "'Editorial', serif",
-      "--fontFamily-body-fontFamily": "'Editorial', serif",
+      "--ve-text-font-family": "'Editorial', serif",
       fontSize: "20px",
-      "--fontSize-body-fontSize": "20px",
+      "--ve-text-font-size": "20px",
       fontWeight: "700",
-      "--fontWeight-body-fontWeight": "700",
+      "--ve-text-font-weight": "700",
       fontStyle: "italic",
-      "--fontStyle-body-fontStyle": "italic",
+      "--ve-text-font-style": "italic",
       textTransform: "uppercase",
-      "--textTransform-body-textTransform": "uppercase",
+      "--ve-text-text-transform": "uppercase",
     });
   });
 

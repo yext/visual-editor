@@ -1,3 +1,5 @@
+import { useThemeData } from "../../hooks/useThemeData.ts";
+import { resolveThemeEntry } from "../../utils/dynamicTheme.ts";
 import {
   HoursStatus as HoursStatusJS,
   HoursType,
@@ -18,6 +20,7 @@ export interface HoursStatusAtomProps {
   dayOfWeekFormat?: "short" | "long";
   timezone?: string;
   boldCurrentStatus?: boolean;
+  typographyId?: string;
   bodyVariant?: "lg" | "base" | "sm";
 }
 
@@ -33,104 +36,110 @@ export const HoursStatusAtom = React.memo(
     timezone,
     boldCurrentStatus = true,
     bodyVariant = "lg",
+    typographyId,
   }: HoursStatusAtomProps): any => {
+    const theme = useThemeData();
+    const typography = resolveThemeEntry(theme.typography, typographyId);
     const { t, i18n } = useTranslation();
 
     const classNameResolved = themeManagerCn(
-      "components mb-2 font-body-fontFamily font-body-fontWeight",
-      bodyVariant === "lg"
-        ? "text-body-lg-fontSize"
-        : bodyVariant === "sm"
-          ? "text-body-sm-fontSize"
-          : "text-body-fontSize",
+      "components mb-2  ",
+      bodyVariant === "lg" ? "text-lg" : bodyVariant === "sm" ? "text-sm" : "",
       className
     );
 
     return (
-      <HoursStatusJS
-        hours={hours}
-        comingSoon={comingSoon}
-        className={classNameResolved}
-        statusTemplate={(params: HoursStatusParams) => {
-          const isComingSoon = !!params.comingSoon;
-          const isFuture = !isOpen24h(params) && !isIndefinitelyClosed(params);
-          let time = "";
-          if (params.isOpen) {
-            const interval = params.currentInterval;
-            time += interval
-              ? interval.getEndTime(i18n.language, params.timeOptions)
-              : "";
-          } else {
-            const interval = params.futureInterval;
-            time += interval
-              ? interval.getStartTime(i18n.language, params.timeOptions)
-              : "";
-          }
-
-          const showDayOfWeek = showDayNames && isFuture;
-          let dayOfWeek = "";
-          if (params.isOpen) {
-            const interval = params.currentInterval;
-            dayOfWeek +=
-              interval?.end
-                ?.setLocale(i18n.language)
-                .toLocaleString(params.dayOptions) || "";
-          } else {
-            const interval = params.futureInterval;
-            dayOfWeek +=
-              interval?.start
-                ?.setLocale(i18n.language)
-                .toLocaleString(params.dayOptions) || "";
-          }
-
-          let statusText = "";
-          if (isFuture && params.isOpen) {
-            if (showDayOfWeek) {
-              statusText = t(
-                "closesAtTimeWeek",
-                "Closes at {{time}} {{dayOfWeek}}",
-                {
-                  time,
-                  dayOfWeek,
-                }
-              );
+      <div data-ve-typography={typography.id}>
+        <HoursStatusJS
+          hours={hours}
+          comingSoon={comingSoon}
+          className={classNameResolved}
+          statusTemplate={(params: HoursStatusParams) => {
+            const isComingSoon = !!params.comingSoon;
+            const isFuture =
+              !isOpen24h(params) && !isIndefinitelyClosed(params);
+            let time = "";
+            if (params.isOpen) {
+              const interval = params.currentInterval;
+              time += interval
+                ? interval.getEndTime(i18n.language, params.timeOptions)
+                : "";
             } else {
-              statusText = t("closesAtTime", "Closes at {{time}}", { time });
+              const interval = params.futureInterval;
+              time += interval
+                ? interval.getStartTime(i18n.language, params.timeOptions)
+                : "";
             }
-          }
 
-          if (isFuture && !params.isOpen) {
-            if (showDayOfWeek) {
-              statusText = t(
-                "opensAtTimeWeek",
-                "Opens at {{time}} {{dayOfWeek}}",
-                {
-                  time,
-                  dayOfWeek,
-                }
-              );
+            const showDayOfWeek = showDayNames && isFuture;
+            let dayOfWeek = "";
+            if (params.isOpen) {
+              const interval = params.currentInterval;
+              dayOfWeek +=
+                interval?.end
+                  ?.setLocale(i18n.language)
+                  .toLocaleString(params.dayOptions) || "";
             } else {
-              statusText = t("opensAtTime", "Opens at {{time}}", { time });
+              const interval = params.futureInterval;
+              dayOfWeek +=
+                interval?.start
+                  ?.setLocale(i18n.language)
+                  .toLocaleString(params.dayOptions) || "";
             }
-          }
 
-          return (
-            <div className={themeManagerCn("HoursStatus", classNameResolved)}>
-              {(showCurrentStatus || isComingSoon) &&
-                hoursCurrentTemplateOverride(params, t, boldCurrentStatus)}
-              {!isComingSoon &&
-                showCurrentStatus &&
-                defaultSeparatorTemplate(params)}
-              {!isComingSoon && statusText && (
-                <span className="HoursStatus-future">{statusText}</span>
-              )}
-            </div>
-          );
-        }}
-        dayOptions={{ weekday: dayOfWeekFormat }}
-        timeOptions={timeFormat ? { hour12: timeFormat === "12h" } : undefined}
-        timezone={timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone}
-      />
+            let statusText = "";
+            if (isFuture && params.isOpen) {
+              if (showDayOfWeek) {
+                statusText = t(
+                  "closesAtTimeWeek",
+                  "Closes at {{time}} {{dayOfWeek}}",
+                  {
+                    time,
+                    dayOfWeek,
+                  }
+                );
+              } else {
+                statusText = t("closesAtTime", "Closes at {{time}}", { time });
+              }
+            }
+
+            if (isFuture && !params.isOpen) {
+              if (showDayOfWeek) {
+                statusText = t(
+                  "opensAtTimeWeek",
+                  "Opens at {{time}} {{dayOfWeek}}",
+                  {
+                    time,
+                    dayOfWeek,
+                  }
+                );
+              } else {
+                statusText = t("opensAtTime", "Opens at {{time}}", { time });
+              }
+            }
+
+            return (
+              <div className={themeManagerCn("HoursStatus", classNameResolved)}>
+                {(showCurrentStatus || isComingSoon) &&
+                  hoursCurrentTemplateOverride(params, t, boldCurrentStatus)}
+                {!isComingSoon &&
+                  showCurrentStatus &&
+                  defaultSeparatorTemplate(params)}
+                {!isComingSoon && statusText && (
+                  <span className="HoursStatus-future">{statusText}</span>
+                )}
+              </div>
+            );
+          }}
+          dayOptions={{ weekday: dayOfWeekFormat }}
+          timeOptions={
+            timeFormat ? { hour12: timeFormat === "12h" } : undefined
+          }
+          timezone={
+            timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone
+          }
+        />
+      </div>
     );
   }
 );

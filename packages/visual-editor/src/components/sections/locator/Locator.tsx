@@ -4,10 +4,7 @@ import { YextAutoField } from "../../../fields/YextAutoField.tsx";
 import { TranslatableString } from "../../../types/types.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { TranslatableAssetImage } from "../../../types/images.ts";
-import {
-  backgroundColors,
-  ThemeColor,
-} from "../../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../../utils/themeConfigOptions.ts";
 import {
   DEFAULT_ENTITY_TYPE,
   getEntityTypeLabel,
@@ -110,6 +107,7 @@ export interface LocatorProps {
    * Allows customizing the title text and its color.
    */
   pageHeading?: {
+    typographyId?: string;
     /** The title displayed at the top of the locator page. */
     title: TranslatableString;
     /**
@@ -282,7 +280,7 @@ const locatorFields: YextFields<LocatorProps> = {
     defaultItemProps: {
       entityType: DEFAULT_ENTITY_TYPE,
       pinIcon: { type: "none" },
-      pinColor: backgroundColors.background6.value,
+      pinColor: undefined,
     },
   },
   filters: {
@@ -354,6 +352,11 @@ const locatorFields: YextFields<LocatorProps> = {
     type: "object",
     label: msg("fields.pageHeading", "Page Heading"),
     objectFields: {
+      typographyId: {
+        type: "themeCollection",
+        collection: "typography",
+        label: "Typography",
+      },
       title: {
         type: "translatableString",
         label: msg("fields.title", "Title"),

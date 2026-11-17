@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { type ThemeData } from "../../../types/themeData.ts";
+import { createThemeChoiceSchema } from "../../../utils/layoutGenerationSchemas/colorFieldSchemas.ts";
 import { resolveCanonicalSelectorGroups } from "../../../utils/selectorOptions.ts";
 import {
   appendSchemaInstructions,
@@ -109,7 +111,8 @@ export const inferGenerationSchema = (
   fields: Fields | undefined,
   defaults: Record<string, unknown> | undefined,
   metadata: LayoutGenerationMetadata | undefined,
-  omissions: FieldOmission[]
+  omissions: FieldOmission[],
+  theme?: ThemeData
 ): z.ZodObject => {
   const omit = (field: InferenceField, path: string, reason: string) => {
     omissions.push({ component, path, fieldType: field.type, reason });
@@ -260,6 +263,14 @@ export const inferGenerationSchema = (
     path: string
   ): z.ZodType | undefined => {
     switch (field.type) {
+      case "themeCollection":
+        return theme
+          ? createThemeChoiceSchema(theme, field.collection, field.channel)
+          : omit(
+              field,
+              path,
+              "Theme collection fields require current theme data"
+            );
       case "text":
       case "textarea":
       case "richtext":
@@ -316,9 +327,15 @@ export const inferGenerationSchema = (
         const canonical = (
           key: keyof typeof ThemeOptions
         ): z.ZodType | undefined => {
-          if (key === "MAX_WIDTH") return widthZodSchema;
-          if (key === "SITE_COLOR") return siteColorZodSchema;
-          if (key === "BACKGROUND_COLOR") return backgroundColorZodSchema;
+          if (key === "MAX_WIDTH") {
+            return widthZodSchema;
+          }
+          if (key === "SITE_COLOR") {
+            return siteColorZodSchema;
+          }
+          if (key === "BACKGROUND_COLOR") {
+            return backgroundColorZodSchema;
+          }
           return optionSchema(
             resolveCanonicalSelectorGroups(key).flatMap(
               ({ options }) => options

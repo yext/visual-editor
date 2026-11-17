@@ -1,9 +1,9 @@
+import { deepMerge } from "./deepMerge.ts";
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import {
   convertToTailwindConfig,
-  deepMerge,
   themeResolver,
-} from "./themeResolver.ts";
+} from "../components/migrations/themeData.ts";
 import {
   testDeveloperTailwindConfig,
   testMarketerTailwindConfig as testDefaultTailwindConfig,
@@ -11,7 +11,7 @@ import {
   testThemeConfig,
 } from "./testData.ts";
 
-describe("themeResolver", () => {
+describe("deepMerge and legacy theme conversion", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });

@@ -6,11 +6,7 @@ import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { PhoneAtom } from "../atoms/phone.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { TranslatableString } from "../../types/types.ts";
-import {
-  ThemeColor,
-  ThemeOptions,
-  backgroundColors,
-} from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
@@ -24,6 +20,7 @@ export interface PhoneProps {
   };
 
   styles: {
+    actionId?: string;
     /** Whether to format the phone number like a domestic or international number */
     phoneFormat: "domestic" | "international";
     /** Whether to make the phone number a clickable link */
@@ -59,6 +56,11 @@ export const PhoneDataFields: YextFields<PhoneProps["data"]> = {
 
 // Phone style definitions used in Phone and CoreInfoSection
 export const PhoneStyleFields: YextFields<PhoneProps["styles"]> = {
+  actionId: {
+    type: "themeCollection",
+    collection: "actions",
+    label: "Action preset",
+  },
   phoneFormat: {
     label: msg("fields.phoneFormat", "Phone Format"),
     type: "radio",
@@ -126,7 +128,8 @@ const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
       constantValueEnabled={!parentData && data.number.constantValueEnabled}
     >
       <PhoneAtom
-        backgroundColor={styles.color ?? backgroundColors.background2.value}
+        actionId={styles.actionId}
+        backgroundColor={styles.color ?? undefined}
         eventName={`phone`}
         format={styles.phoneFormat}
         label={resolveComponentData(data.label, i18n.language, streamDocument)}

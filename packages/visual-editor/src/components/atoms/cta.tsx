@@ -12,17 +12,15 @@ import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
+import { useThemeData } from "../../hooks/useThemeData.ts";
+import {
+  resolveThemeEntry,
+  resolveThemeColor,
+} from "../../utils/dynamicTheme.ts";
 import {
   getThemeColorCssValue,
-  getThemeColorHexValue,
-  hexToRGB,
-  isColorContrastWcagCompliant,
+  getDefaultForegroundColor,
 } from "../../utils/colors.ts";
-
-const LINK_TEXT_TRANSFORM_CSS_VAR =
-  "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"];
-const BUTTON_TEXT_TRANSFORM_CSS_VAR =
-  "var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"];
 
 export type CTAProps = {
   // Core props
@@ -41,7 +39,7 @@ export type CTAProps = {
   dataAttributes?: Record<`data-${string}`, string>;
 
   // Styling and behavior props
-  variant?: ButtonProps["variant"];
+  actionId?: string;
   className?: string;
   style?: React.CSSProperties;
   eventName?: string;
@@ -55,26 +53,11 @@ export type CTAProps = {
   color?: ThemeColor;
   openInNewTab?: boolean;
   /**
-   * When true and variant is "link", applies vertical padding (py-3) to the CTA.
+   * When true and the selected preset presents a link, applies vertical padding (py-3) to the CTA.
    * @defaultValue false
    */
   setPadding?: boolean;
 };
-
-/**
- * The different visual variants for CTA buttons.
- * "primary": the default button style. A button filled with the primary theme color.
- * "secondary": an outlined button style. A button with a border in the primary theme color and transparent background.
- * "link": a text link style. A button with no border or background, just a hyperlink in the link theme color.
- * "directoryLink": a text link style optimized for directory listings.
- * "headerFooterMainLink": a text link style optimized for main links in the header and footer.
- * "headerFooterSecondaryLink": a text link style optimized for secondary links in the header and footer.
- */
-export type CTAVariant = ButtonProps["variant"];
-
-/** Returns whether a CTA variant supports user-configurable color overrides. */
-export const isCtaVariantWithColor = (variant?: CTAVariant): boolean =>
-  variant === "primary" || variant === "secondary" || variant === "link";
 
 const presetImageTypeToName = (presetImageType: PresetImageType) => {
   switch (presetImageType) {
@@ -106,10 +89,12 @@ const presetImageTypeToName = (presetImageType: PresetImageType) => {
 };
 
 // useResolvedCtaProps resolves the CTA props based on the current context and ctaType
-const useResolvedCtaProps = (props: CTAProps) => {
+const useResolvedCtaProps = (
+  props: CTAProps & { presentation: "button" | "link" }
+) => {
   const {
     ctaType = "textAndLink",
-    variant,
+    presentation,
     className,
     alwaysHideCaret,
     ariaLabel,
@@ -199,12 +184,10 @@ const useResolvedCtaProps = (props: CTAProps) => {
     return null;
   }
 
-  const buttonVariant = ctaType === "presetImage" ? "link" : variant;
-
   const showCaret =
     !alwaysHideCaret &&
     ctaType !== "presetImage" &&
-    variant === "link" &&
+    presentation === "link" &&
     resolvedDynamicProps.linkType !== "EMAIL" &&
     resolvedDynamicProps.linkType !== "PHONE";
 
@@ -226,7 +209,6 @@ const useResolvedCtaProps = (props: CTAProps) => {
 
   return {
     ...resolvedDynamicProps,
-    buttonVariant,
     buttonClassName,
     showCaret,
     background,
@@ -237,7 +219,6 @@ export const CTA = (props: CTAProps) => {
   const {
     eventName,
     target,
-    variant,
     style,
     ctaType,
     onClick,
@@ -251,87 +232,40 @@ export const CTA = (props: CTAProps) => {
   } = props;
 
   const { t } = useTranslation();
-  const streamDocument = useDocument();
-  const resolvedProps = useResolvedCtaProps(props);
+  const theme = useThemeData();
+  const action = resolveThemeEntry(theme.actions, props.actionId);
+  const resolvedProps = useResolvedCtaProps({
+    ...props,
+    presentation: action.presentation,
+  });
   const isButton = actionType === "button";
 
   if (!resolvedProps) {
     return null;
   }
 
-  const {
-    link,
-    linkType,
-    label,
-    ariaLabel,
-    buttonVariant,
-    buttonClassName,
-    showCaret,
-    background,
-  } = resolvedProps;
-  const isDarkBackground = background?.isDarkColor;
-  const resolvedCtaColorHex = React.useMemo(
-    () => getThemeColorHexValue(color?.selectedColor, streamDocument),
-    [color?.selectedColor, streamDocument]
-  );
-  const resolvedBackgroundColorHex = React.useMemo(
-    () => getThemeColorHexValue(background?.selectedColor, streamDocument),
-    [background?.selectedColor, streamDocument]
-  );
-  const resolvedCtaColorRgb = resolvedCtaColorHex
-    ? hexToRGB(resolvedCtaColorHex)
-    : undefined;
-  const resolvedBackgroundColorRgb = resolvedBackgroundColorHex
-    ? hexToRGB(resolvedBackgroundColorHex)
-    : undefined;
-  const shouldUseConfiguredSecondaryColor =
-    !!color?.selectedColor &&
-    !!resolvedCtaColorHex &&
-    (!isDarkBackground ||
-      (!!resolvedCtaColorRgb &&
-        !!resolvedBackgroundColorRgb &&
-        isColorContrastWcagCompliant(
-          resolvedCtaColorRgb,
-          resolvedBackgroundColorRgb,
-          12,
-          400
-        )));
-  const dynamicStyle: React.CSSProperties = (() => {
-    const bg = getThemeColorCssValue(color?.selectedColor);
-    const textColor = getThemeColorCssValue(color?.contrastingColor);
-    const border = bg;
-
-    if (variant === "primary") {
-      return {
-        backgroundColor: bg,
-        color: textColor,
-        borderColor: border,
-      };
-    }
-
-    if (
-      variant === "secondary" &&
-      (shouldUseConfiguredSecondaryColor || !isDarkBackground)
-    ) {
-      return {
-        borderColor: border,
-        color: border,
-      };
-    }
-
-    if (
-      variant === "link" ||
-      variant === "directoryLink" ||
-      variant === "headerFooterMainLink" ||
-      variant === "headerFooterSecondaryLink"
-    ) {
-      return {
-        color: bg,
-      };
-    }
-
-    return {};
-  })();
+  const { link, linkType, label, ariaLabel, buttonClassName, showCaret } =
+    resolvedProps;
+  const presetBackground =
+    action.presentation === "button"
+      ? resolveThemeColor(theme, action.default.backgroundColor)
+      : undefined;
+  const unfilled =
+    presetBackground === "transparent" ||
+    /^#[0-9a-f]{6}00$/i.test(presetBackground ?? "");
+  const dynamicStyle: React.CSSProperties =
+    action.presentation === "button" && !unfilled
+      ? {
+          background: getThemeColorCssValue(color),
+          color: getThemeColorCssValue(getDefaultForegroundColor(color)),
+          borderColor: getThemeColorCssValue(color, true),
+        }
+      : {
+          color: getThemeColorCssValue(color, true),
+          ...(action.presentation === "button"
+            ? { borderColor: getThemeColorCssValue(color, true) }
+            : {}),
+        };
   const disabledStyle: React.CSSProperties = {
     ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
     cursor: "default",
@@ -344,16 +278,8 @@ export const CTA = (props: CTAProps) => {
       {ctaType !== "presetImage" && (
         <FaAngleRight
           size="12px"
-          // For directoryLink, the theme value for caret is ignored
-          className={variant === "directoryLink" ? "block sm:hidden" : ""}
-          // display does not support custom Tailwind utilities so the property must be set directly
           style={{
-            display:
-              variant === "directoryLink"
-                ? undefined
-                : showCaret
-                  ? "var(--display-link-caret)"
-                  : "none",
+            display: showCaret ? "var(--ve-action-caret, none)" : "none",
           }}
         />
       )}
@@ -365,7 +291,7 @@ export const CTA = (props: CTAProps) => {
       <Button
         type="button"
         className={buttonClassName}
-        variant={buttonVariant}
+        actionId={action.id}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -380,9 +306,7 @@ export const CTA = (props: CTAProps) => {
         }}
         style={{
           ...disabledStyle,
-          textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? LINK_TEXT_TRANSFORM_CSS_VAR
-            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
+
           ...style,
         }}
       >
@@ -400,7 +324,7 @@ export const CTA = (props: CTAProps) => {
       : ariaLabel || undefined;
 
   const linkPadding: ButtonProps["linkPadding"] =
-    buttonVariant === "link" && setPadding ? "yOnly" : "none";
+    action.presentation === "link" && setPadding ? "yOnly" : "none";
 
   if (isButton) {
     return (
@@ -409,13 +333,10 @@ export const CTA = (props: CTAProps) => {
         type="button"
         style={{
           ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
-          textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? LINK_TEXT_TRANSFORM_CSS_VAR
-            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
           ...style,
         }}
         className={buttonClassName}
-        variant={buttonVariant}
+        actionId={action.id}
         linkPadding={linkPadding}
         aria-label={computedAriaLabel}
         onClick={onClick}
@@ -434,7 +355,7 @@ export const CTA = (props: CTAProps) => {
       }}
       asChild
       className={buttonClassName}
-      variant={buttonVariant}
+      actionId={action.id}
       linkPadding={linkPadding}
     >
       <Link
@@ -447,10 +368,6 @@ export const CTA = (props: CTAProps) => {
         // textTransform has to be applied via styles because there is no custom tailwind utility
         style={{
           ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
-          // @ts-ignore: the css variable here resolves to a valid enum value
-          textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? LINK_TEXT_TRANSFORM_CSS_VAR
-            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
           ...style,
         }}
       >

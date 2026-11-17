@@ -1,3 +1,4 @@
+import { migrateThemeData } from "../../components/migrations/themeDataLabels.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { TARGET_ORIGINS, useReceiveMessage } from "./useMessage.ts";
@@ -8,7 +9,7 @@ import {
 import { DevLogger } from "../../utils/devLogger.ts";
 import { Config, Data } from "@puckeditor/core";
 import { useCommonMessageSenders } from "./useMessageSenders.ts";
-import { ThemeData } from "../types/themeData.ts";
+import { ThemeData } from "../../types/themeData.ts";
 import { migrate, type MigrationRegistry } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
@@ -135,7 +136,9 @@ export const useCommonMessageReceivers = (
         )
       );
       setLayoutDataFetched(true);
-      setThemeData({});
+      setThemeData(
+        migrateThemeData(JSON.parse(streamDocument.__?.theme ?? "{}"))
+      );
       setThemeDataFetched(true);
     }
   }, [
@@ -203,7 +206,7 @@ export const useCommonMessageReceivers = (
     const payloadString = payload as unknown as string;
     const themeData = payloadString ? JSON.parse(payloadString) : {};
     devLogger.logData("THEME_DATA", themeData);
-    setThemeData(themeData as ThemeData);
+    setThemeData(migrateThemeData(themeData ?? {}));
     setThemeDataFetched(true);
     send({
       status: "success",

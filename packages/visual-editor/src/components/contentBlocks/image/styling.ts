@@ -25,6 +25,7 @@ export const imageAspectRatioOptions = [
 
 /** Props for displaying an image */
 export interface ImageStylingProps {
+  actionId?: string;
   /** The aspect ratio of the image */
   aspectRatio: number;
   width?: number;

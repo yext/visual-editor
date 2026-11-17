@@ -1,5 +1,7 @@
 import { PUCK_PREVIEW_IFRAME_ID } from "./applyTheme.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
+import { migrateThemeData } from "../components/migrations/themeDataLabels.ts";
+import { themeCssVariables } from "./dynamicTheme.ts";
 
 const getThemeValueFromDocument = (
   targetDocument: Document,
@@ -35,11 +37,8 @@ const getThemeValueFromPublishedTheme = (
   variableName: string,
   streamDocument?: StreamDocument | Record<string, any>
 ): string | undefined => {
-  if (!streamDocument?.__?.theme) {
-    return undefined;
-  }
-
-  const publishedValue = JSON.parse(streamDocument.__.theme)?.[variableName];
+  const theme = migrateThemeData(JSON.parse(streamDocument?.__?.theme ?? "{}"));
+  const publishedValue = themeCssVariables(theme)[variableName];
   if (!publishedValue) {
     return undefined;
   }

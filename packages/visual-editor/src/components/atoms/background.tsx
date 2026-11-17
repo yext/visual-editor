@@ -1,91 +1,71 @@
 import * as React from "react";
-import {
-  ThemeColor,
-  backgroundColors,
-} from "../../utils/themeConfigOptions.ts";
+import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 import { BackgroundProvider } from "../../hooks/useBackground.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { getThemeValue } from "../../utils/getThemeValue.ts";
+
 import {
   getBackgroundColorClasses,
   getBackgroundColorStyle,
   type ResolvedThemeColor,
+  getThemeColorCssValue,
+  getDefaultForegroundColor,
+  isDarkColor,
 } from "../../utils/colors.ts";
+import { useThemeData } from "../../hooks/useThemeData.ts";
+import { resolveThemeEntry } from "../../utils/dynamicTheme.ts";
 
 export interface BackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
   background?: ThemeColor | ResolvedThemeColor;
+  backgroundId?: string;
   as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
 }
 
 export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
-  ({ className, background, as, children, style, ...props }, ref) => {
+  (
+    { className, background, backgroundId, as, children, style, ...props },
+    ref
+  ) => {
     const streamDocument = useDocument();
+    const theme = useThemeData();
+    const pair = resolveThemeEntry(
+      theme.colors,
+      background?.colorId ?? backgroundId
+    );
     const Component = as ?? "div";
-    const selectedBackground = background ?? backgroundColors.background1.value;
-
-    const backgroundValue: Required<ThemeColor> = React.useMemo(() => {
-      // Our built-in backgrounds are always light or dark
-      if (
-        selectedBackground.contrastingColor === "white" ||
-        selectedBackground.contrastingColor === "black"
-      ) {
-        return {
-          selectedColor: selectedBackground.selectedColor,
-          contrastingColor: selectedBackground.contrastingColor,
-          isDarkColor: selectedBackground.contrastingColor === "white",
-        };
-      }
-
-      // of the form `palette-x`
-      const paletteColor = selectedBackground.selectedColor;
-      // of the form `--colors-palette-x-contrast`
-      const paletteColorContrastCSSVariable = `--colors-${paletteColor}-contrast`;
-
-      const contrastColor = getThemeValue(
-        paletteColorContrastCSSVariable,
-        streamDocument
+    const appearance = className
+      ?.split(/\s+/)
+      .find(
+        (name) => name === "ve-theme-on-dark" || name === "ve-theme-on-light"
       );
-      if (contrastColor) {
-        return {
-          selectedColor: selectedBackground.selectedColor,
-          contrastingColor: selectedBackground.contrastingColor,
-          isDarkColor: contrastColor.toUpperCase() === "#FFFFFF",
-        };
-      }
-
-      // Handle color palette defaults and fallback.
-      let isDarkColor;
-      switch (paletteColorContrastCSSVariable) {
-        case "--colors-palette-primary-contrast":
-          isDarkColor = true;
-          break;
-        case "--colors-palette-secondary-contrast":
-          isDarkColor = true;
-          break;
-        case "--colors-palette-tertiary-contrast":
-          isDarkColor = false;
-          break;
-        case "--colors-palette-quaternary-contrast":
-          isDarkColor = true;
-          break;
-        default:
-          isDarkColor = false;
-          break;
-      }
-
-      return {
-        selectedColor: selectedBackground.selectedColor,
-        contrastingColor: selectedBackground.contrastingColor,
-        isDarkColor,
-      };
-    }, [selectedBackground, streamDocument]);
-
+    const backgroundValue = {
+      selectedColor:
+        background?.selectedColor !== undefined
+          ? (getThemeColorCssValue(background) ?? pair.background)
+          : pair.background,
+      contrastingColor:
+        getThemeColorCssValue(getDefaultForegroundColor(background)) ??
+        pair.foreground,
+      isDarkColor: appearance
+        ? appearance === "ve-theme-on-dark"
+        : isDarkColor(
+            background &&
+              (background.colorId === undefined ||
+                background.isDarkColor !== undefined)
+              ? background
+              : pair[background?.channel ?? "background"],
+            streamDocument
+          ),
+    };
     return (
       <BackgroundProvider value={backgroundValue}>
         <Component
+          data-ve-background={pair.id}
           className={themeManagerCn(
             "components",
+            backgroundValue.isDarkColor
+              ? "ve-theme-on-dark"
+              : "ve-theme-on-light",
             getBackgroundColorClasses(background),
             className
           )}

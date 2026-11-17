@@ -6,14 +6,9 @@ import {
   useCardAnalyticsCallback,
 } from "@yext/search-ui-react";
 import { Background } from "../../atoms/background.tsx";
-import {
-  backgroundColors,
-  ThemeColor,
-  HeadingLevel,
-  ThemeOptions,
-} from "../../../utils/themeConfigOptions.ts";
+import { ThemeColor, HeadingLevel } from "../../../utils/themeConfigOptions.ts";
 import { Body, BodyProps } from "../../atoms/body.tsx";
-import { CTA, CTAVariant } from "../../atoms/cta.tsx";
+import { CTA } from "../../atoms/cta.tsx";
 import { Heading } from "../../atoms/heading.tsx";
 import { Image } from "../../atoms/image.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
@@ -53,12 +48,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../../atoms/accordion.js";
-import {
-  FaAngleRight,
-  FaMapMarkerAlt,
-  FaRegClock,
-  FaRegEnvelope,
-} from "react-icons/fa";
+import { FaMapMarkerAlt, FaRegClock, FaRegEnvelope } from "react-icons/fa";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
 import { FieldTypeData } from "../../../internal/types/templateMetadata.ts";
 import {
@@ -74,10 +64,7 @@ import { resolveLocatorResultUrl } from "../../../utils/urls/resolveLocatorResul
 import {
   getBackgroundColorClasses,
   getBackgroundColorStyle,
-  getTextColorClass,
-  getTextColorStyle,
 } from "../../../utils/colors.ts";
-import { themeManagerCn } from "../../../utils/cn.ts";
 
 export interface LocatorResultCardProps {
   /** The entity type this result card applies to. */
@@ -100,6 +87,7 @@ export interface LocatorResultCardProps {
     falseDisplayText?: TranslatableString;
     /** The heading level for the primary heading */
     headingLevel: HeadingLevel;
+    typographyId?: string;
     /**
      * The color applied to the primary heading text
      * @defaultValue inherited from theme
@@ -120,7 +108,8 @@ export interface LocatorResultCardProps {
     /** Static text to display when the selected boolean field is false */
     falseDisplayText?: TranslatableString;
     /** The variant for the secondary heading */
-    variant: BodyProps["variant"];
+    variant?: BodyProps["variant"];
+    typographyId?: string;
     /** Whether the secondary heading is visible in live mode */
     liveVisibility: boolean;
   };
@@ -138,7 +127,8 @@ export interface LocatorResultCardProps {
     /** Static text to display when the selected boolean field is false */
     falseDisplayText?: TranslatableString;
     /** The variant for the tertiary heading */
-    variant: BodyProps["variant"];
+    variant?: BodyProps["variant"];
+    typographyId?: string;
     /** Whether the tertiary heading is visible in live mode */
     liveVisibility: boolean;
   };
@@ -161,6 +151,7 @@ export interface LocatorResultCardProps {
 
   /** Settings for the address block */
   address: {
+    actionId?: string;
     /**
      * Whether to include the region in the Address
      * @defaultValue true
@@ -188,6 +179,7 @@ export interface LocatorResultCardProps {
 
   /** Settings for the phone block */
   phone: {
+    actionId?: string;
     /**
      * The field from the data to use for the phone number
      * @defaultValue "mainPhone"
@@ -206,6 +198,7 @@ export interface LocatorResultCardProps {
 
   /** Settings for the email block */
   email: {
+    actionId?: string;
     /**
      * The field from the data to use for the email address
      * @defaultValue "emails"
@@ -231,8 +224,7 @@ export interface LocatorResultCardProps {
     label: TranslatableString;
     /** Whether the primary CTA link should be normalized before rendering */
     normalizeLink: boolean;
-    /** The variant for the primary CTA */
-    variant: CTAVariant;
+    actionId?: string;
     /** Whether the primary CTA is visible in live mode */
     liveVisibility: boolean;
     /** Static URL to use for primary CTA when an entity page URL is not found */
@@ -247,8 +239,7 @@ export interface LocatorResultCardProps {
     link: TranslatableString;
     /** Whether the secondary CTA link should be normalized before rendering */
     normalizeLink: boolean;
-    /** The variant for the secondary CTA */
-    variant: CTAVariant;
+    actionId?: string;
     /** Whether the secondary CTA is visible in live mode */
     liveVisibility: boolean;
   };
@@ -325,14 +316,14 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   primaryCTA: {
     label: "Visit Page",
     normalizeLink: true,
-    variant: "primary",
+
     liveVisibility: true,
   },
   secondaryCTA: {
     label: "Call to Action",
     link: "#",
     normalizeLink: true,
-    variant: "secondary",
+
     liveVisibility: false,
   },
   image: {
@@ -434,6 +425,11 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             showApplyAllOption: false,
             showFieldSelector: false,
           },
+          typographyId: {
+            type: "themeCollection",
+            collection: "typography",
+            label: "Typography",
+          },
           headingLevel: {
             type: "basicSelector",
             label: msg("fields.headingLevel", "Heading Level"),
@@ -486,10 +482,10 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             showApplyAllOption: false,
             showFieldSelector: false,
           },
-          variant: {
-            label: msg("fields.variant", "Variant"),
-            type: "radio",
-            options: ThemeOptions.BODY_VARIANT,
+          typographyId: {
+            type: "themeCollection",
+            collection: "typography",
+            label: "Typography",
           },
           liveVisibility: {
             label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
@@ -541,10 +537,10 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             showApplyAllOption: false,
             showFieldSelector: false,
           },
-          variant: {
-            label: msg("fields.variant", "Variant"),
-            type: "radio",
-            options: ThemeOptions.BODY_VARIANT,
+          typographyId: {
+            type: "themeCollection",
+            collection: "typography",
+            label: "Typography",
           },
           liveVisibility: {
             label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
@@ -593,6 +589,11 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         label: msg("fields.address", "Address"),
         type: "object",
         objectFields: {
+          actionId: {
+            type: "themeCollection",
+            collection: "actions",
+            label: "Action preset",
+          },
           showRegion: {
             label: msg("fields.showRegion", "Show Region"),
             type: "radio",
@@ -642,6 +643,11 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         label: msg("fields.phone", "Phone"),
         type: "object",
         objectFields: {
+          actionId: {
+            type: "themeCollection",
+            collection: "actions",
+            label: "Action preset",
+          },
           field: DisplayFieldSelector("type.phone"),
           phoneFormat: {
             label: msg("fields.phoneFormat", "Phone Format"),
@@ -682,6 +688,11 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
         label: msg("fields.email", "Email"),
         type: "object",
         objectFields: {
+          actionId: {
+            type: "themeCollection",
+            collection: "actions",
+            label: "Action preset",
+          },
           field: DisplayFieldSelector("type.string"),
           liveVisibility: {
             label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
@@ -719,10 +730,10 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
             showFieldSelector: true,
             getOptions: () => getDisplayFieldOptions("type.string"),
           },
-          variant: {
-            label: msg("fields.ctaVariant", "CTA Variant"),
-            type: "radio",
-            options: ThemeOptions.CTA_VARIANT,
+          actionId: {
+            type: "themeCollection",
+            collection: "actions",
+            label: "Action preset",
           },
           liveVisibility: {
             label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
@@ -775,10 +786,10 @@ export const LocatorResultCardFields: YextObjectField<LocatorResultCardProps> =
               { label: msg("fields.options.no", "No"), value: false },
             ],
           },
-          variant: {
-            label: msg("fields.ctaVariant", "CTA Variant"),
-            type: "radio",
-            options: ThemeOptions.CTA_VARIANT,
+          actionId: {
+            type: "themeCollection",
+            collection: "actions",
+            label: "Action preset",
           },
           liveVisibility: {
             label: msg("fields.visibleOnLivePage", "Visible on Live Page"),
@@ -858,10 +869,8 @@ export const LocatorResultCard = React.memo(
     const { t, i18n } = useTranslation();
 
     const location = result.rawData;
-    const resolvedAccentBackgroundColor =
-      props.accentColor ?? backgroundColors.background2.value;
-    const resolvedAccentLinkColor =
-      props.accentColor ?? backgroundColors.background6.value;
+    const resolvedAccentBackgroundColor = props.accentColor ?? undefined;
+    const resolvedAccentLinkColor = props.accentColor ?? undefined;
     const distance =
       distanceDisplay === "distanceFromUser"
         ? result.distance
@@ -971,7 +980,7 @@ export const LocatorResultCard = React.memo(
 
     return (
       <Background
-        background={backgroundColors.background1.value}
+        background={undefined}
         className="container flex flex-row border-b border-gray-300 p-4 md:p-6 lg:p-8 gap-4"
         style={isSelected ? { backgroundColor: "#F9F9F9" } : undefined}
       >
@@ -983,11 +992,8 @@ export const LocatorResultCard = React.memo(
                 <ImageSection image={props.image} location={location} />
                 <div className="flex flex-row items-center gap-4 min-w-0">
                   <Background
-                    background={
-                      props?.primaryHeading?.color ??
-                      backgroundColors.background6.value
-                    }
-                    className="flex-shrink-0 w-6 h-6 rounded-full font-bold hidden md:flex items-center justify-center text-body-sm-fontSize"
+                    background={props?.primaryHeading?.color ?? undefined}
+                    className="flex-shrink-0 w-6 h-6 rounded-full font-bold hidden md:flex items-center justify-center text-sm"
                   >
                     {result.index}
                   </Background>
@@ -1002,7 +1008,7 @@ export const LocatorResultCard = React.memo(
               {showDistance && (
                 <div
                   className={
-                    "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex flex-col items-end text-right min-w-fit"
+                    " text-sm rounded-full hidden lg:flex flex-col items-end text-right min-w-fit"
                   }
                 >
                   {displayDistanceContent}
@@ -1033,7 +1039,7 @@ export const LocatorResultCard = React.memo(
                         </CardIcon>
                       )}
                       <div className="flex flex-col gap-1 w-full">
-                        <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize gap-4">
+                        <div className="   gap-4">
                           <Address
                             address={location.address}
                             showRegion={props.address.showRegion}
@@ -1042,32 +1048,21 @@ export const LocatorResultCard = React.memo(
                         </div>
                         {getDirectionsLink &&
                           props.address.showGetDirectionsLink && (
-                            <a
-                              href={getDirectionsLink}
-                              target={
-                                props.address.openInNewTab
-                                  ? "_blank"
-                                  : undefined
-                              }
-                              rel={
-                                props.address.openInNewTab
-                                  ? "noopener noreferrer"
-                                  : undefined
-                              }
+                            <CTA
+                              link={getDirectionsLink}
+                              linkType="DRIVING_DIRECTIONS"
+                              normalizeLink={false}
+                              actionId={props.address.actionId}
+                              openInNewTab={props.address.openInNewTab}
                               onClick={handleGetDirectionsClick}
-                              aria-label={t("getDirectionsForLocation", {
+                              ariaLabel={t("getDirectionsForLocation", {
                                 address: location.address.line1,
                                 defaultValue: "Get Directions for {{address}}",
                               })}
-                              className={themeManagerCn(
-                                "components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold",
-                                getTextColorClass(resolvedAccentLinkColor)
-                              )}
-                              style={getTextColorStyle(resolvedAccentLinkColor)}
-                            >
-                              {t("getDirections", "Get Directions")}
-                              <FaAngleRight size={"12px"} />
-                            </a>
+                              className="w-fit gap-2"
+                              color={resolvedAccentLinkColor}
+                              label={t("getDirections", "Get Directions")}
+                            />
                           )}
                       </div>
                     </div>
@@ -1102,9 +1097,9 @@ export const LocatorResultCard = React.memo(
           {showDistance && (
             <div
               className={`
-              font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize flex flex-col items-start text-left lg:hidden md:ml-10 py-1 w-fit max-w-full break-words
+               text-sm flex flex-col items-start text-left lg:hidden md:ml-10 py-1 w-fit max-w-full break-words
               ${distanceDisplay === "bothDistances" ? "rounded-md px-3" : "rounded-full px-2"}
-              ${getBackgroundColorClasses(backgroundColors.background2.value)}`}
+              ${getBackgroundColorClasses(undefined)}`}
             >
               {displayDistanceContent}
             </div>
@@ -1130,7 +1125,7 @@ export const LocatorResultCard = React.memo(
                     location
                   ) || t("callToAction", "Call to Action")
                 }
-                variant={props.secondaryCTA.variant}
+                actionId={props.secondaryCTA.actionId}
                 normalizeLink={props.secondaryCTA.normalizeLink}
                 onClick={handleSecondaryCTAClick}
                 className="basis-full sm:w-auto justify-center"
@@ -1198,7 +1193,7 @@ const PrimaryCTA = (props: {
           name: primaryHeadingText,
           defaultValue: "Visit Page for {{name}}",
         })}
-        variant={primaryCTA.variant}
+        actionId={primaryCTA.actionId}
         normalizeLink={primaryCTA.normalizeLink}
         onClick={handlePrimaryCtaClick}
         className="basis-full sm:w-auto justify-center"
@@ -1214,11 +1209,9 @@ const CardIcon: React.FC<{
   return (
     <div
       className={`h-10 w-10 flex justify-center rounded-full items-center ${getBackgroundColorClasses(
-        backgroundColor ?? backgroundColors.background2.value
+        backgroundColor ?? undefined
       )}`}
-      style={getBackgroundColorStyle(
-        backgroundColor ?? backgroundColors.background2.value
-      )}
+      style={getBackgroundColorStyle(backgroundColor ?? undefined)}
     >
       {children}
     </div>
@@ -1306,18 +1299,24 @@ const HeadingTextSection = (props: {
     <div className="flex flex-col gap-2 flex-1 min-w-0">
       <Heading
         color={primaryHeading?.color}
-        className={`font-bold ${primaryHeading?.color ? "" : "text-palette-primary-dark"}`}
+        className={`font-bold ${primaryHeading?.color ? "" : "text-current"}`}
         level={primaryHeading.headingLevel}
+        typographyId={primaryHeading.typographyId}
       >
         {primaryHeadingText}
       </Heading>
       {secondaryHeadingText && secondaryHeading.liveVisibility && (
-        <Body variant={secondaryHeading.variant} className="font-bold">
+        <Body
+          typographyId={secondaryHeading.typographyId}
+          className="font-bold"
+        >
           {secondaryHeadingText}
         </Body>
       )}
       {tertiaryHeadingText && tertiaryHeading.liveVisibility && (
-        <Body variant={tertiaryHeading.variant}>{tertiaryHeadingText}</Body>
+        <Body typographyId={tertiaryHeading.typographyId}>
+          {tertiaryHeadingText}
+        </Body>
       )}
     </div>
   );
@@ -1350,7 +1349,7 @@ const HoursSection = (props: {
         hours={hoursData ?? {}}
         comingSoon={comingSoon}
         timezone={location.timezone}
-        className="text-body-fontSize mb-0"
+        className=" mb-0"
         showDayNames={false}
         boldCurrentStatus={true}
       />
@@ -1359,7 +1358,7 @@ const HoursSection = (props: {
 
   return (
     showHoursSection && (
-      <div className="font-body-fontFamily text-body-fontSize gap-8">
+      <div className="  gap-8">
         {comingSoon ? (
           hoursStatusRow
         ) : (
@@ -1393,7 +1392,7 @@ const HoursSection = (props: {
                   />
                   {location.additionalHoursText &&
                     hoursProps.table.showAdditionalHoursText && (
-                      <div className="text-body-sm-fontSize">
+                      <div className="text-sm">
                         {location.additionalHoursText}
                       </div>
                     )}
@@ -1413,8 +1412,8 @@ const PhoneSection = (props: {
   location: Location;
   icons: boolean;
   index?: number;
-  backgroundColor: ThemeColor;
-  linkColor: ThemeColor;
+  backgroundColor?: ThemeColor;
+  linkColor?: ThemeColor;
 }) => {
   const {
     phone,
@@ -1432,6 +1431,7 @@ const PhoneSection = (props: {
   return (
     showPhoneNumber && (
       <PhoneAtom
+        actionId={phone.actionId}
         backgroundColor={backgroundColor}
         eventName={`phone${index}`}
         label={t("phone", "Phone")}
@@ -1451,8 +1451,8 @@ const EmailSection = (props: {
   location: Location;
   icons: boolean;
   index?: number;
-  iconBackgroundColor: ThemeColor;
-  linkColor: ThemeColor;
+  iconBackgroundColor?: ThemeColor;
+  linkColor?: ThemeColor;
 }) => {
   const { email, location, index, icons, iconBackgroundColor, linkColor } =
     props;
@@ -1477,7 +1477,7 @@ const EmailSection = (props: {
           label={emailAddresses[0]}
           linkType="EMAIL"
           normalizeLink={false}
-          variant="link"
+          actionId={email.actionId}
           color={linkColor}
         />
       </div>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CTAVariant, CTA } from "./cta.tsx";
+import { CTA } from "./cta.tsx";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
 
 export type MaybeLinkProps = {
@@ -7,7 +7,7 @@ export type MaybeLinkProps = {
   children?: React.ReactNode;
   className?: string;
   eventName?: string;
-  variant?: CTAVariant;
+  actionId?: string;
   color?: ThemeColor;
   alwaysHideCaret?: boolean;
   ariaLabel?: string;
@@ -21,7 +21,6 @@ export const MaybeLink = (props: MaybeLinkProps) => {
     className,
     eventName,
     alwaysHideCaret,
-    variant = "link",
     color,
     ariaLabel,
     disabled = false,
@@ -35,7 +34,7 @@ export const MaybeLink = (props: MaybeLinkProps) => {
         linkType="URL"
         normalizeLink={false}
         eventName={eventName}
-        variant={variant}
+        actionId={props.actionId}
         color={color}
         className={className}
         alwaysHideCaret={alwaysHideCaret}

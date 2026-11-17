@@ -16,7 +16,6 @@ It is automatically used in the edit pages created by the Section Library Vite p
 | -------------------------------- | ----------------------------------------------------------------------------------------- |
 | document                         | any (json data from [our hook](../hooks/README.md#usePlatformBridgeDocument))             |
 | componentRegistry                | `Record<string, Config<any>>` from [@measuredco/puck](https://github.com/measuredco/puck) |
-| themeConfig?                     | ThemeConfig                                                                               |
 | metadata?                        | Metadata                                                                                  |
 | sectionLibraryMigrationRegistry? | MigrationRegistry                                                                         |
 
@@ -655,7 +654,7 @@ When the field definition is part of a normal component `fields` config, Puck re
 
 ## themeColor Field Type
 
-Use `themeColor` for site and background palette choices, including custom colors. It authors the same `ThemeColor` value as existing color `basicSelector` fields. The render prop always contains the authored tokens plus CSS values for the selected and contrasting colors:
+Use `themeColor` for shared foreground/background choices, including custom colors. It authors the same `ThemeColor` value as existing color `basicSelector` fields. The render prop always contains the authored tokens plus CSS values for the selected and contrasting colors:
 
 ```tsx
 const backgroundField = {
@@ -664,7 +663,7 @@ const backgroundField = {
 };
 ```
 
-For a palette color, the render value has the shape `{ selectedColor: "palette-primary", contrastingColor: "palette-primary-contrast", selectedColorCss: "var(--colors-palette-primary)", contrastingColorCss: "var(--colors-palette-primary-contrast)" }`. An empty selection returns `undefined`. The value can be passed to `Background` or `PageSection`. Existing color `basicSelector` definitions remain editable; use `themeColor` for resolved color values.
+For a shared color, the authored value is `{ colorId: "ocean", channel: "background" }`. The render value retains this reference and adds `selectedColorCss` and `contrastingColorCss`, which resolve through the current theme. An empty selection returns `undefined`. The value can be passed to `Background` or `PageSection`. Existing color `basicSelector` definitions remain editable; use `themeColor` for resolved color values.
 
 ## image Field
 

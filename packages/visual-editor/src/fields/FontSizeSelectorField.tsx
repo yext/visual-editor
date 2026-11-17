@@ -4,7 +4,7 @@ import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { Combobox } from "../internal/puck/ui/Combobox.tsx";
 import { pt, type MsgString } from "../utils/i18n/platform.ts";
 import { fontSizeOptions } from "../utils/themeConfigOptions.ts";
-import { type TailwindConfig } from "../utils/themeResolver.ts";
+import { type TailwindConfig } from "../types/types.ts";
 
 export const convertToPixels = (fontSize: string): number => {
   // If the font size is already in px, just extract the number

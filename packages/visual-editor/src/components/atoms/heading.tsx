@@ -1,30 +1,21 @@
-import { ThemeColor, HeadingLevel } from "../../utils/themeConfigOptions.ts";
+import {
+  ThemeColor,
+  HeadingLevel,
+  fontSizeOptions,
+} from "../../utils/themeConfigOptions.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { getTextColorClass, getTextColorStyle } from "../../utils/colors.ts";
+import { getTextColorStyle } from "../../utils/colors.ts";
+import { useThemeData } from "../../hooks/useThemeData.ts";
+import {
+  resolveThemeEntry,
+  resolveThemeColor,
+} from "../../utils/dynamicTheme.ts";
 
 // Define the variants for the heading component
 export const headingVariants = cva("components", {
   variants: {
-    level: {
-      1:
-        "font-h2-fontWeight text-h2-fontSize font-h2-fontFamily " +
-        "sm:font-h1-fontWeight sm:text-h1-fontSize sm:font-h1-fontFamily",
-      2:
-        "font-h3-fontWeight text-h3-fontSize font-h3-fontFamily " +
-        "sm:font-h2-fontWeight sm:text-h2-fontSize sm:font-h2-fontFamily",
-      3:
-        "font-h4-fontWeight text-h4-fontSize font-h4-fontFamily " +
-        "sm:font-h3-fontWeight sm:text-h3-fontSize sm:font-h3-fontFamily",
-      4:
-        "font-h5-fontWeight text-h5-fontSize font-h5-fontFamily " +
-        "sm:font-h4-fontWeight sm:text-h4-fontSize sm:font-h4-fontFamily",
-      5:
-        "font-h6-fontWeight text-h6-fontSize font-h6-fontFamily " +
-        "sm:font-h5-fontWeight sm:text-h5-fontSize sm:font-h5-fontFamily",
-      6: "font-h6-fontWeight text-h6-fontSize font-h6-fontFamily",
-    },
     fontSize: {
       default: "",
       xs: "text-xs",
@@ -68,6 +59,7 @@ export interface HeadingProps
   level: HeadingLevel;
   semanticLevelOverride?: HeadingLevel | "span";
   color?: ThemeColor;
+  typographyId?: string;
 }
 
 export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
@@ -80,10 +72,13 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       semanticLevelOverride,
       style,
       color,
+      typographyId,
       ...props
     },
     ref
   ) => {
+    const theme = useThemeData();
+    const typography = resolveThemeEntry(theme.typography, typographyId);
     const Tag = (
       semanticLevelOverride
         ? typeof semanticLevelOverride === "string"
@@ -94,24 +89,29 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       JSX.IntrinsicElements,
       "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span"
     >;
-    const textColorClass = getTextColorClass(color);
 
     return (
       <Tag
+        data-ve-typography={typography.id}
         className={themeManagerCn(
           headingVariants({
             fontSize,
             weight,
-            level,
           }),
-          textColorClass,
           Tag === "span" && "block",
           className
         )}
         style={{
           ...getTextColorStyle(color),
-          // @ts-ignore: the css variable here resolves to a valid enum value
-          textTransform: `var(--textTransform-h${level}-textTransform)`,
+          ...(color?.colorId !== undefined
+            ? { color: resolveThemeColor(theme, color, true) }
+            : {}),
+          ...(weight && weight !== "default" ? { fontWeight: weight } : {}),
+          ...(fontSize && fontSize !== "default"
+            ? {
+                fontSize: `${fontSizeOptions().find((option) => option.value === fontSize)?.px}px`,
+              }
+            : {}),
           ...style,
         }}
         ref={ref}

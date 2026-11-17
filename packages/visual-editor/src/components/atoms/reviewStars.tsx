@@ -1,4 +1,3 @@
-import * as React from "react";
 import { FaRegStar, FaStar, FaStarHalf, FaStarHalfAlt } from "react-icons/fa";
 import { Body } from "./body.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
@@ -25,10 +24,8 @@ export const ReviewStars = (props: ReviewStarsProps) => {
   const hasDarkBackground = background?.isDarkColor;
   const roundedAverageRating = Math.round(averageRating * 10) / 10;
   const HalfStar = hasDarkBackground ? FaStarHalf : FaStarHalfAlt;
-  const starColorValue = getThemeColorCssValue(color?.selectedColor);
-  const starColor = hasDarkBackground
-    ? "text-white"
-    : "text-palette-primary-dark";
+  const starColorValue = getThemeColorCssValue(color);
+  const starColor = hasDarkBackground ? "text-white" : "text-current";
   const { t } = useTranslation();
 
   return (
@@ -71,11 +68,12 @@ export const ReviewStars = (props: ReviewStarsProps) => {
  */
 export function getAggregateRating(document: any): AggregateRating {
   const reviews = document?.ref_reviewsAgg;
-  if (!Array.isArray(reviews))
+  if (!Array.isArray(reviews)) {
     return {
       averageRating: 0,
       reviewCount: 0,
     };
+  }
 
   const firstPartyReview = reviews.find(
     (r) =>
@@ -84,11 +82,12 @@ export function getAggregateRating(document: any): AggregateRating {
       typeof r.reviewCount === "number"
   );
 
-  if (!firstPartyReview)
+  if (!firstPartyReview) {
     return {
       averageRating: 0,
       reviewCount: 0,
     };
+  }
 
   return {
     averageRating: firstPartyReview.averageRating,

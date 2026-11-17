@@ -1,3 +1,5 @@
+import { getThemeColorHexValue } from "../../utils/colors.ts";
+import { useThemeData } from "../../hooks/useThemeData.ts";
 import { useTranslation } from "react-i18next";
 import { Coordinate } from "@yext/pages-components";
 import { EntityField } from "../../editor/EntityField.tsx";
@@ -9,10 +11,10 @@ import { msg, pt } from "../../utils/i18n/platform.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { Body } from "../atoms/body.tsx";
 import { PuckComponent } from "@puckeditor/core";
-import { StreamDocument } from "../../utils/types/StreamDocument.ts";
+
 import mapboxLogo from "../assets/mapbox-logo-black.svg";
 import { Map } from "lucide-react";
-import { getThemeValue } from "../../utils/getThemeValue.ts";
+
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type MapboxStaticProps = {
@@ -55,14 +57,6 @@ const mapboxFields: YextFields<MapboxStaticProps> = {
   mapStyle: mapStyleField,
 };
 
-const getPrimaryColor = (streamDocument: StreamDocument) => {
-  return (
-    getThemeValue("--colors-palette-primary", streamDocument)
-      ?.replace("#", "")
-      ?.trim() ?? "000000"
-  );
-};
-
 export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   coordinate: coordinateField,
   height = "300px",
@@ -72,6 +66,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
 }) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument<any>();
+  const theme = useThemeData();
 
   const coordinate = resolveComponentData<Coordinate>(
     coordinateField,
@@ -128,7 +123,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
     return <></>;
   }
 
-  const marker = `pin-l+${getPrimaryColor(streamDocument)}(${coordinate.longitude},${coordinate.latitude})`;
+  const marker = `pin-l+${(getThemeColorHexValue({ colorId: theme.colors[0].id, channel: "foreground" }, streamDocument) ?? "#000000").slice(1)}(${coordinate.longitude},${coordinate.latitude})`;
 
   const staticImageSizes = {
     large: "1280x720",

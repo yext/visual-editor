@@ -361,8 +361,8 @@ describe("resolveComponentData", () => {
       };
       const result = resolveComponentData(data, "en", mockDocument, {
         color: {
-          selectedColor: "palette-quaternary",
-          contrastingColor: "palette-quaternary-contrast",
+          colorId: "main-quaternary",
+          channel: "background",
         },
       });
       expect(React.isValidElement(result)).toBe(true);
@@ -371,7 +371,7 @@ describe("resolveComponentData", () => {
           style?: React.CSSProperties;
         }>;
         expect(element.props.style?.color).toBe(
-          "var(--colors-palette-quaternary)"
+          "var(--ve-colors-15-main-quaternary-background-solid, var(--ve-default-solid-background))"
         );
       }
     });

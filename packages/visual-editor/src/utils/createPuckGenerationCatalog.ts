@@ -1,6 +1,7 @@
 import { defineCatalog, defineSchema } from "@json-render/core";
 import type { Config, Fields, Permissions } from "@puckeditor/core";
 import { z } from "zod";
+import { type ThemeData } from "../types/themeData.ts";
 import { mainContentDisallowedComponents } from "../components/helpers/MainContent.tsx";
 import type { LayoutGenerationMetadata } from "../fields/fields.ts";
 import {
@@ -58,6 +59,7 @@ export const createPuckGenerationCatalog = (
     rootAllowedComponentIds?: string[];
     /** Prompt guidance for fresh generation; explicit user requests take precedence. */
     defaultGenerationSectionIds?: string[];
+    themeData?: ThemeData;
   } = {}
 ) => {
   const entries: Record<string, GenerationComponentInput> = {
@@ -105,7 +107,8 @@ export const createPuckGenerationCatalog = (
                     fields,
                     component.defaultProps,
                     metadata,
-                    fieldOmissions
+                    fieldOmissions,
+                    options.themeData
                   ),
                 };
 
@@ -138,7 +141,11 @@ export const createPuckGenerationCatalog = (
     );
   }
 
-  return Object.assign(catalog, { puckOptions: options, fieldOmissions });
+  return Object.assign(catalog, {
+    puckOptions: options,
+    fieldOmissions,
+    sourceComponents: components,
+  });
 };
 
 export type PuckGenerationCatalog = ReturnType<

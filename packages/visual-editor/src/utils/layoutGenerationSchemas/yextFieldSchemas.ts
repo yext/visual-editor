@@ -1,3 +1,7 @@
+import {
+  themeTypographyIdSchema,
+  themeActionIdSchema,
+} from "./colorFieldSchemas.ts";
 import { z } from "zod";
 import { FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { imageAspectRatioOptions } from "../../components/contentBlocks/image/styling.ts";
@@ -157,6 +161,7 @@ export const styledLinkZodSchema = z.object({
 
 export const styledTextZodSchema = (includeColor: boolean) =>
   z.object({
+    typographyId: themeTypographyIdSchema.optional(),
     ...typography,
     ...(includeColor ? { color: siteColorZodSchema.optional() } : {}),
   });
@@ -212,7 +217,7 @@ export const comprehensiveCtaZodSchema = z.object({
     ariaLabel: translatableStringZodSchema.optional(),
   }),
   styles: z.object({
-    variant: z.enum(["primary", "secondary", "link"]),
+    actionId: themeActionIdSchema.optional(),
     presetImage: z
       .enum([
         "app-store",

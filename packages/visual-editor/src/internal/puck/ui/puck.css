@@ -228,3 +228,138 @@ div[class*="_SidebarSection-breadcrumb"] button {
   flex: 1 !important;
   min-width: 0 !important;
 }
+
+/* Theme controls are editor UI, independent of the site's typography. */
+.theme-editor-sidebar,
+.theme-editor-fields,
+.theme-editor-dialog {
+  color: var(--puck-color-grey-04);
+  font-family: var(--puck-font-family, Inter, sans-serif);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  min-width: 0;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.theme-editor-collection {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.theme-editor-collection-heading,
+.theme-editor-entry-toolbar,
+.theme-editor-entry-toolbar > div,
+.theme-editor-gradient-stops,
+.theme-editor-gradient-stops > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-editor-collection-heading,
+.theme-editor-entry-toolbar {
+  justify-content: space-between;
+}
+
+.theme-editor-collection-heading p,
+.theme-editor-entry-toolbar > span,
+.theme-editor-gradient-stops {
+  margin: 0;
+  color: var(--puck-color-grey-05);
+  font-size: 12px;
+}
+
+.theme-editor-collection-heading button {
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+.theme-editor-entry-toolbar {
+  margin-bottom: 12px;
+}
+
+.theme-editor-entry-toolbar button {
+  width: 28px;
+  height: 28px;
+}
+
+.theme-editor-grid {
+  display: grid;
+  align-items: end;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.theme-editor-action-states {
+  padding-inline-start: 12px;
+}
+
+.theme-editor-grid > * {
+  min-width: 0;
+}
+
+.theme-editor-color-value {
+  display: flex;
+  align-items: end;
+  gap: 10px;
+}
+
+.theme-editor-color-value > :last-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.theme-editor-color-value > button {
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.theme-editor-gradient {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.theme-editor-gradient-stops {
+  justify-content: space-between;
+}
+
+.theme-editor-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--puck-color-grey-09);
+  background: var(--puck-color-white);
+}
+
+.theme-editor-footer > button {
+  width: 100%;
+}
+
+.theme-editor-error,
+.theme-editor-warning {
+  margin: 0;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.theme-editor-error {
+  color: #b42318;
+}
+
+.theme-editor-warning {
+  color: #854d0e;
+}
+
+.theme-editor-issues {
+  max-height: 180px;
+  overflow-y: auto;
+}

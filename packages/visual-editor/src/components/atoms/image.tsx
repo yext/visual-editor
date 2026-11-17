@@ -182,10 +182,7 @@ export const imgSizesHelper = (
 ): string => {
   const streamDocument = useDocument();
 
-  let maxWidth = getThemeValue(
-    "--maxWidth-pageSection-contentWidth",
-    streamDocument
-  );
+  let maxWidth = getThemeValue("--ve-page-content-max-width", streamDocument);
   if (!maxWidth && streamDocument?.__?.theme) {
     maxWidth = "1024px";
   }

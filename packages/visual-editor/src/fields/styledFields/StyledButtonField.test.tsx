@@ -1,4 +1,3 @@
-import React from "react";
 import {
   fireEvent,
   render,
@@ -81,6 +80,31 @@ const renderField = (value: StyledButtonValue = styledButtonValue()) => {
 };
 
 describe("StyledButtonField", () => {
+  it("retains local weight and style when a preset supplies a different font", () => {
+    const onChange = vi.fn();
+    const value = styledButtonValue({ fontWeight: "700", fontStyle: "italic" });
+    const view = (inheritedFontFamily: string) => (
+      <TemplateMetadataContext.Provider value={templateMetadata}>
+        <YextAutoField
+          field={{ ...field, inheritedFontFamily }}
+          id="styled-button"
+          onChange={onChange}
+          value={value}
+        />
+      </TemplateMetadataContext.Provider>
+    );
+    const { rerender } = render(view("'Weights Only', sans-serif"));
+    const weight = screen.getByDisplayValue("Bold (700)") as HTMLSelectElement;
+    const style = screen.getByDisplayValue("Italic") as HTMLSelectElement;
+    rerender(view("'No Italic', serif"));
+    expect(weight.value).toBe("700");
+    expect(style.value).toBe("italic");
+    expect(onChange).not.toHaveBeenCalled();
+    fireEvent.click(screen.getAllByText("Default")[1]);
+    fireEvent.click(screen.getByText("2XL (24px)"));
+    expect(onChange).toHaveBeenCalledWith({ ...value, fontSize: "24px" });
+  });
+
   it("renders through YextAutoField as a registered field type", () => {
     renderField(
       styledButtonValue({

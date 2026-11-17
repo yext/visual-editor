@@ -1,14 +1,15 @@
+import { defaultThemeData } from "../../../utils/defaultThemeData.ts";
 import "../ui/puck.css";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Button } from "../ui/button.tsx";
 import "../../../editor/index.css";
-import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { FontRegistry } from "../../../utils/fonts/visualEditorFonts.ts";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import { InitialHistory, createUsePuck, useGetPuck } from "@puckeditor/core";
-import { ThemeData, ThemeHistories } from "../../types/themeData.ts";
+import { ThemeData } from "../../../types/themeData.ts";
+import { ThemeHistories } from "../../types/themeData.ts";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { LocalDevOverrideButtons } from "./LayoutHeader.tsx";
@@ -29,7 +30,6 @@ type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
   isDevMode: boolean;
   setThemeHistories: (themeHistories: ThemeHistories) => void;
-  themeConfig?: ThemeConfig;
   themeHistories?: ThemeHistories;
   clearThemeHistory: () => void;
   puckInitialHistory: InitialHistory | undefined;
@@ -46,7 +46,6 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     isDevMode,
     setThemeHistories,
     onPublishTheme,
-    themeConfig,
     themeHistories,
     clearThemeHistory,
     puckInitialHistory,
@@ -195,10 +194,9 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
           disabled={themeHistories?.histories?.length === 1}
           onClearLocalChanges={() => {
             clearThemeHistory();
-            if (themeConfig) {
+            {
               updateThemeInEditor(
                 themeHistories?.histories?.[0]?.data as ThemeData,
-                themeConfig,
                 true,
                 customFonts
               );
@@ -207,7 +205,8 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
               histories: [
                 {
                   id: themeHistories?.histories?.[0]?.id ?? "",
-                  data: themeHistories?.histories?.[0]?.data ?? {},
+                  data:
+                    themeHistories?.histories?.[0]?.data ?? defaultThemeData,
                 },
               ],
               index: 0,

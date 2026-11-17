@@ -5,11 +5,7 @@ import { PageSection } from "../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { TranslatableString } from "../../types/types.ts";
-import {
-  ThemeColor,
-  backgroundColors,
-  ThemeOptions,
-} from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { setDeep } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -37,6 +33,7 @@ export interface BreadcrumbsData {
 }
 
 export interface BreadcrumbsStyles {
+  actionId?: string;
   /**
    * The background color of the section.
    * @defaultValue Background Color 1
@@ -109,6 +106,11 @@ const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
     type: "object",
     label: msg("fields.styles", "Styles"),
     objectFields: {
+      actionId: {
+        type: "themeCollection",
+        collection: "actions",
+        label: "Action preset",
+      },
       backgroundColor: {
         type: "basicSelector",
         label: msg("fields.backgroundColor", "Background Color"),
@@ -219,9 +221,10 @@ export const BreadcrumbsComponent = ({
               <wbr />
 
               <MaybeLink
+                actionId={styles.actionId}
                 eventName={`link${index}`}
                 href={isCurrentPage ? "" : href}
-                className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
+                className="inline text-sm   whitespace-normal break-words"
                 color={styles?.linkColor}
                 alwaysHideCaret
               >
@@ -267,7 +270,7 @@ export const BreadcrumbsSection: YextComponentConfig<BreadcrumbsSectionProps> =
         },
       },
       styles: {
-        backgroundColor: backgroundColors.background1.value,
+        backgroundColor: undefined,
         showCurrentPage: true,
       },
       analytics: {
