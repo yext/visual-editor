@@ -328,7 +328,9 @@ const LocatorInternal = ({
   const searchActions = useSearchActions();
   const searchFilters = useSearchState((state) => state.filters);
 
-  const handleSearchAreaClick = (): void => {
+  const preserveMapView = React.useRef(false);
+
+  const handleSearchAreaClick = (preserveView = false): void => {
     cancelMapSearch();
     if (mapCenter && mapRadius) {
       searchActions.setOffset(0);
@@ -352,6 +354,7 @@ const LocatorInternal = ({
       setSelectedDistanceOption(null);
       setSelectedDistanceMeters(null);
       searchActions.setStaticFilters([locationFilter, openNowFilter]);
+      preserveMapView.current = preserveView;
       searchActions.executeVerticalQuery();
       setSearchState("loading");
       setShowSearchAreaButton(false);
@@ -366,10 +369,10 @@ const LocatorInternal = ({
     }
   };
 
-  const searchMapArea = React.useRef(handleSearchAreaClick);
+  const searchMapArea = React.useRef((): void => handleSearchAreaClick(true));
   React.useEffect((): void => {
     // Use the current map area and filters when the movement delay ends.
-    searchMapArea.current = handleSearchAreaClick;
+    searchMapArea.current = (): void => handleSearchAreaClick(true);
   });
 
   const handleCurrentLocationClick = (position: GeolocationPosition) => {
@@ -399,6 +402,7 @@ const LocatorInternal = ({
     );
     searchActions.setOffset(0);
     searchActions.setStaticFilters([...nonLocationFilters, locationFilter]);
+    preserveMapView.current = false;
     searchActions.executeVerticalQuery();
     setSearchState("loading");
     updateLocationQuery(formatCoordinateQuery(latitude, longitude, radius));
@@ -464,6 +468,7 @@ const LocatorInternal = ({
 
     searchActions.setOffset(0);
     searchActions.setStaticFilters([locationFilter, openNowFilter]);
+    preserveMapView.current = false;
     searchActions.executeVerticalQuery();
     setSearchState("loading");
     updateLocationQuery(newDisplayName);
@@ -520,6 +525,7 @@ const LocatorInternal = ({
       );
       searchActions.setStaticFilters(updatedFilters);
       searchActions.setOffset(0);
+      preserveMapView.current = false;
       executeSearch(searchActions);
       setSearchState("loading");
     }
@@ -678,6 +684,7 @@ const LocatorInternal = ({
   const mapProps = React.useMemo(
     () => ({
       mapStyle,
+      preserveMapView,
       centerCoords,
       onDragHandler: handleDrag,
       scrollToResult,
@@ -768,6 +775,7 @@ const LocatorInternal = ({
             ? [initialLocationFilter]
             : [initialLocationFilter, openNowFilter]
         );
+        preserveMapView.current = false;
         searchActions.executeVerticalQuery();
         setSearchState("loading");
         if (
@@ -987,6 +995,7 @@ const LocatorInternal = ({
     });
     setIsOpenNowSelected(selected);
     searchActions.setOffset(0);
+    preserveMapView.current = false;
     executeSearch(searchActions);
   };
 
@@ -1025,6 +1034,7 @@ const LocatorInternal = ({
     // Always reload from offset 0 if switching to mobile
     setMobileResults([]);
     searchActions.setOffset(0);
+    preserveMapView.current = false;
     executeSearch(searchActions);
     setSearchState("loading");
   }, [currentOffset, isMobile, searchActions, searchLoading]);
@@ -1067,6 +1077,7 @@ const LocatorInternal = ({
     }
     searchActions.setStaticFilters(updatedFilters);
     searchActions.setOffset(0);
+    preserveMapView.current = false;
     executeSearch(searchActions);
   };
 
@@ -1090,6 +1101,7 @@ const LocatorInternal = ({
     searchActions.resetFacets();
     // Execute search to update AppliedFilters components
     searchActions.setOffset(0);
+    preserveMapView.current = false;
     executeSearch(searchActions);
     setSelectedDistanceMeters(null);
     setSelectedDistanceOption(null);
@@ -1288,6 +1300,7 @@ const LocatorInternal = ({
                     }
 
                     searchActions.setOffset(mobileResults.length);
+                    preserveMapView.current = false;
                     executeSearch(searchActions);
                     setSearchState("loading");
                   }}
@@ -1362,7 +1375,7 @@ const LocatorInternal = ({
         {showSearchAreaButton && !autoSearchOnMapMove && (
           <div className="absolute top-10 left-0 right-0 flex justify-center">
             <Button
-              onClick={handleSearchAreaClick}
+              onClick={() => handleSearchAreaClick()}
               className="py-2 px-4 shadow-xl"
             >
               <Body>{t("searchThisArea", "Search This Area")}</Body>

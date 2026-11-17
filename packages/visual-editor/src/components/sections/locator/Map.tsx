@@ -7,6 +7,9 @@ import {
 } from "@yext/search-ui-react";
 import { Result } from "@yext/search-headless-react";
 import React from "react";
+import type mapboxgl from "mapbox-gl";
+import ReactDOM from "react-dom";
+import { createRoot, type Root } from "react-dom/client";
 import { useTranslation } from "react-i18next";
 import { ImageField } from "../../../fields/ImageField.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
@@ -135,6 +138,7 @@ const LocatorTestMap = () => {
 
 interface MapProps {
   mapStyle?: string;
+  preserveMapView?: React.MutableRefObject<boolean>;
   centerCoords?: Coordinate;
   onDragHandler?: OnDragHandler;
   scrollToResult?: (result: Result<Location> | undefined) => void;
@@ -144,6 +148,7 @@ interface MapProps {
 
 export const LocatorMap: React.FC<MapProps> = ({
   mapStyle,
+  preserveMapView,
   centerCoords,
   onDragHandler,
   scrollToResult,
@@ -175,17 +180,91 @@ export const LocatorMap: React.FC<MapProps> = ({
     }),
     [centerCoords, mapPadding, mapStyle]
   );
-  const PinComponent = React.useMemo(
-    () =>
-      function PinComponent<T>(pinProps: PinComponentProps<T>) {
-        return (
-          <LocatorMapPin
-            {...pinProps}
-            locationStyleConfig={locationStyleConfig}
-          />
-        );
-      },
-    [locationStyleConfig]
+  const markerRoots = React.useRef(new Map<HTMLElement, Root>());
+  const restoreCamera = React.useRef<(() => void) | null>(null);
+
+  /**
+   * 1. Guard this map's camera before Search UI fits the new markers.
+   * 2. Render each pin and remove its React root when its marker is removed.
+   */
+  const renderPin = React.useCallback(
+    (
+      pinProps: PinComponentProps<Location> & { container: HTMLElement }
+    ): void => {
+      if (!restoreCamera.current) {
+        // Search UI can provide the native map directly or through a facade.
+        const nativeMap = (
+          "getNativeInstance" in pinProps.mapbox &&
+          typeof pinProps.mapbox.getNativeInstance === "function"
+            ? pinProps.mapbox.getNativeInstance()
+            : pinProps.mapbox
+        ) as mapboxgl.Map;
+        const fitBounds = nativeMap.fitBounds;
+        const flyTo = nativeMap.flyTo;
+        nativeMap.fitBounds = (
+          ...args: Parameters<mapboxgl.Map["fitBounds"]>
+        ): mapboxgl.Map =>
+          preserveMapView?.current
+            ? nativeMap
+            : fitBounds.apply(nativeMap, args);
+        nativeMap.flyTo = (
+          ...args: Parameters<mapboxgl.Map["flyTo"]>
+        ): mapboxgl.Map =>
+          preserveMapView?.current ? nativeMap : flyTo.apply(nativeMap, args);
+
+        const observer = new MutationObserver((): void => {
+          for (const [container, root] of markerRoots.current) {
+            if (!nativeMap.getContainer().contains(container)) {
+              markerRoots.current.delete(container);
+              queueMicrotask((): void => root.unmount());
+            }
+          }
+        });
+        observer.observe(nativeMap.getContainer(), {
+          childList: true,
+          subtree: true,
+        });
+        restoreCamera.current = (): void => {
+          observer.disconnect();
+          nativeMap.fitBounds = fitBounds;
+          nativeMap.flyTo = flyTo;
+        };
+      }
+      let root = markerRoots.current.get(pinProps.container);
+      if (!root) {
+        // Keep the React 17 rendering path supported by this package.
+        root =
+          Number(React.version.split(".")[0]) >= 18
+            ? createRoot(pinProps.container)
+            : {
+                render: (children: React.ReactNode): void => {
+                  ReactDOM.render(<>{children}</>, pinProps.container);
+                },
+                unmount: (): void => {
+                  ReactDOM.unmountComponentAtNode(pinProps.container);
+                },
+              };
+        markerRoots.current.set(pinProps.container, root);
+      }
+      root.render(
+        <LocatorMapPin
+          {...pinProps}
+          locationStyleConfig={locationStyleConfig}
+        />
+      );
+    },
+    [locationStyleConfig, preserveMapView]
+  );
+  React.useEffect(
+    () => (): void => {
+      restoreCamera.current?.();
+      restoreCamera.current = null;
+      for (const root of markerRoots.current.values()) {
+        queueMicrotask((): void => root.unmount());
+      }
+      markerRoots.current.clear();
+    },
+    []
   );
 
   if (isVisualEditorTestEnv()) {
@@ -213,7 +292,7 @@ export const LocatorMap: React.FC<MapProps> = ({
       mapboxAccessToken={mapboxApiKey || ""}
       mapboxOptions={mapboxOptions}
       onDrag={onDragHandler}
-      PinComponent={PinComponent}
+      renderPin={renderPin}
       iframeWindow={iframe?.contentWindow ?? undefined}
       allowUpdates={!!iframe?.contentDocument}
       onPinClick={scrollToResult}

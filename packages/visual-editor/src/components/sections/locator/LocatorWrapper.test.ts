@@ -17,6 +17,7 @@ import { LocatorWrapper } from "./LocatorWrapper.tsx";
 const mocks = vi.hoisted(() => ({
   streamDocument: { id: "locator", locale: "en" } as StreamDocument,
   onDrag: undefined as OnDragHandler | undefined,
+  cameraPolicy: undefined as React.MutableRefObject<boolean> | undefined,
   onSelect: undefined as ((params: OnSelectParams) => void) | undefined,
   onOpenNow: undefined as ((selected: boolean) => void) | undefined,
   onCurrentLocation: undefined as
@@ -83,7 +84,14 @@ vi.mock("@yext/search-ui-react", async (importOriginal) => ({
 }));
 vi.mock("./Map.tsx", async (importOriginal) => ({
   ...(await importOriginal<typeof import("./Map.tsx")>()),
-  LocatorMap: ({ onDragHandler }: { onDragHandler: OnDragHandler }) => {
+  LocatorMap: ({
+    onDragHandler,
+    preserveMapView,
+  }: {
+    onDragHandler: OnDragHandler;
+    preserveMapView: React.MutableRefObject<boolean>;
+  }) => {
+    mocks.cameraPolicy = preserveMapView;
     mocks.onDrag = onDragHandler;
     return null;
   },
@@ -178,6 +186,7 @@ describe("Locator map search", () => {
         ).toBeNull();
       }
       expect(mocks.actions.executeVerticalQuery).toHaveBeenCalledTimes(2);
+      expect(mocks.cameraPolicy?.current).toBe(!!autoSearchOnMapMove);
       expect(mocks.actions.setOffset).toHaveBeenLastCalledWith(0);
       expect(mocks.actions.setStaticFilters).toHaveBeenLastCalledWith([
         expect.objectContaining({
@@ -311,4 +320,51 @@ describe("Locator map search", () => {
       expect.objectContaining({ selected: true }),
     ]);
   });
+  it.each(["select", "geolocate", "navigate", "filter"])(
+    "when %s follows automatic area search then camera changes are allowed",
+    (action: string): void => {
+      render(
+        React.createElement(LocatorWrapper, {
+          autoSearchOnMapMove: true,
+          filters: { openNowButton: true, showDistanceOptions: false },
+          resultCard: [],
+          locationStyles: [],
+          puck: {
+            metadata: {},
+            isEditing: false,
+            dragRef: null,
+            renderDropZone: () => null,
+          },
+        } as WithPuckProps<LocatorProps>)
+      );
+      moveMap(41, 5000);
+      act((): void => {
+        vi.advanceTimersByTime(500);
+      });
+      expect(mocks.cameraPolicy?.current).toBe(true);
+      act((): void => {
+        if (action === "select") {
+          mocks.onSelect?.({
+            newDisplayName: "Boston",
+            newFilter: {
+              kind: "fieldValue",
+              fieldId: "builtin.location",
+              matcher: "$near",
+              value: { lat: 42, lng: -71, radius: 3000 },
+            },
+          } as OnSelectParams);
+        } else if (action === "geolocate") {
+          mocks.onCurrentLocation?.({
+            coords: { latitude: 43, longitude: -72, accuracy: 100 },
+          } as GeolocationPosition);
+        } else if (action === "navigate") {
+          window.history.replaceState({}, "", "/?q=39,-73,3000");
+          window.dispatchEvent(new PopStateEvent("popstate"));
+        } else {
+          mocks.onOpenNow?.(true);
+        }
+      });
+      expect(mocks.cameraPolicy?.current).toBe(false);
+    }
+  );
 });
