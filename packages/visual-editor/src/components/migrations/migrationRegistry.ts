@@ -1,5 +1,4 @@
-import { addLocatorAutoSearch } from "./0084_locator_auto_search.ts";
-import { photoGalleryItemSource } from "./0083_photo_gallery_item_source.ts";
+import { addLocatorAutoSearch } from "./0085_locator_auto_search.ts";
 import { MigrationRegistry } from "../../utils/migrate.ts";
 import { adjustPropObjectsMigration } from "./0001_adjust_prop_objects.ts";
 import { addHeadingAlignmentMigration } from "./0002_add_heading_alignment.ts";
@@ -83,6 +82,8 @@ import { imageFillTypeMigration } from "./0079_image_fill_type.ts";
 import { directoryCardDisplayProps } from "./0080_directory_card_display_props.ts";
 import { headerFooterImageFillTypeMigration } from "./0081_header_footer_image_fill_type.ts";
 import { heroPhoneSlotMigration } from "./0082_hero_phone_slot.ts";
+import { photoGalleryItemSource } from "./0083_photo_gallery_item_source.ts";
+import { locatorDistanceUnit } from "./0084_locator_distance_unit.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -173,5 +174,6 @@ export const migrationRegistry: MigrationRegistry = [
   headerFooterImageFillTypeMigration,
   heroPhoneSlotMigration,
   photoGalleryItemSource,
+  locatorDistanceUnit,
   addLocatorAutoSearch,
 ];

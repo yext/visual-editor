@@ -49,6 +49,12 @@ import { Button } from "../../atoms/button.tsx";
 import { Body } from "../../atoms/body.tsx";
 import { Heading } from "../../atoms/heading.tsx";
 import {
+  BROWSER_LANGUAGE,
+  DISTANCE_UNITS,
+  MILE,
+  type DistanceUnit,
+} from "./distanceUnits.ts";
+import {
   DEFAULT_ENTITY_TYPE,
   LocatorEntityType,
   getLocatorEntityTypeSourceMap,
@@ -85,6 +91,7 @@ import {
   ResultsCountSummary,
   RESULTS_LIMIT,
   SearchState,
+  translateDistanceUnit,
 } from "./Results.tsx";
 
 export const INITIAL_LOCATION_KEY = "initialLocation";
@@ -172,6 +179,8 @@ const LocatorInternal = ({
   defaultSearchRadius,
   resultCard: resultCardConfigs,
   distanceDisplay,
+  showDistanceUnitToggle,
+  defaultDistanceUnit,
   pageHeading,
 }: LocatorProps) => {
   // Adds unified [enable|disable]YextAnalytics to the window for both Pages and Search
@@ -199,13 +208,23 @@ const LocatorInternal = ({
   const windowWidth = useWindowWidth(previewWindow);
   const { isMobile } = getViewport(windowWidth);
   const preferredUnit = getPreferredDistanceUnit(i18n.language);
+  const [distanceUnitOverride, setDistanceUnitOverride] =
+    React.useState<DistanceUnit | null>(null);
+  const configuredDistanceUnit =
+    defaultDistanceUnit && defaultDistanceUnit !== BROWSER_LANGUAGE
+      ? defaultDistanceUnit
+      : preferredUnit;
+  const distanceUnit = distanceUnitOverride ?? configuredDistanceUnit;
+  React.useEffect(() => setDistanceUnitOverride(null), [defaultDistanceUnit]);
   // Puck emits 0 when its number field is cleared; only positive radii override Search.
   const configuredRadiusMeters =
     defaultSearchRadius?.value && defaultSearchRadius.value > 0
       ? toMeters(defaultSearchRadius.value, defaultSearchRadius.unit)
       : undefined;
   const defaultRadiusMeters =
-    configuredRadiusMeters ?? toMeters(DEFAULT_RADIUS, preferredUnit);
+    configuredRadiusMeters ?? toMeters(DEFAULT_RADIUS, distanceUnit);
+  const initialDefaultRadiusMeters =
+    configuredRadiusMeters ?? toMeters(DEFAULT_RADIUS, configuredDistanceUnit);
   const streamDocument = useDocument();
   const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
   const entityTypes =
@@ -264,8 +283,16 @@ const LocatorInternal = ({
   const [selectedDistanceOption, setSelectedDistanceOption] = React.useState<
     number | null
   >(null);
+  const currentDistanceSelection = React.useRef({
+    selectedDistanceOption,
+    distanceUnit,
+  });
+  currentDistanceSelection.current = { selectedDistanceOption, distanceUnit };
+  const previousDistanceUnit = React.useRef(distanceUnit);
   /** Radius of the current location filter before a distance option is applied */
   const baseFilterRadius = React.useRef<number | null>(null);
+  /** Minimum accuracy for a base radius derived from the default unit; null for independent radii. */
+  const automaticBaseRadiusAccuracy = React.useRef<number | null>(null);
 
   const handleDrag: OnDragHandler = (center, bounds) => {
     setMapCenter({
@@ -321,6 +348,7 @@ const LocatorInternal = ({
         },
       };
       baseFilterRadius.current = mapRadius;
+      automaticBaseRadiusAccuracy.current = null;
       setSelectedDistanceOption(null);
       setSelectedDistanceMeters(null);
       searchActions.setStaticFilters([locationFilter, openNowFilter]);
@@ -349,6 +377,7 @@ const LocatorInternal = ({
     setShowSearchAreaButton(false);
     const { latitude, longitude, accuracy } = position.coords;
     baseFilterRadius.current = Math.max(accuracy, defaultRadiusMeters);
+    automaticBaseRadiusAccuracy.current = accuracy;
     const radius = Math.max(
       accuracy,
       showDistanceOptions && selectedDistanceMeters
@@ -410,6 +439,7 @@ const LocatorInternal = ({
         nearFilterValue = filter.value as NearFilterValue;
         baseFilterRadius.current =
           configuredRadiusMeters ?? nearFilterValue.radius;
+        automaticBaseRadiusAccuracy.current = null;
         const radius =
           showDistanceOptions && selectedDistanceMeters
             ? selectedDistanceMeters
@@ -423,6 +453,7 @@ const LocatorInternal = ({
       }
       case Matcher.Equals: {
         baseFilterRadius.current = null;
+        automaticBaseRadiusAccuracy.current = null;
         locationFilter = buildEqualsLocationFilter(filter, newDisplayName);
         break;
       }
@@ -467,13 +498,38 @@ const LocatorInternal = ({
   }, [searchLoading, searchState]);
 
   React.useEffect(() => {
+    const unitChanged = previousDistanceUnit.current !== distanceUnit;
+    previousDistanceUnit.current = distanceUnit;
+    if (unitChanged && automaticBaseRadiusAccuracy.current !== null) {
+      baseFilterRadius.current = Math.max(
+        automaticBaseRadiusAccuracy.current,
+        defaultRadiusMeters
+      );
+    }
     if (selectedDistanceOption === null) {
       setSelectedDistanceMeters(null);
       return;
     }
 
-    setSelectedDistanceMeters(toMeters(selectedDistanceOption, preferredUnit));
-  }, [preferredUnit, selectedDistanceOption]);
+    const radius = toMeters(selectedDistanceOption, distanceUnit);
+    setSelectedDistanceMeters(radius);
+    if (unitChanged) {
+      const updatedFilters = updateRadiusInNearFiltersOnLocationField(
+        searchFilters.static || [],
+        radius
+      );
+      searchActions.setStaticFilters(updatedFilters);
+      searchActions.setOffset(0);
+      executeSearch(searchActions);
+      setSearchState("loading");
+    }
+  }, [
+    distanceUnit,
+    defaultRadiusMeters,
+    selectedDistanceOption,
+    searchActions,
+    searchFilters.static,
+  ]);
 
   const resultsRef = React.useRef<Array<HTMLDivElement | null>>([]);
   const resultsContainer = React.useRef<HTMLDivElement>(null);
@@ -561,12 +617,14 @@ const LocatorInternal = ({
           resultCardProps={resultCardProps}
           isSelected={result.result.index === selectedResultIndex}
           distanceDisplay={distanceDisplay}
+          distanceUnit={distanceUnit}
           searchLocationName={filterDisplayName}
         />
       );
     },
     [
       distanceDisplay,
+      distanceUnit,
       filterDisplayName,
       getResultCardProps,
       selectedResultIndex,
@@ -636,8 +694,46 @@ const LocatorInternal = ({
     ]
   );
 
+  const initializationInputsRef = React.useRef({
+    urlNavigationVersion,
+    initialMapCenter,
+    searchActions,
+    configuredRadiusMeters,
+    initialDefaultRadiusMeters,
+  });
+  const initializationCompleted = React.useRef(false);
   React.useEffect(() => {
+    const previousInputs = initializationInputsRef.current;
+    initializationInputsRef.current = {
+      urlNavigationVersion,
+      initialMapCenter,
+      searchActions,
+      configuredRadiusMeters,
+      initialDefaultRadiusMeters,
+    };
+    // Changing only the default unit should update the active distance filter
+    // without restarting location initialization.
+    if (
+      initializationCompleted.current &&
+      selectedDistanceOption !== null &&
+      previousInputs.urlNavigationVersion === urlNavigationVersion &&
+      previousInputs.initialMapCenter === initialMapCenter &&
+      previousInputs.searchActions === searchActions &&
+      previousInputs.configuredRadiusMeters === configuredRadiusMeters &&
+      previousInputs.initialDefaultRadiusMeters !== initialDefaultRadiusMeters
+    ) {
+      return;
+    }
+
+    initializationCompleted.current = false;
     let isCancelled = false;
+    const getActiveDistanceMeters = () => {
+      const { selectedDistanceOption, distanceUnit } =
+        currentDistanceSelection.current;
+      return selectedDistanceOption === null
+        ? null
+        : toMeters(selectedDistanceOption, distanceUnit);
+    };
     const queryParams = new URLSearchParams(window.location.search);
     const initialLocationParam = queryParams.has(LOCATION_QUERY_KEY)
       ? queryParams.get(LOCATION_QUERY_KEY)
@@ -648,11 +744,13 @@ const LocatorInternal = ({
       setCenterCoords(initialMapCenter);
       setMapCenter(initialMapCenter);
 
+      const activeDistanceMeters = getActiveDistanceMeters();
       const radius =
-        showDistanceOptions && selectedDistanceMeters
-          ? selectedDistanceMeters
-          : defaultRadiusMeters;
-      baseFilterRadius.current = defaultRadiusMeters;
+        showDistanceOptions && activeDistanceMeters
+          ? activeDistanceMeters
+          : initialDefaultRadiusMeters;
+      baseFilterRadius.current = initialDefaultRadiusMeters;
+      automaticBaseRadiusAccuracy.current = 0;
       // default location filter to configured starting location or NYC
       let initialLocationFilter = buildNearLocationFilterFromCoords(
         initialMapCenter.latitude,
@@ -696,6 +794,7 @@ const LocatorInternal = ({
         }
         if (!isCancelled) {
           setIsInitialMapLocationResolved(true);
+          initializationCompleted.current = true;
         }
       };
 
@@ -725,11 +824,13 @@ const LocatorInternal = ({
                 const filterFromResult = resultFilter.value as NearFilterValue;
                 baseFilterRadius.current =
                   configuredRadiusMeters ?? filterFromResult.radius;
+                automaticBaseRadiusAccuracy.current = null;
+                const activeDistanceMeters = getActiveDistanceMeters();
                 initialLocationFilter = buildNearLocationFilterFromPrevious(
                   filterFromResult,
                   firstResult.value,
-                  showDistanceOptions && selectedDistanceMeters
-                    ? selectedDistanceMeters
+                  showDistanceOptions && activeDistanceMeters
+                    ? activeDistanceMeters
                     : baseFilterRadius.current
                 );
                 return true;
@@ -740,6 +841,7 @@ const LocatorInternal = ({
                   firstResult.value
                 );
                 baseFilterRadius.current = null;
+                automaticBaseRadiusAccuracy.current = null;
                 return true;
               }
               default: {
@@ -760,6 +862,7 @@ const LocatorInternal = ({
         : undefined;
       if (coordinates) {
         baseFilterRadius.current = coordinates.radius;
+        automaticBaseRadiusAccuracy.current = null;
         setSelectedDistanceOption(null);
         setSelectedDistanceMeters(null);
         initialLocationFilter = buildNearLocationFilterFromCoords(
@@ -791,10 +894,6 @@ const LocatorInternal = ({
         }
         const lat = location.coords.latitude;
         const lng = location.coords.longitude;
-        baseFilterRadius.current = Math.max(
-          location.coords.accuracy,
-          defaultRadiusMeters
-        );
         setShowCurrentLocationButton(true);
 
         // Try to reverse-geocode the coordinates to a human-readable place name using Mapbox
@@ -820,14 +919,33 @@ const LocatorInternal = ({
           }
         } catch (e) {
           console.warn("Reverse geocoding failed:", e);
-        } finally {
-          initialLocationFilter = buildNearLocationFilterFromCoords(
-            lat,
-            lng,
-            Math.max(location.coords.accuracy, radius),
-            displayName
-          );
         }
+        if (isCancelled) {
+          return;
+        }
+        const activeDistanceMeters = getActiveDistanceMeters();
+        const currentDefaultRadiusMeters =
+          configuredRadiusMeters ??
+          toMeters(
+            DEFAULT_RADIUS,
+            currentDistanceSelection.current.distanceUnit
+          );
+        baseFilterRadius.current = Math.max(
+          location.coords.accuracy,
+          currentDefaultRadiusMeters
+        );
+        automaticBaseRadiusAccuracy.current = location.coords.accuracy;
+        initialLocationFilter = buildNearLocationFilterFromCoords(
+          lat,
+          lng,
+          Math.max(
+            location.coords.accuracy,
+            showDistanceOptions && activeDistanceMeters
+              ? activeDistanceMeters
+              : currentDefaultRadiusMeters
+          ),
+          displayName
+        );
       } catch {
         // Fall back to configured starting location or default center.
       }
@@ -849,7 +967,7 @@ const LocatorInternal = ({
     initialMapCenter,
     searchActions,
     configuredRadiusMeters,
-    defaultRadiusMeters,
+    initialDefaultRadiusMeters,
   ]);
 
   const handleOpenNowClick = (selected: boolean) => {
@@ -927,7 +1045,7 @@ const LocatorInternal = ({
 
   const handleDistanceClick = (
     distance: number,
-    distanceUnit: "mile" | "kilometer"
+    distanceUnit: DistanceUnit
   ) => {
     const existingFilters = searchFilters.static || [];
     let updatedFilters: SelectableStaticFilter[];
@@ -950,6 +1068,11 @@ const LocatorInternal = ({
     searchActions.setStaticFilters(updatedFilters);
     searchActions.setOffset(0);
     executeSearch(searchActions);
+  };
+
+  const handleDistanceUnitChange = (nextUnit: DistanceUnit) => {
+    if (nextUnit === distanceUnit) return;
+    setDistanceUnitOverride(nextUnit);
   };
 
   const handleClearFiltersClick = () => {
@@ -1083,6 +1206,33 @@ const LocatorInternal = ({
               radius: fromMeters(defaultRadiusMeters, "mile"),
             }}
           />
+          {showDistanceUnitToggle && (
+            <div className="flex items-center justify-end gap-3 font-body-fontFamily text-body-sm-fontSize">
+              <span>{t("distance", "Distance")}</span>
+              <div
+                role="group"
+                aria-label={t("distance", "Distance")}
+                className="inline-flex rounded-md border border-gray-300 overflow-hidden"
+              >
+                {DISTANCE_UNITS.map((unit) => (
+                  <button
+                    key={unit}
+                    type="button"
+                    aria-label={translateDistanceUnit(t, unit, 2)}
+                    aria-pressed={distanceUnit === unit}
+                    onClick={() => handleDistanceUnitChange(unit)}
+                    className={`px-3 py-1 font-bold ${
+                      distanceUnit === unit
+                        ? "bg-palette-primary text-palette-primary-contrast"
+                        : "bg-white text-palette-primary-dark"
+                    }`}
+                  >
+                    {unit === MILE ? "mi" : "km"}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         <div className="relative flex-1 flex flex-col min-h-0">
           <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 inline-block">
@@ -1091,6 +1241,7 @@ const LocatorInternal = ({
                 searchState={searchState}
                 resultCount={resultCount}
                 selectedDistanceOption={selectedDistanceOption}
+                distanceUnit={distanceUnit}
                 filterDisplayName={filterDisplayName}
               />
               {hasFilterModalToggle && (
@@ -1166,6 +1317,7 @@ const LocatorInternal = ({
             handleOpenNowClick={handleOpenNowClick}
             showDistanceOptions={showDistanceOptions}
             selectedDistanceOption={selectedDistanceOption}
+            distanceUnit={distanceUnit}
             handleDistanceClick={handleDistanceClick}
             handleCloseModalClick={() => setShowFilterModal(false)}
             handleClearFiltersClick={handleClearFiltersClick}

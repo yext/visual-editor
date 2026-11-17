@@ -6,11 +6,11 @@ import { useTranslation } from "react-i18next";
 import { YextAutoField } from "../../../fields/YextAutoField.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
-import { getPreferredDistanceUnit } from "../../../utils/i18n/distance.ts";
 import { getLocatorEntityTypeSourceMap } from "../../../utils/locatorEntityTypes.ts";
 import { LocatorConfig } from "../../../utils/types/StreamDocument.ts";
 import { Body } from "../../atoms/body.tsx";
 import { Button } from "../../atoms/button.tsx";
+import { MILE, type DistanceUnit } from "./distanceUnits.ts";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   Location,
@@ -42,10 +42,10 @@ const getLocatorConfigFromPageSet = (pageSet?: string): LocatorConfig => {
 
 export const translateDistanceUnit = (
   t: (key: string, options?: Record<string, unknown>) => string,
-  unit: "mile" | "kilometer",
+  unit: DistanceUnit,
   count: number
 ) => {
-  if (unit === "mile") {
+  if (unit === MILE) {
     return t("mile", { count, defaultValue: "mile" });
   }
 
@@ -198,6 +198,7 @@ interface ResultsCountSummaryProps {
   searchState: SearchState;
   resultCount: number;
   selectedDistanceOption: number | null;
+  distanceUnit: DistanceUnit;
   filterDisplayName?: string;
 }
 
@@ -205,9 +206,10 @@ export const ResultsCountSummary = ({
   searchState,
   resultCount,
   selectedDistanceOption,
+  distanceUnit,
   filterDisplayName,
 }: ResultsCountSummaryProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   if (resultCount === 0) {
     if (searchState === "not started") {
@@ -234,13 +236,16 @@ export const ResultsCountSummary = ({
 
   if (filterDisplayName) {
     if (selectedDistanceOption) {
-      const unit = getPreferredDistanceUnit(i18n.language);
       return (
         <Body>
           {t("locationsWithinDistanceOf", {
             count: resultCount,
             distance: selectedDistanceOption,
-            unit: translateDistanceUnit(t, unit, selectedDistanceOption),
+            unit: translateDistanceUnit(
+              t,
+              distanceUnit,
+              selectedDistanceOption
+            ),
             name: filterDisplayName,
           })}
         </Body>
