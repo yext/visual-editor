@@ -1,3 +1,12 @@
+#### 2.0.0-beta.13 (2026-11-18)
+
+##### New Features
+
+- allow custom entity types for locator ([#1392](https://github.com/yext/visual-editor/pull/1392)) ([8b00d1ca](https://github.com/yext/visual-editor/commit/8b00d1ca7bc48f5475a2767275faf77a2106e242))
+- add locator auto-search option ([#1391](https://github.com/yext/visual-editor/pull/1391)) ([f8086171](https://github.com/yext/visual-editor/commit/f808617149c79eeffde1af93002694ae58ae4ccc))
+- add km/mi toggle and default distance unit option ([#1390](https://github.com/yext/visual-editor/pull/1390)) ([6699da74](https://github.com/yext/visual-editor/commit/6699da748edb4c6cc8dcc46de89c3e81ce342c3e))
+- improve usage of kg fields in layout generation ([#1388](https://github.com/yext/visual-editor/pull/1388)) ([3ef25104](https://github.com/yext/visual-editor/commit/3ef25104e83e2f0030d6c74425110b01a251a5ca))
+
 #### 2.0.0-beta.12 (2026-11-13)
 
 ##### Chores
