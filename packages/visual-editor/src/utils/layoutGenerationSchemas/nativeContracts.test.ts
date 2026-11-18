@@ -96,14 +96,16 @@ const data = () => ({
 });
 
 describe("native generation contracts through section-library-support", () => {
-  it("exposes the supported Locator entity types as the enum source", () => {
+  it("exposes built-in Locator types while accepting custom entity types", () => {
     const schema = z.enum(LOCATOR_ENTITY_TYPES);
     for (const entityType of LOCATOR_ENTITY_TYPES) {
       expect(schema.safeParse(entityType).success).toBe(true);
       expect(isLocatorEntityType(entityType)).toBe(true);
     }
-    expect(schema.safeParse("unsupported").success).toBe(false);
-    expect(isLocatorEntityType("unsupported")).toBe(false);
+    expect(schema.safeParse("ce_warehouse").success).toBe(false);
+    expect(isLocatorEntityType("ce_warehouse")).toBe(true);
+    expect(schema.safeParse("").success).toBe(false);
+    expect(isLocatorEntityType("")).toBe(false);
   });
 
   it.each([false, true])(

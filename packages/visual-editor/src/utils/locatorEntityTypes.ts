@@ -6,6 +6,7 @@ import {
 import { useDocument } from "../hooks/useDocument.tsx";
 import { pt } from "../utils/i18n/platform.ts";
 
+/** Built-in locator entity types. Locators can also use custom entity types. */
 export const LOCATOR_ENTITY_TYPES = Object.freeze([
   "location",
   "healthcareProfessional",
@@ -18,13 +19,15 @@ export const LOCATOR_ENTITY_TYPES = Object.freeze([
   "financialProfessional",
 ] as const);
 
-export type LocatorEntityType = (typeof LOCATOR_ENTITY_TYPES)[number];
+/** Entity type API name, including custom types configured for the locator. */
+export type LocatorEntityType = string;
 export const DEFAULT_ENTITY_TYPE: LocatorEntityType = "location";
 
-const VALID_ENTITY_TYPES = new Set<string>(LOCATOR_ENTITY_TYPES);
-
-export function isLocatorEntityType(value: string): value is LocatorEntityType {
-  return VALID_ENTITY_TYPES.has(value);
+/** Eligibility (including address support) is validated by the backend. */
+export function isLocatorEntityType(
+  value: unknown
+): value is LocatorEntityType {
+  return typeof value === "string" && value.length > 0;
 }
 
 export const getLocatorEntityTypeSourceMap = (
@@ -89,6 +92,8 @@ export const getLocatorEntityTypeSourceMap = (
 
 export const getEntityTypeLabel = (entityType: LocatorEntityType) => {
   switch (entityType) {
+    case "location":
+      return pt("locations", "Locations");
     case "healthcareProfessional":
       return pt("healthcareProfessionals", "Healthcare Professionals");
     case "healthcareFacility":
@@ -106,6 +111,6 @@ export const getEntityTypeLabel = (entityType: LocatorEntityType) => {
     case "financialProfessional":
       return pt("financialProfessionals", "Financial Professionals");
     default:
-      return pt("locations", "Locations");
+      return entityType;
   }
 };

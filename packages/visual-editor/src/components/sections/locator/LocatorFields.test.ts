@@ -22,6 +22,72 @@ const getKeywordsDisplayNameVisibility = (facetValues?: string[]) => {
 
 describe("Locator fields", () => {
   it.each([
+    { entityTypes: ["ce_warehouse"] },
+    { entityTypes: ["ce_warehouse", "location"] },
+    { entityTypes: ["location", "ce_warehouse"] },
+  ])(
+    "configures cards and styles for $entityTypes",
+    async ({ entityTypes }) => {
+      const params = {
+        metadata: {
+          streamDocument: {
+            _pageset: JSON.stringify({
+              typeConfig: {
+                locatorConfig: {
+                  entityTypeScope: entityTypes.map((entityType) => ({
+                    entityType,
+                  })),
+                },
+              },
+            }),
+          },
+        },
+      } as any;
+      const customCard = {
+        props: {
+          entityType: "ce_warehouse",
+          primaryHeading: { field: "c_warehouseName" },
+        },
+      };
+      const customStyle = {
+        entityType: "ce_warehouse",
+        pinIcon: { type: "icon", iconName: "warehouse" },
+      };
+      const data = {
+        props: {
+          ...LocatorComponent.defaultProps,
+          resultCard: [customCard],
+          locationStyles: [customStyle],
+        },
+      } as any;
+      const fields = LocatorComponent.resolveFields?.(data, params) as any;
+      expect(fields.resultCard).toMatchObject({
+        min: entityTypes.length,
+        max: entityTypes.length,
+      });
+      expect(fields.locationStyles).toMatchObject({
+        min: entityTypes.length,
+        max: entityTypes.length,
+      });
+
+      const resolved = (await LocatorComponent.resolveData?.(
+        data,
+        params
+      )) as any;
+      expect(
+        resolved.props.resultCard.map((card: any) => card.props.entityType)
+      ).toEqual(entityTypes);
+      expect(
+        resolved.props.locationStyles.map((style: any) => style.entityType)
+      ).toEqual(entityTypes);
+      expect(resolved.props.resultCard).toContainEqual(customCard);
+      expect(resolved.props.locationStyles).toContainEqual(
+        expect.objectContaining(customStyle)
+      );
+    }
+  );
+
+  it.each([
     {
       name: "shows the display name when Keywords is selected",
       facetValues: ["keywords", "services"],
