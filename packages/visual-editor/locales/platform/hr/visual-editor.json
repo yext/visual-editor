@@ -113,6 +113,7 @@
     "align": "Poravnajte",
     "analytics": "Analitika",
     "ariaLabel": "Etiketa Aria",
+    "autoSearchOnMapMove": "Automatsko pretraživanje po kretanju karte",
     "backgroundColor": "Boja pozadine",
     "buttonStyles": "Stilovi gumba",
     "buttonText": "Tekst gumba",

@@ -390,12 +390,28 @@ describe("Locator default search radius", () => {
     expect(getRadius()).toBeCloseTo(5000);
     expect(mocks.filterModal.selectedDistanceOption).toBe(5);
 
-    const milesButton = screen.getByText("mi");
-    await act(async () => fireEvent.click(milesButton));
-    expect(milesButton.getAttribute("aria-pressed")).toBe("true");
-    expect(mocks.filterModal.distanceUnit).toBe("mile");
-    expect(getRadius()).toBeCloseTo(8046.72);
-    expect(mocks.actions.executeVerticalQuery).toHaveBeenCalled();
+    for (const { label, unit, radius } of [
+      { label: "mi", unit: "mile", radius: 8046.72 },
+      { label: "km", unit: "kilometer", radius: 5000 },
+    ]) {
+      const queriesBeforeSwitch =
+        mocks.actions.executeVerticalQuery.mock.calls.length;
+      const lookupsBeforeSwitch =
+        mocks.actions.executeFilterSearch.mock.calls.length;
+      const button = screen.getByText(label);
+      await act(async (): Promise<void> => {
+        fireEvent.click(button);
+      });
+      expect(button.getAttribute("aria-pressed")).toBe("true");
+      expect(mocks.filterModal.distanceUnit).toBe(unit);
+      expect(getRadius()).toBeCloseTo(radius);
+      expect(mocks.actions.executeVerticalQuery).toHaveBeenCalledTimes(
+        queriesBeforeSwitch + 1
+      );
+      expect(mocks.actions.executeFilterSearch).toHaveBeenCalledTimes(
+        lookupsBeforeSwitch
+      );
+    }
   });
 
   it.each<{

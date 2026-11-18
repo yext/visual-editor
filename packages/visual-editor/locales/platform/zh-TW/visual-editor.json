@@ -113,6 +113,7 @@
     "align": "對齊",
     "analytics": "分析",
     "ariaLabel": "詠嘆調標籤",
+    "autoSearchOnMapMove": "地圖移動自動搜索",
     "backgroundColor": "背景顏色",
     "buttonStyles": "按鈕樣式",
     "buttonText": "按鈕文字",

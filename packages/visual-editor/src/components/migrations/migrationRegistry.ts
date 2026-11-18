@@ -1,3 +1,4 @@
+import { addLocatorAutoSearch } from "./0085_locator_auto_search.ts";
 import { MigrationRegistry } from "../../utils/migrate.ts";
 import { adjustPropObjectsMigration } from "./0001_adjust_prop_objects.ts";
 import { addHeadingAlignmentMigration } from "./0002_add_heading_alignment.ts";
@@ -174,4 +175,5 @@ export const migrationRegistry: MigrationRegistry = [
   heroPhoneSlotMigration,
   photoGalleryItemSource,
   locatorDistanceUnit,
+  addLocatorAutoSearch,
 ];

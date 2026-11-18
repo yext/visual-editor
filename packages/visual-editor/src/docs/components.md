@@ -162,10 +162,13 @@ Available on Locator templates.
 
 #### Other Props
 
-Unit used before a visitor selects one. Defaults to the page language.
+Search the visible map area 500 ms after the user stops a pan or zoom.
+If enabled, hide the Search This Area button.
 
 | Prop                                                                                         | Type                                                                                                                                                                                                                | Description                                                                         | Default                                |
 | :------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------- | :------------------------------------- |
+| `autoSearchOnMapMove`                                                                        | `boolean`                                                                                                                                                                                                           | Search the visible map area 500 ms after the user stops a pan or zoom.              |
+| If enabled, hide the Search This Area button.                                                | `false`                                                                                                                                                                                                             |
 | `defaultDistanceUnit`                                                                        | `DefaultDistanceUnit`                                                                                                                                                                                               | Unit used before a visitor selects one. Defaults to the page language.              |                                        |
 | `defaultSearchRadius`                                                                        | `{ value?: number; unit: "mile" \| "kilometer"; }`                                                                                                                                                                  | The default radius for nearby-location searches. Leave unset to use Search's        |
 | suggested radius, or 25 in the configured default distance unit for coordinate searches.     |

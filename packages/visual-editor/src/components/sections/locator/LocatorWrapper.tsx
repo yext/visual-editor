@@ -165,6 +165,7 @@ export const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
 };
 
 const LocatorInternal = ({
+  autoSearchOnMapMove = false,
   mapStyle,
   locationStyles,
   filters: {
@@ -270,6 +271,11 @@ const LocatorInternal = ({
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
   const [mapCenter, setMapCenter] = React.useState<Coordinate | undefined>();
   const [mapRadius, setMapRadius] = React.useState<number | undefined>();
+  const mapSearchTimeout = React.useRef<ReturnType<typeof setTimeout>>();
+  const cancelMapSearch = React.useCallback((): void => {
+    clearTimeout(mapSearchTimeout.current);
+    mapSearchTimeout.current = undefined;
+  }, []);
   /** Explicit filter radius selected by the user, in meters */
   const [selectedDistanceMeters, setSelectedDistanceMeters] = React.useState<
     number | null
@@ -295,6 +301,13 @@ const LocatorInternal = ({
     });
     setMapRadius(center.distanceTo(bounds.getNorthEast()));
     setShowSearchAreaButton(true);
+    cancelMapSearch();
+    if (autoSearchOnMapMove && mapEnabled) {
+      mapSearchTimeout.current = setTimeout((): void => {
+        mapSearchTimeout.current = undefined;
+        searchMapArea.current();
+      }, 500);
+    }
   };
 
   const [isOpenNowSelected, setIsOpenNowSelected] = React.useState(false);
@@ -315,7 +328,10 @@ const LocatorInternal = ({
   const searchActions = useSearchActions();
   const searchFilters = useSearchState((state) => state.filters);
 
-  const handleSearchAreaClick = () => {
+  const preserveMapView = React.useRef(false);
+
+  const handleSearchAreaClick = (preserveView = false): void => {
+    cancelMapSearch();
     if (mapCenter && mapRadius) {
       searchActions.setOffset(0);
       const locationFilter: SelectableStaticFilter = {
@@ -338,6 +354,7 @@ const LocatorInternal = ({
       setSelectedDistanceOption(null);
       setSelectedDistanceMeters(null);
       searchActions.setStaticFilters([locationFilter, openNowFilter]);
+      preserveMapView.current = preserveView;
       searchActions.executeVerticalQuery();
       setSearchState("loading");
       setShowSearchAreaButton(false);
@@ -352,7 +369,15 @@ const LocatorInternal = ({
     }
   };
 
+  const searchMapArea = React.useRef((): void => handleSearchAreaClick(true));
+  React.useEffect((): void => {
+    // Use the current map area and filters when the movement delay ends.
+    searchMapArea.current = (): void => handleSearchAreaClick(true);
+  });
+
   const handleCurrentLocationClick = (position: GeolocationPosition) => {
+    cancelMapSearch();
+    setShowSearchAreaButton(false);
     const { latitude, longitude, accuracy } = position.coords;
     baseFilterRadius.current = Math.max(accuracy, defaultRadiusMeters);
     automaticBaseRadiusAccuracy.current = accuracy;
@@ -377,6 +402,7 @@ const LocatorInternal = ({
     );
     searchActions.setOffset(0);
     searchActions.setStaticFilters([...nonLocationFilters, locationFilter]);
+    preserveMapView.current = false;
     searchActions.executeVerticalQuery();
     setSearchState("loading");
     updateLocationQuery(formatCoordinateQuery(latitude, longitude, radius));
@@ -405,6 +431,8 @@ const LocatorInternal = ({
   );
 
   const handleFilterSelect = (params: OnSelectParams) => {
+    cancelMapSearch();
+    setShowSearchAreaButton(false);
     const newDisplayName = params.newDisplayName;
     const filter = params.newFilter;
 
@@ -440,6 +468,7 @@ const LocatorInternal = ({
 
     searchActions.setOffset(0);
     searchActions.setStaticFilters([locationFilter, openNowFilter]);
+    preserveMapView.current = false;
     searchActions.executeVerticalQuery();
     setSearchState("loading");
     updateLocationQuery(newDisplayName);
@@ -496,6 +525,7 @@ const LocatorInternal = ({
       );
       searchActions.setStaticFilters(updatedFilters);
       searchActions.setOffset(0);
+      preserveMapView.current = false;
       executeSearch(searchActions);
       setSearchState("loading");
     }
@@ -654,6 +684,7 @@ const LocatorInternal = ({
   const mapProps = React.useMemo(
     () => ({
       mapStyle,
+      preserveMapView,
       centerCoords,
       onDragHandler: handleDrag,
       scrollToResult,
@@ -744,6 +775,7 @@ const LocatorInternal = ({
             ? [initialLocationFilter]
             : [initialLocationFilter, openNowFilter]
         );
+        preserveMapView.current = false;
         searchActions.executeVerticalQuery();
         setSearchState("loading");
         if (
@@ -963,6 +995,7 @@ const LocatorInternal = ({
     });
     setIsOpenNowSelected(selected);
     searchActions.setOffset(0);
+    preserveMapView.current = false;
     executeSearch(searchActions);
   };
 
@@ -1001,6 +1034,7 @@ const LocatorInternal = ({
     // Always reload from offset 0 if switching to mobile
     setMobileResults([]);
     searchActions.setOffset(0);
+    preserveMapView.current = false;
     executeSearch(searchActions);
     setSearchState("loading");
   }, [currentOffset, isMobile, searchActions, searchLoading]);
@@ -1043,6 +1077,7 @@ const LocatorInternal = ({
     }
     searchActions.setStaticFilters(updatedFilters);
     searchActions.setOffset(0);
+    preserveMapView.current = false;
     executeSearch(searchActions);
   };
 
@@ -1066,6 +1101,7 @@ const LocatorInternal = ({
     searchActions.resetFacets();
     // Execute search to update AppliedFilters components
     searchActions.setOffset(0);
+    preserveMapView.current = false;
     executeSearch(searchActions);
     setSelectedDistanceMeters(null);
     setSelectedDistanceOption(null);
@@ -1112,6 +1148,15 @@ const LocatorInternal = ({
     : false;
   // If no opt-in is required, the map is already enabled.
   const [mapEnabled, setMapEnabled] = React.useState(!requireMapOptIn);
+  // Cancel pending searches when the prop or map is disabled, and on unmount.
+  React.useEffect(
+    () => cancelMapSearch,
+    [autoSearchOnMapMove, mapEnabled, cancelMapSearch]
+  );
+  React.useEffect((): void => {
+    cancelMapSearch();
+    setShowSearchAreaButton(false);
+  }, [urlNavigationVersion, cancelMapSearch]);
   // Adds unified [enable|disable]Map functions to the window.
   useEffect(() => {
     (window as any).enableMap = () => setMapEnabled(true);
@@ -1255,6 +1300,7 @@ const LocatorInternal = ({
                     }
 
                     searchActions.setOffset(mobileResults.length);
+                    preserveMapView.current = false;
                     executeSearch(searchActions);
                     setSearchState("loading");
                   }}
@@ -1326,10 +1372,10 @@ const LocatorInternal = ({
             </div>
           </div>
         )}
-        {showSearchAreaButton && (
+        {showSearchAreaButton && !autoSearchOnMapMove && (
           <div className="absolute top-10 left-0 right-0 flex justify-center">
             <Button
-              onClick={handleSearchAreaClick}
+              onClick={() => handleSearchAreaClick()}
               className="py-2 px-4 shadow-xl"
             >
               <Body>{t("searchThisArea", "Search This Area")}</Body>

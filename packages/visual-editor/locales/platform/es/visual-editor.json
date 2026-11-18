@@ -113,6 +113,7 @@
     "align": "Alinear",
     "analytics": "Analítica",
     "ariaLabel": "Etiqueta Aria",
+    "autoSearchOnMapMove": "Buscar automáticamente en el movimiento del mapa",
     "backgroundColor": "Color de fondo",
     "buttonStyles": "Estilos de botones",
     "buttonText": "Texto del botón",

@@ -113,6 +113,7 @@
     "align": "Ausrichten",
     "analytics": "Analytics",
     "ariaLabel": "Aria-Label",
+    "autoSearchOnMapMove": "Automatische Suche nach Kartenbewegung",
     "backgroundColor": "Hintergrundfarbe",
     "buttonStyles": "Schaltflächenstile",
     "buttonText": "Schaltflächentext",
