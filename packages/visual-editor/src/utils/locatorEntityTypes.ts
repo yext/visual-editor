@@ -110,19 +110,7 @@ export const getEntityTypeLabel = (entityType: LocatorEntityType) => {
       return pt("providerFacilities", "Provider Facilities");
     case "financialProfessional":
       return pt("financialProfessionals", "Financial Professionals");
-    default: {
-      // convert api name to display name (e.g. ce_myCustomField -> My Custom Field)
-      const match = /^ce_([a-z][a-zA-Z0-9]*)$/.exec(entityType);
-      if (match) {
-        return (
-          match[1]
-            // handle acronyms like ce_localATMBranch
-            .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")
-            .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-            .replace(/^./, (letter) => letter.toUpperCase())
-        );
-      }
+    default:
       return entityType;
-    }
   }
 };
