@@ -1,15 +1,17 @@
 import React from "react";
 import { BaseField, FieldLabel, type FieldProps } from "@puckeditor/core";
-import { ThemeOptions, type ThemeColor } from "../utils/themeConfigOptions.ts";
+import { ThemeOptions, type ThemeColor } from "../utils/themeOptions.ts";
 import { msg, pt, type MsgString } from "../utils/i18n/platform.ts";
 import { ColorPickerInput } from "./ColorSelector.tsx";
 import {
-  getContrastingColor,
   getThemeColorHexValue,
+  getThemeColorCssValue,
   isCustomThemeColorToken,
+  getContrastingColor,
 } from "../utils/colors.ts";
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { BasicSelectorCombobox } from "./BasicSelectorCombobox.tsx";
+import { getPickerContrastHex } from "../utils/colorPicker.ts";
 
 /** Theme colors always retain authored tokens and resolve both CSS colors. */
 export type ThemeColorField = BaseField & {
@@ -43,20 +45,6 @@ const isCustomThemeColorValue = (value: unknown): value is ThemeColor => {
   );
 };
 
-const toCustomThemeColor = (hexColor: string): ThemeColor => {
-  const selectedColor = hexColor.toUpperCase();
-  const contrastingColor =
-    getContrastingColor(selectedColor, 12, 400) === "#FFFFFF"
-      ? "white"
-      : "black";
-
-  return {
-    selectedColor: `[${selectedColor}]`,
-    contrastingColor,
-    isDarkColor: contrastingColor === "white",
-  };
-};
-
 /** Edits palette and custom ThemeColor values without changing their authored shape. */
 export const ThemeColorFieldOverride = ({
   field,
@@ -65,10 +53,14 @@ export const ThemeColorFieldOverride = ({
 }: FieldProps<ThemeColorField, ThemeColor | undefined>) => {
   const templateProps = React.useContext(TemplatePropsContext);
   const customColorHex =
+    (isCustomThemeColorValue(value)
+      ? getThemeColorCssValue(value)
+      : undefined) ??
     getThemeColorHexValue(
       isThemeColorValue(value) ? value.selectedColor : undefined,
       templateProps?.document
-    ) ?? "#000000";
+    ) ??
+    "#000000";
 
   return (
     <>
@@ -77,7 +69,23 @@ export const ThemeColorFieldOverride = ({
           ...field,
           type: "basicSelector",
           optionGroups: [
-            ...ThemeOptions[field.options],
+            {
+              options: [
+                {
+                  label: msg("default", "Default"),
+                  value: {
+                    selectedColor: "default",
+                    contrastingColor: "default",
+                  },
+                },
+              ],
+            },
+            ...ThemeOptions[field.options].map((group) => ({
+              ...group,
+              options: group.options.filter(
+                (option) => option.value !== undefined
+              ),
+            })),
             {
               title:
                 field.translateOptions === false
@@ -90,7 +98,7 @@ export const ThemeColorFieldOverride = ({
                       ? pt("fields.options.other", "Other")
                       : msg("fields.options.other", "Other"),
                   value: CUSTOM_COLOR_OPTION_VALUE,
-                  colorStyle: { backgroundColor: customColorHex },
+                  colorStyle: { background: customColorHex },
                 },
               ],
             },
@@ -113,6 +121,7 @@ export const ThemeColorFieldOverride = ({
           <FieldLabel label={pt("fields.customColor", "Custom Color")} el="div">
             <ColorPickerInput
               ariaLabel={pt("colorPicker.open", "Open color picker")}
+              allowGradient={field.options === "BACKGROUND_COLOR"}
               value={customColorHex}
               onChange={(nextColor) => onChange(toCustomThemeColor(nextColor))}
             />
@@ -121,4 +130,19 @@ export const ThemeColorFieldOverride = ({
       )}
     </>
   );
+};
+
+export const toCustomThemeColor = (color: string): ThemeColor => {
+  const selectedColor = color.startsWith("#") ? color.toUpperCase() : color;
+  const contrastingColor =
+    getContrastingColor(getPickerContrastHex(selectedColor), 12, 400) ===
+    "#FFFFFF"
+      ? "white"
+      : "black";
+
+  return {
+    selectedColor: `[${selectedColor}]`,
+    contrastingColor,
+    isDarkColor: contrastingColor === "white",
+  };
 };

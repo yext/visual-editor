@@ -63,11 +63,7 @@ const Edit: () => JSX.Element = () => {
       entityFields={entityFields}
       tailwindConfig={tailwindConfig}
     >
-      <Editor
-        document={entityDocument}
-        componentRegistry={componentRegistry}
-        themeConfig={themeConfig}
-      />
+      <Editor document={entityDocument} componentRegistry={componentRegistry} />
     </VisualEditorProvider>
   );
 };
@@ -101,11 +97,7 @@ const Edit: () => JSX.Element = () => {
       entityFields={entityFields}
       tailwindConfig={tailwindConfig}
     >
-      <Editor
-        document={entityDocument}
-        componentRegistry={componentRegistry}
-        themeConfig={themeConfig}
-      />
+      <Editor document={entityDocument} componentRegistry={componentRegistry} />
     </VisualEditorProvider>
   );
 };

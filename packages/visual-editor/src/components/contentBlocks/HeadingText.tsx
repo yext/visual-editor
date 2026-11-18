@@ -1,3 +1,9 @@
+import {
+  type TypographyRole,
+  ThemeOptions,
+  HeadingLevel,
+  ThemeColor,
+} from "../../utils/themeOptions.ts";
 import * as React from "react";
 import { PuckComponent } from "@puckeditor/core";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -7,11 +13,6 @@ import { Heading, HeadingProps } from "../atoms/heading.tsx";
 import { TranslatableString } from "../../types/types.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
-import {
-  ThemeOptions,
-  HeadingLevel,
-  ThemeColor,
-} from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { useTranslation } from "react-i18next";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
@@ -25,13 +26,17 @@ export type HeadingTextProps = {
   /** Styling for the heading. */
   styles: {
     /** The h tag level of the section heading */
-    level: HeadingProps["level"];
+    level?: HeadingProps["level"];
     /** Alignment of the event section heading */
     align: "left" | "center" | "right";
     /** Optional override to render a different HTML tag instead of the one based on the level */
-    semanticLevelOverride?: HeadingLevel | "span";
+    semanticLevelOverride?: HeadingLevel | "span" | "p";
     color?: ThemeColor;
+    typographyRole?: TypographyRole;
   };
+
+  /** @internal Default typography supplied by the placement. */
+  parentStyles?: { typographyRole?: TypographyRole };
 
   /** @internal Controlled data from the parent section */
   parentData?: {
@@ -73,10 +78,13 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
         constantValueEnabled={!parentData && data.text.constantValueEnabled}
       >
         <Heading
-          level={styles.level}
+          level={styles.level ?? 2}
           className={alignClass}
           semanticLevelOverride={styles.semanticLevelOverride}
           color={styles.color}
+          typographyRole={
+            styles.typographyRole ?? props.parentStyles?.typographyRole
+          }
         >
           {resolvedHeadingText}
         </Heading>
@@ -107,11 +115,8 @@ const headingTextFields: YextFields<HeadingTextProps> = {
     label: msg("fields.styles", "Styles"),
     type: "object",
     objectFields: {
-      level: {
-        type: "basicSelector",
-        label: msg("fields.headingLevel", "Heading Level"),
-        options: "HEADING_LEVEL",
-      },
+      level: { type: "number", visible: false },
+      typographyRole: { type: "typographyRole" },
       align: {
         label: msg("fields.headingAlign", "Heading Align"),
         type: "radio",

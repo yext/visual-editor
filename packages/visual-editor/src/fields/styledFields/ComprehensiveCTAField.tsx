@@ -6,7 +6,7 @@ import {
 } from "../../components/atoms/cta.tsx";
 import { getCTAType } from "../../internal/utils/ctaFieldUtils.ts";
 import { type MsgString, pt } from "../../utils/i18n/platform.ts";
-import { ThemeColor, ThemeOptions } from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeOptions.ts";
 import { PresetImageType, TranslatableString } from "../../types/types.ts";
 import { type YextCTAField } from "../CTASelectorField.tsx";
 import { type YextObjectField } from "../fields.ts";

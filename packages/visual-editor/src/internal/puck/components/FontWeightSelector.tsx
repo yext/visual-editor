@@ -39,6 +39,10 @@ export const FontWeightSelector = ({
   }, [options]);
 
   useEffect(() => {
+    updateOptions();
+  }, [updateOptions]);
+
+  useEffect(() => {
     if (!availableOptions.length) {
       return;
     }

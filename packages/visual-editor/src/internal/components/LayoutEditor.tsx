@@ -15,7 +15,6 @@ import { useLayoutMessageSenders } from "../hooks/layout/useMessageSenders.ts";
 import { useLayoutMessageReceivers } from "../hooks/layout/useMessageReceivers.ts";
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 import { ThemeData, ThemeHistory } from "../types/themeData.ts";
-import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
@@ -36,7 +35,6 @@ type LayoutEditorProps = {
   templateMetadata: TemplateMetadata;
   layoutData: Data;
   themeData: ThemeData;
-  themeConfig: ThemeConfig | undefined;
   localDev: boolean;
   metadata?: Metadata;
   streamDocument: StreamDocument;
@@ -49,7 +47,6 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     templateMetadata,
     layoutData,
     themeData,
-    themeConfig,
     localDev,
     metadata,
     streamDocument,
@@ -124,10 +121,6 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
    * Apply the themes from Content
    */
   useEffect(() => {
-    if (!themeConfig) {
-      return;
-    }
-
     // use theme from localStorage when in dev mode
     if (templateMetadata.isDevMode) {
       const localHistoryArray = lzstring.decompress(
@@ -144,7 +137,6 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         });
         updateThemeInEditor(
           localThemeData,
-          themeConfig,
           false,
           templateMetadata.customFonts
         );
@@ -155,12 +147,11 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     if (themeData) {
       updateThemeInEditor(
         themeData as ThemeData,
-        themeConfig,
         false,
         templateMetadata.customFonts
       );
     }
-  }, [themeData, themeConfig, templateMetadata]);
+  }, [themeData, templateMetadata]);
 
   /**
    * Determines the initialHistory to send to Puck. It is based on a combination

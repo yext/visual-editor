@@ -23,6 +23,7 @@ const MainContentComponent: PuckComponent<MainContentProps> = ({
   return (
     <main
       id="main-content"
+      className="ve-theme-page ve-theme-body"
       style={{
         minHeight: puck.isEditing ? "400px" : undefined,
       }}

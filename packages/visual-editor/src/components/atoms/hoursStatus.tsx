@@ -1,3 +1,4 @@
+import type { TypographyRole } from "../../utils/themeOptions.ts";
 import {
   HoursStatus as HoursStatusJS,
   HoursType,
@@ -10,7 +11,9 @@ import { useTranslation } from "react-i18next";
 
 export interface HoursStatusAtomProps {
   hours: HoursType;
+  typographyRole?: TypographyRole;
   className?: string;
+  style?: React.CSSProperties;
   comingSoon?: boolean;
   showCurrentStatus?: boolean;
   showDayNames?: boolean;
@@ -18,13 +21,13 @@ export interface HoursStatusAtomProps {
   dayOfWeekFormat?: "short" | "long";
   timezone?: string;
   boldCurrentStatus?: boolean;
-  bodyVariant?: "lg" | "base" | "sm";
 }
 
 export const HoursStatusAtom = React.memo(
   ({
     hours,
     className,
+    style,
     comingSoon,
     showCurrentStatus = true,
     showDayNames = true,
@@ -32,17 +35,12 @@ export const HoursStatusAtom = React.memo(
     dayOfWeekFormat = "long",
     timezone,
     boldCurrentStatus = true,
-    bodyVariant = "lg",
+    typographyRole = "body",
   }: HoursStatusAtomProps): any => {
     const { t, i18n } = useTranslation();
 
     const classNameResolved = themeManagerCn(
-      "components mb-2 font-body-fontFamily font-body-fontWeight",
-      bodyVariant === "lg"
-        ? "text-body-lg-fontSize"
-        : bodyVariant === "sm"
-          ? "text-body-sm-fontSize"
-          : "text-body-fontSize",
+      `components mb-2 ve-theme-${typographyRole}`,
       className
     );
 
@@ -115,7 +113,10 @@ export const HoursStatusAtom = React.memo(
           }
 
           return (
-            <div className={themeManagerCn("HoursStatus", classNameResolved)}>
+            <div
+              className={themeManagerCn("HoursStatus", classNameResolved)}
+              style={style}
+            >
               {(showCurrentStatus || isComingSoon) &&
                 hoursCurrentTemplateOverride(params, t, boldCurrentStatus)}
               {!isComingSoon &&

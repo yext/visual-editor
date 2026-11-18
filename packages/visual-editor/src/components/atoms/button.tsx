@@ -2,115 +2,118 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { themeManagerCn } from "../../utils/cn.ts";
-import { useBackground } from "../../hooks/useBackground.tsx";
+import { getThemeColorCssValue } from "../../utils/colors.ts";
+import {
+  type ThemeColor,
+  type InteractionRole,
+  type TypographyRole,
+} from "../../utils/themeOptions.ts";
 
-export const buttonVariants = cva(
-  "components h-fit flex items-center justify-center whitespace-nowrap",
+export const variantToInteractionRole = (
+  variant?: string | null
+): InteractionRole => {
+  switch (variant) {
+    case "secondary":
+      return "secondary-button";
+    case "headerFooterMainLink":
+    case "headerFooterSecondaryLink":
+      return "navigation-link";
+    case "link":
+    case "directoryLink":
+      return "link";
+    default:
+      return "primary-button";
+  }
+};
+
+/** Apply a complete typography role to an element that also has an interaction role. */
+const typographyRoleStyle = (role: TypographyRole): React.CSSProperties =>
+  ({
+    "--ve-typography-mobile-size": `var(--ve-${role}-mobile-font-size)`,
+    "--ve-typography-size": `var(--ve-${role}-font-size)`,
+    fontFamily: `var(--ve-${role}-font-family)`,
+    fontWeight: `var(--ve-${role}-font-weight)`,
+    fontStyle: `var(--ve-${role}-font-style)`,
+    "--ve-typography-mobile-line-height": `var(--ve-${role}-mobile-line-height)`,
+    "--ve-typography-line-height": `var(--ve-${role}-line-height)`,
+    letterSpacing: `var(--ve-${role}-letter-spacing)`,
+    textTransform: `var(--ve-${role}-text-transform)`,
+  }) as React.CSSProperties;
+
+export const buttonLayoutVariants = cva(
+  "components h-fit flex items-center justify-center",
   {
     variants: {
       variant: {
-        primary:
-          "bg-palette-primary text-palette-primary-contrast border-palette-primary",
-        secondary: "bg-none",
-        link: "w-fit underline",
+        primary: "sm:w-fit w-full",
+        secondary: "sm:w-fit w-full",
+        link: "w-fit gap-2",
         directoryLink:
-          "border-b-gray-400 border-b sm:border-transparent w-full sm:w-fit sm:underline py-3",
-        headerFooterMainLink:
-          "font-link-fontWeight text-link-sm-fontSize hover:underline hover:cursor-pointer",
-        headerFooterSecondaryLink:
-          "text-link-xs-fontSize hover:underline hover:cursor-pointer",
+          "border-b sm:border-transparent w-full sm:w-fit py-3 gap-2",
+        headerFooterMainLink: "",
+        headerFooterSecondaryLink: "",
       },
-      hasDarkBackground: {
-        true: "",
-        false: "",
-      },
-      linkPadding: {
-        none: "",
-        yOnly: "py-3",
-      },
+      linkPadding: { none: "", yOnly: "py-3" },
     },
-    compoundVariants: [
-      {
-        variant: ["primary", "secondary"],
-        className:
-          "font-button-fontFamily text-button-fontSize font-button-fontWeight tracking-button-letterSpacing rounded-button-borderRadius " +
-          "hover:underline focus:underline active:underline sm:w-fit w-full px-6 py-3 border-2 border-solid",
-      },
-      {
-        variant: ["link", "directoryLink"],
-        className:
-          "bg-none justify-between gap-2 decoration-0 hover:no-underline " +
-          "font-link-fontFamily text-link-fontSize font-link-fontWeight tracking-link-letterSpacing ",
-      },
-      {
-        variant: ["headerFooterMainLink", "headerFooterSecondaryLink"],
-        className:
-          "no-underline font-link-fontFamily tracking-link-letterSpacing",
-      },
-      {
-        variant: "secondary",
-        hasDarkBackground: false,
-        className: "text-palette-primary-dark border-palette-primary-dark",
-      },
-      {
-        variant: "secondary",
-        hasDarkBackground: true,
-        className: "text-white border-white",
-      },
-      {
-        variant: [
-          "link",
-          "directoryLink",
-          "headerFooterMainLink",
-          "headerFooterSecondaryLink",
-        ],
-        hasDarkBackground: false,
-        className: "text-palette-primary-dark",
-      },
-      {
-        hasDarkBackground: true,
-        variant: [
-          "link",
-          "directoryLink",
-          "headerFooterMainLink",
-          "headerFooterSecondaryLink",
-        ],
-        className: "text-white",
-      },
-    ],
-    defaultVariants: {
-      variant: "primary",
-      hasDarkBackground: false,
-      linkPadding: "none",
-    },
+    defaultVariants: { variant: "primary", linkPadding: "none" },
   }
 );
 
 export interface ButtonProps
   extends
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color">,
+    VariantProps<typeof buttonLayoutVariants> {
   asChild?: boolean;
+  interactionRole?: InteractionRole;
+  typographyRole?: TypographyRole;
+  color?: ThemeColor;
+  labelColor?: ThemeColor;
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, variant, asChild = false, linkPadding = "none", ...props },
+    {
+      className,
+      variant,
+      interactionRole,
+      typographyRole,
+      color,
+      labelColor,
+      style,
+      asChild = false,
+      linkPadding = "none",
+      ...props
+    },
     ref
   ) => {
     const Comp = asChild ? Slot : "button";
-    const background = useBackground();
-
+    const role = interactionRole ?? variantToInteractionRole(variant);
+    const selected = getThemeColorCssValue(color);
+    const explicit: React.CSSProperties =
+      role === "primary-button"
+        ? {
+            background: selected,
+            borderColor: selected,
+            color: getThemeColorCssValue(color?.contrastingColor),
+          }
+        : role === "secondary-button"
+          ? { borderColor: selected, color: selected }
+          : { color: selected };
     return (
       <Comp
         className={themeManagerCn(
-          buttonVariants({
-            variant,
-            hasDarkBackground: background?.isDarkColor,
-            linkPadding,
-          }),
+          buttonLayoutVariants({ variant, linkPadding }),
+          `ve-theme-${role}`,
+          typographyRole && `ve-theme-${typographyRole}`,
+          typographyRole && "ve-theme-typography-override",
           className
         )}
+        style={{
+          ...(typographyRole ? typographyRoleStyle(typographyRole) : {}),
+          ...explicit,
+          ...(labelColor ? { color: getThemeColorCssValue(labelColor) } : {}),
+          ...style,
+        }}
         ref={ref}
         {...props}
       />

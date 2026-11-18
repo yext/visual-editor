@@ -78,7 +78,7 @@ const EmptyCustomCodeSection = () => {
     <div className="p-3">
       <div className="flex flex-col items-center justify-center gap-4 p-3 bg-gray-100 rounded-md">
         <CodeXml className="w-12 h-12 text-gray-300" />
-        <span className="text-gray-500 text-lg font-medium font-body-fontFamily">
+        <span className="text-gray-500 text-lg font-medium ve-theme-body">
           {pt("missingHtmlWidget", "Add HTML to view component")}
         </span>
       </div>

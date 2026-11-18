@@ -1,5 +1,6 @@
+import { parsePickerGradient, getPickerContrastHex } from "./colorPicker.ts";
 import { getThemeValue } from "./getThemeValue.ts";
-import { type ThemeColor } from "./themeConfigOptions.ts";
+import { type ThemeColor } from "./themeOptions.ts";
 import { type StreamDocument } from "./types/StreamDocument.ts";
 
 /** An authored theme color with render-ready CSS for both selected and contrasting colors. */
@@ -219,6 +220,12 @@ export const getThemeColorCssValue = (
     return `hsl(from var(--colors-palette-${palette}) h s ${lightness})`;
   }
 
+  if (
+    isResolvedCssColor(normalizedColorToken) ||
+    normalizedColorToken.includes("gradient(")
+  ) {
+    return normalizedColorToken;
+  }
   return `var(--colors-${normalizedColorToken})`;
 };
 
@@ -424,7 +431,10 @@ export const getThemeColorHexValue = (
     normalizedColorToken.startsWith("[") &&
     normalizedColorToken.endsWith("]")
   ) {
-    return normalizeHexColor(normalizedColorToken.slice(1, -1));
+    const value = normalizedColorToken.slice(1, -1);
+    return parsePickerGradient(value)
+      ? normalizeHexColor(getPickerContrastHex(value))
+      : normalizeHexColor(value);
   }
 
   const directHex = normalizeHexColor(normalizedColorToken);
@@ -454,20 +464,6 @@ export const isDarkColor = (
   color?: ThemeColor | string,
   streamDocument?: StreamDocument | Record<string, any>
 ): boolean => {
-  if (color !== null && typeof color === "object") {
-    if (color.isDarkColor !== undefined) {
-      return color.isDarkColor;
-    }
-
-    if (color.contrastingColor === "white") {
-      return true;
-    }
-
-    if (color.contrastingColor === "black") {
-      return false;
-    }
-  }
-
   const normalizedColorToken = normalizeThemeColorToken(color);
   if (!normalizedColorToken) {
     return false;
@@ -539,7 +535,9 @@ export const getSurfaceColorStyle = (
     fallbackBackgroundColor?: string;
     fallbackTextColor?: string;
   }
-): { backgroundColor?: string; color?: string } | undefined => {
+):
+  | { backgroundColor?: string; backgroundImage?: string; color?: string }
+  | undefined => {
   const backgroundColor = getThemeColorCssValue(surfaceColor);
   const foregroundColor = getThemeColorCssValue(
     getDefaultForegroundColor(surfaceColor, streamDocument)
@@ -554,7 +552,9 @@ export const getSurfaceColorStyle = (
 
   return {
     ...(resolvedBackgroundColor
-      ? { backgroundColor: resolvedBackgroundColor }
+      ? parsePickerGradient(resolvedBackgroundColor)
+        ? { backgroundImage: resolvedBackgroundColor }
+        : { backgroundColor: resolvedBackgroundColor }
       : {}),
     ...(resolvedTextColor ? { color: resolvedTextColor } : {}),
   };
@@ -567,10 +567,13 @@ export const getSurfaceColorStyle = (
  */
 export const getBackgroundColorClasses = (color?: ThemeColor): string => {
   return [
-    color?.selectedColor && !isCustomThemeColorToken(color.selectedColor)
-      ? `bg-${color.selectedColor}`
+    normalizeThemeColorToken(color) &&
+    !isCustomThemeColorToken(color?.selectedColor)
+      ? `bg-${color?.selectedColor}`
       : undefined,
-    color?.contrastingColor && !isCustomThemeColorToken(color.contrastingColor)
+    color?.contrastingColor &&
+    color.contrastingColor !== "default" &&
+    !isCustomThemeColorToken(color.contrastingColor)
       ? `text-${color.contrastingColor}`
       : undefined,
   ]
@@ -585,24 +588,26 @@ export const getBackgroundColorClasses = (color?: ThemeColor): string => {
  */
 export const getBackgroundColorStyle = (
   color?: ThemeColor | ResolvedThemeColor
-): { backgroundColor?: string; color?: string } | undefined => {
+):
+  | { backgroundColor?: string; backgroundImage?: string; color?: string }
+  | undefined => {
   const backgroundColor =
     (color && "selectedColorCss" in color && color.selectedColorCss) ||
-    (isCustomThemeColorToken(color?.selectedColor)
-      ? getThemeColorCssValue(color?.selectedColor)
-      : undefined);
+    getThemeColorCssValue(color?.selectedColor);
   const textColor =
     (color && "contrastingColorCss" in color && color.contrastingColorCss) ||
-    (isCustomThemeColorToken(color?.contrastingColor)
-      ? getThemeColorCssValue(color?.contrastingColor)
-      : undefined);
+    getThemeColorCssValue(color?.contrastingColor);
 
   if (!backgroundColor && !textColor) {
     return undefined;
   }
 
   return {
-    ...(backgroundColor ? { backgroundColor } : {}),
+    ...(backgroundColor
+      ? parsePickerGradient(backgroundColor)
+        ? { backgroundImage: backgroundColor }
+        : { backgroundColor }
+      : {}),
     ...(textColor ? { color: textColor } : {}),
   };
 };
@@ -613,11 +618,14 @@ export const getBackgroundColorStyle = (
  * @returns the selected text color class, if present.
  */
 export const getTextColorClass = (color?: ThemeColor): string | undefined => {
-  if (!color?.selectedColor || isCustomThemeColorToken(color.selectedColor)) {
+  if (
+    !normalizeThemeColorToken(color) ||
+    isCustomThemeColorToken(color?.selectedColor)
+  ) {
     return undefined;
   }
 
-  return `text-${color.selectedColor}`;
+  return `text-${color?.selectedColor}`;
 };
 
 /**
@@ -628,9 +636,53 @@ export const getTextColorClass = (color?: ThemeColor): string | undefined => {
 export const getTextColorStyle = (
   color?: ThemeColor
 ): { color?: string } | undefined => {
-  if (!isCustomThemeColorToken(color?.selectedColor)) {
-    return undefined;
-  }
+  const value = getThemeColorCssValue(color?.selectedColor);
+  return value ? { color: value } : undefined;
+};
 
-  return { color: getThemeColorCssValue(color?.selectedColor) };
+/** Classify the supported gradient/alpha formats using a representative color. */
+export const isDarkSurface = (color: string): boolean => {
+  const sample = normalizeHexColor(getPickerContrastHex(color));
+  const rgb = sample ? hexToRGB(sample) : undefined;
+  const luminance = rgb && luminanceFromRGB(rgb);
+  return luminance !== undefined && luminance < Math.sqrt(1.05 * 0.05) - 0.05;
+};
+
+/** Normalize raw and transformed backgrounds from the authored token. Derived CSS is not another input. */
+export const resolveBackgroundColor = (
+  background: ThemeColor | ResolvedThemeColor | undefined,
+  surface: string,
+  streamDocument?: StreamDocument | Record<string, any>
+) => {
+  const token = normalizeThemeColorToken(background);
+  const css = getThemeColorCssValue(token);
+  const resolveVariables = (value: string) =>
+    value.replace(
+      /var\((--[\w-]+)\)/g,
+      (_, variable) => getThemeValue(variable, streamDocument) ?? ""
+    );
+  const concreteColor = token?.match(/^palette-.*-(light|dark)$/)
+    ? (getThemeColorHexValue(token, streamDocument) ?? "")
+    : resolveVariables(
+        css ?? getThemeValue(`--ve-color-${surface}`, streamDocument) ?? ""
+      );
+  const dark = isDarkSurface(concreteColor);
+  const contrastingColor =
+    background?.contrastingColor ?? (dark ? "white" : "black");
+  const foreground = getThemeColorCssValue(
+    token ? contrastingColor : background?.contrastingColor
+  );
+  return {
+    hasOverride: !!token,
+    style: {
+      // Use the shorthand so a solid override also clears a surface gradient.
+      ...(css ? { background: css } : {}),
+      ...(foreground ? { color: foreground } : {}),
+    },
+    context: {
+      selectedColor: token ?? `[${concreteColor}]`,
+      contrastingColor,
+      isDarkColor: dark,
+    },
+  };
 };

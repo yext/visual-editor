@@ -1,3 +1,4 @@
+import { type SurfaceValue } from "../../utils/themeOptions.ts";
 import { useTranslation } from "react-i18next";
 import { useTemplateProps } from "../../hooks/useDocument.tsx";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
@@ -5,11 +6,7 @@ import { PageSection } from "../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { TranslatableString } from "../../types/types.ts";
-import {
-  ThemeColor,
-  backgroundColors,
-  ThemeOptions,
-} from "../../utils/themeConfigOptions.ts";
+import { ThemeColor, ThemeOptions } from "../../utils/themeOptions.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { setDeep } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -41,7 +38,7 @@ export interface BreadcrumbsStyles {
    * The background color of the section.
    * @defaultValue Background Color 1
    */
-  backgroundColor?: ThemeColor;
+  backgroundColor?: SurfaceValue;
 
   /**
    * The link color of breadcrumbs.
@@ -110,9 +107,9 @@ const breadcrumbsSectionFields: YextFields<BreadcrumbsSectionProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
-        type: "basicSelector",
+        type: "surface",
         label: msg("fields.backgroundColor", "Background Color"),
-        options: "BACKGROUND_COLOR",
+        allowInherit: false,
       },
       linkColor: {
         type: "basicSelector",
@@ -221,7 +218,8 @@ export const BreadcrumbsComponent = ({
               <MaybeLink
                 eventName={`link${index}`}
                 href={isCurrentPage ? "" : href}
-                className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
+                typographyRole="body-small"
+                className="inline whitespace-normal break-words"
                 color={styles?.linkColor}
                 alwaysHideCaret
               >
@@ -267,7 +265,7 @@ export const BreadcrumbsSection: YextComponentConfig<BreadcrumbsSectionProps> =
         },
       },
       styles: {
-        backgroundColor: backgroundColors.background1.value,
+        backgroundColor: "page",
         showCurrentPage: true,
       },
       analytics: {

@@ -1,10 +1,13 @@
+import {
+  type TypographyRole,
+  type ThemeColor,
+} from "../../../utils/themeOptions.ts";
 import * as React from "react";
 import { MaybeRTF } from "../maybeRTF.tsx";
 import { type StyledTextValue } from "../../../fields/styledFields/StyledTextField.tsx";
 import { getTextColorClass, getTextColorStyle } from "../../../utils/colors.ts";
 import { themeManagerCn } from "../../../utils/cn.ts";
 import { getRichTextStyle } from "../../../utils/richTextStyles.ts";
-import { type ThemeColor } from "../../../utils/themeConfigOptions.ts";
 
 export type StyledTextTag =
   "div" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "strong";
@@ -92,8 +95,10 @@ export const renderStyledRichText = ({
   align,
   className,
   text,
+  typographyRole = "body",
 }: {
   content: React.ReactNode;
+  typographyRole?: TypographyRole;
   align?: StyledTextAlignment;
   className?: string;
   text?: StyledTextValue;
@@ -119,6 +124,7 @@ export const renderStyledRichText = ({
         <MaybeRTF
           className={richTextClassName}
           data={{ html: content }}
+          typographyRole={typographyRole}
           richTextStyleOverrides={text}
           style={richTextStyle}
         />
@@ -128,6 +134,7 @@ export const renderStyledRichText = ({
     return (
       <StyledTextElement
         as="div"
+        typographyRole={typographyRole}
         align={align}
         color={text?.color}
         className={className}
@@ -146,6 +153,7 @@ export const renderStyledRichText = ({
     return (
       <MaybeRTF
         {...content.props}
+        typographyRole={typographyRole}
         className={themeManagerCn(content.props.className, richTextClassName)}
         richTextStyleOverrides={{
           ...content.props.richTextStyleOverrides,
@@ -195,7 +203,8 @@ export const renderStyledRichText = ({
   });
 };
 
-type StyledTextElementProps = {
+export type StyledTextElementProps = {
+  typographyRole?: TypographyRole;
   align?: StyledTextAlignment;
   as?: StyledTextTag;
   children: React.ReactNode;
@@ -211,30 +220,44 @@ type StyledTextElementProps = {
 export const StyledTextElement = React.forwardRef<
   HTMLElement,
   StyledTextElementProps
->(({ align, as = "span", children, className, color, style }, ref) => {
-  const Tag = as;
-  const textColorClassName = getTextColorClass(color);
-  const renderProps = getStyledTextRenderProps({
-    align,
-    className: themeManagerCn(
-      textColorClassName,
-      as === "span" && "block",
-      className
-    ),
-    color,
-  });
+>(
+  (
+    {
+      align,
+      as = "span",
+      children,
+      className,
+      color,
+      style,
+      typographyRole = "body",
+    },
+    ref
+  ) => {
+    const Tag = as;
+    const textColorClassName = getTextColorClass(color);
+    const renderProps = getStyledTextRenderProps({
+      align,
+      className: themeManagerCn(
+        `ve-theme-${typographyRole}`,
+        textColorClassName,
+        as === "span" && "block",
+        className
+      ),
+      color,
+    });
 
-  return (
-    <Tag
-      className={renderProps.className}
-      style={{
-        ...renderProps.style,
-        ...style,
-      }}
-      ref={ref as never}
-    >
-      {children}
-    </Tag>
-  );
-});
+    return (
+      <Tag
+        className={renderProps.className}
+        style={{
+          ...renderProps.style,
+          ...style,
+        }}
+        ref={ref as never}
+      >
+        {children}
+      </Tag>
+    );
+  }
+);
 StyledTextElement.displayName = "StyledTextElement";

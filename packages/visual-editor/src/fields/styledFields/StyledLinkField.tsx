@@ -8,7 +8,7 @@ import {
   withDefaultOption,
 } from "./baseText.tsx";
 import { MsgString, pt } from "../../utils/i18n/platform.ts";
-import { ThemeOptions } from "../../utils/themeConfigOptions.ts";
+import { ThemeOptions } from "../../utils/themeOptions.ts";
 import { Combobox } from "../../internal/puck/ui/Combobox.tsx";
 
 export type StyledLinkValue = BaseTextStyles & {

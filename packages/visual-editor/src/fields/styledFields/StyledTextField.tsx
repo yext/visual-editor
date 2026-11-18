@@ -2,7 +2,7 @@ import React from "react";
 import { BaseField, type FieldProps } from "@puckeditor/core";
 import { pt, type MsgString } from "../../utils/i18n/platform.ts";
 import { ThemeColorFieldOverride } from "../ThemeColorField.tsx";
-import { type ThemeColor } from "../../utils/themeConfigOptions.ts";
+import { type ThemeColor } from "../../utils/themeOptions.ts";
 import {
   BaseTextStyles,
   BaseTypographyFields,

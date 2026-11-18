@@ -1,8 +1,8 @@
 import "../ui/puck.css";
+import { SetThemeDataButton } from "./SetThemeDataButton.tsx";
 import React, { useEffect } from "react";
 import { Button } from "../ui/button.tsx";
 import "../../../editor/index.css";
-import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { FontRegistry } from "../../../utils/fonts/visualEditorFonts.ts";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
@@ -27,9 +27,9 @@ const usePuck = createUsePuck();
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
+  onThemeChange: (values: ThemeData) => void;
   isDevMode: boolean;
   setThemeHistories: (themeHistories: ThemeHistories) => void;
-  themeConfig?: ThemeConfig;
   themeHistories?: ThemeHistories;
   clearThemeHistory: () => void;
   puckInitialHistory: InitialHistory | undefined;
@@ -46,7 +46,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     isDevMode,
     setThemeHistories,
     onPublishTheme,
-    themeConfig,
+    onThemeChange,
     themeHistories,
     clearThemeHistory,
     puckInitialHistory,
@@ -165,6 +165,14 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       {localDev && <LocalDevOverrideButtons showSetLayoutData={false} />}
       <div className="header-center"></div>
       <div className="actions">
+        <SetThemeDataButton
+          themeData={
+            themeHistories?.histories[themeHistories.index]?.data ?? {}
+          }
+          onThemeChange={onThemeChange}
+          customFonts={customFonts}
+          disabled={!themeHistories}
+        />
         <Button
           variant="ghost"
           size="icon"
@@ -195,14 +203,11 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
           disabled={themeHistories?.histories?.length === 1}
           onClearLocalChanges={() => {
             clearThemeHistory();
-            if (themeConfig) {
-              updateThemeInEditor(
-                themeHistories?.histories?.[0]?.data as ThemeData,
-                themeConfig,
-                true,
-                customFonts
-              );
-            }
+            updateThemeInEditor(
+              themeHistories?.histories?.[0]?.data as ThemeData,
+              true,
+              customFonts
+            );
             setThemeHistories({
               histories: [
                 {

@@ -1,50 +1,58 @@
+import { themeValuesToCss } from "../internal/utils/internalThemeResolver.ts";
+import { legacyThemeVariables } from "../internal/theme/legacyTheme.ts";
 import { PUCK_PREVIEW_IFRAME_ID } from "./applyTheme.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
+
+const resolveThemeVariables = (
+  variableName: string,
+  read: (name: string) => string | undefined,
+  seen = new Set<string>()
+): string | undefined => {
+  if (seen.has(variableName)) {
+    return undefined;
+  }
+
+  seen.add(variableName);
+
+  const value = read(variableName)?.replace("!important", "").trim();
+  if (!value) {
+    return undefined;
+  }
+  return (
+    value.replace(
+      /var\((--[\w-]+)\)/g,
+      (_, name) => resolveThemeVariables(name, read, new Set(seen)) ?? ""
+    ) || undefined
+  );
+};
 
 const getThemeValueFromDocument = (
   targetDocument: Document,
   variableName: string
 ): string | undefined => {
-  const themedRoot =
-    targetDocument.getElementsByClassName("components")?.[0] ?? null;
   const styleReader = targetDocument.defaultView?.getComputedStyle;
-
-  if (!styleReader) {
-    return undefined;
-  }
-
-  const elementsToRead = [themedRoot, targetDocument.documentElement].filter(
-    (element): element is Element => !!element
+  if (!styleReader) return undefined;
+  const styles = styleReader(targetDocument.documentElement);
+  return resolveThemeVariables(variableName, (name) =>
+    styles.getPropertyValue(name)
   );
-
-  for (const element of elementsToRead) {
-    const value = styleReader(element)
-      .getPropertyValue(variableName)
-      .replace("!important", "")
-      .trim();
-
-    if (value) {
-      return value;
-    }
-  }
-
-  return undefined;
 };
 
 const getThemeValueFromPublishedTheme = (
   variableName: string,
   streamDocument?: StreamDocument | Record<string, any>
 ): string | undefined => {
-  if (!streamDocument?.__?.theme) {
-    return undefined;
+  let values = {};
+  try {
+    values = JSON.parse(streamDocument?.__?.theme ?? "{}");
+  } catch {
+    // Match applyTheme: malformed published data still uses legacy defaults.
   }
-
-  const publishedValue = JSON.parse(streamDocument.__.theme)?.[variableName];
-  if (!publishedValue) {
-    return undefined;
-  }
-
-  return String(publishedValue).replace("!important", "").trim();
+  const variables = {
+    ...legacyThemeVariables,
+    ...themeValuesToCss(values ?? {}),
+  };
+  return resolveThemeVariables(variableName, (name) => variables[name]);
 };
 
 /**

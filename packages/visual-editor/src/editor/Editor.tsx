@@ -6,7 +6,6 @@ import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
-import { ThemeConfig } from "../utils/themeResolver.ts";
 import { useQuickFindShortcut } from "../internal/hooks/useQuickFindShortcut.ts";
 import {
   useCommonMessageReceivers,
@@ -19,10 +18,6 @@ import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts"
 import { useProgress } from "../internal/hooks/useProgress.ts";
 import { i18nPlatformInstance } from "../utils/i18n/i18nInstances.ts";
 import { StreamDocument } from "../utils/types/StreamDocument.ts";
-import {
-  createDefaultThemeConfig,
-  defaultThemeConfig,
-} from "../components/DefaultThemeConfig.ts";
 import {
   defaultFonts,
   loadFontsIntoDOM,
@@ -61,7 +56,6 @@ declare module "@puckeditor/core" {
 type EditorProps = {
   document: any;
   componentRegistry: ComponentRegistry;
-  themeConfig?: ThemeConfig;
   // localDev is used for running VE outside of the platform
   localDev?: boolean;
   localDevOptions?: LocalDevOptions;
@@ -74,7 +68,6 @@ type EditorProps = {
 export const Editor = ({
   document,
   componentRegistry,
-  themeConfig,
   localDev,
   localDevOptions,
   forceThemeMode,
@@ -206,13 +199,6 @@ export const Editor = ({
     ],
   });
 
-  let finalThemeConfig = themeConfig;
-  // If themeConfig is the default and there are custom fonts, create a new default theme config with the custom fonts.
-  // In the case of a hybrid developer with a custom themeConfig, we cannot adjust their themeConfig to have custom fonts.
-  // The hybrid developer must provide a themeConfig that includes their custom fonts if they want to use them.
-  if (themeConfig === defaultThemeConfig && templateMetadata?.customFonts) {
-    finalThemeConfig = createDefaultThemeConfig(templateMetadata?.customFonts);
-  }
   const migratedData = !isLoading
     ? migrate(
         puckConfig,
@@ -234,7 +220,6 @@ export const Editor = ({
                 templateMetadata={templateMetadata!}
                 layoutData={migratedData!}
                 themeData={themeData!}
-                themeConfig={finalThemeConfig}
                 localDev={!!localDev}
                 metadata={{ ...metadata, streamDocument: document }}
               />
@@ -249,7 +234,6 @@ export const Editor = ({
                   templateMetadata={templateMetadata!}
                   layoutData={migratedData!}
                   themeData={themeData!}
-                  themeConfig={finalThemeConfig}
                   localDev={!!localDev}
                   metadata={{ ...metadata, streamDocument: document }}
                   streamDocument={document}

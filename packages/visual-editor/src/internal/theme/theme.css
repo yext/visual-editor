@@ -1,0 +1,426 @@
+/* Shared theme classes, included by applyTheme in published pages and editor previews.
+ * Apply these classes explicitly; they do not target elements by tag name.
+ * Surfaces establish nearest-boundary interaction colors.
+ * Use ve-theme-on-dark for image overlays without a semantic surface.
+ */
+
+/* Colors */
+:where(.ve-theme-page) {
+  background: var(--ve-color-background);
+  color: var(--ve-color-foreground);
+}
+
+:where(.ve-theme-primary) {
+  background: var(--ve-color-primary);
+  color: var(--ve-color-primary-foreground);
+}
+
+:where(.ve-theme-secondary) {
+  background: var(--ve-color-secondary);
+  color: var(--ve-color-secondary-foreground);
+}
+
+:where(.ve-theme-accent) {
+  background: var(--ve-color-accent);
+  color: var(--ve-color-accent-foreground);
+}
+
+:where(.ve-theme-muted) {
+  background: var(--ve-color-muted);
+  color: var(--ve-color-muted-foreground);
+}
+
+:where(.ve-theme-border) {
+  border-color: var(--ve-color-border);
+}
+
+/* Typography classes outrank element resets; mobile values apply below 640px. */
+
+.ve-theme-headline {
+  font-family: var(--ve-headline-font-family);
+  font-size: var(--ve-headline-mobile-font-size);
+  font-weight: var(--ve-headline-font-weight);
+  font-style: var(--ve-headline-font-style);
+  line-height: var(--ve-headline-mobile-line-height);
+  letter-spacing: var(--ve-headline-letter-spacing);
+  text-transform: var(--ve-headline-text-transform);
+}
+
+.ve-theme-section-title {
+  font-family: var(--ve-section-title-font-family);
+  font-size: var(--ve-section-title-mobile-font-size);
+  font-weight: var(--ve-section-title-font-weight);
+  font-style: var(--ve-section-title-font-style);
+  line-height: var(--ve-section-title-mobile-line-height);
+  letter-spacing: var(--ve-section-title-letter-spacing);
+  text-transform: var(--ve-section-title-text-transform);
+}
+
+.ve-theme-card-title {
+  font-family: var(--ve-card-title-font-family);
+  font-size: var(--ve-card-title-mobile-font-size);
+  font-weight: var(--ve-card-title-font-weight);
+  font-style: var(--ve-card-title-font-style);
+  line-height: var(--ve-card-title-mobile-line-height);
+  letter-spacing: var(--ve-card-title-letter-spacing);
+  text-transform: var(--ve-card-title-text-transform);
+}
+
+.ve-theme-eyebrow {
+  font-family: var(--ve-eyebrow-font-family);
+  font-size: var(--ve-eyebrow-mobile-font-size);
+  font-weight: var(--ve-eyebrow-font-weight);
+  font-style: var(--ve-eyebrow-font-style);
+  line-height: var(--ve-eyebrow-mobile-line-height);
+  letter-spacing: var(--ve-eyebrow-letter-spacing);
+  text-transform: var(--ve-eyebrow-text-transform);
+}
+
+.ve-theme-body {
+  font-family: var(--ve-body-font-family);
+  font-size: var(--ve-body-mobile-font-size);
+  font-weight: var(--ve-body-font-weight);
+  font-style: var(--ve-body-font-style);
+  line-height: var(--ve-body-mobile-line-height);
+  letter-spacing: var(--ve-body-letter-spacing);
+  text-transform: var(--ve-body-text-transform);
+}
+
+.ve-theme-body-large {
+  font-family: var(--ve-body-large-font-family);
+  font-size: var(--ve-body-large-mobile-font-size);
+  font-weight: var(--ve-body-large-font-weight);
+  font-style: var(--ve-body-large-font-style);
+  line-height: var(--ve-body-large-mobile-line-height);
+  letter-spacing: var(--ve-body-large-letter-spacing);
+  text-transform: var(--ve-body-large-text-transform);
+}
+
+.ve-theme-body-small {
+  font-family: var(--ve-body-small-font-family);
+  font-size: var(--ve-body-small-mobile-font-size);
+  font-weight: var(--ve-body-small-font-weight);
+  font-style: var(--ve-body-small-font-style);
+  line-height: var(--ve-body-small-mobile-line-height);
+  letter-spacing: var(--ve-body-small-letter-spacing);
+  text-transform: var(--ve-body-small-text-transform);
+}
+
+/* Button and link classes must outrank element resets such as Tailwind preflight. */
+/* Buttons and links */
+
+.ve-theme-primary-button {
+  font-family: var(--ve-primary-button-font-family);
+  font-size: var(--ve-primary-button-mobile-font-size);
+  font-weight: var(--ve-primary-button-default-font-weight);
+  font-style: var(--ve-primary-button-font-style);
+  line-height: var(--ve-primary-button-mobile-line-height);
+  letter-spacing: var(--ve-primary-button-letter-spacing);
+  text-transform: var(--ve-primary-button-text-transform);
+  text-decoration: var(--ve-primary-button-default-text-decoration);
+  color: var(--ve-surface-primary-button-default-text-color);
+  transition: var(--ve-primary-button-transition);
+  padding: var(--ve-primary-button-padding);
+  border-radius: var(--ve-primary-button-border-radius);
+  border-style: solid;
+  border-width: var(--ve-primary-button-border-width);
+  border-color: var(--ve-surface-primary-button-default-border-color);
+  background: var(--ve-surface-primary-button-default-background-color);
+}
+
+.ve-theme-primary-button:hover {
+  font-weight: var(--ve-primary-button-hover-font-weight);
+  text-decoration: var(--ve-primary-button-hover-text-decoration);
+  color: var(--ve-surface-primary-button-hover-text-color);
+  border-color: var(--ve-surface-primary-button-hover-border-color);
+  background: var(--ve-surface-primary-button-hover-background-color);
+}
+
+.ve-theme-primary-button:active {
+  font-weight: var(--ve-primary-button-active-font-weight);
+  text-decoration: var(--ve-primary-button-active-text-decoration);
+  color: var(--ve-surface-primary-button-active-text-color);
+  border-color: var(--ve-surface-primary-button-active-border-color);
+  background: var(--ve-surface-primary-button-active-background-color);
+}
+
+.ve-theme-secondary-button {
+  font-family: var(--ve-secondary-button-font-family);
+  font-size: var(--ve-secondary-button-mobile-font-size);
+  font-weight: var(--ve-secondary-button-default-font-weight);
+  font-style: var(--ve-secondary-button-font-style);
+  line-height: var(--ve-secondary-button-mobile-line-height);
+  letter-spacing: var(--ve-secondary-button-letter-spacing);
+  text-transform: var(--ve-secondary-button-text-transform);
+  text-decoration: var(--ve-secondary-button-default-text-decoration);
+  color: var(--ve-surface-secondary-button-default-text-color);
+  transition: var(--ve-secondary-button-transition);
+  padding: var(--ve-secondary-button-padding);
+  border-radius: var(--ve-secondary-button-border-radius);
+  border-style: solid;
+  border-width: var(--ve-secondary-button-border-width);
+  border-color: var(--ve-surface-secondary-button-default-border-color);
+  background: var(--ve-surface-secondary-button-default-background-color);
+}
+
+.ve-theme-secondary-button:hover {
+  font-weight: var(--ve-secondary-button-hover-font-weight);
+  text-decoration: var(--ve-secondary-button-hover-text-decoration);
+  color: var(--ve-surface-secondary-button-hover-text-color);
+  border-color: var(--ve-surface-secondary-button-hover-border-color);
+  background: var(--ve-surface-secondary-button-hover-background-color);
+}
+
+.ve-theme-secondary-button:active {
+  font-weight: var(--ve-secondary-button-active-font-weight);
+  text-decoration: var(--ve-secondary-button-active-text-decoration);
+  color: var(--ve-surface-secondary-button-active-text-color);
+  border-color: var(--ve-surface-secondary-button-active-border-color);
+  background: var(--ve-surface-secondary-button-active-background-color);
+}
+
+.ve-theme-link,
+.rtf-wrapper a {
+  font-family: var(--ve-link-font-family);
+  font-size: var(--ve-link-mobile-font-size);
+  font-weight: var(--ve-link-default-font-weight);
+  font-style: var(--ve-link-font-style);
+  line-height: var(--ve-link-mobile-line-height);
+  letter-spacing: var(--ve-link-letter-spacing);
+  text-transform: var(--ve-link-text-transform);
+  text-decoration: var(--ve-link-default-text-decoration);
+  color: var(--ve-surface-link-default-text-color);
+  transition: var(--ve-link-transition);
+}
+
+.ve-theme-link:hover,
+.rtf-wrapper a:hover {
+  font-weight: var(--ve-link-hover-font-weight);
+  text-decoration: var(--ve-link-hover-text-decoration);
+  color: var(--ve-surface-link-hover-text-color);
+}
+
+.ve-theme-link:active,
+.rtf-wrapper a:active {
+  font-weight: var(--ve-link-active-font-weight);
+  text-decoration: var(--ve-link-active-text-decoration);
+  color: var(--ve-surface-link-active-text-color);
+}
+
+.ve-theme-navigation-link {
+  font-family: var(--ve-navigation-link-font-family);
+  font-size: var(--ve-navigation-link-mobile-font-size);
+  font-weight: var(--ve-navigation-link-default-font-weight);
+  font-style: var(--ve-navigation-link-font-style);
+  line-height: var(--ve-navigation-link-mobile-line-height);
+  letter-spacing: var(--ve-navigation-link-letter-spacing);
+  text-transform: var(--ve-navigation-link-text-transform);
+  text-decoration: var(--ve-navigation-link-default-text-decoration);
+  color: var(--ve-surface-navigation-link-default-text-color);
+  transition: var(--ve-navigation-link-transition);
+}
+
+.ve-theme-navigation-link:hover,
+.ve-theme-navigation-link[data-highlighted] {
+  font-weight: var(--ve-navigation-link-hover-font-weight);
+  text-decoration: var(--ve-navigation-link-hover-text-decoration);
+  color: var(--ve-surface-navigation-link-hover-text-color);
+}
+
+.ve-theme-navigation-link:active {
+  font-weight: var(--ve-navigation-link-active-font-weight);
+  text-decoration: var(--ve-navigation-link-active-text-decoration);
+  color: var(--ve-surface-navigation-link-active-text-color);
+}
+
+/* Keyboard focus remains visible across all interactive styles. */
+.ve-theme-primary-button:focus-visible,
+.ve-theme-secondary-button:focus-visible,
+.ve-theme-link:focus-visible,
+.rtf-wrapper a:focus-visible,
+.ve-theme-navigation-link:focus-visible {
+  outline: 2px solid var(--ve-color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* Desktop typography */
+@media (min-width: 640px) {
+  .ve-theme-headline {
+    font-size: var(--ve-headline-font-size);
+    line-height: var(--ve-headline-line-height);
+  }
+  .ve-theme-section-title {
+    font-size: var(--ve-section-title-font-size);
+    line-height: var(--ve-section-title-line-height);
+  }
+  .ve-theme-card-title {
+    font-size: var(--ve-card-title-font-size);
+    line-height: var(--ve-card-title-line-height);
+  }
+  .ve-theme-eyebrow {
+    font-size: var(--ve-eyebrow-font-size);
+    line-height: var(--ve-eyebrow-line-height);
+  }
+  .ve-theme-body {
+    font-size: var(--ve-body-font-size);
+    line-height: var(--ve-body-line-height);
+  }
+  .ve-theme-body-large {
+    font-size: var(--ve-body-large-font-size);
+    line-height: var(--ve-body-large-line-height);
+  }
+  .ve-theme-body-small {
+    font-size: var(--ve-body-small-font-size);
+    line-height: var(--ve-body-small-line-height);
+  }
+  .ve-theme-primary-button {
+    font-size: var(--ve-primary-button-font-size);
+    line-height: var(--ve-primary-button-line-height);
+  }
+  .ve-theme-secondary-button {
+    font-size: var(--ve-secondary-button-font-size);
+    line-height: var(--ve-secondary-button-line-height);
+  }
+  .ve-theme-link,
+  .rtf-wrapper a {
+    font-size: var(--ve-link-font-size);
+    line-height: var(--ve-link-line-height);
+  }
+  .ve-theme-navigation-link {
+    font-size: var(--ve-navigation-link-font-size);
+    line-height: var(--ve-navigation-link-line-height);
+  }
+}
+
+/* Page styles */
+:where(.ve-theme-image) {
+  border-radius: var(--ve-image-border-radius);
+}
+
+.ve-theme-card {
+  border-radius: var(--ve-card-border-radius);
+  border-style: solid;
+  border-width: var(--ve-card-border-width);
+  border-color: var(--ve-color-border);
+}
+
+:where(.ve-theme-content) {
+  max-width: var(--ve-page-content-max-width);
+  margin-inline: auto;
+}
+
+:where(.ve-theme-section) {
+  padding-block: var(--ve-page-section-vertical-spacing);
+}
+
+/* Rich text preserves authored structure; visual typography comes from its role. */
+.rtf-wrapper :where(p, h1, h2, h3, h4, h5, h6, li, blockquote) {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+.rtf-wrapper :where(ul) {
+  list-style-type: disc;
+  padding-inline-start: 1.5em;
+}
+.rtf-wrapper :where(ol) {
+  list-style-type: decimal;
+  padding-inline-start: 1.5em;
+}
+.rtf-wrapper :where(p, ul, ol, blockquote) {
+  margin-block: 0 1em;
+}
+.rtf-wrapper > :last-child {
+  margin-bottom: 0;
+}
+.rtf-wrapper :where(strong, b) {
+  font-weight: bolder;
+}
+.rtf-wrapper :where(em, i) {
+  font-style: italic;
+}
+
+/* Explicit typography roles override an interaction role's typography. */
+.ve-theme-typography-override {
+  font-size: var(--ve-typography-mobile-size);
+  line-height: var(--ve-typography-mobile-line-height);
+}
+@media (min-width: 640px) {
+  .ve-theme-typography-override {
+    font-size: var(--ve-typography-size);
+    line-height: var(--ve-typography-line-height);
+  }
+}
+
+/* Inherit control fonts unless an explicit typography role is selected. */
+:where(.ve-theme-input) {
+  font: inherit;
+}
+
+/* Shared native form styling. Error borders retain their functional distinction. */
+.ve-theme-input {
+  background: var(--ve-color-background);
+  color: var(--ve-color-foreground);
+  border: 1px solid var(--ve-color-border);
+  border-radius: var(--ve-primary-button-border-radius);
+  padding: 0.5em 0.75em;
+}
+.ve-theme-input::placeholder {
+  color: var(--ve-color-muted-foreground);
+}
+.ve-theme-check {
+  accent-color: var(--ve-color-primary);
+}
+.ve-theme-input[aria-invalid="true"] {
+  border-color: #b91c1c;
+}
+.ve-theme-input:focus-visible,
+.ve-theme-check:focus-visible,
+.ve-theme-control:focus-visible {
+  outline: 2px solid var(--ve-color-focus-ring);
+  outline-offset: 2px;
+}
+.ve-theme-input:disabled,
+.ve-theme-check:disabled,
+.ve-theme-control:disabled,
+.ve-theme-primary-button:disabled,
+.ve-theme-secondary-button:disabled,
+.ve-theme-link:disabled,
+.ve-theme-navigation-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rtf-wrapper a {
+  color: var(--ve-rich-text-color, var(--ve-surface-link-default-text-color));
+  font-family: var(--ve-rich-text-font-family, var(--ve-link-font-family));
+  font-size: var(--ve-rich-text-font-size, var(--ve-link-mobile-font-size));
+  font-weight: var(
+    --ve-rich-text-font-weight,
+    var(--ve-link-default-font-weight)
+  );
+  font-style: var(--ve-rich-text-font-style, var(--ve-link-font-style));
+  text-transform: var(
+    --ve-rich-text-text-transform,
+    var(--ve-link-text-transform)
+  );
+}
+.rtf-wrapper a:hover {
+  color: var(--ve-rich-text-color, var(--ve-surface-link-hover-text-color));
+  font-weight: var(
+    --ve-rich-text-font-weight,
+    var(--ve-link-hover-font-weight)
+  );
+}
+.rtf-wrapper a:active {
+  color: var(--ve-rich-text-color, var(--ve-surface-link-active-text-color));
+  font-weight: var(
+    --ve-rich-text-font-weight,
+    var(--ve-link-active-font-weight)
+  );
+}
+@media (min-width: 640px) {
+  .rtf-wrapper a {
+    font-size: var(--ve-rich-text-font-size, var(--ve-link-font-size));
+  }
+}

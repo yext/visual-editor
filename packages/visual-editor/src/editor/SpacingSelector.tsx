@@ -4,7 +4,7 @@ import { YextAutoField } from "../fields/YextAutoField.tsx";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../utils/themeResolver.ts";
 import { pt } from "../utils/i18n/platform.ts";
-import { spacingOptions } from "../utils/themeConfigOptions.ts";
+import { spacingOptions } from "../utils/themeOptions.ts";
 
 const convertToPixels = (spacing: string): number => {
   if (spacing.endsWith("px")) {

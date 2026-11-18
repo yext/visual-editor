@@ -9,10 +9,10 @@ import { msg, pt } from "../../utils/i18n/platform.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { Body } from "../atoms/body.tsx";
 import { PuckComponent } from "@puckeditor/core";
-import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import mapboxLogo from "../assets/mapbox-logo-black.svg";
 import { Map } from "lucide-react";
-import { getThemeValue } from "../../utils/getThemeValue.ts";
+import { useThemeValue } from "../../hooks/useThemeValue.ts";
+import { getThemeColorHexValue } from "../../utils/colors.ts";
 import { YextComponentConfig, YextFields } from "../../fields/fields.ts";
 
 export type MapboxStaticProps = {
@@ -55,14 +55,6 @@ const mapboxFields: YextFields<MapboxStaticProps> = {
   mapStyle: mapStyleField,
 };
 
-const getPrimaryColor = (streamDocument: StreamDocument) => {
-  return (
-    getThemeValue("--colors-palette-primary", streamDocument)
-      ?.replace("#", "")
-      ?.trim() ?? "000000"
-  );
-};
-
 export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   coordinate: coordinateField,
   height = "300px",
@@ -72,6 +64,12 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
 }) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument<any>();
+  const primary = useThemeValue("--ve-color-primary", streamDocument);
+  const pinHex =
+    (primary ? getThemeColorHexValue(`[${primary}]`) : undefined)?.replace(
+      "#",
+      ""
+    ) ?? "000000";
 
   const coordinate = resolveComponentData<Coordinate>(
     coordinateField,
@@ -103,13 +101,13 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
         >
           <Map className="w-12 h-12 text-gray-400" />
           <div className="flex flex-col items-center gap-0">
-            <Body variant="base" className="text-gray-500 font-medium">
+            <Body className="text-gray-500 font-medium">
               {pt(
                 "staticMapEmptyStateSectionHidden",
                 "Section hidden for all locations"
               )}
             </Body>
-            <Body variant="base" className="text-gray-500 font-normal">
+            <Body className="text-gray-500 font-normal">
               {pt(
                 "staticMapEmptyStateMissingApiKey",
                 "Failed to load YEXT_MAPBOX_API_KEY. Please check your site's advanced configuration."
@@ -128,7 +126,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
     return <></>;
   }
 
-  const marker = `pin-l+${getPrimaryColor(streamDocument)}(${coordinate.longitude},${coordinate.latitude})`;
+  const marker = `pin-l+${pinHex}(${coordinate.longitude},${coordinate.latitude})`;
 
   const staticImageSizes = {
     large: "1280x720",

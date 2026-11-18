@@ -22,7 +22,7 @@ on:
 jobs:
   unit_tests:
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.55.1
+    container: mcr.microsoft.com/playwright:v1.65.0
     env:
       SCREENSHOT_AUTOCOMMIT_TRAILER: "auto-screenshot-update: true"
     strategy:
@@ -82,9 +82,9 @@ jobs:
         run: pnpm run test:editor
         working-directory: ./packages/${{ inputs.package }}
 
-      - name: Run component tests (Node 20 only)
+      - name: Run component tests (Node 22 only)
         id: run_component_tests
-        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true' && matrix.node-version == '20.x'
+        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true' && matrix.node-version == '22.x'
         continue-on-error: true
         env:
           COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY: ${{secrets.COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY}}
@@ -104,7 +104,7 @@ jobs:
           echo "test_exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
       - name: Detect new/modified screenshots
         id: check_screenshots
-        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true' && matrix.node-version == '20.x'
+        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true' && matrix.node-version == '22.x'
         env:
           TEST_EXIT_CODE: ${{ steps.run_component_tests.outputs.test_exit_code }}
         working-directory: ./packages/${{ inputs.package }}
@@ -120,7 +120,7 @@ jobs:
           fi
 
       - name: Commit new screenshots and Fail if found
-        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true' && matrix.node-version == '20.x' && (steps.run_component_tests.outputs.test_exit_code != '0' || steps.check_screenshots.outputs.new_screenshots_found == 'true')
+        if: steps.detect_screenshot_autocommit.outputs.skip_workflow != 'true' && matrix.node-version == '22.x' && (steps.run_component_tests.outputs.test_exit_code != '0' || steps.check_screenshots.outputs.new_screenshots_found == 'true')
         env:
           PACKAGE_INPUT: ${{ inputs.package }}
           TEST_EXIT_CODE: ${{ steps.run_component_tests.outputs.test_exit_code }}

@@ -1,3 +1,6 @@
+import { getTextColorStyle } from "../../utils/colors.ts";
+import { type ThemeColor } from "../../utils/themeOptions.ts";
+import { type TypographyRole } from "../../utils/themeOptions.ts";
 import { useTranslation } from "react-i18next";
 import { PuckComponent } from "@puckeditor/core";
 import { HoursType } from "@yext/pages-components";
@@ -27,8 +30,9 @@ export interface HoursStatusProps {
     showDayNames?: boolean;
     /** Additional class names to apply to the underlying component */
     className?: string;
-    /** The body size variant */
-    bodyVariant?: "lg" | "base" | "sm";
+    /** The color of the hours status text. */
+    textColor?: ThemeColor;
+    typographyRole?: TypographyRole;
   };
 
   /** @internal */
@@ -58,6 +62,11 @@ export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
     type: "object",
     label: msg("fields.styles", "Styles"),
     objectFields: {
+      textColor: {
+        type: "basicSelector",
+        label: msg("fields.textColor", "Text Color"),
+        options: "SITE_COLOR",
+      },
       showCurrentStatus: {
         label: msg("fields.showCurrentStatus", "Show Current Status"),
         type: "radio",
@@ -90,6 +99,7 @@ export const hoursStatusWrapperFields: YextFields<HoursStatusProps> = {
           { label: msg("fields.options.long", "Long"), value: "long" },
         ],
       },
+      typographyRole: { type: "typographyRole" },
     },
   },
 };
@@ -119,11 +129,12 @@ const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
         comingSoon={comingSoon}
         timezone={timezone}
         className={styles.className}
+        style={getTextColorStyle(styles.textColor)}
         showCurrentStatus={styles.showCurrentStatus}
         showDayNames={styles.showDayNames}
         timeFormat={styles.timeFormat}
         dayOfWeekFormat={styles.dayOfWeekFormat}
-        bodyVariant={styles.bodyVariant}
+        typographyRole={styles.typographyRole ?? "body"}
       />
     </EntityField>
   ) : puck.isEditing ? (

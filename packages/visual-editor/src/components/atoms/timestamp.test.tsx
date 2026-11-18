@@ -58,7 +58,8 @@ describe("timestampFormatter", () => {
       option: TimestampOption.DATE_RANGE,
       hideTimeZone: true,
     });
-    expect(result).toEqual("Jan 1 – 5, 2024");
+    // Intl may use thin spaces or regular spaces around the range separator.
+    expect(result.replaceAll("\u2009", " ")).toEqual("Jan 1 – 5, 2024");
   });
 
   it("formats DATE_TIME_RANGE on the same day", () => {

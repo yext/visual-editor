@@ -43,30 +43,14 @@
   width: 1rem;
 }
 
-.theme-field {
-  color: var(--puck-color-grey-04);
-  font-size: var(--puck-font-size-xxs);
-  font-weight: 600;
-  padding: 12px 0 12px 4px;
-  border-bottom: 1px solid #e5e5f0;
+.theme-fields {
+  padding: 0 16px 16px;
 }
 
-.theme-field > :first-child {
-  padding: 0 16px;
-}
-
-.theme-field > div {
-  padding: 12px 16px;
-}
-
-.theme-field > fieldset {
-  padding: 16px 15px;
-}
-
-.theme-field fieldset > div,
-.theme-field fieldset > label {
-  padding: 0;
-  border: none !important;
+.theme-fields
+  > [data-puck-field-group-collapsible]
+  + [data-puck-field-group-collapsible] {
+  margin-top: 16px;
 }
 
 .font-select {

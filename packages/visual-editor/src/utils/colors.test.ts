@@ -174,16 +174,19 @@ describe("getBackgroundColorStyle", () => {
         selectedColor: "[#FF6D66]",
         contrastingColor: "black",
       })
-    ).toStrictEqual({ backgroundColor: "#FF6D66" });
+    ).toStrictEqual({ backgroundColor: "#FF6D66", color: "black" });
   });
 
-  it("returns undefined for theme colors", () => {
+  it("renders explicit palette overrides with live theme variables", () => {
     expect(
       getBackgroundColorStyle({
         selectedColor: "palette-primary",
         contrastingColor: "palette-primary-contrast",
       })
-    ).toBeUndefined();
+    ).toEqual({
+      backgroundColor: "var(--colors-palette-primary)",
+      color: "var(--colors-palette-primary-contrast)",
+    });
   });
 });
 
@@ -221,13 +224,13 @@ describe("getTextColorStyle", () => {
     ).toStrictEqual({ color: "#00E5FF" });
   });
 
-  it("returns undefined for theme colors", () => {
+  it("renders explicit palette text overrides with a live theme variable", () => {
     expect(
       getTextColorStyle({
         selectedColor: "palette-secondary",
         contrastingColor: "palette-secondary-contrast",
       })
-    ).toBeUndefined();
+    ).toEqual({ color: "var(--colors-palette-secondary)" });
   });
 });
 
@@ -289,39 +292,39 @@ describe("getThemeColorHexValue", () => {
     );
   });
 
-  it("resolves base palette tokens from the published theme", () => {
+  it("resolves base palette tokens from frozen defaults, ignoring published overrides", () => {
     expect(getThemeColorHexValue("palette-primary", streamDocument)).toBe(
-      "#341A1F"
+      "#CF0A2C"
     );
     expect(
       getThemeColorHexValue("palette-quaternary-contrast", streamDocument)
-    ).toBe("#F5F5F5");
+    ).toBe("#2B2B2B");
   });
 
-  it("derives light and dark palette tokens from the published theme", () => {
+  it("derives light and dark palette tokens from frozen defaults", () => {
     expect(getThemeColorHexValue("palette-primary-light", streamDocument)).toBe(
-      "#FCF8F9"
+      "#FFF5F7"
     );
     expect(
       getThemeColorHexValue("palette-secondary-dark", streamDocument)
-    ).toBe("#2A323C");
+    ).toBe("#303336");
   });
 
-  it("returns undefined when theme values are unavailable", () => {
+  it("uses frozen defaults when no saved theme exists", () => {
     expect(
       getThemeColorHexValue("palette-primary", { __: { theme: "{}" } })
-    ).toBeUndefined();
+    ).toBe("#CF0A2C");
   });
 });
 
 describe("isDarkColor", () => {
-  it("uses explicit contrast before resolving a theme token", () => {
+  it("derives darkness from the resolved color rather than stale contrast metadata", () => {
     expect(
       isDarkColor({
         selectedColor: "palette-tertiary",
         contrastingColor: "white",
       })
-    ).toBe(true);
+    ).toBe(false);
   });
 });
 

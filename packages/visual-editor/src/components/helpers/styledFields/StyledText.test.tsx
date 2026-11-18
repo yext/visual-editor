@@ -189,7 +189,7 @@ describe("Styled text content blocks", () => {
     );
 
     const wrapper = container.querySelector(
-      ".rtf-theme.components"
+      ".rtf-wrapper.components"
     ) as HTMLElement;
     expect(wrapper).toBeTruthy();
     expect(wrapper.style.color).toBe("rgb(18, 52, 86)");
@@ -234,7 +234,7 @@ describe("Styled text content blocks", () => {
     );
 
     const wrapper = container.querySelector(
-      ".rtf-theme.components"
+      ".rtf-wrapper.components"
     ) as HTMLElement;
     expect(wrapper.className).toContain("text-center");
     expect(wrapper.className).toContain("text-palette-secondary");
@@ -353,7 +353,7 @@ describe("Styled text content blocks", () => {
     );
 
     const wrapper = container.querySelector(
-      ".rtf-theme.components"
+      ".rtf-wrapper.components"
     ) as HTMLElement;
     expect(wrapper.className).toContain("text-right");
     expect(wrapper.style.getPropertyValue("--fontFamily-body-fontFamily")).toBe(
@@ -364,7 +364,7 @@ describe("Styled text content blocks", () => {
     );
   });
 
-  it("creates a plain-text config with only Text and Font Options", () => {
+  it("creates a plain-text config with Text, Typography Role, and Font Options", () => {
     const config = createStyledTextConfig({
       kind: "plain",
       label: "Plain Text",
@@ -372,7 +372,11 @@ describe("Styled text content blocks", () => {
     });
     const fields = config.fields!;
 
-    expect(Object.keys(fields)).toEqual(["data", "fontOptions"]);
+    expect(Object.keys(fields)).toEqual([
+      "data",
+      "typographyRole",
+      "fontOptions",
+    ]);
     expect(String(fields.data.label)).toContain("Text");
     expect(String(fields.fontOptions.label)).toContain("Font Options");
     expect(fields.data.objectFields.text.filter?.types).toEqual([
@@ -394,6 +398,7 @@ describe("Styled text content blocks", () => {
 
     expect(Object.keys(fields)).toEqual([
       "data",
+      "typographyRole",
       "fontOptions",
       "alignment",
       "tag",
@@ -418,7 +423,11 @@ describe("Styled text content blocks", () => {
       "type.string",
       "type.rich_text_v2",
     ]);
-    expect(Object.keys(fields)).toEqual(["data", "fontOptions"]);
+    expect(Object.keys(fields)).toEqual([
+      "data",
+      "typographyRole",
+      "fontOptions",
+    ]);
   });
 
   it("does not create an Alignment field when includeAlignment is false", () => {

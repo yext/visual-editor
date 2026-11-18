@@ -1,5 +1,7 @@
 import { BasicSelectorFieldOverride } from "./BasicSelectorField.tsx";
 import { ThemeColorFieldOverride } from "./ThemeColorField.tsx";
+import { SurfaceFieldOverride } from "./SurfaceField.tsx";
+import { TypographyRoleFieldOverride } from "./TypographyRoleField.tsx";
 import { CodeFieldOverride } from "./CodeField.tsx";
 import { DateTimeSelectorFieldOverride } from "./DateTimeSelectorField.tsx";
 import { EntityFieldSelectorFieldOverride } from "./EntityFieldSelectorField.tsx";
@@ -19,6 +21,8 @@ import { ComprehensiveCTAFieldOverride } from "./styledFields/ComprehensiveCTAFi
 
 export const YextPuckFieldOverrides = {
   basicSelector: BasicSelectorFieldOverride,
+  surface: SurfaceFieldOverride,
+  typographyRole: TypographyRoleFieldOverride,
   themeColor: ThemeColorFieldOverride,
   ctaSelector: CTASelectorFieldOverride,
   code: CodeFieldOverride,

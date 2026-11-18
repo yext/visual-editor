@@ -1,9 +1,10 @@
+import { pickerGradientPattern } from "../colorPicker.ts";
 import { z } from "zod";
 import {
   backgroundColors,
   ThemeOptions,
   type ThemeColor,
-} from "../themeConfigOptions.ts";
+} from "../themeOptions.ts";
 
 const backgroundValues = Object.values(backgroundColors).map(
   ({ value }) => value
@@ -23,9 +24,9 @@ const textValues = ThemeOptions.SITE_COLOR.flatMap((group) => group.options)
 
 const hexColorSchema = z
   .string()
-  .regex(/^\[#[0-9A-Fa-f]{6}\]$/)
+  .regex(/^\[#[0-9A-Fa-f]{6}(?:[0-9A-Fa-f]{2})?\]$/)
   .describe(
-    "Custom hex color with literal square brackets: [#FFBBC7]. Bare hex such as #FFBBC7 is invalid."
+    "Custom hex color (6 digits, or 8 digits including opacity) with literal square brackets: [#FFBBC7]. Bare hex such as #FFBBC7 is invalid."
   );
 
 // Keep saved-value validation tolerant. Only the model-facing compiler uses
@@ -42,6 +43,10 @@ export const getColorGenerationSchema = (
 };
 
 function makeColorSchema(options: ThemeColor[], kind: ColorSchemaKind) {
+  options = [
+    { selectedColor: "default", contrastingColor: "default" },
+    ...options,
+  ];
   const themeColorSchemas = options.map((color) =>
     z.object({
       selectedColor: z.literal(color.selectedColor),
@@ -53,19 +58,33 @@ function makeColorSchema(options: ThemeColor[], kind: ColorSchemaKind) {
     })
   );
 
+  const selectedColorSchema =
+    kind === "background"
+      ? z.union([
+          hexColorSchema,
+          z
+            .string()
+            .regex(
+              new RegExp(
+                `^\\[${pickerGradientPattern.source.slice(1, -1)}\\]$`,
+                "i"
+              )
+            ),
+        ])
+      : hexColorSchema;
   const customColorSchemas = [
     z.object({
-      selectedColor: hexColorSchema,
+      selectedColor: selectedColorSchema,
       contrastingColor: z.literal("black"),
       isDarkColor: z.literal(false),
     }),
     z.object({
-      selectedColor: hexColorSchema,
+      selectedColor: selectedColorSchema,
       contrastingColor: z.literal("white"),
       isDarkColor: z.literal(true),
     }),
     z.object({
-      selectedColor: hexColorSchema,
+      selectedColor: selectedColorSchema,
       contrastingColor: hexColorSchema,
       isDarkColor: z.boolean(),
     }),
@@ -76,10 +95,15 @@ function makeColorSchema(options: ThemeColor[], kind: ColorSchemaKind) {
     ...(typeof customColorSchemas)[number][],
   ];
 
+  const gradientDescription =
+    kind === "background"
+      ? " Backgrounds also support bracketed two-color gradients, for example [linear-gradient(90deg, #00000080 0%, #FFFFFF 100%)] or [radial-gradient(circle, #000000 0%, #FFFFFF 100%)]."
+      : "";
   const schema = z
     .union(schemas)
     .describe(
-      'Palette colors must exactly match the selector option: selectedColor and its canonical contrastingColor, without isDarkColor. Custom colors require selectedColor in [#XXXXXX] format, contrastingColor, and isDarkColor. For a light pink background use {"selectedColor":"[#FFBBC7]","contrastingColor":"black","isDarkColor":false}. Use white contrast with isDarkColor true for dark backgrounds.'
+      'Palette colors must exactly match the selector option: selectedColor and its canonical contrastingColor, without isDarkColor. Custom colors require selectedColor in [#XXXXXX] or [#XXXXXXXX] format (the last two digits encode opacity), contrastingColor, and isDarkColor. For a light pink background use {"selectedColor":"[#FFBBC7]","contrastingColor":"black","isDarkColor":false}. Use white contrast with isDarkColor true for dark backgrounds.' +
+        gradientDescription
     );
 
   colorSchemas.add(schema, { kind });

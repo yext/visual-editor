@@ -1,71 +1,103 @@
-import { Body, BodyProps } from "../atoms/body.tsx";
-import { RichText } from "../../types/types.ts";
+import * as React from "react";
+import { type RichText } from "../../types/types.ts";
 import type { BaseTextStyles } from "../../fields/styledFields/baseText.tsx";
+import {
+  type ThemeColor,
+  type TypographyRole,
+} from "../../utils/themeOptions.ts";
 import { getRichTextStyle } from "../../utils/richTextStyles.ts";
-import { type ThemeColor } from "../../utils/themeConfigOptions.ts";
-import "./maybeRTF.css";
 
 export type RichTextStyleOverrides = Partial<BaseTextStyles> & {
   color?: ThemeColor | string;
 };
 
-export interface MaybeRTFProps extends Record<string, any> {
+export interface MaybeRTFProps extends React.HTMLAttributes<HTMLElement> {
   data: RichText | string | undefined;
-  bodyVariant?: BodyProps["variant"];
-  /** Override the theme's styling */
+  typographyRole?: TypographyRole;
+  as?: "p" | "span" | "div" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   richTextStyleOverrides?: RichTextStyleOverrides;
 }
 
 /**
- * Renders plain strings through the shared `Body` component and rich text HTML
- * through the standard `rtf-wrapper` container while applying shared rich-text
- * typography and color overrides.
+ * Remove generated inline font/color defaults; retain layout and semantic emphasis.
  */
+const normalizeRichTextPresentation = (html: string): string =>
+  html.replace(/<([a-z][\w:-]*)\b[^>]*>/gi, (tag, tagName: string) => {
+    const normalizedTag = tag.replace(
+      /\sstyle=(["'])([\s\S]*?)\1/gi,
+      (_, quote, css: string) => {
+        const declarations = css
+          .split(";")
+          .filter((declaration) => {
+            const [name, value = ""] = declaration.split(":");
+            const property = name.trim().toLowerCase();
+            // Inline spans may carry authored emphasis. Block-level generated font
+            // weights/styles must inherit the selected role and component overrides.
+            if (property === "font-weight") {
+              return (
+                tagName.toLowerCase() === "span" &&
+                /^(bold|bolder|[6-9]00)$/i.test(value.trim())
+              );
+            }
+            if (property === "font-style") {
+              return (
+                tagName.toLowerCase() === "span" && value.trim() === "italic"
+              );
+            }
+            return !/^(font|font-family|font-size|line-height|letter-spacing|text-transform|color|background-color)$/.test(
+              property
+            );
+          })
+          .join(";");
+        return declarations.trim()
+          ? ` style=${quote}${declarations}${quote}`
+          : "";
+      }
+    );
+    return tagName.toLowerCase() === "font"
+      ? normalizedTag.replace(/\s(?:face|size|color)=(["']).*?\1/gi, "")
+      : normalizedTag;
+  });
+
 export const MaybeRTF = ({
   data,
-  bodyVariant = "base",
+  typographyRole = "body",
+  as: Tag = "p",
   richTextStyleOverrides,
-  style,
   className,
+  style,
   ...props
 }: MaybeRTFProps) => {
-  const mergedStyle = {
+  if (!data) {
+    return <></>;
+  }
+  const classes = `ve-theme-${typographyRole} ${className ?? ""}`.trim();
+  const resolvedStyle = {
     ...getRichTextStyle({
       color: richTextStyleOverrides?.color,
       typography: richTextStyleOverrides,
     }),
     ...style,
+    ...(style?.color ? { "--ve-rich-text-color": style.color } : {}),
   };
-
-  if (!data) {
-    return <></>;
-  }
-
   if (typeof data === "string") {
     return (
-      <Body
-        {...props}
-        className={className}
-        style={mergedStyle}
-        variant={bodyVariant}
-      >
+      <Tag {...props} className={classes} style={resolvedStyle}>
         {data}
-      </Body>
+      </Tag>
     );
   }
-
-  if (typeof data === "object") {
-    if ("html" in data && data.html) {
-      return (
-        <div
-          {...props}
-          style={mergedStyle}
-          dangerouslySetInnerHTML={{ __html: data.html }}
-          className={`rtf-theme rtf-wrapper ${bodyVariant !== "base" ? `rtf-body-${bodyVariant}` : ""} ${className ?? ""}`.trim()}
-        />
-      );
-    }
+  if (data.html) {
+    return (
+      <div
+        {...props}
+        className={`rtf-wrapper ${classes}`}
+        style={resolvedStyle}
+        dangerouslySetInnerHTML={{
+          __html: normalizeRichTextPresentation(data.html),
+        }}
+      />
+    );
   }
-
   return <></>;
 };

@@ -114,10 +114,10 @@ This object contains properties for customizing the component's appearance.
 
 #### Other Props
 
-| Prop     | Type                                                                                                                                                                                   | Description | Default |
-| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                                                               |             |         |
-| `styles` | `{ showCurrentStatus?: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; className?: string; bodyVariant?: "lg" \| "base" \| "sm"; }` |             |         |
+| Prop     | Type                                                                                                                                                                              | Description | Default |
+| :------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                                                          |             |         |
+| `styles` | `{ showCurrentStatus?: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; className?: string; typographyRole?: TypographyRole; }` |             |         |
 
 ---
 

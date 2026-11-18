@@ -9,7 +9,7 @@ import type { Fields } from "@puckeditor/core";
 import { toPuckFields, type YextFields } from "../../../fields/fields.ts";
 import { createPuckGenerationCatalog } from "../../../utils/createPuckGenerationCatalog.ts";
 import { createSlottedItemSource } from "../../../utils/itemSource/createSlottedItemSource.ts";
-import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
+import { ThemeOptions } from "../../../utils/themeOptions.ts";
 import { DirectoryGrid } from "../../../components/sections/directory/DirectoryWrapper.tsx";
 import { applyAuthoredValueEdits } from "../workflows/edits/applyEditsToComponent.ts";
 import { getEditValueContracts } from "../workflows/edits/getEditValueContracts.ts";

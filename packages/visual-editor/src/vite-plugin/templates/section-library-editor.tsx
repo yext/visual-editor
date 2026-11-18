@@ -11,7 +11,6 @@ import {
 } from "@yext/pages";
 import {
   applyTheme,
-  defaultThemeConfig,
   Editor,
   type MigrationRegistry,
   usePlatformBridgeDocument,
@@ -33,7 +32,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
 }): HeadConfig => ({
   title: editorName,
-  other: applyTheme(document, "./", defaultThemeConfig),
+  other: applyTheme(document, "./"),
 });
 
 const Edit = (): JSX.Element => {
@@ -49,7 +48,6 @@ const Edit = (): JSX.Element => {
       <Editor
         document={document}
         componentRegistry={componentRegistry}
-        themeConfig={defaultThemeConfig}
         sectionLibraryMigrationRegistry={sectionLibraryMigrationRegistry}
       />
     </SectionLibraryVisualEditorProvider>

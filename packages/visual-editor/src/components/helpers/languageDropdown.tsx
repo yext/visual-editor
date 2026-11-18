@@ -1,3 +1,4 @@
+import { Background } from "../atoms/background.tsx";
 import * as React from "react";
 import { ChevronDown, Globe } from "lucide-react";
 import { themeManagerCn } from "../../utils/cn.ts";
@@ -7,9 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../atoms/dropdown.tsx";
-import { Background } from "../atoms/background.tsx";
-import { ThemeColor } from "../../utils/themeConfigOptions.ts";
-import { Body } from "../atoms/body.tsx";
+import { type SurfaceRole, ThemeColor } from "../../utils/themeOptions.ts";
 import { fetchLocalesToPathsForEntity } from "../../utils/api/fetchLocalesToPathsForEntity.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import {
@@ -28,6 +27,8 @@ export interface LanguageDropdownProps {
   contentDeliveryAPIDomain: string;
   locales: string[];
   currentLocale: string;
+  surfaceRole?: SurfaceRole;
+  /** Explicit background override; clearing it restores surface inheritance. */
   background?: ThemeColor;
 }
 
@@ -40,6 +41,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   contentDeliveryAPIDomain,
   locales,
   currentLocale,
+  surfaceRole,
   background,
 }) => {
   const streamDocument = useDocument();
@@ -129,28 +131,34 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   };
 
   return (
-    <Background background={background} as="div" className={className}>
+    <Background
+      surfaceRole={surfaceRole}
+      background={background}
+      className={className}
+    >
       <div className="hidden md:block">
         <DropdownMenu open={open} onOpenChange={handleOpenChange}>
-          <DropdownMenuTrigger className="flex flex-row items-center gap-4 justify-between w-full">
+          <DropdownMenuTrigger className="ve-theme-navigation-link flex flex-row items-center gap-4 justify-between w-full">
             <div className="flex gap-4 items-center">
               <Globe className="w-4 h-4" />
-              <Body variant="xs">{getLanguageName(selected)}</Body>
+              <span>{getLanguageName(selected)}</span>
             </div>
             <ChevronDown />
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="w-40 rounded p-0 hidden md:block"
+            className="ve-theme-page w-40 rounded p-0 hidden md:block"
           >
             {(status === "COMPLETE" || status === "ERROR") &&
               Object.entries(validLocalesToPaths).map(([locale, path]) => (
                 <DropdownMenuItem
+                  key={locale}
+                  aria-current={selected === locale ? "true" : undefined}
                   onSelect={() => handleLocaleSelected(locale, path)}
                   className={themeManagerCn(
-                    "components font-body-fontFamily font-normal bg-white py-4 px-6 text-body-sm-fontSize",
-                    "hover:bg-[#EDEDED] active:bg-[#EDEDED] cursor-pointer data-[highlighted]:outline-none data-[highlighted]:shadow-none",
-                    selected === locale && "font-bold"
+                    "ve-theme-navigation-link py-4 px-6",
+                    "cursor-pointer",
+                    selected === locale && "underline"
                   )}
                 >
                   {getLanguageName(locale)}
@@ -167,26 +175,27 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
           onValueChange={(value) => handleOpenChange(!!value)}
         >
           <AccordionItem value="language-selector">
-            <AccordionTrigger className="group flex w-full items-center justify-between text-body-sm-fontSize font-medium text-gray-900 py-6 md:pb-4 ">
+            <AccordionTrigger className="ve-theme-navigation-link group flex w-full items-center justify-between py-6 md:pb-4">
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4" />
-                <Body variant="xs">{getLanguageName(selected)}</Body>
+                <span>{getLanguageName(selected)}</span>
               </div>
               <ChevronDown
                 className="transition-transform duration-300 group-data-[state=open]:rotate-180"
                 size={16}
               />
             </AccordionTrigger>
-            <AccordionContent className="overflow-hidden data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp bg-white">
+            <AccordionContent className="overflow-hidden data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp ve-theme-page">
               <div className="flex flex-col pl-6">
                 {(status === "COMPLETE" || status === "ERROR") &&
                   Object.entries(validLocalesToPaths).map(([locale, path]) => (
                     <button
                       key={locale}
+                      aria-current={selected === locale ? "true" : undefined}
                       onClick={() => handleLocaleSelected(locale, path)}
                       className={themeManagerCn(
-                        "text-left py-3 px-2 rounded text-body-sm-fontSize",
-                        selected === locale && "font-body-fontWeight"
+                        "ve-theme-navigation-link text-left py-3 px-2 rounded",
+                        selected === locale && "underline"
                       )}
                     >
                       {getLanguageName(locale)}

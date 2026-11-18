@@ -1,4 +1,5 @@
-import { PuckComponent, Slot } from "@puckeditor/core";
+import { type SurfaceValue } from "../../../utils/themeOptions.ts";
+import { setDeep, PuckComponent, Slot } from "@puckeditor/core";
 import React from "react";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import {
@@ -7,10 +8,6 @@ import {
 } from "../../../hooks/useDocument.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
-import {
-  backgroundColors,
-  ThemeColor,
-} from "../../../utils/themeConfigOptions.ts";
 import { deepMerge } from "../../../utils/themeResolver.ts";
 import { bindSlots } from "../../../utils/cardSlots/bindSlots.ts";
 import {
@@ -101,11 +98,7 @@ export const defaultDirectoryCardSlotData = (
         showHoursStatus: true,
         showPhoneNumber: true,
       },
-      styles: {
-        backgroundColor:
-          existingCardStyle?.backgroundColor ??
-          backgroundColors.background1.value,
-      },
+      styles: { backgroundColor: "page" as const, ...existingCardStyle },
       slots: {
         HeadingSlot: [
           {
@@ -117,7 +110,8 @@ export const defaultDirectoryCardSlotData = (
               },
               styles: {
                 ...existingHeadingStyles,
-                level: existingHeadingStyles?.level ?? 3,
+                level: 2,
+                semanticLevelOverride: 2,
                 align: existingHeadingStyles?.align ?? "left",
               },
             } satisfies HeadingTextProps,
@@ -201,7 +195,7 @@ export const defaultDirectoryCardSlotData = (
                   existingHoursStyles?.showCurrentStatus ?? true,
                 className:
                   existingHoursStyles?.className ??
-                  "mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full",
+                  "mb-2 font-semibold ve-theme-body h-full",
               },
               parentData: {
                 field: "profile.hours",
@@ -236,7 +230,7 @@ export type DirectoryCardProps = {
   /** Styling for all the cards. */
   styles: {
     /** The background color of each directory card */
-    backgroundColor?: ThemeColor;
+    backgroundColor?: SurfaceValue;
   };
 
   /** @internal */
@@ -378,11 +372,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
         props: {
           ...otherProps,
           data: props.data,
-          styles: {
-            backgroundColor:
-              sharedCardProps?.cardStyles.backgroundColor ||
-              backgroundColors.background1.value,
-          },
+          styles: { ...sharedCardProps?.cardStyles },
           slots: newSlotData,
         } satisfies DirectoryCardProps,
       },
@@ -433,7 +423,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
           <slots.PhoneSlot style={{ height: "auto" }} />
         )}
         {data.showAddress && resolvedChild?.address && (
-          <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
+          <div className="ve-theme-body">
             <slots.AddressSlot style={{ height: "auto" }} />
           </div>
         )}
@@ -454,9 +444,8 @@ const directoryCardFields: YextFields<DirectoryCardProps> = {
     label: msg("fields.styles", "Styles"),
     objectFields: {
       backgroundColor: {
-        type: "basicSelector",
+        type: "surface",
         label: msg("fields.backgroundColor", "Background Color"),
-        options: "BACKGROUND_COLOR",
       },
     },
   },
@@ -484,7 +473,7 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
       showPhoneNumber: true,
     },
     styles: {
-      backgroundColor: backgroundColors.background1.value,
+      backgroundColor: "page",
     },
     slots: {
       HeadingSlot: [],
@@ -493,8 +482,20 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
       AddressSlot: [],
     },
   },
-  resolveData: (data) =>
-    bindSlots(data, {
+  resolveData: (data) => {
+    if (data.props.slots.HeadingSlot?.[0]) {
+      data = setDeep(
+        data,
+        "props.slots.HeadingSlot[0].props.styles.semanticLevelOverride",
+        2
+      );
+      data = setDeep(
+        data,
+        "props.slots.HeadingSlot[0].props.parentStyles.typographyRole",
+        "card-title"
+      );
+    }
+    return bindSlots(data, {
       HeadingSlot:
         typeof data.props.data?.cardTitle === "string"
           ? ({
@@ -502,6 +503,7 @@ export const DirectoryCard: YextComponentConfig<DirectoryCardProps> = {
               text: data.props.data.cardTitle,
             } satisfies HeadingTextProps["parentData"])
           : undefined,
-    }),
+    });
+  },
   render: (props) => <DirectoryCardComponent {...props} />,
 };

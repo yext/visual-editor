@@ -38,6 +38,10 @@ export const FontStyleSelector = ({
   }, [options]);
 
   useEffect(() => {
+    updateOptions();
+  }, [updateOptions]);
+
+  useEffect(() => {
     if (!availableOptions.length) {
       return;
     }

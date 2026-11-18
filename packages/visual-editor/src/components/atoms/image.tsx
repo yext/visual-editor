@@ -17,7 +17,7 @@ import {
 import { TranslatableString } from "../../types/types.ts";
 import { useTranslation } from "react-i18next";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
-import { getThemeValue } from "../../utils/getThemeValue.ts";
+import { useThemeValue } from "../../hooks/useThemeValue.ts";
 
 export interface ImageProps {
   image: ImageType | ComplexImageType | TranslatableAssetImage;
@@ -34,6 +34,7 @@ export interface ImageProps {
    */
   streamDocumentOverride?: Record<string, any>;
   style?: React.CSSProperties;
+  applyThemeRadius?: boolean;
 }
 
 export const getImageAltText = (
@@ -67,6 +68,7 @@ export const Image: React.FC<ImageProps> = ({
   loading = "lazy",
   streamDocumentOverride,
   style,
+  applyThemeRadius = true,
 }) => {
   const { i18n } = useTranslation();
   const streamDocument: StreamDocument | Record<string, any> =
@@ -104,6 +106,7 @@ export const Image: React.FC<ImageProps> = ({
 
   const altText = getImageAltText(image, i18n.language, streamDocument);
   const imageStyle: React.CSSProperties = {
+    borderRadius: applyThemeRadius ? "var(--ve-image-border-radius)" : 0,
     objectFit: imageFillType === "fit" ? "contain" : "cover",
     ...style,
   };
@@ -182,10 +185,7 @@ export const imgSizesHelper = (
 ): string => {
   const streamDocument = useDocument();
 
-  let maxWidth = getThemeValue(
-    "--maxWidth-pageSection-contentWidth",
-    streamDocument
-  );
+  let maxWidth = useThemeValue("--ve-page-content-max-width", streamDocument);
   if (!maxWidth && streamDocument?.__?.theme) {
     maxWidth = "1024px";
   }

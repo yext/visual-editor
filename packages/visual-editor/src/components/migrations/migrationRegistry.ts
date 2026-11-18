@@ -82,12 +82,15 @@ import { imageFillTypeMigration } from "./0079_image_fill_type.ts";
 import { directoryCardDisplayProps } from "./0080_directory_card_display_props.ts";
 import { headerFooterImageFillTypeMigration } from "./0081_header_footer_image_fill_type.ts";
 import { heroPhoneSlotMigration } from "./0082_hero_phone_slot.ts";
+import { semanticThemeRoles } from "./0084_semantic_theme_roles.ts";
+import { unifiedBackgrounds } from "./0085_unified_backgrounds.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
 // Import it in this file and add it to this array.
 // The migrations are run in the order of this array
 // and the data's version number indicates the last applied index.
+
 export const migrationRegistry: MigrationRegistry = [
   adjustPropObjectsMigration,
   addHeadingAlignmentMigration,
@@ -172,4 +175,6 @@ export const migrationRegistry: MigrationRegistry = [
   headerFooterImageFillTypeMigration,
   heroPhoneSlotMigration,
   photoGalleryItemSource,
+  semanticThemeRoles,
+  unifiedBackgrounds,
 ];

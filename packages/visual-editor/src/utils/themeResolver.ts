@@ -1,86 +1,9 @@
-export type CoreStyle =
-  | {
-      label: string;
-      type: "number";
-      default: number;
-    }
-  | {
-      label: string;
-      type: "select";
-      default: string;
-      options: StyleSelectOption[] | (() => StyleSelectOption[]);
-    }
-  | {
-      label: string;
-      type: "color";
-      default: string;
-    };
-
-export type Style = CoreStyle & { plugin: string };
-
-export type StyleSelectOption = {
-  label: string;
-  value: string;
-};
-
-export type StyleGroup = {
-  label: string;
-  plugin: string;
-  styles: { [key: string]: CoreStyle };
-};
-
-export type ThemeConfigSection = {
-  label: string;
-  styles: { [key: string]: Style | StyleGroup };
-};
-
-export type ThemeConfig = {
-  [key: string]: ThemeConfigSection;
-};
+export type StyleSelectOption = { label: string; value: string };
 
 export type TailwindConfig = {
   [key: string]: {
     [key: string]: any;
   };
-};
-
-export const convertToTailwindConfig = (
-  themeConfig: ThemeConfig
-): TailwindConfig => {
-  const output: TailwindConfig = {};
-
-  for (const themeSectionKey in themeConfig) {
-    const themeSectionStyles = themeConfig[themeSectionKey].styles;
-
-    for (const styleKey in themeSectionStyles) {
-      const style = themeSectionStyles[styleKey];
-
-      if (!output[style.plugin]) {
-        // add theme extension to tailwindConfig if it does not exist
-        output[style.plugin] = {};
-      }
-
-      if ("default" in style) {
-        // If it's type Style, assign a class name and CSS variable
-        output[style.plugin][`${themeSectionKey}-${styleKey}`] =
-          `var(--${style.plugin}-${themeSectionKey}-${styleKey})`;
-      } else if ("styles" in style) {
-        // If it's type StyleGroup, construct an object with class names and CSS variables
-        const styleGroupValues: Record<string, any> = {};
-
-        for (const subkey in style.styles) {
-          styleGroupValues[subkey] =
-            `var(--${style.plugin}-${themeSectionKey}-${styleKey}-${subkey})`;
-        }
-
-        // add the object extension to the tailwindConfig
-        output[style.plugin][`${themeSectionKey}-${styleKey}`] =
-          styleGroupValues;
-      }
-    }
-  }
-
-  return output;
 };
 
 type PlainObject = Record<string, any>;
@@ -114,16 +37,4 @@ export const deepMerge = <T extends PlainObject, U extends PlainObject>(
 
 const isObject = (value: any): value is PlainObject => {
   return value !== null && typeof value === "object";
-};
-
-/**
- * Merges the developer-specified theming and the marketer-specified theming,
- * giving priority to the developer-specified theming.
- */
-export const themeResolver = (
-  developerTheming: TailwindConfig,
-  marketerTheming: ThemeConfig
-): TailwindConfig => {
-  const marketerTailwindConfig = convertToTailwindConfig(marketerTheming);
-  return deepMerge(developerTheming, marketerTailwindConfig);
 };

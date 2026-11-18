@@ -1,173 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { ThemeData } from "../../internal/types/themeData.ts";
 import {
   constructFontSelectOptions,
-  filterInUseFontRegistries,
   type FontRegistry,
-  defaultFonts,
   constructGoogleFontLinkTags,
   generateCustomFontLinkData,
   getFacePathsFromFonts,
-  getFontStyleOptions,
+  getFontStyleOptionsForFontFamily,
 } from "./visualEditorFonts.ts";
-
-describe("filterInUseFontRegistries", () => {
-  it("returns the specifications for all built-in fonts used in the theme", () => {
-    const themeData: ThemeData = {
-      "--fontFamily-h1-fontFamily": "'Oi', sans-serif",
-      "--fontFamily-button-fontFamily": "'Adamina', serif",
-    };
-
-    const expected: FontRegistry = {
-      Oi: {
-        italics: false,
-        weights: [400],
-        fallback: "sans-serif",
-      },
-      Adamina: {
-        italics: false,
-        weights: [400],
-        fallback: "serif",
-      },
-    };
-
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
-      defaultFonts
-    );
-    expect(inUseGoogleFonts).toEqual(expected);
-    expect(inUseCustomFonts).toEqual({});
-  });
-
-  it("returns empty registries when theme data is empty", () => {
-    expect(filterInUseFontRegistries({}, defaultFonts)).toEqual({
-      inUseGoogleFonts: {},
-      inUseCustomFonts: {},
-    });
-  });
-
-  it("returns empty registries when no font families are defined in the theme", () => {
-    const themeData: ThemeData = {
-      "--colors-palette-primary": "#CF0A2C",
-      "--fontSize-h1-fontSize": "48px",
-    };
-
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
-      defaultFonts
-    );
-    expect(inUseGoogleFonts).toEqual({});
-    expect(inUseCustomFonts).toEqual({});
-  });
-
-  it("returns empty registries if the list of available fonts is empty", () => {
-    const themeData: ThemeData = {
-      "--fontFamily-h1-fontFamily": "'Open Sans', sans-serif",
-    };
-
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
-      {}
-    );
-    expect(inUseGoogleFonts).toEqual({});
-    expect(inUseCustomFonts).toEqual({});
-  });
-
-  it("handles malformed or empty fontFamily values gracefully", () => {
-    const themeData: ThemeData = {
-      "--fontFamily-h1-fontFamily": "",
-      "--fontFamily-h2-fontFamily": null,
-      "--fontFamily-button-fontFamily": "'Adamina', serif",
-    };
-
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
-      defaultFonts
-    );
-    expect(inUseGoogleFonts).toEqual({
-      Adamina: {
-        italics: false,
-        weights: [400],
-        fallback: "serif",
-      },
-    });
-    expect(inUseCustomFonts).toEqual({});
-  });
-
-  it("does not include duplicate fonts even if used multiple times", () => {
-    const themeData: ThemeData = {
-      "--fontFamily-h1-fontFamily": "'Open Sans', sans-serif",
-      "--fontFamily-h2-fontFamily": "'Open Sans', sans-serif",
-      "--fontFamily-body-fontFamily": "'Open Sans', sans-serif",
-    };
-
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
-      defaultFonts
-    );
-    expect(inUseGoogleFonts).toEqual({
-      "Open Sans": {
-        italics: true,
-        minWeight: 300,
-        maxWeight: 800,
-        fallback: "sans-serif",
-      },
-    });
-    expect(inUseCustomFonts).toEqual({});
-  });
-
-  it("handles custom fonts keyed by family name", () => {
-    const themeData: ThemeData = {
-      "--fontFamily-h1-fontFamily": "'Custom Font', sans-serif",
-      "--fontFamily-h2-fontFamily": "'Open Sans', sans-serif",
-    };
-    const customFonts: FontRegistry = {
-      "Custom Font": {
-        italics: false,
-        weights: [400],
-        fallback: "sans-serif",
-        facePath: "y-fonts/custom-font.css",
-        variants: [],
-      },
-    };
-
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
-      defaultFonts,
-      customFonts
-    );
-    expect(inUseGoogleFonts).toEqual({
-      "Open Sans": {
-        italics: true,
-        minWeight: 300,
-        maxWeight: 800,
-        fallback: "sans-serif",
-      },
-    });
-    expect(inUseCustomFonts).toEqual(customFonts);
-  });
-
-  it("resolves var() references to the default header font", () => {
-    const themeData: ThemeData = {
-      "--fontFamily-headers-defaultFont": "'Open Sans', sans-serif",
-      "--fontFamily-h1-fontFamily": "var(--fontFamily-headers-defaultFont)",
-    };
-
-    const { inUseGoogleFonts, inUseCustomFonts } = filterInUseFontRegistries(
-      themeData,
-      defaultFonts
-    );
-    expect(inUseGoogleFonts).toEqual({
-      "Open Sans": {
-        italics: true,
-        minWeight: 300,
-        maxWeight: 800,
-        fallback: "sans-serif",
-      },
-    });
-    expect(inUseCustomFonts).toEqual({});
-  });
-});
 
 describe("custom font helpers", () => {
   it("builds font select options from family names", () => {
@@ -366,61 +205,22 @@ describe("constructGoogleFontLinkTags", () => {
   });
 });
 
-describe("getFontStyleOptions", () => {
-  const createPreviewIframe = () => {
-    document.body.replaceChildren();
-    const iframe = document.createElement("iframe");
-    iframe.id = "preview-frame";
-    document.body.appendChild(iframe);
-    return iframe;
-  };
-
+describe("getFontStyleOptionsForFontFamily", () => {
   it("returns both options when the selected font supports italics", () => {
-    const iframe = createPreviewIframe();
-    const iframeDocument = iframe.contentDocument!;
-    const styleTag = iframeDocument.createElement("style");
-    styleTag.id = "visual-editor-theme";
-    styleTag.textContent =
-      ".components{--fontFamily-body-fontFamily:'Open Sans', sans-serif !important;}";
-    iframeDocument.head.appendChild(styleTag);
-
     expect(
-      getFontStyleOptions({
-        fontCssVariable: "--fontFamily-body-fontFamily",
-        fontList: defaultFonts,
-      })
+      getFontStyleOptionsForFontFamily("'Open Sans', sans-serif")
     ).toMatchObject([{ value: "normal" }, { value: "italic" }]);
   });
 
   it("filters italic out when the selected font does not support italics", () => {
-    const iframe = createPreviewIframe();
-    const iframeDocument = iframe.contentDocument!;
-    const styleTag = iframeDocument.createElement("style");
-    styleTag.id = "visual-editor-theme";
-    styleTag.textContent =
-      ".components{--fontFamily-body-fontFamily:'Adamina', serif !important;}";
-    iframeDocument.head.appendChild(styleTag);
-
-    expect(
-      getFontStyleOptions({
-        fontCssVariable: "--fontFamily-body-fontFamily",
-        fontList: defaultFonts,
-      })
-    ).toMatchObject([{ value: "normal" }]);
+    expect(getFontStyleOptionsForFontFamily("'Adamina', serif")).toMatchObject([
+      { value: "normal" },
+    ]);
   });
 
   it("resolves custom fonts by family name", () => {
-    const iframe = createPreviewIframe();
-    const iframeDocument = iframe.contentDocument!;
-    const styleTag = iframeDocument.createElement("style");
-    styleTag.id = "visual-editor-theme";
-    styleTag.textContent =
-      ".components{--fontFamily-body-fontFamily:'Custom Display', sans-serif !important;}";
-    iframeDocument.head.appendChild(styleTag);
-
     expect(
-      getFontStyleOptions({
-        fontCssVariable: "--fontFamily-body-fontFamily",
+      getFontStyleOptionsForFontFamily("'Custom Display', sans-serif", {
         fontList: {
           "Custom Display": {
             italics: false,
