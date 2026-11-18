@@ -129,7 +129,7 @@ This API only changes generation contracts. Saved representations and editor opt
 
 ## Additional native contracts
 
-`LOCATOR_ENTITY_TYPES` is exported as a readonly tuple through `section-library-support`. Use `z.enum(LOCATOR_ENTITY_TYPES)` instead of duplicating the supported Locator entity type list.
+`LocatorEntityType` is an entity type API name, including custom types. Use `z.string().min(1)` for Locator entity type schemas so custom types are accepted. `LOCATOR_ENTITY_TYPES` remains exported as a readonly tuple of built-in types for compatibility; it is not an exhaustive list of supported types. Locator eligibility, including support for the built-in address field, is validated by the backend.
 
 Fixed repeated sources such as Directory can remove their wrapper-level source schema override when `fixedRepeatedField` and `disableConstantValueToggle` already describe their restrictions. Keep `slottedItemSource` ownership metadata and individual mapping overrides for opaque custom editors, such as Directory's link override. Mapping requiredness still follows declared generation metadata and defaults; use `required: false` where an old optional source/mapping contract requires it. A complete component schema still bypasses inference.
 

@@ -18,9 +18,11 @@ import type { FilterModal } from "./Filters.tsx";
 import type { LocatorMap } from "./Map.tsx";
 import type { LocatorProps } from "./Locator.tsx";
 import { LocatorWrapper } from "./LocatorWrapper.tsx";
+import type { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 
 const mocks = vi.hoisted(() => ({
   locale: "en",
+  streamDocument: {} as StreamDocument,
   state: {
     vertical: { results: [], resultsCount: 0, offset: 0 },
     filters: { static: [] as SelectableStaticFilter[], facets: [] },
@@ -75,7 +77,11 @@ vi.mock("react-i18next", async (importOriginal) => ({
   }),
 }));
 vi.mock("../../../hooks/useDocument.tsx", () => ({
-  useDocument: () => ({ id: "locator", locale: mocks.locale }),
+  useDocument: () => ({
+    ...mocks.streamDocument,
+    id: "locator",
+    locale: mocks.locale,
+  }),
 }));
 vi.mock("../../../hooks/useViewport.ts", () => ({
   getViewport: () => ({ isMobile: false }),
@@ -186,6 +192,7 @@ beforeEach(() => {
     new Error("Geolocation unavailable")
   );
   mocks.locale = "en";
+  mocks.streamDocument = {};
   mocks.state.filters = { static: [], facets: [] };
   window.history.replaceState(null, "", "/");
   mocks.actions.setStaticFilters.mockImplementation(
@@ -397,6 +404,46 @@ describe("Locator default search radius", () => {
     expect(getRadius()).toBeCloseTo(8046.72);
     expect(mocks.actions.executeVerticalQuery).toHaveBeenCalled();
   });
+
+  it.each([
+    { entityTypes: ["ce_warehouse"] },
+    { entityTypes: ["ce_warehouse", "location"] },
+    { entityTypes: ["location", "ce_warehouse"] },
+  ])(
+    "uses a configured entity type for autocomplete and URL lookup: $entityTypes",
+    async ({ entityTypes }) => {
+      mocks.streamDocument = {
+        _pageset: JSON.stringify({
+          typeConfig: {
+            locatorConfig: {
+              entityTypeScope: entityTypes.map((entityType) => ({
+                entityType,
+              })),
+            },
+          },
+        }),
+      };
+      window.history.replaceState(null, "", "/?q=Arlington");
+      renderLocator();
+
+      expect(mocks.filterSearch.searchFields).toEqual([
+        { fieldApiName: "builtin.location", entityType: entityTypes[0] },
+      ]);
+      await waitFor(() => {
+        expect(mocks.actions.executeFilterSearch).toHaveBeenCalledWith(
+          "Arlington",
+          false,
+          [
+            {
+              fieldApiName: "builtin.location",
+              entityType: entityTypes[0],
+              fetchEntities: false,
+            },
+          ]
+        );
+      });
+    }
+  );
 
   it.each<{
     name: string;
