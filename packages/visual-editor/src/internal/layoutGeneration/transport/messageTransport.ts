@@ -195,11 +195,14 @@ export const iframeModelTransport: ModelTransport = (...args) =>
     isResponseOriginAllowed: isOriginAllowed,
   })(...args);
 
-export const createLocalMessageTransport = () => {
-  const origin = window.location.origin;
-  return createMessageModelTransport({
-    target: window,
-    outgoingOrigins: () => [origin],
-    isResponseOriginAllowed: (value) => value === origin,
-  });
-};
+/** Allows server rendering by accessing the browser only when a request starts. */
+export const createLocalMessageTransport =
+  (): ModelTransport =>
+  (...args) => {
+    const origin = window.location.origin;
+    return createMessageModelTransport({
+      target: window,
+      outgoingOrigins: () => [origin],
+      isResponseOriginAllowed: (value) => value === origin,
+    })(...args);
+  };

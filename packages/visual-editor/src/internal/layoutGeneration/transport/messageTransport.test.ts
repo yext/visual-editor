@@ -316,3 +316,9 @@ it("runs the same prepared request and parser through a parent harness and the l
     ]
   ).toBe(h.requests().at(-1)!.payload.requestId);
 });
+
+it("when window is unavailable then the local transport can be created", (): void => {
+  vi.stubGlobal("window", undefined);
+
+  expect(createLocalMessageTransport()).toBeTypeOf("function");
+});
