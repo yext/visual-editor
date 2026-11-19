@@ -59,7 +59,7 @@ function copyStyles(
     });
   const style = destination.createElement("style");
   style.dataset.blockPreviewStyle = "true";
-  style.textContent = `html,body{margin:0!important;padding:0!important;overflow:hidden!important;background:#fff}#block-preview-root{display:flow-root;width:100%}.ve-block-preview-stage{display:flow-root;width:100%}.ve-block-preview-stage>.sl-atom:empty{outline:1px dashed #94a3b8}*{caret-color:transparent!important}`;
+  style.textContent = `html,body{margin:0!important;padding:0!important;overflow:hidden!important}#block-preview-root{display:flow-root;width:100%}.ve-block-preview-stage{display:flow-root;width:100%}.ve-block-preview-stage>.sl-atom:empty{outline:1px dashed #94a3b8}*{caret-color:transparent!important}`;
   destination.head.append(style);
   return Promise.allSettled(fontsAndStyles);
 }

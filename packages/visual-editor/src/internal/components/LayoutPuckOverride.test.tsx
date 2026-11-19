@@ -1,5 +1,11 @@
-import { useGetPuck } from "@puckeditor/core";
-import { act, render, waitFor } from "@testing-library/react";
+import { Puck, useGetPuck, type PuckComponent } from "@puckeditor/core";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import React from "react";
 import { expect, it } from "vitest";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
@@ -11,6 +17,73 @@ import {
 } from "../layoutGeneration/shared/authoredValues.ts";
 import { ChatHarness } from "../layoutGeneration/testing/chatFixtures.tsx";
 import { slottedFixture } from "../layoutGeneration/testing/slottedFixtures.ts";
+import { LayoutPreviewOverride } from "./LayoutPuckOverride.tsx";
+
+it("blocks link navigation while allowing component selection and interactive preview controls", async () => {
+  let getPuck!: ReturnType<typeof useGetPuck>;
+  const Link: PuckComponent<{ id: string }> = ({ puck }) => {
+    getPuck = useGetPuck();
+    return (
+      <a ref={puck.dragRef} href="#destination" target="_blank">
+        <span>Page link</span>
+      </a>
+    );
+  };
+
+  const Disclosure = () => {
+    const [expanded, setExpanded] = React.useState(false);
+    return (
+      <button
+        type="button"
+        aria-expanded={expanded}
+        onClick={() => setExpanded((value) => !value)}
+      >
+        FAQ
+      </button>
+    );
+  };
+
+  render(
+    <Puck
+      config={{
+        components: {
+          Link: { inline: true, render: Link },
+          Disclosure: { render: Disclosure },
+        },
+      }}
+      data={{
+        content: [
+          { type: "Link", props: { id: "link" } },
+          { type: "Disclosure", props: { id: "disclosure" } },
+        ],
+        root: {},
+      }}
+      iframe={{ enabled: false }}
+      overrides={{ preview: LayoutPreviewOverride }}
+    />
+  );
+
+  const label = await screen.findByText("Page link");
+  expect(fireEvent.click(label, { ctrlKey: true })).toBe(false);
+  expect(getPuck().appState.ui.itemSelector).toMatchObject({ index: 0 });
+
+  const middleClick = new MouseEvent("auxclick", {
+    bubbles: true,
+    button: 1,
+    cancelable: true,
+  });
+  expect(fireEvent(label, middleClick)).toBe(false);
+
+  act(() =>
+    getPuck().dispatch({ type: "setUi", ui: { previewMode: "interactive" } })
+  );
+  expect(fireEvent.click(screen.getByText("Page link"))).toBe(false);
+  const disclosure = screen.getByText("FAQ", { selector: "button" });
+  fireEvent.click(disclosure);
+  expect(disclosure.getAttribute("aria-expanded")).toBe("true");
+  fireEvent.click(disclosure);
+  expect(disclosure.getAttribute("aria-expanded")).toBe("false");
+});
 
 it("keeps generated cards valid after automatic Puck synchronization and allows a follow-up reorder", async () => {
   const f = slottedFixture();

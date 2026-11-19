@@ -1,13 +1,13 @@
 // Compatibility aliases for saved palette values and older public consumers.
 // All rendering resolves through the semantic theme.
 export const legacyThemeVariables: Readonly<Record<string, string>> = {
-  "--colors-palette-primary": "var(--ve-color-primary)",
+  "--colors-palette-primary": "var(--ve-color-primary-solid)",
   "--colors-palette-primary-contrast": "var(--ve-color-primary-foreground)",
-  "--colors-palette-secondary": "var(--ve-color-secondary)",
+  "--colors-palette-secondary": "var(--ve-color-secondary-solid)",
   "--colors-palette-secondary-contrast": "var(--ve-color-secondary-foreground)",
-  "--colors-palette-tertiary": "var(--ve-color-accent)",
+  "--colors-palette-tertiary": "var(--ve-color-accent-solid)",
   "--colors-palette-tertiary-contrast": "var(--ve-color-accent-foreground)",
-  "--colors-palette-quaternary": "var(--ve-color-muted)",
+  "--colors-palette-quaternary": "var(--ve-color-muted-solid)",
   "--colors-palette-quaternary-contrast": "var(--ve-color-muted-foreground)",
   "--fontFamily-h1-fontFamily": "var(--ve-headline-font-family)",
   "--fontSize-h1-fontSize": "var(--ve-headline-font-size)",

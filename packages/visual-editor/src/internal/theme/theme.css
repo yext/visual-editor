@@ -128,7 +128,7 @@
   background: var(--ve-surface-primary-button-default-background-color);
 }
 
-.ve-theme-primary-button:hover {
+.ve-theme-primary-button:where(:not(:disabled, [aria-disabled="true"])):hover {
   font-weight: var(--ve-primary-button-hover-font-weight);
   text-decoration: var(--ve-primary-button-hover-text-decoration);
   color: var(--ve-surface-primary-button-hover-text-color);
@@ -136,7 +136,7 @@
   background: var(--ve-surface-primary-button-hover-background-color);
 }
 
-.ve-theme-primary-button:active {
+.ve-theme-primary-button:where(:not(:disabled, [aria-disabled="true"])):active {
   font-weight: var(--ve-primary-button-active-font-weight);
   text-decoration: var(--ve-primary-button-active-text-decoration);
   color: var(--ve-surface-primary-button-active-text-color);
@@ -163,7 +163,9 @@
   background: var(--ve-surface-secondary-button-default-background-color);
 }
 
-.ve-theme-secondary-button:hover {
+.ve-theme-secondary-button:where(
+    :not(:disabled, [aria-disabled="true"])
+  ):hover {
   font-weight: var(--ve-secondary-button-hover-font-weight);
   text-decoration: var(--ve-secondary-button-hover-text-decoration);
   color: var(--ve-surface-secondary-button-hover-text-color);
@@ -171,7 +173,9 @@
   background: var(--ve-surface-secondary-button-hover-background-color);
 }
 
-.ve-theme-secondary-button:active {
+.ve-theme-secondary-button:where(
+    :not(:disabled, [aria-disabled="true"])
+  ):active {
   font-weight: var(--ve-secondary-button-active-font-weight);
   text-decoration: var(--ve-secondary-button-active-text-decoration);
   color: var(--ve-surface-secondary-button-active-text-color);
@@ -193,14 +197,14 @@
   transition: var(--ve-link-transition);
 }
 
-.ve-theme-link:hover,
+.ve-theme-link:where(:not(:disabled, [aria-disabled="true"])):hover,
 .rtf-wrapper a:hover {
   font-weight: var(--ve-link-hover-font-weight);
   text-decoration: var(--ve-link-hover-text-decoration);
   color: var(--ve-surface-link-hover-text-color);
 }
 
-.ve-theme-link:active,
+.ve-theme-link:where(:not(:disabled, [aria-disabled="true"])):active,
 .rtf-wrapper a:active {
   font-weight: var(--ve-link-active-font-weight);
   text-decoration: var(--ve-link-active-text-decoration);
@@ -220,14 +224,18 @@
   transition: var(--ve-navigation-link-transition);
 }
 
-.ve-theme-navigation-link:hover,
-.ve-theme-navigation-link[data-highlighted] {
+.ve-theme-navigation-link:where(:not(:disabled, [aria-disabled="true"])):hover,
+.ve-theme-navigation-link:where(
+    :not(:disabled, [aria-disabled="true"])
+  )[data-highlighted] {
   font-weight: var(--ve-navigation-link-hover-font-weight);
   text-decoration: var(--ve-navigation-link-hover-text-decoration);
   color: var(--ve-surface-navigation-link-hover-text-color);
 }
 
-.ve-theme-navigation-link:active {
+.ve-theme-navigation-link:where(
+    :not(:disabled, [aria-disabled="true"])
+  ):active {
   font-weight: var(--ve-navigation-link-active-font-weight);
   text-decoration: var(--ve-navigation-link-active-text-decoration);
   color: var(--ve-surface-navigation-link-active-text-color);
@@ -369,7 +377,7 @@
   color: var(--ve-color-muted-foreground);
 }
 .ve-theme-check {
-  accent-color: var(--ve-color-primary);
+  accent-color: var(--ve-color-primary-solid);
 }
 .ve-theme-input[aria-invalid="true"] {
   border-color: #b91c1c;

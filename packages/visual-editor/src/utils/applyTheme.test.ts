@@ -26,7 +26,7 @@ describe("semantic theme application", () => {
     expect(result.startsWith("base")).toBe(true);
     expect(result).toContain("--ve-color-foreground:#123456 !important");
     expect(result).toContain(
-      "--colors-palette-primary:var(--ve-color-primary) !important"
+      "--colors-palette-primary:var(--ve-color-primary-solid) !important"
     );
     expect(result).not.toContain("#abcdef");
     expect(result).not.toContain("--unknown");
@@ -58,6 +58,20 @@ describe("semantic theme application", () => {
     expect(result).toContain("--colors-palette-primary-contrast:");
     expect(result).toContain("--ve-color-foreground:#000000 !important");
   });
+  it("keeps surface gradients and emits solid samples for color-only consumers", () => {
+    const primary = "linear-gradient(90deg, #00000080 0%, #FFFFFF 100%)";
+    const accent = "radial-gradient(circle, #123456 0%, #FFFFFF 100%)";
+    const result = internalApplyTheme({
+      colorPrimary: primary,
+      colorAccent: accent,
+    });
+
+    expect(result).toContain(`--ve-color-primary:${primary} !important`);
+    expect(result).toContain("--ve-color-primary-solid:#7f7f7f !important");
+    expect(result).toContain(`--ve-color-accent:${accent} !important`);
+    expect(result).toContain("--ve-color-accent-solid:#123456 !important");
+    expect(result).toContain("accent-color: var(--ve-color-primary-solid)");
+  });
   it("applies the foreground default on published pages without a saved theme", () => {
     expect(applyTheme({}, "./")).toContain(
       "--ve-color-foreground:#000000 !important"
@@ -85,7 +99,7 @@ describe("semantic theme application", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     for (const theme of ["invalid", "null", "[]"])
       expect(applyTheme({ __: { theme } }, "./")).toContain(
-        "--colors-palette-primary:var(--ve-color-primary)"
+        "--colors-palette-primary:var(--ve-color-primary-solid)"
       );
     warn.mockRestore();
   });

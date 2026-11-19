@@ -84,6 +84,7 @@ import { headerFooterImageFillTypeMigration } from "./0081_header_footer_image_f
 import { heroPhoneSlotMigration } from "./0082_hero_phone_slot.ts";
 import { semanticThemeRoles } from "./0084_semantic_theme_roles.ts";
 import { unifiedBackgrounds } from "./0085_unified_backgrounds.ts";
+import { preserveHeadingTags } from "./0086_preserve_heading_tags.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -177,4 +178,5 @@ export const migrationRegistry: MigrationRegistry = [
   photoGalleryItemSource,
   semanticThemeRoles,
   unifiedBackgrounds,
+  preserveHeadingTags,
 ];

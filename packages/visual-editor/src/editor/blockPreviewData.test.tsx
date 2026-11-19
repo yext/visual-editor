@@ -7,6 +7,8 @@ import {
 } from "@puckeditor/core";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it, vi } from "vitest";
+import { CTA } from "../components/atoms/cta.tsx";
+import { TemplatePropsContext } from "../hooks/useDocument.tsx";
 import { resolveBlockPreview } from "./blockPreviewData.tsx";
 import { toPuckFields } from "../fields/fields.ts";
 import { createYextFieldTransforms } from "../fields/fieldTransforms/index.ts";
@@ -61,6 +63,7 @@ it("resolves current entity fields with the published transforms without renderi
   );
   expect(html).toContain("Actual entity name");
   expect(html).toContain("<article");
+  expect(html).toContain("ve-block-preview-stage ve-theme-page ve-theme-body");
   expect(html).not.toContain("Page chrome");
   expect(config.root!.resolveData).not.toHaveBeenCalled();
   expect(config.components.Card.defaultProps).toEqual(before);
@@ -69,6 +72,41 @@ it("resolves current entity fields with the published transforms without renderi
   );
   expect(preview.wideLayout).toBe(false);
 });
+
+it.each(["link", "button"] as const)(
+  "keeps authored CTA colors in the default state for a %s action",
+  (actionType) => {
+    const html = renderToStaticMarkup(
+      <TemplatePropsContext.Provider value={{ document: {} }}>
+        <CTA
+          label="Contact"
+          link="https://example.com"
+          variant="primary"
+          actionType={actionType}
+          normalizeLink={false}
+          color={{ selectedColor: "[#123456]", contrastingColor: "white" }}
+        />
+      </TemplatePropsContext.Provider>
+    );
+    const container = document.createElement("div");
+    container.innerHTML = html;
+    const cta = container.querySelector(
+      actionType === "link" ? "a" : "button"
+    )!;
+    expect(
+      cta.style.getPropertyValue(
+        "--ve-surface-primary-button-default-background-color"
+      )
+    ).toBe("#123456");
+    expect(
+      cta.style.getPropertyValue(
+        "--ve-surface-primary-button-default-text-color"
+      )
+    ).toBe("white");
+    expect(cta.style.background).toBe("");
+    expect(cta.style.color).toBe("");
+  }
+);
 
 it("assigns private, stable, unique IDs through nested defaults", async () => {
   const one = await resolveBlockPreview(config, "Card", { locale: "en" }, {});

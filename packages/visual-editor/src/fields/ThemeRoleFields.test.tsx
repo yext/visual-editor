@@ -1,5 +1,10 @@
 import { TemplatePropsContext } from "../hooks/useDocument.tsx";
-import type { Fields } from "@puckeditor/core";
+import { Render, type Fields } from "@puckeditor/core";
+import {
+  HeadingText,
+  HeadingTextSlot,
+} from "../components/contentBlocks/HeadingText.tsx";
+import { MapPinIcon } from "../components/sections/locator/MapPinIcon.tsx";
 import React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
@@ -31,6 +36,64 @@ const fields = { surface, typographyRole } satisfies YextFields<{
   typographyRole?: TypographyRole;
 }>;
 afterEach(cleanup);
+
+it("exposes standalone heading semantics independently of the typography role", () => {
+  const standalone = HeadingText.fields?.styles;
+  const slot = HeadingTextSlot.fields?.styles;
+  expect(
+    standalone?.type === "object" && standalone.objectFields.level
+  ).toMatchObject({ type: "basicSelector", options: "HEADING_LEVEL" });
+  expect(slot?.type === "object" && slot.objectFields.level).toMatchObject({
+    visible: false,
+  });
+
+  render(
+    <TemplatePropsContext.Provider value={{ document: {} }}>
+      <Render
+        config={{
+          components: {
+            HeadingText: {
+              ...HeadingText,
+              fields: toPuckFields(HeadingText.fields!),
+            },
+          },
+        }}
+        data={{
+          root: { props: {} },
+          content: [
+            {
+              type: "HeadingText",
+              props: {
+                ...HeadingText.defaultProps!,
+                id: "heading",
+                styles: { level: 1, align: "left" },
+              },
+            },
+          ],
+        }}
+      />
+    </TemplatePropsContext.Provider>
+  );
+  expect(screen.getByRole("heading", { level: 1 }).classList).toContain(
+    "ve-theme-section-title"
+  );
+});
+
+it("samples an explicitly authored pin gradient for SVG color", () => {
+  const { container } = render(
+    <TemplatePropsContext.Provider value={{ document: {} }}>
+      <MapPinIcon
+        color={{
+          selectedColor: "[LINEAR-GRADIENT(90deg, #112233 0%, #FFFFFF 100%)]",
+          contrastingColor: "white",
+        }}
+        iconWidth={10}
+        resultIndex={1}
+      />
+    </TemplatePropsContext.Provider>
+  );
+  expect(container.querySelector("svg")?.style.color).toBe("rgb(17, 34, 51)");
+});
 
 describe("built-in theme role fields", () => {
   it("renders surface swatches and preserves role and inherit values", () => {

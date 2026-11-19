@@ -128,7 +128,7 @@ export async function resolveBlockPreview(
     root: {
       render: ({ children }: { children: React.ReactNode }) => (
         <RootTag
-          className="components ve-block-preview-stage"
+          className="components ve-block-preview-stage ve-theme-page ve-theme-body"
           style={{ margin: 0, padding: 0, listStyle: "none" }}
         >
           {children}

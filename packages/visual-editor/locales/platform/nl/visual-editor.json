@@ -161,6 +161,7 @@
     "fontOptions": "Lettertype-opties",
     "fontStyle": "Lettertypestijl",
     "headingAlign": "Regeloplossing",
+    "headingLevel": "Regelniveau",
     "headingBackgroundColor": "Achtergrondkleur van de kop",
     "hours": "Uren",
     "hoursColumn": "Uren kolom",

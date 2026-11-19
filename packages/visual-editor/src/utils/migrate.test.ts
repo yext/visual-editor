@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type { Data } from "@puckeditor/core";
+import { createElement } from "react";
 import { Migration, MigrationRegistry, migrate } from "./migrate.ts";
 import { addIdToSchema } from "../components/migrations/0023_add_id_to_schema.ts";
 import { updateSchemaIdAnchorFormat } from "../components/migrations/0069_update_schema_id_anchor_format.ts";
@@ -9,6 +10,7 @@ import { normalizeFooterLogoImageMigration } from "../components/migrations/0075
 import { slotMappedCardsMigration } from "../components/migrations/0076_slot_mapped_cards.ts";
 import { removeMapboxApiKeyPropsMigration } from "../components/migrations/0078_remove_mapbox_api_key_props.ts";
 import { imageFillTypeMigration } from "../components/migrations/0079_image_fill_type.ts";
+import { migrationRegistry as builtInMigrations } from "../components/migrations/migrationRegistry.ts";
 
 const registry = (...migrations: Migration[]): MigrationRegistry => migrations;
 
@@ -22,6 +24,84 @@ const appendStep = (step: string): Migration => ({
 });
 
 describe("migrate", () => {
+  it("preserves authored heading tags through the semantic role migration", () => {
+    const render = () => createElement("div");
+    const config: Parameters<typeof migrate>[0] = {
+      components: {
+        HeadingText: { render },
+        HeadingTextSlot: { render },
+        Directory: {
+          render,
+          fields: {
+            slots: {
+              type: "object",
+              objectFields: {
+                TitleSlot: { type: "slot" },
+                SiteNameSlot: { type: "slot" },
+              },
+            },
+          },
+        },
+      },
+    };
+    const data: Parameters<typeof migrate>[1] = {
+      root: { props: { version: 83 } },
+      content: [
+        { type: "HeadingText", props: { id: "heading", styles: { level: 1 } } },
+        {
+          type: "HeadingText",
+          props: {
+            id: "span",
+            styles: { level: 4, semanticLevelOverride: "span" },
+          },
+        },
+        {
+          type: "Directory",
+          props: {
+            id: "directory",
+            slots: {
+              TitleSlot: [
+                {
+                  type: "HeadingTextSlot",
+                  props: { id: "title", styles: { level: 3 } },
+                },
+              ],
+              SiteNameSlot: [
+                {
+                  type: "HeadingTextSlot",
+                  props: { id: "name", styles: { level: 4 } },
+                },
+              ],
+            },
+          },
+        },
+      ],
+    };
+
+    const migrated = migrate(config, data, {});
+    const [heading, span, directory] = migrated.content;
+    expect(heading.props.styles).toMatchObject({
+      level: 1,
+      typographyRole: "headline",
+    });
+    expect(span.props.styles).toMatchObject({
+      level: 4,
+      semanticLevelOverride: "span",
+      typographyRole: "card-title",
+    });
+    expect(directory.props.slots.TitleSlot[0].props.styles).toMatchObject({
+      level: 1,
+      typographyRole: "card-title",
+    });
+    expect(directory.props.slots.SiteNameSlot[0].props.styles).toMatchObject({
+      semanticLevelOverride: "p",
+    });
+    expect(migrated.root.props).toMatchObject({
+      version: builtInMigrations.length,
+    });
+    expect(migrate(config, migrated, {})).toEqual(migrated);
+  });
+
   it("runs built-in migrations before section-library migrations", () => {
     const migratedData = migrate(
       { components: {} },

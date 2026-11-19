@@ -161,6 +161,7 @@
     "fontOptions": "Fonttiasetukset",
     "fontStyle": "Fonttityyli",
     "headingAlign": "Suuntaviiva",
+    "headingLevel": "Päätaso",
     "headingBackgroundColor": "Otsikon taustaväri",
     "hours": "Tuntia",
     "hoursColumn": "Tuntiasarake",

@@ -161,6 +161,7 @@
     "fontOptions": "Teckensnittsalternativ",
     "fontStyle": "Typsnittsstil",
     "headingAlign": "Rubriken justera",
+    "headingLevel": "Rubriknivå",
     "headingBackgroundColor": "Rubrik Bakgrundsfärg",
     "hours": "Timme",
     "hoursColumn": "Time -kolumn",

@@ -45,8 +45,10 @@ export type HeadingTextProps = {
   };
 };
 
-const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
-  const { data, styles, puck, parentData } = props;
+const HeadingTextWrapper: PuckComponent<
+  HeadingTextProps & { defaultTypographyRole?: TypographyRole }
+> = (props) => {
+  const { data, styles, puck, parentData, defaultTypographyRole } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
@@ -83,7 +85,9 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
           semanticLevelOverride={styles.semanticLevelOverride}
           color={styles.color}
           typographyRole={
-            styles.typographyRole ?? props.parentStyles?.typographyRole
+            styles.typographyRole ??
+            props.parentStyles?.typographyRole ??
+            defaultTypographyRole
           }
         >
           {resolvedHeadingText}
@@ -97,7 +101,7 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
   );
 };
 
-const headingTextFields: YextFields<HeadingTextProps> = {
+const headingTextSlotFields = {
   data: {
     label: msg("fields.data", "Data"),
     type: "object",
@@ -129,12 +133,33 @@ const headingTextFields: YextFields<HeadingTextProps> = {
       },
     },
   },
-};
+} satisfies YextFields<HeadingTextProps>;
+
+const headingTextFields = {
+  ...headingTextSlotFields,
+  styles: {
+    ...headingTextSlotFields.styles,
+    objectFields: {
+      ...headingTextSlotFields.styles.objectFields,
+      level: {
+        type: "basicSelector",
+        label: msg("fields.headingLevel", "Heading Level"),
+        options: "HEADING_LEVEL",
+      },
+    },
+  },
+} satisfies YextFields<HeadingTextProps>;
 
 export const HeadingText: YextComponentConfig<HeadingTextProps> = {
   label: msg("components.headingText", "Heading Text"),
   fields: headingTextFields,
-  resolveFields: (data) => resolveDataFromParent(headingTextFields, data),
+  resolveFields: (data) =>
+    resolveDataFromParent(
+      data.props.styles?.semanticLevelOverride === undefined
+        ? headingTextFields
+        : headingTextSlotFields,
+      data
+    ),
   defaultProps: {
     data: {
       text: {
@@ -148,5 +173,14 @@ export const HeadingText: YextComponentConfig<HeadingTextProps> = {
       align: "left",
     },
   },
+  render: (props) => (
+    <HeadingTextWrapper {...props} defaultTypographyRole="section-title" />
+  ),
+};
+
+export const HeadingTextSlot: YextComponentConfig<HeadingTextProps> = {
+  ...HeadingText,
+  fields: headingTextSlotFields,
+  resolveFields: (data) => resolveDataFromParent(headingTextSlotFields, data),
   render: (props) => <HeadingTextWrapper {...props} />,
 };

@@ -6,9 +6,13 @@ import {
   migrate as migratePuck,
   walkTree,
 } from "@puckeditor/core";
+import { semanticThemeRoles } from "../components/migrations/0084_semantic_theme_roles.ts";
+import { preserveHeadingTags } from "../components/migrations/0086_preserve_heading_tags.ts";
 import { migrationRegistry as commonMigrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { clonePuckResolveData } from "../internal/utils/clonePuckResolveData.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
+
+type ComponentProps = { id: string } & Record<string, any>;
 
 export type MigrationAction =
   | {
@@ -21,9 +25,10 @@ export type MigrationAction =
   | {
       action: "updated";
       propTransformation: (
-        oldProps: { id: string } & Record<string, any>,
-        streamDocument: StreamDocument
-      ) => { id: string } & Record<string, any>;
+        oldProps: ComponentProps,
+        streamDocument: StreamDocument,
+        previousProps?: ComponentProps
+      ) => ComponentProps;
     };
 
 type ContentMigrationAction = {
@@ -177,7 +182,14 @@ const applyRegistry = (
     return data;
   }
 
-  registry.slice(version).forEach((migration) => {
+  const pending = registry.slice(version);
+  // 0084 discards heading tags. Capture them after its placement-specific
+  // updates and keep them in memory until 0086 restores them.
+  const headingPropsBeforeRoles = pending.includes(preserveHeadingTags)
+    ? new Map<string, ComponentProps>()
+    : undefined;
+
+  pending.forEach((migration) => {
     Object.entries(migration).forEach(([componentName, migrationAction]) => {
       if (componentName === "content" && isContentMigration(migrationAction)) {
         data.content = migrationAction.transformation(data.content);
@@ -240,11 +252,21 @@ const applyRegistry = (
               if (!appliesToAllComponents && c.type !== componentName) {
                 return c;
               }
+              if (
+                migration === semanticThemeRoles &&
+                (componentName === "HeadingText" ||
+                  componentName === "HeadingTextSlot")
+              ) {
+                headingPropsBeforeRoles?.set(c.props.id, c.props);
+              }
               return {
                 ...c,
                 props: migrationAction.propTransformation(
                   c.props,
-                  streamDocument
+                  streamDocument,
+                  migration === preserveHeadingTags
+                    ? headingPropsBeforeRoles?.get(c.props.id)
+                    : undefined
                 ),
               };
             });

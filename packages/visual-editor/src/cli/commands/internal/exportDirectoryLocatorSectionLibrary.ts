@@ -36,7 +36,7 @@ const sharedComponentSources: Record<
   },
   HeadingTextSlot: {
     path: "components/contentBlocks/HeadingText.tsx",
-    exportName: "HeadingText",
+    exportName: "HeadingTextSlot",
   },
   HoursStatusSlot: {
     path: "components/contentBlocks/HoursStatus.tsx",

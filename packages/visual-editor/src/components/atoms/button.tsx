@@ -89,16 +89,18 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     const role = interactionRole ?? variantToInteractionRole(variant);
     const selected = getThemeColorCssValue(color);
-    const explicit: React.CSSProperties =
-      role === "primary-button"
-        ? {
-            background: selected,
-            borderColor: selected,
-            color: getThemeColorCssValue(color?.contrastingColor),
-          }
-        : role === "secondary-button"
-          ? { borderColor: selected, color: selected }
-          : { color: selected };
+    const label = getThemeColorCssValue(labelColor);
+    const isPrimary = role === "primary-button";
+    const defaultColors = {
+      [`--ve-surface-${role}-default-text-color`]:
+        label ??
+        (isPrimary ? getThemeColorCssValue(color?.contrastingColor) : selected),
+      [`--ve-surface-${role}-default-background-color`]: isPrimary
+        ? selected
+        : undefined,
+      [`--ve-surface-${role}-default-border-color`]:
+        isPrimary || role === "secondary-button" ? selected : undefined,
+    };
     return (
       <Comp
         className={themeManagerCn(
@@ -110,8 +112,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         style={{
           ...(typographyRole ? typographyRoleStyle(typographyRole) : {}),
-          ...explicit,
-          ...(labelColor ? { color: getThemeColorCssValue(labelColor) } : {}),
+          ...defaultColors,
           ...style,
         }}
         ref={ref}

@@ -2,7 +2,7 @@ import * as React from "react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
-import { Button, ButtonProps, variantToInteractionRole } from "./button.js";
+import { Button, ButtonProps } from "./button.js";
 import { ThemeColor } from "../../utils/themeOptions.ts";
 import { normalizeLink } from "../../utils/normalizeLink.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
@@ -11,7 +11,6 @@ import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
-import { getThemeColorCssValue } from "../../utils/colors.ts";
 
 export type CTAProps = {
   // Core props
@@ -243,7 +242,6 @@ export const CTA = (props: CTAProps) => {
   const { t } = useTranslation();
   const resolvedProps = useResolvedCtaProps(props);
   const isButton = actionType === "button";
-  const resolvedRole = interactionRole ?? variantToInteractionRole(variant);
 
   if (!resolvedProps) {
     return null;
@@ -258,39 +256,7 @@ export const CTA = (props: CTAProps) => {
     buttonClassName,
     showCaret,
   } = resolvedProps;
-  const dynamicStyle: React.CSSProperties = (() => {
-    const bg = getThemeColorCssValue(color?.selectedColor);
-    const textColor = getThemeColorCssValue(color?.contrastingColor);
-    const border = bg;
-
-    if (resolvedRole === "primary-button") {
-      return {
-        background: bg,
-        color: textColor,
-        borderColor: border,
-      };
-    }
-
-    if (resolvedRole === "secondary-button") {
-      return {
-        borderColor: border,
-        color: border,
-      };
-    }
-
-    if (resolvedRole === "link" || resolvedRole === "navigation-link") {
-      return {
-        color: bg,
-      };
-    }
-
-    return {};
-  })();
-  const disabledStyle: React.CSSProperties = {
-    ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
-    cursor: "default",
-    pointerEvents: "auto",
-  };
+  const buttonColor = ctaType === "presetImage" ? undefined : color;
 
   const linkContent = (
     <>
@@ -323,6 +289,7 @@ export const CTA = (props: CTAProps) => {
         variant={buttonVariant}
         interactionRole={interactionRole}
         typographyRole={typographyRole}
+        color={buttonColor}
         labelColor={labelColor}
         onClick={(e) => {
           e.preventDefault();
@@ -336,11 +303,7 @@ export const CTA = (props: CTAProps) => {
           e.preventDefault();
           e.stopPropagation();
         }}
-        style={{
-          ...disabledStyle,
-          ...(labelColor ? { color: getThemeColorCssValue(labelColor) } : {}),
-          ...style,
-        }}
+        style={{ cursor: "default", pointerEvents: "auto", ...style }}
       >
         {linkContent}
       </Button>
@@ -363,15 +326,12 @@ export const CTA = (props: CTAProps) => {
       <Button
         id={id}
         type="button"
-        style={{
-          ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
-          ...(labelColor ? { color: getThemeColorCssValue(labelColor) } : {}),
-          ...style,
-        }}
+        style={style}
         className={buttonClassName}
         variant={buttonVariant}
         interactionRole={interactionRole}
         typographyRole={typographyRole}
+        color={buttonColor}
         labelColor={labelColor}
         linkPadding={linkPadding}
         aria-label={computedAriaLabel}
@@ -385,16 +345,13 @@ export const CTA = (props: CTAProps) => {
 
   return (
     <Button
-      style={{
-        ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
-        ...(labelColor ? { color: getThemeColorCssValue(labelColor) } : {}),
-        ...style,
-      }}
+      style={style}
       asChild
       className={buttonClassName}
       variant={buttonVariant}
       interactionRole={interactionRole}
       typographyRole={typographyRole}
+      color={buttonColor}
       labelColor={labelColor}
       linkPadding={linkPadding}
     >
@@ -405,11 +362,6 @@ export const CTA = (props: CTAProps) => {
         aria-label={computedAriaLabel}
         rel={openInNewTab ? "noopener noreferrer" : undefined}
         onClick={onClick}
-        style={{
-          ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
-          ...(labelColor ? { color: getThemeColorCssValue(labelColor) } : {}),
-          ...style,
-        }}
       >
         {linkContent}
         {openInNewTab && (

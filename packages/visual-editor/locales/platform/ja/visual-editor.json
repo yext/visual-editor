@@ -161,6 +161,7 @@
     "fontOptions": "フォントオプション",
     "fontStyle": "フォントスタイル",
     "headingAlign": "見出し揃え",
+    "headingLevel": "見出しレベル",
     "headingBackgroundColor": "見出しの背景色",
     "hours": "時間",
     "hoursColumn": "時間列",

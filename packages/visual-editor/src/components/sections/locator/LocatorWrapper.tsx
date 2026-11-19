@@ -938,7 +938,7 @@ const LocatorInternal = ({
     openNowButton || showDistanceOptions || hasFacetOptions;
   const filterAccentColorCssVariable =
     getThemeColorCssValue(accentColor?.selectedColor) ??
-    "var(--ve-color-primary)";
+    "var(--ve-color-primary-solid)";
   const [showFilterModal, setShowFilterModal] = React.useState(false);
   const filterToggleButtonRef = React.useRef<HTMLButtonElement>(null);
   const filterModalCloseButtonRef = React.useRef<HTMLButtonElement>(null);

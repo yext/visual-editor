@@ -161,6 +161,7 @@
     "fontOptions": "Schriftartoptionen",
     "fontStyle": "Schriftstil",
     "headingAlign": "Überschrift ausrichten",
+    "headingLevel": "Überschrift-Ebene",
     "headingBackgroundColor": "Hintergrundfarbe der Überschrift",
     "hours": "Öffnungszeiten",
     "hoursColumn": "Spalte für Öffnungszeiten",

@@ -27,10 +27,20 @@ export const LayoutPreviewOverride = ({
         intent.state.stage === "clarification" ||
         (intent.state.stage === "idle" && intent.status === "PENDING")));
 
+  const preventLinkNavigation = (event: React.MouseEvent) => {
+    const target = event.target as Element;
+    if (target.closest?.("a[href], area[href]")) {
+      // Keep the click available to Puck's component selection handler.
+      event.preventDefault();
+    }
+  };
+
   // Preserve Puck's preview sizing when visible; an extra block collapses its height.
   return (
     <div
       hidden={!!hidePreview}
+      onClickCapture={preventLinkNavigation}
+      onAuxClickCapture={preventLinkNavigation}
       style={{ display: hidePreview ? "none" : "contents" }}
     >
       {children}

@@ -35,7 +35,10 @@ export const MapPinIcon = ({
 
   const streamDocument = useDocument();
   const role = selected ? "accent" : "primary";
-  const fill = getThemeColorCssValue(color);
+  const fillCss = getThemeColorCssValue(color);
+  const fill = fillCss?.toLowerCase().includes("gradient(")
+    ? getThemeColorHexValue(color, streamDocument)
+    : fillCss;
   const contrastToken =
     color?.selectedColor === "default" ? undefined : color?.contrastingColor;
   const contrastCss = getThemeColorCssValue(contrastToken);
@@ -49,7 +52,7 @@ export const MapPinIcon = ({
     streamDocument
   );
   const svgStyle: React.CSSProperties = {
-    color: fill ?? `var(--ve-color-${role})`,
+    color: fill ?? `var(--ve-color-${role}-solid)`,
   };
 
   const ariaLabel =

@@ -161,6 +161,7 @@
     "fontOptions": "字体选项",
     "fontStyle": "字体样式",
     "headingAlign": "标题对齐",
+    "headingLevel": "标题水平",
     "headingBackgroundColor": "标题背景颜色",
     "hours": "小时",
     "hoursColumn": "小时列",

@@ -1,7 +1,7 @@
 import { Address, AddressProps } from "../contentBlocks/Address.tsx";
 import {
   HeadingTextProps,
-  HeadingText,
+  HeadingTextSlot,
 } from "../contentBlocks/HeadingText.tsx";
 import { HoursTable, HoursTableProps } from "../contentBlocks/HoursTable.tsx";
 import {
@@ -50,7 +50,7 @@ export const SlotsCategoryComponents = {
   BreadcrumbsSlot: { ...BreadcrumbsSection, permissions: lockedPermissions },
   DirectoryCard: { ...DirectoryCard, permissions: lockedPermissions },
   DirectoryGrid: { ...DirectoryGrid, permissions: lockedPermissions },
-  HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
+  HeadingTextSlot: { ...HeadingTextSlot, permissions: lockedPermissions },
   HoursStatusSlot: { ...HoursStatus, permissions: lockedPermissions },
   HoursTableSlot: { ...HoursTable, permissions: lockedPermissions },
   ImageSlot: { ...ImageWrapper, permissions: lockedPermissions },

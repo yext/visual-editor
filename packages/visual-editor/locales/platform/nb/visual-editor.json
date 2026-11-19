@@ -161,6 +161,7 @@
     "fontOptions": "Skriftalternativer",
     "fontStyle": "Skriftstil",
     "headingAlign": "Overskrift justeres",
+    "headingLevel": "Overskriftsnivå",
     "headingBackgroundColor": "Overskrift Bakgrunnsfarge",
     "hours": "Timer",
     "hoursColumn": "Timer kolonne",
