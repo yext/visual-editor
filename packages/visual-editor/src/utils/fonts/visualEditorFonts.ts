@@ -178,9 +178,10 @@ export const createFontLinkElements = (
   customFonts: FontRegistry
 ): HTMLLinkElement[] => {
   const googleFontLinkData = generateGoogleFontLinkData(googleFonts);
+  // Editor URLs can be nested, but custom font assets are served from the site root.
   const customFontLinkData = generateCustomFontLinkData(
     getFacePathsFromFonts(customFonts),
-    "./"
+    "/"
   );
 
   return [...customFontLinkData, ...googleFontLinkData].map((link) => {
