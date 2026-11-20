@@ -9,6 +9,7 @@ import {
   generateCustomFontLinkData,
   getFacePathsFromFonts,
   getFontStyleOptions,
+  loadFontsIntoDOM,
 } from "./visualEditorFonts.ts";
 
 describe("filterInUseFontRegistries", () => {
@@ -234,6 +235,75 @@ describe("custom font helpers", () => {
       },
     ]);
   });
+});
+
+describe("loadFontsIntoDOM", () => {
+  it.each([
+    {
+      editorPath: "/edit",
+      facePath: "y-fonts/custom-font.css",
+      expectedHref: "https://preview.example.com/y-fonts/custom-font.css",
+    },
+    {
+      editorPath: "/edit/standard-library",
+      facePath: "y-fonts/custom-font.css",
+      expectedHref: "https://preview.example.com/y-fonts/custom-font.css",
+    },
+    {
+      editorPath: "/edit/standard-library/revision",
+      facePath: "y-fonts/custom-font.css",
+      expectedHref: "https://preview.example.com/y-fonts/custom-font.css",
+    },
+    {
+      editorPath: "/edit/standard-library/revision",
+      facePath: "/y-fonts/custom-font.css",
+      expectedHref: "https://preview.example.com/y-fonts/custom-font.css",
+    },
+    {
+      editorPath: "/edit/standard-library/revision",
+      facePath: "https://fonts.example.com/custom-font.css",
+      expectedHref: "https://fonts.example.com/custom-font.css",
+    },
+  ])(
+    "loads $facePath from $editorPath in the picker and preview",
+    ({ editorPath, facePath, expectedHref }) => {
+      const base = document.createElement("base");
+      base.href = `https://preview.example.com${editorPath}`;
+      document.head.appendChild(base);
+      const iframe = document.createElement("iframe");
+      document.body.appendChild(iframe);
+      const customFonts: FontRegistry = {
+        "Custom Font": {
+          fallback: "sans-serif",
+          italics: false,
+          weights: [400],
+          facePath,
+        },
+      };
+
+      try {
+        for (const targetDocument of [document, iframe.contentDocument!]) {
+          loadFontsIntoDOM(
+            targetDocument,
+            {},
+            customFonts,
+            "font-path-regression"
+          );
+
+          const link = targetDocument.querySelector<HTMLLinkElement>(
+            'link[id^="font-path-regression-"][rel="stylesheet"]'
+          );
+          expect(link?.href).toBe(expectedHref);
+        }
+      } finally {
+        base.remove();
+        iframe.remove();
+        document
+          .querySelectorAll('[id^="font-path-regression-"]')
+          .forEach((link) => link.remove());
+      }
+    }
+  );
 });
 
 describe("constructGoogleFontLinkTags", () => {
