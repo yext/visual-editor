@@ -1,3 +1,14 @@
+#### 2.0.0-beta.14 (2026-11-20)
+
+##### New Features
+
+- restore dev releases ([#1393](https://github.com/yext/visual-editor/pull/1393)) ([316158ba](https://github.com/yext/visual-editor/commit/316158ba1cd3ec8b464c3ba29f9b645935c2e447))
+
+##### Bug Fixes
+
+- custom fonts fail to load in section-library editors ([#1395](https://github.com/yext/visual-editor/pull/1395)) ([50c8140f](https://github.com/yext/visual-editor/commit/50c8140f9d440cb25ebcc48784f2c1e9ff887f46))
+- prevent local-editor server-rendering crash ([#1394](https://github.com/yext/visual-editor/pull/1394)) ([022bf16c](https://github.com/yext/visual-editor/commit/022bf16caf3bd1fa696abcffb5ee4dd9ac865d52))
+
 #### 2.0.0-beta.13 (2026-11-18)
 
 ##### New Features
