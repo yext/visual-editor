@@ -12,6 +12,8 @@ import {
   loadComponentTranslations,
 } from "./i18n/components.ts";
 import { normalizeLocalesInObject } from "./normalizeLocale.ts";
+import { installPassThroughUrlParameters } from "./passThroughUrlParameters.ts";
+import type { StreamDocument } from "./types/StreamDocument.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 
 type AllOrNothing<T extends Record<string, any>> =
@@ -88,6 +90,27 @@ const VisualEditorProvider = <T extends Record<string, any>>({
       delete window.YextCustomCodeAnalytics;
     };
   }, [pagesAnalytics]);
+
+  // Pages includes both fields on published renders. The editor supplies only the stream document.
+  const streamDocument: StreamDocument | undefined = templateProps.document;
+  const visualEditorConfig =
+    typeof templateProps.path === "string" &&
+    typeof templateProps.relativePrefixToRoot === "string"
+      ? streamDocument?.__?.visualEditorConfig
+      : undefined;
+  useBrowserLayoutEffect(() => {
+    if (!visualEditorConfig) {
+      return;
+    }
+    try {
+      if (JSON.parse(visualEditorConfig)?.passThroughUrlParameters !== true) {
+        return;
+      }
+    } catch {
+      return;
+    }
+    return installPassThroughUrlParameters();
+  }, [visualEditorConfig]);
 
   return (
     <ErrorProvider>
