@@ -4,6 +4,7 @@ import { isDeepEqual } from "../../../../utils/deepEqual.ts";
 import type { PuckGenerationCatalog } from "../../../../utils/createPuckGenerationCatalog.ts";
 import { unwrapZodSchema as unwrap } from "../../../utils/unwrapZodSchema.ts";
 import { createGenerationSchemaCompiler } from "../../schema/compiler.ts";
+import { StrictOutputEnumLimitError } from "../../schema/strictSchema.ts";
 import {
   clone,
   extractAuthored,
@@ -30,6 +31,44 @@ import type {
   SectionEditResult,
   SectionEditTask,
 } from "./types.ts";
+
+type EditValueContract = ReturnType<typeof getEditValueContracts>[number];
+
+/** Share model-facing branches with the same value contract and keep exact paths. */
+const groupModelChanges = (
+  contracts: EditValueContract[],
+  pathSelector: (paths: string[]) => z.ZodType
+) => {
+  const sets = new Map<string, { paths: string[]; value: z.ZodType }>();
+  const unsets: string[] = [];
+  for (const { path, set, unset } of contracts) {
+    if (set) {
+      const key = JSON.stringify(z.toJSONSchema(set.wire, { io: "output" }));
+      const existing = sets.get(key);
+      if (existing) {
+        existing.paths.push(path);
+      } else {
+        sets.set(key, { paths: [path], value: set.wire });
+      }
+    }
+    if (unset) {
+      unsets.push(path);
+    }
+  }
+  const changes: z.ZodType[] = [...sets.values()].map(({ paths, value }) =>
+    z.strictObject({
+      kind: z.literal("set"),
+      path: pathSelector(paths),
+      value,
+    })
+  );
+  if (unsets.length) {
+    changes.push(
+      z.strictObject({ kind: z.literal("unset"), path: pathSelector(unsets) })
+    );
+  }
+  return changes;
+};
 
 /** Compile a strict response containing only planned targets and insertion types. */
 export const compileSectionEditSchema = (
@@ -64,7 +103,7 @@ export const compileSectionEditSchema = (
     Map<string, (input: any) => AuthoredValueEdit>
   >();
   const updateSchemas: z.ZodType[] = [];
-  const modelUpdateSchemas: z.ZodType[] = [];
+  const modelContracts = new Map<string, EditValueContract[]>();
   const modelCompilers = new Map<
     string,
     ReturnType<typeof createGenerationSchemaCompiler>
@@ -81,7 +120,6 @@ export const compileSectionEditSchema = (
       }
       const component = saved.get(componentId)!;
       const changes: z.ZodType[] = [];
-      const modelChanges: z.ZodType[] = [];
       const componentConfig = catalog.data.components[component.type];
       const componentLocales = localizedTextState(
         component.props,
@@ -118,15 +156,11 @@ export const compileSectionEditSchema = (
       // Offer a single representation: leaf paths where available, otherwise
       // atomic values (including correlated object unions). Parent resets and
       // replacements cannot coexist with descendant edits in model output.
-      const modelContracts = new Map(
-        offeredContracts
-          .filter(
-            (contract) =>
-              !offeredContracts.some((other) =>
-                other.path.startsWith(`${contract.path}/`)
-              )
+      const modelChanges = offeredContracts.filter(
+        (contract) =>
+          !offeredContracts.some((other) =>
+            other.path.startsWith(`${contract.path}/`)
           )
-          .map((contract) => [contract.path, contract])
       );
       const decoders = new Map<string, (input: any) => AuthoredValueEdit>();
       const contracts = getEditValueContracts(
@@ -145,16 +179,6 @@ export const compileSectionEditSchema = (
               value: node.wire,
             })
           );
-          const modelContract = modelContracts.get(contract.path);
-          if (modelContract?.set) {
-            modelChanges.push(
-              z.strictObject({
-                kind: z.literal("set"),
-                path: z.literal(contract.path),
-                value: modelContract.set.wire,
-              })
-            );
-          }
           decoders.set(`set:${contract.path}`, (input) => ({
             kind: "set",
             path: contract.path,
@@ -168,14 +192,6 @@ export const compileSectionEditSchema = (
               path: z.literal(contract.path),
             })
           );
-          if (modelContracts.get(contract.path)?.unset) {
-            modelChanges.push(
-              z.strictObject({
-                kind: z.literal("unset"),
-                path: z.literal(contract.path),
-              })
-            );
-          }
           decoders.set(`unset:${contract.path}`, () => ({
             kind: "unset",
             path: contract.path,
@@ -190,13 +206,7 @@ export const compileSectionEditSchema = (
             changes: z.array(compiler.union(changes)).min(1),
           })
         );
-        modelUpdateSchemas.push(
-          z.strictObject({
-            kind: z.literal("update"),
-            componentId: z.literal(componentId),
-            changes: z.array(compiler.union(modelChanges)).min(1),
-          })
-        );
+        modelContracts.set(componentId, modelChanges);
         updateDecoders.set(componentId, decoders);
       }
     }
@@ -480,14 +490,39 @@ export const compileSectionEditSchema = (
       .filter((item) => item.sectionId === task.sectionId)
       .map((item) => item.componentId)
   );
-  return {
-    jsonSchema: compiler.exportSchema(
+  const exportModelSchema = (pathSelector: (paths: string[]) => z.ZodType) => {
+    const updates = Array.from(modelContracts, ([componentId, contracts]) =>
+      z.strictObject({
+        kind: z.literal("update"),
+        componentId: z.literal(componentId),
+        changes: z
+          .array(compiler.union(groupModelChanges(contracts, pathSelector)))
+          .min(1),
+      })
+    );
+    return compiler.exportSchema(
       responseSchema.extend({
-        updates: modelUpdateSchemas.length
-          ? z.array(compiler.union(modelUpdateSchemas))
+        updates: updates.length
+          ? z.array(compiler.union(updates))
           : z.array(z.string()).max(0),
       })
-    ),
+    );
+  };
+  let jsonSchema: Record<string, any>;
+  try {
+    jsonSchema = exportModelSchema((paths) => z.enum(paths));
+  } catch (error) {
+    if (!(error instanceof StrictOutputEnumLimitError)) {
+      throw error;
+    }
+    // Keep the same allowed paths and value branches when a task has too many
+    // string paths for strict-output enums.
+    jsonSchema = exportModelSchema((paths) =>
+      compiler.union(paths.map((path) => z.literal(path)))
+    );
+  }
+  return {
+    jsonSchema,
     availableComponentNames: [
       ...new Set([
         ...compiler.nodes.keys(),

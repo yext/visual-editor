@@ -58,7 +58,9 @@ describe("preset CTA generation contracts", () => {
         },
       ],
     });
-    const paths = planning.context.capabilities.CTA.authoredPaths;
+    const paths = planning.context.capabilities.CTA.authoredPaths.map(
+      (index) => planning.context.authoredPaths[index]
+    );
     expect(
       paths.find(({ path }) => path === "/cta/constantValue/ctaType")
         ?.description

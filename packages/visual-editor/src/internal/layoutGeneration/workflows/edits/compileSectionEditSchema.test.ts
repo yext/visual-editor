@@ -25,6 +25,76 @@ import { buildPlanningContext } from "./taskValidation.ts";
 import { applyFullPageUpdateStep } from "../fullPageUpdate/applyFullPageUpdateStep.ts";
 
 describe("section edit targets and values", () => {
+  it("keeps grouped paths available when the provider enum limit is exceeded", () => {
+    const props = z.object(
+      Object.fromEntries(
+        Array.from({ length: 260 }, (_, index) => [
+          [`spacing${index}`, z.string().optional()],
+          [`order${index}`, z.number().optional()],
+        ]).flat()
+      )
+    );
+    const catalog = createPuckGenerationCatalog({
+      Atom: { layoutGenerationMetadata: { props } },
+    });
+    const data = { content: [{ type: "Atom", props: { id: "atom" } }] };
+    const compiled = compileSectionEditSchema(
+      catalog,
+      ["en"],
+      data,
+      editTask("atom", ["atom"])
+    );
+    const schema = JSON.stringify(compiled.jsonSchema);
+    expect(schema).toContain('"const":"/spacing259"');
+    expect(schema).toContain('"const":"/order259"');
+    expect(schema).not.toContain('"enum":["/spacing0"');
+  });
+
+  it("shares strict branches across equivalent paths without widening their values", () => {
+    const catalog = createPuckGenerationCatalog({
+      Atom: {
+        layoutGenerationMetadata: {
+          props: z.object({
+            top: z.string().optional(),
+            bottom: z.string().optional(),
+            order: z.number().optional(),
+          }),
+        },
+      },
+    });
+    const data = {
+      content: [
+        { type: "Atom", props: { id: "atom", top: "1rem", bottom: "2rem" } },
+      ],
+    };
+    const task = editTask("atom", ["atom"]);
+    const compiled = compileSectionEditSchema(catalog, ["en"], data, task);
+    const schema = JSON.stringify(compiled.jsonSchema);
+    expect(schema).toContain('"enum":["/top","/bottom"]');
+    expect(schema).toContain('"enum":["/top","/bottom","/order"]');
+    const response = (value: unknown) =>
+      JSON.stringify({
+        taskId: task.taskId,
+        sectionId: task.sectionId,
+        insertions: [],
+        updates: [
+          {
+            kind: "update",
+            componentId: "atom",
+            changes: [{ kind: "set", path: "/bottom", value }],
+          },
+        ],
+      });
+    expect(compiled.parseResponse(response("3rem")).operations).toEqual([
+      {
+        kind: "update",
+        componentId: "atom",
+        changes: [{ kind: "set", path: "/bottom", value: "3rem" }],
+      },
+    ]);
+    expect(() => compiled.parseResponse(response(3))).toThrow();
+  });
+
   it.each([
     {
       selectedColor: "palette-primary-dark",
@@ -556,7 +626,11 @@ describe("section edit targets and values", () => {
       ],
     };
     const planning = compileEditPlanningSchema(catalog, ["en"], data);
-    expect(planning.context.capabilities.Header.authoredPaths).toContainEqual({
+    expect(
+      planning.context.capabilities.Header.authoredPaths.map(
+        (index) => planning.context.authoredPaths[index]
+      )
+    ).toContainEqual({
       path: "/styles/showHeading",
       set: true,
       unset: false,
@@ -568,7 +642,11 @@ describe("section edit targets and values", () => {
       disallow: [],
       description: slotGuidance,
     });
-    expect(planning.context.capabilities.CTA.authoredPaths).toContainEqual({
+    expect(
+      planning.context.capabilities.CTA.authoredPaths.map(
+        (index) => planning.context.authoredPaths[index]
+      )
+    ).toContainEqual({
       path: "/data/show",
       set: true,
       unset: true,
