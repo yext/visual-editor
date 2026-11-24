@@ -23,8 +23,10 @@ import {
 } from "./LocatorResultCard.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
+import { Source } from "@yext/search-headless-react";
 import { getUserLocation } from "@yext/search-ui-react";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import type { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { MainContent } from "../structure/MainContent.tsx";
 
 vi.mock("@yext/search-ui-react", async () => {
@@ -1621,6 +1623,44 @@ describe("Locator", async () => {
       vi.mocked(getUserLocation).mockRejectedValue(
         new Error("Locator screenshot tests use fixture search data.")
       );
+      window.history.replaceState(window.history.state, "", originalUrl);
+    }
+  });
+
+  it("when the page has campaign parameters then the locator directions link includes them", async () => {
+    const streamDocument: StreamDocument = { locale: "en" };
+    const translations = await injectTranslations(streamDocument);
+    const originalUrl = window.location.href;
+    const startingUrl = new URL(originalUrl);
+    startingUrl.searchParams.set("utm_campaign", "local-search");
+    startingUrl.searchParams.set("gclid", "locator-click");
+    window.history.replaceState(window.history.state, "", startingUrl);
+
+    try {
+      reactRender(
+        <VisualEditorProvider
+          templateProps={{ document: streamDocument, translations }}
+        >
+          <LocatorResultCard
+            result={{
+              index: 1,
+              source: Source.KnowledgeManager,
+              rawData: DEFAULT_LOCATOR_RESULTS[0].data,
+            }}
+            resultCardProps={DEFAULT_LOCATOR_RESULT_CARD_PROPS}
+          />
+        </VisualEditorProvider>
+      );
+
+      const directionsLink = screen.getByRole<HTMLAnchorElement>("link", {
+        name: "Get Directions for 1101 Wilson Blvd",
+      });
+      const params = new URL(directionsLink.href).searchParams;
+      expect(params.get("utm_campaign")).toBe("local-search");
+      expect(params.get("gclid")).toBe("locator-click");
+      expect(params.get("api")).toBe("1");
+      expect(params.get("query")).toBe("38.895546,-77.069915");
+    } finally {
       window.history.replaceState(window.history.state, "", originalUrl);
     }
   });
