@@ -1,7 +1,6 @@
 import { translatedPuckFieldOverrides } from "../../fields/translatedPuckFieldOverrides.tsx";
 import { withGenerationCatalog } from "../../utils/createPuckGenerationCatalog.ts";
 import { getGenerationCatalog } from "../layoutGeneration/shared/catalogRegistry.ts";
-import { inspectorSessionPlugin } from "../../editor/inspectorSessionPlugin.tsx";
 import { blockSearchPlugin } from "../../editor/blockSearchPlugin.tsx";
 import {
   ActionBar,
@@ -151,7 +150,6 @@ export const InternalLayoutEditor = ({
   // Keep plugin sidebar fields mounted when saved state changes.
   const plugins = React.useMemo(
     () => [
-      inspectorSessionPlugin,
       blockSearchPlugin,
       { ...blocks, label: pt("sections", "Sections") },
       outline,

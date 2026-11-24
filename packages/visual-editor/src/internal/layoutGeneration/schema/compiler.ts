@@ -48,6 +48,7 @@ export const createGenerationSchemaCompiler = (
   schemaMetadata.get = (schema) =>
     getMetadata(schema) ?? z.globalRegistry.get(schema);
   let componentSchemaId = 0;
+  let usesSparseInsertions = false;
   const union = (schemas: z.ZodType[]): z.ZodType =>
     schemas.length === 1 ? schemas[0] : z.union(schemas);
   const describe = (wire: z.ZodType, original: z.ZodType) => {
@@ -249,19 +250,71 @@ export const createGenerationSchemaCompiler = (
               ),
         ])
       );
+      const entries = Object.entries(children);
+      const sparse =
+        mode === "insert" &&
+        markers &&
+        field?.generation?.sparseInsertion === true &&
+        entries.length > 0 &&
+        !native.def.catchall &&
+        Object.values(native.shape).every(
+          (schema: z.ZodType) => schema.safeParse(undefined).success
+        );
+      const sparseValueGroups = new Map<
+        string,
+        { keys: string[]; value: z.ZodType }
+      >();
+      if (sparse) {
+        usesSparseInsertions = true;
+        for (const [key, node] of entries) {
+          const signature = JSON.stringify(
+            z.toJSONSchema(node.wire, { io: "output" })
+          );
+          const group = sparseValueGroups.get(signature);
+          if (group) {
+            group.keys.push(key);
+          } else {
+            sparseValueGroups.set(signature, { keys: [key], value: node.wire });
+          }
+        }
+      }
       child = {
-        wire: z.strictObject(
-          Object.fromEntries(
-            Object.entries(children).map(([key, node]) => [key, node.wire])
-          )
-        ),
+        wire: sparse
+          ? z
+              .array(
+                union(
+                  Array.from(sparseValueGroups.values(), ({ keys, value }) =>
+                    z.strictObject({
+                      key: union(keys.map((key) => z.literal(key))),
+                      value,
+                    })
+                  )
+                )
+              )
+              .max(entries.length)
+              .describe(
+                "List only properties you need to change. An empty list uses the existing defaults for this group. Omitted properties inherit defaults."
+              )
+          : z.strictObject(
+              Object.fromEntries(entries.map(([key, node]) => [key, node.wire]))
+            ),
         apply: (input, baseline) => {
           const result =
             baseline && typeof baseline === "object" && !Array.isArray(baseline)
               ? clone(baseline)
               : {};
-          for (const [key, node] of Object.entries(children)) {
-            const resultValue = node.apply(input[key], result[key]);
+          const provided = sparse
+            ? (input as { key: string; value: unknown }[]).map(
+                ({ key, value }) => [key, value] as const
+              )
+            : entries.map(([key]) => [key, input[key]] as const);
+          const seen = new Set<string>();
+          for (const [key, value] of provided) {
+            if (sparse && seen.has(key)) {
+              fail(path, `duplicate property ${key}`);
+            }
+            seen.add(key);
+            const resultValue = children[key].apply(value, result[key]);
             if (resultValue === undefined) {
               delete result[key];
             } else {
@@ -454,7 +507,12 @@ export const createGenerationSchemaCompiler = (
     // defaults/optionals replaced by markers and transforms/coercion rejected.
     // Input and output contracts are identical. Output export avoids Zod's
     // repeated transform scans over the entire nested component graph.
-    exportGenerationSchema(schema, schemaMetadata, "output");
+    exportGenerationSchema(
+      schema,
+      schemaMetadata,
+      "output",
+      usesSparseInsertions
+    );
   return {
     element,
     value,

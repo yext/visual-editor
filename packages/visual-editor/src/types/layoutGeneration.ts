@@ -16,6 +16,8 @@ export type FieldGenerationMetadata = {
   instructions?: string;
   /** Require exactly one slot child. False or omitted keeps variable-length arrays. */
   singleChild?: boolean;
+  /** Encode optional object fields as sparse key/value entries in follow-up insertions. */
+  sparseInsertion?: boolean;
   /** Explicit schemas own optionality; callbacks receive the inferred schema. */
   schema?: z.ZodType | ((inferred: z.ZodType) => z.ZodType);
 };

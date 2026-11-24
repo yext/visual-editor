@@ -16,7 +16,7 @@ function containsComponent(value: unknown, id: string): boolean {
 }
 
 /** Selection and inspector navigation belong to the editing session, not the document history. */
-function InspectorSession({ children }: { children: React.ReactNode }) {
+export function InspectorSession({ children }: { children: React.ReactNode }) {
   const getPuck = useGetPuck();
   const index = usePuck((state) => state.history.index);
   const histories = usePuck((state) => state.history.histories);

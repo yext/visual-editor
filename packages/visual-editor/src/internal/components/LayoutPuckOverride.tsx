@@ -1,5 +1,6 @@
 import { createUsePuck, resolveAllData, useGetPuck } from "@puckeditor/core";
 import React from "react";
+import { InspectorSession } from "../../editor/inspectorSessionPlugin.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
@@ -116,10 +117,12 @@ export const LayoutPuckOverride = ({
   }, [getPuck, streamDocument]);
 
   return (
-    <>
+    // Puck recreates wrappers for plugin overrides when its props change.
+    // Keep the chat bridge inside this stable override during chat renders.
+    <InspectorSession>
       <ValidationReporters />
       <LayoutGenerationChatBridge streamDocument={streamDocument} />
       {children}
-    </>
+    </InspectorSession>
   );
 };

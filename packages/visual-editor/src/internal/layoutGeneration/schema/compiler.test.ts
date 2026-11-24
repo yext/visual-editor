@@ -194,3 +194,79 @@ it("drops direct-rich-text keys when authoring a localized bundle without retain
     { defaultValue: "New fallback" }
   );
 });
+
+it("compacts authored style overrides on six composed cards", () => {
+  const spacing = z
+    .object({
+      top: z.string().optional(),
+      bottom: z.string().optional(),
+    })
+    .optional();
+  const catalog = createPuckGenerationCatalog({
+    Columns: {
+      fields: { content: { type: "slot", allow: ["Card"] } },
+      defaultProps: { content: [] },
+    },
+    Card: {
+      fields: {
+        content: { type: "slot", allow: ["Heading", "Image", "Paragraph"] },
+        spacing: {
+          type: "object",
+          objectFields: {},
+          generation: { schema: spacing, sparseInsertion: true },
+        },
+      },
+      defaultProps: { content: [], spacing: { top: "1rem", bottom: "1rem" } },
+    },
+    Heading: { fields: { text: { type: "text" } } },
+    Image: { fields: { url: { type: "text" } } },
+    Paragraph: { fields: { text: { type: "text" } } },
+  });
+  const input = {
+    type: "Columns",
+    props: {
+      content: Array.from({ length: 6 }, (_, index) => ({
+        type: "Card",
+        props: {
+          spacing: index === 0 ? [{ key: "top", value: "2rem" }] : [],
+          content: [
+            { type: "Image", props: { url: "/sample.png" } },
+            { type: "Heading", props: { text: `Ingredient ${index + 1}` } },
+            { type: "Paragraph", props: { text: "Sample ingredient copy." } },
+          ],
+        },
+      })),
+    },
+  };
+  const insertion = createGenerationSchemaCompiler(catalog, ["en"], "insert");
+  const section = insertion.element("Columns");
+  expect(section.wire.safeParse(input).success).toBe(true);
+  const result = section.apply(input, undefined);
+  expect(result.props.content).toHaveLength(6);
+  expect(result.props.content[0].props.spacing).toEqual({
+    top: "2rem",
+    bottom: "1rem",
+  });
+  expect(result.props.content[1].props.spacing).toEqual({
+    top: "1rem",
+    bottom: "1rem",
+  });
+  expect(result.props.content[5].props.content[1].props.text).toBe(
+    "Ingredient 6"
+  );
+  expect(
+    createGenerationSchemaCompiler(catalog, ["en"])
+      .element("Columns")
+      .wire.safeParse(input).success
+  ).toBe(false);
+
+  input.props.content[0].props.spacing = [
+    { key: "top", value: "2rem" },
+    { key: "top", value: "3rem" },
+  ];
+  expect(() => section.apply(input, undefined)).toThrow(
+    "duplicate property top"
+  );
+  input.props.content[0].props.spacing = [{ key: "unknown", value: "2rem" }];
+  expect(section.wire.safeParse(input).success).toBe(false);
+});
