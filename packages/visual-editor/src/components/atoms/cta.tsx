@@ -4,7 +4,10 @@ import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
 import { ThemeColor } from "../../utils/themeConfigOptions.ts";
-import { normalizeLink } from "../../utils/normalizeLink.ts";
+import {
+  isNonNormalizableLinkType,
+  normalizeLink,
+} from "../../utils/normalizeLink.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -12,6 +15,10 @@ import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
+import {
+  mergePageQueryParameters,
+  PageQueryContext,
+} from "../../contexts/PageQueryContext.ts";
 import {
   getThemeColorCssValue,
   getThemeColorHexValue,
@@ -254,6 +261,7 @@ export const CTA = (props: CTAProps) => {
 
   const { t } = useTranslation();
   const streamDocument = useDocument();
+  const pageQuery = React.useContext(PageQueryContext);
   const resolvedProps = useResolvedCtaProps(props);
   const isButton = actionType === "button";
 
@@ -436,7 +444,12 @@ export const CTA = (props: CTAProps) => {
       linkPadding={linkPadding}
     >
       <Link
-        cta={{ link: link || "#", linkType }}
+        cta={{
+          link: isNonNormalizableLinkType(linkType)
+            ? link
+            : mergePageQueryParameters(link, pageQuery),
+          linkType,
+        }}
         eventName={eventName}
         target={openInNewTab ? "_blank" : target}
         aria-label={computedAriaLabel}

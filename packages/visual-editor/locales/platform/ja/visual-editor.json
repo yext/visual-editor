@@ -441,6 +441,7 @@
     },
     "overrideLink": "オーバーライドリンク",
     "pageHeading": "ページ見出し",
+    "passThroughUrlParameters": "URL パラメータを CTA リンクに引き継ぐ",
     "phone": "電話",
     "phoneFormat": "電話形式",
     "phoneNumber": "電話番号",

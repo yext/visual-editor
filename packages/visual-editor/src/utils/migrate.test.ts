@@ -9,6 +9,8 @@ import { slotMappedCardsMigration } from "../components/migrations/0076_slot_map
 import { removeMapboxApiKeyPropsMigration } from "../components/migrations/0078_remove_mapbox_api_key_props.ts";
 import { imageFillTypeMigration } from "../components/migrations/0079_image_fill_type.ts";
 import { photoGalleryItemSource } from "../components/migrations/0083_photo_gallery_item_source.ts";
+import { migrationRegistry as layoutMigrationRegistry } from "../components/migrations/migrationRegistry.ts";
+import { defaultLayoutData } from "../vite-plugin/defaultLayoutData.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
@@ -2073,3 +2075,48 @@ const exampleBasicDataAfter = {
     },
   ],
 };
+
+describe("Pass URL parameters to CTA links", () => {
+  it.each([
+    { state: "the field is missing", props: {}, expected: false },
+    {
+      state: "the field is Yes",
+      props: { passThroughUrlParameters: true },
+      expected: true,
+    },
+    {
+      state: "the field is No",
+      props: { passThroughUrlParameters: false },
+      expected: false,
+    },
+  ])(
+    "when $state, then migration keeps the layout and sets the field to $expected",
+    ({ props, expected }): void => {
+      const migratedData = migrate(
+        {
+          root: { props: { version: 84, title: "Example page", ...props } },
+          content: [],
+        },
+        layoutMigrationRegistry,
+        { components: {} },
+        {}
+      );
+
+      expect(migratedData.root.props).toEqual({
+        version: layoutMigrationRegistry.length,
+        title: "Example page",
+        passThroughUrlParameters: expected,
+      });
+    }
+  );
+
+  it.each(["main", "directory", "locator"] as const)(
+    "when a page group uses the %s default layout, then the field starts at No",
+    (template): void => {
+      expect(
+        JSON.parse(defaultLayoutData[template]).root.props
+          .passThroughUrlParameters
+      ).toBe(false);
+    }
+  );
+});

@@ -441,6 +441,7 @@
     },
     "overrideLink": "Ohita linkki",
     "pageHeading": "Sivun otsikko",
+    "passThroughUrlParameters": "Välitä URL-parametrit CTA-linkkeihin",
     "phone": "Puhelin",
     "phoneFormat": "Puhelinmuoto",
     "phoneNumber": "Puhelinnumero",

@@ -441,6 +441,7 @@
     },
     "overrideLink": "Anular enlace",
     "pageHeading": "Encabezado de página",
+    "passThroughUrlParameters": "Pasar los parámetros de URL a los enlaces de CTA",
     "phone": "Teléfono",
     "phoneFormat": "Formato de teléfono",
     "phoneNumber": "Número de teléfono",

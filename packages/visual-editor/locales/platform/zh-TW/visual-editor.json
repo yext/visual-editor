@@ -441,6 +441,7 @@
     },
     "overrideLink": "覆蓋連結",
     "pageHeading": "頁面標題",
+    "passThroughUrlParameters": "將網址參數傳遞至 CTA 連結",
     "phone": "電話",
     "phoneFormat": "電話格式",
     "phoneNumber": "電話號碼",

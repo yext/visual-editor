@@ -441,6 +441,7 @@
     },
     "overrideLink": "Overstyr kobling",
     "pageHeading": "Sideoverskrift",
+    "passThroughUrlParameters": "Viderefør URL-parametere til CTA-lenker",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",

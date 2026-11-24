@@ -441,6 +441,7 @@
     },
     "overrideLink": "Zastąp łącze",
     "pageHeading": "Nagłówek strony",
+    "passThroughUrlParameters": "Przekazuj parametry adresu URL do linków CTA",
     "phone": "Telefon",
     "phoneFormat": "Format telefonu",
     "phoneNumber": "Numer telefonu",

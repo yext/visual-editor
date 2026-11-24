@@ -441,6 +441,7 @@
     },
     "overrideLink": "Perrašyti nuorodą",
     "pageHeading": "Puslapio antraštė",
+    "passThroughUrlParameters": "Perduoti URL parametrus CTA nuorodoms",
     "phone": "Telefonas",
     "phoneFormat": "Telefono formatas",
     "phoneNumber": "Telefono numeris",

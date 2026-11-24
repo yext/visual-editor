@@ -441,6 +441,7 @@
     },
     "overrideLink": "Link überschreiben",
     "pageHeading": "Seitenüberschrift",
+    "passThroughUrlParameters": "URL-Parameter an CTA-Links weitergeben",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",

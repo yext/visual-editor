@@ -246,6 +246,17 @@ export const InternalLayoutEditor = ({
               types: ["type.string"],
             },
           },
+          passThroughUrlParameters: {
+            type: "radio",
+            label: msg(
+              "fields.passThroughUrlParameters",
+              "Pass URL parameters to CTA links"
+            ),
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          },
           ...puckConfig.root?.fields,
           __advancedSettingsLink: createAdvancedSettingsLink(),
         },
@@ -260,6 +271,7 @@ export const InternalLayoutEditor = ({
             constantValue: "",
             constantValueEnabled: false,
           },
+          passThroughUrlParameters: false,
           schemaMarkup: "",
           ...puckConfig.root?.defaultProps,
           __advancedSettingsLink: null,

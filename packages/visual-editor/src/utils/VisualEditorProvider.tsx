@@ -13,6 +13,8 @@ import {
 } from "./i18n/components.ts";
 import { normalizeLocalesInObject } from "./normalizeLocale.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
+import { PageQueryContext } from "../contexts/PageQueryContext.ts";
+import { StreamDocument } from "./types/StreamDocument.ts";
 
 type AllOrNothing<T extends Record<string, any>> =
   | T
@@ -57,6 +59,14 @@ const VisualEditorProvider = <T extends Record<string, any>>({
   children,
 }: VisualEditorProviderProps<T>) => {
   const pagesAnalytics = useAnalytics();
+  const [pageQuery, setPageQuery] = React.useState("");
+  const streamDocument: StreamDocument | undefined = templateProps.document;
+  const publishedLayout =
+    tailwindConfig === undefined &&
+    typeof templateProps.path === "string" &&
+    typeof templateProps.relativePrefixToRoot === "string"
+      ? streamDocument?.__?.layout
+      : undefined;
 
   // Use useMemo to prevent creating a new QueryClient on every render
   // QueryClient maintains internal caches, so creating new instances unnecessarily
@@ -89,6 +99,24 @@ const VisualEditorProvider = <T extends Record<string, any>>({
     };
   }, [pagesAnalytics]);
 
+  useBrowserLayoutEffect((): void => {
+    if (publishedLayout) {
+      try {
+        if (
+          JSON.parse(publishedLayout)?.root?.props?.passThroughUrlParameters ===
+          true
+        ) {
+          // Read the query before Locator effects update the URL.
+          setPageQuery(window.location.search);
+          return;
+        }
+      } catch {
+        // The page template reports invalid layout data.
+      }
+    }
+    setPageQuery("");
+  }, [publishedLayout]);
+
   return (
     <ErrorProvider>
       <I18nextProvider i18n={i18nComponentsInstance}>
@@ -96,7 +124,9 @@ const VisualEditorProvider = <T extends Record<string, any>>({
           <TemplatePropsContext.Provider value={normalizedTemplateProps}>
             <EntityFieldsContext.Provider value={entityFields}>
               <TailwindConfigContext.Provider value={tailwindConfig}>
-                {children}
+                <PageQueryContext.Provider value={pageQuery}>
+                  {children}
+                </PageQueryContext.Provider>
               </TailwindConfigContext.Provider>
             </EntityFieldsContext.Provider>
           </TemplatePropsContext.Provider>

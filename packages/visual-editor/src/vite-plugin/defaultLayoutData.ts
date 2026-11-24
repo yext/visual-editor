@@ -2,6 +2,7 @@ const mainDefaultLayout = {
   root: {
     props: {
       version: 83,
+      passThroughUrlParameters: false,
       title: {
         field: "name",
         constantValue: "",
@@ -4490,6 +4491,7 @@ const directoryDefaultLayout = {
   root: {
     props: {
       version: 76,
+      passThroughUrlParameters: false,
       title: {
         field: "",
         constantValue: { defaultValue: "PLACEHOLDER" },
@@ -5289,6 +5291,7 @@ const locatorDefaultLayout = {
   root: {
     props: {
       version: 73,
+      passThroughUrlParameters: false,
       title: {
         field: "",
         constantValue: { defaultValue: "Find Locations" },

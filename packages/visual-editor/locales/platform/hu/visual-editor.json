@@ -441,6 +441,7 @@
     },
     "overrideLink": "Hivatkozás felülbírálása",
     "pageHeading": "Oldalfejléc",
+    "passThroughUrlParameters": "URL-paraméterek továbbítása a CTA-hivatkozásokhoz",
     "phone": "Telefon",
     "phoneFormat": "Telefonformátum",
     "phoneNumber": "Telefonszám",

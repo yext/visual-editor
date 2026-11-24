@@ -441,6 +441,7 @@
     },
     "overrideLink": "Link overschrijven",
     "pageHeading": "Paginakop",
+    "passThroughUrlParameters": "URL-parameters doorgeven aan CTA-links",
     "phone": "Telefoon",
     "phoneFormat": "Telefoonformaat",
     "phoneNumber": "Telefoonnummer",

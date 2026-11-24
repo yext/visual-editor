@@ -441,6 +441,7 @@
     },
     "overrideLink": "Alista link",
     "pageHeading": "Lehekülje pealkiri",
+    "passThroughUrlParameters": "Edasta URL-i parameetrid CTA-linkidele",
     "phone": "Telefon",
     "phoneFormat": "Telefonivorming",
     "phoneNumber": "Telefoninumber",

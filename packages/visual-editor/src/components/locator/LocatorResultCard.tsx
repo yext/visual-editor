@@ -72,6 +72,10 @@ import {
   getTextColorStyle,
 } from "../../utils/colors.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
+import {
+  mergePageQueryParameters,
+  PageQueryContext,
+} from "../../contexts/PageQueryContext.ts";
 
 export interface LocatorResultCardProps {
   /** The entity type this result card applies to. */
@@ -860,6 +864,7 @@ export const LocatorResultCard = React.memo(
     isSelected?: boolean;
   }): React.JSX.Element => {
     const { t, i18n } = useTranslation();
+    const pageQuery = React.useContext(PageQueryContext);
 
     const location = result.rawData;
     const resolvedAccentBackgroundColor =
@@ -1053,7 +1058,10 @@ export const LocatorResultCard = React.memo(
                         {getDirectionsLink &&
                           props.address.showGetDirectionsLink && (
                             <a
-                              href={getDirectionsLink}
+                              href={mergePageQueryParameters(
+                                getDirectionsLink,
+                                pageQuery
+                              )}
                               onClick={handleGetDirectionsClick}
                               aria-label={t("getDirectionsForLocation", {
                                 address: location.address.line1,

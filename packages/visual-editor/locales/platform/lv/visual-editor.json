@@ -441,6 +441,7 @@
     },
     "overrideLink": "Pārrakstīt saiti",
     "pageHeading": "Lapas virsraksts",
+    "passThroughUrlParameters": "Pārsūtīt URL parametrus uz CTA saitēm",
     "phone": "Tālrunis",
     "phoneFormat": "Tālruņa formāts",
     "phoneNumber": "Tālruņa numurs",

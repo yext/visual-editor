@@ -441,6 +441,7 @@
     },
     "overrideLink": "Přepište odkaz",
     "pageHeading": "Záhlaví stránky",
+    "passThroughUrlParameters": "Předávat parametry adresy URL do odkazů CTA",
     "phone": "Telefon",
     "phoneFormat": "Formát telefonu",
     "phoneNumber": "Telefonní číslo",

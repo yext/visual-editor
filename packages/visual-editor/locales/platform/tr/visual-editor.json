@@ -441,6 +441,7 @@
     },
     "overrideLink": "Bağlantıyı Geçersiz Kıl",
     "pageHeading": "Sayfa Başlığı",
+    "passThroughUrlParameters": "URL parametrelerini CTA bağlantılarına aktar",
     "phone": "Telefon",
     "phoneFormat": "Telefon formatı",
     "phoneNumber": "Telefon numarası",

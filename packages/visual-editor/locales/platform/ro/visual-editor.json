@@ -441,6 +441,7 @@
     },
     "overrideLink": "Înlocuiți linkul",
     "pageHeading": "Titlul paginii",
+    "passThroughUrlParameters": "Transmite parametrii URL către linkurile CTA",
     "phone": "Telefon",
     "phoneFormat": "Format telefonic",
     "phoneNumber": "Număr de telefon",

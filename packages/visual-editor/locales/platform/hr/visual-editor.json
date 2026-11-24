@@ -441,6 +441,7 @@
     },
     "overrideLink": "Nadjačaj vezu",
     "pageHeading": "Naslov stranice",
+    "passThroughUrlParameters": "Proslijedi parametre URL-a CTA poveznicama",
     "phone": "Telefon",
     "phoneFormat": "Format telefona",
     "phoneNumber": "Telefonski broj",

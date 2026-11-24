@@ -83,6 +83,7 @@ import { headerFooterImageFillTypeMigration } from "./0081_header_footer_image_f
 import { heroPhoneSlotMigration } from "./0082_hero_phone_slot.ts";
 import { photoGalleryItemSource } from "./0083_photo_gallery_item_source.ts";
 import { uniqueDirectoryManualCardIds } from "./0084_unique_directory_manual_card_ids.ts";
+import { passThroughUrlParametersDefault } from "./0085_pass_through_url_parameters.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -174,4 +175,5 @@ export const migrationRegistry: MigrationRegistry = [
   heroPhoneSlotMigration,
   photoGalleryItemSource,
   uniqueDirectoryManualCardIds,
+  passThroughUrlParametersDefault,
 ];
