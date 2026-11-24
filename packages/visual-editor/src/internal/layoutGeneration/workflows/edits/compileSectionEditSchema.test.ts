@@ -72,7 +72,7 @@ describe("section edit targets and values", () => {
     const schema = JSON.stringify(compiled.jsonSchema);
     expect(schema).toContain('"enum":["/top","/bottom"]');
     expect(schema).toContain('"enum":["/top","/bottom","/order"]');
-    const response = (value: unknown) =>
+    const response = (value: unknown, path = "/bottom") =>
       JSON.stringify({
         taskId: task.taskId,
         sectionId: task.sectionId,
@@ -81,10 +81,20 @@ describe("section edit targets and values", () => {
           {
             kind: "update",
             componentId: "atom",
-            changes: [{ kind: "set", path: "/bottom", value }],
+            changes: [{ kind: "set", path, value }],
           },
         ],
       });
+    const wire = z.fromJSONSchema(compiled.jsonSchema);
+    expect(wire.safeParse(JSON.parse(response("3rem"))).success).toBe(true);
+    expect(wire.safeParse(JSON.parse(response(3))).success).toBe(false);
+    expect(wire.safeParse(JSON.parse(response(3, "/order"))).success).toBe(
+      true
+    );
+    expect(wire.safeParse(JSON.parse(response("3rem", "/order"))).success).toBe(
+      false
+    );
+
     expect(compiled.parseResponse(response("3rem")).operations).toEqual([
       {
         kind: "update",
