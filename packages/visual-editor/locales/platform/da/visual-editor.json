@@ -158,6 +158,7 @@
     "image": "Billede",
     "imageConstrain": "Billedbegrænsning",
     "imageFillType": "Billedfyldtype",
+    "includeCount": "Inkluder tæller",
     "includePhoneHyperlink": "Medtag telefonhyperlink",
     "javascript": "JavaScript",
     "key": "Nøgle",
