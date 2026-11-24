@@ -263,7 +263,11 @@ describe("follow-up planning", () => {
         requestIds(fixture).encode("second"),
       ],
     ]);
-    expect(compiled.context.capabilities.Card.authoredPaths).toContainEqual({
+    expect(
+      compiled.context.capabilities.Card.authoredPaths.map(
+        (index) => compiled.context.authoredPaths[index]
+      )
+    ).toContainEqual({
       path: "/text/defaultValue",
       set: true,
       unset: false,

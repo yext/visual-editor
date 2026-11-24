@@ -48,6 +48,25 @@ export const compileEditPlanningSchema = (
     }
     return cached;
   };
+  type AuthoredPath = {
+    path: string;
+    set: boolean;
+    unset: boolean;
+    description?: string;
+  };
+  const authoredPaths: AuthoredPath[] = [];
+  const authoredPathIndexes = new Map<string, number>();
+  const indexAuthoredPath = (path: AuthoredPath) => {
+    const key = JSON.stringify(path);
+    const existing = authoredPathIndexes.get(key);
+    if (existing !== undefined) {
+      return existing;
+    }
+    const index = authoredPaths.length;
+    authoredPaths.push(path);
+    authoredPathIndexes.set(key, index);
+    return index;
+  };
   const capabilities = Object.fromEntries(
     Object.entries(catalog.data.components)
       .filter(([, config]) => config.generation)
@@ -57,14 +76,16 @@ export const compileEditPlanningSchema = (
           description: config.description ?? "",
           nestedOnly: !!config.nestedOnly,
           permissions: config.permissions ?? {},
-          authoredPaths: contractsFor(name).map((contract) => ({
-            path: contract.path,
-            set: !!contract.set,
-            unset: contract.unset,
-            ...(contract.description
-              ? { description: contract.description }
-              : {}),
-          })),
+          authoredPaths: contractsFor(name).map((contract) =>
+            indexAuthoredPath({
+              path: contract.path,
+              set: !!contract.set,
+              unset: contract.unset,
+              ...(contract.description
+                ? { description: contract.description }
+                : {}),
+            })
+          ),
           slots: slotCapabilities(
             config.fields ?? {},
             config.generation!.props
@@ -233,6 +254,9 @@ export const compileEditPlanningSchema = (
       ),
       inventory: wireInventory,
       capabilities,
+      authoredPaths,
+      authoredPathLookup:
+        "Each entry in capabilities[type].authoredPaths is a zero-based index into context.authoredPaths. Use the referenced path, set/unset flags, and description for that component type.",
       readOnlyFields: Object.fromEntries(
         [...saved]
           .filter(([, component]) => component.readOnly)

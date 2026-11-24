@@ -2,6 +2,8 @@ import { z } from "zod";
 import { isDeepEqual } from "../../../utils/deepEqual.ts";
 import { compactGenerationSchema } from "./compactSchema.ts";
 
+export class StrictOutputEnumLimitError extends Error {}
+
 /** Export only schemas supported by the gateway's strict-output contract. */
 export const exportGenerationSchema = (
   schema: z.ZodType,
@@ -186,7 +188,7 @@ const assertStrictSchema = (schema: Record<string, any>) => {
       .join("").length;
     nameLength += stringLength;
     if (values.length > 250 && stringLength > 15_000) {
-      throw new Error(
+      throw new StrictOutputEnumLimitError(
         `Generation schema at ${path}: enum strings exceed the strict-output limit`
       );
     }
@@ -212,9 +214,11 @@ const assertStrictSchema = (schema: Record<string, any>) => {
   };
   visit(schema, "response");
   if (propertyCount > 5_000 || enumCount > 1_000 || nameLength > 120_000) {
-    throw new Error(
-      `Generation schema exceeds strict-output limits: ${propertyCount}/5000 properties, ${enumCount}/1000 enum values, ${nameLength}/120000 name characters`
-    );
+    const message = `Generation schema exceeds strict-output limits: ${propertyCount}/5000 properties, ${enumCount}/1000 enum values, ${nameLength}/120000 name characters`;
+    if (enumCount > 1_000) {
+      throw new StrictOutputEnumLimitError(message);
+    }
+    throw new Error(message);
   }
   // The provider limits inline schema nesting, not the expanded output tree.
   // Check the root and each definition separately; expanding refs rejects valid
