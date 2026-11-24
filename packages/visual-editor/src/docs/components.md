@@ -106,6 +106,14 @@ This object contains properties for customizing the component's appearance.
 | `styles.textTransform`       | `"none" \| "default" \| "lowercase" \| "uppercase" \| "capitalize"` | The casing of directory list labels. Default uses the link theme transform, |
 | falling back to title case.  | `default`                                                           |
 
+#### Other Props
+
+Whether directory list labels include the available base entity count.
+
+| Prop           | Type      | Description                                                            | Default |
+| :------------- | :-------- | :--------------------------------------------------------------------- | :------ |
+| `includeCount` | `boolean` | Whether directory list labels include the available base entity count. |         |
+
 ---
 
 ## HoursStatus
