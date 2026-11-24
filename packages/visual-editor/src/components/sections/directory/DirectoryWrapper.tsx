@@ -235,6 +235,7 @@ const getNormalizedDirectoryGridData = (
 });
 
 export const DirectoryList = ({
+  includeCount = false,
   streamDocument,
   directoryChildren,
   relativePrefixToRoot,
@@ -243,6 +244,7 @@ export const DirectoryList = ({
   textTransform = "default",
 }: {
   streamDocument: StreamDocument;
+  includeCount?: boolean;
   directoryChildren: {
     id: string;
     name: string;
@@ -254,6 +256,7 @@ export const DirectoryList = ({
     };
     dm_addressCountryDisplayName?: string;
     dm_addressRegionDisplayName?: string;
+    dm_baseEntityCount?: string;
   }[];
   relativePrefixToRoot: string;
   backgroundColor: ThemeColor;
@@ -315,6 +318,9 @@ export const DirectoryList = ({
                   }}
                 >
                   {label}
+                  {includeCount && child.dm_baseEntityCount != null
+                    ? ` (${child.dm_baseEntityCount})`
+                    : ""}
                 </Body>
               </MaybeLink>
             </li>

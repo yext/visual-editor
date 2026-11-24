@@ -45,6 +45,9 @@ export interface DirectoryStyles {
 }
 
 export interface DirectoryProps {
+  /** Whether directory list labels include the available base entity count. */
+  includeCount?: boolean;
+
   /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
@@ -66,6 +69,15 @@ export interface DirectoryProps {
 }
 
 const directoryFields: YextFields<DirectoryProps> = {
+  includeCount: {
+    type: "radio",
+    label: msg("fields.includeCount", "Include count"),
+    visible: false,
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  },
   styles: {
     type: "object",
     label: msg("fields.styles", "Styles"),
@@ -134,6 +146,7 @@ const directoryFields: YextFields<DirectoryProps> = {
 };
 
 const DirectoryComponent: PuckComponent<DirectoryProps> = ({
+  includeCount,
   styles,
   slots,
 }) => {
@@ -154,6 +167,7 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
         !isDirectoryGrid(streamDocument.dm_directoryChildren) && (
           <DirectoryList
             streamDocument={streamDocument}
+            includeCount={includeCount}
             directoryChildren={streamDocument.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot ?? ""}
             linkColor={styles.linkColor}
@@ -175,32 +189,41 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
 export const Directory: YextComponentConfig<DirectoryProps> = {
   label: msg("components.directory", "Directory"),
   fields: directoryFields,
-  resolveFields: (data, params) => {
-    if (
-      params.metadata.streamDocument?.dm_directoryChildren &&
-      isDirectoryGrid(params.metadata.streamDocument.dm_directoryChildren)
-    ) {
-      const updatedFields = setDeep(
-        directoryFields,
+  resolveFields: (_data, params) => {
+    const streamDocument = params.metadata.streamDocument;
+    const children = streamDocument?.dm_directoryChildren;
+    const isGrid = isDirectoryGrid(children);
+    const hasBaseEntityCount =
+      streamDocument?.dm_baseEntityCount != null ||
+      (Array.isArray(children) &&
+        children.some((child) => child.dm_baseEntityCount != null));
+    let updatedFields = setDeep(
+      directoryFields,
+      "includeCount.visible",
+      !isGrid && hasBaseEntityCount
+    );
+
+    if (isGrid) {
+      updatedFields = setDeep(
+        updatedFields,
         "styles.objectFields.listBackgroundColor.visible",
         false
       );
-      const listFieldsHidden = setDeep(
+      updatedFields = setDeep(
         updatedFields,
         "styles.objectFields.linkColor.visible",
         false
       );
-      return toPuckFields(
-        setDeep(
-          listFieldsHidden,
-          "styles.objectFields.textTransform.visible",
-          false
-        )
+      updatedFields = setDeep(
+        updatedFields,
+        "styles.objectFields.textTransform.visible",
+        false
       );
     }
-    return toPuckFields(directoryFields);
+    return toPuckFields(updatedFields);
   },
   defaultProps: {
+    includeCount: false,
     styles: {
       backgroundColor: backgroundColors.background1.value,
       listBackgroundColor: backgroundColors.background1.value,
