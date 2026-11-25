@@ -54,6 +54,7 @@ import {
   FaRegEnvelope,
 } from "react-icons/fa";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers.ts";
+import { useCtaTrackingLink } from "../../internal/hooks/useCtaTrackingLink.ts";
 import { FieldTypeData } from "../../internal/types/templateMetadata.ts";
 import {
   formatDistance,
@@ -972,6 +973,7 @@ export const LocatorResultCard = React.memo(
 
       return listingsLink || coordinateLink;
     })();
+    const directionsHref = useCtaTrackingLink(getDirectionsLink);
 
     return (
       <Background
@@ -1050,10 +1052,10 @@ export const LocatorResultCard = React.memo(
                             showCountry={props.address.showCountry}
                           />
                         </div>
-                        {getDirectionsLink &&
+                        {directionsHref &&
                           props.address.showGetDirectionsLink && (
                             <a
-                              href={getDirectionsLink}
+                              href={directionsHref}
                               onClick={handleGetDirectionsClick}
                               aria-label={t("getDirectionsForLocation", {
                                 address: location.address.line1,

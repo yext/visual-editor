@@ -8,6 +8,7 @@ import { normalizeLink } from "../../utils/normalizeLink.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
+import { useCtaTrackingLink } from "../../internal/hooks/useCtaTrackingLink.ts";
 import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
@@ -256,13 +257,16 @@ export const CTA = (props: CTAProps) => {
   const streamDocument = useDocument();
   const resolvedProps = useResolvedCtaProps(props);
   const isButton = actionType === "button";
+  const linkWithTrackingParams = useCtaTrackingLink(
+    isButton || disabled ? undefined : resolvedProps?.link,
+    resolvedProps?.linkType
+  );
 
   if (!resolvedProps) {
     return null;
   }
 
   const {
-    link,
     linkType,
     label,
     ariaLabel,
@@ -436,7 +440,7 @@ export const CTA = (props: CTAProps) => {
       linkPadding={linkPadding}
     >
       <Link
-        cta={{ link: link || "#", linkType }}
+        cta={{ link: linkWithTrackingParams || "#", linkType }}
         eventName={eventName}
         target={openInNewTab ? "_blank" : target}
         aria-label={computedAriaLabel}
