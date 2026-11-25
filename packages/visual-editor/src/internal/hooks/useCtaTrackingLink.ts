@@ -54,14 +54,10 @@ export const useCtaTrackingLink = (
 
   // Trim ASCII whitespace that the browser ignores around the URL.
   const trimmedHref = href.replace(/^[ \t\r\n\f\v]+|[ \t\r\n\f\v]+$/g, "");
-  const fragmentIndex = trimmedHref.indexOf("#");
-  const destination =
-    fragmentIndex === -1 ? trimmedHref : trimmedHref.slice(0, fragmentIndex);
+  const [destination] = trimmedHref.split("#", 1);
   const fragment = trimmedHref.slice(destination.length);
-  const queryIndex = destination.indexOf("?");
-  const path =
-    queryIndex === -1 ? destination : destination.slice(0, queryIndex);
-  const query = queryIndex === -1 ? "" : destination.slice(queryIndex + 1);
+  const [path] = destination.split("?", 1);
+  const query = destination.slice(path.length + 1);
 
   // Keep the original encoding of the other query parameters.
   const params = query
