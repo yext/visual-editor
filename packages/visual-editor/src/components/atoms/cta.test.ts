@@ -201,14 +201,29 @@ describe("CTA links with page tracking parameters", (): void => {
     {
       name: "when a URL uses mailto then the destination is unchanged",
       pageQuery: "?utm_source=page",
-      props: { link: "MAILTO:team@example.com?subject=Book", linkType: "URL" },
-      expectedHref: "MAILTO:team@example.com?subject=Book",
+      props: {
+        link: " \tMAILTO:team@example.com?subject=Book \n",
+        linkType: "URL",
+      },
+      expectedHref: " \tMAILTO:team@example.com?subject=Book \n",
     },
     {
       name: "when a URL uses tel then the destination is unchanged",
       pageQuery: "?utm_source=page&fbclid=page",
       props: { link: "TeL:+15551234567", linkType: "URL" },
       expectedHref: "TeL:+15551234567",
+    },
+    {
+      name: "when a path has surrounding ASCII spaces then they stay out of the destination",
+      pageQuery: "?utm_source=page",
+      props: { link: " \t/book%20\u00a0 \n" },
+      expectedHref: "/book%20\u00a0?utm_source=page",
+    },
+    {
+      name: "when a query has trailing ASCII spaces then its encoded space is preserved",
+      pageQuery: "?utm_source=page",
+      props: { link: "/book?ref=a%20 \r\n" },
+      expectedHref: "/book?ref=a%20&utm_source=page",
     },
   ])("$name", ({ pageQuery, props, expectedHref }): void => {
     window.history.replaceState(window.history.state, "", `/page${pageQuery}`);
